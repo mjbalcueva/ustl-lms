@@ -5,6 +5,16 @@
 await import('./src/env.js')
 
 /** @type {import("next").NextConfig} */
-const config = {}
+const config = {
+	experimental: {
+		optimizePackageImports: [
+			'@/client/components/navigation',
+			'@/client/components/ui',
+			'@/client/context',
+			'@/client/lib/hooks',
+			'@/shared/types'
+		]
+	}
+}
 
 export default config
