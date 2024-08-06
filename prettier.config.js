@@ -7,11 +7,11 @@ const config = {
 		'<BUILTIN_MODULES>', // Node.js built-in modules
 		'<THIRD_PARTY_MODULES>', // NPM packages
 		'',
-		'^@/client/(.*)$',
+		'^@/shared/(.*)$',
 		'',
 		'^@/server/(.*)$',
 		'',
-		'^@/shared/(.*)$',
+		'^@/client/(.*)$',
 		'',
 		'^@/(.*)$',
 		'',

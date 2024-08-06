@@ -1,8 +1,8 @@
 import Link from 'next/link'
 
-import { getServerAuthSession } from '@/server/auth'
+import { api, HydrateClient } from '@/shared/trpc/server'
 
-import { api, HydrateClient } from '@/trpc/server'
+import { getServerAuthSession } from '@/server/auth'
 
 import { LatestPost } from '@/app/_components/post'
 
