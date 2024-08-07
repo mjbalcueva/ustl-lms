@@ -36,13 +36,13 @@ import { cn, getInitials } from '@/client/lib/utils'
 
 const themes: ThemeType = {
 	light: [
-		{ name: 'ayu', color: 'bg-amber-600' },
+		{ name: 'ayu', color: 'bg-yellow-500' },
 		{ name: 'zinc', color: 'bg-zinc-950' },
 		{ name: 'rose', color: 'bg-rose-500' },
 		{ name: 'grass', color: 'bg-green-500' }
 	],
 	dark: [
-		{ name: 'ayu', color: 'bg-amber-400' },
+		{ name: 'ayu', color: 'bg-yellow-400' },
 		{ name: 'zinc', color: 'bg-zinc-100' },
 		{ name: 'rose', color: 'bg-rose-500' },
 		{ name: 'grass', color: 'bg-green-500' }
@@ -93,7 +93,7 @@ export const UserButton = ({ user }: { user: NavUser }) => {
 
 	return (
 		<DropdownMenu
-			modal={false}
+			modal
 			onOpenChange={(open) => {
 				isMobile ? setNavExpanded(false) : setAnimate(!open)
 			}}
@@ -232,7 +232,7 @@ export const UserButton = ({ user }: { user: NavUser }) => {
 							<div className="flex gap-1.5 px-2 pb-1">
 								<DropdownMenuItem asChild>
 									<Button
-										className="flex-1 bg-card"
+										className={cn('flex-1 bg-card', mode === 'light' && 'border-ring')}
 										variant={'outline'}
 										size={'xs'}
 										onClick={() => handleModeChange('light')}
@@ -243,7 +243,7 @@ export const UserButton = ({ user }: { user: NavUser }) => {
 								</DropdownMenuItem>
 								<DropdownMenuItem asChild>
 									<Button
-										className="flex-1 bg-card"
+										className={cn('flex-1 bg-card', mode === 'dark' && 'border-ring')}
 										variant={'outline'}
 										size={'xs'}
 										onClick={() => handleModeChange('dark')}

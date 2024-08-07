@@ -4,25 +4,25 @@
 
 @layer base {
 	[data-theme='light-ayu'] {
-		--background: 210 17% 98%;
-		--foreground: 210 5% 38%;
-		--muted: 210 12% 90%;
-		--muted-foreground: 210 12% 30%;
-		--popover: 210 17% 95%;
-		--popover-foreground: 210 5% 28%;
-		--card: 210 17% 96%;
-		--card-foreground: 210 5% 33%;
-		--border: 210 7% 93%;
-		--input: 210 7% 90%;
-		--primary: 35 100% 60%;
-		--primary-foreground: 0 0% 0%;
-		--secondary: 35 30% 25%;
-		--secondary-foreground: 35 30% 85%;
-		--accent: 210 17% 83%;
-		--accent-foreground: 210 17% 23%;
-		--destructive: 5 83% 33%;
-		--destructive-foreground: 5 83% 93%;
-		--ring: 35 100% 60%;
+		--background: 0 0% 100%;
+		--foreground: 20 14.3% 4.1%;
+		--muted: 60 4.8% 95.9%;
+		--muted-foreground: 25 5.3% 44.7%;
+		--popover: 0 0% 100%;
+		--popover-foreground: 20 14.3% 4.1%;
+		--card: 0 0% 100%;
+		--card-foreground: 20 14.3% 4.1%;
+		--border: 20 5.9% 90%;
+		--input: 20 5.9% 90%;
+		--primary: 47.9 95.8% 53.1%;
+		--primary-foreground: 26 83.3% 14.1%;
+		--secondary: 60 4.8% 95.9%;
+		--secondary-foreground: 24 9.8% 10%;
+		--accent: 60 4.8% 95.9%;
+		--accent-foreground: 24 9.8% 10%;
+		--destructive: 0 84.2% 60.2%;
+		--destructive-foreground: 60 9.1% 97.8%;
+		--ring: 47.9 95.8% 53.1%;
 		--radius: 0.5rem;
 		--chart-1: 12 76% 61%;
 		--chart-2: 173 58% 39%;
