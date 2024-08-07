@@ -4,7 +4,7 @@ import { useState } from 'react'
 
 import { api } from '@/shared/trpc/react'
 
-export function LatestPost() {
+export const LatestPost = () => {
 	const [latestPost] = api.post.getLatest.useSuspenseQuery()
 
 	const utils = api.useUtils()

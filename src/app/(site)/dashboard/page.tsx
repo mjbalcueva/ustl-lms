@@ -4,6 +4,8 @@ import { api, HydrateClient } from '@/shared/trpc/server'
 
 import { getServerAuthSession } from '@/server/auth'
 
+import { LatestPost } from '@/client/components/post'
+
 export default async function Page() {
 	const hello = await api.post.hello({ text: 'from tRPC' })
 	const session = await getServerAuthSession()
@@ -54,6 +56,8 @@ export default async function Page() {
 							</Link>
 						</div>
 					</div>
+
+					{session?.user && <LatestPost />}
 				</div>
 			</main>
 		</HydrateClient>
