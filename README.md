@@ -61,7 +61,7 @@ Key Highlights:
 3. Set up your environment variables
 4. Run the development server with `npm run dev`
 
-## Roadmap
+## Roadmap (6/36)
 
 ### Responsive Design
 
