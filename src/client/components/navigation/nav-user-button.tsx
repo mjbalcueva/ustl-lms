@@ -131,7 +131,7 @@ export const UserButton = ({ user }: { user: NavUser }) => {
 				)}
 			</DropdownMenuTrigger>
 
-			<DropdownMenuContent className="w-56 shadow-none" sideOffset={isMobile ? 13 : 18}>
+			<DropdownMenuContent className="w-56 shadow-none" align="end" sideOffset={isMobile ? 13 : 18}>
 				<DropdownMenuLabel>
 					{isMobile ? (
 						<>
@@ -227,7 +227,7 @@ export const UserButton = ({ user }: { user: NavUser }) => {
 							<span>Preferences</span>
 						</DropdownMenuSubTrigger>
 
-						<DropdownMenuSubContent className="w-64 py-2" sideOffset={10}>
+						<DropdownMenuSubContent className="-mt-[2.3rem] w-64 py-2" alignOffset={0} sideOffset={isMobile ? 10 : 15}>
 							<DropdownMenuLabel className="pb-2 text-xs">Mode</DropdownMenuLabel>
 							<div className="flex gap-1.5 px-2 pb-1">
 								<DropdownMenuItem asChild>
