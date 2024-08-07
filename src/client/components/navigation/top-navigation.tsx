@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
 
-import type { NavLink, NavUser } from '@/shared/types'
+import { type NavLink, type NavUser } from '@/shared/types'
 
 import { Icons } from '@/client/components/icons'
 import { NavLinkComponent, UserButton } from '@/client/components/navigation'

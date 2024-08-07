@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 
 import { siteConfig } from '@/shared/config/site'
-import type { NavLink, NavUser } from '@/shared/types'
+import { type NavLink, type NavUser } from '@/shared/types'
 
 import { Icons } from '@/client/components/icons'
 import { NavLinkComponent, UserButton } from '@/client/components/navigation'

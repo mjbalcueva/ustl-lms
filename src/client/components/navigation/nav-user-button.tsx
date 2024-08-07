@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { useTheme } from 'next-themes'
 
-import type { NavUser, ThemeType } from '@/shared/types'
+import { type NavUser, type ThemeType } from '@/shared/types'
 
 import { Icons } from '@/client/components/icons'
 import {

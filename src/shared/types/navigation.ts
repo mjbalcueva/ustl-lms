@@ -1,13 +1,11 @@
-type NavLink = {
+export type NavLink = {
 	label: string
 	href: string
 	icon: React.JSX.Element | React.ReactNode
 }
 
-type NavUser = {
+export type NavUser = {
 	name: string
 	email: string
 	avatar: string
 }
-
-export type { NavLink, NavUser }
