@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+body,
+:root {
+	@apply h-full;
+}
+
 @layer base {
 	[data-theme='light-ayu'] {
 		--background: 0 0% 100%;
