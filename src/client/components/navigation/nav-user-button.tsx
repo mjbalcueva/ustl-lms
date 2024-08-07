@@ -98,7 +98,7 @@ export const UserButton = ({ user }: { user: NavUser }) => {
 				isMobile ? setNavExpanded(false) : setAnimate(!open)
 			}}
 		>
-			<DropdownMenuTrigger className="group/user-button mx-2 flex cursor-pointer items-center gap-3 rounded-md p-1 outline-none ring-offset-background hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring">
+			<DropdownMenuTrigger className="mx-2 flex cursor-pointer items-center gap-3 rounded-md p-1 outline-none ring-offset-background hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring">
 				{isMobile ? (
 					<>
 						<Avatar className="h-8 w-8 border border-border">
@@ -112,21 +112,21 @@ export const UserButton = ({ user }: { user: NavUser }) => {
 							<AvatarImage src={user.avatar} />
 							<AvatarFallback>{getInitials(user.name)}</AvatarFallback>
 						</Avatar>
-						<motion.span
+						<motion.div
 							animate={{
 								display: animate ? (isNavExpanded ? 'flex' : 'none') : 'flex',
 								opacity: animate ? (isNavExpanded ? 1 : 0) : 1
 							}}
-							className="hidden w-full items-center justify-between whitespace-pre transition duration-150"
+							className="hidden min-w-[168px] items-center justify-between whitespace-pre transition duration-150"
 						>
 							<div className="flex max-w-[9rem] flex-col items-start">
 								<span className="truncate text-sm font-medium">{user.name}</span>
 								<span className="truncate text-xs text-muted-foreground">@{user.email}</span>
 							</div>
-							<div className="relative right-0.5 hidden rounded-md p-1 group-hover/user-button:inline-block">
+							<div className="relative right-0.5 rounded-md p-1">
 								<Icons.dropdown className="h-4 w-4 text-muted-foreground" />
 							</div>
-						</motion.span>
+						</motion.div>
 					</>
 				)}
 			</DropdownMenuTrigger>
