@@ -98,7 +98,7 @@ export const UserButton = ({ user }: { user: NavUser }) => {
 				isMobile ? setNavExpanded(false) : setAnimate(!open)
 			}}
 		>
-			<DropdownMenuTrigger className="mx-2 flex cursor-pointer items-center gap-3 rounded-md p-1 outline-none ring-offset-background hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring">
+			<DropdownMenuTrigger className="mx-2 flex cursor-pointer items-center gap-3 rounded-md p-1 outline-none hover:bg-accent">
 				{isMobile ? (
 					<>
 						<Avatar className="h-8 w-8 border border-border">
@@ -142,7 +142,9 @@ export const UserButton = ({ user }: { user: NavUser }) => {
 						'My Account'
 					)}
 				</DropdownMenuLabel>
-				<DropdownMenuSeparator />
+
+				<DropdownMenuSeparator className="border" />
+
 				<DropdownMenuItem asChild>
 					<Link href="#link" className="cursor-pointer">
 						<Icons.profile className="mr-2 h-4 w-4" />
@@ -254,7 +256,7 @@ export const UserButton = ({ user }: { user: NavUser }) => {
 								</DropdownMenuItem>
 							</div>
 
-							<DropdownMenuSeparator />
+							<DropdownMenuSeparator className="border" />
 
 							<DropdownMenuLabel className="pb-2 text-xs">Theme</DropdownMenuLabel>
 							<div className="flex flex-wrap gap-1.5 px-2 pb-1">
@@ -288,7 +290,8 @@ export const UserButton = ({ user }: { user: NavUser }) => {
 						<span>Settings</span>
 					</Link>
 				</DropdownMenuItem>
-				<DropdownMenuSeparator />
+
+				<DropdownMenuSeparator className="border" />
 
 				<DropdownMenuItem className="cursor-pointer">
 					<Icons.logout className="mr-2 h-4 w-4" />
