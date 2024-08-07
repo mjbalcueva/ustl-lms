@@ -6,6 +6,8 @@ import { GeistSans } from 'geist/font/sans'
 import { siteConfig } from '@/shared/config/site'
 import { TRPCReactProvider } from '@/shared/trpc/react'
 
+import { TailwindSizeIndicator } from '@/client/components/tailwind-size-indicator'
+
 export const metadata: Metadata = {
 	title: siteConfig.title,
 	description: siteConfig.description,
@@ -16,7 +18,10 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
 	return (
 		<html lang="en" className={`${GeistSans.variable}`}>
 			<body>
-				<TRPCReactProvider>{children}</TRPCReactProvider>
+				<TRPCReactProvider>
+					{children}
+					<TailwindSizeIndicator />
+				</TRPCReactProvider>
 			</body>
 		</html>
 	)
