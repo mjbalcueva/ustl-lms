@@ -73,7 +73,7 @@ export const TopNavigation = ({
 						duration: 0.2
 					}}
 					className={cn(
-						'sticky top-0 flex h-14 items-center justify-between border-b border-border bg-popover/40 px-2 backdrop-blur-md sm:px-4 md:hidden',
+						'sticky top-0 flex h-14 items-center justify-between border-b border-border bg-popover/50 px-2 backdrop-blur-xl sm:px-4 md:hidden',
 						className
 					)}
 					{...props}
@@ -131,7 +131,7 @@ export const TopNavigation = ({
 							}
 						}}
 						className={cn(
-							'fixed top-14 h-full w-full overflow-auto bg-popover/40 backdrop-blur-md md:hidden',
+							'fixed top-14 h-full w-full overflow-auto bg-popover/50 backdrop-blur-xl md:hidden',
 							!isNavExpanded && 'pointer-events-none'
 						)}
 					>
@@ -166,7 +166,7 @@ export const TopNavigation = ({
 									}}
 									className=""
 								>
-									<NavLinkComponent link={item} className="h-12 rounded-none border-b md:rounded-md" />
+									<NavLinkComponent link={item} className="h-12 rounded-none border-b border-border md:rounded-md" />
 								</motion.li>
 							))}
 						</motion.ul>
