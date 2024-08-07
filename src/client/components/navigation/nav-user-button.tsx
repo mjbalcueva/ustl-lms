@@ -93,7 +93,7 @@ export const UserButton = ({ user }: { user: NavUser }) => {
 
 	return (
 		<DropdownMenu
-			modal
+			modal={false}
 			onOpenChange={(open) => {
 				isMobile ? setNavExpanded(false) : setAnimate(!open)
 			}}
