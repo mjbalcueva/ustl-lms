@@ -65,7 +65,7 @@ body,
 		--chart-5: 340 75% 55%;
 	}
 
-	[data-theme='light-zinc'] {
+	[data-theme='light-default'] {
 		--background: 0 0% 100%;
 		--foreground: 240 10% 3.9%;
 		--card: 0 0% 100%;
@@ -93,7 +93,7 @@ body,
 		--chart-5: 27 87% 67%;
 	}
 
-	[data-theme='dark-zinc'] {
+	[data-theme='dark-default'] {
 		--background: 240 5% 6%;
 		--foreground: 60 5% 90%;
 		--card: 240 4% 10%;
