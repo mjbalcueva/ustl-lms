@@ -1,8 +1,9 @@
+import { fontFamily } from 'tailwindcss/defaultTheme'
+
 import { type Config } from 'tailwindcss'
 
 /* eslint-disable */
 const { default: flattenColorPalette } = require('tailwindcss/lib/util/flattenColorPalette')
-const colors = require('tailwindcss/colors')
 const svgToDataUri = require('mini-svg-data-uri')
 
 const addBackgroundUtilities = ({ matchUtilities, theme }: any) => {
@@ -53,6 +54,9 @@ const config = {
 			}
 		},
 		extend: {
+			fontFamily: {
+				sans: ['var(--font-geist-sans)', ...fontFamily.sans]
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',

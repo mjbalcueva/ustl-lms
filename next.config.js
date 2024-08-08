@@ -8,6 +8,7 @@ await import('./src/env.js')
 const config = {
 	experimental: {
 		optimizePackageImports: [
+			'@/client/components/auth',
 			'@/client/components/navigation',
 			'@/client/components/ui',
 			'@/client/context',

@@ -4,7 +4,7 @@ import { type ThemeProviderProps } from 'next-themes/dist/types'
 export const ThemeProvider = ({ children, ...props }: ThemeProviderProps) => {
 	return (
 		<NextThemesProvider
-			defaultTheme="dark-ayu"
+			defaultTheme="dark-zinc"
 			disableTransitionOnChange
 			enableColorScheme
 			enableSystem={false}
