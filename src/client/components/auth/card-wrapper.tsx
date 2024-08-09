@@ -5,6 +5,7 @@ import { signIn } from 'next-auth/react'
 import { Icons } from '@/client/components/icons'
 import {
 	Button,
+	buttonVariants,
 	Card,
 	CardContent,
 	CardDescription,
@@ -13,6 +14,7 @@ import {
 	CardTitle,
 	Separator
 } from '@/client/components/ui'
+import { cn } from '@/client/lib/utils'
 
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes'
 
@@ -42,18 +44,20 @@ export const CardWrapper = ({
 				<CardTitle>{title}</CardTitle>
 				<CardDescription>{description}</CardDescription>
 			</CardHeader>
+
 			<CardContent>{children}</CardContent>
 
 			{showSocial && (
-				<CardFooter className="flex flex-col space-y-4 pb-4">
-					<div className="relative m-2 w-full">
+				<CardContent className="flex flex-col space-y-6">
+					<div className="relative w-full">
 						<Separator />
-						<div className="absolute -top-2 left-0 right-0 flex items-center justify-center">
+						<div className="absolute left-0 right-0 flex translate-y-[-50%] items-center justify-center">
 							<span className="bg-card px-2 text-sm leading-none text-muted-foreground">Or continue with</span>
 						</div>
 					</div>
+
 					<Button
-						className="w-full bg-card"
+						className="group/button relative w-full overflow-hidden rounded-xl hover:transition-all hover:duration-300 hover:ease-in-out"
 						variant="outline"
 						onClick={() =>
 							signIn('google', {
@@ -62,15 +66,21 @@ export const CardWrapper = ({
 						}
 					>
 						<Icons.google className="mr-2 size-4" />
-						Register with Google
+						Sign in with Google
+						<div className="absolute inset-0 flex h-full w-full justify-center [transform:skew(-13deg)_translateX(-100%)] group-hover/button:duration-1000 group-hover/button:[transform:skew(-13deg)_translateX(100%)]">
+							<div className="relative h-full w-8 bg-white/[0.02]" />
+						</div>
 					</Button>
-				</CardFooter>
+				</CardContent>
 			)}
 
-			<CardFooter className="flex items-center justify-center">
-				<Button variant="link" className="font-normal" size="sm" asChild>
-					<Link href={backButtonHref}>{backButtonLabel}</Link>
-				</Button>
+			<CardFooter className="flex justify-center pb-4 font-normal">
+				<Link
+					href={backButtonHref}
+					className={cn(buttonVariants({ variant: 'link', size: 'sm' }), 'justify-start px-0')}
+				>
+					{backButtonLabel}
+				</Link>
 			</CardFooter>
 		</Card>
 	)

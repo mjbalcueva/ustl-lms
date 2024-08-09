@@ -60,7 +60,7 @@ export const TopNavigation = ({
 	return (
 		<>
 			<AnimatePresence>
-				<motion.div
+				<motion.aside
 					initial={{
 						opacity: 1,
 						y: 0
@@ -99,12 +99,12 @@ export const TopNavigation = ({
 					</Link>
 
 					<UserButton user={user} />
-				</motion.div>
+				</motion.aside>
 			</AnimatePresence>
 
 			<AnimatePresence>
 				{displayContent && (
-					<motion.div
+					<motion.nav
 						animate={isNavExpanded ? 'animate' : 'exit'}
 						initial="initial"
 						exit="exit"
@@ -170,7 +170,7 @@ export const TopNavigation = ({
 								</motion.li>
 							))}
 						</motion.ul>
-					</motion.div>
+					</motion.nav>
 				)}
 			</AnimatePresence>
 		</>

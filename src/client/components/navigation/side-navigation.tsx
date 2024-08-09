@@ -26,7 +26,7 @@ export const SideNavigation = ({
 	}
 
 	return (
-		<motion.div
+		<motion.nav
 			className={cn('h-full w-[60px] flex-shrink-0 bg-popover py-4', className)}
 			animate={{
 				width: animate ? (isNavExpanded ? '240px' : '60px') : '240px'
@@ -59,6 +59,6 @@ export const SideNavigation = ({
 			</div>
 
 			<UserButton user={user} />
-		</motion.div>
+		</motion.nav>
 	)
 }

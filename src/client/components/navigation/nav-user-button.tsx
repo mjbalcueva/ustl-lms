@@ -98,7 +98,7 @@ export const UserButton = ({ user }: { user: NavUser }) => {
 				isMobile ? setNavExpanded(false) : setAnimate(!open)
 			}}
 		>
-			<DropdownMenuTrigger className="mx-2 flex cursor-pointer items-center gap-3 rounded-md p-1 outline-none hover:bg-accent">
+			<DropdownMenuTrigger className="mx-2 flex cursor-pointer items-center gap-3 rounded-md p-1 outline-none ring-offset-background hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
 				{isMobile ? (
 					<>
 						<Avatar className="h-8 w-8 border border-border">
