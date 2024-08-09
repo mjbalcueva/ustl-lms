@@ -37,7 +37,7 @@ export const CardWrapper = ({
 	const callbackUrl = searchParams.get('callbackUrl')
 
 	return (
-		<Card className="w-[400px] shadow-md">
+		<Card className="w-[400px] border-2 border-border shadow-md">
 			<CardHeader>
 				<CardTitle>{title}</CardTitle>
 				<CardDescription>{description}</CardDescription>

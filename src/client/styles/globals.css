@@ -150,25 +150,25 @@ body,
 	}
 
 	[data-theme='dark-grass'] {
-		--background: 20 14.3% 4.1%;
-		--foreground: 0 0% 95%;
-		--card: 24 9.8% 10%;
-		--card-foreground: 0 0% 95%;
-		--popover: 0 0% 9%;
-		--popover-foreground: 0 0% 95%;
-		--primary: 142.1 70.6% 45.3%;
-		--primary-foreground: 144.9 80.4% 10%;
-		--secondary: 240 3.7% 15.9%;
-		--secondary-foreground: 0 0% 98%;
-		--muted: 0 0% 15%;
-		--muted-foreground: 240 5% 64.9%;
-		--accent: 12 6.5% 15.1%;
-		--accent-foreground: 0 0% 98%;
-		--destructive: 0 62.8% 30.6%;
-		--destructive-foreground: 0 85.7% 97.3%;
-		--border: 240 3.7% 15.9%;
-		--input: 240 3.7% 15.9%;
-		--ring: 142.4 71.8% 29.2%;
+		--background: 222 28% 7%;
+		--foreground: 47 7% 73%;
+		--muted: 212.75 14.6% 18.79%;
+		--muted-foreground: 222 12% 65%;
+		--popover: 222 28% 4%;
+		--popover-foreground: 47 7% 83%;
+		--card: 222 28% 5%;
+		--card-foreground: 47 7% 78%;
+		--border: 222 18% 12%;
+		--input: 222 18% 15%;
+		--primary: 129.18 43.83% 38.72%;
+		--primary-foreground: 222 28% 97%;
+		--secondary: 222 18% 75%;
+		--secondary-foreground: 222 18% 15%;
+		--accent: 215.01 14.31% 14.8%;
+		--accent-foreground: 222 10.73% 78.29%;
+		--destructive: 0 99% 53%;
+		--destructive-foreground: 0 0% 100%;
+		--ring: 129.66 44.16% 38.63%;
 		--radius: 0.5rem;
 		--chart-1: 220 70% 50%;
 		--chart-2: 160 60% 45%;
@@ -208,7 +208,7 @@ body,
 	[data-theme='dark-rose'] {
 		--background: 230 16% 7%;
 		--foreground: 230 16% 67%;
-		--muted: 230 12% 15%;
+		--muted: 230 5.59% 19.67%;
 		--muted-foreground: 230 12% 65%;
 		--popover: 230 16% 4%;
 		--popover-foreground: 230 16% 77%;
@@ -220,7 +220,7 @@ body,
 		--primary-foreground: 0 0% 100%;
 		--secondary: 340 30% 75%;
 		--secondary-foreground: 340 30% 15%;
-		--accent: 230 16% 22%;
+		--accent: 230 9.39% 14.77%;
 		--accent-foreground: 230 16% 82%;
 		--destructive: 8 89% 54%;
 		--destructive-foreground: 0 0% 100%;
