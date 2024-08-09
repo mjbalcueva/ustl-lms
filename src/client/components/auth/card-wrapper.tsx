@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { signIn } from 'next-auth/react'
@@ -52,7 +54,9 @@ export const CardWrapper = ({
 					<div className="relative w-full">
 						<Separator />
 						<div className="absolute left-0 right-0 flex translate-y-[-50%] items-center justify-center">
-							<span className="bg-card px-2 text-sm leading-none text-muted-foreground">Or continue with</span>
+							<span className="pointer-events-none select-none bg-card px-2 text-sm leading-none text-muted-foreground">
+								Or continue with
+							</span>
 						</div>
 					</div>
 
@@ -75,10 +79,7 @@ export const CardWrapper = ({
 			)}
 
 			<CardFooter className="flex justify-center pb-4 font-normal">
-				<Link
-					href={backButtonHref}
-					className={cn(buttonVariants({ variant: 'link', size: 'sm' }), 'justify-start px-0')}
-				>
+				<Link href={backButtonHref} className={cn(buttonVariants({ variant: 'link', size: 'sm' }), 'px-0')}>
 					{backButtonLabel}
 				</Link>
 			</CardFooter>
