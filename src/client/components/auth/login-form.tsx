@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 
@@ -8,6 +9,7 @@ import { loginSchema, type LoginSchema } from '@/shared/schemas'
 import { CardWrapper } from '@/client/components/auth'
 import {
 	Button,
+	buttonVariants,
 	Form,
 	FormControl,
 	FormField,
@@ -17,6 +19,7 @@ import {
 	Input,
 	PasswordInput
 } from '@/client/components/ui'
+import { cn } from '@/client/lib/utils'
 
 export const LoginForm = () => {
 	const form = useForm<LoginSchema>({
@@ -40,14 +43,14 @@ export const LoginForm = () => {
 			showSocial
 		>
 			<Form {...form}>
-				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
 					<div className="space-y-4">
 						<FormField
 							control={form.control}
 							name="email"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel className="text-foreground">Email Address</FormLabel>
+									<FormLabel className="text-card-foreground">Email Address</FormLabel>
 									<FormControl>
 										<Input
 											placeholder="Enter your email"
@@ -61,16 +64,28 @@ export const LoginForm = () => {
 								</FormItem>
 							)}
 						/>
+
 						<FormField
 							control={form.control}
 							name="password"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel className="text-foreground">Password</FormLabel>
+									<FormLabel className="text-card-foreground">Password</FormLabel>
 									<FormControl>
 										<PasswordInput placeholder="Password" className="rounded-xl bg-background" {...field} />
 									</FormControl>
 									<FormMessage />
+									<div className="flex justify-end">
+										<Link
+											className={cn(
+												buttonVariants({ variant: 'link', size: 'sm' }),
+												'font-normal text-card-foreground'
+											)}
+											href="/auth/reset"
+										>
+											Forgot password?
+										</Link>
+									</div>
 								</FormItem>
 							)}
 						/>

@@ -48,7 +48,7 @@ export const RegisterForm = () => {
 							name="name"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel className="text-foreground">Name</FormLabel>
+									<FormLabel className="text-card-foreground">Name</FormLabel>
 									<FormControl>
 										<Input
 											placeholder="What should we call you?"
@@ -66,7 +66,7 @@ export const RegisterForm = () => {
 							name="email"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel className="text-foreground">Email Address</FormLabel>
+									<FormLabel className="text-card-foreground">Email Address</FormLabel>
 									<FormControl>
 										<Input
 											placeholder="Enter your email"
@@ -85,7 +85,7 @@ export const RegisterForm = () => {
 							name="password"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel className="text-foreground">Password</FormLabel>
+									<FormLabel className="text-card-foreground">Password</FormLabel>
 									<FormControl>
 										<PasswordInput placeholder="Password" className="rounded-xl bg-background" {...field} />
 									</FormControl>

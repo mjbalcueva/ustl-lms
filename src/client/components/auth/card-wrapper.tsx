@@ -61,7 +61,7 @@ export const CardWrapper = ({
 					</div>
 
 					<Button
-						className="group/button relative w-full overflow-hidden rounded-xl hover:transition-all hover:duration-300 hover:ease-in-out"
+						className="group/button relative w-full overflow-hidden rounded-xl text-foreground hover:transition-all hover:duration-300 hover:ease-in-out"
 						variant="outline"
 						onClick={() =>
 							signIn('google', {
@@ -79,7 +79,10 @@ export const CardWrapper = ({
 			)}
 
 			<CardFooter className="flex justify-center pb-4 font-normal">
-				<Link href={backButtonHref} className={cn(buttonVariants({ variant: 'link', size: 'sm' }), 'px-0')}>
+				<Link
+					href={backButtonHref}
+					className={cn(buttonVariants({ variant: 'link', size: 'sm' }), 'px-0 text-card-foreground')}
+				>
 					{backButtonLabel}
 				</Link>
 			</CardFooter>
