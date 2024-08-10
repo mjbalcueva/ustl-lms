@@ -54,7 +54,7 @@ export const CardWrapper = ({
 					<div className="relative w-full">
 						<Separator />
 						<div className="absolute left-0 right-0 flex translate-y-[-50%] items-center justify-center">
-							<span className="pointer-events-none select-none bg-card px-2 text-sm leading-none text-muted-foreground">
+							<span className="pointer-events-none select-none bg-card px-2 text-xs leading-none text-muted-foreground">
 								Or continue with
 							</span>
 						</div>
@@ -81,7 +81,7 @@ export const CardWrapper = ({
 			<CardFooter className="flex justify-center pb-4 font-normal">
 				<Link
 					href={backButtonHref}
-					className={cn(buttonVariants({ variant: 'link', size: 'sm' }), 'px-0 text-card-foreground')}
+					className={cn(buttonVariants({ variant: 'link', size: 'sm' }), 'px-0 text-xs text-card-foreground')}
 				>
 					{backButtonLabel}
 				</Link>

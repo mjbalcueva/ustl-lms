@@ -78,8 +78,8 @@ export const LoginForm = () => {
 									<div className="flex justify-end">
 										<Link
 											className={cn(
-												buttonVariants({ variant: 'link', size: 'sm' }),
-												'font-normal text-card-foreground'
+												buttonVariants({ variant: 'link', size: 'xs' }),
+												'p-0 text-xs font-normal text-card-foreground'
 											)}
 											href="/auth/reset"
 										>
