@@ -2,13 +2,13 @@ import Link from 'next/link'
 
 import { api, HydrateClient } from '@/shared/trpc/server'
 
-import { getServerAuthSession } from '@/server/auth'
+import { auth } from '@/server/auth'
 
 import { LatestPost } from '@/client/components/post'
 
 export default async function Page() {
 	const hello = await api.post.hello({ text: 'from tRPC' })
-	const session = await getServerAuthSession()
+	const session = await auth()
 
 	session && void api.post.getLatest.prefetch()
 
@@ -56,6 +56,8 @@ export default async function Page() {
 							</Link>
 						</div>
 					</div>
+
+					<pre>{JSON.stringify(session, null, 2)}</pre>
 
 					{session?.user && <LatestPost />}
 				</div>

@@ -1,7 +1,6 @@
 import { PrismaAdapter } from '@auth/prisma-adapter'
-import { getServerSession, type DefaultSession, type NextAuthOptions } from 'next-auth'
-import { type Adapter } from 'next-auth/adapters'
-import GithubProvider from 'next-auth/providers/github'
+import NextAuth, { type DefaultSession } from 'next-auth'
+import Github from 'next-auth/providers/github'
 
 import { db } from '@/server/db'
 
@@ -33,28 +32,31 @@ declare module 'next-auth' {
  *
  * @see https://next-auth.js.org/configuration/options
  */
-export const authOptions: NextAuthOptions = {
-	callbacks: {
-		session: ({ session, user }) => ({
-			...session,
-			user: {
-				...session.user,
-				id: user.id
-			}
-		})
+
+export const {
+	handlers: { GET, POST },
+	auth
+} = NextAuth({
+	adapter: PrismaAdapter(db),
+	pages: {
+		signIn: '/auth/login'
 	},
-	adapter: PrismaAdapter(db) as Adapter,
+	callbacks: {
+		session: ({ session, user }) => {
+			return {
+				...session,
+				user: {
+					...session.user,
+					id: user.id
+				}
+			}
+		}
+	},
 	providers: [
-		GithubProvider({
-			clientId: env.GITHUB_CLIENT_ID,
-			clientSecret: env.GITHUB_CLIENT_SECRET
+		Github({
+			clientId: env.AUTH_GITHUB_ID,
+			clientSecret: env.AUTH_GITHUB_SECRET,
+			allowDangerousEmailAccountLinking: true
 		})
 	]
-}
-
-/**
- * Wrapper for `getServerSession` so that you don't need to import the `authOptions` in every file.
- *
- * @see https://next-auth.js.org/configuration/nextjs
- */
-export const getServerAuthSession = () => getServerSession(authOptions)
+})
