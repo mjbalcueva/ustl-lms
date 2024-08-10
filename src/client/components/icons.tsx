@@ -4,6 +4,8 @@ import {
 	IconLayoutDashboard,
 	IconLayoutSidebar,
 	IconLayoutSidebarFilled,
+	IconLoader,
+	IconLoader2,
 	IconLogout,
 	IconMessage,
 	IconMoonStars,
@@ -21,6 +23,8 @@ import { cn } from '@/client/lib/utils'
 export const Icons = {
 	dashboard: IconLayoutDashboard,
 	dropdown: IconSelector,
+	loader: IconLoader,
+	loader2: IconLoader2,
 	learning: IconSchool,
 	logout: IconLogout,
 	messages: IconMessage,

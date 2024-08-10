@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 
@@ -8,6 +9,7 @@ import { loginSchema, type LoginSchema } from '@/shared/schemas'
 
 import { CardWrapper } from '@/client/components/auth'
 import { ButtonShimmering } from '@/client/components/button-shimmering'
+import { Loader } from '@/client/components/loader'
 import {
 	buttonVariants,
 	Form,
@@ -22,6 +24,8 @@ import {
 import { cn } from '@/client/lib/utils'
 
 export const LoginForm = () => {
+	const [isLoading, setIsLoading] = useState(false)
+
 	const form = useForm<LoginSchema>({
 		resolver: zodResolver(loginSchema),
 		defaultValues: {
@@ -31,7 +35,9 @@ export const LoginForm = () => {
 	})
 
 	const onSubmit: SubmitHandler<LoginSchema> = (data) => {
+		setIsLoading(true)
 		console.log(data)
+		setIsLoading(false)
 	}
 
 	return (
@@ -89,8 +95,13 @@ export const LoginForm = () => {
 						)}
 					/>
 
-					<ButtonShimmering className="w-full rounded-xl" shimmerClassName="bg-white/20">
-						Login
+					<ButtonShimmering className="w-full rounded-xl" shimmerClassName="bg-white/20" disabled={isLoading}>
+						{isLoading && (
+							<span className="relative right-[3.4ch]">
+								<Loader />
+							</span>
+						)}
+						<span className="absolute">Login</span>
 					</ButtonShimmering>
 				</form>
 			</Form>

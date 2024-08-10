@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 
@@ -7,6 +8,7 @@ import { registerSchema, type RegisterSchema } from '@/shared/schemas'
 
 import { CardWrapper } from '@/client/components/auth'
 import { ButtonShimmering } from '@/client/components/button-shimmering'
+import { Loader } from '@/client/components/loader'
 import {
 	Form,
 	FormControl,
@@ -19,6 +21,8 @@ import {
 } from '@/client/components/ui'
 
 export const RegisterForm = () => {
+	const [isLoading, setIsLoading] = useState(false)
+
 	const form = useForm<RegisterSchema>({
 		resolver: zodResolver(registerSchema),
 		defaultValues: {
@@ -29,7 +33,9 @@ export const RegisterForm = () => {
 	})
 
 	const onSubmit: SubmitHandler<RegisterSchema> = (data) => {
+		setIsLoading(true)
 		console.log(data)
+		setIsLoading(false)
 	}
 
 	return (
@@ -96,8 +102,13 @@ export const RegisterForm = () => {
 					/>
 
 					<div className="pt-2">
-						<ButtonShimmering className="w-full rounded-xl" shimmerClassName="bg-white/20">
-							Register
+						<ButtonShimmering className="w-full rounded-xl" shimmerClassName="bg-white/20" disabled={isLoading}>
+							{isLoading && (
+								<span className="relative right-[4.5ch]">
+									<Loader />
+								</span>
+							)}
+							<span className="absolute">Register</span>
 						</ButtonShimmering>
 					</div>
 				</form>
