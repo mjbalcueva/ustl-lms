@@ -164,7 +164,6 @@ export const TopNavigation = ({
 											}
 										}
 									}}
-									className=""
 								>
 									<NavLinkComponent link={item} className="h-12 rounded-none border-b border-border md:rounded-md" />
 								</motion.li>
