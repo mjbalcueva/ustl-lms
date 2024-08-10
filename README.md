@@ -61,7 +61,7 @@ Key Highlights:
 3. Set up your environment variables
 4. Run the development server with `npm run dev`
 
-## Roadmap (6/36)
+## Roadmap (7/37)
 
 ### Responsive Design
 
@@ -72,16 +72,18 @@ Key Highlights:
 - [ ] Design and implement responsive layouts for course content
 - [ ] Create adaptive UI components for various screen sizes
 - [ ] Optimize images and media for different device capabilities
-- [ ] Implement touch-friendly interactions for mobile users
+- [x] Implement touch-friendly interactions for mobile users
 - [ ] Develop a consistent design system across all device types
 - [x] Implement accessibility features for diverse user needs
 
 ### Authentication
 
-- [x] Implement user authentication system
-- [ ] Set up user registration
-- [ ] Implement login functionality
-- [ ] Implement logout functionality
+- [ ] Implement user authentication system
+  - [ ] Set up user registration
+  - [ ] Implement login functionality
+    - [x] using auth
+    - [ ] using credentials
+  - [ ] Implement logout functionality
 
 ### User Management
 
