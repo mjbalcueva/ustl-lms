@@ -49,7 +49,7 @@ export const CardWrapper = ({
 			<CardFooter className="flex justify-center pb-4 font-normal">
 				<Link
 					href={backButtonHref}
-					className={cn(buttonVariants({ variant: 'link', size: 'sm' }), 'px-0 text-xs text-card-foreground')}
+					className={cn(buttonVariants({ variant: 'link', size: 'xs' }), 'px-0 text-xs text-card-foreground')}
 				>
 					{backButtonLabel}
 				</Link>
