@@ -1,6 +1,5 @@
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import NextAuth, { type DefaultSession } from 'next-auth'
-import Github from 'next-auth/providers/github'
 import Google from 'next-auth/providers/google'
 
 import { db } from '@/server/db'
@@ -54,11 +53,6 @@ export const {
 		}
 	},
 	providers: [
-		Github({
-			clientId: env.AUTH_GITHUB_ID,
-			clientSecret: env.AUTH_GITHUB_SECRET,
-			allowDangerousEmailAccountLinking: true
-		}),
 		Google({
 			clientId: env.AUTH_GOOGLE_ID,
 			clientSecret: env.AUTH_GOOGLE_SECRET,
