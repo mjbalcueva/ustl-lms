@@ -8,6 +8,7 @@ import { siteConfig } from '@/shared/config/site'
 import { TRPCReactProvider } from '@/shared/trpc/react'
 
 import { TailwindSizeIndicator } from '@/client/components/tailwind-size-indicator'
+import { Toaster } from '@/client/components/ui'
 import { DeviceTypeProvider, ThemeProvider, type DeviceType } from '@/client/context'
 
 export const metadata: Metadata = {
@@ -29,6 +30,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
 					<DeviceTypeProvider defaultDeviceSize={defaultDeviceSize}>
 						<ThemeProvider>
 							{children}
+							<Toaster />
 							<TailwindSizeIndicator />
 						</ThemeProvider>
 					</DeviceTypeProvider>

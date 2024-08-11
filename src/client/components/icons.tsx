@@ -1,6 +1,10 @@
 import {
+	IconAlertTriangleFilled,
 	IconChartHistogram,
+	IconCircleCheckFilled,
 	IconDiamondFilled,
+	IconInfoCircleFilled,
+	IconInfoTriangleFilled,
 	IconLayoutDashboard,
 	IconLayoutSidebar,
 	IconLayoutSidebarFilled,
@@ -21,6 +25,10 @@ import {
 import { cn } from '@/client/lib/utils'
 
 export const Icons = {
+	circleInfoFilled: IconInfoCircleFilled,
+	circleCheckFilled: IconCircleCheckFilled,
+	triangleInfoFilled: IconInfoTriangleFilled,
+	triangleAlertFilled: IconAlertTriangleFilled,
 	dashboard: IconLayoutDashboard,
 	dropdown: IconSelector,
 	loader: IconLoader,
