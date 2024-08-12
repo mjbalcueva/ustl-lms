@@ -1,7 +1,7 @@
 /**
  * an array of routes that are public these routes do not require authentication
  */
-export const publicRoutes: string[] = ['/', '/auth/new-verification']
+export const publicRoutes: string[] = ['/auth/new-verification']
 
 /**
  * An array of routes that are used for authentication. The login will redirect logged in users to /settings

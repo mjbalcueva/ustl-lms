@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 
 import { siteConfig } from '@/shared/config/site'
-import { type NavLink, type NavUser } from '@/shared/types'
+import { type NavLink } from '@/shared/types'
 
 import { Icons } from '@/client/components/icons'
 import { NavLinkComponent, UserButton } from '@/client/components/navigation'
@@ -17,13 +17,6 @@ export const SideNavigation = ({
 	...props
 }: React.ComponentProps<typeof motion.div> & { navLinks: NavLink[] }) => {
 	const { isNavExpanded, setNavExpanded, animate } = useNavContext()
-
-	const user: NavUser = {
-		name: 'Mark John Balcueva',
-		email: 'markjohn.balcueva',
-		avatar:
-			'https://scontent.flgp1-1.fna.fbcdn.net/v/t39.30808-6/448224989_1004840857833378_7515964060620761005_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeExf6aj3n47tFXS7owstkS-FQVNljVX0e0VBU2WNVfR7aSGg4eQGbK2Ys-OJykl7TAm_vFbe_Jm4-A5iysbVtrd&_nc_ohc=yFDoQyXjQ9IQ7kNvgFXrkAL&_nc_ht=scontent.flgp1-1.fna&oh=00_AYAEbOLR7bCbxoVqmXBPM4qzEYlwPCEN5Fz9kCtg24Xj7w&oe=66A85844'
-	}
 
 	return (
 		<motion.nav
@@ -58,7 +51,7 @@ export const SideNavigation = ({
 				<Separator className="bg-muted" />
 			</div>
 
-			<UserButton user={user} />
+			<UserButton />
 		</motion.nav>
 	)
 }

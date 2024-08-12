@@ -3,9 +3,10 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+import { signOut, useSession } from 'next-auth/react'
 import { useTheme } from 'next-themes'
 
-import { type NavUser, type ThemeType } from '@/shared/types'
+import { type ThemeType } from '@/shared/types'
 
 import { Icons } from '@/client/components/icons'
 import {
@@ -34,24 +35,19 @@ import {
 } from '@/client/components/ui'
 import { useDeviceType, useNavContext } from '@/client/context'
 import { useMediaQuery } from '@/client/lib/hooks'
-import { cn, getInitials } from '@/client/lib/utils'
+import { themes } from '@/client/lib/themes'
+import { cn, getEmail, getInitials } from '@/client/lib/utils'
 
-const themes: ThemeType = {
-	light: [
-		{ name: 'default', color: 'bg-zinc-950' },
-		{ name: 'ayu', color: 'bg-yellow-500' },
-		{ name: 'rose', color: 'bg-rose-500' },
-		{ name: 'grass', color: 'bg-green-500' }
-	],
-	dark: [
-		{ name: 'default', color: 'bg-zinc-100' },
-		{ name: 'ayu', color: 'bg-yellow-400' },
-		{ name: 'rose', color: 'bg-rose-500' },
-		{ name: 'grass', color: 'bg-green-500' }
-	]
-}
+export const UserButton = () => {
+	const session = useSession()
 
-export const UserButton = ({ user }: { user: NavUser }) => {
+	const name = session.data?.user?.name ?? ''
+	const email = session.data?.user?.email ?? ''
+	const image = session.data?.user?.image ?? ''
+
+	const initials = getInitials(name)
+	const strippedEmail = getEmail(email)
+
 	const [mounted, setMounted] = useState(false)
 	const [mode, setMode] = useState(() => {
 		if (typeof window !== 'undefined') {
@@ -85,126 +81,196 @@ export const UserButton = ({ user }: { user: NavUser }) => {
 		setTheme(newTheme)
 	}
 
-	if (!mounted) {
+	if (!session.data || !mounted) {
 		return (
 			<div className="mx-2 p-1">
 				<Skeleton className="size-8 rounded-full md:size-9" />
 			</div>
 		)
-	}
-
-	return (
-		<DropdownMenu
-			modal={false}
-			onOpenChange={(open) => {
-				isMobile ? setNavExpanded(false) : setAnimate(!open)
-			}}
-		>
-			<DropdownMenuTrigger className="mx-2 flex cursor-pointer items-center gap-3 rounded-md p-1 outline-none hover:bg-accent">
-				{isMobile ? (
-					<>
-						<Avatar className="h-8 w-8 border border-border">
-							<AvatarImage src={user.avatar} />
-							<AvatarFallback>{getInitials(user.name)}</AvatarFallback>
-						</Avatar>
-					</>
-				) : (
-					<>
-						<Avatar className="h-9 w-9 border border-border">
-							<AvatarImage src={user.avatar} />
-							<AvatarFallback>{getInitials(user.name)}</AvatarFallback>
-						</Avatar>
-						<motion.div
-							animate={{
-								display: animate ? (isNavExpanded ? 'flex' : 'none') : 'flex',
-								opacity: animate ? (isNavExpanded ? 1 : 0) : 1
-							}}
-							className="hidden min-w-[168px] items-center justify-between whitespace-pre transition duration-150"
-						>
-							<div className="flex max-w-[9rem] flex-col items-start">
-								<span className="truncate text-sm font-medium">{user.name}</span>
-								<span className="truncate text-xs text-muted-foreground">@{user.email}</span>
-							</div>
-							<div className="relative right-0.5 rounded-md p-1">
-								<Icons.dropdown className="h-4 w-4 text-muted-foreground" />
-							</div>
-						</motion.div>
-					</>
-				)}
-			</DropdownMenuTrigger>
-
-			<DropdownMenuContent className="w-56 shadow-none" align="end" sideOffset={isMobile ? 13 : 18}>
-				<DropdownMenuLabel>
+	} else
+		return (
+			<DropdownMenu
+				modal={false}
+				onOpenChange={(open) => {
+					isMobile ? setNavExpanded(false) : setAnimate(!open)
+				}}
+			>
+				<DropdownMenuTrigger className="mx-2 flex cursor-pointer items-center gap-3 rounded-md p-1 outline-none hover:bg-accent">
 					{isMobile ? (
-						<>
-							<span className="block">{user.name}</span>
-							<span className="font-normal text-muted-foreground">@{user.email}</span>
-						</>
+						<Avatar className="h-8 w-8 border border-border">
+							<AvatarImage src={image} alt={initials} />
+							<AvatarFallback>{initials}</AvatarFallback>
+						</Avatar>
 					) : (
-						'My Account'
+						<>
+							<Avatar className="h-9 w-9 border border-border">
+								<AvatarImage src={image} alt={initials} />
+								<AvatarFallback>{initials}</AvatarFallback>
+							</Avatar>
+							<motion.div
+								animate={{
+									display: animate ? (isNavExpanded ? 'flex' : 'none') : 'flex',
+									opacity: animate ? (isNavExpanded ? 1 : 0) : 1
+								}}
+								className="hidden min-w-[168px] items-center justify-between whitespace-pre transition duration-150"
+							>
+								<div className="flex max-w-[9rem] flex-col items-start">
+									<span className="max-w-full truncate text-sm font-medium">{name}</span>
+									<span className="max-w-full truncate text-xs text-muted-foreground">{strippedEmail}</span>
+								</div>
+								<div className="relative right-0.5 rounded-md p-1">
+									<Icons.dropdown className="h-4 w-4 text-muted-foreground" />
+								</div>
+							</motion.div>
+						</>
 					)}
-				</DropdownMenuLabel>
+				</DropdownMenuTrigger>
 
-				<DropdownMenuSeparator className="border" />
+				<DropdownMenuContent className="w-56 shadow-none" align="end" sideOffset={isMobile ? 13 : 18}>
+					<DropdownMenuLabel>
+						{isMobile ? (
+							<>
+								<span className="block">{name}</span>
+								<span className="font-normal text-muted-foreground">{strippedEmail}</span>
+							</>
+						) : (
+							<>
+								<span className="block">My Account</span>
+							</>
+						)}
+					</DropdownMenuLabel>
 
-				<DropdownMenuItem asChild>
-					<Link href="#link" className="cursor-pointer">
-						<Icons.profile className="mr-2 h-4 w-4" />
-						<span>Profile</span>
-					</Link>
-				</DropdownMenuItem>
+					<DropdownMenuSeparator className="border" />
 
-				{isTinyMobile ? (
-					<Drawer>
-						<DrawerTrigger className="flex w-full items-center rounded-md px-2 py-1.5">
-							<Icons.theme className="mr-2 h-4 w-4" />
-							<span className="text-sm">Preferences</span>
-						</DrawerTrigger>
+					<DropdownMenuItem asChild>
+						<Link href="#link" className="cursor-pointer">
+							<Icons.profile className="mr-2 h-4 w-4" />
+							<span>Profile</span>
+						</Link>
+					</DropdownMenuItem>
 
-						<DrawerContent>
-							<DrawerHeader className="text-left">
-								<DrawerTitle>Edit Preferences</DrawerTitle>
-								<DrawerDescription>Choose your preferred mode and theme</DrawerDescription>
-							</DrawerHeader>
+					{isTinyMobile ? (
+						<Drawer>
+							<DrawerTrigger className="flex w-full items-center rounded-md px-2 py-1.5">
+								<Icons.theme className="mr-2 h-4 w-4" />
+								<span className="text-sm">Preferences</span>
+							</DrawerTrigger>
 
-							<div className="space-y-2 p-4">
-								<div className="space-y-2">
-									<h3 className="text-sm font-semibold">Mode</h3>
-									<div className="flex flex-wrap gap-2 pb-1">
+							<DrawerContent>
+								<DrawerHeader className="text-left">
+									<DrawerTitle>Edit Preferences</DrawerTitle>
+									<DrawerDescription>Choose your preferred mode and theme</DrawerDescription>
+								</DrawerHeader>
+
+								<div className="space-y-2 p-4">
+									<div className="space-y-2">
+										<h3 className="text-sm font-semibold">Mode</h3>
+										<div className="flex flex-wrap gap-2 pb-1">
+											<Button
+												className={cn('flex-grow bg-card', mode === 'light' && 'border-ring')}
+												variant={'outline'}
+												size={'xs'}
+												onClick={() => handleModeChange('light')}
+											>
+												<Icons.sun className="mr-2 h-4 w-4 shrink-0" />
+												<span className="text-xs">Light</span>
+											</Button>
+											<Button
+												className={cn('flex-grow bg-card', mode === 'dark' && 'border-ring')}
+												variant={'outline'}
+												size={'xs'}
+												onClick={() => handleModeChange('dark')}
+											>
+												<Icons.moon className="mr-2 h-4 w-4 shrink-0" />
+												<span className="text-xs">Dark</span>
+											</Button>
+										</div>
+									</div>
+
+									<div className="space-y-2">
+										<h3 className="text-sm font-semibold">Theme</h3>
+										<div className="flex flex-wrap gap-2 pb-1">
+											{themes[mode as keyof ThemeType].map((themeOption) => (
+												<Button
+													key={themeOption.name}
+													className={cn(
+														'w-28 flex-grow bg-card',
+														theme === `${mode}-${themeOption.name}` && 'border-ring'
+													)}
+													variant={'outline'}
+													size={'xs'}
+													onClick={() => setTheme(`${mode}-${themeOption.name}`)}
+												>
+													<div className={`mr-2 h-4 w-4 shrink-0 rounded-full border ${themeOption.color}`} />
+													<span className="text-xs">
+														{themeOption.name.charAt(0).toUpperCase()}
+														{themeOption.name.slice(1)}
+													</span>
+												</Button>
+											))}
+										</div>
+									</div>
+								</div>
+
+								<DrawerFooter>
+									<DrawerClose asChild>
+										<Button size={'sm'}>Done</Button>
+									</DrawerClose>
+								</DrawerFooter>
+							</DrawerContent>
+						</Drawer>
+					) : (
+						<DropdownMenuSub>
+							<DropdownMenuSubTrigger>
+								<Icons.theme className="mr-2 h-4 w-4" />
+								<span>Preferences</span>
+							</DropdownMenuSubTrigger>
+
+							<DropdownMenuSubContent
+								className="-mt-[2.3rem] w-64 py-2"
+								alignOffset={0}
+								sideOffset={isMobile ? 10 : 15}
+							>
+								<DropdownMenuLabel className="pb-2 text-xs">Mode</DropdownMenuLabel>
+								<div className="flex gap-1.5 px-2 pb-1">
+									<DropdownMenuItem asChild>
 										<Button
-											className={cn('flex-grow bg-card', mode === 'light' && 'border-ring')}
+											className={cn('flex-1 bg-card', mode === 'light' && 'border-ring')}
 											variant={'outline'}
 											size={'xs'}
 											onClick={() => handleModeChange('light')}
 										>
-											<Icons.sun className="mr-2 h-4 w-4 shrink-0" />
+											<Icons.sun className="mr-2 h-4 w-4" />
 											<span className="text-xs">Light</span>
 										</Button>
+									</DropdownMenuItem>
+									<DropdownMenuItem asChild>
 										<Button
-											className={cn('flex-grow bg-card', mode === 'dark' && 'border-ring')}
+											className={cn('flex-1 bg-card', mode === 'dark' && 'border-ring')}
 											variant={'outline'}
 											size={'xs'}
 											onClick={() => handleModeChange('dark')}
 										>
-											<Icons.moon className="mr-2 h-4 w-4 shrink-0" />
+											<Icons.moon className="mr-2 h-4 w-4" />
 											<span className="text-xs">Dark</span>
 										</Button>
-									</div>
+									</DropdownMenuItem>
 								</div>
 
-								<div className="space-y-2">
-									<h3 className="text-sm font-semibold">Theme</h3>
-									<div className="flex flex-wrap gap-2 pb-1">
-										{themes[mode as keyof ThemeType].map((themeOption) => (
+								<DropdownMenuSeparator className="border" />
+
+								<DropdownMenuLabel className="pb-2 text-xs">Theme</DropdownMenuLabel>
+								<div className="flex flex-wrap gap-1.5 px-2 pb-1">
+									{themes[mode as keyof ThemeType].map((themeOption) => (
+										<DropdownMenuItem
+											key={themeOption.name}
+											onClick={() => setTheme(`${mode}-${themeOption.name}`)}
+											asChild
+										>
 											<Button
-												key={themeOption.name}
-												className={cn(
-													'w-28 flex-grow bg-card',
-													theme === `${mode}-${themeOption.name}` && 'border-ring'
-												)}
+												className={cn('w-[48.7%] bg-card', theme === `${mode}-${themeOption.name}` && 'border-ring')}
 												variant={'outline'}
 												size={'xs'}
-												onClick={() => setTheme(`${mode}-${themeOption.name}`)}
 											>
 												<div className={`mr-2 h-4 w-4 shrink-0 rounded-full border ${themeOption.color}`} />
 												<span className="text-xs">
@@ -212,94 +278,27 @@ export const UserButton = ({ user }: { user: NavUser }) => {
 													{themeOption.name.slice(1)}
 												</span>
 											</Button>
-										))}
-									</div>
+										</DropdownMenuItem>
+									))}
 								</div>
-							</div>
+							</DropdownMenuSubContent>
+						</DropdownMenuSub>
+					)}
 
-							<DrawerFooter>
-								<DrawerClose asChild>
-									<Button size={'sm'}>Done</Button>
-								</DrawerClose>
-							</DrawerFooter>
-						</DrawerContent>
-					</Drawer>
-				) : (
-					<DropdownMenuSub>
-						<DropdownMenuSubTrigger>
-							<Icons.theme className="mr-2 h-4 w-4" />
-							<span>Preferences</span>
-						</DropdownMenuSubTrigger>
+					<DropdownMenuItem asChild>
+						<Link href="#link" className="cursor-pointer">
+							<Icons.settings className="mr-2 h-4 w-4" />
+							<span>Settings</span>
+						</Link>
+					</DropdownMenuItem>
 
-						<DropdownMenuSubContent className="-mt-[2.3rem] w-64 py-2" alignOffset={0} sideOffset={isMobile ? 10 : 15}>
-							<DropdownMenuLabel className="pb-2 text-xs">Mode</DropdownMenuLabel>
-							<div className="flex gap-1.5 px-2 pb-1">
-								<DropdownMenuItem asChild>
-									<Button
-										className={cn('flex-1 bg-card', mode === 'light' && 'border-ring')}
-										variant={'outline'}
-										size={'xs'}
-										onClick={() => handleModeChange('light')}
-									>
-										<Icons.sun className="mr-2 h-4 w-4" />
-										<span className="text-xs">Light</span>
-									</Button>
-								</DropdownMenuItem>
-								<DropdownMenuItem asChild>
-									<Button
-										className={cn('flex-1 bg-card', mode === 'dark' && 'border-ring')}
-										variant={'outline'}
-										size={'xs'}
-										onClick={() => handleModeChange('dark')}
-									>
-										<Icons.moon className="mr-2 h-4 w-4" />
-										<span className="text-xs">Dark</span>
-									</Button>
-								</DropdownMenuItem>
-							</div>
+					<DropdownMenuSeparator className="border" />
 
-							<DropdownMenuSeparator className="border" />
-
-							<DropdownMenuLabel className="pb-2 text-xs">Theme</DropdownMenuLabel>
-							<div className="flex flex-wrap gap-1.5 px-2 pb-1">
-								{themes[mode as keyof ThemeType].map((themeOption) => (
-									<DropdownMenuItem
-										key={themeOption.name}
-										onClick={() => setTheme(`${mode}-${themeOption.name}`)}
-										asChild
-									>
-										<Button
-											className={cn('w-[48.7%] bg-card', theme === `${mode}-${themeOption.name}` && 'border-ring')}
-											variant={'outline'}
-											size={'xs'}
-										>
-											<div className={`mr-2 h-4 w-4 shrink-0 rounded-full border ${themeOption.color}`} />
-											<span className="text-xs">
-												{themeOption.name.charAt(0).toUpperCase()}
-												{themeOption.name.slice(1)}
-											</span>
-										</Button>
-									</DropdownMenuItem>
-								))}
-							</div>
-						</DropdownMenuSubContent>
-					</DropdownMenuSub>
-				)}
-
-				<DropdownMenuItem asChild>
-					<Link href="#link" className="cursor-pointer">
-						<Icons.settings className="mr-2 h-4 w-4" />
-						<span>Settings</span>
-					</Link>
-				</DropdownMenuItem>
-
-				<DropdownMenuSeparator className="border" />
-
-				<DropdownMenuItem className="cursor-pointer">
-					<Icons.logout className="mr-2 h-4 w-4" />
-					<span>Log out</span>
-				</DropdownMenuItem>
-			</DropdownMenuContent>
-		</DropdownMenu>
-	)
+					<DropdownMenuItem className="cursor-pointer" onClick={() => signOut()}>
+						<Icons.logout className="mr-2 h-4 w-4" />
+						<span>Log out</span>
+					</DropdownMenuItem>
+				</DropdownMenuContent>
+			</DropdownMenu>
+		)
 }
