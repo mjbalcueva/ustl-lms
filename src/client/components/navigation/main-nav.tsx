@@ -6,9 +6,10 @@ import { type NavLink } from '@/shared/types'
 
 import { Icons } from '@/client/components/icons'
 import { SideNav, TopNav } from '@/client/components/navigation'
-import { ThreeDotsLoader } from '@/client/components/three-dots-loader'
 import { NavProvider, useDeviceType } from '@/client/context'
 import { cn } from '@/client/lib/utils'
+
+import { Loader } from '../loader'
 
 const inter = Inter({
 	subsets: ['latin'],
@@ -41,7 +42,15 @@ const navLinks: NavLink[] = [
 export const MainNav = () => {
 	const { deviceSize } = useDeviceType()
 
-	if (!deviceSize) return <ThreeDotsLoader />
+	if (!deviceSize)
+		return (
+			<div className="fixed bottom-0 left-0 right-0 top-0 grid place-items-center bg-background">
+				<div className="flex flex-col items-center gap-6">
+					<Loader variant="bars" size="large" />
+					<h1 className="text-xl font-bold">Please wait</h1>
+				</div>
+			</div>
+		)
 
 	return (
 		<NavProvider>

@@ -32,7 +32,7 @@ const NavProvider = ({
 	const setAnimate = setAnimateProp ?? setAnimateState
 
 	return (
-		<NavContext.Provider value={{ isNavExpanded, setNavExpanded, animate: animateState, setAnimate: setAnimate }}>
+		<NavContext.Provider value={{ isNavExpanded, setNavExpanded, animate: animateState, setAnimate }}>
 			{children}
 		</NavContext.Provider>
 	)
