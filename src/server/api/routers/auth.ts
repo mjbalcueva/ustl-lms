@@ -11,10 +11,11 @@ export const authRouter = createTRPCRouter({
 		const hashedPassword = await hash(input.password, 10)
 		const existingUser = await getUserByEmail(input.email)
 
-		if (existingUser) throw new Error('User already exists')
+		if (existingUser) throw new Error('User already exists!')
 
 		await db.user.create({
 			data: {
+				name: input.name,
 				email: input.email,
 				password: hashedPassword
 			}
@@ -23,7 +24,7 @@ export const authRouter = createTRPCRouter({
 		// TODO: send verification token email
 
 		return {
-			success: 'User created successfully!'
+			message: 'User created successfully!'
 		}
 	})
 })

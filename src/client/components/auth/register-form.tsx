@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 
@@ -22,23 +21,6 @@ import {
 } from '@/client/components/ui'
 
 export const RegisterForm = () => {
-	const [isLoading, setIsLoading] = useState(false)
-	const [error, setError] = useState<string | undefined>('')
-	const [success, setSuccess] = useState<string | undefined>('')
-
-	const register = api.auth.register.useMutation({
-		onMutate: () => {
-			setError('')
-			setSuccess('')
-			setIsLoading(true)
-		},
-		onError: (error) => setError(error.message),
-		onSuccess: (data) => setSuccess(data.success),
-		onSettled: () => {
-			setIsLoading(false)
-		}
-	})
-
 	const form = useForm<RegisterSchema>({
 		resolver: zodResolver(registerSchema),
 		defaultValues: {
@@ -48,11 +30,9 @@ export const RegisterForm = () => {
 		}
 	})
 
-	const onSubmit: SubmitHandler<RegisterSchema> = async (data) => {
-		setIsLoading(true)
-		register.mutate(data)
-		setIsLoading(false)
-	}
+	const { mutate, isPending, error, data } = api.auth.register.useMutation()
+
+	const onSubmit: SubmitHandler<RegisterSchema> = (data) => mutate(data)
 
 	return (
 		<CardWrapper
@@ -117,12 +97,12 @@ export const RegisterForm = () => {
 						)}
 					/>
 
-					<FormResponse type="error" message={error} />
-					<FormResponse type="success" message={success} />
+					<FormResponse type="error" message={error?.message} />
+					<FormResponse type="success" message={data?.message} />
 
 					<div className="pt-2">
-						<ButtonShimmering className="w-full rounded-xl" shimmerClassName="bg-white/20" disabled={isLoading}>
-							{isLoading && (
+						<ButtonShimmering className="w-full rounded-xl" shimmerClassName="bg-white/20" disabled={isPending}>
+							{isPending && (
 								<span className="relative right-[4.5ch]">
 									<Loader />
 								</span>

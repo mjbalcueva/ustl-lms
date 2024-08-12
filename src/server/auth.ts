@@ -1,17 +1,13 @@
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import NextAuth from 'next-auth'
-import Google from 'next-auth/providers/google'
 
+import authConfig from '@/server/auth.config'
 import { db } from '@/server/db'
-
-import { env } from '@/env'
 
 export const {
 	handlers: { GET, POST },
 	auth
 } = NextAuth({
-	adapter: PrismaAdapter(db),
-	session: { strategy: 'jwt' },
 	pages: {
 		signIn: '/auth/login'
 	},
@@ -34,11 +30,7 @@ export const {
 			}
 		}
 	},
-	providers: [
-		Google({
-			clientId: env.AUTH_GOOGLE_ID,
-			clientSecret: env.AUTH_GOOGLE_SECRET,
-			allowDangerousEmailAccountLinking: true
-		})
-	]
+	adapter: PrismaAdapter(db),
+	session: { strategy: 'jwt' },
+	...authConfig
 })
