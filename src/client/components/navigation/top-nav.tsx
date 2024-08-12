@@ -12,7 +12,7 @@ import { Button } from '@/client/components/ui'
 import { useNavContext } from '@/client/context'
 import { cn } from '@/client/lib/utils'
 
-export const TopNavigation = ({
+export const TopNav = ({
 	navLinks,
 	className,
 	...props

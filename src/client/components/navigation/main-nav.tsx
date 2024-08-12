@@ -5,7 +5,7 @@ import { Inter } from 'next/font/google'
 import { type NavLink } from '@/shared/types'
 
 import { Icons } from '@/client/components/icons'
-import { SideNavigation, TopNavigation } from '@/client/components/navigation'
+import { SideNav, TopNav } from '@/client/components/navigation'
 import { ThreeDotsLoader } from '@/client/components/three-dots-loader'
 import { NavProvider, useDeviceType } from '@/client/context'
 import { cn } from '@/client/lib/utils'
@@ -38,7 +38,7 @@ const navLinks: NavLink[] = [
 	}
 ]
 
-export const MainNavigation = () => {
+export const MainNav = () => {
 	const { deviceSize } = useDeviceType()
 
 	if (!deviceSize) return <ThreeDotsLoader />
@@ -46,9 +46,9 @@ export const MainNavigation = () => {
 	return (
 		<NavProvider>
 			{deviceSize === 'mobile' ? (
-				<TopNavigation navLinks={navLinks} className={cn('md:hidden', inter.className)} />
+				<TopNav navLinks={navLinks} className={cn('md:hidden', inter.className)} />
 			) : (
-				<SideNavigation navLinks={navLinks} className={cn('hidden md:flex md:flex-col', inter.className)} />
+				<SideNav navLinks={navLinks} className={cn('hidden md:flex md:flex-col', inter.className)} />
 			)}
 		</NavProvider>
 	)

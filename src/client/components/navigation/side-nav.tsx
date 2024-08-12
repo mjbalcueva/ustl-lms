@@ -11,7 +11,7 @@ import { Separator } from '@/client/components/ui'
 import { useNavContext } from '@/client/context'
 import { cn } from '@/client/lib/utils'
 
-export const SideNavigation = ({
+export const SideNav = ({
 	navLinks,
 	className,
 	...props
