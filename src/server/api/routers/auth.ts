@@ -1,4 +1,4 @@
-import { hash } from 'bcrypt'
+import { hash } from 'bcryptjs'
 
 import { getUserByEmail } from '@/shared/data/user'
 import { registerSchema } from '@/shared/schemas'
@@ -21,10 +21,6 @@ export const authRouter = createTRPCRouter({
 			}
 		})
 
-		// TODO: send verification token email
-
-		return {
-			message: 'User created successfully!'
-		}
+		return { message: 'User created successfully!' }
 	})
 })
