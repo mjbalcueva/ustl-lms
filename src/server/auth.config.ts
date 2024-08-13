@@ -1,4 +1,4 @@
-import bcrypt from 'bcryptjs'
+import { compare } from 'bcryptjs'
 import type { NextAuthConfig } from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 import Google from 'next-auth/providers/google'
@@ -25,7 +25,7 @@ export default {
 				const user = await getUserByEmail(email)
 				if (!user?.password) return null
 
-				const isPasswordValid = await bcrypt.compare(password, user.password)
+				const isPasswordValid = await compare(password, user.password)
 				if (!isPasswordValid) return null
 
 				console.log('user', user)

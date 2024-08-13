@@ -1,6 +1,5 @@
 export * from './main-nav'
 export * from './nav-link'
 export * from './side-nav'
-export * from './side-user-button'
 export * from './top-nav'
-export * from './top-user-button'
+export * from './user-button'

@@ -7,7 +7,7 @@ import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-
 import { type NavLink } from '@/shared/types'
 
 import { Icons } from '@/client/components/icons'
-import { NavLinkComponent, TopUserButton } from '@/client/components/navigation'
+import { NavLinkComponent, UserButton } from '@/client/components/navigation'
 import { Button } from '@/client/components/ui'
 import { useNavContext } from '@/client/context'
 import { cn } from '@/client/lib/utils'
@@ -91,7 +91,7 @@ export const TopNav = ({
 						<Icons.logo2 />
 					</Link>
 
-					<TopUserButton />
+					<UserButton />
 				</motion.aside>
 			</AnimatePresence>
 

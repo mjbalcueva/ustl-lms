@@ -5,7 +5,7 @@ type FormResponseType = 'success' | 'error'
 
 type FormResponseProps = {
 	type: FormResponseType
-	message?: string
+	message?: string | null
 }
 
 const formResponseIcon: Record<FormResponseType, React.ReactNode> = {

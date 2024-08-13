@@ -1,13 +1,14 @@
 'use client'
 
 import Link from 'next/link'
-import { useState, useTransition } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { signIn } from 'next-auth/react'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 
 import { loginSchema, type LoginSchema } from '@/shared/schemas'
-
-import { login } from '@/server/actions/login'
+import { api } from '@/shared/trpc/react'
 
 import { CardWrapper, FormResponse } from '@/client/components/auth'
 import { ButtonShimmering } from '@/client/components/button-shimmering'
@@ -21,49 +22,57 @@ import {
 	FormLabel,
 	FormMessage,
 	Input,
-	InputOTP,
-	InputOTPGroup,
-	InputOTPSlot,
 	PasswordInput
 } from '@/client/components/ui'
 import { cn } from '@/client/lib/utils'
 
+import { DEFAULT_LOGIN_REDIRECT } from '@/routes'
+
 export const LoginForm = () => {
-	const [showTwoFactor, setShowTwoFactor] = useState(false)
-	const [error, setError] = useState<string | undefined>('')
-	const [success, setSuccess] = useState<string | undefined>('')
-	const [isPending, startTransition] = useTransition()
+	const router = useRouter()
+	const searchParams = useSearchParams()
+	const callbackUrl = searchParams.get('callbackUrl') ?? DEFAULT_LOGIN_REDIRECT
+
+	const [formSuccess, setFormSuccess] = useState<string | null>(null)
+	const [formError, setFormError] = useState<string | null>(null)
 
 	const form = useForm<LoginSchema>({
 		resolver: zodResolver(loginSchema),
 		defaultValues: {
-			code: '',
 			email: '',
-			password: ''
+			password: '',
+			code: ''
+		}
+	})
+
+	const { mutate, isPending, error } = api.auth.login.useMutation({
+		onSuccess: async (data) => {
+			const result = await signIn('credentials', {
+				email: data.email,
+				password: data.password,
+				redirect: false
+			})
+
+			if (result?.error) {
+				switch (result.error) {
+					case 'CredentialsSignin':
+						setFormError('Invalid credentials. Please try again.')
+						break
+					default:
+						setFormError('An unexpected error occurred.')
+						break
+				}
+			} else {
+				setFormSuccess('Login successful! Redirecting...')
+				router.push(callbackUrl)
+			}
 		}
 	})
 
 	const onSubmit: SubmitHandler<LoginSchema> = (data) => {
-		setError('')
-		setSuccess('')
-
-		startTransition(async () => {
-			await login(data)
-				.then((data) => {
-					if (data?.error) {
-						setError(data?.error)
-						return
-					}
-
-					if (data?.success) setSuccess(data?.success)
-
-					setShowTwoFactor(false)
-				})
-				.catch((e) => {
-					console.log('login error', e)
-					setError('Something went wrong')
-				})
-		})
+		setFormSuccess('')
+		setFormError('')
+		mutate(data)
 	}
 
 	return (
@@ -76,80 +85,53 @@ export const LoginForm = () => {
 		>
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-					{showTwoFactor ? (
-						<FormField
-							control={form.control}
-							name="code"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel className="text-card-foreground">Two Factor Code</FormLabel>
-									<FormControl>
-										<InputOTP maxLength={6} {...field}>
-											<InputOTPGroup>
-												<InputOTPSlot index={0} className="bg-background" />
-												<InputOTPSlot index={1} className="bg-background" />
-												<InputOTPSlot index={2} className="bg-background" />
-												<InputOTPSlot index={3} className="bg-background" />
-												<InputOTPSlot index={4} className="bg-background" />
-												<InputOTPSlot index={5} className="bg-background" />
-											</InputOTPGroup>
-										</InputOTP>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-					) : (
-						<>
-							<FormField
-								control={form.control}
-								name="email"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel className="text-card-foreground">Email Address</FormLabel>
-										<FormControl>
-											<Input
-												placeholder="Enter your email"
-												className="rounded-xl bg-background"
-												type="email"
-												autoComplete="email"
-												{...field}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
+					<FormField
+						control={form.control}
+						name="email"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel className="text-card-foreground">Email Address</FormLabel>
+								<FormControl>
+									<Input
+										placeholder="Enter your email"
+										className="rounded-xl bg-background"
+										type="email"
+										autoComplete="email"
+										{...field}
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
 
-							<FormField
-								control={form.control}
-								name="password"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel className="text-card-foreground">Password</FormLabel>
-										<FormControl>
-											<PasswordInput placeholder="Password" className="rounded-xl bg-background" {...field} />
-										</FormControl>
-										<FormMessage />
-										<div className="flex justify-end">
-											<Link
-												className={cn(
-													buttonVariants({ variant: 'link', size: 'xs' }),
-													'p-0 text-xs font-normal text-card-foreground'
-												)}
-												href="/auth/reset"
-											>
-												Forgot password?
-											</Link>
-										</div>
-									</FormItem>
-								)}
-							/>
-						</>
-					)}
+					<FormField
+						control={form.control}
+						name="password"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel className="text-card-foreground">Password</FormLabel>
+								<FormControl>
+									<PasswordInput placeholder="Password" className="rounded-xl bg-background" {...field} />
+								</FormControl>
+								<FormMessage />
+								<div className="flex justify-end">
+									<Link
+										className={cn(
+											buttonVariants({ variant: 'link', size: 'xs' }),
+											'p-0 text-xs font-normal text-card-foreground'
+										)}
+										href="/auth/reset"
+									>
+										Forgot password?
+									</Link>
+								</div>
+							</FormItem>
+						)}
+					/>
 
-					<FormResponse type="error" message={error} />
-					<FormResponse type="success" message={success} />
+					<FormResponse type="error" message={formError ?? error?.message} />
+					<FormResponse type="success" message={formSuccess} />
 
 					<ButtonShimmering className="w-full rounded-xl" shimmerClassName="bg-white/20" disabled={isPending}>
 						{isPending && (

@@ -6,16 +6,16 @@ import { siteConfig } from '@/shared/config/site'
 import { type NavLink } from '@/shared/types'
 
 import { Icons } from '@/client/components/icons'
-import { NavLinkComponent, SideUserButton } from '@/client/components/navigation'
+import { NavLinkComponent, UserButton } from '@/client/components/navigation'
 import { Separator } from '@/client/components/ui'
 import { useNavContext } from '@/client/context'
 import { cn } from '@/client/lib/utils'
 
-export const SideNav = ({
-	navLinks,
-	className,
-	...props
-}: React.ComponentProps<typeof motion.div> & { navLinks: NavLink[] }) => {
+type SideNavProps = {
+	navLinks: NavLink[]
+} & React.ComponentProps<typeof motion.div>
+
+export const SideNav = ({ navLinks, className, ...props }: SideNavProps) => {
 	const { isNavExpanded, setNavExpanded, animate } = useNavContext()
 
 	return (
@@ -51,7 +51,13 @@ export const SideNav = ({
 				<Separator className="bg-muted" />
 			</div>
 
-			<SideUserButton />
+			{/* {session ? ( */}
+			<UserButton />
+			{/* ) : (
+				<div className="mx-2 p-1">
+					<Skeleton className="size-8 rounded-full md:size-9" />
+				</div>
+			)} */}
 		</motion.nav>
 	)
 }
