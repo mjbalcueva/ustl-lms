@@ -24,7 +24,7 @@ export default async function Layout({ children }: Readonly<{ children: React.Re
 	const session = await auth()
 	const deviceSizeCookie = cookies().get('device-size')
 
-	let defaultDeviceSize: DeviceType
+	let defaultDeviceSize: DeviceType = ''
 	if (deviceSizeCookie) defaultDeviceSize = JSON.parse(deviceSizeCookie.value) as DeviceType
 
 	return (

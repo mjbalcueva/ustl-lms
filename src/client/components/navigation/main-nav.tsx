@@ -9,8 +9,6 @@ import { SideNav, TopNav } from '@/client/components/navigation'
 import { NavProvider, useDeviceType } from '@/client/context'
 import { cn } from '@/client/lib/utils'
 
-import { Loader } from '../loader'
-
 const inter = Inter({
 	subsets: ['latin'],
 	display: 'swap'
@@ -46,8 +44,13 @@ export const MainNav = () => {
 		return (
 			<div className="fixed bottom-0 left-0 right-0 top-0 grid place-items-center bg-background">
 				<div className="flex flex-col items-center gap-6">
-					<Loader variant="bars" size="large" />
-					<h1 className="text-xl font-bold">Please wait</h1>
+					<h1 className="text-lg font-semibold">
+						{'Loading'.split('').map((char, index) => (
+							<span key={index} className="inline-block animate-bounce" style={{ animationDelay: `${index * 0.08}s` }}>
+								{char}
+							</span>
+						))}
+					</h1>
 				</div>
 			</div>
 		)

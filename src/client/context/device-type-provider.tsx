@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 
-type DeviceType = 'mobile' | 'tablet' | 'desktop' | undefined
+type DeviceType = 'mobile' | 'tablet' | 'desktop' | '' | undefined
 
 type DeviceTypeContextType = {
 	deviceSize: DeviceType
