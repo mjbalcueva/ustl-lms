@@ -14,7 +14,7 @@ import { useUserTheme } from '@/client/lib/hooks/use-user-theme'
 import { cn } from '@/client/lib/utils'
 
 export const PreferenceDrawer = () => {
-	const { theme, setTheme, mode, handleModeChange, currentThemes } = useUserTheme()
+	const { theme, handleThemeChange, mode, handleModeChange, themeOptions } = useUserTheme()
 
 	return (
 		<Drawer>
@@ -57,13 +57,13 @@ export const PreferenceDrawer = () => {
 					<div className="space-y-2">
 						<h3 className="text-sm font-semibold">Theme</h3>
 						<div className="flex flex-wrap gap-2 pb-1">
-							{currentThemes.map((themeOption) => (
+							{themeOptions.map((themeOption) => (
 								<Button
 									key={themeOption.name}
 									className={cn('w-28 flex-grow bg-card', theme === `${mode}-${themeOption.name}` && 'border-ring')}
 									variant={'outline'}
 									size={'xs'}
-									onClick={() => setTheme(`${mode}-${themeOption.name}`)}
+									onClick={() => handleThemeChange(mode, themeOption.name)}
 								>
 									<div className={`mr-2 h-4 w-4 shrink-0 rounded-full border ${themeOption.color}`} />
 									<span className="text-xs">

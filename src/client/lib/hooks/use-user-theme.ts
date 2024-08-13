@@ -1,40 +1,26 @@
-import { useEffect, useState } from 'react'
 import { useTheme } from 'next-themes'
+import { useLocalStorage } from 'usehooks-ts'
 
 import { type ThemeType } from '@/shared/types'
 
 import { themes } from '@/client/lib/themes'
 
 export const useUserTheme = () => {
-	const [mode, setMode] = useState(() => {
-		if (typeof window === 'undefined') return ''
-		return localStorage.getItem('mode') ?? 'dark'
-	})
-
-	const [isThemeLoading, setIsThemeLoading] = useState(true)
 	const { theme, setTheme } = useTheme()
-
-	useEffect(() => {
-		const storedMode = localStorage.getItem('mode')
-		if (storedMode) setMode(storedMode)
-	}, [])
-
-	useEffect(() => {
-		localStorage.setItem('mode', mode)
-	}, [mode])
-
-	useEffect(() => {
-		if (theme) setIsThemeLoading(false)
-	}, [theme])
+	const directMode = theme?.split('-')[0]
+	const directTheme = theme?.split('-')[1]
+	const [mode, setMode] = useLocalStorage('mode', directMode)
 
 	const handleModeChange = (newMode: 'light' | 'dark') => {
-		const selectedTheme = theme?.split('-')[1]
-		const newTheme = `${newMode}-${selectedTheme}`
 		setMode(newMode)
-		setTheme(newTheme)
+		setTheme(`${newMode}-${directTheme}`)
 	}
 
-	const currentThemes = themes[mode as keyof ThemeType]
+	const handleThemeChange = (newMode: typeof mode, newTheme: string) => {
+		setTheme(`${newMode}-${newTheme}`)
+	}
 
-	return { theme, setTheme, isThemeLoading, mode, handleModeChange, currentThemes }
+	const themeOptions = themes[mode as keyof ThemeType]
+
+	return { theme, handleThemeChange, mode, handleModeChange, themeOptions }
 }

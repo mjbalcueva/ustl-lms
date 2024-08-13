@@ -13,7 +13,7 @@ import { useUserTheme } from '@/client/lib/hooks/use-user-theme'
 import { cn } from '@/client/lib/utils'
 
 export const PreferenceDropdown = () => {
-	const { theme, setTheme, mode, handleModeChange, currentThemes } = useUserTheme()
+	const { theme, handleThemeChange, mode, handleModeChange, themeOptions } = useUserTheme()
 
 	return (
 		<DropdownMenuSub>
@@ -54,10 +54,10 @@ export const PreferenceDropdown = () => {
 
 					<DropdownMenuLabel className="pb-2 text-xs">Theme</DropdownMenuLabel>
 					<div className="flex flex-wrap gap-1.5 px-2 pb-1">
-						{currentThemes.map((themeOption) => (
+						{themeOptions.map((themeOption) => (
 							<DropdownMenuItem
 								key={themeOption.name}
-								onClick={() => setTheme(`${mode}-${themeOption.name}`)}
+								onClick={() => handleThemeChange(mode, themeOption.name)}
 								className={cn(
 									buttonVariants({ variant: 'outline', size: 'xs' }),
 									'w-[48.7%]',
