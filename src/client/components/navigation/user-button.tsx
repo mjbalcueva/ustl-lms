@@ -37,8 +37,8 @@ export const UserButton = () => {
 
 	return (
 		<DropdownMenu modal={false} onOpenChange={(open) => (isMobile ? setNavExpanded(false) : setAnimate(!open))}>
-			<DropdownMenuTrigger className="mx-2 flex cursor-pointer items-center gap-3 rounded-md p-1 outline-none hover:bg-accent">
-				<Avatar className="size-8 border border-border md:size-9">
+			<DropdownMenuTrigger className="mx-2 flex min-h-[2.8rem] cursor-pointer items-center gap-3 rounded-md p-1 outline-none hover:bg-accent">
+				<Avatar className="size-8 border border-border">
 					<AvatarImage src={session.data?.user.image ?? ''} alt={initials} />
 					<AvatarFallback>{initials}</AvatarFallback>
 				</Avatar>
@@ -50,12 +50,12 @@ export const UserButton = () => {
 						}}
 						className="hidden min-w-[168px] items-center justify-between whitespace-pre transition duration-150"
 					>
-						<div className="flex max-w-[9rem] flex-col items-start">
+						<div className="flex max-w-[9.5rem] flex-col items-start -space-y-0.5">
 							<span className="max-w-full truncate text-sm font-medium">{name}</span>
-							<span className="max-w-full truncate text-xs text-muted-foreground">{strippedEmail}</span>
+							<span className="max-w-full truncate text-xs text-muted-foreground">@{strippedEmail}</span>
 						</div>
 						<div className="relative right-0.5 rounded-md p-1">
-							<Icons.dropdown className="h-4 w-4 text-muted-foreground" />
+							<Icons.dropdown className="h-4 w-4 text-muted-foreground/80" />
 						</div>
 					</motion.div>
 				)}
