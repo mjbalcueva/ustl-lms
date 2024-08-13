@@ -1,8 +1,9 @@
 import { Icons } from '@/client/components/icons'
 import {
-	Button,
+	buttonVariants,
 	DropdownMenuItem,
 	DropdownMenuLabel,
+	DropdownMenuPortal,
 	DropdownMenuSeparator,
 	DropdownMenuSub,
 	DropdownMenuSubContent,
@@ -21,54 +22,58 @@ export const PreferenceDropdown = () => {
 				<span>Preferences</span>
 			</DropdownMenuSubTrigger>
 
-			<DropdownMenuSubContent className="-mt-[2.3rem] w-64 py-2" alignOffset={0} sideOffset={15}>
-				<DropdownMenuLabel className="pb-2 text-xs">Mode</DropdownMenuLabel>
-				<div className="flex gap-1.5 px-2 pb-1">
-					<DropdownMenuItem asChild>
-						<Button
-							className={cn('flex-grow bg-card', mode === 'light' && 'border-ring')}
-							variant={'outline'}
-							size={'xs'}
+			<DropdownMenuPortal>
+				<DropdownMenuSubContent className="-mt-[2.3rem] w-64 py-2" alignOffset={0} sideOffset={15}>
+					<DropdownMenuLabel className="pb-2 text-xs">Mode</DropdownMenuLabel>
+					<div className="flex gap-1.5 px-2 pb-1">
+						<DropdownMenuItem
 							onClick={() => handleModeChange('light')}
+							className={cn(
+								buttonVariants({ variant: 'outline', size: 'xs' }),
+								'w-[48.7%]',
+								mode === 'light' && 'border-ring'
+							)}
 						>
 							<Icons.sun className="mr-2 h-4 w-4 shrink-0" />
 							<span className="text-xs">Light</span>
-						</Button>
-					</DropdownMenuItem>
-					<DropdownMenuItem asChild>
-						<Button
-							className={cn('flex-grow bg-card', mode === 'dark' && 'border-ring')}
-							variant={'outline'}
-							size={'xs'}
+						</DropdownMenuItem>
+						<DropdownMenuItem
 							onClick={() => handleModeChange('dark')}
+							className={cn(
+								buttonVariants({ variant: 'outline', size: 'xs' }),
+								'w-[48.7%]',
+								mode === 'dark' && 'border-ring'
+							)}
 						>
 							<Icons.moon className="mr-2 h-4 w-4 shrink-0" />
 							<span className="text-xs">Dark</span>
-						</Button>
-					</DropdownMenuItem>
-				</div>
+						</DropdownMenuItem>
+					</div>
 
-				<DropdownMenuSeparator className="border" />
+					<DropdownMenuSeparator className="border" />
 
-				<DropdownMenuLabel className="pb-2 text-xs">Theme</DropdownMenuLabel>
-				<div className="flex flex-wrap gap-1.5 px-2 pb-1">
-					{currentThemes.map((themeOption) => (
-						<DropdownMenuItem key={themeOption.name} onClick={() => setTheme(`${mode}-${themeOption.name}`)} asChild>
-							<Button
-								className={cn('w-[48.7%] bg-card', theme === `${mode}-${themeOption.name}` && 'border-ring')}
-								variant={'outline'}
-								size={'xs'}
+					<DropdownMenuLabel className="pb-2 text-xs">Theme</DropdownMenuLabel>
+					<div className="flex flex-wrap gap-1.5 px-2 pb-1">
+						{currentThemes.map((themeOption) => (
+							<DropdownMenuItem
+								key={themeOption.name}
+								onClick={() => setTheme(`${mode}-${themeOption.name}`)}
+								className={cn(
+									buttonVariants({ variant: 'outline', size: 'xs' }),
+									'w-[48.7%]',
+									theme === `${mode}-${themeOption.name}` && 'border-ring'
+								)}
 							>
 								<div className={`mr-2 h-4 w-4 shrink-0 rounded-full border ${themeOption.color}`} />
 								<span className="text-xs">
 									{themeOption.name.charAt(0).toUpperCase()}
 									{themeOption.name.slice(1)}
 								</span>
-							</Button>
-						</DropdownMenuItem>
-					))}
-				</div>
-			</DropdownMenuSubContent>
+							</DropdownMenuItem>
+						))}
+					</div>
+				</DropdownMenuSubContent>
+			</DropdownMenuPortal>
 		</DropdownMenuSub>
 	)
 }

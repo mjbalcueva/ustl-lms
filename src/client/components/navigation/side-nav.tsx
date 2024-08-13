@@ -51,13 +51,7 @@ export const SideNav = ({ navLinks, className, ...props }: SideNavProps) => {
 				<Separator className="bg-muted" />
 			</div>
 
-			{/* {session ? ( */}
 			<UserButton />
-			{/* ) : (
-				<div className="mx-2 p-1">
-					<Skeleton className="size-8 rounded-full md:size-9" />
-				</div>
-			)} */}
 		</motion.nav>
 	)
 }
