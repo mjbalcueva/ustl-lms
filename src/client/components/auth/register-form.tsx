@@ -1,10 +1,13 @@
 'use client'
 
+import { useState, useTransition } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { signIn } from 'next-auth/react'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 
 import { registerSchema, type RegisterSchema } from '@/shared/schemas'
-import { api } from '@/shared/trpc/react'
+
+import { register } from '@/server/actions/register'
 
 import { CardWrapper, FormResponse } from '@/client/components/auth'
 import { ButtonShimmering } from '@/client/components/button-shimmering'
@@ -21,6 +24,10 @@ import {
 } from '@/client/components/ui'
 
 export const RegisterForm = () => {
+	const [formSuccess, setFormSuccess] = useState<string | null>(null)
+	const [formError, setFormError] = useState<string | null>(null)
+	const [isPending, startTransition] = useTransition()
+
 	const form = useForm<RegisterSchema>({
 		resolver: zodResolver(registerSchema),
 		defaultValues: {
@@ -30,9 +37,22 @@ export const RegisterForm = () => {
 		}
 	})
 
-	const { mutate, isPending, error, data } = api.auth.register.useMutation()
+	const onSubmit: SubmitHandler<RegisterSchema> = (data) => {
+		setFormError('')
+		setFormSuccess('')
 
-	const onSubmit: SubmitHandler<RegisterSchema> = (data) => mutate(data)
+		startTransition(async () => {
+			await register(data).then(async (data) => {
+				if (data?.error) return setFormError(data?.error)
+				if (data?.success) setFormSuccess(data?.success)
+
+				await signIn('credentials', {
+					email: data.email,
+					password: data.password
+				})
+			})
+		})
+	}
 
 	return (
 		<CardWrapper
@@ -97,12 +117,16 @@ export const RegisterForm = () => {
 						)}
 					/>
 
-					<FormResponse type="error" message={error?.message} />
-					<FormResponse type="success" message={data?.message} />
+					<FormResponse type="error" message={formError} />
+					<FormResponse type="success" message={formSuccess} />
 
 					<div className="pt-2">
-						<ButtonShimmering className="w-full rounded-xl" shimmerClassName="bg-white/20" disabled={isPending}>
-							{isPending && (
+						<ButtonShimmering
+							className="w-full rounded-xl"
+							shimmerClassName="bg-white/20"
+							disabled={isPending || !!formSuccess}
+						>
+							{(isPending || !!formSuccess) && (
 								<span className="relative right-[4.5ch]">
 									<Loader />
 								</span>

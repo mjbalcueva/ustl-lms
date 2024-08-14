@@ -48,21 +48,12 @@ export const LoginForm = () => {
 		setFormSuccess('')
 
 		startTransition(async () => {
-			await login(data)
-				.then((data) => {
-					if (data?.error) {
-						setFormError(data?.error)
-						return
-					}
+			await login(data).then((data) => {
+				if (data?.error) return setFormError(data?.error)
+				if (data?.success) return setFormSuccess(data?.success)
 
-					if (data?.success) setFormSuccess(data?.success)
-
-					setShowTwoFactor(false)
-				})
-				.catch((e) => {
-					console.log('login error', e)
-					setFormError('Something went wrong')
-				})
+				setShowTwoFactor(false)
+			})
 		})
 	}
 
