@@ -17,7 +17,7 @@ export const NavLinkComponent = ({
 	className?: string
 	props?: LinkProps
 }) => {
-	const { isNavExpanded: open, animate } = useNavContext()
+	const { isNavOpen, canNavOpen } = useNavContext()
 
 	return (
 		<Link
@@ -35,8 +35,8 @@ export const NavLinkComponent = ({
 
 			<motion.span
 				animate={{
-					display: animate ? (open ? 'inline-block' : 'none') : 'inline-block',
-					opacity: animate ? (open ? 1 : 0) : 1
+					display: canNavOpen ? (isNavOpen ? 'inline-block' : 'none') : 'inline-block',
+					opacity: canNavOpen ? (isNavOpen ? 1 : 0) : 1
 				}}
 				className={cn(
 					'hidden whitespace-pre transition duration-150',

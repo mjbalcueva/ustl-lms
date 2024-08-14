@@ -130,7 +130,7 @@ export const LoginForm = () => {
 						)}
 					/>
 
-					<FormResponse type="error" message={formError ?? error?.message} />
+					<FormResponse type="error" message={error?.message ?? formError} />
 					<FormResponse type="success" message={formSuccess} />
 
 					<ButtonShimmering className="w-full rounded-xl" shimmerClassName="bg-white/20" disabled={isPending}>

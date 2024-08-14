@@ -5,6 +5,8 @@ import { motion } from 'framer-motion'
 import { signOut, useSession } from 'next-auth/react'
 
 import { Icons } from '@/client/components/icons'
+import { PreferenceDrawer } from '@/client/components/navigation/preference-drawer'
+import { PreferenceDropdown } from '@/client/components/navigation/preference-dropdown'
 import {
 	Avatar,
 	AvatarFallback,
@@ -19,11 +21,8 @@ import {
 import { useDeviceType, useNavContext } from '@/client/context'
 import { getEmail, getInitials } from '@/client/lib/utils'
 
-import { PreferenceDrawer } from './preference-drawer'
-import { PreferenceDropdown } from './preference-dropdown'
-
-export const UserButton = () => {
-	const { isNavExpanded, setNavExpanded, setAnimate, animate } = useNavContext()
+export const UserButton: React.FC<React.ComponentProps<typeof DropdownMenu>> = ({ ...props }) => {
+	const { isNavOpen, canNavOpen } = useNavContext()
 	const session = useSession()
 	const { deviceSize } = useDeviceType()
 
@@ -36,17 +35,7 @@ export const UserButton = () => {
 	const isMobile = deviceSize === 'mobile'
 
 	return (
-		<DropdownMenu
-			modal={false}
-			onOpenChange={(open) => {
-				if (isMobile) {
-					setNavExpanded(false)
-				} else {
-					setNavExpanded(false)
-					setAnimate(!open)
-				}
-			}}
-		>
+		<DropdownMenu modal={false} {...props}>
 			<DropdownMenuTrigger className="mx-2 flex min-h-[2.8rem] cursor-pointer items-center gap-3 rounded-md p-1 outline-none hover:bg-accent">
 				<Avatar className="ml-[1.5px] size-8 border border-border">
 					<AvatarImage src={session.data?.user.image ?? ''} alt={initials} />
@@ -55,8 +44,8 @@ export const UserButton = () => {
 				{!isMobile && (
 					<motion.div
 						animate={{
-							display: animate ? (isNavExpanded ? 'flex' : 'none') : 'flex',
-							opacity: animate ? (isNavExpanded ? 1 : 0) : 1
+							display: canNavOpen ? (isNavOpen ? 'flex' : 'none') : 'flex',
+							opacity: canNavOpen ? (isNavOpen ? 1 : 0) : 1
 						}}
 						className="hidden min-w-[168px] items-center justify-between whitespace-pre transition duration-150"
 					>

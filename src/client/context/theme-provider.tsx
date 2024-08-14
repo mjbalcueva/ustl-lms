@@ -15,5 +15,3 @@ export const ThemeProvider = ({ children, ...props }: ThemeProviderProps) => {
 		</NextThemesProvider>
 	)
 }
-
-// export { ThemeProvider }

@@ -16,22 +16,22 @@ type SideNavProps = {
 } & React.ComponentProps<typeof motion.div>
 
 export const SideNav = ({ navLinks, className, ...props }: SideNavProps) => {
-	const { isNavExpanded, setNavExpanded, animate } = useNavContext()
+	const { isNavOpen, setNavOpen, canNavOpen, setCanNavOpen } = useNavContext()
 
 	return (
 		<motion.nav
 			className={cn('h-full w-[60px] flex-shrink-0 bg-popover py-4', className)}
 			animate={{
-				width: animate ? (isNavExpanded ? '240px' : '60px') : '240px'
+				width: canNavOpen ? (isNavOpen ? '240px' : '60px') : '240px'
 			}}
-			onMouseEnter={() => setNavExpanded(true)}
-			onMouseLeave={() => setNavExpanded(false)}
+			onMouseEnter={() => setNavOpen(true)}
+			onMouseLeave={() => setNavOpen(false)}
 			{...props}
 		>
 			<NavLinkComponent
 				link={{
 					label: siteConfig.title,
-					href: '/',
+					href: '/dashboard',
 					icon: <Icons.logo2 />
 				}}
 				isLogo
@@ -51,7 +51,12 @@ export const SideNav = ({ navLinks, className, ...props }: SideNavProps) => {
 				<Separator className="bg-muted" />
 			</div>
 
-			<UserButton />
+			<UserButton
+				onOpenChange={(open) => {
+					setNavOpen(false)
+					setCanNavOpen(!open)
+				}}
+			/>
 		</motion.nav>
 	)
 }

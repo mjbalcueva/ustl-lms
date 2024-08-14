@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
 
 import { type NavLink } from '@/shared/types'
@@ -17,38 +17,25 @@ export const TopNav = ({
 	className,
 	...props
 }: React.ComponentProps<typeof motion.div> & { navLinks: NavLink[] }) => {
-	const { isNavExpanded, setNavExpanded } = useNavContext()
-	const [displayContent, setDisplayContent] = useState(false)
+	const { isNavOpen, setNavOpen } = useNavContext()
 
+	const [showNav, setShowNav] = useState(true)
 	const { scrollYProgress } = useScroll()
-	const [isNavVisible, setNavVisible] = useState(true)
 
 	useMotionValueEvent(scrollYProgress, 'change', (current) => {
 		if (typeof current !== 'number') return
 		const direction = current - scrollYProgress.getPrevious()!
-		if (current === 1) setNavVisible(true)
-		else !isNavExpanded && setNavVisible(direction < 0)
+		if (current === 1) setShowNav(true)
+		else !isNavOpen && setShowNav(direction < 0)
 	})
 
-	useEffect(() => {
-		let timeoutId: string | number | NodeJS.Timeout | undefined
-		if (isNavExpanded) {
-			setDisplayContent(true)
-		} else if (!isNavExpanded && displayContent) {
-			timeoutId = setTimeout(() => {
-				setDisplayContent(false)
-			}, 500)
-		}
-		return () => clearTimeout(timeoutId)
-	}, [isNavExpanded, displayContent])
+	const toggleScroll = useCallback((disable: boolean) => {
+		disable ? document.body.classList.add('overflow-hidden') : document.body.classList.remove('overflow-hidden')
+	}, [])
 
 	useEffect(() => {
-		if (displayContent) {
-			document.body.style.overflow = 'hidden'
-		} else {
-			document.body.style.overflow = ''
-		}
-	}, [displayContent])
+		toggleScroll(isNavOpen)
+	}, [isNavOpen, toggleScroll])
 
 	return (
 		<>
@@ -59,8 +46,8 @@ export const TopNav = ({
 						y: 0
 					}}
 					animate={{
-						y: isNavVisible ? 0 : -100, // Hide when scrolling down
-						opacity: isNavVisible ? 1 : 0
+						y: showNav ? 0 : -100, // Hide when scrolling down
+						opacity: showNav ? 1 : 0
 					}}
 					transition={{
 						duration: 0.2
@@ -74,10 +61,11 @@ export const TopNav = ({
 					<Button
 						variant={'ghost'}
 						size={'icon'}
-						onClick={() => setNavExpanded(!isNavExpanded)}
+						onClick={() => setNavOpen(!isNavOpen)}
 						className="outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
+						aria-label={isNavOpen ? 'Close navigation menu' : 'Open navigation menu'}
 					>
-						{isNavExpanded ? (
+						{isNavOpen ? (
 							<Icons.sidebarClose className="h-6 w-6 text-popover-foreground" />
 						) : (
 							<Icons.sidebarOpen className="h-6 w-6 text-popover-foreground" />
@@ -86,19 +74,25 @@ export const TopNav = ({
 
 					<Link
 						className="flex items-center justify-center gap-3 rounded-md p-1 text-lg font-semibold tracking-wide outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
-						href="/"
+						href="/dashboard"
+						aria-label="Home"
 					>
 						<Icons.logo2 />
 					</Link>
 
-					<UserButton />
+					<UserButton
+						onOpenChange={(open) => {
+							setNavOpen(false)
+							toggleScroll(open)
+						}}
+					/>
 				</motion.aside>
 			</AnimatePresence>
 
 			<AnimatePresence>
-				{displayContent && (
+				{isNavOpen && (
 					<motion.nav
-						animate={isNavExpanded ? 'animate' : 'exit'}
+						animate={isNavOpen ? 'animate' : 'exit'}
 						initial="initial"
 						exit="exit"
 						variants={{
@@ -125,11 +119,11 @@ export const TopNav = ({
 						}}
 						className={cn(
 							'fixed top-14 h-full w-full overflow-auto bg-popover/50 backdrop-blur-xl md:hidden',
-							!isNavExpanded && 'pointer-events-none'
+							!isNavOpen && 'pointer-events-none'
 						)}
 					>
 						<motion.ul
-							animate={isNavExpanded ? 'open' : 'exit'}
+							animate={isNavOpen ? 'open' : 'exit'}
 							initial="initial"
 							variants={{
 								open: {
