@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { type Session } from 'next-auth'
 
 import { siteConfig } from '@/shared/config/site'
 import { type NavLink } from '@/shared/types'
@@ -12,10 +13,11 @@ import { useNav } from '@/client/lib/hooks/use-nav'
 import { cn } from '@/client/lib/utils'
 
 type SideNavProps = {
+	session: Session
 	navLinks: NavLink[]
 } & React.ComponentProps<typeof motion.div>
 
-export const SideNav = ({ navLinks, className, ...props }: SideNavProps) => {
+export const SideNav = ({ session, navLinks, className, ...props }: SideNavProps) => {
 	const { isNavOpen, setNavOpen, canNavOpen, setCanNavOpen } = useNav()
 
 	return (
@@ -52,6 +54,7 @@ export const SideNav = ({ navLinks, className, ...props }: SideNavProps) => {
 			</div>
 
 			<UserButton
+				session={session}
 				onOpenChange={(open) => {
 					setNavOpen(false)
 					setCanNavOpen(!open)

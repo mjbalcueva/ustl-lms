@@ -2,7 +2,8 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { signOut, useSession } from 'next-auth/react'
+import { type Session } from 'next-auth'
+import { signOut } from 'next-auth/react'
 
 import { Icons } from '@/client/components/icons'
 import { PreferenceDrawer } from '@/client/components/navigation/preference-drawer'
@@ -22,24 +23,29 @@ import { useDeviceType } from '@/client/context'
 import { useNav } from '@/client/lib/hooks/use-nav'
 import { getEmail, getInitials } from '@/client/lib/utils'
 
-export const UserButton: React.FC<React.ComponentProps<typeof DropdownMenu>> = ({ ...props }) => {
+type UserButtonProps = React.ComponentProps<typeof DropdownMenu> & {
+	session: Session
+}
+
+export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }: UserButtonProps) => {
+	const user = session.user
+
 	const { isNavOpen, canNavOpen } = useNav()
-	const session = useSession()
 	const { deviceSize } = useDeviceType()
 
-	const name = session.data?.user.name ?? ''
-	const email = session.data?.user.email ?? ''
+	const isMobile = deviceSize === 'mobile'
+
+	const name = user.name ?? ''
+	const email = user.email ?? ''
 
 	const initials = getInitials(name)
 	const strippedEmail = getEmail(email)
 
-	const isMobile = deviceSize === 'mobile'
-
 	return (
 		<DropdownMenu modal={false} {...props}>
 			<DropdownMenuTrigger className="mx-2 flex min-h-[2.8rem] cursor-pointer items-center gap-3 rounded-md p-1 outline-none hover:bg-accent">
-				<Avatar className="ml-[1.5px] size-8 border border-border">
-					<AvatarImage src={session.data?.user.image ?? ''} alt={initials} />
+				<Avatar className="size-8 border border-border md:ml-[1.5px]">
+					<AvatarImage src={user.image ?? ''} alt={initials} />
 					<AvatarFallback>{initials}</AvatarFallback>
 				</Avatar>
 				{!isMobile && (

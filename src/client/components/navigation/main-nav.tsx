@@ -1,6 +1,7 @@
 'use client'
 
 import { Inter } from 'next/font/google'
+import { type Session } from 'next-auth'
 
 import { type NavLink } from '@/shared/types'
 
@@ -37,7 +38,11 @@ const navLinks: NavLink[] = [
 	}
 ]
 
-export const MainNav = () => {
+type MainNavProps = {
+	session: Session
+}
+
+export const MainNav = ({ session }: MainNavProps) => {
 	const { deviceSize } = useDeviceType()
 
 	if (!deviceSize)
@@ -58,9 +63,9 @@ export const MainNav = () => {
 	return (
 		<>
 			{deviceSize === 'mobile' ? (
-				<TopNav navLinks={navLinks} className={cn('md:hidden', inter.className)} />
+				<TopNav session={session} navLinks={navLinks} className={cn('md:hidden', inter.className)} />
 			) : (
-				<SideNav navLinks={navLinks} className={cn('hidden md:flex md:flex-col', inter.className)} />
+				<SideNav session={session} navLinks={navLinks} className={cn('hidden md:flex md:flex-col', inter.className)} />
 			)}
 		</>
 	)
