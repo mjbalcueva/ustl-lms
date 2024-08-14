@@ -13,7 +13,7 @@ import {
 import { cn } from '@/client/lib/utils'
 
 type CardWrapperProps = {
-	children: React.ReactNode
+	children?: React.ReactNode
 	title: string
 	description: string
 	backButtonLabel: string
@@ -46,13 +46,27 @@ export const CardWrapper = ({
 				)}
 			</CardContent>
 
-			<CardFooter className="flex justify-center pb-4 font-normal">
+			<CardFooter className="flex justify-between pb-4 font-normal">
 				<Link
 					href={backButtonHref}
 					className={cn(buttonVariants({ variant: 'link', size: 'xs' }), 'px-0 text-xs text-card-foreground')}
 				>
 					{backButtonLabel}
 				</Link>
+				<div className="space-x-4">
+					<Link
+						href="/privacy"
+						className={cn(buttonVariants({ variant: 'link', size: 'xs' }), 'px-0 text-xs text-card-foreground')}
+					>
+						Privacy
+					</Link>
+					<Link
+						href="/terms"
+						className={cn(buttonVariants({ variant: 'link', size: 'xs' }), 'px-0 text-xs text-card-foreground')}
+					>
+						Terms
+					</Link>
+				</div>
 			</CardFooter>
 		</Card>
 	)
