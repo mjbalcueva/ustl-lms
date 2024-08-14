@@ -9,8 +9,8 @@ type FormResponseProps = {
 }
 
 const formResponseIcon: Record<FormResponseType, React.ReactNode> = {
-	success: <Icons.circleCheckFilled className="size-4" />,
-	error: <Icons.triangleAlertFilled className="size-4" />
+	success: <Icons.circleCheckFilled className="size-4 min-h-4 min-w-4" />,
+	error: <Icons.triangleAlertFilled className="size-4 min-h-4 min-w-4" />
 }
 
 export function FormResponse({ type, message }: FormResponseProps) {
@@ -19,7 +19,7 @@ export function FormResponse({ type, message }: FormResponseProps) {
 	return (
 		<div
 			className={cn(
-				'flex h-10 items-center gap-2 rounded-xl border p-3 text-sm',
+				'flex items-center gap-2 rounded-xl border px-3 py-[0.575rem] text-sm',
 				type === 'success'
 					? 'border-emerald-500/15 bg-emerald-500/15 text-emerald-500'
 					: 'border-destructive/15 bg-destructive/15 text-destructive'
