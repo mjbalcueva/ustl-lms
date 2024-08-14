@@ -52,7 +52,7 @@ export const UserButton: React.FC<React.ComponentProps<typeof DropdownMenu>> = (
 					>
 						<div className="flex max-w-[9.5rem] flex-col items-start -space-y-0.5">
 							<span className="max-w-full truncate text-sm font-medium">{name}</span>
-							<span className="max-w-full truncate text-xs text-muted-foreground">@{strippedEmail}</span>
+							<span className="max-w-full truncate text-xs text-muted-foreground">{strippedEmail}</span>
 						</div>
 						<div className="relative right-0.5 rounded-md p-1">
 							<Icons.dropdown className="h-4 w-4 text-muted-foreground/80" />

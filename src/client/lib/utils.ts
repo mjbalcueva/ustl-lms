@@ -14,7 +14,6 @@ export function getInitials(name: string) {
 		.substring(0, 2)
 }
 
-// func getEmail, returns everything before the @
 export function getEmail(email: string) {
-	return email.split('@')[0]
+	return `${email.split('@')[0]}`
 }
