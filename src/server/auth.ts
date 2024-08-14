@@ -27,9 +27,10 @@ export const {
 		}
 	},
 	callbacks: {
-		async signIn({ profile }) {
-			// Allow sign in only if the email ends with @ust-legazpi.edu.ph
-			return Boolean(profile?.email?.endsWith('@ust-legazpi.edu.ph'))
+		async signIn({ account, profile }) {
+			if (account?.provider !== 'credentials') return profile?.email?.endsWith('@ust-legazpi.edu.ph') ?? false
+
+			return true
 		},
 		// async signIn({ user, account }) {
 		// 	// Allow OAuth without email verification, can be account?.type too
