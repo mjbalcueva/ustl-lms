@@ -36,7 +36,17 @@ export const UserButton = () => {
 	const isMobile = deviceSize === 'mobile'
 
 	return (
-		<DropdownMenu modal={false} onOpenChange={(open) => (isMobile ? setNavExpanded(false) : setAnimate(!open))}>
+		<DropdownMenu
+			modal={false}
+			onOpenChange={(open) => {
+				if (isMobile) {
+					setNavExpanded(false)
+				} else {
+					setNavExpanded(false)
+					setAnimate(!open)
+				}
+			}}
+		>
 			<DropdownMenuTrigger className="mx-2 flex min-h-[2.8rem] cursor-pointer items-center gap-3 rounded-md p-1 outline-none hover:bg-accent">
 				<Avatar className="ml-[1.5px] size-8 border border-border">
 					<AvatarImage src={session.data?.user.image ?? ''} alt={initials} />
