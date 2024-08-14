@@ -32,7 +32,7 @@ export const SocialButton = ({ text, provider, className, ...props }: SocialButt
 		setIsLoading(true)
 		await signIn(provider, {
 			callbackUrl: callbackUrl ?? DEFAULT_LOGIN_REDIRECT
-		}).finally(() => setIsLoading(false))
+		})
 	}
 
 	return (

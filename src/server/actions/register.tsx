@@ -9,14 +9,15 @@ import { db } from '@/server/db'
 
 export const register = async (values: RegisterSchema) => {
 	const validatedFields = registerSchema.safeParse(values)
-	if (!validatedFields.success) return { error: 'Invalid Fields' }
 
+	if (!validatedFields.success) return { error: 'Invalid Fields' }
 	const { name, email, password } = validatedFields.data
 
-	const hashedPassword = await hash(password, 10)
-
+	if (!email.endsWith('@ust-legazpi.edu.ph')) return { error: 'Please use your UST Legazpi email address.' }
 	const existingUser = await getUserByEmail(email)
 	if (existingUser) return { error: 'User already exists!' }
+
+	const hashedPassword = await hash(password, 10)
 
 	await db.user.create({
 		data: {

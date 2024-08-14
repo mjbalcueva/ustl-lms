@@ -11,19 +11,14 @@ import { DEFAULT_LOGIN_REDIRECT } from '@/routes'
 
 export const login = async (values: LoginSchema) => {
 	const validatedFields = loginSchema.safeParse(values)
-	if (!validatedFields.success) return { error: 'Invalid Fields' }
 
+	if (!validatedFields.success) return { error: 'Invalid Fields' }
 	const { email, password } = validatedFields.data
 
+	if (!email.endsWith('@ust-legazpi.edu.ph')) return { error: 'Please use your UST Legazpi email address.' }
 	const existingUser = await getUserByEmail(email)
-
-	// Check if the user exists
 	if (!existingUser) return { error: 'User does not exist!' }
 
-	// Check if the user's email exists
-	if (!existingUser.email) return { error: 'Email does not exist!' }
-
-	// Check if the user has a password (not a Google sign-in user)
 	if (!existingUser.password) return { error: 'Sign in with Google instead!' }
 
 	try {
