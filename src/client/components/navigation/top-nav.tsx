@@ -9,7 +9,7 @@ import { type NavLink } from '@/shared/types'
 import { Icons } from '@/client/components/icons'
 import { NavLinkComponent, UserButton } from '@/client/components/navigation'
 import { Button } from '@/client/components/ui'
-import { useNavContext } from '@/client/context'
+import { useNav } from '@/client/lib/hooks/use-nav'
 import { cn } from '@/client/lib/utils'
 
 export const TopNav = ({
@@ -17,7 +17,7 @@ export const TopNav = ({
 	className,
 	...props
 }: React.ComponentProps<typeof motion.div> & { navLinks: NavLink[] }) => {
-	const { isNavOpen, setNavOpen } = useNavContext()
+	const { isNavOpen, setNavOpen } = useNav()
 
 	const [showNav, setShowNav] = useState(true)
 	const { scrollYProgress } = useScroll()

@@ -18,11 +18,12 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger
 } from '@/client/components/ui'
-import { useDeviceType, useNavContext } from '@/client/context'
+import { useDeviceType } from '@/client/context'
+import { useNav } from '@/client/lib/hooks/use-nav'
 import { getEmail, getInitials } from '@/client/lib/utils'
 
 export const UserButton: React.FC<React.ComponentProps<typeof DropdownMenu>> = ({ ...props }) => {
-	const { isNavOpen, canNavOpen } = useNavContext()
+	const { isNavOpen, canNavOpen } = useNav()
 	const session = useSession()
 	const { deviceSize } = useDeviceType()
 

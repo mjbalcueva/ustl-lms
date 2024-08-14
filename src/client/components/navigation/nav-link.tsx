@@ -1,9 +1,11 @@
+'use client'
+
 import Link, { type LinkProps } from 'next/link'
 import { motion } from 'framer-motion'
 
 import { type NavLink } from '@/shared/types'
 
-import { useNavContext } from '@/client/context'
+import { useNav } from '@/client/lib/hooks/use-nav'
 import { cn } from '@/client/lib/utils'
 
 export const NavLinkComponent = ({
@@ -17,7 +19,7 @@ export const NavLinkComponent = ({
 	className?: string
 	props?: LinkProps
 }) => {
-	const { isNavOpen, canNavOpen } = useNavContext()
+	const { isNavOpen, canNavOpen } = useNav()
 
 	return (
 		<Link

@@ -8,7 +8,7 @@ import { type NavLink } from '@/shared/types'
 import { Icons } from '@/client/components/icons'
 import { NavLinkComponent, UserButton } from '@/client/components/navigation'
 import { Separator } from '@/client/components/ui'
-import { useNavContext } from '@/client/context'
+import { useNav } from '@/client/lib/hooks/use-nav'
 import { cn } from '@/client/lib/utils'
 
 type SideNavProps = {
@@ -16,7 +16,7 @@ type SideNavProps = {
 } & React.ComponentProps<typeof motion.div>
 
 export const SideNav = ({ navLinks, className, ...props }: SideNavProps) => {
-	const { isNavOpen, setNavOpen, canNavOpen, setCanNavOpen } = useNavContext()
+	const { isNavOpen, setNavOpen, canNavOpen, setCanNavOpen } = useNav()
 
 	return (
 		<motion.nav

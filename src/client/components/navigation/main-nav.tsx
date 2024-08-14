@@ -6,7 +6,7 @@ import { type NavLink } from '@/shared/types'
 
 import { Icons } from '@/client/components/icons'
 import { SideNav, TopNav } from '@/client/components/navigation'
-import { NavProvider, useDeviceType } from '@/client/context'
+import { useDeviceType } from '@/client/context'
 import { cn } from '@/client/lib/utils'
 
 const inter = Inter({
@@ -56,12 +56,12 @@ export const MainNav = () => {
 		)
 
 	return (
-		<NavProvider>
+		<>
 			{deviceSize === 'mobile' ? (
 				<TopNav navLinks={navLinks} className={cn('md:hidden', inter.className)} />
 			) : (
 				<SideNav navLinks={navLinks} className={cn('hidden md:flex md:flex-col', inter.className)} />
 			)}
-		</NavProvider>
+		</>
 	)
 }
