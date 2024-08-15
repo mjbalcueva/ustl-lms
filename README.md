@@ -1,5 +1,7 @@
 # UST-Legazpi LMS (Scholar)
 
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
 ## Overview
 
 Scholar redefines the digital learning experience, offering a robust ecosystem for course management, student-teacher collaboration, and interactive learning. Leveraging the power of Next.js for lightning-fast performance, TypeScript for enhanced code reliability, and tRPC for efficient API communication, Scholar delivers a responsive and user-centric platform that adapts to the evolving needs of modern education.
@@ -23,7 +25,7 @@ Scholar redefines the digital learning experience, offering a robust ecosystem f
 
 ## Features
 
-For a more detailed information about our project's future plans and upcoming features, please visit our [Roadmap](./ROADMAP.md).
+For a more detailed information about our project's future plans and upcoming features, please visit our [Roadmap](ROADMAP.md).
 
 - **User-Friendly Interface**
   - Responsive design for all devices
@@ -52,7 +54,7 @@ For a more detailed information about our project's future plans and upcoming fe
    ```
 2. Install dependencies:
    ```
-   cd scholar-lms
+   cd ustl-lms
    npm install
    ```
 3. Set up your environment variables:
@@ -69,3 +71,8 @@ To learn more about the T3 Stack, check out the following resources:
 
 - [T3 Stack Documentation](https://create.t3.gg/)
 - [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+
+
+## License
+
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
