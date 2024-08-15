@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { type Session } from 'next-auth'
 import { signOut } from 'next-auth/react'
+import { useMediaQuery } from 'usehooks-ts'
 
 import { Icons } from '@/client/components/icons'
 import { PreferenceDrawer } from '@/client/components/navigation/preference-drawer'
@@ -34,6 +35,7 @@ export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }: Use
 	const { deviceSize } = useDeviceType()
 
 	const isMobile = deviceSize === 'mobile'
+	const isTiny = useMediaQuery('(max-width: 525px)')
 
 	const name = user.name ?? ''
 	const email = user.email ?? ''
@@ -88,7 +90,7 @@ export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }: Use
 					</Link>
 				</DropdownMenuItem>
 
-				{isMobile ? <PreferenceDrawer /> : <PreferenceDropdown />}
+				{isTiny ? <PreferenceDrawer /> : <PreferenceDropdown />}
 
 				<DropdownMenuItem asChild>
 					<Link href="#link" className="cursor-pointer">
