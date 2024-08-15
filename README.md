@@ -61,66 +61,9 @@ Key Highlights:
 3. Set up your environment variables
 4. Run the development server with `npm run dev`
 
-## Roadmap (7/37)
+## Roadmap
 
-### Responsive Design
-
-- [x] Create responsive design
-- [x] Implement responsive sidebar navigation for desktop
-- [x] Create collapsible top navigation for mobile devices
-- [x] Develop theme customization options (light/dark mode, color schemes)
-- [ ] Design and implement responsive layouts for course content
-- [ ] Create adaptive UI components for various screen sizes
-- [ ] Optimize images and media for different device capabilities
-- [x] Implement touch-friendly interactions for mobile users
-- [ ] Develop a consistent design system across all device types
-- [x] Implement accessibility features for diverse user needs
-
-### Authentication
-
-- [ ] Implement user authentication system
-  - [ ] Set up user registration
-  - [ ] Implement login functionality
-    - [x] using auth
-    - [ ] using credentials
-  - [ ] Implement logout functionality
-
-### User Management
-
-- [ ] Develop user profile management
-- [ ] Manage user roles
-- [ ] Allow users to update bio and name
-- [ ] Implement user preferences (themes)
-
-### Learning Management
-
-- [ ] Create basic course creation interface
-- [ ] Set up course enrollment process
-- [ ] Design lesson structure per course
-- [ ] Create forums for each course and lesson
-- [ ] Develop activity and quiz functionalities
-- [ ] Implement ability to archive courses and lessons
-
-### Reports
-
-- [ ] Develop comprehensive analytics dashboard for instructors
-- [ ] Implement grade reporting
-- [ ] Track user progress
-
-### Chats
-
-- [ ] Integrate real-time video conferencing solution
-- [ ] Implement private chat functionality
-- [ ] Implement group chat functionality
-- [ ] Enhance messaging features (file sharing in conversations)
-
-### AI Integration and Smart Learning
-
-- [ ] Develop and integrate context-aware RAG AI model
-- [ ] Implement AI-assisted content creation for instructors (quizzes, assignments, exams)
-- [ ] Create personalized chatbot support for individual course modules
-- [ ] Enhance AI model with continuous learning from course materials and student interactions
-- [ ] Implement AI-powered personalized learning recommendations
+For detailed information about our project's future plans and upcoming features, please visit our [Roadmap](./ROADMAP.md).
 
 ## Contributing
 
