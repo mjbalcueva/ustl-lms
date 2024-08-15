@@ -4,47 +4,14 @@
 
 Scholar redefines the digital learning experience, offering a robust ecosystem for course management, student-teacher collaboration, and interactive learning. Leveraging the power of Next.js for lightning-fast performance, TypeScript for enhanced code reliability, and tRPC for efficient API communication, Scholar delivers a responsive and user-centric platform that adapts to the evolving needs of modern education.
 
-Key Highlights:
+### Key Highlights:
 
-- Streamlined course creation and management
-- Intuitive interface for both educators and students
-- Real-time collaboration tools
-- Advanced analytics for tracking student progress
-- AI-powered learning assistance
-- Mobile-responsive design for learning on-the-go
-
-## Features
-
-- **User Authentication and Access Control**
-  - Role-based permissions for students, teachers, and administrators
-  - Secure login and account management
-- **Course Management**
-  - Easy course creation and customization for instructors
-  - Intuitive enrollment process for students
-  - Organized course content and resource sharing
-- **Assessment and Grading**
-  - Diverse assignment types (quizzes, essays, projects)
-  - Automated and manual grading options
-  - Detailed feedback mechanisms
-- **Communication Tools**
-  - Real-time messaging system
-  - Discussion forums integrated with course modules
-  - Video conferencing for virtual classes and office hours
-- **Progress Tracking**
-  - Comprehensive dashboards for students and instructors
-  - Detailed analytics on course performance and engagement
-- **Mobile-Responsive Design**
-  - Seamless experience across devices (desktop, tablet, mobile)
-- **Advanced Messaging Features**
-  - Individual and group chat functionality
-  - File and media sharing within conversations
-  - Presence indicators and read receipts
-  - Push notifications for important updates
-- **AI-Powered Learning Support**
-  - RAG (Retrieval-Augmented Generation) AI chatbot
-  - Context-aware responses based on course materials
-  - 24/7 availability for student queries and tutoring
-  - Personalized learning recommendations
+- 📚 Streamlined course creation and management
+- 🎨 Intuitive, customizable interface
+- 🤝 Real-time collaboration tools
+- 📊 Advanced analytics for tracking progress
+- 🤖 AI-powered learning assistance
+- 📱 Mobile-responsive design for learning on-the-go
 
 ## Tech Stack
 
@@ -54,20 +21,47 @@ Key Highlights:
 - [Tailwind CSS](https://tailwindcss.com)
 - [tRPC](https://trpc.io)
 
+## Features
+
+For a more detailed information about our project's future plans and upcoming features, please visit our [Roadmap](./ROADMAP.md).
+
+- **User-Friendly Interface**
+  - Responsive design for all devices
+  - Customizable themes with light/dark modes
+- **Course Management**
+  - Easy course creation and enrollment
+  - Diverse assessment types
+- **Interactive Learning**
+  - Discussion forums and video conferencing
+  - AI-assisted tutoring
+- **Analytics**
+  - Progress tracking for students and instructors
+- **Secure Authentication**
+  - Multiple login options
+  - Role-based access control
+- **Communication**
+  - Real-time messaging and group chats
+- **Accessibility**
+  - Screen reader and keyboard navigation support
+
 ## Getting Started
 
-1. Clone the repository
-2. Install dependencies with `npm install`
-3. Set up your environment variables
-4. Run the development server with `npm run dev`
-
-## Roadmap
-
-For detailed information about our project's future plans and upcoming features, please visit our [Roadmap](./ROADMAP.md).
-
-## Contributing
-
-We welcome contributions to Scholar. Please read our contributing guidelines before submitting pull requests.
+1. Clone the repository:
+   ```
+   git clone https://github.com/mjbalcueva/ustl-lms.git
+   ```
+2. Install dependencies:
+   ```
+   cd scholar-lms
+   npm install
+   ```
+3. Set up your environment variables:
+   - Copy `.env.example` to `.env`
+   - Fill in the required variables
+4. Run the development server:
+   ```
+   npm run dev
+   ```
 
 ## Learn More
 
