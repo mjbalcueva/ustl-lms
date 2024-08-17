@@ -34,7 +34,7 @@ export const SideNav = ({ session, navLinks, className, ...props }: SideNavProps
 				link={{
 					label: siteConfig.title,
 					href: '/dashboard',
-					icon: <Icons.logo2 />
+					icon: <Icons.logo />
 				}}
 				isLogo
 			/>

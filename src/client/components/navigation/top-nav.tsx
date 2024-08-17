@@ -77,7 +77,7 @@ export const TopNav = ({ session, navLinks, className, ...props }: TopNavProps) 
 					href="/dashboard"
 					aria-label="Home"
 				>
-					<Icons.logo2 />
+					<Icons.logo />
 				</Link>
 
 				<UserButton
