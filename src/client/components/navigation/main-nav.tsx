@@ -2,9 +2,6 @@
 
 import { Inter } from 'next/font/google'
 
-import { type NavLink } from '@/shared/types'
-
-import { Icons } from '@/client/components/icons'
 import { SideNav, TopNav } from '@/client/components/navigation'
 import { useDeviceType } from '@/client/context'
 import { cn } from '@/client/lib/utils'
@@ -13,29 +10,6 @@ const inter = Inter({
 	subsets: ['latin'],
 	display: 'swap'
 })
-
-const navLinks: NavLink[] = [
-	{
-		label: 'Dashboard',
-		href: '#',
-		icon: <Icons.dashboard className="h-5 w-5 flex-shrink-0" />
-	},
-	{
-		label: 'Learning',
-		href: '#',
-		icon: <Icons.learning className="h-5 w-5 flex-shrink-0" />
-	},
-	{
-		label: 'Reports',
-		href: '#',
-		icon: <Icons.reports className="h-5 w-5 flex-shrink-0" />
-	},
-	{
-		label: 'Chat',
-		href: '#',
-		icon: <Icons.messages className="h-5 w-5 flex-shrink-0" />
-	}
-]
 
 export const MainNav = () => {
 	const { deviceSize } = useDeviceType()
@@ -58,13 +32,10 @@ export const MainNav = () => {
 	return (
 		<>
 			{deviceSize === 'mobile' ? (
-				<TopNav
-					navLinks={navLinks}
-					className={cn('bg-popover/50 text-popover-foreground md:hidden', inter.className)}
-				/>
+				<TopNav className={cn('bg-popover/50 text-popover-foreground md:hidden', inter.className)} />
 			) : (
 				<SideNav
-					navLinks={navLinks}
+					// navLinks={navLinks}
 					className={cn('hidden bg-popover text-popover-foreground md:flex md:flex-col', inter.className)}
 				/>
 			)}

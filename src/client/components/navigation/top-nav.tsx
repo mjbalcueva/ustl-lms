@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
 
-import { type NavLink } from '@/shared/types'
+import { navLinks } from '@/shared/config/links'
 
 import { Icons } from '@/client/components/icons'
 import { NavLinkComponent, UserButton } from '@/client/components/navigation'
@@ -12,11 +12,9 @@ import { Button } from '@/client/components/ui'
 import { useNav } from '@/client/lib/hooks/use-nav'
 import { cn } from '@/client/lib/utils'
 
-type TopNavProps = {
-	navLinks: NavLink[]
-} & React.ComponentProps<typeof motion.div>
+type TopNavProps = React.ComponentProps<typeof motion.div>
 
-export const TopNav = ({ navLinks, className, ...props }: TopNavProps) => {
+export const TopNav = ({ className, ...props }: TopNavProps) => {
 	const { isNavOpen, setNavOpen } = useNav()
 
 	const [showNav, setShowNav] = useState(true)

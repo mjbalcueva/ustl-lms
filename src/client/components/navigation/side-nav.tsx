@@ -2,20 +2,17 @@
 
 import { motion } from 'framer-motion'
 
+import { navLinks } from '@/shared/config/links'
 import { siteConfig } from '@/shared/config/site'
-import { type NavLink } from '@/shared/types'
 
-import { Icons } from '@/client/components/icons'
 import { NavLinkComponent, UserButton } from '@/client/components/navigation'
 import { Separator } from '@/client/components/ui'
 import { useNav } from '@/client/lib/hooks/use-nav'
 import { cn } from '@/client/lib/utils'
 
-type SideNavProps = {
-	navLinks: NavLink[]
-} & React.ComponentProps<typeof motion.div>
+type SideNavProps = React.ComponentProps<typeof motion.div>
 
-export const SideNav = ({ navLinks, className, ...props }: SideNavProps) => {
+export const SideNav = ({ className, ...props }: SideNavProps) => {
 	const { isNavOpen, setNavOpen, canNavOpen, setCanNavOpen } = useNav()
 
 	return (
@@ -32,7 +29,7 @@ export const SideNav = ({ navLinks, className, ...props }: SideNavProps) => {
 				link={{
 					label: siteConfig.title,
 					href: '/dashboard',
-					icon: <Icons.logo />
+					icon: 'logo'
 				}}
 				isLogo
 			/>

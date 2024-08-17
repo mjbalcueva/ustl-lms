@@ -1,7 +1,9 @@
+import { type Icons } from '@/client/components/icons'
+
 export type NavLink = {
 	label: string
 	href: string
-	icon: React.JSX.Element | React.ReactNode
+	icon: keyof typeof Icons
 }
 
 export type NavUser = {

@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 
 import { type NavLink } from '@/shared/types'
 
+import { Icons } from '@/client/components/icons'
 import { useNav } from '@/client/lib/hooks/use-nav'
 import { cn } from '@/client/lib/utils'
 
@@ -20,18 +21,21 @@ export const NavLinkComponent = ({
 	props?: LinkProps
 }) => {
 	const { isNavOpen, canNavOpen } = useNav()
+	const Icon = Icons[link.icon]
 
 	return (
 		<Link
 			href={link.href}
 			className={cn(
 				'group/navigation flex items-center justify-start gap-3 py-2 outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring',
-				isLogo ? 'mx-2 rounded-md pl-2' : 'rounded-md px-5 hover:bg-accent/40 sm:px-7 md:px-3 md:hover:bg-accent',
+				isLogo
+					? 'mx-2 min-h-11 rounded-md pl-3'
+					: 'rounded-md px-5 hover:bg-accent/40 sm:px-7 md:px-3 md:hover:bg-accent',
 				className
 			)}
 			{...props}
 		>
-			{link.icon}
+			<Icon className="h-5 w-5 flex-shrink-0" />
 
 			<motion.span
 				animate={{
