@@ -5,9 +5,3 @@ export type NavLink = {
 	href: string
 	icon: keyof typeof Icons
 }
-
-export type NavUser = {
-	name: string
-	email: string
-	avatar: string
-}
