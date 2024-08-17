@@ -2,8 +2,7 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { type Session } from 'next-auth'
-import { signOut } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import { useMediaQuery } from 'usehooks-ts'
 
 import { Icons } from '@/client/components/icons'
@@ -24,12 +23,11 @@ import { useDeviceType } from '@/client/context'
 import { useNav } from '@/client/lib/hooks/use-nav'
 import { getEmail, getInitials } from '@/client/lib/utils'
 
-type UserButtonProps = React.ComponentProps<typeof DropdownMenu> & {
-	session: Session
-}
+type UserButtonProps = React.ComponentProps<typeof DropdownMenu>
 
-export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }: UserButtonProps) => {
-	const user = session.user
+export const UserButton: React.FC<UserButtonProps> = ({ ...props }: UserButtonProps) => {
+	const sesh = useSession()
+	const user = sesh.data?.user
 
 	const { isNavOpen, canNavOpen } = useNav()
 	const { deviceSize } = useDeviceType()
@@ -37,8 +35,8 @@ export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }: Use
 	const isMobile = deviceSize === 'mobile'
 	const isTiny = useMediaQuery('(max-width: 525px)')
 
-	const name = user.name ?? ''
-	const email = user.email ?? ''
+	const name = user?.name ?? ''
+	const email = user?.email ?? ''
 
 	const initials = getInitials(name)
 	const strippedEmail = getEmail(email)
@@ -47,7 +45,7 @@ export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }: Use
 		<DropdownMenu modal={false} {...props}>
 			<DropdownMenuTrigger className="mx-2 flex cursor-pointer items-center gap-3 rounded-md p-1 outline-none hover:bg-accent md:min-h-[2.8rem]">
 				<Avatar className="size-8 border border-border/50 dark:border-border md:ml-[1.5px]">
-					<AvatarImage src={user.image ?? ''} alt={initials} />
+					<AvatarImage src={user?.image ?? ''} alt={initials} />
 					<AvatarFallback className="bg-muted">{initials}</AvatarFallback>
 				</Avatar>
 				{!isMobile && (
