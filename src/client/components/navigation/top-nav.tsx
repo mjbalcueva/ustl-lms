@@ -12,9 +12,7 @@ import { Button } from '@/client/components/ui'
 import { useNav } from '@/client/lib/hooks/use-nav'
 import { cn } from '@/client/lib/utils'
 
-type TopNavProps = React.ComponentProps<typeof motion.div>
-
-export const TopNav = ({ className, ...props }: TopNavProps) => {
+export const TopNav = ({ className, ...props }: React.ComponentProps<typeof motion.div>) => {
 	const { isNavOpen, setNavOpen } = useNav()
 
 	const [showNav, setShowNav] = useState(true)

@@ -1,6 +1,7 @@
 'use client'
 
 import { Inter } from 'next/font/google'
+import { type motion } from 'framer-motion'
 
 import { SideNav, TopNav } from '@/client/components/navigation'
 import { useDeviceType } from '@/client/context'
@@ -11,7 +12,7 @@ const inter = Inter({
 	display: 'swap'
 })
 
-export const MainNav = () => {
+export const MainNav = ({ className, ...props }: React.ComponentProps<typeof motion.div>) => {
 	const { deviceSize } = useDeviceType()
 
 	if (!deviceSize)
@@ -32,12 +33,9 @@ export const MainNav = () => {
 	return (
 		<>
 			{deviceSize === 'mobile' ? (
-				<TopNav className={cn('bg-popover/50 text-popover-foreground md:hidden', inter.className)} />
+				<TopNav className={cn(className, inter.className)} {...props} />
 			) : (
-				<SideNav
-					// navLinks={navLinks}
-					className={cn('hidden bg-popover text-popover-foreground md:flex md:flex-col', inter.className)}
-				/>
+				<SideNav className={cn(className, inter.className)} {...props} />
 			)}
 		</>
 	)
