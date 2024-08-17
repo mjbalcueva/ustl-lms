@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
 
 import { navLinks } from '@/shared/config/links'
@@ -13,34 +13,32 @@ import { useNav } from '@/client/lib/hooks/use-nav'
 import { cn } from '@/client/lib/utils'
 
 export const TopNav = ({ className, ...props }: React.ComponentProps<typeof motion.div>) => {
+	const MotionNavLink = useMemo(() => motion(NavLinkComponent), [])
 	const { isNavOpen, setNavOpen } = useNav()
 
-	const [showNav, setShowNav] = useState(true)
 	const { scrollYProgress } = useScroll()
+	const [showNav, setShowNav] = useState(true)
+	const isUserButtonOpen = useRef(false)
 
 	useMotionValueEvent(scrollYProgress, 'change', (current) => {
 		const previous = scrollYProgress.getPrevious()!
-		setShowNav(previous === 0 || previous > current)
+		setShowNav(previous === 0 || previous > current || isUserButtonOpen.current)
 	})
 
 	const toggleScroll = useCallback((disable: boolean) => {
-		disable ? document.body.classList.add('overflow-hidden') : document.body.classList.remove('overflow-hidden')
+		document.body.classList.toggle('overflow-hidden', disable)
 	}, [])
-
-	useEffect(() => {
-		toggleScroll(isNavOpen)
-	}, [isNavOpen, toggleScroll])
 
 	return (
 		<AnimatePresence>
-			<motion.aside
+			<motion.nav
 				key="nav"
 				initial={{
 					opacity: 1,
 					y: 0
 				}}
 				animate={{
-					y: showNav ? 0 : -100, // Hide when scrolling down
+					y: showNav ? 0 : -100,
 					opacity: showNav ? 1 : 0
 				}}
 				transition={{
@@ -55,7 +53,10 @@ export const TopNav = ({ className, ...props }: React.ComponentProps<typeof moti
 				<Button
 					variant={'ghost'}
 					size={'icon'}
-					onClick={() => setNavOpen(!isNavOpen)}
+					onClick={() => {
+						setNavOpen(!isNavOpen)
+						toggleScroll(!isNavOpen)
+					}}
 					className="outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
 					aria-label={isNavOpen ? 'Close navigation menu' : 'Open navigation menu'}
 				>
@@ -72,79 +73,52 @@ export const TopNav = ({ className, ...props }: React.ComponentProps<typeof moti
 
 				<UserButton
 					onOpenChange={(open) => {
+						isUserButtonOpen.current = open
 						setNavOpen(false)
 						toggleScroll(open)
 					}}
 				/>
-			</motion.aside>
+			</motion.nav>
 
-			<motion.nav
-				key="nav-content"
-				animate={isNavOpen ? 'animate' : 'exit'}
-				initial="initial"
-				exit="exit"
-				variants={{
-					initial: {
-						opacity: 0,
-						scale: 1
-					},
-					animate: {
-						scale: 1,
-						opacity: 1,
-						transition: {
-							duration: 0.2,
-							ease: 'easeOut'
-						}
-					},
-					exit: {
-						opacity: 0,
-						transition: {
-							duration: 0.2,
-							delay: 0.2,
-							ease: 'easeOut'
-						}
-					}
-				}}
-				className={cn(
-					'fixed top-14 h-full w-full overflow-auto bg-popover/50 text-popover-foreground backdrop-blur-xl md:hidden',
-					!isNavOpen && 'pointer-events-none'
-				)}
-			>
-				<motion.ul
+			{isNavOpen && (
+				<motion.aside
+					key="aside"
+					initial="exit"
 					animate={isNavOpen ? 'open' : 'exit'}
-					initial="initial"
+					exit="exit"
 					variants={{
-						open: {
-							transition: {
-								staggerChildren: 0.06
-							}
-						}
+						open: { opacity: 1 },
+						exit: { opacity: 0 }
 					}}
-					className="flex flex-col ease-in"
+					onAnimationEnd={() => setNavOpen(false)}
+					className="fixed top-14 h-full w-full overflow-auto bg-popover/50 text-popover-foreground backdrop-blur-xl md:hidden"
 				>
 					{navLinks.map((item, index) => (
-						<motion.li
+						<MotionNavLink
 							key={index}
+							link={item}
 							variants={{
-								initial: {
-									y: '-30px',
-									opacity: 0
-								},
 								open: {
 									y: 0,
-									opacity: 1,
-									transition: {
-										duration: 0.3,
-										ease: 'easeOut'
-									}
+									opacity: 1
+								},
+								exit: {
+									y: '-100px',
+									opacity: 0
 								}
 							}}
-						>
-							<NavLinkComponent link={item} className="h-12 rounded-none border-b border-border md:rounded-md" />
-						</motion.li>
+							transition={{
+								type: 'spring',
+								stiffness: 300,
+								damping: 20,
+								duration: 1,
+								delay: index * 0.05
+							}}
+							className="h-12 rounded-none border-b border-border md:rounded-md"
+						/>
 					))}
-				</motion.ul>
-			</motion.nav>
+				</motion.aside>
+			)}
 		</AnimatePresence>
 	)
 }
