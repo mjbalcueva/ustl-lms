@@ -8,9 +8,9 @@ export default async function Layout({ children }: Readonly<{ children: React.Re
 	if (!session) return null
 
 	return (
-		<div className="flex flex-col sm:bg-popover md:h-[100vh] md:flex-row">
+		<div className="flex flex-col md:h-[100vh] md:flex-row">
 			<MainNav session={session} />
-			<div className="flex flex-grow flex-col gap-2 overflow-y-auto md:mt-3 md:flex-row">{children}</div>
+			<div className="flex flex-grow flex-col gap-2 overflow-y-auto bg-popover md:flex-row md:pt-3">{children}</div>
 		</div>
 	)
 }

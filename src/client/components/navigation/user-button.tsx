@@ -45,10 +45,10 @@ export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }: Use
 
 	return (
 		<DropdownMenu modal={false} {...props}>
-			<DropdownMenuTrigger className="mx-2 flex min-h-[2.8rem] cursor-pointer items-center gap-3 rounded-md p-1 outline-none hover:bg-accent">
-				<Avatar className="size-8 border border-border md:ml-[1.5px]">
+			<DropdownMenuTrigger className="mx-2 flex cursor-pointer items-center gap-3 rounded-md p-1 outline-none hover:bg-accent md:min-h-[2.8rem]">
+				<Avatar className="size-8 border border-border/50 dark:border-border md:ml-[1.5px]">
 					<AvatarImage src={user.image ?? ''} alt={initials} />
-					<AvatarFallback>{initials}</AvatarFallback>
+					<AvatarFallback className="bg-muted">{initials}</AvatarFallback>
 				</Avatar>
 				{!isMobile && (
 					<motion.div

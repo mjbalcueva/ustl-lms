@@ -11,7 +11,7 @@ export default async function Page() {
 
 	return (
 		<HydrateClient>
-			<main className="flex flex-auto flex-col overflow-y-auto border-border bg-background md:rounded-xl md:border">
+			<main className="flex flex-auto flex-col overflow-y-auto border-border bg-background shadow-inner md:rounded-xl md:border">
 				{/* <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
 					<h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
 						Create <span className="text-[hsl(280,100%,70%)]">T3</span> App

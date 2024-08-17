@@ -26,9 +26,7 @@ export const NavLinkComponent = ({
 			href={link.href}
 			className={cn(
 				'group/navigation flex items-center justify-start gap-3 py-2 outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring',
-				isLogo
-					? 'mx-2 rounded-md pl-2'
-					: 'rounded-md px-5 text-popover-foreground hover:bg-accent/40 sm:px-7 md:px-3 md:hover:bg-accent',
+				isLogo ? 'mx-2 rounded-md pl-2' : 'rounded-md px-5 hover:bg-accent/40 sm:px-7 md:px-3 md:hover:bg-accent',
 				className
 			)}
 			{...props}

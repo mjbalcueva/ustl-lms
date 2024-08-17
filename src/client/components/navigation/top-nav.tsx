@@ -53,7 +53,7 @@ export const TopNav = ({ session, navLinks, className, ...props }: TopNavProps) 
 					duration: 0.2
 				}}
 				className={cn(
-					'sticky top-0 flex h-14 items-center justify-between border-b border-border bg-popover/50 px-2 backdrop-blur-xl sm:px-4 md:hidden',
+					'sticky top-0 flex h-14 items-center justify-between border-b border-border px-2 backdrop-blur-xl sm:px-4 md:hidden',
 					className
 				)}
 				{...props}
@@ -65,11 +65,7 @@ export const TopNav = ({ session, navLinks, className, ...props }: TopNavProps) 
 					className="outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
 					aria-label={isNavOpen ? 'Close navigation menu' : 'Open navigation menu'}
 				>
-					{isNavOpen ? (
-						<Icons.sidebarClose className="h-6 w-6 text-popover-foreground" />
-					) : (
-						<Icons.sidebarOpen className="h-6 w-6 text-popover-foreground" />
-					)}
+					{isNavOpen ? <Icons.sidebarClose className="h-6 w-6" /> : <Icons.sidebarOpen className="h-6 w-6" />}
 				</Button>
 
 				<Link
@@ -117,7 +113,7 @@ export const TopNav = ({ session, navLinks, className, ...props }: TopNavProps) 
 					}
 				}}
 				className={cn(
-					'fixed top-14 h-full w-full overflow-auto bg-popover/50 backdrop-blur-xl md:hidden',
+					'fixed top-14 h-full w-full overflow-auto bg-popover/50 text-popover-foreground backdrop-blur-xl md:hidden',
 					!isNavOpen && 'pointer-events-none'
 				)}
 			>

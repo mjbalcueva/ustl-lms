@@ -19,22 +19,22 @@ const navLinks: NavLink[] = [
 	{
 		label: 'Dashboard',
 		href: '#',
-		icon: <Icons.dashboard className="h-5 w-5 flex-shrink-0 text-foreground" />
+		icon: <Icons.dashboard className="h-5 w-5 flex-shrink-0" />
 	},
 	{
 		label: 'Learning',
 		href: '#',
-		icon: <Icons.learning className="h-5 w-5 flex-shrink-0 text-foreground" />
+		icon: <Icons.learning className="h-5 w-5 flex-shrink-0" />
 	},
 	{
 		label: 'Reports',
 		href: '#',
-		icon: <Icons.reports className="h-5 w-5 flex-shrink-0 text-foreground" />
+		icon: <Icons.reports className="h-5 w-5 flex-shrink-0" />
 	},
 	{
 		label: 'Chat',
 		href: '#',
-		icon: <Icons.messages className="h-5 w-5 flex-shrink-0 text-foreground" />
+		icon: <Icons.messages className="h-5 w-5 flex-shrink-0" />
 	}
 ]
 
@@ -63,9 +63,17 @@ export const MainNav = ({ session }: MainNavProps) => {
 	return (
 		<>
 			{deviceSize === 'mobile' ? (
-				<TopNav session={session} navLinks={navLinks} className={cn('md:hidden', inter.className)} />
+				<TopNav
+					session={session}
+					navLinks={navLinks}
+					className={cn('bg-popover/50 text-popover-foreground md:hidden', inter.className)}
+				/>
 			) : (
-				<SideNav session={session} navLinks={navLinks} className={cn('hidden md:flex md:flex-col', inter.className)} />
+				<SideNav
+					session={session}
+					navLinks={navLinks}
+					className={cn('hidden bg-popover text-popover-foreground md:flex md:flex-col', inter.className)}
+				/>
 			)}
 		</>
 	)

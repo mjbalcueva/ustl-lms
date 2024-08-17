@@ -22,7 +22,7 @@ export const SideNav = ({ session, navLinks, className, ...props }: SideNavProps
 
 	return (
 		<motion.nav
-			className={cn('h-full w-[60px] flex-shrink-0 bg-popover py-4', className)}
+			className={cn('h-full w-[60px] flex-shrink-0 py-4', className)}
 			animate={{
 				width: canNavOpen ? (isNavOpen ? '240px' : '60px') : '240px'
 			}}
