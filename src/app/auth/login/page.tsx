@@ -1,4 +1,5 @@
 import { type Metadata } from 'next'
+import { Suspense } from 'react'
 
 import { LoginForm } from '@/client/components/auth'
 
@@ -8,5 +9,9 @@ export const metadata: Metadata = {
 }
 
 export default function Page() {
-	return <LoginForm />
+	return (
+		<Suspense>
+			<LoginForm />
+		</Suspense>
+	)
 }
