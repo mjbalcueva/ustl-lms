@@ -1,10 +1,30 @@
 import { PrismaAdapter } from '@auth/prisma-adapter'
-import NextAuth from 'next-auth'
+import { type UserRole } from '@prisma/client'
+import NextAuth, { type DefaultSession } from 'next-auth'
+import { type DefaultJWT } from 'next-auth/jwt'
 
 import { getUserById, getUserByIdWithAccounts } from '@/shared/data/user'
 
 import authConfig from '@/server/lib/auth.config'
 import { db } from '@/server/lib/db'
+
+declare module 'next-auth' {
+	interface Session extends DefaultSession {
+		user: {
+			role: UserRole
+			isTwoFactorEnabled: boolean
+			isOAuth: boolean
+		} & DefaultSession['user']
+	}
+}
+
+declare module 'next-auth/jwt' {
+	interface JWT extends DefaultJWT {
+		role: UserRole
+		isTwoFactorEnabled: boolean
+		isOAuth: boolean
+	}
+}
 
 export const {
 	auth,
