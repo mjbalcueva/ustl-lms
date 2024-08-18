@@ -3,7 +3,7 @@ import NextAuth from 'next-auth'
 
 import { getUserById, getUserByIdWithAccounts } from '@/shared/data/user'
 
-import authConfig from '@/server/auth.config'
+import authConfig from '@/server/lib/auth.config'
 import { db } from '@/server/lib/db'
 
 export const {
