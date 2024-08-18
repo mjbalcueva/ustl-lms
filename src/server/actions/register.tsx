@@ -6,7 +6,7 @@ import { generateVerificationToken } from '@/shared/data/tokens'
 import { getUserByEmail } from '@/shared/data/user'
 import { registerSchema, type RegisterSchema } from '@/shared/schemas'
 
-import { db } from '@/server/db'
+import { db } from '@/server/lib/db'
 
 export const register = async (values: RegisterSchema) => {
 	const validatedFields = registerSchema.safeParse(values)
