@@ -39,7 +39,9 @@ export const login = async (values: LoginSchema) => {
 		if (error instanceof AuthError) {
 			switch (error.type) {
 				case 'CredentialsSignin':
-					return { error: 'Invalid Credentials' }
+					return { error: 'Invalid Credentials!' }
+				case 'AccessDenied':
+					return { error: 'Access Denied!' }
 				default:
 					return { error: error.message }
 			}

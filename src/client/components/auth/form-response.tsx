@@ -19,7 +19,7 @@ export function FormResponse({ type, message }: FormResponseProps) {
 	return (
 		<div
 			className={cn(
-				'flex items-center gap-2 rounded-xl border px-3 py-[0.575rem] text-sm',
+				'flex items-end gap-2 rounded-xl border px-3 py-[0.575rem] text-sm leading-none',
 				type === 'success'
 					? 'border-emerald-500/15 bg-emerald-500/15 text-emerald-500'
 					: 'border-destructive/15 bg-destructive/15 text-destructive'
