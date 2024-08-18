@@ -61,14 +61,13 @@ export const {
 		// },
 		async session({ token, session }) {
 			const { sub, role, isTwoFactorEnabled, name, email, isOAuth } = token
-
 			if (sub) session.user.id = sub
 			if (role) session.user.role = role
 
-			session.user.isTwoFactorEnabled = isTwoFactorEnabled
 			session.user.name = name
 			session.user.email = email!
 			session.user.isOAuth = isOAuth
+			session.user.isTwoFactorEnabled = isTwoFactorEnabled
 
 			return session
 		},
@@ -78,10 +77,10 @@ export const {
 			if (!existingUser) return token
 
 			const { accounts, name, email, role, isTwoFactorEnabled } = existingUser
-			token.isOAuth = !!accounts.length
 			token.name = name
 			token.email = email
 			token.role = role
+			token.isOAuth = !!accounts.length
 			token.isTwoFactorEnabled = isTwoFactorEnabled
 
 			return token

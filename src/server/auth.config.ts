@@ -28,7 +28,6 @@ export default {
 				const isPasswordValid = await compare(password, user.password)
 				if (!isPasswordValid) return null
 
-				console.log('user', user)
 				return user
 			}
 		})
