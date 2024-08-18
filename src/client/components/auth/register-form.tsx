@@ -2,7 +2,6 @@
 
 import { useState, useTransition } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { signIn } from 'next-auth/react'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 
 import { registerSchema, type RegisterSchema } from '@/shared/schemas'
@@ -42,14 +41,9 @@ export const RegisterForm = () => {
 		setFormSuccess('')
 
 		startTransition(async () => {
-			await register(data).then(async (data) => {
+			await register(data).then((data) => {
 				if (data?.error) return setFormError(data?.error)
-				if (data?.success) setFormSuccess(data?.success)
-
-				await signIn('credentials', {
-					email: data.email,
-					password: data.password
-				})
+				if (data?.success) return setFormSuccess(data?.success)
 			})
 		})
 	}
@@ -121,12 +115,8 @@ export const RegisterForm = () => {
 					<FormResponse type="success" message={formSuccess} />
 
 					<div className="pt-2">
-						<ButtonShimmering
-							className="w-full rounded-xl"
-							shimmerClassName="bg-white/20"
-							disabled={isPending || !!formSuccess}
-						>
-							{(isPending || !!formSuccess) && (
+						<ButtonShimmering className="w-full rounded-xl" shimmerClassName="bg-white/20" disabled={isPending}>
+							{isPending && (
 								<span className="relative right-[4.5ch]">
 									<Loader />
 								</span>

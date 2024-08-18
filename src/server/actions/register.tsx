@@ -2,6 +2,7 @@
 
 import { hash } from 'bcryptjs'
 
+import { generateVerificationToken } from '@/shared/data/tokens'
 import { getUserByEmail } from '@/shared/data/user'
 import { registerSchema, type RegisterSchema } from '@/shared/schemas'
 
@@ -14,6 +15,7 @@ export const register = async (values: RegisterSchema) => {
 	const { name, email, password } = validatedFields.data
 
 	if (!email.endsWith('@ust-legazpi.edu.ph')) return { error: 'Please use your UST Legazpi email address.' }
+
 	const existingUser = await getUserByEmail(email)
 	if (existingUser) return { error: 'User already exists!' }
 
@@ -27,5 +29,8 @@ export const register = async (values: RegisterSchema) => {
 		}
 	})
 
-	return { email, password, success: 'User created successfully!' }
+	const verificationToken = await generateVerificationToken(email)
+	console.log(verificationToken)
+
+	return { success: 'Confirmation email sent!' }
 }

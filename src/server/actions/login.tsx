@@ -2,6 +2,7 @@
 
 import { AuthError } from 'next-auth'
 
+import { generateVerificationToken } from '@/shared/data/tokens'
 import { getUserByEmail } from '@/shared/data/user'
 import { loginSchema, type LoginSchema } from '@/shared/schemas'
 
@@ -16,10 +17,16 @@ export const login = async (values: LoginSchema) => {
 	const { email, password } = validatedFields.data
 
 	if (!email.endsWith('@ust-legazpi.edu.ph')) return { error: 'Please use your UST Legazpi email address.' }
-	const existingUser = await getUserByEmail(email)
-	if (!existingUser) return { error: 'User does not exist!' }
 
+	const existingUser = await getUserByEmail(email)
+	if (!existingUser ?? !existingUser?.email) return { error: 'User does not exist!' }
 	if (!existingUser.password) return { error: 'Sign in with Google instead!' }
+	if (!existingUser.emailVerified) {
+		const verificationToken = await generateVerificationToken(existingUser.email)
+		console.log(verificationToken)
+
+		return { success: 'Confirmation email sent!' }
+	}
 
 	try {
 		await signIn('credentials', {
