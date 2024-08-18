@@ -6,7 +6,7 @@ import { generateVerificationToken } from '@/shared/data/tokens'
 import { getUserByEmail } from '@/shared/data/user'
 import { loginSchema, type LoginSchema } from '@/shared/schemas'
 
-import { signIn } from '@/server/auth'
+import { signIn } from '@/server/lib/auth'
 
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes'
 

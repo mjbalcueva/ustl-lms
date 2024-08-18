@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers'
 import { SessionProvider } from 'next-auth/react'
 
-import { auth } from '@/server/auth'
+import { auth } from '@/server/lib/auth'
 
 import { MainNav } from '@/client/components/navigation'
 import { DeviceTypeProvider, type DeviceType } from '@/client/context'
