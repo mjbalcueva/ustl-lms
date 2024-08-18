@@ -2,7 +2,8 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { signOut, useSession } from 'next-auth/react'
+import { type Session } from 'next-auth'
+import { signOut } from 'next-auth/react'
 import { useMediaQuery } from 'usehooks-ts'
 
 import { Icons } from '@/client/components/icons'
@@ -23,11 +24,12 @@ import { useDeviceType } from '@/client/context'
 import { useNav } from '@/client/lib/hooks/use-nav'
 import { getEmail, getInitials } from '@/client/lib/utils'
 
-type UserButtonProps = React.ComponentProps<typeof DropdownMenu>
+type UserButtonProps = React.ComponentProps<typeof DropdownMenu> & {
+	session: Session
+}
 
-export const UserButton: React.FC<UserButtonProps> = ({ ...props }: UserButtonProps) => {
-	const sesh = useSession()
-	const user = sesh.data?.user
+export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }: UserButtonProps) => {
+	const user = session?.user
 
 	const { isNavOpen, canNavOpen } = useNav()
 	const { deviceSize } = useDeviceType()

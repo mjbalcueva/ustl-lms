@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
+import { type Session } from 'next-auth'
 
 import { navLinks } from '@/shared/config/links'
 
@@ -12,7 +13,10 @@ import { Button } from '@/client/components/ui'
 import { useNav } from '@/client/lib/hooks/use-nav'
 import { cn } from '@/client/lib/utils'
 
-export const TopNav = ({ className, ...props }: React.ComponentProps<typeof motion.div>) => {
+type NavProps = React.ComponentProps<typeof motion.div> & {
+	session: Session
+}
+export const TopNav = ({ className, session, ...props }: NavProps) => {
 	const MotionNavLink = useMemo(() => motion(NavLinkComponent), [])
 	const { isNavOpen, setNavOpen } = useNav()
 
@@ -72,6 +76,7 @@ export const TopNav = ({ className, ...props }: React.ComponentProps<typeof moti
 				</Link>
 
 				<UserButton
+					session={session}
 					onOpenChange={(open) => {
 						isUserButtonOpen.current = open
 						setNavOpen(false)

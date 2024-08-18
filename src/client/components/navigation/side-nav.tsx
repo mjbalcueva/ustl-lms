@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { type Session } from 'next-auth'
 
 import { navLinks } from '@/shared/config/links'
 import { siteConfig } from '@/shared/config/site'
@@ -10,7 +11,11 @@ import { Separator } from '@/client/components/ui'
 import { useNav } from '@/client/lib/hooks/use-nav'
 import { cn } from '@/client/lib/utils'
 
-export const SideNav = ({ className, ...props }: React.ComponentProps<typeof motion.div>) => {
+type NavProps = React.ComponentProps<typeof motion.div> & {
+	session: Session
+}
+
+export const SideNav = ({ className, session, ...props }: NavProps) => {
 	const { isNavOpen, setNavOpen, canNavOpen, setCanNavOpen } = useNav()
 
 	return (
@@ -43,6 +48,7 @@ export const SideNav = ({ className, ...props }: React.ComponentProps<typeof mot
 			<Separator className="bg-muted" />
 
 			<UserButton
+				session={session}
 				onOpenChange={(open) => {
 					setNavOpen(false)
 					setCanNavOpen(!open)

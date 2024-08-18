@@ -3,12 +3,9 @@ import '@/client/styles/globals.css'
 import { type Metadata } from 'next'
 import { cookies } from 'next/headers'
 import { GeistSans } from 'geist/font/sans'
-import { SessionProvider } from 'next-auth/react'
 
 import { siteConfig } from '@/shared/config/site'
 import { TRPCReactProvider } from '@/shared/trpc/react'
-
-import { auth } from '@/server/auth'
 
 import { TailwindSizeIndicator } from '@/client/components/tailwind-size-indicator'
 import { Toaster } from '@/client/components/ui'
@@ -21,7 +18,6 @@ export const metadata: Metadata = {
 }
 
 export default async function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
-	const session = await auth()
 	const deviceSizeCookie = cookies().get('device-size')
 
 	let defaultDeviceSize: DeviceType = ''
@@ -30,17 +26,15 @@ export default async function Layout({ children }: Readonly<{ children: React.Re
 	return (
 		<html lang="en" className={`${GeistSans.variable}`} suppressHydrationWarning>
 			<body>
-				<SessionProvider session={session}>
-					<TRPCReactProvider>
-						<DeviceTypeProvider defaultDeviceSize={defaultDeviceSize}>
-							<ThemeProvider>
-								{children}
-								<Toaster />
-								<TailwindSizeIndicator />
-							</ThemeProvider>
-						</DeviceTypeProvider>
-					</TRPCReactProvider>
-				</SessionProvider>
+				<TRPCReactProvider>
+					<DeviceTypeProvider defaultDeviceSize={defaultDeviceSize}>
+						<ThemeProvider>
+							{children}
+							<Toaster />
+							<TailwindSizeIndicator />
+						</ThemeProvider>
+					</DeviceTypeProvider>
+				</TRPCReactProvider>
 			</body>
 		</html>
 	)
