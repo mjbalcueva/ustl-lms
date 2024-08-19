@@ -8,6 +8,8 @@ import { registerSchema, type RegisterSchema } from '@/shared/schemas'
 
 import { db } from '@/server/lib/db'
 
+import { sendVerificationEmail } from '../lib/mail'
+
 export const register = async (values: RegisterSchema) => {
 	const validatedFields = registerSchema.safeParse(values)
 
@@ -30,7 +32,7 @@ export const register = async (values: RegisterSchema) => {
 	})
 
 	const verificationToken = await generateVerificationToken(email)
-	console.log(verificationToken)
+	await sendVerificationEmail(verificationToken.email, verificationToken.token)
 
 	return { success: 'Confirmation email sent.' }
 }
