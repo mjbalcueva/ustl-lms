@@ -1,8 +1,8 @@
 import { Resend } from 'resend'
 
-import { env } from '@/env'
+import VerificationEmail from '@/client/emails/verification-email'
 
-import VerificationEmail from '../emails/verification-email'
+import { env } from '@/env'
 
 const resend = new Resend(env.RESEND_API_KEY)
 const domain = env.AUTH_URL
