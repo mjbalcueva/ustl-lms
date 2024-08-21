@@ -6,12 +6,7 @@ import { env } from '@/env'
 
 const resend = new Resend(env.RESEND_API_KEY)
 
-const domain =
-	typeof window !== 'undefined'
-		? window.location.origin
-		: process.env.VERCEL_URL
-			? `https://${process.env.VERCEL_URL}`
-			: `http://localhost:${process.env.PORT ?? 3000}`
+const domain = 'https://ustl-lms.tech'
 const supportMail = 'support@ustl-lms.tech'
 
 export async function sendVerificationEmail(email: string, token: string) {
