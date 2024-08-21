@@ -13,8 +13,6 @@ import {
 	Text
 } from '@react-email/components'
 
-import { Icons } from '@/client/components/icons'
-
 interface VerificationEmailProps {
 	email?: string
 	confirmLink?: string
@@ -28,10 +26,7 @@ export const VerificationEmail = ({ email, confirmLink }: VerificationEmailProps
 			<Tailwind>
 				<Body className="mx-auto my-auto bg-neutral-100 font-sans text-black">
 					<Container className="rounded border border-solid border-[#eaeaea] bg-white px-10 pb-10">
-						<Heading className="flex items-center justify-start gap-4">
-							<Icons.logo />
-							Scholar
-						</Heading>
+						<Heading className="flex items-center justify-start gap-4">Scholar</Heading>
 						<Hr />
 						<Section>
 							<Text>
