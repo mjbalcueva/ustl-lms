@@ -3,7 +3,7 @@ import { cn } from '@/client/lib/utils'
 
 type FormResponseType = 'success' | 'error'
 
-type FormResponseProps = {
+type FormResponseProps = React.HTMLAttributes<HTMLDivElement> & {
 	type: FormResponseType
 	message?: string | null
 }
@@ -13,20 +13,24 @@ const formResponseIcon: Record<FormResponseType, React.ReactNode> = {
 	error: <Icons.triangleAlertFilled className="size-4 min-h-4 min-w-4" />
 }
 
-export function FormResponse({ type, message }: FormResponseProps) {
+export function FormResponse({ type, message, className, ...props }: FormResponseProps) {
 	if (!message) return null
 
 	return (
 		<div
 			className={cn(
-				'flex items-end gap-2 rounded-xl border px-3 py-[0.575rem] text-sm leading-none',
+				'flex items-center rounded-xl border p-3',
 				type === 'success'
 					? 'border-emerald-500/15 bg-emerald-500/15 text-emerald-500'
-					: 'border-destructive/15 bg-destructive/15 text-destructive'
+					: 'border-destructive/15 bg-destructive/15 text-destructive',
+				className
 			)}
+			{...props}
 		>
-			{formResponseIcon[type]}
-			{message}
+			<div className="flex items-end gap-2 text-sm leading-none">
+				{formResponseIcon[type]}
+				{message}
+			</div>
 		</div>
 	)
 }
