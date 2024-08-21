@@ -6,7 +6,7 @@ import { env } from '@/env'
 
 const resend = new Resend(env.RESEND_API_KEY)
 
-const domain = 'https://ustl-lms.tech'
+const domain = env.AUTH_URL
 const supportMail = 'support@ustl-lms.tech'
 
 export async function sendVerificationEmail(email: string, token: string) {
