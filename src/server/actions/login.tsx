@@ -7,6 +7,7 @@ import { getUserByEmail } from '@/shared/data/user'
 import { loginSchema, type LoginSchema } from '@/shared/schemas'
 
 import { signIn } from '@/server/lib/auth'
+import { sendVerificationEmail } from '@/server/lib/mail'
 
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes'
 
@@ -23,7 +24,7 @@ export const login = async (values: LoginSchema) => {
 	if (!existingUser.password) return { error: 'Sign in with Google instead!' }
 	if (!existingUser.emailVerified) {
 		const verificationToken = await generateVerificationToken(existingUser.email)
-		console.log(verificationToken)
+		await sendVerificationEmail(verificationToken.email, verificationToken.token)
 
 		return { success: 'Confirmation email sent!' }
 	}
