@@ -2,6 +2,8 @@ import { Resend } from 'resend'
 
 import { env } from '@/env'
 
+import VerificationEmail from '../emails/verification-email'
+
 const resend = new Resend(env.RESEND_API_KEY)
 const domain = env.AUTH_URL
 const supportMail = 'support@ustl-lms.tech'
@@ -13,7 +15,7 @@ export async function sendVerificationEmail(email: string, token: string) {
 		from: `Scholar <${supportMail}>`,
 		to: email,
 		subject: 'Confirm your email',
-		html: `<p>Click <a href="${confirmLink}">here</a> to confirm email.</p>`
+		react: VerificationEmail({ email, confirmLink })
 	})
 }
 
