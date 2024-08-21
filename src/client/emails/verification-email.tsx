@@ -24,7 +24,7 @@ export const VerificationEmail = ({ email, confirmLink }: VerificationEmailProps
 	return (
 		<Html>
 			<Head />
-			<Preview>Verify your account</Preview>
+			<Preview>Confirm your email</Preview>
 			<Tailwind>
 				<Body className="mx-auto my-auto bg-neutral-100 font-sans text-black">
 					<Container className="rounded border border-solid border-[#eaeaea] bg-white px-10 pb-10">
