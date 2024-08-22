@@ -36,8 +36,8 @@
 - [x] Logout functionality
 - [x] Domain Restriction (UST-Legazpi only)
 - [ ] Enhanced Security
-  - [ ] Forgot password flow
-  - [ ] Email verification
+  - [ ] Forgot password
+  - [x] Email verification
   - [ ] Two-factor authentication (2FA)
 
 ### User Management (0/6)
