@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 
-import { ErrorCard } from '@/client/components/auth/error-card'
+import { ErrorCard } from '@/client/components/auth'
 
 export default function Page() {
 	return (
