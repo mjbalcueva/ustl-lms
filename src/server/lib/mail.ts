@@ -5,6 +5,7 @@ import VerificationEmail from '@/client/emails/verification-email'
 import { env } from '@/env'
 
 const resend = new Resend(env.RESEND_API_KEY)
+
 const domain = env.AUTH_URL
 const supportMail = 'support@ustl-lms.tech'
 
