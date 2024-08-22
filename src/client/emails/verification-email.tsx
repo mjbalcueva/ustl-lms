@@ -33,8 +33,8 @@ export const VerificationEmail = ({ email, confirmLink }: VerificationEmailProps
 								Hi there <strong>{email}</strong>!
 							</Text>
 							<Text>
-								Thank you for signing up! We want to make sure it&apos;s really you. Please confirm your email by
-								clicking the button below:
+								Thank you for signing up! We want to make sure it&apos;s really you. Please{' '}
+								<strong>confirm your email</strong> by clicking the button below:
 							</Text>
 							<Button
 								href={confirmLink}
