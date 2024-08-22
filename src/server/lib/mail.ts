@@ -1,5 +1,6 @@
 import { Resend } from 'resend'
 
+import PasswordResetEmail from '@/client/emails/password-reset-email'
 import VerificationEmail from '@/client/emails/verification-email'
 
 import { env } from '@/env'
@@ -27,7 +28,7 @@ export async function sendPasswordResetEmail(email: string, token: string) {
 		from: `Scholar <${supportMail}>`,
 		to: email,
 		subject: 'Reset your password',
-		html: `<p>Click <a href="${resetLink}">here</a> to reset your password.</p>`
+		react: PasswordResetEmail({ email, resetLink })
 	})
 }
 
