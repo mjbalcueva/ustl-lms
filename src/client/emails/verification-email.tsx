@@ -38,9 +38,9 @@ export const VerificationEmail = ({ email, confirmLink }: VerificationEmailProps
 							</Text>
 							<Button
 								href={confirmLink}
-								className="rounded bg-[#000000] px-14 py-3 text-center text-xs font-semibold text-white no-underline"
+								className="rounded bg-[#000000] px-14 py-3 text-center text-xs font-semibold tracking-wide text-white no-underline"
 							>
-								Click to confirm
+								Confirm Email
 							</Button>
 							<Text>
 								If you did not sign up for this account, please ignore this email or contact support at{' '}
@@ -49,7 +49,7 @@ export const VerificationEmail = ({ email, confirmLink }: VerificationEmailProps
 								</Link>
 								.
 							</Text>
-							<Text>To keep your account secure, please don&apos;t forward this email to anyone.</Text>
+							<Text>To keep your account secure, please do not forward this email to anyone.</Text>
 							<Text>Happy Learning!</Text>
 						</Section>
 					</Container>
