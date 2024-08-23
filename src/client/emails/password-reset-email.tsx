@@ -33,8 +33,8 @@ export const PasswordResetEmail = ({ email, resetLink }: PasswordEmailProps) => 
 								Hi there <strong>{email}</strong>!
 							</Text>
 							<Text>
-								Someone recently requested a Someone recently requested a <strong>password change</strong> for your for
-								your Scholar account. If this was you, you can set a new password by clicking the button below:
+								Someone recently requested a <strong>password change</strong> for your for your Scholar account. If this
+								was you, you can set a new password by clicking the button below:
 							</Text>
 							<Button
 								href={resetLink}
