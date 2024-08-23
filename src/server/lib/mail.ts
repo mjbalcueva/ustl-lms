@@ -1,6 +1,7 @@
 import { Resend } from 'resend'
 
 import PasswordResetEmail from '@/client/emails/password-reset-email'
+import TwoFactorTokenEmail from '@/client/emails/two-factor-token-email'
 import VerificationEmail from '@/client/emails/verification-email'
 
 import { env } from '@/env'
@@ -25,8 +26,8 @@ export async function sendTwoFactorTokenEmail(email: string, token: string) {
 	await resend.emails.send({
 		from: `Scholar <${supportMail}>`,
 		to: email,
-		subject: '2FA Code',
-		html: `<p>Your 2FA Code: ${token}</p>`
+		subject: 'Two Factor Authentication Code',
+		react: TwoFactorTokenEmail({ email, token })
 	})
 }
 
