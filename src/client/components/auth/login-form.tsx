@@ -44,16 +44,22 @@ export const LoginForm = () => {
 	})
 
 	const onSubmit: SubmitHandler<LoginSchema> = (data) => {
+		console.log(data)
 		setFormError('')
 		setFormSuccess('')
 
 		startTransition(async () => {
-			await login(data).then((data) => {
-				if (data?.error) return setFormError(data?.error)
-				if (data?.success) return setFormSuccess(data?.success)
-
-				setShowTwoFactor(false)
-			})
+			await login(data)
+				.then((data) => {
+					if (data?.error) return setFormError(data?.error)
+					if (data?.success) {
+						setShowTwoFactor(data?.twoFactor ?? false)
+						return setFormSuccess(data?.success)
+					}
+				})
+				.catch(() => {
+					setFormError('Something went wrong!')
+				})
 		})
 	}
 
@@ -146,11 +152,11 @@ export const LoginForm = () => {
 
 					<ButtonShimmering className="w-full rounded-xl" shimmerClassName="bg-white/20" disabled={isPending}>
 						{isPending && (
-							<span className="relative right-[3.4ch]">
+							<span className={cn('relative', showTwoFactor ? 'right-[4ch]' : 'right-[3.4ch]')}>
 								<Loader />
 							</span>
 						)}
-						<span className="absolute">Login</span>
+						<span className="absolute">{showTwoFactor ? 'Confirm' : 'Login'}</span>
 					</ButtonShimmering>
 				</form>
 			</Form>
