@@ -24,8 +24,8 @@ export const VerificationEmail = ({ email, confirmLink }: VerificationEmailProps
 			<Head />
 			<Preview>Confirm your email</Preview>
 			<Tailwind>
-				<Body className="mx-auto my-auto bg-neutral-100 font-sans text-black">
-					<Container className="rounded border border-solid border-[#eaeaea] bg-white px-10 pb-10">
+				<Body className="mx-auto my-auto bg-neutral-100 py-6 font-sans text-black">
+					<Container className="rounded-xl border border-solid border-[#eaeaea] bg-white px-10 pb-10">
 						<Heading className="flex items-center justify-start gap-4">Scholar</Heading>
 						<Hr />
 						<Section>
