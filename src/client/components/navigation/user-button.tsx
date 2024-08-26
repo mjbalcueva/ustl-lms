@@ -97,7 +97,7 @@ export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }: Use
 				{isTiny ? <PreferenceDrawer /> : <PreferenceDropdown isMobile={isMobile} />}
 
 				<DropdownMenuItem asChild>
-					<Link href="#link" className="cursor-pointer">
+					<Link href="/settings" className="cursor-pointer">
 						<Icons.settings className="mr-2 h-4 w-4" />
 						<span>Settings</span>
 					</Link>
