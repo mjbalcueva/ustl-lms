@@ -19,7 +19,7 @@ type SocialButtonProps = React.ComponentProps<typeof ButtonShimmering> & {
 }
 
 const providerIcons: Record<Provider, React.ReactNode> = {
-	google: <Icons.google className="size-4 min-h-4 min-w-4" />
+	google: <Icons.google className="size-4" />
 }
 
 export const SocialButton = ({ text, provider, className, ...props }: SocialButtonProps) => {
@@ -37,7 +37,7 @@ export const SocialButton = ({ text, provider, className, ...props }: SocialButt
 
 	return (
 		<ButtonShimmering
-			className={cn('rounded-xl', className)}
+			className={cn('items-center rounded-xl', className)}
 			variant="outline"
 			shimmerClassName="bg-white/5"
 			onClick={handleClick}
@@ -45,7 +45,7 @@ export const SocialButton = ({ text, provider, className, ...props }: SocialButt
 			{...props}
 		>
 			<span className="mr-2">{isLoading ? <Loader /> : providerIcons[provider]}</span>
-			<span>{text}</span>
+			<span className="leading-none">{text}</span>
 		</ButtonShimmering>
 	)
 }
