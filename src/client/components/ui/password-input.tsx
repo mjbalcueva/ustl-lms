@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { EyeIcon, EyeOffIcon } from 'lucide-react'
+import { LuEye, LuEyeOff } from 'react-icons/lu'
 
 import { Button } from '@/client/components/ui/button'
 import { Input, type InputProps } from '@/client/components/ui/input'
@@ -28,9 +28,9 @@ const PasswordInput = React.forwardRef<HTMLInputElement, InputProps>(({ classNam
 					onClick={() => setShowPassword((prev) => !prev)}
 				>
 					{showPassword ? (
-						<EyeIcon className="size-4" aria-hidden="true" />
+						<LuEye className="size-4" aria-hidden="true" />
 					) : (
-						<EyeOffIcon className="size-4" aria-hidden="true" />
+						<LuEyeOff className="size-4" aria-hidden="true" />
 					)}
 					<span className="sr-only">{showPassword ? 'Hide password' : 'Show password'}</span>
 				</Button>
