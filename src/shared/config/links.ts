@@ -19,6 +19,6 @@ export const navLinks: NavLink[] = [
 	{
 		label: 'Chat',
 		href: '/chat',
-		icon: 'messages'
+		icon: 'chat'
 	}
 ]

@@ -1,13 +1,13 @@
-import { CardWrapper } from '@/client/components/card-wrapper'
-import { CardDescription, CardHeader, CardTitle } from '@/client/components/ui'
+import { CardWrapper, CardWrapperHeader } from '@/client/components/card-wrapper'
+import { CardDescription, CardTitle } from '@/client/components/ui'
 
 export default function Page() {
 	return (
-		<CardWrapper showBreadcrumbs>
-			<CardHeader>
+		<CardWrapper>
+			<CardWrapperHeader>
 				<CardTitle>Profile</CardTitle>
-				<CardDescription>Manage your profile</CardDescription>
-			</CardHeader>
+				<CardDescription>Manage your account settings and set up two-factor authentication.</CardDescription>
+			</CardWrapperHeader>
 		</CardWrapper>
 	)
 }

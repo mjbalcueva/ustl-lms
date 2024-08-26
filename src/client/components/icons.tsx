@@ -34,7 +34,7 @@ export const Icons = {
 	loader2: IconLoader2,
 	learning: IconSchool,
 	logout: IconLogout,
-	messages: IconMessage,
+	chat: IconMessage,
 	moon: IconMoonStars,
 	profile: IconUser,
 	reports: IconChartHistogram,
@@ -75,5 +75,6 @@ export const Icons = {
 		<div className={cn('flex items-center justify-center rounded-md', className)} {...props}>
 			<IconDiamondFilled className="h-7 w-7 flex-shrink-0" />
 		</div>
-	)
+	),
+	logoMinimal: IconDiamondFilled
 }
