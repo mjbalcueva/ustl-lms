@@ -6,7 +6,7 @@ export default function Page() {
 		<CardWrapper>
 			<CardWrapperHeader>
 				<CardTitle>Profile</CardTitle>
-				<CardDescription>Manage your account settings and set up two-factor authentication.</CardDescription>
+				<CardDescription>Manage your Scholar profile</CardDescription>
 			</CardWrapperHeader>
 		</CardWrapper>
 	)
