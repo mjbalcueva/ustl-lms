@@ -59,13 +59,13 @@ model User {
   password              String?
   isTwoFactorEnabled    Boolean                @default(false)
   role                  UserRole               @default(STUDENT)
-  Accounts              Account[]
-  VerificationToken     VerificationToken[]
-  PasswordResetToken    PasswordResetToken[]
-  TwoFactorToken        TwoFactorToken[]
-  TwoFactorConfirmation TwoFactorConfirmation?
-  Profile               Profile?
-  Posts                 Post[]
+  accounts              Account[]
+  profile               Profile?
+  verificationToken     VerificationToken[]
+  passwordResetToken    PasswordResetToken[]
+  twoFactorToken        TwoFactorToken[]
+  twoFactorConfirmation TwoFactorConfirmation?
+  posts                 Post[]
 
   @@map("user")
 }
