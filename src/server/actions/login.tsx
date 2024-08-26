@@ -2,7 +2,6 @@
 
 import { AuthError } from 'next-auth'
 
-import { generateTwoFactorToken, generateVerificationToken } from '@/shared/data/tokens'
 import { getTwoFactorConfirmationByUserId } from '@/shared/data/two-factor-confirmation'
 import { getTwoFactorTokenByEmail } from '@/shared/data/two-factor-token'
 import { getUserByEmail } from '@/shared/data/user'
@@ -11,6 +10,7 @@ import { loginSchema, type LoginSchema } from '@/shared/schemas'
 import { signIn } from '@/server/lib/auth'
 import { db } from '@/server/lib/db'
 import { sendTwoFactorTokenEmail, sendVerificationEmail } from '@/server/lib/mail'
+import { generateTwoFactorToken, generateVerificationToken } from '@/server/lib/tokens'
 
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes'
 

@@ -1,10 +1,10 @@
 'use server'
 
-import { generatePasswordResetToken } from '@/shared/data/tokens'
 import { getUserByEmail } from '@/shared/data/user'
 import { resetSchema, type ResetSchema } from '@/shared/schemas/reset'
 
 import { sendPasswordResetEmail } from '@/server/lib/mail'
+import { generatePasswordResetToken } from '@/server/lib/tokens'
 
 export async function reset(values: ResetSchema) {
 	const validatedFields = resetSchema.safeParse(values)
