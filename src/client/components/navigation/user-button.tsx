@@ -84,7 +84,7 @@ export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }: Use
 				<DropdownMenuSeparator className="border" />
 
 				<DropdownMenuItem asChild>
-					<Link href="#link" className="cursor-pointer">
+					<Link href="/profile" className="cursor-pointer">
 						<Icons.profile className="mr-2 h-4 w-4" />
 						<span>Profile</span>
 					</Link>

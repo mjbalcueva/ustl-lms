@@ -3,22 +3,22 @@ import { type NavLink } from '@/shared/types'
 export const navLinks: NavLink[] = [
 	{
 		label: 'Dashboard',
-		href: '#',
+		href: '/dashboard',
 		icon: 'dashboard'
 	},
 	{
 		label: 'Learning',
-		href: '#',
+		href: '/learning',
 		icon: 'learning'
 	},
 	{
 		label: 'Reports',
-		href: '#',
+		href: '/reports',
 		icon: 'reports'
 	},
 	{
 		label: 'Chat',
-		href: '#',
+		href: '/chat',
 		icon: 'messages'
 	}
 ]
