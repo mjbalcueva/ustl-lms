@@ -1,48 +1,47 @@
 import {
-	IconAlertTriangleFilled,
-	IconChartHistogram,
-	IconCircleCheckFilled,
-	IconDiamondFilled,
-	IconInfoCircleFilled,
-	IconInfoTriangleFilled,
-	IconLayoutDashboard,
-	IconLayoutSidebar,
-	IconLayoutSidebarFilled,
-	IconLoader,
-	IconLoader2,
-	IconLogout,
-	IconMessage,
-	IconMoonStars,
-	IconPaint,
-	IconSchool,
-	IconSelector,
-	IconSettings2,
-	IconSunHigh,
-	IconUser
-} from '@tabler/icons-react'
-
-import { cn } from '@/client/lib/utils'
+	TbAlertTriangle,
+	TbChartHistogram,
+	TbCircleCheck,
+	TbDiamond,
+	TbInfoCircle,
+	TbInfoTriangle,
+	TbLayoutDashboard,
+	TbLayoutSidebar,
+	TbLayoutSidebarFilled,
+	TbLoader,
+	TbLoader2,
+	TbLogout,
+	TbMessage,
+	TbMoonStars,
+	TbPaint,
+	TbSchool,
+	TbSelector,
+	TbSettings2,
+	TbSunHigh,
+	TbUser
+} from 'react-icons/tb'
 
 export const Icons = {
-	circleInfoFilled: IconInfoCircleFilled,
-	circleCheckFilled: IconCircleCheckFilled,
-	triangleInfoFilled: IconInfoTriangleFilled,
-	triangleAlertFilled: IconAlertTriangleFilled,
-	dashboard: IconLayoutDashboard,
-	dropdown: IconSelector,
-	loader: IconLoader,
-	loader2: IconLoader2,
-	learning: IconSchool,
-	logout: IconLogout,
-	chat: IconMessage,
-	moon: IconMoonStars,
-	profile: IconUser,
-	reports: IconChartHistogram,
-	settings: IconSettings2,
-	sidebarClose: IconLayoutSidebarFilled,
-	sidebarOpen: IconLayoutSidebar,
-	sun: IconSunHigh,
-	theme: IconPaint,
+	chat: TbMessage,
+	circleCheckFilled: TbCircleCheck,
+	circleInfoFilled: TbInfoCircle,
+	dashboard: TbLayoutDashboard,
+	dropdown: TbSelector,
+	learning: TbSchool,
+	loader: TbLoader,
+	loader2: TbLoader2,
+	logo: TbDiamond,
+	logout: TbLogout,
+	moon: TbMoonStars,
+	profile: TbUser,
+	reports: TbChartHistogram,
+	settings: TbSettings2,
+	sidebarClose: TbLayoutSidebarFilled,
+	sidebarOpen: TbLayoutSidebar,
+	sun: TbSunHigh,
+	theme: TbPaint,
+	triangleAlertFilled: TbAlertTriangle,
+	triangleInfoFilled: TbInfoTriangle,
 	google: ({ className, ...props }: { className?: string }) => (
 		<svg
 			width="256"
@@ -70,11 +69,5 @@ export const Icons = {
 				fill="#EB4335"
 			/>
 		</svg>
-	),
-	logo: ({ className, ...props }: { className?: string }) => (
-		<div className={cn('flex items-center justify-center rounded-md', className)} {...props}>
-			<IconDiamondFilled className="h-7 w-7 flex-shrink-0" />
-		</div>
-	),
-	logoMinimal: IconDiamondFilled
+	)
 }

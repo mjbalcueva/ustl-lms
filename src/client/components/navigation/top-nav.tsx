@@ -72,7 +72,7 @@ export const TopNav = ({ className, session, ...props }: NavProps) => {
 					href="/dashboard"
 					aria-label="Home"
 				>
-					<Icons.logo />
+					<Icons.logo className="size-7" />
 				</Link>
 
 				<UserButton

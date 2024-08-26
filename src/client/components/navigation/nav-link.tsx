@@ -26,13 +26,15 @@ export const NavLinkComponent = forwardRef<HTMLAnchorElement, NavLinkComponentPr
 				ref={ref}
 				href={link.href}
 				className={cn(
-					'group/navigation flex items-center justify-start gap-3 py-2 outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring',
-					isLogo ? 'min-h-11 rounded-md pl-3' : 'rounded-md px-5 hover:bg-accent/40 sm:px-7 md:px-3 md:hover:bg-accent',
+					'group/navigation flex items-center justify-start py-2 outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring',
+					isLogo
+						? 'min-h-11 gap-2 rounded-md pl-2'
+						: 'gap-3 rounded-md px-5 hover:bg-accent/40 sm:px-7 md:px-3 md:hover:bg-accent',
 					className
 				)}
 				{...props}
 			>
-				<Icon className="h-5 w-5 flex-shrink-0" />
+				<Icon className={cn('flex-shrink-0', isLogo ? 'h-7 w-7' : 'h-5 w-5')} />
 
 				<motion.span
 					animate={{

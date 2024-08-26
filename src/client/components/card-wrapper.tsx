@@ -43,8 +43,8 @@ export const CardWrapper = ({ showBreadcrumbs, children, className, ...props }: 
 				<Breadcrumb>
 					<BreadcrumbList className="hidden px-4 pb-0 pt-3 md:flex">
 						<BreadcrumbItem>
-							<BreadcrumbLink href="/dashboard" className="flex items-start gap-2">
-								<Icons.logoMinimal className="size-4" />
+							<BreadcrumbLink href="/dashboard" className="flex items-center space-x-2">
+								<Icons.logo className="size-4" />
 								<span>Scholar</span>
 							</BreadcrumbLink>
 						</BreadcrumbItem>
@@ -55,9 +55,9 @@ export const CardWrapper = ({ showBreadcrumbs, children, className, ...props }: 
 								<React.Fragment key={href}>
 									<BreadcrumbSeparator />
 									<BreadcrumbItem>
-										<BreadcrumbLink href={href} className="flex items-start gap-2">
+										<BreadcrumbLink href={href} className="flex items-center space-x-2">
 											{icon}
-											<span>{segment.charAt(0).toUpperCase() + segment.slice(1)}</span>
+											<span className="leading-none">{segment.charAt(0).toUpperCase() + segment.slice(1)}</span>
 										</BreadcrumbLink>
 									</BreadcrumbItem>
 								</React.Fragment>
