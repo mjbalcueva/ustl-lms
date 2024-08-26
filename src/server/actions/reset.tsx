@@ -1,6 +1,5 @@
 'use server'
 
-import { getAccountByUserId } from '@/shared/data/account'
 import { generatePasswordResetToken } from '@/shared/data/tokens'
 import { getUserByEmail } from '@/shared/data/user'
 import { resetSchema, type ResetSchema } from '@/shared/schemas/reset'
@@ -15,9 +14,6 @@ export async function reset(values: ResetSchema) {
 
 	const existingUser = await getUserByEmail(email)
 	if (!existingUser) return { error: 'Email not found!' }
-
-	const existingAccount = await getAccountByUserId(existingUser.id)
-	if (existingAccount) return { error: 'You are registered with a provider!' }
 
 	const passwordResetToken = await generatePasswordResetToken(email)
 	await sendPasswordResetEmail(passwordResetToken.email, passwordResetToken.token)

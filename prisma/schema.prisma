@@ -29,6 +29,19 @@ model Post {
   @@map("post")
 }
 
+// Profile model
+
+model Profile {
+  id          String    @id @default(cuid())
+  userId      String    @unique
+  bio         String?
+  dateOfBirth DateTime? @map("date_of_birth")
+  gender      String?
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("profile")
+}
+
 // Auth models
 
 enum UserRole {
@@ -46,12 +59,13 @@ model User {
   password              String?
   isTwoFactorEnabled    Boolean                @default(false)
   role                  UserRole               @default(STUDENT)
-  accounts              Account[]
-  posts                 Post[]
+  Accounts              Account[]
   VerificationToken     VerificationToken[]
   PasswordResetToken    PasswordResetToken[]
   TwoFactorToken        TwoFactorToken[]
   TwoFactorConfirmation TwoFactorConfirmation?
+  Profile               Profile?
+  Posts                 Post[]
 
   @@map("user")
 }
