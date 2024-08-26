@@ -71,14 +71,26 @@ export const CardWrapper = ({ showBreadcrumbs, children, className, ...props }: 
 	)
 }
 
-export const CardWrapperHeader = ({ children }: React.ComponentProps<typeof CardHeader>) => {
-	return <CardHeader className="px-4 pt-4 md:p-6">{children}</CardHeader>
+export const CardWrapperHeader = ({ children, className, ...props }: React.ComponentProps<typeof CardHeader>) => {
+	return (
+		<CardHeader className={cn('px-4 pt-4 md:p-6', className)} {...props}>
+			{children}
+		</CardHeader>
+	)
 }
 
-export const CardWrapperContent = ({ children }: React.ComponentProps<typeof CardContent>) => {
-	return <CardContent className="px-4 md:p-6 md:pt-0">{children}</CardContent>
+export const CardWrapperContent = ({ children, className, ...props }: React.ComponentProps<typeof CardContent>) => {
+	return (
+		<CardContent className={cn('px-4 md:p-6 md:pt-0', className)} {...props}>
+			{children}
+		</CardContent>
+	)
 }
 
-export const CardWrapperFooter = ({ children }: React.ComponentProps<typeof CardFooter>) => {
-	return <CardFooter className="px-4 md:p-6 md:pt-0">{children}</CardFooter>
+export const CardWrapperFooter = ({ children, className, ...props }: React.ComponentProps<typeof CardFooter>) => {
+	return (
+		<CardFooter className={cn('px-4 md:p-6 md:pt-0', className)} {...props}>
+			{children}
+		</CardFooter>
+	)
 }
