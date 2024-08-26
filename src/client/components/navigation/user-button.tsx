@@ -69,7 +69,11 @@ export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }: Use
 				)}
 			</DropdownMenuTrigger>
 
-			<DropdownMenuContent className="w-56 shadow-none" align="end" sideOffset={isMobile ? 13 : 18}>
+			<DropdownMenuContent
+				className="w-56 shadow-none"
+				align={isMobile ? 'end' : 'start'}
+				sideOffset={isMobile ? 13 : 18}
+			>
 				{isMobile ? (
 					<DropdownMenuLabel>
 						<span className="block">{name}</span>
