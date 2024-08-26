@@ -35,7 +35,7 @@ export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }: Use
 	const { deviceSize } = useDeviceType()
 
 	const isMobile = deviceSize === 'mobile'
-	const isTiny = useMediaQuery('(max-width: 525px)')
+	const isTiny = useMediaQuery('(max-width: 500px)')
 
 	const name = user?.name ?? ''
 	const email = user?.email ?? ''
@@ -72,7 +72,7 @@ export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }: Use
 			<DropdownMenuContent
 				className="w-56 shadow-none"
 				align={isMobile ? 'end' : 'start'}
-				sideOffset={isMobile ? 13 : 18}
+				sideOffset={isMobile ? 13 : 25}
 			>
 				{isMobile ? (
 					<DropdownMenuLabel>
@@ -94,7 +94,7 @@ export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }: Use
 					</Link>
 				</DropdownMenuItem>
 
-				{isTiny ? <PreferenceDrawer /> : <PreferenceDropdown />}
+				{isTiny ? <PreferenceDrawer /> : <PreferenceDropdown isMobile={isMobile} />}
 
 				<DropdownMenuItem asChild>
 					<Link href="#link" className="cursor-pointer">
