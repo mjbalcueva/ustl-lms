@@ -50,7 +50,7 @@ export const LoginForm = () => {
 		startTransition(async () => {
 			await login(data)
 				.then((data) => {
-					if (data?.error) return setFormError(data?.error)
+					if (data?.error) return setFormError(data.error)
 					if (data?.success) {
 						setShowTwoFactor(data?.twoFactor ?? false)
 						return setFormSuccess(data?.success)
@@ -72,7 +72,7 @@ export const LoginForm = () => {
 		>
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-					{showTwoFactor && (
+					{showTwoFactor ? (
 						<FormField
 							control={form.control}
 							name="code"
@@ -95,55 +95,52 @@ export const LoginForm = () => {
 								</FormItem>
 							)}
 						/>
-					)}
-
-					{!showTwoFactor && (
-						<FormField
-							control={form.control}
-							name="email"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel className="text-card-foreground">Email Address</FormLabel>
-									<FormControl>
-										<Input
-											placeholder="Enter your email"
-											className="rounded-xl bg-background"
-											type="email"
-											autoComplete="email"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-					)}
-
-					{!showTwoFactor && (
-						<FormField
-							control={form.control}
-							name="password"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel className="text-card-foreground">Password</FormLabel>
-									<FormControl>
-										<PasswordInput placeholder="Password" className="rounded-xl bg-background" {...field} />
-									</FormControl>
-									<FormMessage />
-									<div className="flex justify-end">
-										<Link
-											className={cn(
-												buttonVariants({ variant: 'link', size: 'xs' }),
-												'p-0 text-xs font-normal text-card-foreground'
-											)}
-											href="/auth/reset"
-										>
-											Forgot password?
-										</Link>
-									</div>
-								</FormItem>
-							)}
-						/>
+					) : (
+						<>
+							<FormField
+								control={form.control}
+								name="email"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel className="text-card-foreground">Email Address</FormLabel>
+										<FormControl>
+											<Input
+												placeholder="Enter your email"
+												className="rounded-xl bg-background"
+												type="email"
+												autoComplete="email"
+												{...field}
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="password"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel className="text-card-foreground">Password</FormLabel>
+										<FormControl>
+											<PasswordInput placeholder="Password" className="rounded-xl bg-background" {...field} />
+										</FormControl>
+										<FormMessage />
+										<div className="flex justify-end">
+											<Link
+												className={cn(
+													buttonVariants({ variant: 'link', size: 'xs' }),
+													'p-0 text-xs font-normal text-card-foreground'
+												)}
+												href="/auth/reset"
+											>
+												Forgot password?
+											</Link>
+										</div>
+									</FormItem>
+								)}
+							/>
+						</>
 					)}
 
 					<FormResponse type="error" message={formError} />

@@ -1,5 +1,6 @@
 'use server'
 
+import { compare } from 'bcryptjs'
 import { AuthError } from 'next-auth'
 
 import { getTwoFactorConfirmationByUserId } from '@/shared/data/two-factor-confirmation'
@@ -25,6 +26,7 @@ export const login = async (values: LoginSchema) => {
 	const existingUser = await getUserByEmail(email)
 	if (!existingUser ?? !existingUser?.email) return { error: 'User does not exist!' }
 	if (!existingUser.password) return { error: 'Sign in with Google instead!' }
+
 	if (!existingUser.emailVerified) {
 		const verificationToken = await generateVerificationToken(existingUser.email)
 		await sendVerificationEmail(verificationToken.email, verificationToken.token)
@@ -34,6 +36,9 @@ export const login = async (values: LoginSchema) => {
 
 	if (existingUser.isTwoFactorEnabled) {
 		if (!code) {
+			const isPasswordValid = await compare(password, existingUser.password)
+			if (!isPasswordValid) return { error: 'Invalid credentials' }
+
 			const twoFactorToken = await generateTwoFactorToken(existingUser.email)
 			await sendTwoFactorTokenEmail(twoFactorToken.email, twoFactorToken.token)
 
@@ -73,7 +78,7 @@ export const login = async (values: LoginSchema) => {
 		if (error instanceof AuthError) {
 			switch (error.type) {
 				case 'CredentialsSignin':
-					return { error: 'Invalid Credentials!' }
+					return { error: 'Invalid credentials' }
 				case 'AccessDenied':
 					return { error: 'Access Denied!' }
 				default:
