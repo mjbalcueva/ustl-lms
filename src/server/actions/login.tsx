@@ -33,8 +33,6 @@ export const login = async (values: LoginSchema) => {
 	}
 
 	if (existingUser.isTwoFactorEnabled) {
-		console.log(code)
-
 		if (!code) {
 			const twoFactorToken = await generateTwoFactorToken(existingUser.email)
 			await sendTwoFactorTokenEmail(twoFactorToken.email, twoFactorToken.token)

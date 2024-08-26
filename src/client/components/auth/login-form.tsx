@@ -44,7 +44,6 @@ export const LoginForm = () => {
 	})
 
 	const onSubmit: SubmitHandler<LoginSchema> = (data) => {
-		console.log(data)
 		setFormError('')
 		setFormSuccess('')
 

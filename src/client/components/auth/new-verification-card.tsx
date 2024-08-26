@@ -21,8 +21,6 @@ export const NewVerificationCard = () => {
 			return
 		}
 
-		console.log('token', token)
-
 		await newVerification(token)
 			.then((data) => {
 				if (data?.error) {
