@@ -2,7 +2,7 @@
 
 import { api, HydrateClient } from '@/shared/trpc/server'
 
-import { CardWrapper } from '@/client/components/card-wrapper'
+import { PageWrapper } from '@/client/components/page-wrapper'
 
 // import { LatestPost } from '@/client/components/post'
 
@@ -13,7 +13,7 @@ export default async function Page() {
 
 	return (
 		<HydrateClient>
-			<CardWrapper showBreadcrumbs></CardWrapper>
+			<PageWrapper></PageWrapper>
 			{/* <main className="flex flex-auto flex-col overflow-y-auto border-border bg-background shadow-inner md:rounded-xl md:border">
 				<div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
 					<h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">

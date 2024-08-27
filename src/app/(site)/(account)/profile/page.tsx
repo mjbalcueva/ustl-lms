@@ -1,13 +1,13 @@
-import { CardWrapper, CardWrapperHeader } from '@/client/components/card-wrapper'
+import { PageHeader, PageWrapper } from '@/client/components/page-wrapper'
 import { CardDescription, CardTitle } from '@/client/components/ui'
 
 export default function Page() {
 	return (
-		<CardWrapper>
-			<CardWrapperHeader>
+		<PageWrapper>
+			<PageHeader>
 				<CardTitle>Profile</CardTitle>
 				<CardDescription>Manage your Scholar profile</CardDescription>
-			</CardWrapperHeader>
-		</CardWrapper>
+			</PageHeader>
+		</PageWrapper>
 	)
 }

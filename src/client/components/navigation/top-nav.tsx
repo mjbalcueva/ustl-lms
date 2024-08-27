@@ -49,7 +49,7 @@ export const TopNav = ({ className, session, ...props }: NavProps) => {
 					duration: 0.2
 				}}
 				className={cn(
-					'sticky top-0 flex h-14 items-center justify-between border-b border-border px-2 backdrop-blur-xl sm:px-4 md:hidden',
+					'sticky top-0 z-[999] flex h-14 items-center justify-between border-b border-border px-2 backdrop-blur-xl sm:px-4 md:hidden',
 					className
 				)}
 				{...props}
@@ -96,7 +96,7 @@ export const TopNav = ({ className, session, ...props }: NavProps) => {
 						exit: { opacity: 0 }
 					}}
 					onAnimationEnd={() => setNavOpen(false)}
-					className="fixed top-14 h-full w-full overflow-auto bg-popover/50 text-popover-foreground backdrop-blur-xl md:hidden"
+					className="fixed top-14 z-[999] h-full w-full overflow-auto bg-popover/50 text-popover-foreground backdrop-blur-xl md:hidden"
 				>
 					{navLinks.map((item, index) => (
 						<MotionNavLink
