@@ -13,7 +13,11 @@ export default async function Page() {
 
 	return (
 		<HydrateClient>
-			<PageWrapper></PageWrapper>
+			<PageWrapper>
+				<div className="h-screen bg-red-700">rawr</div>
+				<div className="h-screen bg-blue-700">rawr</div>
+				<div className="h-screen bg-green-700">rawr</div>
+			</PageWrapper>
 			{/* <main className="flex flex-auto flex-col overflow-y-auto border-border bg-background shadow-inner md:rounded-xl md:border">
 				<div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
 					<h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">

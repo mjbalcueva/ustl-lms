@@ -26,11 +26,12 @@ export const TopNav = ({ className, session, ...props }: NavProps) => {
 
 	useMotionValueEvent(scrollYProgress, 'change', (current) => {
 		const previous = scrollYProgress.getPrevious()!
-		setShowNav(previous === 0 || previous > current || isUserButtonOpen.current)
+		setShowNav(previous === 0 || current === 1 || previous > current || isUserButtonOpen.current)
+		console.log({ previous, current, isUserButtonOpen: isUserButtonOpen.current })
 	})
 
 	const toggleScroll = useCallback((disable: boolean) => {
-		document.body.classList.toggle('overflow-hidden', disable)
+		document.getElementById('body')?.classList.toggle('overflow-hidden', disable)
 	}, [])
 
 	return (

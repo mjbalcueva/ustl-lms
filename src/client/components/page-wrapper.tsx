@@ -18,7 +18,14 @@ const crumbIcons: Record<string, React.ReactNode> = {
 
 export const PageWrapper = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
 	({ className, ...props }, ref) => (
-		<div ref={ref} className={cn('size-full bg-background md:rounded-xl', className)} {...props} />
+		<div
+			ref={ref}
+			className={cn(
+				'size-full overflow-hidden overflow-y-scroll border-t border-border bg-background md:rounded-xl md:border',
+				className
+			)}
+			{...props}
+		/>
 	)
 )
 PageWrapper.displayName = 'PageWrapper'
@@ -29,7 +36,7 @@ export const PageBreadcrumbs = () => {
 
 	return (
 		<Breadcrumb>
-			<BreadcrumbList className="hidden px-4 pb-0 pt-3 md:flex">
+			<BreadcrumbList className="hidden px-4 pb-0 pt-3 md:flex md:px-6 md:pt-4">
 				<BreadcrumbItem>
 					<BreadcrumbLink href="/dashboard" className="flex items-center space-x-2">
 						<Icons.logo className="size-4" />
@@ -62,6 +69,6 @@ export const PageHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<
 PageHeader.displayName = 'PageHeader'
 
 export const PageContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-	({ className, ...props }, ref) => <div ref={ref} className={cn('p-6 pt-0', className)} {...props} />
+	({ className, ...props }, ref) => <div ref={ref} className={cn('p-4 pt-0 md:p-6 md:pt-0', className)} {...props} />
 )
 PageContent.displayName = 'PageContent'
