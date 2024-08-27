@@ -20,13 +20,11 @@ import {
 	FormLabel,
 	FormMessage,
 	PasswordInput,
-	Separator,
-	Switch
+	Separator
 } from '@/client/components/ui'
 
-const settingsSchema = z
+const changePasswordSchema = z
 	.object({
-		twoFactorEnabled: z.boolean(),
 		currentPassword: z.string().min(6, 'Password must be at least 6 characters'),
 		newPassword: z.string().min(6, 'Password must be at least 6 characters'),
 		confirmPassword: z.string().min(6, 'Password must be at least 6 characters')
@@ -36,22 +34,21 @@ const settingsSchema = z
 		path: ['confirmPassword']
 	})
 
-type SettingsFormValues = z.infer<typeof settingsSchema>
+type ChangePasswordFormValues = z.infer<typeof changePasswordSchema>
 
-export const SettingsForm = () => {
+export const ChangePasswordForm = () => {
 	const [, setIsPending] = useState(false)
 
-	const form = useForm<SettingsFormValues>({
-		resolver: zodResolver(settingsSchema),
+	const form = useForm<ChangePasswordFormValues>({
+		resolver: zodResolver(changePasswordSchema),
 		defaultValues: {
-			twoFactorEnabled: false,
 			currentPassword: '',
 			newPassword: '',
 			confirmPassword: ''
 		}
 	})
 
-	const onSubmit = (data: SettingsFormValues) => {
+	const onSubmit = (data: ChangePasswordFormValues) => {
 		setIsPending(true)
 		// TODO: Implement the actual submission logic here
 		console.log(data)
@@ -60,33 +57,7 @@ export const SettingsForm = () => {
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-				<Card className="bg-popover">
-					<CardHeader className="space-y-0.5 p-4">
-						<CardTitle className="text-lg font-medium">Two-Factor Authentication</CardTitle>
-						<CardDescription>Add an extra layer of security to your account</CardDescription>
-					</CardHeader>
-					<CardContent className="px-4">
-						<Separator className="mb-4" />
-						<FormField
-							control={form.control}
-							name="twoFactorEnabled"
-							render={({ field }) => (
-								<FormItem className="flex items-center gap-2">
-									<FormControl>
-										<Switch checked={field.value} onCheckedChange={field.onChange} />
-									</FormControl>
-									<FormLabel className="!m-0 text-popover-foreground">{field.value ? 'Enabled' : 'Disabled'}</FormLabel>
-								</FormItem>
-							)}
-						/>
-					</CardContent>
-					<Separator />
-					<CardFooter className="flex justify-end px-4 py-2.5">
-						<ButtonShimmering className="h-8 bg-accent text-sm">Save</ButtonShimmering>
-					</CardFooter>
-				</Card>
-
+			<form onSubmit={form.handleSubmit(onSubmit)}>
 				<Card className="bg-popover">
 					<CardHeader className="space-y-0.5 p-4">
 						<CardTitle className="text-lg font-medium">Change Password</CardTitle>
@@ -94,6 +65,7 @@ export const SettingsForm = () => {
 					</CardHeader>
 					<CardContent className="px-4">
 						<Separator className="mb-4" />
+
 						<div className="space-y-4">
 							<FormField
 								control={form.control}
