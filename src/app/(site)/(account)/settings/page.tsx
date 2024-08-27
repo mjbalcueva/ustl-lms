@@ -11,7 +11,7 @@ export default function Page() {
 				<CardTitle>Account Settings</CardTitle>
 				<CardDescription>Manage your account security settings</CardDescription>
 			</PageHeader>
-			<PageContent className="flex flex-col gap-4">
+			<PageContent>
 				<TwoFactorAuthenticationForm />
 				<ChangePasswordForm />
 			</PageContent>
