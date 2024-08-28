@@ -1,7 +1,7 @@
 'use server'
 
 import { getUserByEmail } from '@/shared/data/user'
-import { resetSchema, type ResetSchema } from '@/shared/schemas/reset'
+import { resetSchema, type ResetSchema } from '@/shared/validations/reset'
 
 import { sendPasswordResetEmail } from '@/server/lib/mail'
 import { generatePasswordResetToken } from '@/server/lib/tokens'

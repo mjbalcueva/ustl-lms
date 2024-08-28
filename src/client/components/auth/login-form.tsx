@@ -5,7 +5,7 @@ import { useState, useTransition } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 
-import { loginSchema, type LoginSchema } from '@/shared/schemas'
+import { loginSchema, type LoginSchema } from '@/shared/validations/login'
 
 import { login } from '@/server/actions/login'
 

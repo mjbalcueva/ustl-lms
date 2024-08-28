@@ -4,7 +4,7 @@ import { useState, useTransition } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 
-import { resetSchema, type ResetSchema } from '@/shared/schemas/reset'
+import { resetSchema, type ResetSchema } from '@/shared/validations/reset'
 
 import { reset } from '@/server/actions/reset'
 

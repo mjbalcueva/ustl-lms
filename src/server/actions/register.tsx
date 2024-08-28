@@ -3,7 +3,7 @@
 import { hash } from 'bcryptjs'
 
 import { getUserByEmail } from '@/shared/data/user'
-import { registerSchema, type RegisterSchema } from '@/shared/schemas'
+import { registerSchema, type RegisterSchema } from '@/shared/validations/register'
 
 import { db } from '@/server/lib/db'
 import { sendVerificationEmail } from '@/server/lib/mail'

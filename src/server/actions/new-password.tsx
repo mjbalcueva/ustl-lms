@@ -4,7 +4,7 @@ import { hash } from 'bcryptjs'
 
 import { getPasswordResetTokenByToken } from '@/shared/data/password-reset-token'
 import { getUserByEmail } from '@/shared/data/user'
-import { newPasswordSchema, type NewPasswordSchema } from '@/shared/schemas/new-password'
+import { newPasswordSchema, type NewPasswordSchema } from '@/shared/validations/new-password'
 
 import { db } from '@/server/lib/db'
 

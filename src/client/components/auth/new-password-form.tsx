@@ -5,7 +5,7 @@ import { useState, useTransition } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 
-import { newPasswordSchema, type NewPasswordSchema } from '@/shared/schemas/new-password'
+import { newPasswordSchema, type NewPasswordSchema } from '@/shared/validations/new-password'
 
 import { newPassword } from '@/server/actions/new-password'
 

@@ -12,7 +12,6 @@ const config = {
 			'@/client/components/navigation',
 			'@/client/components/ui',
 			'@/client/context',
-			'@/shared/schemas',
 			'@/shared/types'
 		]
 	}
