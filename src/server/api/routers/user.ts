@@ -3,7 +3,7 @@ import { hash } from 'bcryptjs'
 
 import { forgotPasswordSchema } from '@/shared/validations/forgot-password'
 import { registerSchema } from '@/shared/validations/register'
-import { verifyEmailSchema } from '@/shared/validations/token'
+import { verifyEmailSchema } from '@/shared/validations/verify-email'
 
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc'
 import { sendPasswordResetEmail, sendVerificationEmail } from '@/server/lib/mail'
