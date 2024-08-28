@@ -75,7 +75,12 @@ export const ChangePasswordForm = () => {
 									<FormItem>
 										<FormLabel className="text-popover-foreground">Current Password</FormLabel>
 										<FormControl>
-											<PasswordInput className="w-fit rounded-xl" placeholder="Enter current password" {...field} />
+											<PasswordInput
+												className="rounded-xl"
+												parentClassName="sm:w-3/5"
+												placeholder="Enter current password"
+												{...field}
+											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -89,7 +94,12 @@ export const ChangePasswordForm = () => {
 									<FormItem>
 										<FormLabel className="text-popover-foreground">New Password</FormLabel>
 										<FormControl>
-											<PasswordInput className="w-fit rounded-xl" placeholder="Enter new password" {...field} />
+											<PasswordInput
+												className="rounded-xl"
+												parentClassName="sm:w-3/5"
+												placeholder="Enter new password"
+												{...field}
+											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -103,7 +113,12 @@ export const ChangePasswordForm = () => {
 									<FormItem>
 										<FormLabel className="text-popover-foreground">Confirm New Password</FormLabel>
 										<FormControl>
-											<PasswordInput className="w-fit rounded-xl" placeholder="Confirm new password" {...field} />
+											<PasswordInput
+												className="rounded-xl"
+												parentClassName="sm:w-3/5"
+												placeholder="Confirm new password"
+												{...field}
+											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
