@@ -2,7 +2,7 @@ import { TRPCError } from '@trpc/server'
 import { hash } from 'bcryptjs'
 
 import { registerSchema } from '@/shared/validations/register'
-import { tokenSchema } from '@/shared/validations/token'
+import { verifyEmailSchema } from '@/shared/validations/token'
 
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc'
 import { sendVerificationEmail } from '@/server/lib/mail'
@@ -37,7 +37,7 @@ export const userRouter = createTRPCRouter({
 		return { message: 'Confirmation email sent.' }
 	}),
 
-	verifyEmail: publicProcedure.input(tokenSchema).mutation(async ({ ctx, input }) => {
+	verifyEmail: publicProcedure.input(verifyEmailSchema).mutation(async ({ ctx, input }) => {
 		const { token } = input
 		if (!token) {
 			throw new TRPCError({ code: 'BAD_REQUEST', message: 'No verification token provided.' })
