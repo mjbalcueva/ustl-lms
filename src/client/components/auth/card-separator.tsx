@@ -1,11 +1,11 @@
 import { Separator } from '@/client/components/ui'
 import { cn } from '@/client/lib/utils'
 
-type SeparatorWithTextProps = React.HTMLAttributes<HTMLDivElement> & {
+type CardSeparatorProps = React.HTMLAttributes<HTMLDivElement> & {
 	text: string
 }
 
-export const SeparatorWithText = ({ text, className, ...props }: SeparatorWithTextProps) => {
+export const CardSeparator = ({ text, className, ...props }: CardSeparatorProps) => {
 	return (
 		<div className={cn('relative w-full', className)} {...props}>
 			<Separator />

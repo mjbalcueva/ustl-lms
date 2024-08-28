@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 
-import { AuthCard } from '@/client/components/auth'
+import { CardWrapper } from '@/client/components/auth/card-wrapper'
 
 export const ErrorForm = () => {
 	const searchParams = useSearchParams()
@@ -19,10 +19,10 @@ export const ErrorForm = () => {
 	}
 
 	return (
-		<AuthCard title={title} description={description} backButtonHref="/auth/login" backButtonLabel="Back to login">
+		<CardWrapper title={title} description={description} backButtonHref="/auth/login" backButtonLabel="Back to login">
 			<div className="flex w-full items-center justify-center">
 				<Image src="/assets/error.svg" alt="Error" className="w-52" width={100} height={100} priority />
 			</div>
-		</AuthCard>
+		</CardWrapper>
 	)
 }

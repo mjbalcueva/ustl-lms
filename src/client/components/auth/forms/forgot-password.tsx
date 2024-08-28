@@ -6,10 +6,19 @@ import { useForm, type SubmitHandler } from 'react-hook-form'
 import { api } from '@/shared/trpc/react'
 import { forgotPasswordSchema, type ForgotPasswordSchema } from '@/shared/validations/forgot-password'
 
-import { AuthCard, FormResponse } from '@/client/components/auth'
-import { ButtonShimmering } from '@/client/components/button-shimmering'
+import { CardWrapper } from '@/client/components/auth/card-wrapper'
+import { FormResponse } from '@/client/components/auth/form-response'
 import { Loader } from '@/client/components/loader'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '@/client/components/ui'
+import {
+	ButtonShining,
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+	Input
+} from '@/client/components/ui'
 
 export const ForgotPasswordForm = () => {
 	const form = useForm<ForgotPasswordSchema>({
@@ -23,7 +32,7 @@ export const ForgotPasswordForm = () => {
 	const onSubmit: SubmitHandler<ForgotPasswordSchema> = (data) => mutate(data)
 
 	return (
-		<AuthCard
+		<CardWrapper
 			title="Forgot your password?"
 			description="Enter your email address to reset your password."
 			backButtonHref="/auth/login"
@@ -54,16 +63,16 @@ export const ForgotPasswordForm = () => {
 					<FormResponse type="error" message={error?.message} />
 					<FormResponse type="success" message={data?.message} />
 
-					<ButtonShimmering className="w-full rounded-xl" shimmerClassName="bg-white/20" disabled={isPending}>
+					<ButtonShining className="w-full rounded-xl" shiningClassName="bg-white/20" disabled={isPending}>
 						{isPending && (
 							<span className="relative right-[7.2ch]">
 								<Loader />
 							</span>
 						)}
 						<span className="absolute">Send reset email</span>
-					</ButtonShimmering>
+					</ButtonShining>
 				</form>
 			</Form>
-		</AuthCard>
+		</CardWrapper>
 	)
 }

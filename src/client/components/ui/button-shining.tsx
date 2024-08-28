@@ -1,11 +1,11 @@
 import { Button } from '@/client/components/ui'
 import { cn } from '@/client/lib/utils'
 
-type ButtonShimmeringProps = React.ComponentProps<typeof Button> & {
-	shimmerClassName?: string
+type ButtonShiningProps = React.ComponentProps<typeof Button> & {
+	shiningClassName?: string
 }
 
-export const ButtonShimmering = ({ children, className, shimmerClassName, ...props }: ButtonShimmeringProps) => {
+export const ButtonShining = ({ children, className, shiningClassName, ...props }: ButtonShiningProps) => {
 	return (
 		<Button
 			className={cn(
@@ -16,7 +16,7 @@ export const ButtonShimmering = ({ children, className, shimmerClassName, ...pro
 		>
 			{children}
 			<div className="absolute inset-0 flex justify-center [transform:skew(-13deg)_translateX(-100%)] group-hover/button:duration-1000 group-hover/button:[transform:skew(-13deg)_translateX(100%)]">
-				<div className={cn('relative w-8 bg-white/[0.05]', shimmerClassName)} />
+				<div className={cn('relative w-8 bg-white/[0.05]', shiningClassName)} />
 			</div>
 		</Button>
 	)

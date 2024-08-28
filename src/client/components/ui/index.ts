@@ -1,5 +1,6 @@
 export * from './avatar'
 export * from './breadcrumb'
+export * from './button-shining'
 export * from './button'
 export * from './card'
 export * from './drawer'

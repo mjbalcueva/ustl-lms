@@ -1,11 +1,11 @@
 import { Suspense } from 'react'
 
-import { NewPasswordForm } from '@/client/components/auth'
+import { ResetPasswordForm } from '@/client/components/auth/forms/reset-password'
 
 export default function Page() {
 	return (
 		<Suspense>
-			<NewPasswordForm />
+			<ResetPasswordForm />
 		</Suspense>
 	)
 }

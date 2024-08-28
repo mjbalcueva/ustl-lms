@@ -6,10 +6,11 @@ import { useForm, type SubmitHandler } from 'react-hook-form'
 import { api } from '@/shared/trpc/react'
 import { registerSchema, type RegisterSchema } from '@/shared/validations/register'
 
-import { AuthCard, FormResponse } from '@/client/components/auth'
-import { ButtonShimmering } from '@/client/components/button-shimmering'
+import { CardWrapper } from '@/client/components/auth/card-wrapper'
+import { FormResponse } from '@/client/components/auth/form-response'
 import { Loader } from '@/client/components/loader'
 import {
+	ButtonShining,
 	Form,
 	FormControl,
 	FormField,
@@ -34,7 +35,7 @@ export const RegisterForm = () => {
 	const onSubmit: SubmitHandler<RegisterSchema> = (data) => mutate(data)
 
 	return (
-		<AuthCard
+		<CardWrapper
 			title="Welcome, Thomasian!"
 			description="To get started, please create an account."
 			backButtonLabel="Already have an account?"
@@ -100,17 +101,17 @@ export const RegisterForm = () => {
 					<FormResponse type="success" message={data?.message} />
 
 					<div className="pt-2">
-						<ButtonShimmering className="w-full rounded-xl" shimmerClassName="bg-white/20" disabled={isPending}>
+						<ButtonShining className="w-full rounded-xl" shiningClassName="bg-white/20" disabled={isPending}>
 							{isPending && (
 								<span className="relative right-[4.5ch]">
 									<Loader />
 								</span>
 							)}
 							<span className="absolute">Register</span>
-						</ButtonShimmering>
+						</ButtonShining>
 					</div>
 				</form>
 			</Form>
-		</AuthCard>
+		</CardWrapper>
 	)
 }

@@ -9,10 +9,11 @@ import { loginSchema, type LoginSchema } from '@/shared/validations/login'
 
 import { login } from '@/server/actions/login'
 
-import { AuthCard, FormResponse } from '@/client/components/auth'
-import { ButtonShimmering } from '@/client/components/button-shimmering'
+import { CardWrapper } from '@/client/components/auth/card-wrapper'
+import { FormResponse } from '@/client/components/auth/form-response'
 import { Loader } from '@/client/components/loader'
 import {
+	ButtonShining,
 	buttonVariants,
 	Form,
 	FormControl,
@@ -63,7 +64,7 @@ export const LoginForm = () => {
 	}
 
 	return (
-		<AuthCard
+		<CardWrapper
 			title="Welcome Back, Thomasian!"
 			description="Login to your account to continue."
 			backButtonLabel="Don't have an account?"
@@ -146,16 +147,16 @@ export const LoginForm = () => {
 					<FormResponse type="error" message={formError} />
 					<FormResponse type="success" message={formSuccess} />
 
-					<ButtonShimmering className="w-full rounded-xl" shimmerClassName="bg-white/20" disabled={isPending}>
+					<ButtonShining className="w-full rounded-xl" shiningClassName="bg-white/20" disabled={isPending}>
 						{isPending && (
 							<span className={cn('relative', showTwoFactor ? 'right-[4ch]' : 'right-[3.4ch]')}>
 								<Loader />
 							</span>
 						)}
 						<span className="absolute">{showTwoFactor ? 'Confirm' : 'Login'}</span>
-					</ButtonShimmering>
+					</ButtonShining>
 				</form>
 			</Form>
-		</AuthCard>
+		</CardWrapper>
 	)
 }

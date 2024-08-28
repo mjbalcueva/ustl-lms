@@ -1,7 +1,7 @@
 import { type Metadata } from 'next'
 import { Suspense } from 'react'
 
-import { LoginForm } from '@/client/components/auth'
+import { LoginForm } from '@/client/components/auth/forms/login'
 
 export const metadata: Metadata = {
 	title: 'Login',

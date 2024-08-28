@@ -7,12 +7,21 @@ import { useForm, type SubmitHandler } from 'react-hook-form'
 import { api } from '@/shared/trpc/react'
 import { resetPasswordSchema, type ResetPasswordSchema } from '@/shared/validations/reset-password'
 
-import { AuthCard, FormResponse } from '@/client/components/auth'
-import { ButtonShimmering } from '@/client/components/button-shimmering'
+import { CardWrapper } from '@/client/components/auth/card-wrapper'
+import { FormResponse } from '@/client/components/auth/form-response'
 import { Loader } from '@/client/components/loader'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, PasswordInput } from '@/client/components/ui'
+import {
+	ButtonShining,
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+	PasswordInput
+} from '@/client/components/ui'
 
-export const NewPasswordForm = () => {
+export const ResetPasswordForm = () => {
 	const searchParams = useSearchParams()
 	const token = searchParams.get('token')
 
@@ -28,7 +37,7 @@ export const NewPasswordForm = () => {
 	const onSubmit: SubmitHandler<ResetPasswordSchema> = (data) => mutate(data)
 
 	return (
-		<AuthCard
+		<CardWrapper
 			title="Reset Your Password"
 			description="Enter a new password for your account."
 			backButtonHref="/auth/login"
@@ -52,16 +61,16 @@ export const NewPasswordForm = () => {
 					<FormResponse type="error" message={error?.message} />
 					<FormResponse type="success" message={data?.message} />
 
-					<ButtonShimmering className="w-full rounded-xl" shimmerClassName="bg-white/20" disabled={isPending}>
+					<ButtonShining className="w-full rounded-xl" shiningClassName="bg-white/20" disabled={isPending}>
 						{isPending && (
 							<span className="relative right-[7ch]">
 								<Loader />
 							</span>
 						)}
 						<span className="absolute">Reset password</span>
-					</ButtonShimmering>
+					</ButtonShining>
 				</form>
 			</Form>
-		</AuthCard>
+		</CardWrapper>
 	)
 }

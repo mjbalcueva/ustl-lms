@@ -1,6 +1,7 @@
 import Link from 'next/link'
 
-import { SeparatorWithText, SocialButton } from '@/client/components/auth'
+import { CardSeparator } from '@/client/components/auth/card-separator'
+import { OAuthButton } from '@/client/components/auth/oauth-button'
 import {
 	buttonVariants,
 	Card,
@@ -21,7 +22,7 @@ type CardWrapperProps = {
 	showSocial?: boolean
 }
 
-export const AuthCard = ({
+export const CardWrapper = ({
 	children,
 	title,
 	description,
@@ -40,8 +41,8 @@ export const AuthCard = ({
 				{children}
 				{showSocial && (
 					<>
-						<SeparatorWithText text="Or continue with" />
-						<SocialButton provider="google" text="Sign in with Google" />
+						<CardSeparator text="Or continue with" />
+						<OAuthButton provider="google" text="Sign in with Google" />
 					</>
 				)}
 			</CardContent>
