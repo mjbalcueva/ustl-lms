@@ -79,6 +79,7 @@ export const ChangePasswordForm = () => {
 												className="rounded-xl"
 												parentClassName="sm:w-3/5"
 												placeholder="Enter current password"
+												autoComplete="current-password"
 												{...field}
 											/>
 										</FormControl>
@@ -98,6 +99,7 @@ export const ChangePasswordForm = () => {
 												className="rounded-xl"
 												parentClassName="sm:w-3/5"
 												placeholder="Enter new password"
+												autoComplete="new-password"
 												{...field}
 											/>
 										</FormControl>
@@ -117,6 +119,7 @@ export const ChangePasswordForm = () => {
 												className="rounded-xl"
 												parentClassName="sm:w-3/5"
 												placeholder="Confirm new password"
+												autoComplete="new-password"
 												{...field}
 											/>
 										</FormControl>
