@@ -16,7 +16,16 @@ import {
 	ItemWrapper
 } from '@/client/components/account/item-wrapper'
 import { Loader } from '@/client/components/loader'
-import { Button, Form, FormControl, FormField, FormItem, FormLabel, Switch } from '@/client/components/ui'
+import {
+	Button,
+	Form,
+	FormControl,
+	FormDescription,
+	FormField,
+	FormItem,
+	FormLabel,
+	Switch
+} from '@/client/components/ui'
 
 const twoFactorSchema = z.object({
 	twoFactorEnabled: z.boolean()
@@ -47,6 +56,7 @@ export const TwoFactorAuthenticationForm = () => {
 				<ItemTitle>Two-Factor Authentication</ItemTitle>
 				<ItemDescription>Enabling this feature requires email verification for each login attempt</ItemDescription>
 			</ItemHeader>
+
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)}>
 					<ItemContent>
@@ -57,8 +67,8 @@ export const TwoFactorAuthenticationForm = () => {
 								render={({ field }) => (
 									<FormItem className="flex items-center justify-between space-y-0">
 										<div>
-											<FormLabel className="text-popover-foreground">Enable Two-Factor Authentication</FormLabel>
-											<p className="text-sm text-muted-foreground">Adds an extra layer of security</p>
+											<FormLabel>Enable Two-Factor Authentication</FormLabel>
+											<FormDescription>Adds an extra layer of security</FormDescription>
 										</div>
 										<FormControl>
 											<Switch checked={field.value} onCheckedChange={field.onChange} />
@@ -68,6 +78,7 @@ export const TwoFactorAuthenticationForm = () => {
 							/>
 						</ItemInnerCard>
 					</ItemContent>
+
 					<ItemFooter>
 						{form.watch('twoFactorEnabled') && (
 							<div className="flex items-center text-sm text-muted-foreground">
