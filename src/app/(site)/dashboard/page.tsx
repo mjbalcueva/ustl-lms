@@ -1,13 +1,19 @@
-import { api, HydrateClient } from '@/shared/trpc/server'
+import { auth } from '@/server/lib/auth'
 
-import { PageWrapper } from '@/client/components/page-wrapper'
+import { PageContent, PageDescription, PageHeader, PageTitle, PageWrapper } from '@/client/components/page-wrapper'
 
 export default async function Page() {
-	void api.post.getLatest.prefetch()
+	const session = await auth()
 
 	return (
-		<HydrateClient>
-			<PageWrapper></PageWrapper>
-		</HydrateClient>
+		<PageWrapper>
+			<PageHeader>
+				<PageTitle>Dashboard</PageTitle>
+				<PageDescription>Welcome to your personal dashboard</PageDescription>
+			</PageHeader>
+			<PageContent>
+				<pre>{JSON.stringify(session, null, 2)}</pre>
+			</PageContent>
+		</PageWrapper>
 	)
 }
