@@ -4,9 +4,10 @@ import { hash } from 'bcryptjs'
 import { forgotPasswordSchema } from '@/shared/validations/forgot-password'
 import { registerSchema } from '@/shared/validations/register'
 import { resetPasswordSchema } from '@/shared/validations/reset-password'
+import { toggle2FASchema } from '@/shared/validations/toggle-2fa'
 import { verifyEmailSchema } from '@/shared/validations/verify-email'
 
-import { createTRPCRouter, publicProcedure } from '@/server/api/trpc'
+import { createTRPCRouter, protectedProcedure, publicProcedure } from '@/server/api/trpc'
 import { sendPasswordResetEmail, sendVerificationEmail } from '@/server/lib/mail'
 import { generatePasswordResetToken, generateVerificationToken } from '@/server/lib/tokens'
 
@@ -86,6 +87,16 @@ export const authRouter = createTRPCRouter({
 		})
 
 		return { message: 'Password updated!' }
+	}),
+
+	toggle2FA: protectedProcedure.input(toggle2FASchema).mutation(async ({ ctx, input }) => {
+		const { twoFactorEnabled } = input
+		const { user } = ctx.session
+
+		await ctx.db.user.update({
+			where: { id: user.id },
+			data: { isTwoFactorEnabled: twoFactorEnabled }
+		})
 	}),
 
 	verifyEmail: publicProcedure.input(verifyEmailSchema).mutation(async ({ ctx, input }) => {

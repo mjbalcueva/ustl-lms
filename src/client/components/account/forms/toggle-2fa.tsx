@@ -1,10 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useSession } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
 import { TbShieldCheckFilled } from 'react-icons/tb'
 import { z } from 'zod'
+
+import { api } from '@/shared/trpc/react'
 
 import {
 	ItemContent,
@@ -33,22 +36,31 @@ const twoFactorSchema = z.object({
 
 type TwoFactorFormValues = z.infer<typeof twoFactorSchema>
 
-export const TwoFactorAuthenticationForm = () => {
-	const [isPending, setIsPending] = useState(false)
+export const Toggle2FAForm = () => {
+	const sesh = useSession()
+	const [isChanged, setIsChanged] = useState(false)
 
 	const form = useForm<TwoFactorFormValues>({
 		resolver: zodResolver(twoFactorSchema),
 		defaultValues: {
-			twoFactorEnabled: false
+			twoFactorEnabled: sesh.data?.user?.isTwoFactorEnabled
 		}
 	})
 
+	const { mutate, isPending } = api.auth.toggle2FA.useMutation()
 	const onSubmit = (data: TwoFactorFormValues) => {
-		setIsPending(true)
-		// TODO: Implement the actual submission logic here
-		console.log(data)
-		setTimeout(() => setIsPending(false), 1000) // Simulating API call
+		mutate(data)
+		setIsChanged(false)
 	}
+
+	useEffect(() => {
+		const subscription = form.watch((value, { name }) => {
+			if (name === 'twoFactorEnabled') {
+				setIsChanged(value.twoFactorEnabled !== sesh.data?.user?.isTwoFactorEnabled)
+			}
+		})
+		return () => subscription.unsubscribe()
+	}, [form, sesh.data?.user?.isTwoFactorEnabled])
 
 	return (
 		<ItemWrapper>
@@ -86,7 +98,7 @@ export const TwoFactorAuthenticationForm = () => {
 								2FA is currently enabled
 							</div>
 						)}
-						<Button className="ml-auto h-8 gap-1 text-sm" disabled={isPending}>
+						<Button className="ml-auto h-8 gap-1 text-sm" disabled={!isChanged || isPending}>
 							{isPending && <Loader />}
 							{isPending ? 'Saving...' : 'Save'}
 						</Button>

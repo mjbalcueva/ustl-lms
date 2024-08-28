@@ -1,5 +1,5 @@
 import { ChangePasswordForm } from '@/client/components/account/forms/change-password'
-import { TwoFactorAuthenticationForm } from '@/client/components/account/forms/two-factor-authentication'
+import { Toggle2FAForm } from '@/client/components/account/forms/toggle-2fa'
 import {
 	PageContainer,
 	PageContent,
@@ -18,7 +18,7 @@ export default function Page() {
 					<PageDescription>Manage your account security settings</PageDescription>
 				</PageHeader>
 				<PageContent className="space-y-4">
-					<TwoFactorAuthenticationForm />
+					<Toggle2FAForm />
 					<ChangePasswordForm />
 				</PageContent>
 			</PageContainer>
