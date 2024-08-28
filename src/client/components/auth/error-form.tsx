@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation'
 
 import { AuthCard } from '@/client/components/auth'
 
-export const ErrorCard = () => {
+export const ErrorForm = () => {
 	const searchParams = useSearchParams()
 	const error = searchParams.get('error') as 'Configuration' | 'AccessDenied' | 'Verification'
 

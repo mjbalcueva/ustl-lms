@@ -1,5 +1,5 @@
 export * from './auth-card'
-export * from './error-card'
+export * from './error-form'
 export * from './form-response'
 export * from './login-form'
 export * from './reset-password-form'
