@@ -37,7 +37,7 @@ export const PageBreadcrumbs = () => {
 				<BreadcrumbItem>
 					<BreadcrumbLink href="/dashboard" className="flex items-center space-x-2">
 						<Icons.logo className="size-4" />
-						<span>Scholar</span>
+						<span className="leading-none">Scholar</span>
 					</BreadcrumbLink>
 				</BreadcrumbItem>
 				{pathSegments.map((segment, index) => {
