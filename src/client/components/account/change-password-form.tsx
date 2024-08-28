@@ -64,6 +64,7 @@ export const ChangePasswordForm = () => {
 				<ItemTitle>Change Password</ItemTitle>
 				<ItemDescription>Change your password to secure your account</ItemDescription>
 			</ItemHeader>
+
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)}>
 					<ItemContent>
@@ -73,7 +74,7 @@ export const ChangePasswordForm = () => {
 								name="currentPassword"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel className="text-popover-foreground">Current Password</FormLabel>
+										<FormLabel className="text-card-foreground">Current Password</FormLabel>
 										<FormControl>
 											<PasswordInput
 												className="rounded-xl"
@@ -93,7 +94,7 @@ export const ChangePasswordForm = () => {
 								name="newPassword"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel className="text-popover-foreground">New Password</FormLabel>
+										<FormLabel className="text-card-foreground">New Password</FormLabel>
 										<FormControl>
 											<PasswordInput
 												className="rounded-xl"
@@ -113,7 +114,7 @@ export const ChangePasswordForm = () => {
 								name="confirmPassword"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel className="text-popover-foreground">Confirm New Password</FormLabel>
+										<FormLabel className="text-card-foreground">Confirm New Password</FormLabel>
 										<FormControl>
 											<PasswordInput
 												className="rounded-xl"
@@ -129,6 +130,7 @@ export const ChangePasswordForm = () => {
 							/>
 						</ItemInnerCard>
 					</ItemContent>
+
 					<ItemFooter>
 						<Button className="ml-auto h-8 gap-1 text-sm" disabled={isPending}>
 							{isPending && <Loader />}
