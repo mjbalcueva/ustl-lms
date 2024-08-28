@@ -10,7 +10,7 @@ export const ItemWrapper = React.forwardRef<HTMLDivElement, React.HTMLAttributes
 	({ className, ...props }, ref) => (
 		<div
 			ref={ref}
-			className={cn('overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm', className)}
+			className={cn('overflow-hidden rounded-xl border bg-card text-card-foreground shadow-sm', className)}
 			{...props}
 		/>
 	)
@@ -19,7 +19,7 @@ ItemWrapper.displayName = 'ItemWrapper'
 
 export const ItemHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
 	({ className, ...props }, ref) => (
-		<div ref={ref} className={cn('flex flex-col space-y-1.5 p-4', className)} {...props} />
+		<div ref={ref} className={cn('flex flex-col space-y-1.5 p-4 pt-6', className)} {...props} />
 	)
 )
 ItemHeader.displayName = 'ItemHeader'

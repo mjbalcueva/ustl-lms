@@ -67,7 +67,7 @@ export const ChangePasswordForm = () => {
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)}>
 					<ItemContent>
-						<ItemInnerCard className="space-y-4">
+						<ItemInnerCard className="space-y-4 pb-4">
 							<FormField
 								control={form.control}
 								name="currentPassword"
@@ -75,7 +75,7 @@ export const ChangePasswordForm = () => {
 									<FormItem>
 										<FormLabel className="text-popover-foreground">Current Password</FormLabel>
 										<FormControl>
-											<PasswordInput className="rounded-xl" placeholder="Enter current password" {...field} />
+											<PasswordInput className="w-fit rounded-xl" placeholder="Enter current password" {...field} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -89,7 +89,7 @@ export const ChangePasswordForm = () => {
 									<FormItem>
 										<FormLabel className="text-popover-foreground">New Password</FormLabel>
 										<FormControl>
-											<PasswordInput className="rounded-xl" placeholder="Enter new password" {...field} />
+											<PasswordInput className="w-fit rounded-xl" placeholder="Enter new password" {...field} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -103,7 +103,7 @@ export const ChangePasswordForm = () => {
 									<FormItem>
 										<FormLabel className="text-popover-foreground">Confirm New Password</FormLabel>
 										<FormControl>
-											<PasswordInput className="rounded-xl" placeholder="Confirm new password" {...field} />
+											<PasswordInput className="w-fit rounded-xl" placeholder="Confirm new password" {...field} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -120,64 +120,5 @@ export const ChangePasswordForm = () => {
 				</form>
 			</Form>
 		</ItemWrapper>
-		// <Form {...form}>
-		// 	<form onSubmit={form.handleSubmit(onSubmit)}>
-		// 		<Card className="bg-popover">
-		// 			<CardHeader className="space-y-0.5 p-4">
-		// 				<CardTitle className="text-lg font-medium">Change Password</CardTitle>
-		// 				<CardDescription>Change your password to secure your account</CardDescription>
-		// 			</CardHeader>
-		// 			<CardContent className="px-4">
-		// 				<Separator className="mb-4" />
-
-		// 				<div className="space-y-4">
-		// 					<FormField
-		// 						control={form.control}
-		// 						name="currentPassword"
-		// 						render={({ field }) => (
-		// 							<FormItem>
-		// 								<FormLabel className="text-popover-foreground">Current Password</FormLabel>
-		// 								<FormControl>
-		// 									<PasswordInput className="rounded-xl" placeholder="Enter current password" {...field} />
-		// 								</FormControl>
-		// 								<FormMessage />
-		// 							</FormItem>
-		// 						)}
-		// 					/>
-		// 					<FormField
-		// 						control={form.control}
-		// 						name="newPassword"
-		// 						render={({ field }) => (
-		// 							<FormItem>
-		// 								<FormLabel className="text-popover-foreground">New Password</FormLabel>
-		// 								<FormControl>
-		// 									<PasswordInput className="rounded-xl" placeholder="Enter new password" {...field} />
-		// 								</FormControl>
-		// 								<FormMessage />
-		// 							</FormItem>
-		// 						)}
-		// 					/>
-		// 					<FormField
-		// 						control={form.control}
-		// 						name="confirmPassword"
-		// 						render={({ field }) => (
-		// 							<FormItem>
-		// 								<FormLabel className="text-popover-foreground">Confirm New Password</FormLabel>
-		// 								<FormControl>
-		// 									<PasswordInput className="rounded-xl" placeholder="Confirm new password" {...field} />
-		// 								</FormControl>
-		// 								<FormMessage />
-		// 							</FormItem>
-		// 						)}
-		// 					/>
-		// 				</div>
-		// 			</CardContent>
-		// 			<Separator />
-		// 			<CardFooter className="flex justify-end px-4 py-2.5">
-		// 				<ButtonShimmering className="h-8 bg-accent text-sm">Save</ButtonShimmering>
-		// 			</CardFooter>
-		// 		</Card>
-		// 	</form>
-		// </Form>
 	)
 }
