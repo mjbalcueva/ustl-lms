@@ -12,7 +12,7 @@ const domain = env.AUTH_URL
 const supportMail = 'support@ustl-lms.tech'
 
 export async function sendPasswordResetEmail(email: string, token: string) {
-	const resetLink = `${domain}/auth/new-password?token=${token}`
+	const resetLink = `${domain}/auth/reset-password?token=${token}`
 
 	await resend.emails.send({
 		from: `Scholar <${supportMail}>`,

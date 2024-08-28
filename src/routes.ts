@@ -7,11 +7,11 @@ export const publicRoutes: string[] = ['/auth/verify-email']
  * An array of routes that are used for authentication. The login will redirect logged in users to /settings
  */
 export const authRoutes: string[] = [
-	'/auth/login',
-	'/auth/register',
 	'/auth/error',
 	'/auth/forgot-password',
-	'/auth/new-password'
+	'/auth/login',
+	'/auth/register',
+	'/auth/reset-password'
 ]
 
 /**
