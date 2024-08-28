@@ -1,12 +1,10 @@
 'use client'
 
-import { useState, useTransition } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 
+import { api } from '@/shared/trpc/react'
 import { registerSchema, type RegisterSchema } from '@/shared/validations/register'
-
-import { register } from '@/server/actions/register'
 
 import { CardWrapper, FormResponse } from '@/client/components/auth'
 import { ButtonShimmering } from '@/client/components/button-shimmering'
@@ -23,10 +21,6 @@ import {
 } from '@/client/components/ui'
 
 export const RegisterForm = () => {
-	const [formSuccess, setFormSuccess] = useState<string | null>(null)
-	const [formError, setFormError] = useState<string | null>(null)
-	const [isPending, startTransition] = useTransition()
-
 	const form = useForm<RegisterSchema>({
 		resolver: zodResolver(registerSchema),
 		defaultValues: {
@@ -36,17 +30,8 @@ export const RegisterForm = () => {
 		}
 	})
 
-	const onSubmit: SubmitHandler<RegisterSchema> = (data) => {
-		setFormError('')
-		setFormSuccess('')
-
-		startTransition(async () => {
-			await register(data).then((data) => {
-				if (data?.error) return setFormError(data?.error)
-				if (data?.success) return setFormSuccess(data?.success)
-			})
-		})
-	}
+	const { mutate, data, error, isPending } = api.user.register.useMutation()
+	const onSubmit: SubmitHandler<RegisterSchema> = (data) => mutate(data)
 
 	return (
 		<CardWrapper
@@ -111,8 +96,8 @@ export const RegisterForm = () => {
 						)}
 					/>
 
-					<FormResponse type="error" message={formError} />
-					<FormResponse type="success" message={formSuccess} />
+					<FormResponse type="error" message={error?.message} />
+					<FormResponse type="success" message={data?.message} />
 
 					<div className="pt-2">
 						<ButtonShimmering className="w-full rounded-xl" shimmerClassName="bg-white/20" disabled={isPending}>
