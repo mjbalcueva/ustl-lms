@@ -5,22 +5,25 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { ButtonShimmering } from '@/client/components/button-shimmering'
 import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
+	ItemContent,
+	ItemDescription,
+	ItemFooter,
+	ItemHeader,
+	ItemInnerCard,
+	ItemTitle,
+	ItemWrapper
+} from '@/client/components/account/item-wrapper'
+import { Loader } from '@/client/components/loader'
+import {
+	Button,
 	Form,
 	FormControl,
 	FormField,
 	FormItem,
 	FormLabel,
 	FormMessage,
-	PasswordInput,
-	Separator
+	PasswordInput
 } from '@/client/components/ui'
 
 const changePasswordSchema = z
@@ -37,7 +40,7 @@ const changePasswordSchema = z
 type ChangePasswordFormValues = z.infer<typeof changePasswordSchema>
 
 export const ChangePasswordForm = () => {
-	const [, setIsPending] = useState(false)
+	const [isPending, setIsPending] = useState(false)
 
 	const form = useForm<ChangePasswordFormValues>({
 		resolver: zodResolver(changePasswordSchema),
@@ -56,17 +59,15 @@ export const ChangePasswordForm = () => {
 	}
 
 	return (
-		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)}>
-				<Card className="bg-popover">
-					<CardHeader className="space-y-0.5 p-4">
-						<CardTitle className="text-lg font-medium">Change Password</CardTitle>
-						<CardDescription>Change your password to secure your account</CardDescription>
-					</CardHeader>
-					<CardContent className="px-4">
-						<Separator className="mb-4" />
-
-						<div className="space-y-4">
+		<ItemWrapper>
+			<ItemHeader>
+				<ItemTitle>Change Password</ItemTitle>
+				<ItemDescription>Change your password to secure your account</ItemDescription>
+			</ItemHeader>
+			<Form {...form}>
+				<form onSubmit={form.handleSubmit(onSubmit)}>
+					<ItemContent>
+						<ItemInnerCard className="space-y-4">
 							<FormField
 								control={form.control}
 								name="currentPassword"
@@ -80,6 +81,7 @@ export const ChangePasswordForm = () => {
 									</FormItem>
 								)}
 							/>
+
 							<FormField
 								control={form.control}
 								name="newPassword"
@@ -93,6 +95,7 @@ export const ChangePasswordForm = () => {
 									</FormItem>
 								)}
 							/>
+
 							<FormField
 								control={form.control}
 								name="confirmPassword"
@@ -106,14 +109,75 @@ export const ChangePasswordForm = () => {
 									</FormItem>
 								)}
 							/>
-						</div>
-					</CardContent>
-					<Separator />
-					<CardFooter className="flex justify-end px-4 py-2.5">
-						<ButtonShimmering className="h-8 bg-accent text-sm">Save</ButtonShimmering>
-					</CardFooter>
-				</Card>
-			</form>
-		</Form>
+						</ItemInnerCard>
+					</ItemContent>
+					<ItemFooter>
+						<Button className="ml-auto h-8 gap-1 text-sm" disabled={isPending}>
+							{isPending && <Loader />}
+							{isPending ? 'Saving...' : 'Save'}
+						</Button>
+					</ItemFooter>
+				</form>
+			</Form>
+		</ItemWrapper>
+		// <Form {...form}>
+		// 	<form onSubmit={form.handleSubmit(onSubmit)}>
+		// 		<Card className="bg-popover">
+		// 			<CardHeader className="space-y-0.5 p-4">
+		// 				<CardTitle className="text-lg font-medium">Change Password</CardTitle>
+		// 				<CardDescription>Change your password to secure your account</CardDescription>
+		// 			</CardHeader>
+		// 			<CardContent className="px-4">
+		// 				<Separator className="mb-4" />
+
+		// 				<div className="space-y-4">
+		// 					<FormField
+		// 						control={form.control}
+		// 						name="currentPassword"
+		// 						render={({ field }) => (
+		// 							<FormItem>
+		// 								<FormLabel className="text-popover-foreground">Current Password</FormLabel>
+		// 								<FormControl>
+		// 									<PasswordInput className="rounded-xl" placeholder="Enter current password" {...field} />
+		// 								</FormControl>
+		// 								<FormMessage />
+		// 							</FormItem>
+		// 						)}
+		// 					/>
+		// 					<FormField
+		// 						control={form.control}
+		// 						name="newPassword"
+		// 						render={({ field }) => (
+		// 							<FormItem>
+		// 								<FormLabel className="text-popover-foreground">New Password</FormLabel>
+		// 								<FormControl>
+		// 									<PasswordInput className="rounded-xl" placeholder="Enter new password" {...field} />
+		// 								</FormControl>
+		// 								<FormMessage />
+		// 							</FormItem>
+		// 						)}
+		// 					/>
+		// 					<FormField
+		// 						control={form.control}
+		// 						name="confirmPassword"
+		// 						render={({ field }) => (
+		// 							<FormItem>
+		// 								<FormLabel className="text-popover-foreground">Confirm New Password</FormLabel>
+		// 								<FormControl>
+		// 									<PasswordInput className="rounded-xl" placeholder="Confirm new password" {...field} />
+		// 								</FormControl>
+		// 								<FormMessage />
+		// 							</FormItem>
+		// 						)}
+		// 					/>
+		// 				</div>
+		// 			</CardContent>
+		// 			<Separator />
+		// 			<CardFooter className="flex justify-end px-4 py-2.5">
+		// 				<ButtonShimmering className="h-8 bg-accent text-sm">Save</ButtonShimmering>
+		// 			</CardFooter>
+		// 		</Card>
+		// 	</form>
+		// </Form>
 	)
 }

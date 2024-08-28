@@ -8,10 +8,10 @@ export default function Page() {
 		<PageWrapper>
 			<PageBreadcrumbs />
 			<PageHeader>
-				<CardTitle>Account Settings</CardTitle>
-				<CardDescription>Manage your account security settings</CardDescription>
+				<CardTitle className="w-fit">Account Settings</CardTitle>
+				<CardDescription className="w-fit">Manage your account security settings</CardDescription>
 			</PageHeader>
-			<PageContent>
+			<PageContent className="space-y-4">
 				<TwoFactorAuthenticationForm />
 				<ChangePasswordForm />
 			</PageContent>

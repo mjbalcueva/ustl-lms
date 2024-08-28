@@ -6,22 +6,17 @@ import { useForm } from 'react-hook-form'
 import { TbShieldCheckFilled } from 'react-icons/tb'
 import { z } from 'zod'
 
-import { ButtonShimmering } from '@/client/components/button-shimmering'
 import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	Separator,
-	Switch
-} from '@/client/components/ui'
+	ItemContent,
+	ItemDescription,
+	ItemFooter,
+	ItemHeader,
+	ItemInnerCard,
+	ItemTitle,
+	ItemWrapper
+} from '@/client/components/account/item-wrapper'
+import { Loader } from '@/client/components/loader'
+import { Button, Form, FormControl, FormField, FormItem, FormLabel, Switch } from '@/client/components/ui'
 
 const twoFactorSchema = z.object({
 	twoFactorEnabled: z.boolean()
@@ -30,7 +25,7 @@ const twoFactorSchema = z.object({
 type TwoFactorFormValues = z.infer<typeof twoFactorSchema>
 
 export const TwoFactorAuthenticationForm = () => {
-	const [, setIsPending] = useState(false)
+	const [isPending, setIsPending] = useState(false)
 
 	const form = useForm<TwoFactorFormValues>({
 		resolver: zodResolver(twoFactorSchema),
@@ -47,23 +42,21 @@ export const TwoFactorAuthenticationForm = () => {
 	}
 
 	return (
-		<Card className="bg-popover">
-			<CardHeader className="space-y-0.5 p-4">
-				<CardTitle className="text-lg font-medium">Two-Factor Authentication</CardTitle>
-				<CardDescription>Enabling this feature requires email verification for each login attempt</CardDescription>
-			</CardHeader>
+		<ItemWrapper>
+			<ItemHeader>
+				<ItemTitle>Two-Factor Authentication</ItemTitle>
+				<ItemDescription>Enabling this feature requires email verification for each login attempt</ItemDescription>
+			</ItemHeader>
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)}>
-					<CardContent className="px-4">
-						<Separator className="mb-4" />
-
-						<div className="rounded-md border p-4">
+					<ItemContent>
+						<ItemInnerCard>
 							<FormField
 								control={form.control}
 								name="twoFactorEnabled"
 								render={({ field }) => (
-									<FormItem className="flex flex-row items-center justify-between">
-										<div className="space-y-0.5">
+									<FormItem className="flex items-center justify-between space-y-0">
+										<div>
 											<FormLabel className="text-popover-foreground">Enable Two-Factor Authentication</FormLabel>
 											<p className="text-sm text-muted-foreground">Adds an extra layer of security</p>
 										</div>
@@ -73,20 +66,22 @@ export const TwoFactorAuthenticationForm = () => {
 									</FormItem>
 								)}
 							/>
-						</div>
-					</CardContent>
-					<Separator />
-					<CardFooter className="flex px-4 py-2.5">
+						</ItemInnerCard>
+					</ItemContent>
+					<ItemFooter>
 						{form.watch('twoFactorEnabled') && (
 							<div className="flex items-center text-sm text-muted-foreground">
 								<TbShieldCheckFilled className="mr-2 h-4 w-4" />
 								2FA is currently enabled
 							</div>
 						)}
-						<ButtonShimmering className="ml-auto h-8 bg-accent text-sm">Save</ButtonShimmering>
-					</CardFooter>
+						<Button className="ml-auto h-8 gap-1 text-sm" disabled={isPending}>
+							{isPending && <Loader />}
+							{isPending ? 'Saving...' : 'Save'}
+						</Button>
+					</ItemFooter>
 				</form>
 			</Form>
-		</Card>
+		</ItemWrapper>
 	)
 }
