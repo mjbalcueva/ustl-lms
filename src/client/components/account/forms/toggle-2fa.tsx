@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSession } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
@@ -37,30 +36,21 @@ const twoFactorSchema = z.object({
 type TwoFactorFormValues = z.infer<typeof twoFactorSchema>
 
 export const Toggle2FAForm = () => {
-	const sesh = useSession()
-	const [isChanged, setIsChanged] = useState(false)
+	const { data: sesh } = useSession()
 
 	const form = useForm<TwoFactorFormValues>({
 		resolver: zodResolver(twoFactorSchema),
 		defaultValues: {
-			twoFactorEnabled: sesh.data?.user?.isTwoFactorEnabled
+			twoFactorEnabled: sesh?.user?.isTwoFactorEnabled
 		}
 	})
 
-	const { mutate, isPending } = api.auth.toggle2FA.useMutation()
-	const onSubmit = (data: TwoFactorFormValues) => {
-		mutate(data)
-		setIsChanged(false)
-	}
-
-	useEffect(() => {
-		const subscription = form.watch((value, { name }) => {
-			if (name === 'twoFactorEnabled') {
-				setIsChanged(value.twoFactorEnabled !== sesh.data?.user?.isTwoFactorEnabled)
-			}
-		})
-		return () => subscription.unsubscribe()
-	}, [form, sesh.data?.user?.isTwoFactorEnabled])
+	const { mutate, isPending } = api.auth.toggle2FA.useMutation({
+		onSuccess: () => {
+			form.reset(form.getValues())
+		}
+	})
+	const onSubmit = (data: TwoFactorFormValues) => mutate(data)
 
 	return (
 		<ItemWrapper>
@@ -98,7 +88,7 @@ export const Toggle2FAForm = () => {
 								2FA is currently enabled
 							</div>
 						)}
-						<Button className="ml-auto h-8 gap-1 text-sm" disabled={!isChanged || isPending}>
+						<Button className="ml-auto h-8 gap-1 text-sm" disabled={!form.formState.isDirty || isPending}>
 							{isPending && <Loader />}
 							{isPending ? 'Saving...' : 'Save'}
 						</Button>
