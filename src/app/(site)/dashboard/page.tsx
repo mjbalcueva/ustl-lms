@@ -7,11 +7,7 @@ export default async function Page() {
 
 	return (
 		<HydrateClient>
-			<PageWrapper>
-				<div className="h-screen bg-red-700">rawr</div>
-				<div className="h-screen bg-blue-700">rawr</div>
-				<div className="h-screen bg-green-700">rawr</div>
-			</PageWrapper>
+			<PageWrapper></PageWrapper>
 		</HydrateClient>
 	)
 }
