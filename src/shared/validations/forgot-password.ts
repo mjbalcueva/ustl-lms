@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const resetSchema = z.object({
+export const forgotPasswordSchema = z.object({
 	email: z
 		.string()
 		.email('Email is required')
@@ -9,4 +9,4 @@ export const resetSchema = z.object({
 		})
 })
 
-export type ResetSchema = z.infer<typeof resetSchema>
+export type ForgotPasswordSchema = z.infer<typeof forgotPasswordSchema>

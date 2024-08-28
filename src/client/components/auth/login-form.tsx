@@ -132,7 +132,7 @@ export const LoginForm = () => {
 													buttonVariants({ variant: 'link', size: 'xs' }),
 													'p-0 text-xs font-normal text-card-foreground'
 												)}
-												href="/auth/reset"
+												href="/auth/forgot-password"
 											>
 												Forgot password?
 											</Link>

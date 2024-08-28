@@ -1,46 +1,31 @@
 'use client'
 
-import { useState, useTransition } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 
-import { resetSchema, type ResetSchema } from '@/shared/validations/reset'
-
-import { reset } from '@/server/actions/reset'
+import { api } from '@/shared/trpc/react'
+import { forgotPasswordSchema, type ForgotPasswordSchema } from '@/shared/validations/forgot-password'
 
 import { CardWrapper, FormResponse } from '@/client/components/auth'
 import { ButtonShimmering } from '@/client/components/button-shimmering'
 import { Loader } from '@/client/components/loader'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '@/client/components/ui'
 
-export const ResetForm = () => {
-	const [formSuccess, setFormSuccess] = useState<string | null>(null)
-	const [formError, setFormError] = useState<string | null>(null)
-	const [isPending, startTransition] = useTransition()
-
-	const form = useForm<ResetSchema>({
-		resolver: zodResolver(resetSchema),
+export const ForgotPasswordForm = () => {
+	const form = useForm<ForgotPasswordSchema>({
+		resolver: zodResolver(forgotPasswordSchema),
 		defaultValues: {
 			email: ''
 		}
 	})
 
-	const onSubmit: SubmitHandler<ResetSchema> = (data) => {
-		setFormError('')
-		setFormSuccess('')
-
-		startTransition(async () => {
-			await reset(data).then((data) => {
-				if (data?.error) return setFormError(data?.error)
-				if (data?.success) return setFormSuccess(data?.success)
-			})
-		})
-	}
+	const { mutate, data, error, isPending } = api.user.forgotPassword.useMutation()
+	const onSubmit: SubmitHandler<ForgotPasswordSchema> = (data) => mutate(data)
 
 	return (
 		<CardWrapper
-			title="Welcome Back, Thomasian!"
-			description="Login to your account to continue."
+			title="Forgot your password?"
+			description="Enter your email address to reset your password."
 			backButtonHref="/auth/login"
 			backButtonLabel="Back to login"
 		>
@@ -66,8 +51,8 @@ export const ResetForm = () => {
 						)}
 					/>
 
-					<FormResponse type="error" message={formError} />
-					<FormResponse type="success" message={formSuccess} />
+					<FormResponse type="error" message={error?.message} />
+					<FormResponse type="success" message={data?.message} />
 
 					<ButtonShimmering className="w-full rounded-xl" shimmerClassName="bg-white/20" disabled={isPending}>
 						{isPending && (

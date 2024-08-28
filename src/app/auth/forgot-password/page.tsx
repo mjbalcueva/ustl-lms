@@ -1,11 +1,11 @@
 import { Suspense } from 'react'
 
-import { ResetForm } from '@/client/components/auth'
+import { ForgotPasswordForm } from '@/client/components/auth/forgot-password-form'
 
 export default function Page() {
 	return (
 		<Suspense>
-			<ResetForm />
+			<ForgotPasswordForm />
 		</Suspense>
 	)
 }

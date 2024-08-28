@@ -1,14 +1,29 @@
 import { TRPCError } from '@trpc/server'
 import { hash } from 'bcryptjs'
 
+import { forgotPasswordSchema } from '@/shared/validations/forgot-password'
 import { registerSchema } from '@/shared/validations/register'
 import { verifyEmailSchema } from '@/shared/validations/token'
 
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc'
-import { sendVerificationEmail } from '@/server/lib/mail'
-import { generateVerificationToken } from '@/server/lib/tokens'
+import { sendPasswordResetEmail, sendVerificationEmail } from '@/server/lib/mail'
+import { generatePasswordResetToken, generateVerificationToken } from '@/server/lib/tokens'
 
 export const userRouter = createTRPCRouter({
+	forgotPassword: publicProcedure.input(forgotPasswordSchema).mutation(async ({ ctx, input }) => {
+		const { email } = input
+
+		const existingUser = await ctx.db.user.findUnique({ where: { email } })
+		if (!existingUser) {
+			throw new TRPCError({ code: 'NOT_FOUND', message: 'User with this email not found.' })
+		}
+
+		const passwordResetToken = await generatePasswordResetToken(email)
+		await sendPasswordResetEmail(passwordResetToken.email, passwordResetToken.token)
+
+		return { message: 'Password reset email sent!' }
+	}),
+
 	register: publicProcedure.input(registerSchema).mutation(async ({ ctx, input }) => {
 		const { name, email, password } = input
 
@@ -55,7 +70,7 @@ export const userRouter = createTRPCRouter({
 
 		const existingUser = await ctx.db.user.findUnique({ where: { email: existingToken.email } })
 		if (!existingUser) {
-			throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found.' })
+			throw new TRPCError({ code: 'NOT_FOUND', message: 'User with this email not found.' })
 		}
 
 		await ctx.db.user.update({
