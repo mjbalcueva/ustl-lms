@@ -16,8 +16,8 @@ export default async function Layout({ children }: Readonly<{ children: React.Re
 	return (
 		<SessionProvider session={session}>
 			<DeviceTypeProvider defaultDeviceSize={defaultDeviceSize}>
-				<div className="flex flex-col bg-popover/50 text-foreground md:h-[100vh] md:flex-row md:bg-popover md:pt-3">
-					<MainNav className="bg-popover/50 text-popover-foreground md:bg-popover" session={session!} />
+				<div className="flex flex-col bg-card/50 text-foreground md:h-[100vh] md:flex-row md:bg-card md:pt-3">
+					<MainNav className="text-card-foreground" session={session!} />
 					{children}
 				</div>
 			</DeviceTypeProvider>

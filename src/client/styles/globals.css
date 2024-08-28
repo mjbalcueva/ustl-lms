@@ -40,7 +40,7 @@ body,
 	[data-theme='dark-default'] {
 		--background: 240 5% 6%;
 		--foreground: 60 5% 90%;
-		--card: 240 4% 10%;
+		--card: 240 10% 2.5%;
 		--card-foreground: 60 5% 90%;
 		--popover: 240 10% 2.5%;
 		--popover-foreground: 0 0% 98%;
@@ -100,7 +100,7 @@ body,
 		--muted-foreground: 220 12% 65%;
 		--popover: 220 29% 3%;
 		--popover-foreground: 47 7% 83%;
-		--card: 220 29% 4%;
+		--card: 220 29% 3%;
 		--card-foreground: 47 7% 78%;
 		--border: 220 19% 11%;
 		--input: 220 19% 14%;
@@ -156,7 +156,7 @@ body,
 		--muted-foreground: 222 12% 65%;
 		--popover: 222 28% 3%;
 		--popover-foreground: 47 7% 83%;
-		--card: 222 28% 5%;
+		--card: 222 28% 3%;
 		--card-foreground: 47 7% 78%;
 		--border: 222 18% 12%;
 		--input: 222 18% 15%;
@@ -212,7 +212,7 @@ body,
 		--muted-foreground: 230 12% 65%;
 		--popover: 230 16% 3.5%;
 		--popover-foreground: 230 16% 77%;
-		--card: 230 16% 5%;
+		--card: 230 16% 3.5%;
 		--card-foreground: 230 16% 82%;
 		--border: 230 6% 12%;
 		--input: 230 6% 15%;

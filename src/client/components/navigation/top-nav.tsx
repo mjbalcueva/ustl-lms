@@ -96,7 +96,7 @@ export const TopNav = ({ className, session, ...props }: NavProps) => {
 						exit: { opacity: 0 }
 					}}
 					onAnimationEnd={() => setNavOpen(false)}
-					className="fixed top-14 z-[999] h-full w-full overflow-auto bg-popover/50 text-popover-foreground backdrop-blur-xl md:hidden"
+					className="fixed top-14 z-[999] h-full w-full overflow-auto bg-card/50 text-card-foreground backdrop-blur-xl md:hidden"
 				>
 					{navLinks.map((item, index) => (
 						<MotionNavLink
