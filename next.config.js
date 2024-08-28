@@ -7,12 +7,7 @@ await import('./src/env.js')
 /** @type {import("next").NextConfig} */
 const config = {
 	experimental: {
-		optimizePackageImports: [
-			'@/client/components/navigation',
-			'@/client/components/ui',
-			'@/client/context',
-			'@/shared/types'
-		]
+		optimizePackageImports: ['@/client/components/ui', '@/client/context', '@/shared/types']
 	}
 }
 

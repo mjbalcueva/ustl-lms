@@ -4,7 +4,8 @@ import { Inter } from 'next/font/google'
 import { type motion } from 'framer-motion'
 import { type Session } from 'next-auth'
 
-import { SideNav, TopNav } from '@/client/components/navigation'
+import { SideNav } from '@/client/components/navigation/side-nav'
+import { TopNav } from '@/client/components/navigation/top-nav'
 import { useDeviceType } from '@/client/context'
 import { cn } from '@/client/lib/utils'
 

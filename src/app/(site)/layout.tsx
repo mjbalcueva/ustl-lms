@@ -3,7 +3,7 @@ import { SessionProvider } from 'next-auth/react'
 
 import { auth } from '@/server/lib/auth'
 
-import { MainNav } from '@/client/components/navigation'
+import { MainNav } from '@/client/components/navigation/main-nav'
 import { DeviceTypeProvider, type DeviceType } from '@/client/context'
 
 export default async function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
