@@ -20,7 +20,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger
 } from '@/client/components/ui'
-import { useDeviceType } from '@/client/context'
+import { useDeviceType } from '@/client/context/device-type-provider'
 import { useNav } from '@/client/lib/hooks/use-nav'
 import { getEmail, getInitials } from '@/client/lib/utils'
 

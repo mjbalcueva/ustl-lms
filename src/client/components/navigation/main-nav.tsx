@@ -6,7 +6,7 @@ import { type Session } from 'next-auth'
 
 import { SideNav } from '@/client/components/navigation/side-nav'
 import { TopNav } from '@/client/components/navigation/top-nav'
-import { useDeviceType } from '@/client/context'
+import { useDeviceType } from '@/client/context/device-type-provider'
 import { cn } from '@/client/lib/utils'
 
 const inter = Inter({

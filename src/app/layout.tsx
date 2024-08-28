@@ -8,7 +8,7 @@ import { TRPCReactProvider } from '@/shared/trpc/react'
 
 import { TailwindSizeIndicator } from '@/client/components/tailwind-size-indicator'
 import { Toaster } from '@/client/components/ui'
-import { ThemeProvider } from '@/client/context'
+import { ThemeProvider } from '@/client/context/theme-provider'
 
 export const metadata: Metadata = {
 	title: siteConfig.title,
