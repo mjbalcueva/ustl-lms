@@ -1,11 +1,11 @@
 import { Suspense } from 'react'
 
-import { NewVerificationCard } from '@/client/components/auth'
+import { VerifyEmailForm } from '@/client/components/auth/verify-email-form'
 
 export default function Page() {
 	return (
 		<Suspense>
-			<NewVerificationCard />
+			<VerifyEmailForm />
 		</Suspense>
 	)
 }

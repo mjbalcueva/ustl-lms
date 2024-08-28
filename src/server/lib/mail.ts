@@ -32,7 +32,7 @@ export async function sendTwoFactorTokenEmail(email: string, token: string) {
 }
 
 export async function sendVerificationEmail(email: string, token: string) {
-	const confirmLink = `${domain}/auth/new-verification?token=${token}`
+	const confirmLink = `${domain}/auth/verify-email?token=${token}`
 
 	await resend.emails.send({
 		from: `Scholar <${supportMail}>`,

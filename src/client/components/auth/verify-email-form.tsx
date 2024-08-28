@@ -8,7 +8,7 @@ import { api } from '@/shared/trpc/react'
 import { CardWrapper, FormResponse } from '@/client/components/auth'
 import { Loader } from '@/client/components/loader'
 
-export const NewVerificationCard = () => {
+export const VerifyEmailForm = () => {
 	const searchParams = useSearchParams()
 	const token = searchParams.get('token')
 
