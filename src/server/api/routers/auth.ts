@@ -1,10 +1,11 @@
 import { TRPCError } from '@trpc/server'
-import { hash } from 'bcryptjs'
+import { compare, hash } from 'bcryptjs'
 
 import { forgotPasswordSchema } from '@/shared/validations/forgot-password'
 import { registerSchema } from '@/shared/validations/register'
 import { resetPasswordSchema } from '@/shared/validations/reset-password'
 import { toggle2FASchema } from '@/shared/validations/toggle-2fa'
+import { updatePasswordSchema } from '@/shared/validations/update-password'
 import { verifyEmailSchema } from '@/shared/validations/verify-email'
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '@/server/api/trpc'
@@ -12,6 +13,39 @@ import { sendPasswordResetEmail, sendVerificationEmail } from '@/server/lib/mail
 import { generatePasswordResetToken, generateVerificationToken } from '@/server/lib/tokens'
 
 export const authRouter = createTRPCRouter({
+	updatePassword: protectedProcedure.input(updatePasswordSchema).mutation(async ({ ctx, input }) => {
+		const { currentPassword, newPassword } = input
+		const { user } = ctx.session
+
+		const existingUser = await ctx.db.user.findUnique({ where: { id: user.id } })
+		if (!existingUser) {
+			throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found.' })
+		}
+
+		if (!existingUser.password) {
+			// If user doesn't have a password, add the new password directly
+			const hashedPassword = await hash(newPassword, 10)
+			await ctx.db.user.update({
+				where: { id: existingUser.id },
+				data: { password: hashedPassword }
+			})
+			return { message: 'Password updated!' }
+		}
+
+		const isPasswordCorrect = await compare(currentPassword, existingUser.password)
+		if (!isPasswordCorrect) {
+			throw new TRPCError({ code: 'BAD_REQUEST', message: 'Incorrect current password.' })
+		}
+
+		const hashedPassword = await hash(newPassword, 10)
+		await ctx.db.user.update({
+			where: { id: existingUser.id },
+			data: { password: hashedPassword }
+		})
+
+		return { message: 'Password updated!' }
+	}),
+
 	forgotPassword: publicProcedure.input(forgotPasswordSchema).mutation(async ({ ctx, input }) => {
 		const { email } = input
 

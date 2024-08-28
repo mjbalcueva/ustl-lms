@@ -39,12 +39,12 @@ const Toaster = ({ ...props }: ToasterProps) => {
 					icon: 'absolute top-1/2 -translate-y-1/2',
 					content: '[&:not(:has(+button))]:pr-10 [&:has(+button)]:pb-11 md:[&:has(+button)]:pb-9',
 					error:
-						'bg-red-500/30 text-red-500 ring-white/10 backdrop-blur-xl dark:ring-inset [&>[data-close-button=true]:hover]:bg-white/20 [&>[data-close-button=true]>svg]:text-red-500',
-					info: 'bg-blue-500/30 text-blue-500 ring-white/10 backdrop-blur-xl dark:ring-inset [&>[data-close-button=true]:hover]:bg-white/20 [&>[data-close-button=true]>svg]:text-blue-500',
+						'!bg-red-500/30 !text-red-500 ring-white/10 backdrop-blur-xl dark:ring-inset [&>[data-close-button=true]:hover]:bg-white/20 [&>[data-close-button=true]>svg]:text-red-500',
+					info: '!bg-blue-500/30 !text-blue-500 ring-white/10 backdrop-blur-xl dark:ring-inset [&>[data-close-button=true]:hover]:bg-white/20 [&>[data-close-button=true]>svg]:text-blue-500',
 					warning:
-						'bg-yellow-500/30 text-yellow-500 ring-white/10 backdrop-blur-xl dark:ring-inset [&>[data-close-button=true]:hover]:bg-white/20 [&>[data-close-button=true]>svg]:text-yellow-500',
+						'!bg-yellow-500/30 !text-yellow-500 ring-white/10 backdrop-blur-xl dark:ring-inset [&>[data-close-button=true]:hover]:bg-white/20 [&>[data-close-button=true]>svg]:text-yellow-500',
 					success:
-						'bg-emerald-500/30 text-emerald-400 ring-white/10 backdrop-blur-xl dark:ring-inset [&>[data-close-button=true]:hover]:bg-white/20 [&>[data-close-button=true]>svg]:text-emerald-400',
+						'!bg-emerald-500/30 !text-emerald-500 ring-white/10 backdrop-blur-xl dark:ring-inset [&>[data-close-button=true]:hover]:bg-white/20 [&>[data-close-button=true]>svg]:text-emerald-500',
 					cancelButton: buttonVariants({
 						size: 'sm'
 					}),

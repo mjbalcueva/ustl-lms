@@ -1,9 +1,11 @@
 'use client'
 
-import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { useForm, type SubmitHandler } from 'react-hook-form'
+import { toast } from 'sonner'
+
+import { api } from '@/shared/trpc/react'
+import { updatePasswordSchema, type UpdatePasswordSchema } from '@/shared/validations/update-password'
 
 import {
 	ItemContent,
@@ -26,24 +28,9 @@ import {
 	PasswordInput
 } from '@/client/components/ui'
 
-const changePasswordSchema = z
-	.object({
-		currentPassword: z.string().min(6, 'Password must be at least 6 characters'),
-		newPassword: z.string().min(6, 'Password must be at least 6 characters'),
-		confirmPassword: z.string().min(6, 'Password must be at least 6 characters')
-	})
-	.refine((data) => data.newPassword === data.confirmPassword, {
-		message: "Passwords don't match",
-		path: ['confirmPassword']
-	})
-
-type ChangePasswordFormValues = z.infer<typeof changePasswordSchema>
-
 export const ChangePasswordForm = () => {
-	const [isPending, setIsPending] = useState(false)
-
-	const form = useForm<ChangePasswordFormValues>({
-		resolver: zodResolver(changePasswordSchema),
+	const form = useForm<UpdatePasswordSchema>({
+		resolver: zodResolver(updatePasswordSchema),
 		defaultValues: {
 			currentPassword: '',
 			newPassword: '',
@@ -51,12 +38,17 @@ export const ChangePasswordForm = () => {
 		}
 	})
 
-	const onSubmit = (data: ChangePasswordFormValues) => {
-		setIsPending(true)
-		// TODO: Implement the actual submission logic here
-		console.log(data)
-		setTimeout(() => setIsPending(false), 1000) // Simulating API call
-	}
+	const { mutate, isPending } = api.auth.updatePassword.useMutation({
+		onSuccess: (data) => {
+			form.reset()
+			toast.success(data.message)
+		},
+		onError: (error) => {
+			toast.error(error.message)
+		}
+	})
+
+	const onSubmit: SubmitHandler<UpdatePasswordSchema> = (data) => mutate(data)
 
 	return (
 		<ItemWrapper>
@@ -132,7 +124,12 @@ export const ChangePasswordForm = () => {
 					</ItemContent>
 
 					<ItemFooter>
-						<Button className="ml-auto h-8 gap-1 text-sm" disabled={isPending}>
+						<div className="flex items-center text-sm text-muted-foreground">
+							{form.getValues().currentPassword
+								? 'Change your current password'
+								: 'Set a new password for your account'}
+						</div>
+						<Button className="ml-auto flex h-8 gap-1 text-sm" disabled={!form.formState.isDirty || isPending}>
 							{isPending && <Loader />}
 							{isPending ? 'Saving...' : 'Save'}
 						</Button>
