@@ -28,7 +28,7 @@ export const ForgotPasswordForm = () => {
 		}
 	})
 
-	const { mutate, data, error, isPending } = api.user.forgotPassword.useMutation()
+	const { mutate, data, error, isPending } = api.auth.forgotPassword.useMutation()
 	const onSubmit: SubmitHandler<ForgotPasswordSchema> = (data) => mutate(data)
 
 	return (

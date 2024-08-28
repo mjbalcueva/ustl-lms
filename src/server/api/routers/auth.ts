@@ -10,7 +10,7 @@ import { createTRPCRouter, publicProcedure } from '@/server/api/trpc'
 import { sendPasswordResetEmail, sendVerificationEmail } from '@/server/lib/mail'
 import { generatePasswordResetToken, generateVerificationToken } from '@/server/lib/tokens'
 
-export const userRouter = createTRPCRouter({
+export const authRouter = createTRPCRouter({
 	forgotPassword: publicProcedure.input(forgotPasswordSchema).mutation(async ({ ctx, input }) => {
 		const { email } = input
 

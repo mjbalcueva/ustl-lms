@@ -33,7 +33,7 @@ export const ResetPasswordForm = () => {
 		}
 	})
 
-	const { mutate, data, error, isPending } = api.user.resetPassword.useMutation()
+	const { mutate, data, error, isPending } = api.auth.resetPassword.useMutation()
 	const onSubmit: SubmitHandler<ResetPasswordSchema> = (data) => mutate(data)
 
 	return (

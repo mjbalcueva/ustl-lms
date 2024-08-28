@@ -31,7 +31,7 @@ export const RegisterForm = () => {
 		}
 	})
 
-	const { mutate, data, error, isPending } = api.user.register.useMutation()
+	const { mutate, data, error, isPending } = api.auth.register.useMutation()
 	const onSubmit: SubmitHandler<RegisterSchema> = (data) => mutate(data)
 
 	return (
