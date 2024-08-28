@@ -6,7 +6,7 @@ import { useForm, type SubmitHandler } from 'react-hook-form'
 import { api } from '@/shared/trpc/react'
 import { registerSchema, type RegisterSchema } from '@/shared/validations/register'
 
-import { CardWrapper, FormResponse } from '@/client/components/auth'
+import { AuthCard, FormResponse } from '@/client/components/auth'
 import { ButtonShimmering } from '@/client/components/button-shimmering'
 import { Loader } from '@/client/components/loader'
 import {
@@ -34,7 +34,7 @@ export const RegisterForm = () => {
 	const onSubmit: SubmitHandler<RegisterSchema> = (data) => mutate(data)
 
 	return (
-		<CardWrapper
+		<AuthCard
 			title="Welcome, Thomasian!"
 			description="To get started, please create an account."
 			backButtonLabel="Already have an account?"
@@ -111,6 +111,6 @@ export const RegisterForm = () => {
 					</div>
 				</form>
 			</Form>
-		</CardWrapper>
+		</AuthCard>
 	)
 }

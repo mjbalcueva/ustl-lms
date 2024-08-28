@@ -6,7 +6,7 @@ import { useForm, type SubmitHandler } from 'react-hook-form'
 import { api } from '@/shared/trpc/react'
 import { forgotPasswordSchema, type ForgotPasswordSchema } from '@/shared/validations/forgot-password'
 
-import { CardWrapper, FormResponse } from '@/client/components/auth'
+import { AuthCard, FormResponse } from '@/client/components/auth'
 import { ButtonShimmering } from '@/client/components/button-shimmering'
 import { Loader } from '@/client/components/loader'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '@/client/components/ui'
@@ -23,7 +23,7 @@ export const ForgotPasswordForm = () => {
 	const onSubmit: SubmitHandler<ForgotPasswordSchema> = (data) => mutate(data)
 
 	return (
-		<CardWrapper
+		<AuthCard
 			title="Forgot your password?"
 			description="Enter your email address to reset your password."
 			backButtonHref="/auth/login"
@@ -64,6 +64,6 @@ export const ForgotPasswordForm = () => {
 					</ButtonShimmering>
 				</form>
 			</Form>
-		</CardWrapper>
+		</AuthCard>
 	)
 }

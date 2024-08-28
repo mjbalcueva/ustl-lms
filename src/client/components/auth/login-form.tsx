@@ -9,7 +9,7 @@ import { loginSchema, type LoginSchema } from '@/shared/validations/login'
 
 import { login } from '@/server/actions/login'
 
-import { CardWrapper, FormResponse } from '@/client/components/auth'
+import { AuthCard, FormResponse } from '@/client/components/auth'
 import { ButtonShimmering } from '@/client/components/button-shimmering'
 import { Loader } from '@/client/components/loader'
 import {
@@ -63,7 +63,7 @@ export const LoginForm = () => {
 	}
 
 	return (
-		<CardWrapper
+		<AuthCard
 			title="Welcome Back, Thomasian!"
 			description="Login to your account to continue."
 			backButtonLabel="Don't have an account?"
@@ -156,6 +156,6 @@ export const LoginForm = () => {
 					</ButtonShimmering>
 				</form>
 			</Form>
-		</CardWrapper>
+		</AuthCard>
 	)
 }

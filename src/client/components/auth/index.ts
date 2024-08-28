@@ -1,4 +1,4 @@
-export * from './card-wrapper'
+export * from './auth-card'
 export * from './error-card'
 export * from './form-response'
 export * from './login-form'

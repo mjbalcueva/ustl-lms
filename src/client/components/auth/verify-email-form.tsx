@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 
 import { api } from '@/shared/trpc/react'
 
-import { CardWrapper, FormResponse } from '@/client/components/auth'
+import { AuthCard, FormResponse } from '@/client/components/auth'
 import { Loader } from '@/client/components/loader'
 
 export const VerifyEmailForm = () => {
@@ -19,7 +19,7 @@ export const VerifyEmailForm = () => {
 	}, [token, mutate])
 
 	return (
-		<CardWrapper
+		<AuthCard
 			title="Confirming your verification"
 			description="We just want to make sure it's really you."
 			backButtonHref="/auth/login"
@@ -30,6 +30,6 @@ export const VerifyEmailForm = () => {
 				<FormResponse type="error" message={error?.message} />
 				<FormResponse type="success" message={data?.message} />
 			</div>
-		</CardWrapper>
+		</AuthCard>
 	)
 }

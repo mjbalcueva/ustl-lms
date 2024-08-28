@@ -21,7 +21,7 @@ type CardWrapperProps = {
 	showSocial?: boolean
 }
 
-export const CardWrapper = ({
+export const AuthCard = ({
 	children,
 	title,
 	description,

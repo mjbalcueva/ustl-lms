@@ -7,7 +7,7 @@ import { useForm, type SubmitHandler } from 'react-hook-form'
 import { api } from '@/shared/trpc/react'
 import { resetPasswordSchema, type ResetPasswordSchema } from '@/shared/validations/reset-password'
 
-import { CardWrapper, FormResponse } from '@/client/components/auth'
+import { AuthCard, FormResponse } from '@/client/components/auth'
 import { ButtonShimmering } from '@/client/components/button-shimmering'
 import { Loader } from '@/client/components/loader'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, PasswordInput } from '@/client/components/ui'
@@ -28,7 +28,7 @@ export const NewPasswordForm = () => {
 	const onSubmit: SubmitHandler<ResetPasswordSchema> = (data) => mutate(data)
 
 	return (
-		<CardWrapper
+		<AuthCard
 			title="Reset Your Password"
 			description="Enter a new password for your account."
 			backButtonHref="/auth/login"
@@ -62,6 +62,6 @@ export const NewPasswordForm = () => {
 					</ButtonShimmering>
 				</form>
 			</Form>
-		</CardWrapper>
+		</AuthCard>
 	)
 }
