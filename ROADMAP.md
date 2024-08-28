@@ -1,4 +1,4 @@
-## Roadmap (29/121)
+## Roadmap (37/124)
 
 ### Design (20/20)
 
@@ -23,7 +23,7 @@
     - [x] Rose theme
     - [x] Grass theme
 
-### Authentication & Authorization (9/14)
+### Authentication & Authorization (14/14)
 
 - [x] User Registration and Login
   - [x] Email/Password (Credentials Provider)
@@ -32,22 +32,25 @@
   - [x] Error handling
 - [x] Account Linking
   - [x] Link Google OAuth to Credentials
-  - [ ] Link Credentials to OAuth
+  - [x] Link Credentials to OAuth
 - [x] Logout functionality
 - [x] Domain Restriction (UST-Legazpi only)
-- [ ] Enhanced Security
+- [x] Enhanced Security
   - [x] Forgot password
   - [x] Email verification
-  - [ ] Two-factor authentication (2FA)
+  - [x] Two-factor authentication (2FA)
 
-### User Management (0/6)
+### User Management (3/9)
 
 - [ ] Profile
   - [ ] Change name
+  - [ ] Add pronouns
   - [ ] Change picture
   - [ ] Add bio
-- [ ] Account
-  - [ ] Change password
+  - [ ] Add date of birth
+- [x] Account
+  - [x] Toggle 2FA
+  - [x] Change password
 
 ### Learnings (0/44)
 
