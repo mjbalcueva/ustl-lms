@@ -1,5 +1,5 @@
-import { ChangePasswordForm } from '@/client/components/account/change-password-form'
-import { TwoFactorAuthenticationForm } from '@/client/components/account/two-factor-authentication-form'
+import { ChangePasswordForm } from '@/client/components/account/forms/change-password'
+import { TwoFactorAuthenticationForm } from '@/client/components/account/forms/two-factor-authentication'
 import {
 	PageContainer,
 	PageContent,
