@@ -4,7 +4,7 @@ import Link, { type LinkProps } from 'next/link'
 import { forwardRef } from 'react'
 import { motion } from 'framer-motion'
 
-import { type NavLink } from '@/shared/types'
+import { type NavLink } from '@/shared/types/navigation'
 
 import { Icons } from '@/client/components/icons'
 import { useNav } from '@/client/lib/hooks/use-nav'

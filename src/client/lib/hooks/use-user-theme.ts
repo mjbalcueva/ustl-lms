@@ -1,7 +1,7 @@
 import { useTheme } from 'next-themes'
 import { useLocalStorage } from 'usehooks-ts'
 
-import { type ThemeType } from '@/shared/types'
+import { type ThemeType } from '@/shared/types/themes'
 
 import { themes } from '@/client/lib/themes'
 

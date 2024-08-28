@@ -1,4 +1,4 @@
-import { type ThemeType } from '@/shared/types'
+import { type ThemeType } from '@/shared/types/themes'
 
 export const themes: ThemeType = {
 	light: [

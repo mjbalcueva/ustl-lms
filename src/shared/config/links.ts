@@ -1,4 +1,4 @@
-import { type NavLink } from '@/shared/types'
+import { type NavLink } from '@/shared/types/navigation'
 
 export const navLinks: NavLink[] = [
 	{
