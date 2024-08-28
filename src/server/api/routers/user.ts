@@ -37,7 +37,7 @@ export const userRouter = createTRPCRouter({
 		return { message: 'Confirmation email sent.' }
 	}),
 
-	verifyToken: publicProcedure.input(z.object({ token: z.string().nullable() })).mutation(async ({ ctx, input }) => {
+	verifyEmail: publicProcedure.input(z.object({ token: z.string().nullable() })).mutation(async ({ ctx, input }) => {
 		const { token } = input
 		if (!token) {
 			throw new TRPCError({ code: 'BAD_REQUEST', message: 'No verification token provided.' })

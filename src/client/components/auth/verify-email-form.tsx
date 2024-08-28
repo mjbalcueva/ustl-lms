@@ -12,7 +12,7 @@ export const VerifyEmailForm = () => {
 	const searchParams = useSearchParams()
 	const token = searchParams.get('token')
 
-	const { mutate, data, error, isPending } = api.user.verifyToken.useMutation()
+	const { mutate, data, error, isPending } = api.user.verifyEmail.useMutation()
 
 	useEffect(() => {
 		mutate({ token })
