@@ -3,11 +3,11 @@
 import React from 'react'
 import { useTheme } from 'next-themes'
 import { Toaster as ToasterPrimitive, type ToasterProps } from 'sonner'
-import { twJoin } from 'tailwind-merge'
 
 import { Icons } from '@/client/components/icons'
 import { Loader } from '@/client/components/loader'
 import { buttonVariants } from '@/client/components/ui'
+import { cn } from '@/client/lib/utils'
 
 const Toaster = ({ ...props }: ToasterProps) => {
 	const { theme = 'system' } = useTheme()
@@ -26,7 +26,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
 				unstyled: true,
 				closeButton: true,
 				classNames: {
-					toast: twJoin(
+					toast: cn(
 						'bg-background ring-1 ring-border dark:ring-inset sm:min-w-[22rem] rounded-xl text-foreground overflow-hidden text-sm backdrop-blur-xl px-4 py-3 font-normal sm:px-5 sm:py-5',
 						'[&:has([data-icon])_[data-content]]:ml-5',
 						'[&:has([data-button])_[data-close-button="true"]]:hidden',
@@ -39,12 +39,12 @@ const Toaster = ({ ...props }: ToasterProps) => {
 					icon: 'absolute top-1/2 -translate-y-1/2',
 					content: '[&:not(:has(+button))]:pr-10 [&:has(+button)]:pb-11 md:[&:has(+button)]:pb-9',
 					error:
-						'!bg-red-500/30 !text-red-500 ring-white/10 backdrop-blur-xl dark:ring-inset [&>[data-close-button=true]:hover]:bg-white/20 [&>[data-close-button=true]>svg]:text-red-500',
-					info: '!bg-blue-500/30 !text-blue-500 ring-white/10 backdrop-blur-xl dark:ring-inset [&>[data-close-button=true]:hover]:bg-white/20 [&>[data-close-button=true]>svg]:text-blue-500',
+						'!bg-red-300/60 dark:!bg-red-500/30 !text-red-600 dark:!text-red-500 ring-black/20 dark:ring-white/10 backdrop-blur-xl dark:ring-inset [&>[data-close-button=true]:hover]:bg-white/20 dark:[&>[data-close-button=true]:hover]:bg-white/10 [&>[data-close-button=true]>svg]:text-red-600 dark:[&>[data-close-button=true]>svg]:text-red-500',
+					info: '!bg-blue-300/60 dark:!bg-blue-500/30 !text-blue-600 dark:!text-blue-500 ring-black/20 dark:ring-white/10 backdrop-blur-xl dark:ring-inset [&>[data-close-button=true]:hover]:bg-white/20 dark:[&>[data-close-button=true]:hover]:bg-white/10 [&>[data-close-button=true]>svg]:text-blue-600 dark:[&>[data-close-button=true]>svg]:text-blue-500',
 					warning:
-						'!bg-yellow-500/30 !text-yellow-500 ring-white/10 backdrop-blur-xl dark:ring-inset [&>[data-close-button=true]:hover]:bg-white/20 [&>[data-close-button=true]>svg]:text-yellow-500',
+						'!bg-yellow-300/60 dark:!bg-yellow-500/30 !text-yellow-600 dark:!text-yellow-500 ring-black/20 dark:ring-white/10 backdrop-blur-xl dark:ring-inset [&>[data-close-button=true]:hover]:bg-white/20 dark:[&>[data-close-button=true]:hover]:bg-white/10 [&>[data-close-button=true]>svg]:text-yellow-600 dark:[&>[data-close-button=true]>svg]:text-yellow-500',
 					success:
-						'!bg-emerald-500/30 !text-emerald-500 ring-white/10 backdrop-blur-xl dark:ring-inset [&>[data-close-button=true]:hover]:bg-white/20 [&>[data-close-button=true]>svg]:text-emerald-500',
+						'!bg-emerald-300/60 dark:!bg-emerald-500/30 !text-emerald-600 dark:!text-emerald-500 ring-black/20 dark:ring-white/10 backdrop-blur-xl dark:ring-inset [&>[data-close-button=true]:hover]:bg-white/20 dark:[&>[data-close-button=true]:hover]:bg-white/10 [&>[data-close-button=true]>svg]:text-emerald-600 dark:[&>[data-close-button=true]>svg]:text-emerald-500',
 					cancelButton: buttonVariants({
 						size: 'sm'
 					}),
