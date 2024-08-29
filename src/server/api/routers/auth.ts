@@ -22,9 +22,9 @@ export const authRouter = createTRPCRouter({
 			throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found.' })
 		}
 
+		const hashedPassword = await hash(newPassword, 10)
+
 		if (!existingUser.password) {
-			// If user doesn't have a password, add the new password directly
-			const hashedPassword = await hash(newPassword, 10)
 			await ctx.db.user.update({
 				where: { id: existingUser.id },
 				data: { password: hashedPassword }
@@ -37,7 +37,6 @@ export const authRouter = createTRPCRouter({
 			throw new TRPCError({ code: 'BAD_REQUEST', message: 'Incorrect current password.' })
 		}
 
-		const hashedPassword = await hash(newPassword, 10)
 		await ctx.db.user.update({
 			where: { id: existingUser.id },
 			data: { password: hashedPassword }
