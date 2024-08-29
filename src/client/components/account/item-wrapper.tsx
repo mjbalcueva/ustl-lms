@@ -19,7 +19,7 @@ ItemWrapper.displayName = 'ItemWrapper'
 
 export const ItemHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
 	({ className, ...props }, ref) => (
-		<div ref={ref} className={cn('flex flex-col space-y-1.5 p-4 pt-6 md:p-6', className)} {...props} />
+		<div ref={ref} className={cn('flex flex-col space-y-1.5 p-4 pt-6 md:px-6', className)} {...props} />
 	)
 )
 ItemHeader.displayName = 'ItemHeader'
@@ -38,10 +38,13 @@ export const ItemDescription = React.forwardRef<HTMLDivElement, React.HTMLAttrib
 )
 ItemDescription.displayName = 'ItemDescription'
 
-export const ItemContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-	({ className, children, ...props }, ref) => (
-		<div ref={ref} className={cn('p-4 pt-0 md:p-6 md:pt-0', className)} {...props}>
-			<Separator className="mb-4 md:mb-6" />
+type ItemContentProps = React.HTMLAttributes<HTMLDivElement> & {
+	withSeparator?: boolean
+}
+export const ItemContent = React.forwardRef<HTMLDivElement, ItemContentProps>(
+	({ className, children, withSeparator, ...props }, ref) => (
+		<div ref={ref} className={cn('p-4 pt-0 md:px-6 md:pt-0', className)} {...props}>
+			{withSeparator && <Separator className="mb-4" />}
 			{children}
 		</div>
 	)

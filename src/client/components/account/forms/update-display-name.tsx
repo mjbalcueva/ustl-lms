@@ -66,7 +66,9 @@ export const UpdateDisplayNameForm = () => {
 					</ItemContent>
 
 					<ItemFooter>
-						<div className="flex items-center text-sm text-muted-foreground">Please use 32 characters at maximum.</div>
+						<div className="flex items-center text-sm text-muted-foreground">
+							Your display name helps others recognize you
+						</div>
 						<Button className="ml-auto flex h-8 gap-1 text-sm" disabled={!form.formState.isDirty || isPending}>
 							{isPending && <Loader />}
 							{isPending ? 'Saving...' : 'Save'}

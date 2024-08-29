@@ -67,7 +67,7 @@ export const Toggle2FAForm = () => {
 
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)}>
-					<ItemContent>
+					<ItemContent withSeparator>
 						<ItemInnerCard>
 							<FormField
 								control={form.control}

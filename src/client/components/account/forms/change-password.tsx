@@ -44,6 +44,7 @@ export const ChangePasswordForm = () => {
 			toast.success(data.message)
 		},
 		onError: (error) => {
+			form.setValue('currentPassword', '')
 			toast.error(error.message)
 		}
 	})
@@ -59,7 +60,7 @@ export const ChangePasswordForm = () => {
 
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)}>
-					<ItemContent>
+					<ItemContent withSeparator>
 						<ItemInnerCard className="space-y-4 pb-4 md:pb-6">
 							<FormField
 								control={form.control}
@@ -124,11 +125,7 @@ export const ChangePasswordForm = () => {
 					</ItemContent>
 
 					<ItemFooter>
-						<div className="flex items-center text-sm text-muted-foreground">
-							{form.getValues().currentPassword
-								? 'Change your current password'
-								: 'Set a new password for your account'}
-						</div>
+						<div className="flex items-center text-sm text-muted-foreground">Used to log in to your account</div>
 						<Button className="ml-auto flex h-8 gap-1 text-sm" disabled={!form.formState.isDirty || isPending}>
 							{isPending && <Loader />}
 							{isPending ? 'Saving...' : 'Save'}
