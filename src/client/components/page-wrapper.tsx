@@ -14,7 +14,9 @@ export const PageWrapper = React.forwardRef<HTMLDivElement, React.HTMLAttributes
 PageWrapper.displayName = 'PageWrapper'
 
 export const PageContainer = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-	({ className, ...props }, ref) => <div ref={ref} className={cn('mx-auto w-full max-w-2xl', className)} {...props} />
+	({ className, ...props }, ref) => (
+		<div ref={ref} className={cn('mx-auto w-full max-w-2xl 2xl:max-w-3xl', className)} {...props} />
+	)
 )
 PageContainer.displayName = 'PageContainer'
 

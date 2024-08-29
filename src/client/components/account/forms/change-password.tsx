@@ -60,7 +60,7 @@ export const ChangePasswordForm = () => {
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)}>
 					<ItemContent>
-						<ItemInnerCard className="space-y-4 pb-4">
+						<ItemInnerCard className="space-y-4 pb-4 md:pb-6">
 							<FormField
 								control={form.control}
 								name="currentPassword"

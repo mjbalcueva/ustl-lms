@@ -19,7 +19,7 @@ ItemWrapper.displayName = 'ItemWrapper'
 
 export const ItemHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
 	({ className, ...props }, ref) => (
-		<div ref={ref} className={cn('flex flex-col space-y-1.5 p-4 pt-6', className)} {...props} />
+		<div ref={ref} className={cn('flex flex-col space-y-1.5 p-4 pt-6 md:p-6', className)} {...props} />
 	)
 )
 ItemHeader.displayName = 'ItemHeader'
@@ -40,8 +40,8 @@ ItemDescription.displayName = 'ItemDescription'
 
 export const ItemContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
 	({ className, children, ...props }, ref) => (
-		<div ref={ref} className={cn('p-4 pt-0', className)} {...props}>
-			<Separator className="mb-4" />
+		<div ref={ref} className={cn('p-4 pt-0 md:p-6 md:pt-0', className)} {...props}>
+			<Separator className="mb-4 md:mb-6" />
 			{children}
 		</div>
 	)
@@ -50,7 +50,7 @@ ItemContent.displayName = 'ItemContent'
 
 export const ItemInnerCard = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
 	({ className, ...props }, ref) => (
-		<div ref={ref} className={cn('rounded-lg border px-4 py-2', className)} {...props} />
+		<div ref={ref} className={cn('rounded-lg border px-4 py-2 md:py-3', className)} {...props} />
 	)
 )
 ItemInnerCard.displayName = 'ItemInnerCard'
@@ -59,7 +59,7 @@ export const ItemFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<
 	({ className, ...props }, ref) => (
 		<>
 			<Separator className="h-[0.5px]" />
-			<div ref={ref} className={cn('flex items-center px-4 py-2.5', className)} {...props} />
+			<div ref={ref} className={cn('flex items-center px-4 py-2.5 md:px-6 md:py-3', className)} {...props} />
 		</>
 	)
 )
