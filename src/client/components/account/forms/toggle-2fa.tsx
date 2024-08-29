@@ -79,7 +79,7 @@ export const Toggle2FAForm = () => {
 											<FormDescription>Adds an extra layer of security</FormDescription>
 										</div>
 										<FormControl>
-											<Switch checked={field.value} onCheckedChange={field.onChange} />
+											<Switch checked={field.value} onCheckedChange={field.onChange} aria-autocomplete="none" />
 										</FormControl>
 									</FormItem>
 								)}
@@ -88,12 +88,6 @@ export const Toggle2FAForm = () => {
 					</ItemContent>
 
 					<ItemFooter>
-						{/* {form.watch('twoFactorEnabled') && (
-							<div className="flex items-center text-sm text-muted-foreground">
-								<TbShieldCheckFilled className="mr-2 h-4 w-4" />
-								2FA is currently enabled
-							</div>
-						)} */}
 						<div className="flex items-center text-sm text-muted-foreground">
 							{form.watch('twoFactorEnabled') ? (
 								<>
