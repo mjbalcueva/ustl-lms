@@ -15,9 +15,8 @@ import { generatePasswordResetToken, generateVerificationToken } from '@/server/
 export const authRouter = createTRPCRouter({
 	updatePassword: protectedProcedure.input(updatePasswordSchema).mutation(async ({ ctx, input }) => {
 		const { currentPassword, newPassword } = input
-		const { user } = ctx.session
 
-		const existingUser = await ctx.db.user.findUnique({ where: { id: user.id } })
+		const existingUser = await ctx.db.user.findUnique({ where: { id: ctx.session.user.id } })
 		if (!existingUser) {
 			throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found.' })
 		}
@@ -29,7 +28,7 @@ export const authRouter = createTRPCRouter({
 				where: { id: existingUser.id },
 				data: { password: hashedPassword }
 			})
-			return { message: 'Password updated!' }
+			return { message: 'Password created!' }
 		}
 
 		const isPasswordCorrect = await compare(currentPassword, existingUser.password)
