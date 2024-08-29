@@ -1,4 +1,4 @@
-## Roadmap (37/124)
+## Roadmap (38/124)
 
 ### Design (20/20)
 
@@ -40,10 +40,10 @@
   - [x] Email verification
   - [x] Two-factor authentication (2FA)
 
-### User Management (3/9)
+### User Management (4/9)
 
 - [ ] Profile
-  - [ ] Change name
+  - [x] Change name
   - [ ] Add pronouns
   - [ ] Change picture
   - [ ] Add bio
