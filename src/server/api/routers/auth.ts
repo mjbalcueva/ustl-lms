@@ -131,6 +131,8 @@ export const authRouter = createTRPCRouter({
 			where: { id: user.id },
 			data: { isTwoFactorEnabled: twoFactorEnabled }
 		})
+
+		return { message: 'Two-factor authentication updated!' }
 	}),
 
 	verifyEmail: publicProcedure.input(verifyEmailSchema).mutation(async ({ ctx, input }) => {

@@ -3,7 +3,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSession } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
-import { TbShieldCheckFilled } from 'react-icons/tb'
+import { TbShieldCheckFilled, TbShieldX } from 'react-icons/tb'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
 import { api } from '@/shared/trpc/react'
@@ -46,10 +47,15 @@ export const Toggle2FAForm = () => {
 	})
 
 	const { mutate, isPending } = api.auth.toggle2FA.useMutation({
-		onSuccess: () => {
+		onSuccess: (data) => {
 			form.reset(form.getValues())
+			toast.success(data.message)
+		},
+		onError: (error) => {
+			toast.error(error.message)
 		}
 	})
+
 	const onSubmit = (data: TwoFactorFormValues) => mutate(data)
 
 	return (
@@ -82,12 +88,25 @@ export const Toggle2FAForm = () => {
 					</ItemContent>
 
 					<ItemFooter>
-						{form.watch('twoFactorEnabled') && (
+						{/* {form.watch('twoFactorEnabled') && (
 							<div className="flex items-center text-sm text-muted-foreground">
 								<TbShieldCheckFilled className="mr-2 h-4 w-4" />
 								2FA is currently enabled
 							</div>
-						)}
+						)} */}
+						<div className="flex items-center text-sm text-muted-foreground">
+							{form.watch('twoFactorEnabled') ? (
+								<>
+									<TbShieldCheckFilled className="mr-2 h-4 w-4" />
+									2FA is currently enabled
+								</>
+							) : (
+								<>
+									<TbShieldX className="mr-2 h-4 w-4" />
+									2FA is currently disabled
+								</>
+							)}
+						</div>
 						<Button className="ml-auto h-8 gap-1 text-sm" disabled={!form.formState.isDirty || isPending}>
 							{isPending && <Loader />}
 							{isPending ? 'Saving...' : 'Save'}
