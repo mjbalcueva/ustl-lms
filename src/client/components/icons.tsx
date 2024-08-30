@@ -16,7 +16,6 @@ import {
 	TbMoonStars,
 	TbPaint,
 	TbSchool,
-	TbSelector,
 	TbSettings2,
 	TbSunHigh,
 	TbUser
@@ -27,7 +26,6 @@ export const Icons = {
 	circleCheckFilled: TbCircleCheck,
 	circleInfoFilled: TbInfoCircle,
 	dashboard: TbLayoutDashboard,
-	dropdown: TbSelector,
 	google: FcGoogle,
 	learning: TbSchool,
 	loader: TbLoader,

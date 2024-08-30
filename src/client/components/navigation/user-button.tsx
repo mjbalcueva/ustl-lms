@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { type Session } from 'next-auth'
 import { signOut } from 'next-auth/react'
+import { TbSelector } from 'react-icons/tb'
 import { useMediaQuery } from 'usehooks-ts'
 
 import { Icons } from '@/client/components/icons'
@@ -63,7 +64,7 @@ export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }: Use
 							<span className="max-w-full truncate text-xs text-muted-foreground">{strippedEmail}</span>
 						</div>
 						<div className="relative right-0.5 rounded-md p-1">
-							<Icons.dropdown className="h-4 w-4 text-muted-foreground/80" />
+							<TbSelector className="h-4 w-4 text-muted-foreground/80" />
 						</div>
 					</motion.div>
 				)}
