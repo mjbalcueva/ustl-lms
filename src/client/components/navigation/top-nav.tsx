@@ -44,7 +44,7 @@ export const TopNav = ({ className, session, ...props }: NavProps) => {
 				}}
 				animate={{
 					y: showNav ? 0 : -100,
-					opacity: showNav ? 1 : 0
+					opacity: 1
 				}}
 				className={cn(
 					'sticky top-0 z-10 flex h-14 items-center justify-between border-b border-border px-2 backdrop-blur-xl sm:px-4 md:hidden',
