@@ -12,7 +12,6 @@ import {
 	ItemDescription,
 	ItemFooter,
 	ItemHeader,
-	ItemInnerCard,
 	ItemTitle,
 	ItemWrapper
 } from '@/client/components/account/item-wrapper'
@@ -60,68 +59,66 @@ export const ChangePasswordForm = () => {
 
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)}>
-					<ItemContent withSeparator>
-						<ItemInnerCard className="space-y-4 pb-4 md:pb-6">
-							<FormField
-								control={form.control}
-								name="currentPassword"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel className="text-card-foreground">Current Password</FormLabel>
-										<FormControl>
-											<PasswordInput
-												className="rounded-xl"
-												parentClassName="sm:w-3/5"
-												placeholder="Enter current password"
-												autoComplete="current-password"
-												{...field}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
+					<ItemContent className="space-y-4 pb-4 md:pb-6" withSeparator>
+						<FormField
+							control={form.control}
+							name="currentPassword"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel className="text-card-foreground">Current Password</FormLabel>
+									<FormControl>
+										<PasswordInput
+											className="rounded-xl"
+											parentClassName="sm:w-3/5"
+											placeholder="Enter current password"
+											autoComplete="current-password"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 
-							<FormField
-								control={form.control}
-								name="newPassword"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel className="text-card-foreground">New Password</FormLabel>
-										<FormControl>
-											<PasswordInput
-												className="rounded-xl"
-												parentClassName="sm:w-3/5"
-												placeholder="Enter new password"
-												autoComplete="new-password"
-												{...field}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
+						<FormField
+							control={form.control}
+							name="newPassword"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel className="text-card-foreground">New Password</FormLabel>
+									<FormControl>
+										<PasswordInput
+											className="rounded-xl"
+											parentClassName="sm:w-3/5"
+											placeholder="Enter new password"
+											autoComplete="new-password"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 
-							<FormField
-								control={form.control}
-								name="confirmPassword"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel className="text-card-foreground">Confirm New Password</FormLabel>
-										<FormControl>
-											<PasswordInput
-												className="rounded-xl"
-												parentClassName="sm:w-3/5"
-												placeholder="Confirm new password"
-												autoComplete="new-password"
-												{...field}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-						</ItemInnerCard>
+						<FormField
+							control={form.control}
+							name="confirmPassword"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel className="text-card-foreground">Confirm New Password</FormLabel>
+									<FormControl>
+										<PasswordInput
+											className="rounded-xl"
+											parentClassName="sm:w-3/5"
+											placeholder="Confirm new password"
+											autoComplete="new-password"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 					</ItemContent>
 
 					<ItemFooter>
