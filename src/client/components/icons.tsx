@@ -21,11 +21,12 @@ import {
 export const Icons = {
 	logo: TbDiamond,
 
-	// navlinks
-	dashboard: TbLayoutDashboard,
-	learning: TbSchool,
-	reports: TbChartHistogram,
-	chat: TbMessage,
+	navlinks: {
+		dashboard: TbLayoutDashboard,
+		learning: TbSchool,
+		reports: TbChartHistogram,
+		chat: TbMessage
+	},
 
 	// account settings
 	profile: TbUser,

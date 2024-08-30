@@ -19,7 +19,7 @@ type NavLinkComponentProps = {
 export const NavLinkComponent = forwardRef<HTMLAnchorElement, NavLinkComponentProps>(
 	({ link, isLogo, className, ...props }, ref) => {
 		const { isNavOpen, canNavOpen } = useNav()
-		const Icon = Icons[link.icon]
+		const Icon = Icons[link.icon] as React.ComponentType<React.SVGProps<SVGSVGElement>>
 
 		return (
 			<Link
