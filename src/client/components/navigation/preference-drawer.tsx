@@ -39,7 +39,7 @@ export const PreferenceDrawer = () => {
 								size={'xs'}
 								onClick={() => handleModeChange('light')}
 							>
-								<Icons.lightMode className="mr-2 h-4 w-4 shrink-0" />
+								<Icons.mode.light className="mr-2 h-4 w-4 shrink-0" />
 								<span className="text-xs">Light</span>
 							</Button>
 							<Button
@@ -48,7 +48,7 @@ export const PreferenceDrawer = () => {
 								size={'xs'}
 								onClick={() => handleModeChange('dark')}
 							>
-								<Icons.darkMode className="mr-2 h-4 w-4 shrink-0" />
+								<Icons.mode.dark className="mr-2 h-4 w-4 shrink-0" />
 								<span className="text-xs">Dark</span>
 							</Button>
 						</div>

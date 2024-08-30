@@ -35,9 +35,10 @@ export const Icons = {
 		logout: TbLogout
 	},
 
-	// theme
-	lightMode: TbSunHigh,
-	darkMode: TbMoonStars,
+	mode: {
+		light: TbSunHigh,
+		dark: TbMoonStars
+	},
 
 	// nav
 	sidebarOpen: TbLayoutSidebar,
