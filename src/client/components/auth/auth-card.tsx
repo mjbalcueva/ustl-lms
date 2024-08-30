@@ -1,13 +1,17 @@
+import Link from 'next/link'
 import * as React from 'react'
 
-import { Separator } from '@/client/components/ui'
+import { buttonVariants, Separator } from '@/client/components/ui'
 import { cn } from '@/client/lib/utils'
 
 export const AuthCard = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
 	({ className, ...props }, ref) => (
 		<div
 			ref={ref}
-			className={cn('w-[400px] rounded-lg border-2 border-border bg-card text-card-foreground shadow-md', className)}
+			className={cn(
+				'w-[400px] overflow-auto rounded-lg border-2 border-border bg-card text-card-foreground shadow-md',
+				className
+			)}
 			{...props}
 		/>
 	)
@@ -58,11 +62,17 @@ AuthCardSeparator.displayName = 'AuthCardSeparator'
 
 export const AuthCardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
 	({ className, ...props }, ref) => (
-		<div
-			ref={ref}
-			className={cn('flex items-center justify-between p-6 pb-4 pt-0 font-normal', className)}
-			{...props}
-		/>
+		<div ref={ref} className={cn('flex space-x-3 p-6 pb-4 pt-0 font-normal', className)} {...props} />
 	)
 )
 AuthCardFooter.displayName = 'AuthCardFooter'
+
+export const AuthCardLink = React.forwardRef<
+	HTMLAnchorElement,
+	React.ComponentPropsWithoutRef<typeof Link> & { label: string }
+>(({ className, label, ...props }, ref) => (
+	<Link ref={ref} className={cn(buttonVariants({ variant: 'link', size: 'link' }), className)} {...props}>
+		{label}
+	</Link>
+))
+AuthCardLink.displayName = 'AuthCardLink'
