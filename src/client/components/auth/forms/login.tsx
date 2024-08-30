@@ -9,7 +9,6 @@ import { loginSchema, type LoginSchema } from '@/shared/validations/login'
 
 import { login } from '@/server/actions/login'
 
-import { CardWrapper } from '@/client/components/auth/card-wrapper'
 import { FormResponse } from '@/client/components/auth/form-response'
 import { Loader } from '@/client/components/loader'
 import {
@@ -64,99 +63,91 @@ export const LoginForm = () => {
 	}
 
 	return (
-		<CardWrapper
-			title="Welcome Back, Thomasian!"
-			description="Login to your account to continue."
-			backButtonLabel="Don't have an account?"
-			backButtonHref="/auth/register"
-			showSocial
-		>
-			<Form {...form}>
-				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-					{showTwoFactor ? (
+		<Form {...form}>
+			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+				{showTwoFactor ? (
+					<FormField
+						control={form.control}
+						name="code"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel className="text-card-foreground">Two Factor Code</FormLabel>
+								<FormControl>
+									<InputOTP maxLength={6} {...field}>
+										<InputOTPGroup>
+											<InputOTPSlot index={0} className="bg-background" />
+											<InputOTPSlot index={1} className="bg-background" />
+											<InputOTPSlot index={2} className="bg-background" />
+											<InputOTPSlot index={3} className="bg-background" />
+											<InputOTPSlot index={4} className="bg-background" />
+											<InputOTPSlot index={5} className="bg-background" />
+										</InputOTPGroup>
+									</InputOTP>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+				) : (
+					<>
 						<FormField
 							control={form.control}
-							name="code"
+							name="email"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel className="text-card-foreground">Two Factor Code</FormLabel>
+									<FormLabel className="text-card-foreground">Email Address</FormLabel>
 									<FormControl>
-										<InputOTP maxLength={6} {...field}>
-											<InputOTPGroup>
-												<InputOTPSlot index={0} className="bg-background" />
-												<InputOTPSlot index={1} className="bg-background" />
-												<InputOTPSlot index={2} className="bg-background" />
-												<InputOTPSlot index={3} className="bg-background" />
-												<InputOTPSlot index={4} className="bg-background" />
-												<InputOTPSlot index={5} className="bg-background" />
-											</InputOTPGroup>
-										</InputOTP>
+										<Input
+											placeholder="Enter your email"
+											className="rounded-xl bg-background"
+											type="email"
+											autoComplete="email"
+											{...field}
+										/>
 									</FormControl>
 									<FormMessage />
 								</FormItem>
 							)}
 						/>
-					) : (
-						<>
-							<FormField
-								control={form.control}
-								name="email"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel className="text-card-foreground">Email Address</FormLabel>
-										<FormControl>
-											<Input
-												placeholder="Enter your email"
-												className="rounded-xl bg-background"
-												type="email"
-												autoComplete="email"
-												{...field}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={form.control}
-								name="password"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel className="text-card-foreground">Password</FormLabel>
-										<FormControl>
-											<PasswordInput placeholder="Password" className="rounded-xl bg-background" {...field} />
-										</FormControl>
-										<FormMessage />
-										<div className="flex justify-end">
-											<Link
-												className={cn(
-													buttonVariants({ variant: 'link', size: 'xs' }),
-													'p-0 text-xs font-normal text-card-foreground'
-												)}
-												href="/auth/forgot-password"
-											>
-												Forgot password?
-											</Link>
-										</div>
-									</FormItem>
-								)}
-							/>
-						</>
+						<FormField
+							control={form.control}
+							name="password"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel className="text-card-foreground">Password</FormLabel>
+									<FormControl>
+										<PasswordInput placeholder="Password" className="rounded-xl bg-background" {...field} />
+									</FormControl>
+									<FormMessage />
+									<div className="flex justify-end">
+										<Link
+											className={cn(
+												buttonVariants({ variant: 'link', size: 'xs' }),
+												'p-0 text-xs font-normal text-card-foreground'
+											)}
+											href="/auth/forgot-password"
+										>
+											Forgot password?
+										</Link>
+									</div>
+								</FormItem>
+							)}
+						/>
+					</>
+				)}
+
+				<FormResponse type="error" message={formError} />
+				<FormResponse type="success" message={formSuccess} />
+
+				<ButtonShining className="w-full rounded-xl" shiningClassName="bg-white/20" disabled={isPending}>
+					{isPending && (
+						<span className={cn('relative', showTwoFactor ? 'right-[4ch]' : 'right-[3.4ch]')}>
+							<Loader />
+						</span>
 					)}
-
-					<FormResponse type="error" message={formError} />
-					<FormResponse type="success" message={formSuccess} />
-
-					<ButtonShining className="w-full rounded-xl" shiningClassName="bg-white/20" disabled={isPending}>
-						{isPending && (
-							<span className={cn('relative', showTwoFactor ? 'right-[4ch]' : 'right-[3.4ch]')}>
-								<Loader />
-							</span>
-						)}
-						<span className="absolute">{showTwoFactor ? 'Confirm' : 'Login'}</span>
-					</ButtonShining>
-				</form>
-			</Form>
-		</CardWrapper>
+					<span className="absolute">{showTwoFactor ? 'Confirm' : 'Login'}</span>
+				</ButtonShining>
+			</form>
+		</Form>
 	)
 }
