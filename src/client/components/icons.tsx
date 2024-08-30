@@ -19,21 +19,31 @@ import {
 } from 'react-icons/tb'
 
 export const Icons = {
-	chat: TbMessage,
-	circleCheckFilled: TbCircleCheck,
-	circleInfoFilled: TbInfoCircle,
+	logo: TbDiamond,
+
+	// navlinks
 	dashboard: TbLayoutDashboard,
 	learning: TbSchool,
-	logo: TbDiamond,
-	logout: TbLogout,
-	darkMode: TbMoonStars,
-	profile: TbUser,
 	reports: TbChartHistogram,
-	settings: TbSettings2,
-	sidebarClose: TbLayoutSidebarFilled,
-	sidebarOpen: TbLayoutSidebar,
-	lightMode: TbSunHigh,
+	chat: TbMessage,
+
+	// account settings
+	profile: TbUser,
 	preference: TbPaint,
+	settings: TbSettings2,
+	logout: TbLogout,
+
+	// theme
+	lightMode: TbSunHigh,
+	darkMode: TbMoonStars,
+
+	// nav
+	sidebarOpen: TbLayoutSidebar,
+	sidebarClose: TbLayoutSidebarFilled,
+
+	// variants
+	circleCheckFilled: TbCircleCheck,
+	circleInfoFilled: TbInfoCircle,
 	triangleAlertFilled: TbAlertTriangle,
 	triangleInfoFilled: TbInfoTriangle
 }
