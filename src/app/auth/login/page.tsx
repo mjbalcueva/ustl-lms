@@ -9,6 +9,7 @@ import {
 	AuthCardSeparator
 } from '@/client/components/auth/auth-card'
 import { LoginForm } from '@/client/components/auth/forms/login'
+import { OAuthButton } from '@/client/components/auth/oauth-button'
 
 export const metadata: Metadata = {
 	title: 'Log in to your account',
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
 		'Access your Thomasian account securely. Connect with our vibrant community, manage your profile, and explore exclusive features for University of Santo Tomas-Legazpi students.'
 }
 
-export default function Page() {
+export default function Page(searchParams: { callbackUrl: string }) {
 	return (
 		<AuthCard>
 			<AuthCardHeader
@@ -26,6 +27,7 @@ export default function Page() {
 			<AuthCardContent>
 				<LoginForm />
 				<AuthCardSeparator label="Or continue with" />
+				<OAuthButton provider="google" label="Continue with Google" callbackUrl={searchParams.callbackUrl} />
 			</AuthCardContent>
 			<AuthCardFooter>
 				<AuthCardLink href="/auth/register" label="Don't have an account?" />

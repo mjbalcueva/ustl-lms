@@ -1,6 +1,5 @@
 'use client'
 
-import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { signIn } from 'next-auth/react'
 
@@ -14,7 +13,8 @@ import { DEFAULT_LOGIN_REDIRECT } from '@/routes'
 type Provider = 'google'
 
 type OAuthButtonProps = React.ComponentProps<typeof ButtonShining> & {
-	text: string
+	callbackUrl?: string
+	label: string
 	provider: Provider
 }
 
@@ -22,11 +22,8 @@ const providerIcons: Record<Provider, React.ReactNode> = {
 	google: <Icons.google className="size-4" />
 }
 
-export const OAuthButton = ({ text, provider, className, ...props }: OAuthButtonProps) => {
+export const OAuthButton = ({ callbackUrl, label, provider, className, ...props }: OAuthButtonProps) => {
 	const [isLoading, setIsLoading] = useState(false)
-
-	const searchParams = useSearchParams()
-	const callbackUrl = searchParams.get('callbackUrl')
 
 	const handleClick = async () => {
 		setIsLoading(true)
@@ -45,7 +42,7 @@ export const OAuthButton = ({ text, provider, className, ...props }: OAuthButton
 			{...props}
 		>
 			<span className="mr-2">{isLoading ? <Loader /> : providerIcons[provider]}</span>
-			<span className="leading-none">{text}</span>
+			<span className="leading-none">{label}</span>
 		</ButtonShining>
 	)
 }
