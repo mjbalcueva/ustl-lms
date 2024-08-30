@@ -1,6 +1,12 @@
+import { type Metadata } from 'next'
 import Image from 'next/image'
 
 import { CardWrapper } from '@/client/components/auth/card-wrapper'
+
+export const metadata: Metadata = {
+	title: 'Authentication Error',
+	description: 'An error occurred during the authentication process. Please review the details and try again.'
+}
 
 type ErrorPageParam = 'Configuration' | 'AccessDenied' | 'Verification'
 
