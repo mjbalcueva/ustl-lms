@@ -34,7 +34,7 @@ export const PreferenceDropdown = ({ isMobile }: { isMobile: boolean }) => {
 								mode === 'light' && 'border-ring'
 							)}
 						>
-							<Icons.sun className="mr-2 h-4 w-4 shrink-0" />
+							<Icons.lightMode className="mr-2 h-4 w-4 shrink-0" />
 							<span className="text-xs">Light</span>
 						</DropdownMenuItem>
 						<DropdownMenuItem
@@ -45,7 +45,7 @@ export const PreferenceDropdown = ({ isMobile }: { isMobile: boolean }) => {
 								mode === 'dark' && 'border-ring'
 							)}
 						>
-							<Icons.moon className="mr-2 h-4 w-4 shrink-0" />
+							<Icons.darkMode className="mr-2 h-4 w-4 shrink-0" />
 							<span className="text-xs">Dark</span>
 						</DropdownMenuItem>
 					</div>
