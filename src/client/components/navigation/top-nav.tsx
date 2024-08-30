@@ -46,9 +46,6 @@ export const TopNav = ({ className, session, ...props }: NavProps) => {
 					y: showNav ? 0 : -100,
 					opacity: showNav ? 1 : 0
 				}}
-				transition={{
-					duration: 0.2
-				}}
 				className={cn(
 					'sticky top-0 z-[999] flex h-14 items-center justify-between border-b border-border px-2 backdrop-blur-xl sm:px-4 md:hidden',
 					className
