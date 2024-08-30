@@ -1,4 +1,3 @@
-import { FcGoogle } from 'react-icons/fc'
 import {
 	TbAlertTriangle,
 	TbChartHistogram,
@@ -26,7 +25,6 @@ export const Icons = {
 	circleCheckFilled: TbCircleCheck,
 	circleInfoFilled: TbInfoCircle,
 	dashboard: TbLayoutDashboard,
-	google: FcGoogle,
 	learning: TbSchool,
 	loader: TbLoader,
 	loader2: TbLoader2,

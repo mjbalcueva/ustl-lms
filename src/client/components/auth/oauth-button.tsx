@@ -2,8 +2,8 @@
 
 import { useState } from 'react'
 import { signIn } from 'next-auth/react'
+import { FcGoogle } from 'react-icons/fc'
 
-import { Icons } from '@/client/components/icons'
 import { Loader } from '@/client/components/loader'
 import { ButtonShining } from '@/client/components/ui'
 import { cn } from '@/client/lib/utils'
@@ -19,7 +19,7 @@ type OAuthButtonProps = React.ComponentProps<typeof ButtonShining> & {
 }
 
 const providerIcons: Record<Provider, React.ReactNode> = {
-	google: <Icons.google className="size-4" />
+	google: <FcGoogle className="size-4" />
 }
 
 export const OAuthButton = ({ callbackUrl, label, provider, className, ...props }: OAuthButtonProps) => {
