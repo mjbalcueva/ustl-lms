@@ -31,10 +31,10 @@ export function FormResponse({ type, message, className, ...props }: FormRespons
 
 	return (
 		<div className={cn(formResponseVariants({ type, className }))} {...props}>
-			<div className="flex items-end gap-2 text-sm leading-none">
+			<span className="flex items-end gap-2 text-sm leading-none">
 				{formResponseIcon[type ?? 'success']}
 				{message}
-			</div>
+			</span>
 		</div>
 	)
 }
