@@ -19,7 +19,7 @@ export const PreferenceDrawer = () => {
 	return (
 		<Drawer>
 			<DrawerTrigger className="flex w-full items-center rounded-md px-2 py-1.5 hover:bg-accent">
-				<Icons.theme className="mr-2 h-4 w-4" />
+				<Icons.preference className="mr-2 h-4 w-4" />
 				<span className="text-sm">Preferences</span>
 			</DrawerTrigger>
 

@@ -18,7 +18,7 @@ export const PreferenceDropdown = ({ isMobile }: { isMobile: boolean }) => {
 	return (
 		<DropdownMenuSub>
 			<DropdownMenuSubTrigger>
-				<Icons.theme className="mr-2 h-4 w-4" />
+				<Icons.preference className="mr-2 h-4 w-4" />
 				<span>Preferences</span>
 			</DropdownMenuSubTrigger>
 

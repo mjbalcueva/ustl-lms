@@ -33,7 +33,7 @@ export const Icons = {
 	sidebarClose: TbLayoutSidebarFilled,
 	sidebarOpen: TbLayoutSidebar,
 	lightMode: TbSunHigh,
-	theme: TbPaint,
+	preference: TbPaint,
 	triangleAlertFilled: TbAlertTriangle,
 	triangleInfoFilled: TbInfoTriangle
 }
