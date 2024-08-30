@@ -1,8 +1,8 @@
 import type { SVGProps } from 'react'
 import React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
+import { TbLoader, TbLoader2 } from 'react-icons/tb'
 
-import { Icons } from '@/client/components/icons'
 import { cn } from '@/client/lib/utils'
 
 const loaderStyles = cva('relative', {
@@ -213,11 +213,11 @@ const Dots = React.memo(({ className, ...props }: SVGProps<SVGSVGElement>) => (
 Dots.displayName = 'Dots'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const Ring = React.memo((props: any) => <Icons.loader {...props} />)
+const Ring = React.memo((props: any) => <TbLoader {...props} />)
 Ring.displayName = 'Ring'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const Spin = React.memo((props: any) => <Icons.loader2 {...props} />)
+const Spin = React.memo((props: any) => <TbLoader2 {...props} />)
 Spin.displayName = 'Spin'
 
 const Hot = React.memo(({ className, ...props }: SVGProps<SVGSVGElement>) => (
