@@ -1,7 +1,13 @@
 import { type Metadata } from 'next'
 import Image from 'next/image'
 
-import { CardWrapper } from '@/client/components/auth/card-wrapper'
+import {
+	AuthCard,
+	AuthCardContent,
+	AuthCardFooter,
+	AuthCardHeader,
+	AuthCardLink
+} from '@/client/components/auth/auth-card'
 
 export const metadata: Metadata = {
 	title: 'Authentication Error',
@@ -32,10 +38,16 @@ export default function Page({ searchParams }: { searchParams: { error: ErrorPag
 	}
 
 	return (
-		<CardWrapper title={title} description={description} backButtonHref="/auth/login" backButtonLabel="Back to login">
-			<div className="flex w-full items-center justify-center">
-				<Image src="/assets/error.svg" alt="Error" className="w-52" width={100} height={100} priority />
-			</div>
-		</CardWrapper>
+		<AuthCard>
+			<AuthCardHeader title={title} description={description} />
+			<AuthCardContent className="items-center justify-center">
+				<Image src="/assets/error.svg" alt="Error" width={200} height={200} priority />
+			</AuthCardContent>
+			<AuthCardFooter>
+				<AuthCardLink href="/auth/login" label="Back to login" />
+				<AuthCardLink href="/privacy" label="Privacy" className="!ml-auto" />
+				<AuthCardLink href="/terms" label="Terms" />
+			</AuthCardFooter>
+		</AuthCard>
 	)
 }
