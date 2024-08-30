@@ -25,7 +25,7 @@ export default function Page() {
 			/>
 			<AuthCardContent>
 				<LoginForm />
-				<AuthCardSeparator separatorText="Or continue with" />
+				<AuthCardSeparator label="Or continue with" />
 			</AuthCardContent>
 			<AuthCardFooter>
 				<AuthCardLink href="/auth/register" label="Don't have an account?" />

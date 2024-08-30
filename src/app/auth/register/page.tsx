@@ -22,7 +22,7 @@ export default function Page() {
 			<AuthCardHeader title="Welcome, Thomasian!" description="Join our community by creating your account." />
 			<AuthCardContent>
 				<RegisterForm />
-				<AuthCardSeparator separatorText="Or continue with" />
+				<AuthCardSeparator label="Or continue with" />
 			</AuthCardContent>
 			<AuthCardFooter>
 				<AuthCardLink href="/auth/login" label="Already have an account?" />
