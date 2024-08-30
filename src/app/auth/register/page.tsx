@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 		'Create your account to join the Thomasian community. Experience a seamless registration process and unlock exclusive features.'
 }
 
-export default function Page(searchParams: { callbackUrl: string }) {
+export default function Page({ searchParams }: { searchParams: { callbackUrl?: string } }) {
 	return (
 		<AuthCard>
 			<AuthCardHeader title="Welcome, Thomasian!" description="Join our community by creating your account." />

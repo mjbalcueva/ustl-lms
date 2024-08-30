@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 		'Access your Thomasian account securely. Connect with our vibrant community, manage your profile, and explore exclusive features for University of Santo Tomas-Legazpi students.'
 }
 
-export default function Page(searchParams: { callbackUrl: string }) {
+export default function LoginPage({ searchParams }: { searchParams: { callbackUrl?: string } }) {
 	return (
 		<AuthCard>
 			<AuthCardHeader
