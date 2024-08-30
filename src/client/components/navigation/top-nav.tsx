@@ -121,6 +121,7 @@ export const TopNav = ({ className, session, ...props }: NavProps) => {
 								delay: index * 0.05
 							}}
 							className="h-12 rounded-none border-b border-border md:rounded-md"
+							onClick={() => setNavOpen(false)}
 						/>
 					))}
 				</motion.aside>
