@@ -6,7 +6,10 @@ export const PageWrapper = React.forwardRef<HTMLDivElement, React.HTMLAttributes
 	({ className, ...props }, ref) => (
 		<div
 			ref={ref}
-			className={cn('flex-grow overflow-auto border-t border-border bg-background md:rounded-xl md:border', className)}
+			className={cn(
+				'flex-grow overflow-hidden border-t border-border bg-background md:rounded-xl md:border',
+				className
+			)}
 			{...props}
 		/>
 	)
