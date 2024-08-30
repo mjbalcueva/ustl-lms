@@ -1,3 +1,5 @@
+import { type Metadata } from 'next'
+
 import {
 	AuthCard,
 	AuthCardContent,
@@ -6,6 +8,12 @@ import {
 	AuthCardLink
 } from '@/client/components/auth/auth-card'
 import { ForgotPasswordForm } from '@/client/components/auth/forms/forgot-password'
+
+export const metadata: Metadata = {
+	title: 'Forgot Password | Account Recovery',
+	description:
+		'Securely reset your password. Enter your email address to receive instructions on how to regain access to your account.'
+}
 
 export default function Page() {
 	return (
