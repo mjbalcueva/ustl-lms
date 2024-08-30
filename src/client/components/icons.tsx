@@ -28,11 +28,12 @@ export const Icons = {
 		chat: TbMessage
 	},
 
-	// account settings
-	profile: TbUser,
-	preference: TbPaint,
-	settings: TbSettings2,
-	logout: TbLogout,
+	account: {
+		profile: TbUser,
+		preference: TbPaint,
+		settings: TbSettings2,
+		logout: TbLogout
+	},
 
 	// theme
 	lightMode: TbSunHigh,
