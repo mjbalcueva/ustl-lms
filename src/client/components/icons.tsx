@@ -38,9 +38,10 @@ export const Icons = {
 		dark: TbMoonStars
 	},
 
-	// variants
-	circleCheckFilled: TbCircleCheck,
-	circleInfoFilled: TbInfoCircle,
-	triangleAlertFilled: TbAlertTriangle,
-	triangleInfoFilled: TbInfoTriangle
+	status: {
+		success: TbCircleCheck,
+		info: TbInfoCircle,
+		warning: TbAlertTriangle,
+		error: TbInfoTriangle
+	}
 }

@@ -25,8 +25,8 @@ export function FormResponse({ type, message, className, ...props }: FormRespons
 	if (!message) return null
 
 	const formResponseIcon: Record<string, React.ReactNode> = {
-		success: <Icons.circleCheckFilled className="size-4 min-h-4 min-w-4" />,
-		error: <Icons.triangleAlertFilled className="size-4 min-h-4 min-w-4" />
+		success: <Icons.status.success className="size-4 min-h-4 min-w-4" />,
+		error: <Icons.status.error className="size-4 min-h-4 min-w-4" />
 	}
 
 	return (
