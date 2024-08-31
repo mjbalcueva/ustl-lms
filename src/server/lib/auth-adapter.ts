@@ -7,7 +7,7 @@ export function AuthAdapter(prisma: PrismaClient): Adapter {
 
 	return {
 		...adapter,
-		createUser: async (user: AdapterUser): Promise<AdapterUser> => {
+		createUser: async (user): Promise<AdapterUser> => {
 			const { id, profile, ...userData } = await prisma.user.create({
 				data: {
 					email: user.email,
