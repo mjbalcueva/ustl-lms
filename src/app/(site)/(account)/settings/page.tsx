@@ -1,5 +1,8 @@
-import { ChangePasswordForm } from '@/client/components/account/forms/change-password'
+import { auth } from '@/server/lib/auth'
+
+import { AddPasswordForm } from '@/client/components/account/forms/add-password'
 import { Toggle2FAForm } from '@/client/components/account/forms/toggle-2fa'
+import { UpdatePasswordForm } from '@/client/components/account/forms/update-password'
 import {
 	PageContainer,
 	PageContent,
@@ -9,7 +12,9 @@ import {
 	PageWrapper
 } from '@/client/components/page-wrapper'
 
-export default function Page() {
+export default async function Page() {
+	const session = await auth()
+
 	return (
 		<PageWrapper>
 			<PageContainer>
@@ -19,7 +24,7 @@ export default function Page() {
 				</PageHeader>
 				<PageContent className="space-y-4">
 					<Toggle2FAForm />
-					<ChangePasswordForm />
+					{session?.user.hasPassword ? <UpdatePasswordForm /> : <AddPasswordForm />}
 				</PageContent>
 			</PageContainer>
 		</PageWrapper>
