@@ -50,9 +50,11 @@ export const {
 			if (account?.provider !== 'credentials') return profile?.email?.endsWith('@ust-legazpi.edu.ph') ?? false
 
 			if (!user.id) return false
-			const existingUser = await getUserById(user.id)
 
-			if (!existingUser?.emailVerified) return false
+			const existingUser = await getUserById(user.id)
+			if (!existingUser) return false
+
+			if (!existingUser.emailVerified) return false
 
 			if (!existingUser.isTwoFactorEnabled) return true
 			const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(existingUser.id)
