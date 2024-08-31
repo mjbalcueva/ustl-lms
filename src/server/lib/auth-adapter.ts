@@ -23,11 +23,8 @@ export function AuthAdapter(prisma: PrismaClient): Adapter {
 				image: profile?.image
 			}
 		},
-
 		getUser: async (id) => prisma.user.findUnique({ where: { id } }) as Promise<AdapterUser>,
-
 		getUserByEmail: async (email) => prisma.user.findUnique({ where: { email } }) as Promise<AdapterUser>,
-
 		getUserByAccount: async (provider_providerAccountId) => {
 			const account = await prisma.account.findUnique({
 				where: { provider_providerAccountId },
@@ -35,11 +32,8 @@ export function AuthAdapter(prisma: PrismaClient): Adapter {
 			})
 			return account?.user as AdapterUser
 		},
-
 		updateUser: async ({ id, ...data }) => prisma.user.update({ where: { id }, data }) as Promise<AdapterUser>,
-
 		linkAccount: (data) => prisma.account.create({ data }) as unknown as AdapterAccount,
-
 		unlinkAccount: (provider_providerAccountId) =>
 			prisma.account.delete({ where: { provider_providerAccountId } }) as unknown as AdapterAccount
 	}
