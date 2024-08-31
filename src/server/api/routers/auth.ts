@@ -1,6 +1,7 @@
 import { TRPCError } from '@trpc/server'
 import { compare, hash } from 'bcryptjs'
 
+import { addPasswordSchema } from '@/shared/validations/add-password'
 import { forgotPasswordSchema } from '@/shared/validations/forgot-password'
 import { registerSchema } from '@/shared/validations/register'
 import { resetPasswordSchema } from '@/shared/validations/reset-password'
@@ -13,6 +14,31 @@ import { sendPasswordResetEmail, sendVerificationEmail } from '@/server/lib/mail
 import { generatePasswordResetToken, generateVerificationToken } from '@/server/lib/tokens'
 
 export const authRouter = createTRPCRouter({
+	addPassword: protectedProcedure.input(addPasswordSchema).mutation(async ({ ctx, input }) => {
+		const { password } = input
+
+		const existingUser = await ctx.db.user.findUnique({
+			where: { id: ctx.session.user.id },
+			select: { password: true }
+		})
+
+		if (existingUser?.password) {
+			throw new TRPCError({
+				code: 'BAD_REQUEST',
+				message: 'You already have a password. Refresh the page to see changes.'
+			})
+		}
+
+		const hashedPassword = await hash(password, 10)
+
+		await ctx.db.user.update({
+			where: { id: ctx.session.user.id },
+			data: { password: hashedPassword }
+		})
+
+		return { message: 'Password added successfully!' }
+	}),
+
 	updatePassword: protectedProcedure.input(updatePasswordSchema).mutation(async ({ ctx, input }) => {
 		const { currentPassword, newPassword } = input
 
