@@ -38,7 +38,7 @@ export const SideNav = ({ className, session, ...props }: NavProps) => {
 				isLogo
 			/>
 
-			<Separator className="bg-muted" />
+			<Separator />
 
 			<div className="flex flex-1 flex-col gap-2.5 rounded-lg">
 				{navLinks.map((link, index) => (
@@ -46,7 +46,7 @@ export const SideNav = ({ className, session, ...props }: NavProps) => {
 				))}
 			</div>
 
-			<Separator className="bg-muted" />
+			<Separator />
 
 			<UserButton
 				session={session}
