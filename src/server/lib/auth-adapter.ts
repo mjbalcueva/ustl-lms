@@ -1,13 +1,9 @@
 import { type Adapter, type AdapterUser } from '@auth/core/adapters'
-import { PrismaAdapter } from '@auth/prisma-adapter'
 import { type PrismaClient } from '@prisma/client'
 
 export function AuthAdapter(prisma: PrismaClient): Adapter {
-	const adapter = PrismaAdapter(prisma)
-
 	return {
-		...adapter,
-		createUser: async (user): Promise<AdapterUser> => {
+		createUser: async (user) => {
 			const { id, profile, ...userData } = await prisma.user.create({
 				data: {
 					email: user.email,
@@ -26,6 +22,14 @@ export function AuthAdapter(prisma: PrismaClient): Adapter {
 				emailVerified: userData.emailVerified,
 				image: profile?.image
 			}
+		},
+
+		getUserByAccount: async (provider_providerAccountId) => {
+			const account = await prisma.account.findUnique({
+				where: { provider_providerAccountId },
+				select: { user: true }
+			})
+			return account?.user as AdapterUser
 		}
 	}
 }
