@@ -1,5 +1,5 @@
-import { ChangePasswordForm } from '@/client/components/account/forms/change-password'
 import { Toggle2FAForm } from '@/client/components/account/forms/toggle-2fa'
+import { UpdatePasswordForm } from '@/client/components/account/forms/update-password'
 import {
 	PageContainer,
 	PageContent,
@@ -19,7 +19,7 @@ export default function Page() {
 				</PageHeader>
 				<PageContent className="space-y-4">
 					<Toggle2FAForm />
-					<ChangePasswordForm />
+					<UpdatePasswordForm />
 				</PageContent>
 			</PageContainer>
 		</PageWrapper>

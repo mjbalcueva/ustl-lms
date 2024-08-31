@@ -27,7 +27,7 @@ import {
 	PasswordInput
 } from '@/client/components/ui'
 
-export const ChangePasswordForm = () => {
+export const UpdatePasswordForm = () => {
 	const form = useForm<UpdatePasswordSchema>({
 		resolver: zodResolver(updatePasswordSchema),
 		defaultValues: {
@@ -53,8 +53,8 @@ export const ChangePasswordForm = () => {
 	return (
 		<ItemWrapper>
 			<ItemHeader>
-				<ItemTitle>Change Password</ItemTitle>
-				<ItemDescription>Change your password to secure your account</ItemDescription>
+				<ItemTitle>Update Password</ItemTitle>
+				<ItemDescription>Update your password to secure your account</ItemDescription>
 			</ItemHeader>
 
 			<Form {...form}>
