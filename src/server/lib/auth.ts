@@ -76,11 +76,11 @@ export const {
 		},
 
 		async session({ token, session }) {
-			const { sub: id, name, email, role, hasPassword, isTwoFactorEnabled } = token
+			const { sub: id, name, avatar, email, role, hasPassword, isTwoFactorEnabled } = token
 
 			return {
 				...session,
-				user: { id, name, email, role, hasPassword, isTwoFactorEnabled }
+				user: { id, name, avatar, email, role, hasPassword, isTwoFactorEnabled }
 			}
 		},
 
@@ -90,10 +90,11 @@ export const {
 			const existingUser = await getUserByIdWithAccountsAndProfile(token.sub)
 			if (!existingUser) return token
 
-			const { role, password, isTwoFactorEnabled } = existingUser
+			const { profile, role, password, isTwoFactorEnabled } = existingUser
 
 			return {
 				...token,
+				avatar: profile?.image,
 				role,
 				hasPassword: !!password,
 				isTwoFactorEnabled
