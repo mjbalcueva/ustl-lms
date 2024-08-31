@@ -24,12 +24,7 @@ export function AuthAdapter(prisma: PrismaClient): Adapter {
 			}
 		},
 
-		getUser: async (id) => {
-			const user = await prisma.user.findUnique({
-				where: { id }
-			})
-			return user as AdapterUser
-		},
+		getUser: async (id) => prisma.user.findUnique({ where: { id } }) as Promise<AdapterUser>,
 
 		getUserByEmail: async (email) => prisma.user.findUnique({ where: { email } }) as Promise<AdapterUser>,
 
