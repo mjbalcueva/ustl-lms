@@ -24,6 +24,13 @@ export function AuthAdapter(prisma: PrismaClient): Adapter {
 			}
 		},
 
+		getUser: async (id) => {
+			const user = await prisma.user.findUnique({
+				where: { id }
+			})
+			return user as AdapterUser
+		},
+
 		getUserByAccount: async (provider_providerAccountId) => {
 			const account = await prisma.account.findUnique({
 				where: { provider_providerAccountId },
