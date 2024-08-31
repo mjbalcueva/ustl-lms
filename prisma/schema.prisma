@@ -34,6 +34,8 @@ model Post {
 model Profile {
   id          String    @id @default(cuid())
   userId      String    @unique
+  name        String?
+  image       String?
   bio         String?
   dateOfBirth DateTime? @map("date_of_birth")
   gender      String?
@@ -52,10 +54,8 @@ enum UserRole {
 
 model User {
   id                    String                 @id @default(cuid())
-  name                  String?
   email                 String?                @unique
   emailVerified         DateTime?              @map("email_verified")
-  image                 String?
   password              String?
   isTwoFactorEnabled    Boolean                @default(false)
   role                  UserRole               @default(STUDENT)

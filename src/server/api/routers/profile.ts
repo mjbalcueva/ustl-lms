@@ -8,7 +8,7 @@ export const profileRouter = createTRPCRouter({
 
 		await ctx.db.user.update({
 			where: { id: ctx.session.user.id },
-			data: { name }
+			data: { profile: { update: { name } } }
 		})
 
 		return { message: 'Name updated!' }

@@ -1,11 +1,11 @@
-import { PrismaAdapter } from '@auth/prisma-adapter'
 import { type UserRole } from '@prisma/client'
 import NextAuth, { type DefaultSession } from 'next-auth'
 import { type DefaultJWT } from 'next-auth/jwt'
 
 import { getTwoFactorConfirmationByUserId } from '@/shared/data/two-factor-confirmation'
-import { getUserById, getUserByIdWithAccounts } from '@/shared/data/user'
+import { getUserById, getUserByIdWithAccountsAndProfile } from '@/shared/data/user'
 
+import { AuthAdapter } from '@/server/lib/auth-adapter'
 import authConfig from '@/server/lib/auth.config'
 import { db } from '@/server/lib/db'
 
@@ -41,7 +41,14 @@ export const {
 		async linkAccount({ user }) {
 			await db.user.update({
 				where: { id: user.id },
-				data: { emailVerified: new Date() }
+				data: {
+					emailVerified: new Date(),
+					profile: {
+						create: {
+							name: user.name
+						}
+					}
+				}
 			})
 		}
 	},
@@ -82,11 +89,12 @@ export const {
 		},
 		async jwt({ token }) {
 			if (!token.sub) return token
-			const existingUser = await getUserByIdWithAccounts(token.sub)
+
+			const existingUser = await getUserByIdWithAccountsAndProfile(token.sub)
 			if (!existingUser) return token
 
-			const { accounts, name, email, role, isTwoFactorEnabled } = existingUser
-			token.name = name
+			const { accounts, profile, email, role, isTwoFactorEnabled } = existingUser
+			token.name = profile?.name
 			token.email = email
 			token.role = role
 			token.isOAuth = !!accounts.length
@@ -95,7 +103,7 @@ export const {
 			return token
 		}
 	},
-	adapter: PrismaAdapter(db),
+	adapter: AuthAdapter(db),
 	session: { strategy: 'jwt' },
 	...authConfig
 })
