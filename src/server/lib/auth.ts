@@ -76,16 +76,12 @@ export const {
 		},
 
 		async session({ token, session }) {
-			const { sub, role, isTwoFactorEnabled, name, email, hasPassword } = token
-			if (sub) session.user.id = sub
-			if (role) session.user.role = role
+			const { sub: id, name, email, role, hasPassword, isTwoFactorEnabled } = token
 
-			session.user.name = name
-			session.user.email = email!
-			session.user.hasPassword = hasPassword!
-			session.user.isTwoFactorEnabled = isTwoFactorEnabled
-
-			return session
+			return {
+				...session,
+				user: { id, name, email, role, hasPassword, isTwoFactorEnabled }
+			}
 		},
 		async jwt({ token }) {
 			if (!token.sub) return token
@@ -93,14 +89,14 @@ export const {
 			const existingUser = await getUserByIdWithAccountsAndProfile(token.sub)
 			if (!existingUser) return token
 
-			const { profile, email, role, isTwoFactorEnabled, password } = existingUser
-			token.name = profile?.name
-			token.email = email
-			token.role = role
-			token.hasPassword = !!password
-			token.isTwoFactorEnabled = isTwoFactorEnabled
+			const { role, password, isTwoFactorEnabled } = existingUser
 
-			return token
+			return {
+				...token,
+				role,
+				hasPassword: !!password,
+				isTwoFactorEnabled
+			}
 		}
 	},
 	adapter: AuthAdapter(db),
