@@ -37,6 +37,7 @@ export const {
 		signIn: '/auth/login',
 		error: '/auth/error'
 	},
+
 	events: {
 		async linkAccount({ user }) {
 			await db.user.update({
@@ -44,14 +45,13 @@ export const {
 				data: {
 					emailVerified: new Date(),
 					profile: {
-						create: {
-							name: user.name
-						}
+						create: { name: user.name }
 					}
 				}
 			})
 		}
 	},
+
 	callbacks: {
 		async signIn({ account, profile, user }) {
 			if (account?.provider !== 'credentials') return profile?.email?.endsWith('@ust-legazpi.edu.ph') ?? false
@@ -83,6 +83,7 @@ export const {
 				user: { id, name, email, role, hasPassword, isTwoFactorEnabled }
 			}
 		},
+
 		async jwt({ token }) {
 			if (!token.sub) return token
 
@@ -99,7 +100,10 @@ export const {
 			}
 		}
 	},
+
 	adapter: AuthAdapter(db),
+
 	session: { strategy: 'jwt' },
+
 	...authConfig
 })
