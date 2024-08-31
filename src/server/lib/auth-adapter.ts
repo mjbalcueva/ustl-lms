@@ -33,6 +33,7 @@ export function AuthAdapter(prisma: PrismaClient): Adapter {
 			return account?.user as AdapterUser
 		},
 		updateUser: async ({ id, ...data }) => prisma.user.update({ where: { id }, data }) as Promise<AdapterUser>,
+		deleteUser: async (id) => prisma.user.delete({ where: { id } }) as Promise<AdapterUser>,
 		linkAccount: (data) => prisma.account.create({ data }) as unknown as AdapterAccount,
 		unlinkAccount: (provider_providerAccountId) =>
 			prisma.account.delete({ where: { provider_providerAccountId } }) as unknown as AdapterAccount
