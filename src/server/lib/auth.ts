@@ -14,7 +14,7 @@ declare module 'next-auth' {
 		user: {
 			role: UserRole
 			isTwoFactorEnabled: boolean
-			isOAuth: boolean
+			hasPassword: boolean
 		} & DefaultSession['user']
 	}
 }
@@ -23,7 +23,7 @@ declare module 'next-auth/jwt' {
 	interface JWT extends DefaultJWT {
 		role: UserRole
 		isTwoFactorEnabled: boolean
-		isOAuth: boolean
+		hasPassword: boolean
 	}
 }
 
@@ -76,13 +76,13 @@ export const {
 		},
 
 		async session({ token, session }) {
-			const { sub, role, isTwoFactorEnabled, name, email, isOAuth } = token
+			const { sub, role, isTwoFactorEnabled, name, email, hasPassword } = token
 			if (sub) session.user.id = sub
 			if (role) session.user.role = role
 
 			session.user.name = name
 			session.user.email = email!
-			session.user.isOAuth = isOAuth
+			session.user.hasPassword = hasPassword!
 			session.user.isTwoFactorEnabled = isTwoFactorEnabled
 
 			return session
@@ -93,11 +93,11 @@ export const {
 			const existingUser = await getUserByIdWithAccountsAndProfile(token.sub)
 			if (!existingUser) return token
 
-			const { accounts, profile, email, role, isTwoFactorEnabled } = existingUser
+			const { profile, email, role, isTwoFactorEnabled, password } = existingUser
 			token.name = profile?.name
 			token.email = email
 			token.role = role
-			token.isOAuth = !!accounts.length
+			token.hasPassword = !!password
 			token.isTwoFactorEnabled = isTwoFactorEnabled
 
 			return token
