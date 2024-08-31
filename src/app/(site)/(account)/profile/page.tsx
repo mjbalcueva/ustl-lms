@@ -7,7 +7,7 @@ export default function Page() {
 		<PageWrapper>
 			<PageContainer>
 				<PageHeader>
-					<CardTitle>Profile</CardTitle>
+					<CardTitle>Your Profile</CardTitle>
 					<CardDescription>Manage your Scholar profile</CardDescription>
 				</PageHeader>
 				<PageContent>
