@@ -20,9 +20,9 @@ export const getUserById = async (id: string) => {
 	}
 }
 
-export const getUserByIdWithAccounts = async (id: string) => {
+export const getUserByIdWithAccountsAndProfile = async (id: string) => {
 	try {
-		const user = await db.user.findUnique({ where: { id }, include: { accounts: true } })
+		const user = await db.user.findUnique({ where: { id }, include: { accounts: true, profile: true } })
 
 		return user
 	} catch {
