@@ -20,7 +20,7 @@ body,
 		--primary-foreground: 0 0% 98%;
 		--secondary: 240 4.8% 95.9%;
 		--secondary-foreground: 240 5.9% 10%;
-		--muted: 240 4.8% 95.9%;
+		--muted: 240 4.8% 90.9%;
 		--muted-foreground: 240 3.8% 46.1%;
 		--accent: 240 4.8% 95.9%;
 		--accent-foreground: 240 5.9% 10%;
@@ -48,7 +48,7 @@ body,
 		--primary-foreground: 60 0% 0%;
 		--secondary: 240 4% 15%;
 		--secondary-foreground: 60 5% 85%;
-		--muted: 240 5% 25%;
+		--muted: 240 5% 18%;
 		--muted-foreground: 234 10.31% 67.92%;
 		--accent: 240 0% 13%;
 		--accent-foreground: 60 0% 100%;
@@ -68,7 +68,7 @@ body,
 	[data-theme='light-ayu'] {
 		--background: 0 0% 97.5%;
 		--foreground: 20 14.3% 4.1%;
-		--muted: 60 4.8% 95.9%;
+		--muted: 60 4.8% 90.9%;
 		--muted-foreground: 25 5.3% 44.7%;
 		--popover: 0 0% 100%;
 		--popover-foreground: 20 14.3% 4.1%;
@@ -132,7 +132,7 @@ body,
 		--primary-foreground: 355.7 100% 97.3%;
 		--secondary: 240 4.8% 95.9%;
 		--secondary-foreground: 240 5.9% 10%;
-		--muted: 240 4.8% 95.9%;
+		--muted: 240 4.8% 90.9%;
 		--muted-foreground: 240 3.8% 46.1%;
 		--accent: 240 4.8% 95.9%;
 		--accent-foreground: 240 5.9% 10%;
@@ -188,7 +188,7 @@ body,
 		--primary-foreground: 355.7 100% 97.3%;
 		--secondary: 240 4.8% 95.9%;
 		--secondary-foreground: 240 5.9% 10%;
-		--muted: 240 4.8% 95.9%;
+		--muted: 240 4.8% 90.9%;
 		--muted-foreground: 240 3.8% 46.1%;
 		--accent: 240 4.8% 95.9%;
 		--accent-foreground: 240 5.9% 10%;
