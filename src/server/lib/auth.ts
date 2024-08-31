@@ -76,11 +76,17 @@ export const {
 		},
 
 		async session({ token, session }) {
-			const { sub: id, name, avatar, email, role, hasPassword, isTwoFactorEnabled } = token
-
 			return {
 				...session,
-				user: { id, name, avatar, email, role, hasPassword, isTwoFactorEnabled }
+				user: {
+					id: token.sub,
+					name: token.name,
+					image: token.image as string,
+					email: token.email,
+					role: token.role,
+					hasPassword: token.hasPassword,
+					isTwoFactorEnabled: token.isTwoFactorEnabled
+				}
 			}
 		},
 
@@ -90,15 +96,13 @@ export const {
 			const existingUser = await getUserByIdWithAccountsAndProfile(token.sub)
 			if (!existingUser) return token
 
-			const { profile, role, password, isTwoFactorEnabled } = existingUser
+			token.name = existingUser.profile?.name
+			token.image = existingUser.profile?.image
+			token.role = existingUser.role
+			token.hasPassword = !!existingUser.password
+			token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled
 
-			return {
-				...token,
-				avatar: profile?.image,
-				role,
-				hasPassword: !!password,
-				isTwoFactorEnabled
-			}
+			return token
 		}
 	},
 
