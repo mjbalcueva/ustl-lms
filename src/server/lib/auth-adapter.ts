@@ -4,7 +4,7 @@ import { type PrismaClient } from '@prisma/client'
 export function AuthAdapter(prisma: PrismaClient): Adapter {
 	return {
 		createUser: async (user) => {
-			const { id, profile, ...userData } = await prisma.user.create({
+			const { id, ...userData } = await prisma.user.create({
 				data: {
 					email: user.email,
 					emailVerified: user.emailVerified,
@@ -12,15 +12,12 @@ export function AuthAdapter(prisma: PrismaClient): Adapter {
 				},
 				include: { profile: true }
 			})
-
-			if (!id) throw new Error('User creation failed')
-
 			return {
 				id,
-				name: profile?.name,
+				name: userData.profile?.name,
 				email: userData.email!,
 				emailVerified: userData.emailVerified,
-				image: profile?.image
+				image: userData.profile?.image
 			}
 		},
 		getUser: (id) => prisma.user.findUnique({ where: { id } }) as Promise<AdapterUser>,
