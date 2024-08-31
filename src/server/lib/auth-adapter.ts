@@ -44,6 +44,8 @@ export function AuthAdapter(prisma: PrismaClient): Adapter {
 				select: { user: true }
 			})
 			return account?.user as AdapterUser
-		}
+		},
+
+		updateUser: async ({ id, ...data }) => prisma.user.update({ where: { id }, data }) as Promise<AdapterUser>
 	}
 }
