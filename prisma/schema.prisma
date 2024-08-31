@@ -57,8 +57,8 @@ model User {
   email                 String?                @unique
   emailVerified         DateTime?              @map("email_verified")
   password              String?
-  isTwoFactorEnabled    Boolean                @default(false)
   role                  UserRole               @default(STUDENT)
+  isTwoFactorEnabled    Boolean                @default(false)
   accounts              Account[]
   profile               Profile?
   verificationToken     VerificationToken[]
