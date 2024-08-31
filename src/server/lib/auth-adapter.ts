@@ -1,4 +1,4 @@
-import { type Adapter, type AdapterUser } from '@auth/core/adapters'
+import { type Adapter, type AdapterAccount, type AdapterUser } from '@auth/core/adapters'
 import { type PrismaClient } from '@prisma/client'
 
 export function AuthAdapter(prisma: PrismaClient): Adapter {
@@ -41,6 +41,11 @@ export function AuthAdapter(prisma: PrismaClient): Adapter {
 			return account?.user as AdapterUser
 		},
 
-		updateUser: async ({ id, ...data }) => prisma.user.update({ where: { id }, data }) as Promise<AdapterUser>
+		updateUser: async ({ id, ...data }) => prisma.user.update({ where: { id }, data }) as Promise<AdapterUser>,
+
+		linkAccount: (data) => prisma.account.create({ data }) as unknown as AdapterAccount,
+
+		unlinkAccount: (provider_providerAccountId) =>
+			prisma.account.delete({ where: { provider_providerAccountId } }) as unknown as AdapterAccount
 	}
 }
