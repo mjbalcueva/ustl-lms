@@ -4,7 +4,6 @@ import Link from 'next/link'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
 import { type Session } from 'next-auth'
-import { TbLayoutSidebar, TbLayoutSidebarFilled } from 'react-icons/tb'
 
 import { links } from '@/shared/config/links'
 
@@ -67,7 +66,7 @@ export const TopNav = ({ className, session, ...props }: NavProps) => {
 					className="outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
 					aria-label={isNavOpen ? 'Close navigation menu' : 'Open navigation menu'}
 				>
-					{isNavOpen ? <TbLayoutSidebarFilled className="h-6 w-6" /> : <TbLayoutSidebar className="h-6 w-6" />}
+					{isNavOpen ? <Icons.navbarClose className="h-6 w-6" /> : <Icons.navbarOpen className="h-6 w-6" />}
 				</Button>
 
 				<Link
