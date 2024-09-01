@@ -40,6 +40,7 @@ export const AddPasswordForm = () => {
 		onSuccess: (data) => {
 			form.reset()
 			toast.success(data.message)
+			window.location.reload()
 		},
 		onError: (error) => {
 			toast.error(error.message)

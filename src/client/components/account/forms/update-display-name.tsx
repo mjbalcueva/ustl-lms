@@ -33,6 +33,7 @@ export const UpdateDisplayNameForm = () => {
 		onSuccess: (data) => {
 			form.reset(form.getValues())
 			toast.success(data.message)
+			window.location.reload()
 		},
 		onError: (error) => {
 			toast.error(error.message)
