@@ -11,7 +11,7 @@ import { Separator } from '@/client/components/ui'
 import { useNav } from '@/client/lib/hooks/use-nav'
 import { cn } from '@/client/lib/utils'
 
-import { NavLinks, NavTitle, NavWrapper } from './nav-wrapper'
+import { NavItem, NavLinks, NavTitle, NavWrapper } from './nav-wrapper'
 
 type NavProps = React.ComponentProps<typeof motion.div> & {
 	session: Session
@@ -43,7 +43,15 @@ export const SideNav = ({ className, session, ...props }: NavProps) => {
 				<NavLinks links={links.instructor ?? []} />
 			</NavWrapper>
 
-			<Separator className="mt-auto" />
+			<NavItem
+				icon={isNavOpen ? 'navbarClose' : 'navbarOpen'}
+				label="Toggle Sidebar"
+				className="mt-auto"
+				onClick={() => setNavOpen(!isNavOpen)}
+				disableAnimation
+			/>
+
+			<Separator />
 
 			<UserButton
 				session={session}

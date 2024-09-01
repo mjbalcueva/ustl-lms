@@ -6,6 +6,8 @@ import {
 	TbInfoCircle,
 	TbInfoTriangle,
 	TbLayoutDashboard,
+	TbLayoutSidebar,
+	TbLayoutSidebarFilled,
 	TbLogout,
 	TbMessage,
 	TbMoonStars,
@@ -37,6 +39,10 @@ export const Icons = {
 	preference: TbPaint,
 	settings: TbSettings2,
 	logout: TbLogout,
+
+	// navbar
+	navbarOpen: TbLayoutSidebar,
+	navbarClose: TbLayoutSidebarFilled,
 
 	// mode
 	light: TbSunHigh,

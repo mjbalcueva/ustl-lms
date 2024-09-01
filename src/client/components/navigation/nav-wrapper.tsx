@@ -6,7 +6,9 @@ import { AnimatePresence, motion } from 'framer-motion'
 
 import { type Link } from '@/shared/types/navigation'
 
+import { Icons } from '@/client/components/icons'
 import { NavLinkItem } from '@/client/components/navigation/nav-link'
+import { useNav } from '@/client/lib/hooks/use-nav'
 import { cn } from '@/client/lib/utils'
 
 export const NavWrapper = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
@@ -43,6 +45,47 @@ export const NavTitle = forwardRef<HTMLDivElement, NavTitleProps>(({ title, isVi
 	)
 })
 NavTitle.displayName = 'NavTitle'
+
+type NavItemProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+	icon: keyof typeof Icons
+	label?: string
+	disableAnimation?: boolean
+}
+export const NavItem = forwardRef<HTMLButtonElement, NavItemProps>(
+	({ icon, label, disableAnimation, className, ...props }, ref) => {
+		const { isNavOpen, canNavOpen } = useNav()
+		const Icon = Icons[icon]
+
+		return (
+			<button
+				ref={ref}
+				className={cn(
+					'group/navigation flex items-center justify-start gap-3 rounded-md px-5 py-2 outline-none ring-offset-background hover:bg-accent/40 focus-visible:ring-2 focus-visible:ring-ring sm:px-7 md:px-3 md:hover:bg-accent',
+					className
+				)}
+				{...props}
+			>
+				<Icon className={cn('flex-shrink-0', 'h-5 w-5')} />
+
+				{label && (
+					<motion.span
+						animate={{
+							display: canNavOpen ? (isNavOpen ? 'inline-block' : 'none') : 'inline-block',
+							opacity: canNavOpen ? (isNavOpen ? 1 : 0) : 1
+						}}
+						className={cn(
+							'hidden whitespace-pre text-sm transition duration-150',
+							!disableAnimation && 'group-hover/navigation:translate-x-1.5'
+						)}
+					>
+						{label}
+					</motion.span>
+				)}
+			</button>
+		)
+	}
+)
+NavItem.displayName = 'NavItem'
 
 type NavLinksProps = React.HTMLAttributes<HTMLDivElement> & {
 	links: Link[]
