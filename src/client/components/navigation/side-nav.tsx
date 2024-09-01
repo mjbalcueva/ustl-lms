@@ -11,6 +11,8 @@ import { Separator } from '@/client/components/ui'
 import { useNav } from '@/client/lib/hooks/use-nav'
 import { cn } from '@/client/lib/utils'
 
+import { NavSection, NavSectionTitle } from './nav-section'
+
 type NavProps = React.ComponentProps<typeof motion.div> & {
 	session: Session
 }
@@ -20,7 +22,7 @@ export const SideNav = ({ className, session, ...props }: NavProps) => {
 
 	return (
 		<motion.nav
-			className={cn('flex h-full w-[60px] flex-shrink-0 flex-col gap-3 rounded-xl p-2 pb-4', className)}
+			className={cn('flex h-full w-[60px] flex-shrink-0 flex-col gap-4 rounded-xl p-2 pb-4', className)}
 			animate={{
 				width: canNavOpen ? (isNavOpen ? '240px' : '60px') : '240px'
 			}}
@@ -29,16 +31,21 @@ export const SideNav = ({ className, session, ...props }: NavProps) => {
 			{...props}
 		>
 			{links.site?.[0] && <NavLinkItem link={links.site?.[0]} isLogo />}
-
 			<Separator />
 
-			<div className="flex flex-1 flex-col gap-2.5 rounded-lg">
-				{links.home?.map((link, index) => <NavLinkItem key={index} link={link} />)}
-				<Separator />
-				{links.instructor?.map((link, index) => <NavLinkItem key={index} link={link} />)}
+			<div className="rounded-lg">
+				<NavSectionTitle title="Home" isVisible={isNavOpen || !canNavOpen} />
+				<NavSection>{links.home?.map((link, index) => <NavLinkItem key={index} link={link} />)}</NavSection>
 			</div>
 
 			<Separator />
+
+			<div className="rounded-lg">
+				<NavSectionTitle title="Instructor Resources" isVisible={isNavOpen || !canNavOpen} />
+				<NavSection>{links.instructor?.map((link, index) => <NavLinkItem key={index} link={link} />)}</NavSection>
+			</div>
+
+			<Separator className="mt-auto" />
 
 			<UserButton
 				session={session}
