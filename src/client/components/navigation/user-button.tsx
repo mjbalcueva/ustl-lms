@@ -46,7 +46,7 @@ export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }: Use
 
 	return (
 		<DropdownMenu modal={false} {...props}>
-			<DropdownMenuTrigger className="flex cursor-pointer items-center gap-3 rounded-md p-1 outline-none hover:bg-accent md:min-h-[2.8rem]">
+			<DropdownMenuTrigger className="flex cursor-pointer items-center gap-3 rounded-md p-1 outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring md:min-h-[2.8rem]">
 				<Avatar className="size-8 border border-border md:ml-[1.5px]">
 					<AvatarImage src={user?.image ?? ''} alt={initials} className="select-none" />
 					<AvatarFallback className="pointer-events-none select-none bg-muted">{initials}</AvatarFallback>
