@@ -11,7 +11,7 @@ import { Separator } from '@/client/components/ui'
 import { useNav } from '@/client/lib/hooks/use-nav'
 import { cn } from '@/client/lib/utils'
 
-import { NavSection, NavSectionTitle } from './nav-section'
+import { NavLinks, NavTitle, NavWrapper } from './nav-wrapper'
 
 type NavProps = React.ComponentProps<typeof motion.div> & {
 	session: Session
@@ -26,24 +26,22 @@ export const SideNav = ({ className, session, ...props }: NavProps) => {
 			animate={{
 				width: canNavOpen ? (isNavOpen ? '240px' : '60px') : '240px'
 			}}
-			onMouseEnter={() => setNavOpen(true)}
-			onMouseLeave={() => setNavOpen(false)}
 			{...props}
 		>
 			{links.site?.[0] && <NavLinkItem link={links.site?.[0]} isLogo />}
 			<Separator />
 
-			<div className="rounded-lg">
-				<NavSectionTitle title="Home" isVisible={isNavOpen || !canNavOpen} />
-				<NavSection>{links.home?.map((link, index) => <NavLinkItem key={index} link={link} />)}</NavSection>
-			</div>
+			<NavWrapper>
+				<NavTitle title="Home" isVisible={isNavOpen || !canNavOpen} />
+				<NavLinks links={links.home ?? []} />
+			</NavWrapper>
 
 			<Separator />
 
-			<div className="rounded-lg">
-				<NavSectionTitle title="Instructor Resources" isVisible={isNavOpen || !canNavOpen} />
-				<NavSection>{links.instructor?.map((link, index) => <NavLinkItem key={index} link={link} />)}</NavSection>
-			</div>
+			<NavWrapper>
+				<NavTitle title="Instructor Resources" isVisible={isNavOpen || !canNavOpen} />
+				<NavLinks links={links.instructor ?? []} />
+			</NavWrapper>
 
 			<Separator className="mt-auto" />
 
