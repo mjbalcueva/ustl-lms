@@ -72,10 +72,10 @@ export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }: Use
 
 			<DropdownMenuContent
 				className="w-56 shadow-none"
-				align={isNavOpen ? 'center' : 'end'}
+				align={'end'}
 				alignOffset={isMobile ? 0 : -10}
-				side={isNavOpen ? 'top' : isMobile ? 'bottom' : 'left'}
-				sideOffset={isNavOpen ? 25 : isMobile ? 15 : 13}
+				side={isMobile ? 'bottom' : 'left'}
+				sideOffset={isMobile ? 15 : 13}
 			>
 				{isMobile ? (
 					<DropdownMenuLabel>
