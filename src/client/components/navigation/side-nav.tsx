@@ -3,58 +3,57 @@
 import { motion } from 'framer-motion'
 import { type Session } from 'next-auth'
 
-import { navLinks } from '@/shared/config/links'
-import { siteConfig } from '@/shared/config/site'
+import { links } from '@/shared/config/links'
 
-import { NavLinkComponent } from '@/client/components/navigation/nav-link'
+import { NavLinkItem } from '@/client/components/navigation/nav-link'
 import { UserButton } from '@/client/components/navigation/user-button'
 import { Separator } from '@/client/components/ui'
 import { useNav } from '@/client/lib/hooks/use-nav'
 import { cn } from '@/client/lib/utils'
+
+import { NavItem, NavLinks, NavTitle, NavWrapper } from './nav-wrapper'
 
 type NavProps = React.ComponentProps<typeof motion.div> & {
 	session: Session
 }
 
 export const SideNav = ({ className, session, ...props }: NavProps) => {
-	const { isNavOpen, setNavOpen, canNavOpen, setCanNavOpen } = useNav()
+	const { isNavOpen, setNavOpen, canNavOpen } = useNav()
 
 	return (
 		<motion.nav
-			className={cn('flex h-full w-[60px] flex-shrink-0 flex-col gap-3 rounded-xl p-2 pb-4', className)}
+			className={cn('flex h-full w-[60px] flex-shrink-0 flex-col gap-4 rounded-xl p-2 pb-4', className)}
 			animate={{
 				width: canNavOpen ? (isNavOpen ? '240px' : '60px') : '240px'
 			}}
-			onMouseEnter={() => setNavOpen(true)}
-			onMouseLeave={() => setNavOpen(false)}
 			{...props}
 		>
-			<NavLinkComponent
-				link={{
-					label: siteConfig.title,
-					href: '/dashboard',
-					icon: 'logo'
-				}}
-				isLogo
+			{links.site?.[0] && <NavLinkItem link={links.site?.[0]} isLogo />}
+			<Separator />
+
+			<NavWrapper>
+				<NavTitle title="Home" isVisible={isNavOpen || !canNavOpen} />
+				<NavLinks links={links.home ?? []} />
+			</NavWrapper>
+
+			<Separator />
+
+			<NavWrapper>
+				<NavTitle title="Instructor Resources" isVisible={isNavOpen || !canNavOpen} />
+				<NavLinks links={links.instructor ?? []} />
+			</NavWrapper>
+
+			<NavItem
+				icon={isNavOpen ? 'navbarClose' : 'navbarOpen'}
+				label="Toggle Sidebar"
+				className="mt-auto"
+				onClick={() => setNavOpen(!isNavOpen)}
+				disableAnimation
 			/>
 
 			<Separator />
 
-			<div className="flex flex-1 flex-col gap-2.5 rounded-lg">
-				{navLinks.map((link, index) => (
-					<NavLinkComponent key={index} link={link} />
-				))}
-			</div>
-
-			<Separator />
-
-			<UserButton
-				session={session}
-				onOpenChange={(open) => {
-					setNavOpen(false)
-					setCanNavOpen(!open)
-				}}
-			/>
+			<UserButton session={session} />
 		</motion.nav>
 	)
 }

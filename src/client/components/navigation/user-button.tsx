@@ -46,7 +46,7 @@ export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }: Use
 
 	return (
 		<DropdownMenu modal={false} {...props}>
-			<DropdownMenuTrigger className="flex cursor-pointer items-center gap-3 rounded-md p-1 outline-none hover:bg-accent md:min-h-[2.8rem]">
+			<DropdownMenuTrigger className="flex cursor-pointer items-center gap-3 rounded-md p-1 outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring md:min-h-[2.8rem]">
 				<Avatar className="size-8 border border-border md:ml-[1.5px]">
 					<AvatarImage src={user?.image ?? ''} alt={initials} className="select-none" />
 					<AvatarFallback className="pointer-events-none select-none bg-muted">{initials}</AvatarFallback>
@@ -72,8 +72,10 @@ export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }: Use
 
 			<DropdownMenuContent
 				className="w-56 shadow-none"
-				align={isMobile ? 'end' : 'start'}
-				sideOffset={isMobile ? 13 : 25}
+				align={'end'}
+				alignOffset={isMobile ? 0 : -10}
+				side={isMobile ? 'bottom' : 'left'}
+				sideOffset={isMobile ? 15 : 13}
 			>
 				{isMobile ? (
 					<DropdownMenuLabel>
@@ -90,16 +92,16 @@ export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }: Use
 
 				<DropdownMenuItem asChild>
 					<Link href="/profile" className="cursor-pointer">
-						<Icons.account.profile className="mr-2 h-4 w-4" />
+						<Icons.profile className="mr-2 h-4 w-4" />
 						<span>Profile</span>
 					</Link>
 				</DropdownMenuItem>
 
-				{isTiny ? <PreferenceDrawer /> : <PreferenceDropdown isMobile={isMobile} />}
+				{isTiny ? <PreferenceDrawer /> : <PreferenceDropdown isMobile={isMobile} isNavOpen={isNavOpen} />}
 
 				<DropdownMenuItem asChild>
 					<Link href="/settings" className="cursor-pointer">
-						<Icons.account.settings className="mr-2 h-4 w-4" />
+						<Icons.settings className="mr-2 h-4 w-4" />
 						<span>Settings</span>
 					</Link>
 				</DropdownMenuItem>

@@ -6,42 +6,51 @@ import {
 	TbInfoCircle,
 	TbInfoTriangle,
 	TbLayoutDashboard,
+	TbLayoutSidebar,
+	TbLayoutSidebarFilled,
 	TbLogout,
 	TbMessage,
 	TbMoonStars,
 	TbPaint,
+	TbPresentationAnalytics,
 	TbSchool,
 	TbSettings2,
 	TbSunHigh,
+	TbTools,
 	TbUser
 } from 'react-icons/tb'
 
 export const Icons = {
+	// site
 	logo: TbDiamond,
 
-	navlinks: {
-		dashboard: TbLayoutDashboard,
-		learning: TbSchool,
-		reports: TbChartHistogram,
-		chat: TbMessage
-	},
+	// home
+	dashboard: TbLayoutDashboard,
+	learning: TbSchool,
+	reports: TbChartHistogram,
+	chat: TbMessage,
 
-	account: {
-		profile: TbUser,
-		preference: TbPaint,
-		settings: TbSettings2,
-		logout: TbLogout
-	},
+	// instructor
+	course: TbTools,
+	analytics: TbPresentationAnalytics,
 
-	mode: {
-		light: TbSunHigh,
-		dark: TbMoonStars
-	},
+	// account
+	profile: TbUser,
+	preference: TbPaint,
+	settings: TbSettings2,
+	logout: TbLogout,
 
-	status: {
-		success: TbCircleCheck,
-		info: TbInfoCircle,
-		warning: TbAlertTriangle,
-		error: TbInfoTriangle
-	}
+	// navbar
+	navbarOpen: TbLayoutSidebar,
+	navbarClose: TbLayoutSidebarFilled,
+
+	// mode
+	light: TbSunHigh,
+	dark: TbMoonStars,
+
+	// status
+	success: TbCircleCheck,
+	info: TbInfoCircle,
+	warning: TbAlertTriangle,
+	error: TbInfoTriangle
 }

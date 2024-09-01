@@ -2,7 +2,7 @@ import { UpdateDisplayNameForm } from '@/client/components/account/forms/update-
 import { PageContainer, PageContent, PageHeader, PageWrapper } from '@/client/components/page-wrapper'
 import { CardDescription, CardTitle } from '@/client/components/ui'
 
-export default function Page() {
+export default async function Page() {
 	return (
 		<PageWrapper>
 			<PageContainer>

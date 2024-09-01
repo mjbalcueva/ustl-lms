@@ -4,12 +4,11 @@ import Link from 'next/link'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
 import { type Session } from 'next-auth'
-import { TbLayoutSidebar, TbLayoutSidebarFilled } from 'react-icons/tb'
 
-import { navLinks } from '@/shared/config/links'
+import { links } from '@/shared/config/links'
 
 import { Icons } from '@/client/components/icons'
-import { NavLinkComponent } from '@/client/components/navigation/nav-link'
+import { NavLinkItem } from '@/client/components/navigation/nav-link'
 import { UserButton } from '@/client/components/navigation/user-button'
 import { Button } from '@/client/components/ui'
 import { useNav } from '@/client/lib/hooks/use-nav'
@@ -19,21 +18,25 @@ type NavProps = React.ComponentProps<typeof motion.div> & {
 	session: Session
 }
 export const TopNav = ({ className, session, ...props }: NavProps) => {
-	const MotionNavLink = useMemo(() => motion(NavLinkComponent), [])
 	const { isNavOpen, setNavOpen } = useNav()
 
 	const { scrollYProgress } = useScroll()
 	const [showNav, setShowNav] = useState(true)
 	const isUserButtonOpen = useRef(false)
+	const MotionNavLink = useMemo(() => motion(NavLinkItem), [])
+
+	const navLinks = useMemo(() => {
+		return [...(links.home ?? []), ...(links.instructor ?? [])]
+	}, [])
+
+	const toggleScroll = useCallback((disable: boolean) => {
+		document.getElementById('body')?.classList.toggle('overflow-hidden', disable)
+	}, [])
 
 	useMotionValueEvent(scrollYProgress, 'change', (current) => {
 		const previous = scrollYProgress.getPrevious()!
 		setShowNav(previous === 0 || current === 1 || previous > current || isUserButtonOpen.current)
 	})
-
-	const toggleScroll = useCallback((disable: boolean) => {
-		document.getElementById('body')?.classList.toggle('overflow-hidden', disable)
-	}, [])
 
 	return (
 		<AnimatePresence>
@@ -63,7 +66,7 @@ export const TopNav = ({ className, session, ...props }: NavProps) => {
 					className="outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
 					aria-label={isNavOpen ? 'Close navigation menu' : 'Open navigation menu'}
 				>
-					{isNavOpen ? <TbLayoutSidebarFilled className="h-6 w-6" /> : <TbLayoutSidebar className="h-6 w-6" />}
+					{isNavOpen ? <Icons.navbarClose className="h-6 w-6" /> : <Icons.navbarOpen className="h-6 w-6" />}
 				</Button>
 
 				<Link
@@ -97,7 +100,7 @@ export const TopNav = ({ className, session, ...props }: NavProps) => {
 					onAnimationEnd={() => setNavOpen(false)}
 					className="fixed top-14 z-10 h-full w-full overflow-auto bg-card/50 text-card-foreground backdrop-blur-xl md:hidden"
 				>
-					{navLinks.map((item, index) => (
+					{navLinks?.map((item, index) => (
 						<MotionNavLink
 							key={index}
 							link={item}
@@ -107,7 +110,7 @@ export const TopNav = ({ className, session, ...props }: NavProps) => {
 									opacity: 1
 								},
 								exit: {
-									y: '-100px',
+									y: -100,
 									opacity: 0
 								}
 							}}

@@ -41,6 +41,7 @@ export const UpdatePasswordForm = () => {
 		onSuccess: (data) => {
 			form.reset()
 			toast.success(data.message)
+			window.location.reload()
 		},
 		onError: (error) => {
 			form.setValue('currentPassword', '')

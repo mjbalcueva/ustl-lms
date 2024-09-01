@@ -4,7 +4,7 @@ import Link, { type LinkProps } from 'next/link'
 import { forwardRef } from 'react'
 import { motion } from 'framer-motion'
 
-import { type NavLink } from '@/shared/types/navigation'
+import { type Link as NavLink } from '@/shared/types/navigation'
 
 import { Icons } from '@/client/components/icons'
 import { useNav } from '@/client/lib/hooks/use-nav'
@@ -16,10 +16,10 @@ type NavLinkComponentProps = {
 	className?: string
 } & Omit<LinkProps, 'href'>
 
-export const NavLinkComponent = forwardRef<HTMLAnchorElement, NavLinkComponentProps>(
+export const NavLinkItem = forwardRef<HTMLAnchorElement, NavLinkComponentProps>(
 	({ link, isLogo, className, ...props }, ref) => {
 		const { isNavOpen, canNavOpen } = useNav()
-		const Icon = Icons.navlinks[link.icon as keyof typeof Icons.navlinks] || Icons.logo
+		const Icon = Icons[link.icon]
 
 		return (
 			<Link
@@ -52,4 +52,4 @@ export const NavLinkComponent = forwardRef<HTMLAnchorElement, NavLinkComponentPr
 		)
 	}
 )
-NavLinkComponent.displayName = 'NavLinkComponent'
+NavLinkItem.displayName = 'NavLinkComponent'

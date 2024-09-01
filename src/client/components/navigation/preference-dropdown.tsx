@@ -12,18 +12,22 @@ import {
 import { useUserTheme } from '@/client/lib/hooks/use-user-theme'
 import { cn } from '@/client/lib/utils'
 
-export const PreferenceDropdown = ({ isMobile }: { isMobile: boolean }) => {
+export const PreferenceDropdown = ({ isMobile, isNavOpen }: { isMobile: boolean; isNavOpen: boolean }) => {
 	const { theme, handleThemeChange, mode, handleModeChange, themeOptions } = useUserTheme()
 
 	return (
 		<DropdownMenuSub>
 			<DropdownMenuSubTrigger>
-				<Icons.account.preference className="mr-2 h-4 w-4" />
+				<Icons.preference className="mr-2 h-4 w-4" />
 				<span>Preferences</span>
 			</DropdownMenuSubTrigger>
 
 			<DropdownMenuPortal>
-				<DropdownMenuSubContent className="-mt-[2.3rem] w-64 py-2" sideOffset={isMobile ? 10 : 13}>
+				<DropdownMenuSubContent
+					className="w-64 py-2"
+					alignOffset={isMobile ? -38 : -78}
+					sideOffset={isNavOpen ? 18 : isMobile ? 10 : 9}
+				>
 					<DropdownMenuLabel className="pb-2 text-xs">Mode</DropdownMenuLabel>
 					<div className="flex gap-1.5 px-2 pb-1">
 						<DropdownMenuItem
@@ -34,7 +38,7 @@ export const PreferenceDropdown = ({ isMobile }: { isMobile: boolean }) => {
 								mode === 'light' && 'border-ring'
 							)}
 						>
-							<Icons.mode.light className="mr-2 h-4 w-4 shrink-0" />
+							<Icons.light className="mr-2 h-4 w-4 shrink-0" />
 							<span className="text-xs">Light</span>
 						</DropdownMenuItem>
 						<DropdownMenuItem
@@ -45,7 +49,7 @@ export const PreferenceDropdown = ({ isMobile }: { isMobile: boolean }) => {
 								mode === 'dark' && 'border-ring'
 							)}
 						>
-							<Icons.mode.dark className="mr-2 h-4 w-4 shrink-0" />
+							<Icons.dark className="mr-2 h-4 w-4 shrink-0" />
 							<span className="text-xs">Dark</span>
 						</DropdownMenuItem>
 					</div>

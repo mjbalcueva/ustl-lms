@@ -7,12 +7,12 @@ import { Icons } from '@/client/components/icons'
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@/client/components/ui'
 
 const crumbIcons: Record<string, React.ReactNode> = {
-	dashboard: <Icons.navlinks.dashboard className="size-4" />,
-	learning: <Icons.navlinks.learning className="size-4" />,
-	reports: <Icons.navlinks.reports className="size-4" />,
-	chat: <Icons.navlinks.chat className="size-4" />,
-	profile: <Icons.account.profile className="size-4" />,
-	settings: <Icons.account.settings className="size-4" />
+	dashboard: <Icons.dashboard className="size-4" />,
+	learning: <Icons.learning className="size-4" />,
+	reports: <Icons.reports className="size-4" />,
+	chat: <Icons.chat className="size-4" />,
+	profile: <Icons.profile className="size-4" />,
+	settings: <Icons.settings className="size-4" />
 }
 
 export const PageBreadcrumbs = () => {
