@@ -9,7 +9,7 @@ import { TbLayoutSidebar, TbLayoutSidebarFilled } from 'react-icons/tb'
 import { links } from '@/shared/config/links'
 
 import { Icons } from '@/client/components/icons'
-import { NavLinkComponent } from '@/client/components/navigation/nav-link'
+import { NavLinkItem } from '@/client/components/navigation/nav-link'
 import { UserButton } from '@/client/components/navigation/user-button'
 import { Button } from '@/client/components/ui'
 import { useNav } from '@/client/lib/hooks/use-nav'
@@ -24,7 +24,7 @@ export const TopNav = ({ className, session, ...props }: NavProps) => {
 	const { scrollYProgress } = useScroll()
 	const [showNav, setShowNav] = useState(true)
 	const isUserButtonOpen = useRef(false)
-	const MotionNavLink = useMemo(() => motion(NavLinkComponent), [])
+	const MotionNavLink = useMemo(() => motion(NavLinkItem), [])
 
 	const navLinks = useMemo(() => {
 		return [...(links.home ?? []), ...(links.instructor ?? [])]

@@ -5,7 +5,7 @@ import { type Session } from 'next-auth'
 
 import { links } from '@/shared/config/links'
 
-import { NavLinkComponent } from '@/client/components/navigation/nav-link'
+import { NavLinkItem } from '@/client/components/navigation/nav-link'
 import { UserButton } from '@/client/components/navigation/user-button'
 import { Separator } from '@/client/components/ui'
 import { useNav } from '@/client/lib/hooks/use-nav'
@@ -28,13 +28,14 @@ export const SideNav = ({ className, session, ...props }: NavProps) => {
 			onMouseLeave={() => setNavOpen(false)}
 			{...props}
 		>
-			{links.site?.[0] && <NavLinkComponent link={links.site?.[0]} isLogo />}
+			{links.site?.[0] && <NavLinkItem link={links.site?.[0]} isLogo />}
 
 			<Separator />
 
 			<div className="flex flex-1 flex-col gap-2.5 rounded-lg">
-				{links.home?.map((link, index) => <NavLinkComponent key={index} link={link} />)}
-				{links.instructor?.map((link, index) => <NavLinkComponent key={index} link={link} />)}
+				{links.home?.map((link, index) => <NavLinkItem key={index} link={link} />)}
+				<Separator />
+				{links.instructor?.map((link, index) => <NavLinkItem key={index} link={link} />)}
 			</div>
 
 			<Separator />

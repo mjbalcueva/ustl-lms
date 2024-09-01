@@ -16,7 +16,7 @@ type NavLinkComponentProps = {
 	className?: string
 } & Omit<LinkProps, 'href'>
 
-export const NavLinkComponent = forwardRef<HTMLAnchorElement, NavLinkComponentProps>(
+export const NavLinkItem = forwardRef<HTMLAnchorElement, NavLinkComponentProps>(
 	({ link, isLogo, className, ...props }, ref) => {
 		const { isNavOpen, canNavOpen } = useNav()
 		const Icon = Icons[link.icon]
@@ -52,4 +52,4 @@ export const NavLinkComponent = forwardRef<HTMLAnchorElement, NavLinkComponentPr
 		)
 	}
 )
-NavLinkComponent.displayName = 'NavLinkComponent'
+NavLinkItem.displayName = 'NavLinkComponent'
