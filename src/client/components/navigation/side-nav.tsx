@@ -3,8 +3,7 @@
 import { motion } from 'framer-motion'
 import { type Session } from 'next-auth'
 
-import { navLinks } from '@/shared/config/links'
-import { siteConfig } from '@/shared/config/site'
+import { links } from '@/shared/config/links'
 
 import { NavLinkComponent } from '@/client/components/navigation/nav-link'
 import { UserButton } from '@/client/components/navigation/user-button'
@@ -29,21 +28,12 @@ export const SideNav = ({ className, session, ...props }: NavProps) => {
 			onMouseLeave={() => setNavOpen(false)}
 			{...props}
 		>
-			<NavLinkComponent
-				link={{
-					label: siteConfig.title,
-					href: '/dashboard',
-					icon: 'logo'
-				}}
-				isLogo
-			/>
+			{links.site?.[0] && <NavLinkComponent link={links.site?.[0]} isLogo />}
 
 			<Separator />
 
 			<div className="flex flex-1 flex-col gap-2.5 rounded-lg">
-				{navLinks.map((link, index) => (
-					<NavLinkComponent key={index} link={link} />
-				))}
+				{links.nav?.map((link, index) => <NavLinkComponent key={index} link={link} />)}
 			</div>
 
 			<Separator />

@@ -19,7 +19,7 @@ export const PreferenceDrawer = () => {
 	return (
 		<Drawer>
 			<DrawerTrigger className="flex w-full items-center rounded-md px-2 py-1.5 hover:bg-accent">
-				<Icons.account.preference className="mr-2 h-4 w-4" />
+				<Icons.preference className="mr-2 h-4 w-4" />
 				<span className="text-sm">Preferences</span>
 			</DrawerTrigger>
 
@@ -39,7 +39,7 @@ export const PreferenceDrawer = () => {
 								size={'xs'}
 								onClick={() => handleModeChange('light')}
 							>
-								<Icons.mode.light className="mr-2 h-4 w-4 shrink-0" />
+								<Icons.light className="mr-2 h-4 w-4 shrink-0" />
 								<span className="text-xs">Light</span>
 							</Button>
 							<Button
@@ -48,7 +48,7 @@ export const PreferenceDrawer = () => {
 								size={'xs'}
 								onClick={() => handleModeChange('dark')}
 							>
-								<Icons.mode.dark className="mr-2 h-4 w-4 shrink-0" />
+								<Icons.dark className="mr-2 h-4 w-4 shrink-0" />
 								<span className="text-xs">Dark</span>
 							</Button>
 						</div>

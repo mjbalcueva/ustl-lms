@@ -17,31 +17,28 @@ import {
 } from 'react-icons/tb'
 
 export const Icons = {
+	// site
 	logo: TbDiamond,
 
-	navlinks: {
-		dashboard: TbLayoutDashboard,
-		learning: TbSchool,
-		reports: TbChartHistogram,
-		chat: TbMessage
-	},
+	// navlinks
+	dashboard: TbLayoutDashboard,
+	learning: TbSchool,
+	reports: TbChartHistogram,
+	chat: TbMessage,
 
-	account: {
-		profile: TbUser,
-		preference: TbPaint,
-		settings: TbSettings2,
-		logout: TbLogout
-	},
+	// account
+	profile: TbUser,
+	preference: TbPaint,
+	settings: TbSettings2,
+	logout: TbLogout,
 
-	mode: {
-		light: TbSunHigh,
-		dark: TbMoonStars
-	},
+	// mode
+	light: TbSunHigh,
+	dark: TbMoonStars,
 
-	status: {
-		success: TbCircleCheck,
-		info: TbInfoCircle,
-		warning: TbAlertTriangle,
-		error: TbInfoTriangle
-	}
+	// status
+	success: TbCircleCheck,
+	info: TbInfoCircle,
+	warning: TbAlertTriangle,
+	error: TbInfoTriangle
 }

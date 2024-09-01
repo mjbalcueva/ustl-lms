@@ -18,7 +18,7 @@ export const PreferenceDropdown = ({ isMobile }: { isMobile: boolean }) => {
 	return (
 		<DropdownMenuSub>
 			<DropdownMenuSubTrigger>
-				<Icons.account.preference className="mr-2 h-4 w-4" />
+				<Icons.preference className="mr-2 h-4 w-4" />
 				<span>Preferences</span>
 			</DropdownMenuSubTrigger>
 
@@ -34,7 +34,7 @@ export const PreferenceDropdown = ({ isMobile }: { isMobile: boolean }) => {
 								mode === 'light' && 'border-ring'
 							)}
 						>
-							<Icons.mode.light className="mr-2 h-4 w-4 shrink-0" />
+							<Icons.light className="mr-2 h-4 w-4 shrink-0" />
 							<span className="text-xs">Light</span>
 						</DropdownMenuItem>
 						<DropdownMenuItem
@@ -45,7 +45,7 @@ export const PreferenceDropdown = ({ isMobile }: { isMobile: boolean }) => {
 								mode === 'dark' && 'border-ring'
 							)}
 						>
-							<Icons.mode.dark className="mr-2 h-4 w-4 shrink-0" />
+							<Icons.dark className="mr-2 h-4 w-4 shrink-0" />
 							<span className="text-xs">Dark</span>
 						</DropdownMenuItem>
 					</div>

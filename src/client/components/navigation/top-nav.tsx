@@ -6,7 +6,7 @@ import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-
 import { type Session } from 'next-auth'
 import { TbLayoutSidebar, TbLayoutSidebarFilled } from 'react-icons/tb'
 
-import { navLinks } from '@/shared/config/links'
+import { links } from '@/shared/config/links'
 
 import { Icons } from '@/client/components/icons'
 import { NavLinkComponent } from '@/client/components/navigation/nav-link'
@@ -97,7 +97,7 @@ export const TopNav = ({ className, session, ...props }: NavProps) => {
 					onAnimationEnd={() => setNavOpen(false)}
 					className="fixed top-14 z-10 h-full w-full overflow-auto bg-card/50 text-card-foreground backdrop-blur-xl md:hidden"
 				>
-					{navLinks.map((item, index) => (
+					{links.nav?.map((item, index) => (
 						<MotionNavLink
 							key={index}
 							link={item}

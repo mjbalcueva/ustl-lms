@@ -19,7 +19,7 @@ type NavLinkComponentProps = {
 export const NavLinkComponent = forwardRef<HTMLAnchorElement, NavLinkComponentProps>(
 	({ link, isLogo, className, ...props }, ref) => {
 		const { isNavOpen, canNavOpen } = useNav()
-		const Icon = Icons.navlinks[link.icon as keyof typeof Icons.navlinks] || Icons.logo
+		const Icon = Icons[link.icon]
 
 		return (
 			<Link

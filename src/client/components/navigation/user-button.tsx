@@ -90,7 +90,7 @@ export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }: Use
 
 				<DropdownMenuItem asChild>
 					<Link href="/profile" className="cursor-pointer">
-						<Icons.account.profile className="mr-2 h-4 w-4" />
+						<Icons.profile className="mr-2 h-4 w-4" />
 						<span>Profile</span>
 					</Link>
 				</DropdownMenuItem>
@@ -99,7 +99,7 @@ export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }: Use
 
 				<DropdownMenuItem asChild>
 					<Link href="/settings" className="cursor-pointer">
-						<Icons.account.settings className="mr-2 h-4 w-4" />
+						<Icons.settings className="mr-2 h-4 w-4" />
 						<span>Settings</span>
 					</Link>
 				</DropdownMenuItem>
