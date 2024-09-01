@@ -18,7 +18,7 @@ type NavProps = React.ComponentProps<typeof motion.div> & {
 }
 
 export const SideNav = ({ className, session, ...props }: NavProps) => {
-	const { isNavOpen, setNavOpen, canNavOpen, setCanNavOpen } = useNav()
+	const { isNavOpen, setNavOpen, canNavOpen } = useNav()
 
 	return (
 		<motion.nav
@@ -53,13 +53,7 @@ export const SideNav = ({ className, session, ...props }: NavProps) => {
 
 			<Separator />
 
-			<UserButton
-				session={session}
-				onOpenChange={(open) => {
-					setNavOpen(false)
-					setCanNavOpen(!open)
-				}}
-			/>
+			<UserButton session={session} />
 		</motion.nav>
 	)
 }

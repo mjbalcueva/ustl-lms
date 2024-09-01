@@ -72,8 +72,10 @@ export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }: Use
 
 			<DropdownMenuContent
 				className="w-56 shadow-none"
-				align={isMobile ? 'end' : 'start'}
-				sideOffset={isMobile ? 13 : 25}
+				align={isNavOpen ? 'center' : 'end'}
+				alignOffset={isMobile ? 0 : -10}
+				side={isNavOpen ? 'top' : isMobile ? 'bottom' : 'left'}
+				sideOffset={isNavOpen ? 25 : isMobile ? 15 : 13}
 			>
 				{isMobile ? (
 					<DropdownMenuLabel>
@@ -95,7 +97,7 @@ export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }: Use
 					</Link>
 				</DropdownMenuItem>
 
-				{isTiny ? <PreferenceDrawer /> : <PreferenceDropdown isMobile={isMobile} />}
+				{isTiny ? <PreferenceDrawer /> : <PreferenceDropdown isMobile={isMobile} isNavOpen={isNavOpen} />}
 
 				<DropdownMenuItem asChild>
 					<Link href="/settings" className="cursor-pointer">
