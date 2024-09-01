@@ -9,7 +9,7 @@ export const links: Record<string, Link[]> = {
 			icon: 'logo'
 		}
 	],
-	nav: [
+	home: [
 		{
 			label: 'Dashboard',
 			href: '/dashboard',
@@ -21,14 +21,29 @@ export const links: Record<string, Link[]> = {
 			icon: 'learning'
 		},
 		{
-			label: 'Reports',
-			href: '/reports',
-			icon: 'reports'
-		},
-		{
 			label: 'Chat',
 			href: '/chat',
 			icon: 'chat'
+		},
+		{
+			label: 'Reports',
+			href: '/reports',
+			icon: 'reports',
+			role: ['STUDENT']
+		}
+	],
+	instructor: [
+		{
+			label: 'My Courses',
+			href: '/course',
+			icon: 'course',
+			role: ['INSTRUCTOR']
+		},
+		{
+			label: 'Analytics',
+			href: '/analytics',
+			icon: 'analytics',
+			role: ['INSTRUCTOR']
 		}
 	],
 	account: [

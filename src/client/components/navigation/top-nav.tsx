@@ -19,21 +19,25 @@ type NavProps = React.ComponentProps<typeof motion.div> & {
 	session: Session
 }
 export const TopNav = ({ className, session, ...props }: NavProps) => {
-	const MotionNavLink = useMemo(() => motion(NavLinkComponent), [])
 	const { isNavOpen, setNavOpen } = useNav()
 
 	const { scrollYProgress } = useScroll()
 	const [showNav, setShowNav] = useState(true)
 	const isUserButtonOpen = useRef(false)
+	const MotionNavLink = useMemo(() => motion(NavLinkComponent), [])
+
+	const navLinks = useMemo(() => {
+		return [...(links.home ?? []), ...(links.instructor ?? [])]
+	}, [])
+
+	const toggleScroll = useCallback((disable: boolean) => {
+		document.getElementById('body')?.classList.toggle('overflow-hidden', disable)
+	}, [])
 
 	useMotionValueEvent(scrollYProgress, 'change', (current) => {
 		const previous = scrollYProgress.getPrevious()!
 		setShowNav(previous === 0 || current === 1 || previous > current || isUserButtonOpen.current)
 	})
-
-	const toggleScroll = useCallback((disable: boolean) => {
-		document.getElementById('body')?.classList.toggle('overflow-hidden', disable)
-	}, [])
 
 	return (
 		<AnimatePresence>
@@ -97,7 +101,7 @@ export const TopNav = ({ className, session, ...props }: NavProps) => {
 					onAnimationEnd={() => setNavOpen(false)}
 					className="fixed top-14 z-10 h-full w-full overflow-auto bg-card/50 text-card-foreground backdrop-blur-xl md:hidden"
 				>
-					{links.nav?.map((item, index) => (
+					{navLinks?.map((item, index) => (
 						<MotionNavLink
 							key={index}
 							link={item}
@@ -107,7 +111,7 @@ export const TopNav = ({ className, session, ...props }: NavProps) => {
 									opacity: 1
 								},
 								exit: {
-									y: '-100px',
+									y: -100,
 									opacity: 0
 								}
 							}}

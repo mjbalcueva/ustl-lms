@@ -10,9 +10,11 @@ import {
 	TbMessage,
 	TbMoonStars,
 	TbPaint,
+	TbPresentationAnalytics,
 	TbSchool,
 	TbSettings2,
 	TbSunHigh,
+	TbTools,
 	TbUser
 } from 'react-icons/tb'
 
@@ -20,11 +22,15 @@ export const Icons = {
 	// site
 	logo: TbDiamond,
 
-	// navlinks
+	// home
 	dashboard: TbLayoutDashboard,
 	learning: TbSchool,
 	reports: TbChartHistogram,
 	chat: TbMessage,
+
+	// instructor
+	course: TbTools,
+	analytics: TbPresentationAnalytics,
 
 	// account
 	profile: TbUser,

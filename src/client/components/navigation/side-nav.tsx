@@ -33,7 +33,8 @@ export const SideNav = ({ className, session, ...props }: NavProps) => {
 			<Separator />
 
 			<div className="flex flex-1 flex-col gap-2.5 rounded-lg">
-				{links.nav?.map((link, index) => <NavLinkComponent key={index} link={link} />)}
+				{links.home?.map((link, index) => <NavLinkComponent key={index} link={link} />)}
+				{links.instructor?.map((link, index) => <NavLinkComponent key={index} link={link} />)}
 			</div>
 
 			<Separator />
