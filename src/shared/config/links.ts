@@ -1,6 +1,6 @@
-import { type NavLink } from '@/shared/types/navigation'
+import { type Link } from '@/shared/types/navigation'
 
-export const navLinks: NavLink[] = [
+export const navLinks: Link[] = [
 	{
 		label: 'Dashboard',
 		href: '/dashboard',
