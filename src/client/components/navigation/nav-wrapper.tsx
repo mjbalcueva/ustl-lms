@@ -51,14 +51,15 @@ export const NavContainer = forwardRef<HTMLDivElement, React.HTMLAttributes<HTML
 })
 NavContainer.displayName = 'NavContainer'
 
-type NavItemButton = React.ButtonHTMLAttributes<HTMLButtonElement> & { asLink?: false }
-type NavItemLink = React.AnchorHTMLAttributes<HTMLAnchorElement> & { asLink: true; href: NavLinkType['href'] }
+type NavItemButton = React.ButtonHTMLAttributes<HTMLButtonElement>
+type NavItemLink = React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: NavLinkType['href'] }
 type NavItemProps = Omit<NavLinkType, 'href'> & {
 	className?: string
 	disableAnimation?: boolean
 } & (NavItemLink | NavItemButton)
+
 export const NavItem = forwardRef<HTMLButtonElement, NavItemProps>(
-	({ icon, label, disableAnimation, className, asLink, ...props }, ref) => {
+	({ icon, label, disableAnimation, className, ...props }, ref) => {
 		const { isNavOpen, canNavOpen } = useNav()
 		const Icon = Icons[icon]
 
@@ -87,7 +88,7 @@ export const NavItem = forwardRef<HTMLButtonElement, NavItemProps>(
 			className
 		)
 
-		if (asLink) {
+		if ('href' in props) {
 			return (
 				<Link className={sharedClassName} {...(props as NavItemLink)}>
 					{content}

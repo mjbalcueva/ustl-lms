@@ -33,9 +33,7 @@ export const SideNav = ({ className, session, ...props }: NavProps) => {
 			<NavWrapper>
 				<NavTitle title="Home" isVisible={isNavOpen || !canNavOpen} />
 				<NavContainer>
-					{links.home?.map((link) => (
-						<NavItem key={link.href} icon={link.icon} label={link.label} href={link.href} asLink />
-					))}
+					{links.home?.map((link) => <NavItem key={link.href} icon={link.icon} label={link.label} href={link.href} />)}
 				</NavContainer>
 			</NavWrapper>
 
@@ -45,7 +43,7 @@ export const SideNav = ({ className, session, ...props }: NavProps) => {
 				<NavTitle title="Instructor Resources" isVisible={isNavOpen || !canNavOpen} />
 				<NavContainer>
 					{links.instructor?.map((link) => (
-						<NavItem key={link.href} icon={link.icon} label={link.label} href={link.href} asLink />
+						<NavItem key={link.href} icon={link.icon} label={link.label} href={link.href} />
 					))}
 				</NavContainer>
 			</NavWrapper>
