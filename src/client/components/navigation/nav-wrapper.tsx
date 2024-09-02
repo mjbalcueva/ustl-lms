@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import * as React from 'react'
-import { forwardRef } from 'react'
+import { forwardRef, type LegacyRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { type Link as NavLinkType } from '@/shared/types/navigation'
@@ -51,14 +51,13 @@ export const NavContainer = forwardRef<HTMLDivElement, React.HTMLAttributes<HTML
 })
 NavContainer.displayName = 'NavContainer'
 
-type NavItemButton = React.ButtonHTMLAttributes<HTMLButtonElement>
-type NavItemLink = React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: NavLinkType['href'] }
-type NavItemProps = Omit<NavLinkType, 'href'> & {
-	className?: string
+type NavItemButton = React.ButtonHTMLAttributes<HTMLButtonElement> & Omit<NavLinkType, 'href' | 'role'>
+type NavItemLink = React.AnchorHTMLAttributes<HTMLAnchorElement> & NavLinkType
+type NavItemProps = {
 	disableAnimation?: boolean
 } & (NavItemLink | NavItemButton)
 
-export const NavItem = forwardRef<HTMLButtonElement, NavItemProps>(
+export const NavItem = forwardRef<HTMLButtonElement | HTMLAnchorElement, NavItemProps>(
 	({ icon, label, disableAnimation, className, ...props }, ref) => {
 		const { isNavOpen, canNavOpen } = useNav()
 		const Icon = Icons[icon]
@@ -90,14 +89,14 @@ export const NavItem = forwardRef<HTMLButtonElement, NavItemProps>(
 
 		if ('href' in props) {
 			return (
-				<Link className={sharedClassName} {...(props as NavItemLink)}>
+				<Link className={sharedClassName} {...props}>
 					{content}
 				</Link>
 			)
 		}
 
 		return (
-			<button ref={ref} className={sharedClassName} {...(props as NavItemButton)}>
+			<button ref={ref as LegacyRef<HTMLButtonElement>} className={sharedClassName} {...props}>
 				{content}
 			</button>
 		)
