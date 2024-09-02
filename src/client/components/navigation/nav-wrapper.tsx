@@ -6,6 +6,7 @@ import { forwardRef, type Ref } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { Icons } from '@/client/components/icons'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/client/components/ui'
 import { useDeviceType } from '@/client/context/device-type-provider'
 import { useNav } from '@/client/lib/hooks/use-nav'
 import { cn } from '@/client/lib/utils'
@@ -67,35 +68,44 @@ export const NavItem = forwardRef<HTMLButtonElement | HTMLAnchorElement, NavItem
 
 		const Component = 'href' in props ? Link : 'button'
 		return (
-			<Component
-				ref={ref as Ref<HTMLAnchorElement & HTMLButtonElement>}
-				className={cn(
-					'group/navigation flex items-center justify-start outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring',
-					isLogo
-						? 'gap-2 rounded-md p-1.5 md:p-2'
-						: 'gap-3 rounded-md px-5 py-2 hover:bg-accent/40 sm:px-7 md:px-3 md:hover:bg-accent',
-					className
-				)}
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any
-				{...(props as any)}
-			>
-				<Icon className={cn('flex-shrink-0', isLogo ? 'h-7 w-7' : 'h-5 w-5')} />
-				{label && (
-					<motion.span
-						animate={{
-							display: isNavOpen ? (isMobile && isLogo ? 'none' : 'block') : 'none',
-							opacity: isNavOpen ? (isMobile && isLogo ? 0 : 1) : 0
-						}}
+			<Tooltip>
+				<TooltipTrigger asChild>
+					<Component
+						ref={ref as Ref<HTMLAnchorElement & HTMLButtonElement>}
 						className={cn(
-							'hidden whitespace-pre transition duration-150',
-							isLogo ? 'text-lg font-semibold tracking-wide' : 'text-sm',
-							!disableAnimation && 'group-hover/navigation:translate-x-1.5'
+							'group/navigation z-[999] flex items-center justify-start outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring',
+							isLogo
+								? 'gap-2 rounded-md p-1.5 md:p-2'
+								: 'gap-3 rounded-md px-5 py-2 hover:bg-accent/40 sm:px-7 md:px-3 md:hover:bg-accent',
+							className
 						)}
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any
+						{...(props as any)}
 					>
+						<Icon className={cn('flex-shrink-0', isLogo ? 'h-7 w-7' : 'h-5 w-5')} />
+						{label && (
+							<motion.span
+								animate={{
+									display: isNavOpen ? (isMobile && isLogo ? 'none' : 'block') : 'none',
+									opacity: isNavOpen ? (isMobile && isLogo ? 0 : 1) : 0
+								}}
+								className={cn(
+									'hidden whitespace-pre transition duration-150',
+									isLogo ? 'text-lg font-semibold tracking-wide' : 'text-sm',
+									!disableAnimation && 'group-hover/navigation:translate-x-1.5'
+								)}
+							>
+								{label}
+							</motion.span>
+						)}
+					</Component>
+				</TooltipTrigger>
+				{!isMobile && !isNavOpen && (
+					<TooltipContent side="right" align="center" className="tooltip-content">
 						{label}
-					</motion.span>
+					</TooltipContent>
 				)}
-			</Component>
+			</Tooltip>
 		)
 	}
 )
