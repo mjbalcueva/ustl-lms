@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
 import { type Session } from 'next-auth'
@@ -8,9 +7,8 @@ import { type Session } from 'next-auth'
 import { links } from '@/shared/config/links'
 
 import { Icons } from '@/client/components/icons'
-import { NavLinkItem } from '@/client/components/navigation/nav-link'
+import { NavButton, NavIcon, NavItemSideIcon, NavLabel, NavLink } from '@/client/components/navigation/nav-item'
 import { UserButton } from '@/client/components/navigation/user-button'
-import { Button } from '@/client/components/ui'
 import { useNav } from '@/client/lib/hooks/use-nav'
 import { cn } from '@/client/lib/utils'
 
@@ -23,7 +21,7 @@ export const TopNav = ({ className, session, ...props }: NavProps) => {
 	const { scrollYProgress } = useScroll()
 	const [showNav, setShowNav] = useState(true)
 	const isUserButtonOpen = useRef(false)
-	const MotionNavLink = useMemo(() => motion(NavLinkItem), [])
+	const MotionNavLink = useMemo(() => motion(NavLink), [])
 
 	const navLinks = useMemo(() => {
 		return [...(links.home ?? []), ...(links.instructor ?? [])]
@@ -56,26 +54,13 @@ export const TopNav = ({ className, session, ...props }: NavProps) => {
 				)}
 				{...props}
 			>
-				<Button
-					variant={'ghost'}
-					size={'icon'}
-					onClick={() => {
-						setNavOpen(!isNavOpen)
-						toggleScroll(!isNavOpen)
-					}}
-					className="outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
-					aria-label={isNavOpen ? 'Close navigation menu' : 'Open navigation menu'}
-				>
-					{isNavOpen ? <Icons.navbarClose className="h-6 w-6" /> : <Icons.navbarOpen className="h-6 w-6" />}
-				</Button>
+				<NavButton className="m-0 p-2" onClick={() => setNavOpen(!isNavOpen)}>
+					{isNavOpen ? <Icons.navbarClose className="size-6" /> : <Icons.navbarOpen className="size-6" />}
+				</NavButton>
 
-				<Link
-					className="flex items-center justify-center gap-3 rounded-md p-1 text-lg font-semibold tracking-wide outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
-					href="/dashboard"
-					aria-label="Home"
-				>
-					<Icons.logo className="size-7" />
-				</Link>
+				<NavButton className="m-0 p-1.5">
+					{links.site?.[0]?.icon && <NavIcon icon={links.site?.[0]?.icon} className="size-7" />}
+				</NavButton>
 
 				<UserButton
 					session={session}
@@ -103,27 +88,32 @@ export const TopNav = ({ className, session, ...props }: NavProps) => {
 					{navLinks?.map((item, index) => (
 						<MotionNavLink
 							key={index}
-							link={item}
-							variants={{
-								open: {
-									y: 0,
-									opacity: 1
-								},
-								exit: {
-									y: -100,
-									opacity: 0
-								}
+							href={item.href}
+							className="m-0 h-12 rounded-none border-b border-border md:rounded-md"
+							initial={{
+								y: -100,
+								opacity: 0
+							}}
+							animate={{
+								y: 0,
+								opacity: 1
+							}}
+							exit={{
+								y: -100,
+								opacity: 0
 							}}
 							transition={{
 								type: 'spring',
 								stiffness: 300,
 								damping: 20,
-								duration: 1,
 								delay: index * 0.05
 							}}
-							className="h-12 rounded-none border-b border-border md:rounded-md"
 							onClick={() => setNavOpen(false)}
-						/>
+						>
+							{item.icon && <NavIcon icon={item.icon} className="size-5" />}
+							{item.label && <NavLabel label={item.label} />}
+							<NavItemSideIcon isVisible={isNavOpen} className="size-5" />
+						</MotionNavLink>
 					))}
 				</motion.aside>
 			)}

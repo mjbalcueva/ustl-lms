@@ -50,7 +50,7 @@ export const AuthCardSeparator = React.forwardRef<
 	}
 >(({ className, label, ...props }, ref) => (
 	<div ref={ref} className={cn('relative w-full', className)} {...props}>
-		<Separator className="h-[0.5px]" />
+		<Separator />
 		<div className="absolute left-0 right-0 flex translate-y-[-50%] items-center justify-center">
 			<span className="pointer-events-none select-none bg-card px-2 text-xs leading-none text-muted-foreground">
 				{label}

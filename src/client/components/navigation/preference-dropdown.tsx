@@ -12,7 +12,7 @@ import {
 import { useUserTheme } from '@/client/lib/hooks/use-user-theme'
 import { cn } from '@/client/lib/utils'
 
-export const PreferenceDropdown = ({ isMobile, isNavOpen }: { isMobile: boolean; isNavOpen: boolean }) => {
+export const PreferenceDropdown = ({ isMobile }: { isMobile: boolean; isNavOpen: boolean }) => {
 	const { theme, handleThemeChange, mode, handleModeChange, themeOptions } = useUserTheme()
 
 	return (
@@ -23,11 +23,7 @@ export const PreferenceDropdown = ({ isMobile, isNavOpen }: { isMobile: boolean;
 			</DropdownMenuSubTrigger>
 
 			<DropdownMenuPortal>
-				<DropdownMenuSubContent
-					className="w-64 py-2"
-					alignOffset={isMobile ? -38 : -78}
-					sideOffset={isNavOpen ? 18 : isMobile ? 10 : 9}
-				>
+				<DropdownMenuSubContent className="w-64 py-2" alignOffset={isMobile ? -38 : -78} sideOffset={isMobile ? 10 : 9}>
 					<DropdownMenuLabel className="pb-2 text-xs">Mode</DropdownMenuLabel>
 					<div className="flex gap-1.5 px-2 pb-1">
 						<DropdownMenuItem
