@@ -4,7 +4,8 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { type Session } from 'next-auth'
 import { signOut } from 'next-auth/react'
-import { TbLogout, TbSelector } from 'react-icons/tb'
+import { LuChevronRight } from 'react-icons/lu'
+import { TbLogout } from 'react-icons/tb'
 import { useMediaQuery } from 'usehooks-ts'
 
 import { Icons } from '@/client/components/icons'
@@ -46,7 +47,7 @@ export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }: Use
 
 	return (
 		<DropdownMenu modal={false} {...props}>
-			<DropdownMenuTrigger className="flex cursor-pointer items-center gap-3 rounded-md p-1 outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring md:min-h-[2.8rem]">
+			<DropdownMenuTrigger className="group/user-button flex cursor-pointer items-center gap-3 rounded-md p-1 outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring md:min-h-[2.8rem]">
 				<Avatar className="size-8 border border-border md:ml-[1.5px]">
 					<AvatarImage src={user?.image ?? ''} alt={initials} className="select-none" />
 					<AvatarFallback className="pointer-events-none select-none bg-muted">{initials}</AvatarFallback>
@@ -63,8 +64,8 @@ export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }: Use
 							<span className="max-w-full truncate text-sm font-medium">{name}</span>
 							<span className="max-w-full truncate text-xs text-muted-foreground">{strippedEmail}</span>
 						</div>
-						<div className="relative right-0.5 rounded-md p-1">
-							<TbSelector className="h-4 w-4 text-muted-foreground/80" />
+						<div className="relative rounded-md p-0.5">
+							<LuChevronRight className="hidden size-4 group-hover/user-button:block group-focus/user-button:block" />
 						</div>
 					</motion.div>
 				)}
