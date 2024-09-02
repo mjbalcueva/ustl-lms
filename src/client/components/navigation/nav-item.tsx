@@ -10,28 +10,6 @@ import { Icons } from '@/client/components/icons'
 import { useNav } from '@/client/lib/hooks/use-nav'
 import { cn } from '@/client/lib/utils'
 
-type NavTitleProps = {
-	title: string
-	isVisible: boolean
-}
-export const NavTitle = ({ title, isVisible, ...props }: NavTitleProps) => {
-	return (
-		<AnimatePresence>
-			{isVisible && (
-				<motion.div
-					className="flex overflow-hidden rounded-lg"
-					initial={{ opacity: 0, height: 0 }}
-					animate={{ opacity: 1, height: '2rem' }}
-					exit={{ opacity: 0, height: 0 }}
-					{...props}
-				>
-					<span className="select-none px-3 py-2 text-xs font-medium text-muted-foreground">{title}</span>
-				</motion.div>
-			)}
-		</AnimatePresence>
-	)
-}
-
 type NavLinkProps = React.HTMLAttributes<HTMLAnchorElement> & {
 	href: string
 	className?: string
@@ -62,6 +40,28 @@ export const NavButton = ({ className, ...props }: React.ButtonHTMLAttributes<HT
 			)}
 			{...props}
 		/>
+	)
+}
+
+type NavTitleProps = {
+	title: string
+	isVisible: boolean
+}
+export const NavTitle = ({ title, isVisible, ...props }: NavTitleProps) => {
+	return (
+		<AnimatePresence>
+			{isVisible && (
+				<motion.div
+					className="flex overflow-hidden rounded-lg"
+					initial={{ opacity: 0, height: 0 }}
+					animate={{ opacity: 1, height: '2rem' }}
+					exit={{ opacity: 0, height: 0 }}
+					{...props}
+				>
+					<span className="select-none px-3 py-2 text-xs font-medium text-muted-foreground">{title}</span>
+				</motion.div>
+			)}
+		</AnimatePresence>
 	)
 }
 
