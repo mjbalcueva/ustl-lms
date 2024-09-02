@@ -5,6 +5,8 @@ import * as React from 'react'
 import { forwardRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
+import { type Link as NavLinkType } from '@/shared/types/navigation'
+
 import { Icons } from '@/client/components/icons'
 import { useNav } from '@/client/lib/hooks/use-nav'
 import { cn } from '@/client/lib/utils'
@@ -44,14 +46,15 @@ export const NavTitle = forwardRef<HTMLDivElement, NavTitleProps>(({ title, isVi
 })
 NavTitle.displayName = 'NavTitle'
 
-type NavItemProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-	icon: keyof typeof Icons
-	label?: string
+type NavItemButton = React.ButtonHTMLAttributes<HTMLButtonElement> & { asLink?: false }
+type NavItemLink = React.AnchorHTMLAttributes<HTMLAnchorElement> & { asLink: true; href: NavLinkType['href'] }
+type NavItemProps = Omit<NavLinkType, 'href'> & {
+	className?: string
 	disableAnimation?: boolean
-} & ({ asLink: true; href: string } | { asLink?: false; href?: undefined })
+} & (NavItemLink | NavItemButton)
 
 export const NavItem = forwardRef<HTMLButtonElement, NavItemProps>(
-	({ icon, label, disableAnimation, className, asLink, href, ...props }, ref) => {
+	({ icon, label, disableAnimation, className, asLink, ...props }, ref) => {
 		const { isNavOpen, canNavOpen } = useNav()
 		const Icon = Icons[icon]
 
@@ -80,16 +83,16 @@ export const NavItem = forwardRef<HTMLButtonElement, NavItemProps>(
 			className
 		)
 
-		if (asLink && href) {
+		if (asLink) {
 			return (
-				<Link href={href} className={sharedClassName} {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}>
+				<Link className={sharedClassName} {...(props as NavItemLink)}>
 					{content}
 				</Link>
 			)
 		}
 
 		return (
-			<button ref={ref} className={sharedClassName} {...props}>
+			<button ref={ref} className={sharedClassName} {...(props as React.ButtonHTMLAttributes<HTMLButtonElement>)}>
 				{content}
 			</button>
 		)
