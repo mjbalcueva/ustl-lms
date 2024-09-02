@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import * as React from 'react'
-import { forwardRef, type LegacyRef } from 'react'
+import { forwardRef, type Ref } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { type Link as NavLinkType } from '@/shared/types/navigation'
@@ -62,8 +62,17 @@ export const NavItem = forwardRef<HTMLButtonElement | HTMLAnchorElement, NavItem
 		const { isNavOpen, canNavOpen } = useNav()
 		const Icon = Icons[icon]
 
-		const content = (
-			<>
+		const Component = 'href' in props ? Link : 'button'
+		return (
+			<Component
+				ref={ref as Ref<HTMLAnchorElement & HTMLButtonElement>}
+				className={cn(
+					'group/navigation flex items-center justify-start gap-3 rounded-md px-5 py-2 outline-none ring-offset-background hover:bg-accent/40 focus-visible:ring-2 focus-visible:ring-ring sm:px-7 md:px-3 md:hover:bg-accent',
+					className
+				)}
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				{...(props as any)}
+			>
 				<Icon className={cn('flex-shrink-0', 'h-5 w-5')} />
 				{label && (
 					<motion.span
@@ -79,26 +88,7 @@ export const NavItem = forwardRef<HTMLButtonElement | HTMLAnchorElement, NavItem
 						{label}
 					</motion.span>
 				)}
-			</>
-		)
-
-		const sharedClassName = cn(
-			'group/navigation flex items-center justify-start gap-3 rounded-md px-5 py-2 outline-none ring-offset-background hover:bg-accent/40 focus-visible:ring-2 focus-visible:ring-ring sm:px-7 md:px-3 md:hover:bg-accent',
-			className
-		)
-
-		if ('href' in props) {
-			return (
-				<Link className={sharedClassName} {...props}>
-					{content}
-				</Link>
-			)
-		}
-
-		return (
-			<button ref={ref as LegacyRef<HTMLButtonElement>} className={sharedClassName} {...props}>
-				{content}
-			</button>
+			</Component>
 		)
 	}
 )
