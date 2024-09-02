@@ -10,6 +10,8 @@ import { Icons } from '@/client/components/icons'
 import { useNav } from '@/client/lib/hooks/use-nav'
 import { cn } from '@/client/lib/utils'
 
+import { Tooltip, TooltipContent, TooltipTrigger } from '../ui'
+
 type NavLinkProps = React.HTMLAttributes<HTMLAnchorElement> & {
 	href: string
 	className?: string
@@ -31,15 +33,32 @@ export const NavLink = React.forwardRef<HTMLAnchorElement, NavLinkProps>(({ clas
 })
 NavLink.displayName = 'NavLink'
 
-export const NavButton = ({ className, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
+type NavButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>
+export const NavButton = React.forwardRef<HTMLButtonElement, NavButtonProps>(({ className, ...props }, ref) => {
 	return (
 		<button
+			ref={ref}
 			className={cn(
 				'group/navigation mb-2 flex items-center justify-start gap-3 rounded-md px-5 py-2 outline-none ring-offset-background hover:bg-accent/40 focus-visible:ring-2 focus-visible:ring-ring sm:px-7 md:px-3 md:hover:bg-accent',
 				className
 			)}
 			{...props}
 		/>
+	)
+})
+NavButton.displayName = 'NavButton'
+
+type NavTooltipProps = React.ComponentProps<typeof Tooltip> & {
+	isVisible: boolean
+	content: React.ReactNode
+}
+export const NavTooltip = ({ isVisible, children, content, ...props }: NavTooltipProps) => {
+	if (!isVisible) return <>{children}</>
+	return (
+		<Tooltip {...props} delayDuration={300}>
+			<TooltipTrigger asChild>{children}</TooltipTrigger>
+			<TooltipContent side="right">{content}</TooltipContent>
+		</Tooltip>
 	)
 }
 

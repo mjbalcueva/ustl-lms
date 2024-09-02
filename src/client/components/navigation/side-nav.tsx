@@ -11,7 +11,8 @@ import {
 	NavItemSideIcon,
 	NavLabel,
 	NavLink,
-	NavTitle
+	NavTitle,
+	NavTooltip
 } from '@/client/components/navigation/nav-item'
 import { UserButton } from '@/client/components/navigation/user-button'
 import { Separator } from '@/client/components/ui'
@@ -33,39 +34,47 @@ export const SideNav = ({ className, session, ...props }: NavProps) => {
 			}}
 			{...props}
 		>
-			<NavButton className="gap-2 !pl-2">
-				{links.site?.[0]?.icon && <NavIcon icon={links.site?.[0]?.icon} className="size-7" />}
-				{links.site?.[0]?.label && (
-					<NavLabel label={links.site?.[0]?.label} className="text-lg font-semibold tracking-wide" />
-				)}
-			</NavButton>
+			<NavTooltip content={links.site?.[0]?.label} isVisible={!isNavOpen}>
+				<NavButton className="gap-2 !pl-2">
+					{links.site?.[0]?.icon && <NavIcon icon={links.site?.[0]?.icon} className="size-7" />}
+					{links.site?.[0]?.label && (
+						<NavLabel label={links.site?.[0]?.label} className="text-lg font-semibold tracking-wide" />
+					)}
+				</NavButton>
+			</NavTooltip>
 
 			<Separator className="my-4 mt-2" />
 
 			<NavTitle title="Home" isVisible={isNavOpen || !canNavOpen} />
 			{links.home?.map((link) => (
-				<NavLink key={link.href} href={link.href}>
-					<NavIcon icon={link.icon} />
-					<NavLabel label={link.label} />
-					<NavItemSideIcon isVisible={isNavOpen} />
-				</NavLink>
+				<NavTooltip key={link.href} content={link.label} isVisible={!isNavOpen}>
+					<NavLink href={link.href}>
+						<NavIcon icon={link.icon} />
+						<NavLabel label={link.label} />
+						<NavItemSideIcon isVisible={isNavOpen} />
+					</NavLink>
+				</NavTooltip>
 			))}
 
 			<Separator className="mb-4 mt-2" />
 
 			<NavTitle title="Instructor Resources" isVisible={isNavOpen || !canNavOpen} />
 			{links.instructor?.map((link) => (
-				<NavLink key={link.href} href={link.href}>
-					<NavIcon icon={link.icon} />
-					<NavLabel label={link.label} />
-					<NavItemSideIcon isVisible={isNavOpen} />
-				</NavLink>
+				<NavTooltip key={link.href} content={link.label} isVisible={!isNavOpen}>
+					<NavLink href={link.href}>
+						<NavIcon icon={link.icon} />
+						<NavLabel label={link.label} />
+						<NavItemSideIcon isVisible={isNavOpen} />
+					</NavLink>
+				</NavTooltip>
 			))}
 
-			<NavButton className="mt-auto" onClick={() => setNavOpen(!isNavOpen)}>
-				<NavIcon icon={isNavOpen ? 'navbarClose' : 'navbarOpen'} />
-				<NavLabel label="Toggle Sidebar" disableAnimation />
-			</NavButton>
+			<NavTooltip content="Toggle Sidebar" isVisible={!isNavOpen}>
+				<NavButton className="mt-auto" onClick={() => setNavOpen(!isNavOpen)}>
+					<NavIcon icon={isNavOpen ? 'navbarClose' : 'navbarOpen'} />
+					<NavLabel label="Toggle Sidebar" disableAnimation />
+				</NavButton>
+			</NavTooltip>
 
 			<Separator className="mb-4 mt-2" />
 
