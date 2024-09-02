@@ -1,10 +1,11 @@
 'use client'
 
+import Link from 'next/link'
 import * as React from 'react'
 import { forwardRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
-import { type Link } from '@/shared/types/navigation'
+import { type Link as NavLink } from '@/shared/types/navigation'
 
 import { Icons } from '@/client/components/icons'
 import { NavLinkItem } from '@/client/components/navigation/nav-link'
@@ -50,23 +51,18 @@ type NavItemProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 	icon: keyof typeof Icons
 	label?: string
 	disableAnimation?: boolean
+	asLink?: boolean
+	href?: string
 }
+
 export const NavItem = forwardRef<HTMLButtonElement, NavItemProps>(
-	({ icon, label, disableAnimation, className, ...props }, ref) => {
+	({ icon, label, disableAnimation, className, asLink, href, ...props }, ref) => {
 		const { isNavOpen, canNavOpen } = useNav()
 		const Icon = Icons[icon]
 
-		return (
-			<button
-				ref={ref}
-				className={cn(
-					'group/navigation flex items-center justify-start gap-3 rounded-md px-5 py-2 outline-none ring-offset-background hover:bg-accent/40 focus-visible:ring-2 focus-visible:ring-ring sm:px-7 md:px-3 md:hover:bg-accent',
-					className
-				)}
-				{...props}
-			>
+		const content = (
+			<>
 				<Icon className={cn('flex-shrink-0', 'h-5 w-5')} />
-
 				{label && (
 					<motion.span
 						animate={{
@@ -81,6 +77,25 @@ export const NavItem = forwardRef<HTMLButtonElement, NavItemProps>(
 						{label}
 					</motion.span>
 				)}
+			</>
+		)
+
+		const sharedClassName = cn(
+			'group/navigation flex items-center justify-start gap-3 rounded-md px-5 py-2 outline-none ring-offset-background hover:bg-accent/40 focus-visible:ring-2 focus-visible:ring-ring sm:px-7 md:px-3 md:hover:bg-accent',
+			className
+		)
+
+		if (asLink && href) {
+			return (
+				<Link href={href} className={sharedClassName} {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}>
+					{content}
+				</Link>
+			)
+		}
+
+		return (
+			<button ref={ref} className={sharedClassName} {...props}>
+				{content}
 			</button>
 		)
 	}
@@ -88,7 +103,7 @@ export const NavItem = forwardRef<HTMLButtonElement, NavItemProps>(
 NavItem.displayName = 'NavItem'
 
 type NavLinksProps = React.HTMLAttributes<HTMLDivElement> & {
-	links: Link[]
+	links: NavLink[]
 }
 export const NavLinks = forwardRef<HTMLDivElement, NavLinksProps>(({ links, ...props }, ref) => {
 	return (
