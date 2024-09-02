@@ -28,14 +28,15 @@ export const NavTitle = ({ title, isVisible, ...props }: NavTitleProps) => {
 	)
 }
 
-type NavLinkProps = {
+type NavLinkProps = React.HTMLAttributes<HTMLAnchorElement> & {
 	href: string
 	className?: string
 	children: React.ReactNode
 }
-export const NavLink = ({ className, children, ...props }: NavLinkProps) => {
+export const NavLink = React.forwardRef<HTMLAnchorElement, NavLinkProps>(({ className, children, ...props }, ref) => {
 	return (
 		<Link
+			ref={ref}
 			className={cn(
 				'group/navigation mb-2 flex items-center justify-start gap-3 rounded-md px-5 py-2 outline-none ring-offset-background hover:bg-accent/40 focus-visible:ring-2 focus-visible:ring-ring sm:px-7 md:px-3 md:hover:bg-accent',
 				className
@@ -45,7 +46,8 @@ export const NavLink = ({ className, children, ...props }: NavLinkProps) => {
 			{children}
 		</Link>
 	)
-}
+})
+NavLink.displayName = 'NavLink'
 
 export const NavButton = ({ className, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
 	return (
