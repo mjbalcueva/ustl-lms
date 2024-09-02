@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
 import { type Session } from 'next-auth'
@@ -8,7 +7,7 @@ import { type Session } from 'next-auth'
 import { links } from '@/shared/config/links'
 
 import { Icons } from '@/client/components/icons'
-import { NavLinkItem } from '@/client/components/navigation/nav-link'
+import { NavItem } from '@/client/components/navigation/nav-wrapper'
 import { UserButton } from '@/client/components/navigation/user-button'
 import { Button } from '@/client/components/ui'
 import { useNav } from '@/client/lib/hooks/use-nav'
@@ -23,7 +22,7 @@ export const TopNav = ({ className, session, ...props }: NavProps) => {
 	const { scrollYProgress } = useScroll()
 	const [showNav, setShowNav] = useState(true)
 	const isUserButtonOpen = useRef(false)
-	const MotionNavLink = useMemo(() => motion(NavLinkItem), [])
+	const MotionNavLink = useMemo(() => motion(NavItem), [])
 
 	const navLinks = useMemo(() => {
 		return [...(links.home ?? []), ...(links.instructor ?? [])]
@@ -69,13 +68,7 @@ export const TopNav = ({ className, session, ...props }: NavProps) => {
 					{isNavOpen ? <Icons.navbarClose className="h-6 w-6" /> : <Icons.navbarOpen className="h-6 w-6" />}
 				</Button>
 
-				<Link
-					className="flex items-center justify-center gap-3 rounded-md p-1 text-lg font-semibold tracking-wide outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
-					href="/dashboard"
-					aria-label="Home"
-				>
-					<Icons.logo className="size-7" />
-				</Link>
+				{links.site?.[0] && <NavItem {...links.site[0]} isLogo />}
 
 				<UserButton
 					session={session}
@@ -103,16 +96,14 @@ export const TopNav = ({ className, session, ...props }: NavProps) => {
 					{navLinks?.map((item, index) => (
 						<MotionNavLink
 							key={index}
-							link={item}
-							variants={{
-								open: {
-									y: 0,
-									opacity: 1
-								},
-								exit: {
-									y: -100,
-									opacity: 0
-								}
+							{...item}
+							initial={{
+								y: -100,
+								opacity: 0
+							}}
+							animate={{
+								y: 0,
+								opacity: 1
 							}}
 							transition={{
 								type: 'spring',

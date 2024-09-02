@@ -6,6 +6,7 @@ import { forwardRef, type Ref } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { Icons } from '@/client/components/icons'
+import { useDeviceType } from '@/client/context/device-type-provider'
 import { useNav } from '@/client/lib/hooks/use-nav'
 import { cn } from '@/client/lib/utils'
 
@@ -58,7 +59,10 @@ type NavItemProps = (React.ButtonHTMLAttributes<HTMLButtonElement> | LinkProps) 
 }
 export const NavItem = forwardRef<HTMLButtonElement | HTMLAnchorElement, NavItemProps>(
 	({ icon, label, disableAnimation, isLogo, className, ...props }, ref) => {
-		const { isNavOpen, canNavOpen } = useNav()
+		const { isNavOpen } = useNav()
+		const { deviceSize } = useDeviceType()
+
+		const isMobile = deviceSize === 'mobile'
 		const Icon = Icons[icon]
 
 		const Component = 'href' in props ? Link : 'button'
@@ -66,10 +70,10 @@ export const NavItem = forwardRef<HTMLButtonElement | HTMLAnchorElement, NavItem
 			<Component
 				ref={ref as Ref<HTMLAnchorElement & HTMLButtonElement>}
 				className={cn(
-					'group/navigation flex items-center justify-start py-2 outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring',
+					'group/navigation flex items-center justify-start outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring',
 					isLogo
-						? 'min-h-11 gap-2 rounded-md pl-2'
-						: 'gap-3 rounded-md px-5 hover:bg-accent/40 sm:px-7 md:px-3 md:hover:bg-accent',
+						? 'gap-2 rounded-md p-1.5 md:p-2'
+						: 'gap-3 rounded-md px-5 py-2 hover:bg-accent/40 sm:px-7 md:px-3 md:hover:bg-accent',
 					className
 				)}
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -79,12 +83,12 @@ export const NavItem = forwardRef<HTMLButtonElement | HTMLAnchorElement, NavItem
 				{label && (
 					<motion.span
 						animate={{
-							display: canNavOpen ? (isNavOpen ? 'inline-block' : 'none') : 'inline-block',
-							opacity: canNavOpen ? (isNavOpen ? 1 : 0) : 1
+							display: isNavOpen ? (isMobile && isLogo ? 'none' : 'block') : 'none',
+							opacity: isNavOpen ? (isMobile && isLogo ? 0 : 1) : 0
 						}}
 						className={cn(
-							'hidden whitespace-pre transition duration-150',
-							isLogo ? 'text-lg font-semibold tracking-wide' : 'text-sm',
+							'whitespace-pre transition duration-150',
+							isLogo ? 'hidden text-lg font-semibold tracking-wide md:block' : 'text-sm',
 							!disableAnimation && 'group-hover/navigation:translate-x-1.5'
 						)}
 					>
