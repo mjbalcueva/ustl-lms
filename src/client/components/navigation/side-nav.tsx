@@ -5,7 +5,6 @@ import { type Session } from 'next-auth'
 
 import { links } from '@/shared/config/links'
 
-import { NavLinkItem } from '@/client/components/navigation/nav-link'
 import { NavContainer, NavItem, NavTitle, NavWrapper } from '@/client/components/navigation/nav-wrapper'
 import { UserButton } from '@/client/components/navigation/user-button'
 import { Separator } from '@/client/components/ui'
@@ -27,25 +26,20 @@ export const SideNav = ({ className, session, ...props }: NavProps) => {
 			}}
 			{...props}
 		>
-			{links.site?.[0] && <NavLinkItem link={links.site?.[0]} isLogo />}
+			{links.site?.[0] && <NavItem {...links.site[0]} isLogo />}
+
 			<Separator />
 
 			<NavWrapper>
 				<NavTitle title="Home" isVisible={isNavOpen || !canNavOpen} />
-				<NavContainer>
-					{links.home?.map((link) => <NavItem key={link.href} icon={link.icon} label={link.label} href={link.href} />)}
-				</NavContainer>
+				<NavContainer>{links.home?.map((link) => <NavItem key={link.href} {...link} />)}</NavContainer>
 			</NavWrapper>
 
 			<Separator />
 
 			<NavWrapper>
 				<NavTitle title="Instructor Resources" isVisible={isNavOpen || !canNavOpen} />
-				<NavContainer>
-					{links.instructor?.map((link) => (
-						<NavItem key={link.href} icon={link.icon} label={link.label} href={link.href} />
-					))}
-				</NavContainer>
+				<NavContainer>{links.instructor?.map((link) => <NavItem key={link.href} {...link} />)}</NavContainer>
 			</NavWrapper>
 
 			<NavItem
