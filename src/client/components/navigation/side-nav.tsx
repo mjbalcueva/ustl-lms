@@ -5,7 +5,14 @@ import { type Session } from 'next-auth'
 
 import { links } from '@/shared/config/links'
 
-import { NavButton, NavIcon, NavLabel, NavLink, NavTitle } from '@/client/components/navigation/nav-item'
+import {
+	NavButton,
+	NavIcon,
+	NavItemSideIcon,
+	NavLabel,
+	NavLink,
+	NavTitle
+} from '@/client/components/navigation/nav-item'
 import { UserButton } from '@/client/components/navigation/user-button'
 import { Separator } from '@/client/components/ui'
 import { useNav } from '@/client/lib/hooks/use-nav'
@@ -40,6 +47,7 @@ export const SideNav = ({ className, session, ...props }: NavProps) => {
 				<NavLink key={link.href} href={link.href}>
 					<NavIcon icon={link.icon} />
 					<NavLabel label={link.label} />
+					<NavItemSideIcon isVisible={isNavOpen} />
 				</NavLink>
 			))}
 
@@ -50,6 +58,7 @@ export const SideNav = ({ className, session, ...props }: NavProps) => {
 				<NavLink key={link.href} href={link.href}>
 					<NavIcon icon={link.icon} />
 					<NavLabel label={link.label} />
+					<NavItemSideIcon isVisible={isNavOpen} />
 				</NavLink>
 			))}
 

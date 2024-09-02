@@ -1,6 +1,10 @@
+'use client'
+
 import Link from 'next/link'
 import * as React from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { type IconBaseProps } from 'react-icons/lib'
+import { TbArrowRight } from 'react-icons/tb'
 
 import { Icons } from '@/client/components/icons'
 import { useNav } from '@/client/lib/hooks/use-nav'
@@ -91,5 +95,21 @@ export const NavLabel = ({ label, className, disableAnimation }: NavLabelProps) 
 		>
 			{label}
 		</motion.span>
+	)
+}
+
+type NavItemSideIconProps = IconBaseProps & {
+	isVisible: boolean
+}
+export const NavItemSideIcon = ({ className, isVisible }: NavItemSideIconProps) => {
+	return (
+		isVisible && (
+			<TbArrowRight
+				className={cn(
+					'ml-auto mr-1.5 size-4 flex-shrink-0 opacity-0 transition duration-150 group-hover/navigation:translate-x-1.5 group-hover/navigation:opacity-100',
+					className
+				)}
+			/>
+		)
 	)
 }
