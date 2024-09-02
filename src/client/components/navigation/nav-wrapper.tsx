@@ -1,11 +1,9 @@
 'use client'
 
-import Link from 'next/link'
+import Link, { type LinkProps } from 'next/link'
 import * as React from 'react'
 import { forwardRef, type Ref } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-
-import { type Link as NavLinkType } from '@/shared/types/navigation'
 
 import { Icons } from '@/client/components/icons'
 import { useNav } from '@/client/lib/hooks/use-nav'
@@ -51,12 +49,12 @@ export const NavContainer = forwardRef<HTMLDivElement, React.HTMLAttributes<HTML
 })
 NavContainer.displayName = 'NavContainer'
 
-type NavItemButton = React.ButtonHTMLAttributes<HTMLButtonElement> & Omit<NavLinkType, 'href' | 'role'>
-type NavItemLink = React.AnchorHTMLAttributes<HTMLAnchorElement> & NavLinkType
-type NavItemProps = {
+type NavItemProps = (React.ButtonHTMLAttributes<HTMLButtonElement> | LinkProps) & {
+	icon: keyof typeof Icons
+	label: string
+	className?: string
 	disableAnimation?: boolean
-} & (NavItemLink | NavItemButton)
-
+}
 export const NavItem = forwardRef<HTMLButtonElement | HTMLAnchorElement, NavItemProps>(
 	({ icon, label, disableAnimation, className, ...props }, ref) => {
 		const { isNavOpen, canNavOpen } = useNav()
