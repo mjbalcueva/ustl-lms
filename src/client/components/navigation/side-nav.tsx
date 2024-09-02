@@ -6,12 +6,11 @@ import { type Session } from 'next-auth'
 import { links } from '@/shared/config/links'
 
 import { NavLinkItem } from '@/client/components/navigation/nav-link'
+import { NavContainer, NavItem, NavTitle, NavWrapper } from '@/client/components/navigation/nav-wrapper'
 import { UserButton } from '@/client/components/navigation/user-button'
 import { Separator } from '@/client/components/ui'
 import { useNav } from '@/client/lib/hooks/use-nav'
 import { cn } from '@/client/lib/utils'
-
-import { NavItem, NavLinks, NavTitle, NavWrapper } from './nav-wrapper'
 
 type NavProps = React.ComponentProps<typeof motion.div> & {
 	session: Session
@@ -33,22 +32,22 @@ export const SideNav = ({ className, session, ...props }: NavProps) => {
 
 			<NavWrapper>
 				<NavTitle title="Home" isVisible={isNavOpen || !canNavOpen} />
-				<NavLinks>
+				<NavContainer>
 					{links.home?.map((link) => (
 						<NavItem key={link.href} icon={link.icon} label={link.label} href={link.href} asLink />
 					))}
-				</NavLinks>
+				</NavContainer>
 			</NavWrapper>
 
 			<Separator />
 
 			<NavWrapper>
 				<NavTitle title="Instructor Resources" isVisible={isNavOpen || !canNavOpen} />
-				<NavLinks>
+				<NavContainer>
 					{links.instructor?.map((link) => (
 						<NavItem key={link.href} icon={link.icon} label={link.label} href={link.href} asLink />
 					))}
-				</NavLinks>
+				</NavContainer>
 			</NavWrapper>
 
 			<NavItem

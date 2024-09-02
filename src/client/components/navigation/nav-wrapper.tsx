@@ -46,13 +46,17 @@ export const NavTitle = forwardRef<HTMLDivElement, NavTitleProps>(({ title, isVi
 })
 NavTitle.displayName = 'NavTitle'
 
+export const NavContainer = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ ...props }, ref) => {
+	return <div ref={ref} className="flex flex-col gap-1 rounded-lg" {...props} />
+})
+NavContainer.displayName = 'NavContainer'
+
 type NavItemButton = React.ButtonHTMLAttributes<HTMLButtonElement> & { asLink?: false }
 type NavItemLink = React.AnchorHTMLAttributes<HTMLAnchorElement> & { asLink: true; href: NavLinkType['href'] }
 type NavItemProps = Omit<NavLinkType, 'href'> & {
 	className?: string
 	disableAnimation?: boolean
 } & (NavItemLink | NavItemButton)
-
 export const NavItem = forwardRef<HTMLButtonElement, NavItemProps>(
 	({ icon, label, disableAnimation, className, asLink, ...props }, ref) => {
 		const { isNavOpen, canNavOpen } = useNav()
@@ -92,15 +96,10 @@ export const NavItem = forwardRef<HTMLButtonElement, NavItemProps>(
 		}
 
 		return (
-			<button ref={ref} className={sharedClassName} {...(props as React.ButtonHTMLAttributes<HTMLButtonElement>)}>
+			<button ref={ref} className={sharedClassName} {...(props as NavItemButton)}>
 				{content}
 			</button>
 		)
 	}
 )
 NavItem.displayName = 'NavItem'
-
-export const NavLinks = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ ...props }, ref) => {
-	return <div ref={ref} className="flex flex-col gap-1 rounded-lg" {...props} />
-})
-NavLinks.displayName = 'NavLinks'
