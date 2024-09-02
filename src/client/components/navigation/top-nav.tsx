@@ -7,7 +7,7 @@ import { type Session } from 'next-auth'
 import { links } from '@/shared/config/links'
 
 import { Icons } from '@/client/components/icons'
-import { NavButton, NavIcon, NavLabel, NavLink } from '@/client/components/navigation/nav-item'
+import { NavButton, NavIcon, NavItemSideIcon, NavLabel, NavLink } from '@/client/components/navigation/nav-item'
 import { UserButton } from '@/client/components/navigation/user-button'
 import { useNav } from '@/client/lib/hooks/use-nav'
 import { cn } from '@/client/lib/utils'
@@ -110,8 +110,9 @@ export const TopNav = ({ className, session, ...props }: NavProps) => {
 							}}
 							onClick={() => setNavOpen(false)}
 						>
-							{item.icon && <NavIcon icon={item.icon} className="size-7" />}
+							{item.icon && <NavIcon icon={item.icon} className="size-5" />}
 							{item.label && <NavLabel label={item.label} />}
+							<NavItemSideIcon isVisible={isNavOpen} className="size-5" />
 						</MotionNavLink>
 					))}
 				</motion.aside>
