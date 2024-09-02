@@ -61,7 +61,7 @@ ItemInnerCard.displayName = 'ItemInnerCard'
 export const ItemFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
 	({ className, ...props }, ref) => (
 		<>
-			<Separator className="h-[0.5px]" />
+			<Separator />
 			<div ref={ref} className={cn('flex items-center px-4 py-2.5 md:px-6 md:py-3', className)} {...props} />
 		</>
 	)
