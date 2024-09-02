@@ -11,7 +11,7 @@ import { Separator } from '@/client/components/ui'
 import { useNav } from '@/client/lib/hooks/use-nav'
 import { cn } from '@/client/lib/utils'
 
-type NavProps = React.ComponentProps<typeof motion.div> & {
+type NavProps = React.ComponentProps<typeof motion.aside> & {
 	session: Session
 }
 
@@ -19,7 +19,7 @@ export const SideNav = ({ className, session, ...props }: NavProps) => {
 	const { isNavOpen, setNavOpen, canNavOpen } = useNav()
 
 	return (
-		<motion.nav
+		<motion.aside
 			className={cn('flex h-full w-[60px] flex-shrink-0 flex-col gap-4 rounded-xl p-2 pb-4', className)}
 			animate={{
 				width: canNavOpen ? (isNavOpen ? '240px' : '60px') : '240px'
@@ -53,6 +53,6 @@ export const SideNav = ({ className, session, ...props }: NavProps) => {
 			<Separator />
 
 			<UserButton session={session} />
-		</motion.nav>
+		</motion.aside>
 	)
 }
