@@ -5,10 +5,7 @@ import * as React from 'react'
 import { forwardRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
-import { type Link as NavLink } from '@/shared/types/navigation'
-
 import { Icons } from '@/client/components/icons'
-import { NavLinkItem } from '@/client/components/navigation/nav-link'
 import { useNav } from '@/client/lib/hooks/use-nav'
 import { cn } from '@/client/lib/utils'
 
@@ -51,9 +48,7 @@ type NavItemProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 	icon: keyof typeof Icons
 	label?: string
 	disableAnimation?: boolean
-	asLink?: boolean
-	href?: string
-}
+} & ({ asLink: true; href: string } | { asLink?: false; href?: undefined })
 
 export const NavItem = forwardRef<HTMLButtonElement, NavItemProps>(
 	({ icon, label, disableAnimation, className, asLink, href, ...props }, ref) => {
@@ -102,16 +97,7 @@ export const NavItem = forwardRef<HTMLButtonElement, NavItemProps>(
 )
 NavItem.displayName = 'NavItem'
 
-type NavLinksProps = React.HTMLAttributes<HTMLDivElement> & {
-	links: NavLink[]
-}
-export const NavLinks = forwardRef<HTMLDivElement, NavLinksProps>(({ links, ...props }, ref) => {
-	return (
-		<div ref={ref} className="flex flex-col gap-1 rounded-lg" {...props}>
-			{links.map((link) => (
-				<NavLinkItem key={link.href} link={link} />
-			))}
-		</div>
-	)
+export const NavLinks = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ ...props }, ref) => {
+	return <div ref={ref} className="flex flex-col gap-1 rounded-lg" {...props} />
 })
 NavLinks.displayName = 'NavLinks'

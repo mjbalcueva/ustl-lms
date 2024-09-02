@@ -33,14 +33,22 @@ export const SideNav = ({ className, session, ...props }: NavProps) => {
 
 			<NavWrapper>
 				<NavTitle title="Home" isVisible={isNavOpen || !canNavOpen} />
-				<NavLinks links={links.home ?? []} />
+				<NavLinks>
+					{links.home?.map((link) => (
+						<NavItem key={link.href} icon={link.icon} label={link.label} href={link.href} asLink />
+					))}
+				</NavLinks>
 			</NavWrapper>
 
 			<Separator />
 
 			<NavWrapper>
 				<NavTitle title="Instructor Resources" isVisible={isNavOpen || !canNavOpen} />
-				<NavLinks links={links.instructor ?? []} />
+				<NavLinks>
+					{links.instructor?.map((link) => (
+						<NavItem key={link.href} icon={link.icon} label={link.label} href={link.href} asLink />
+					))}
+				</NavLinks>
 			</NavWrapper>
 
 			<NavItem
