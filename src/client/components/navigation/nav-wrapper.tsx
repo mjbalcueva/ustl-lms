@@ -46,10 +46,10 @@ export const NavTitle = forwardRef<HTMLDivElement, NavTitleProps>(({ title, isVi
 })
 NavTitle.displayName = 'NavTitle'
 
-export const NavContainer = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ ...props }, ref) => {
+export const NavContent = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ ...props }, ref) => {
 	return <div ref={ref} className="flex flex-col gap-1 rounded-lg" {...props} />
 })
-NavContainer.displayName = 'NavContainer'
+NavContent.displayName = 'NavContent'
 
 type NavItemProps = (React.ButtonHTMLAttributes<HTMLButtonElement> | LinkProps) & {
 	icon: keyof typeof Icons
