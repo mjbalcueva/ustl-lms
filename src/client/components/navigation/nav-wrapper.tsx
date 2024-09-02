@@ -87,8 +87,8 @@ export const NavItem = forwardRef<HTMLButtonElement | HTMLAnchorElement, NavItem
 							opacity: isNavOpen ? (isMobile && isLogo ? 0 : 1) : 0
 						}}
 						className={cn(
-							'whitespace-pre transition duration-150',
-							isLogo ? 'hidden text-lg font-semibold tracking-wide md:block' : 'text-sm',
+							'hidden whitespace-pre transition duration-150',
+							isLogo ? 'text-lg font-semibold tracking-wide' : 'text-sm',
 							!disableAnimation && 'group-hover/navigation:translate-x-1.5'
 						)}
 					>
