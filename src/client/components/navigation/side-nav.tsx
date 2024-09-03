@@ -43,7 +43,7 @@ export const SideNav = ({ className, session, ...props }: NavProps) => {
 				</NavButton>
 			</NavTooltip>
 
-			<Separator className="my-4 mt-2" />
+			<Separator className="mb-4" />
 
 			<NavTitle title="Home" isVisible={isNavOpen || !canNavOpen} />
 			{links.home?.map((link) => (
