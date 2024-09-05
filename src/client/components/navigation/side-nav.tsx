@@ -23,7 +23,10 @@ export const SideNav = ({ className, ...props }: React.ComponentProps<typeof mot
 
 	return (
 		<motion.nav
-			className={cn('flex h-full w-[60px] flex-shrink-0 flex-col rounded-xl p-2 pb-4', className)}
+			className={cn(
+				'flex h-full w-[60px] flex-shrink-0 flex-col overflow-x-hidden overflow-y-scroll rounded-xl p-2 pb-4',
+				className
+			)}
 			animate={{
 				width: canNavOpen ? (isNavOpen ? '240px' : '60px') : '240px'
 			}}
