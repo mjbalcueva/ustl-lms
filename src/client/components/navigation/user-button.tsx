@@ -2,11 +2,12 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { type Session } from 'next-auth'
 import { signOut } from 'next-auth/react'
 import { LuChevronRight } from 'react-icons/lu'
 import { TbLogout } from 'react-icons/tb'
 import { useMediaQuery } from 'usehooks-ts'
+
+import { api } from '@/shared/trpc/react'
 
 import { Icons } from '@/client/components/icons'
 import { PreferenceDrawer } from '@/client/components/navigation/preference-drawer'
@@ -26,12 +27,9 @@ import { useDeviceType } from '@/client/context/device-type-provider'
 import { useNav } from '@/client/lib/hooks/use-nav'
 import { getEmail, getInitials } from '@/client/lib/utils'
 
-type UserButtonProps = React.ComponentProps<typeof DropdownMenu> & {
-	session: Session
-}
-
-export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }: UserButtonProps) => {
-	const user = session?.user
+export const UserButton: React.FC<React.ComponentProps<typeof DropdownMenu>> = ({ ...props }) => {
+	const sesh = api.auth.getSession.useQuery()
+	const user = sesh.data?.user
 
 	const { isNavOpen, canNavOpen } = useNav()
 	const { deviceSize } = useDeviceType()

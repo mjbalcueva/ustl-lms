@@ -2,7 +2,6 @@
 
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
-import { type Session } from 'next-auth'
 
 import { links } from '@/shared/config/links'
 
@@ -12,10 +11,7 @@ import { UserButton } from '@/client/components/navigation/user-button'
 import { useNav } from '@/client/lib/hooks/use-nav'
 import { cn } from '@/client/lib/utils'
 
-type NavProps = React.ComponentProps<typeof motion.div> & {
-	session: Session
-}
-export const TopNav = ({ className, session, ...props }: NavProps) => {
+export const TopNav = ({ className, ...props }: React.ComponentProps<typeof motion.div>) => {
 	const { isNavOpen, setNavOpen } = useNav()
 
 	const { scrollYProgress } = useScroll()
@@ -63,7 +59,6 @@ export const TopNav = ({ className, session, ...props }: NavProps) => {
 				</NavButton>
 
 				<UserButton
-					session={session}
 					onOpenChange={(open) => {
 						isUserButtonOpen.current = open
 						setNavOpen(false)

@@ -1,7 +1,6 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useSession } from 'next-auth/react'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { toast } from 'sonner'
 
@@ -20,7 +19,7 @@ import { Loader } from '@/client/components/loader'
 import { Button, Form, FormControl, FormField, FormItem, FormMessage, Input } from '@/client/components/ui'
 
 export const UpdateDisplayNameForm = () => {
-	const { data: sesh } = useSession()
+	const { data: sesh } = api.auth.getSession.useQuery()
 
 	const form = useForm<UpdateDisplayNameSchema>({
 		resolver: zodResolver(updateDisplayNameSchema),
