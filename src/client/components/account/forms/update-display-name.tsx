@@ -20,12 +20,12 @@ import { Loader } from '@/client/components/loader'
 import { Button, Form, FormControl, FormField, FormItem, FormMessage, Input } from '@/client/components/ui'
 
 export const UpdateDisplayNameForm = () => {
-	const { data: sesh } = useSession()
+	const session = useSession()
 
 	const form = useForm<UpdateDisplayNameSchema>({
 		resolver: zodResolver(updateDisplayNameSchema),
 		defaultValues: {
-			name: sesh?.user?.name ?? ''
+			name: session?.data?.user?.name ?? ''
 		}
 	})
 

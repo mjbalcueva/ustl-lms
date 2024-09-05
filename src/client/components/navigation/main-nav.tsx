@@ -2,7 +2,6 @@
 
 import { Inter } from 'next/font/google'
 import { type motion } from 'framer-motion'
-import { type Session } from 'next-auth'
 
 import { SideNav } from '@/client/components/navigation/side-nav'
 import { TopNav } from '@/client/components/navigation/top-nav'
@@ -14,11 +13,7 @@ const inter = Inter({
 	display: 'swap'
 })
 
-type NavProps = React.ComponentProps<typeof motion.div> & {
-	session: Session
-}
-
-export const MainNav = ({ className, session, ...props }: NavProps) => {
+export const MainNav = ({ className, ...props }: React.ComponentProps<typeof motion.div>) => {
 	const { deviceSize } = useDeviceType()
 
 	if (!deviceSize)
@@ -39,9 +34,9 @@ export const MainNav = ({ className, session, ...props }: NavProps) => {
 	return (
 		<>
 			{deviceSize === 'mobile' ? (
-				<TopNav className={cn(className, inter.className)} session={session} {...props} />
+				<TopNav className={cn(className, inter.className)} {...props} />
 			) : (
-				<SideNav className={cn(className, inter.className)} session={session} {...props} />
+				<SideNav className={cn(className, inter.className)} {...props} />
 			)}
 		</>
 	)

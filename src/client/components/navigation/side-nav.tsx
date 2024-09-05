@@ -1,7 +1,6 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { type Session } from 'next-auth'
 
 import { links } from '@/shared/config/links'
 
@@ -19,16 +18,15 @@ import { Separator } from '@/client/components/ui'
 import { useNav } from '@/client/lib/hooks/use-nav'
 import { cn } from '@/client/lib/utils'
 
-type NavProps = React.ComponentProps<typeof motion.nav> & {
-	session: Session
-}
-
-export const SideNav = ({ className, session, ...props }: NavProps) => {
+export const SideNav = ({ className, ...props }: React.ComponentProps<typeof motion.nav>) => {
 	const { isNavOpen, setNavOpen, canNavOpen } = useNav()
 
 	return (
 		<motion.nav
-			className={cn('flex h-full w-[60px] flex-shrink-0 flex-col rounded-xl p-2 pb-4', className)}
+			className={cn(
+				'flex h-full w-[60px] flex-shrink-0 flex-col overflow-x-hidden overflow-y-scroll rounded-xl p-2 pb-4',
+				className
+			)}
 			animate={{
 				width: canNavOpen ? (isNavOpen ? '240px' : '60px') : '240px'
 			}}
@@ -43,7 +41,7 @@ export const SideNav = ({ className, session, ...props }: NavProps) => {
 				</NavButton>
 			</NavTooltip>
 
-			<Separator className="my-4 mt-2" />
+			<Separator className="mb-4" />
 
 			<NavTitle title="Home" isVisible={isNavOpen || !canNavOpen} />
 			{links.home?.map((link) => (
@@ -78,7 +76,7 @@ export const SideNav = ({ className, session, ...props }: NavProps) => {
 
 			<Separator className="mb-4 mt-2" />
 
-			<UserButton session={session} />
+			<UserButton />
 		</motion.nav>
 	)
 }

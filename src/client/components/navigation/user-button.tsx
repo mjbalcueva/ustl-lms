@@ -2,8 +2,7 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { type Session } from 'next-auth'
-import { signOut } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import { LuChevronRight } from 'react-icons/lu'
 import { TbLogout } from 'react-icons/tb'
 import { useMediaQuery } from 'usehooks-ts'
@@ -26,12 +25,8 @@ import { useDeviceType } from '@/client/context/device-type-provider'
 import { useNav } from '@/client/lib/hooks/use-nav'
 import { getEmail, getInitials } from '@/client/lib/utils'
 
-type UserButtonProps = React.ComponentProps<typeof DropdownMenu> & {
-	session: Session
-}
-
-export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }: UserButtonProps) => {
-	const user = session?.user
+export const UserButton: React.FC<React.ComponentProps<typeof DropdownMenu>> = ({ ...props }) => {
+	const session = useSession()
 
 	const { isNavOpen, canNavOpen } = useNav()
 	const { deviceSize } = useDeviceType()
@@ -39,8 +34,8 @@ export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }: Use
 	const isMobile = deviceSize === 'mobile'
 	const isTiny = useMediaQuery('(max-width: 500px)')
 
-	const name = user?.name ?? ''
-	const email = user?.email ?? ''
+	const name = session?.data?.user?.name ?? ''
+	const email = session?.data?.user?.email ?? ''
 
 	const initials = getInitials(name)
 	const strippedEmail = getEmail(email)
@@ -49,7 +44,7 @@ export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }: Use
 		<DropdownMenu modal={false} {...props}>
 			<DropdownMenuTrigger className="group/user-button flex cursor-pointer items-center gap-3 rounded-md p-1 outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring md:min-h-[2.8rem]">
 				<Avatar className="size-8 border border-border md:ml-[1.5px]">
-					<AvatarImage src={user?.image ?? ''} alt={initials} className="select-none" />
+					<AvatarImage src={session?.data?.user?.image ?? ''} alt={initials} className="select-none" />
 					<AvatarFallback className="pointer-events-none select-none bg-muted">{initials}</AvatarFallback>
 				</Avatar>
 				{!isMobile && (

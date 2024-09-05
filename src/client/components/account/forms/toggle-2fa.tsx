@@ -37,12 +37,12 @@ const twoFactorSchema = z.object({
 type TwoFactorFormValues = z.infer<typeof twoFactorSchema>
 
 export const Toggle2FAForm = () => {
-	const { data: sesh } = useSession()
+	const session = useSession()
 
 	const form = useForm<TwoFactorFormValues>({
 		resolver: zodResolver(twoFactorSchema),
 		defaultValues: {
-			twoFactorEnabled: sesh?.user?.isTwoFactorEnabled
+			twoFactorEnabled: session?.data?.user?.isTwoFactorEnabled
 		}
 	})
 

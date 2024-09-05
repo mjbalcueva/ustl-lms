@@ -29,22 +29,9 @@ model Post {
   @@map("post")
 }
 
-// Profile model
-
-model Profile {
-  id          String    @id @default(cuid())
-  userId      String    @unique
-  name        String?
-  image       String?
-  bio         String?
-  dateOfBirth DateTime? @map("date_of_birth")
-  gender      String?
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("profile")
-}
-
-// Auth models
+// -----------------------------------------------------------------------------
+// Auth Models
+// -----------------------------------------------------------------------------
 
 enum UserRole {
   ADMIN
@@ -59,8 +46,8 @@ model User {
   password              String?
   role                  UserRole               @default(STUDENT)
   isTwoFactorEnabled    Boolean                @default(false)
-  accounts              Account[]
   profile               Profile?
+  accounts              Account[]
   verificationToken     VerificationToken[]
   passwordResetToken    PasswordResetToken[]
   twoFactorToken        TwoFactorToken[]
@@ -68,6 +55,19 @@ model User {
   posts                 Post[]
 
   @@map("user")
+}
+
+model Profile {
+  id          String    @id @default(cuid())
+  userId      String    @unique
+  name        String?
+  image       String?
+  bio         String?
+  dateOfBirth DateTime? @map("date_of_birth")
+  gender      String?
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("profile")
 }
 
 model Account {
