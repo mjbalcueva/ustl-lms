@@ -1,6 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useSession } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
 import { TbShieldCheckFilled, TbShieldX } from 'react-icons/tb'
 import { toast } from 'sonner'
@@ -36,12 +37,12 @@ const twoFactorSchema = z.object({
 type TwoFactorFormValues = z.infer<typeof twoFactorSchema>
 
 export const Toggle2FAForm = () => {
-	const { data: sesh } = api.auth.getSession.useQuery()
+	const session = useSession()
 
 	const form = useForm<TwoFactorFormValues>({
 		resolver: zodResolver(twoFactorSchema),
 		defaultValues: {
-			twoFactorEnabled: sesh?.user?.isTwoFactorEnabled
+			twoFactorEnabled: session?.data?.user?.isTwoFactorEnabled
 		}
 	})
 
