@@ -4,7 +4,6 @@ import { PageContent, PageDescription, PageHeader, PageTitle, PageWrapper } from
 
 export default async function Page() {
 	const session = await api.auth.getSession()
-
 	void api.auth.getSession.prefetch()
 
 	return (

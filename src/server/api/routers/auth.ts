@@ -54,7 +54,7 @@ export const authRouter = createTRPCRouter({
 	}),
 
 	getSession: publicProcedure.query(async ({ ctx }) => {
-		return ctx.session
+		return ctx.session ?? null
 	}),
 
 	register: publicProcedure.input(registerSchema).mutation(async ({ ctx, input }) => {
