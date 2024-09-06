@@ -12,6 +12,7 @@ import {
 	ItemContent,
 	ItemDescription,
 	ItemFooter,
+	ItemFooterDescription,
 	ItemHeader,
 	ItemTitle,
 	ItemWrapper
@@ -67,9 +68,7 @@ export const UpdateDisplayNameForm = () => {
 					</ItemContent>
 
 					<ItemFooter>
-						<div className="flex items-center text-sm text-muted-foreground">
-							Your display name helps others recognize you
-						</div>
+						<ItemFooterDescription>Your display name helps others recognize you</ItemFooterDescription>
 						<Button className="ml-auto flex h-8 gap-1 text-sm" disabled={!form.formState.isDirty || isPending}>
 							{isPending && <Loader />}
 							{isPending ? 'Saving...' : 'Save'}

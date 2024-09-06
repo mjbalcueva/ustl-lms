@@ -11,6 +11,7 @@ import {
 	ItemContent,
 	ItemDescription,
 	ItemFooter,
+	ItemFooterDescription,
 	ItemHeader,
 	ItemTitle,
 	ItemWrapper
@@ -101,9 +102,7 @@ export const AddPasswordForm = () => {
 					</ItemContent>
 
 					<ItemFooter>
-						<div className="flex items-center text-sm text-muted-foreground">
-							Your account doesn&apos;t have a password yet
-						</div>
+						<ItemFooterDescription>Your account doesn&apos;t have a password yet</ItemFooterDescription>
 						<Button className="ml-auto flex h-8 gap-1 text-sm" disabled={!form.formState.isDirty || isPending}>
 							{isPending && <Loader />}
 							{isPending ? 'Saving...' : 'Save'}
