@@ -4,7 +4,7 @@ import { PageWrapper } from '@/client/components/page-wrapper'
 export default function Page() {
 	return (
 		<PageWrapper>
-			<PageBreadcrumbs withIcons />
+			<PageBreadcrumbs baseCrumb="Instructor" withIcons />
 		</PageWrapper>
 	)
 }
