@@ -11,6 +11,7 @@ import {
 	ItemContent,
 	ItemDescription,
 	ItemFooter,
+	ItemFooterDescription,
 	ItemHeader,
 	ItemTitle,
 	ItemWrapper
@@ -123,7 +124,7 @@ export const UpdatePasswordForm = () => {
 					</ItemContent>
 
 					<ItemFooter>
-						<div className="flex items-center text-sm text-muted-foreground">Used to log in to your account</div>
+						<ItemFooterDescription>Used to log in to your account</ItemFooterDescription>
 						<Button className="ml-auto flex h-8 gap-1 text-sm" disabled={!form.formState.isDirty || isPending}>
 							{isPending && <Loader />}
 							{isPending ? 'Saving...' : 'Save'}

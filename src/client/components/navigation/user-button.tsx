@@ -22,13 +22,13 @@ import {
 	DropdownMenuTrigger
 } from '@/client/components/ui'
 import { useDeviceType } from '@/client/context/device-type-provider'
-import { useNav } from '@/client/lib/hooks/use-nav'
-import { getEmail, getInitials } from '@/client/lib/utils'
+import { useNav } from '@/client/context/nav-provider'
+import { cn, getEmail, getInitials } from '@/client/lib/utils'
 
 export const UserButton: React.FC<React.ComponentProps<typeof DropdownMenu>> = ({ ...props }) => {
 	const session = useSession()
 
-	const { isNavOpen, canNavOpen } = useNav()
+	const { isNavOpen } = useNav()
 	const { deviceSize } = useDeviceType()
 
 	const isMobile = deviceSize === 'mobile'
@@ -50,18 +50,19 @@ export const UserButton: React.FC<React.ComponentProps<typeof DropdownMenu>> = (
 				{!isMobile && (
 					<motion.div
 						animate={{
-							display: canNavOpen ? (isNavOpen ? 'flex' : 'none') : 'flex',
-							opacity: canNavOpen ? (isNavOpen ? 1 : 0) : 1
+							display: isNavOpen ? 'flex' : 'none',
+							opacity: isNavOpen ? 1 : 0
 						}}
-						className="hidden min-w-[168px] items-center justify-between whitespace-pre transition duration-150"
+						className={cn(
+							'flex items-center justify-between whitespace-pre transition duration-150',
+							isNavOpen ? 'min-w-[168px]' : 'hidden max-w-[0px]'
+						)}
 					>
 						<div className="flex max-w-[9.5rem] flex-col items-start -space-y-0.5">
 							<span className="max-w-full truncate text-sm font-medium">{name}</span>
 							<span className="max-w-full truncate text-xs text-muted-foreground">{strippedEmail}</span>
 						</div>
-						<div className="relative rounded-md p-0.5">
-							<LuChevronRight className="hidden size-4 group-hover/user-button:block group-focus/user-button:block" />
-						</div>
+						<LuChevronRight className="mr-0.5 hidden size-4 group-hover/user-button:block group-focus/user-button:block" />
 					</motion.div>
 				)}
 			</DropdownMenuTrigger>

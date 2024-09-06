@@ -13,6 +13,7 @@ import {
 	ItemContent,
 	ItemDescription,
 	ItemFooter,
+	ItemFooterDescription,
 	ItemHeader,
 	ItemInnerCard,
 	ItemTitle,
@@ -89,7 +90,7 @@ export const Toggle2FAForm = () => {
 					</ItemContent>
 
 					<ItemFooter>
-						<div className="flex items-center text-sm text-muted-foreground">
+						<ItemFooterDescription>
 							{form.watch('twoFactorEnabled') ? (
 								<>
 									<TbShieldCheckFilled className="mr-2 h-4 w-4" />
@@ -101,7 +102,7 @@ export const Toggle2FAForm = () => {
 									2FA is currently disabled
 								</>
 							)}
-						</div>
+						</ItemFooterDescription>
 						<Button className="ml-auto h-8 gap-1 text-sm" disabled={!form.formState.isDirty || isPending}>
 							{isPending && <Loader />}
 							{isPending ? 'Saving...' : 'Save'}

@@ -33,7 +33,7 @@ ItemTitle.displayName = 'ItemTitle'
 
 export const ItemDescription = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
 	({ className, ...props }, ref) => (
-		<p ref={ref} className={cn('w-fit text-sm text-muted-foreground', className)} {...props} />
+		<p ref={ref} className={cn('w-fit text-sm text-foreground', className)} {...props} />
 	)
 )
 ItemDescription.displayName = 'ItemDescription'
@@ -62,8 +62,15 @@ export const ItemFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<
 	({ className, ...props }, ref) => (
 		<>
 			<Separator />
-			<div ref={ref} className={cn('flex items-center px-4 py-2.5 md:px-6 md:py-3', className)} {...props} />
+			<div ref={ref} className={cn('flex items-center px-4 py-2 md:px-6', className)} {...props} />
 		</>
 	)
 )
 ItemFooter.displayName = 'ItemFooter'
+
+export const ItemFooterDescription = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+	({ className, ...props }, ref) => (
+		<p ref={ref} className={cn('flex items-center text-sm text-muted-foreground', className)} {...props} />
+	)
+)
+ItemFooterDescription.displayName = 'ItemFooterDescription'

@@ -9,9 +9,13 @@ import { DeviceTypeProvider, type DeviceType } from '@/client/context/device-typ
 
 export default async function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
 	const deviceSizeCookie = cookies().get('device-size')
+	const navOpenCookie = cookies().get('is-nav-open')
 
 	let defaultDeviceSize: DeviceType = ''
 	if (deviceSizeCookie) defaultDeviceSize = JSON.parse(deviceSizeCookie.value) as DeviceType
+
+	let defaultNavOpen = false
+	if (navOpenCookie) defaultNavOpen = JSON.parse(navOpenCookie.value) as boolean
 
 	const session = await api.auth.getSession()
 
@@ -20,7 +24,7 @@ export default async function Layout({ children }: Readonly<{ children: React.Re
 			<DeviceTypeProvider defaultDeviceSize={defaultDeviceSize}>
 				<TooltipProvider>
 					<div className="flex flex-col bg-background text-foreground md:h-[100vh] md:flex-row md:bg-card md:pt-3">
-						<MainNav className="text-card-foreground" />
+						<MainNav className="text-card-foreground" defaultNavOpen={defaultNavOpen} />
 						{children}
 					</div>
 				</TooltipProvider>

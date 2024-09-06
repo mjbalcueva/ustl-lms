@@ -15,7 +15,7 @@ import {
 } from '@/client/components/navigation/nav-item'
 import { UserButton } from '@/client/components/navigation/user-button'
 import { Separator } from '@/client/components/ui'
-import { useNav } from '@/client/lib/hooks/use-nav'
+import { useNav } from '@/client/context/nav-provider'
 import { cn } from '@/client/lib/utils'
 
 export const SideNav = ({ className, ...props }: React.ComponentProps<typeof motion.nav>) => {
@@ -24,7 +24,8 @@ export const SideNav = ({ className, ...props }: React.ComponentProps<typeof mot
 	return (
 		<motion.nav
 			className={cn(
-				'flex h-full w-[60px] flex-shrink-0 flex-col overflow-x-hidden overflow-y-scroll rounded-xl p-2 pb-4',
+				'flex h-full flex-shrink-0 flex-col overflow-x-hidden overflow-y-scroll rounded-xl p-2 pb-4',
+				isNavOpen ? 'w-[240px]' : 'w-[60px]',
 				className
 			)}
 			animate={{
@@ -32,7 +33,7 @@ export const SideNav = ({ className, ...props }: React.ComponentProps<typeof mot
 			}}
 			{...props}
 		>
-			<NavTooltip content={links.site?.[0]?.label} isVisible={!isNavOpen}>
+			<NavTooltip content={links.site?.[0]?.label}>
 				<NavButton className="gap-2 !pl-2">
 					{links.site?.[0]?.icon && <NavIcon icon={links.site?.[0]?.icon} className="size-7" />}
 					{links.site?.[0]?.label && (
@@ -43,34 +44,34 @@ export const SideNav = ({ className, ...props }: React.ComponentProps<typeof mot
 
 			<Separator className="mb-4" />
 
-			<NavTitle title="Home" isVisible={isNavOpen || !canNavOpen} />
+			<NavTitle title="Home" />
 			{links.home?.map((link) => (
-				<NavTooltip key={link.href} content={link.label} isVisible={!isNavOpen}>
+				<NavTooltip key={link.href} content={link.label}>
 					<NavLink href={link.href}>
 						<NavIcon icon={link.icon} />
 						<NavLabel label={link.label} />
-						<NavItemSideIcon isVisible={isNavOpen} />
+						<NavItemSideIcon />
 					</NavLink>
 				</NavTooltip>
 			))}
 
 			<Separator className="mb-4 mt-2" />
 
-			<NavTitle title="Instructor Resources" isVisible={isNavOpen || !canNavOpen} />
+			<NavTitle title="Instructor Resources" />
 			{links.instructor?.map((link) => (
-				<NavTooltip key={link.href} content={link.label} isVisible={!isNavOpen}>
+				<NavTooltip key={link.href} content={link.label}>
 					<NavLink href={link.href}>
 						<NavIcon icon={link.icon} />
 						<NavLabel label={link.label} />
-						<NavItemSideIcon isVisible={isNavOpen} />
+						<NavItemSideIcon />
 					</NavLink>
 				</NavTooltip>
 			))}
 
-			<NavTooltip content="Toggle Sidebar" isVisible={!isNavOpen}>
+			<NavTooltip content={isNavOpen ? 'Collapse Sidebar' : 'Expand Sidebar'}>
 				<NavButton className="mt-auto" onClick={() => setNavOpen(!isNavOpen)}>
 					<NavIcon icon={isNavOpen ? 'navbarClose' : 'navbarOpen'} />
-					<NavLabel label="Toggle Sidebar" disableAnimation />
+					<NavLabel label={isNavOpen ? 'Collapse Sidebar' : 'Expand Sidebar'} disableAnimation />
 				</NavButton>
 			</NavTooltip>
 

@@ -7,7 +7,7 @@ import { type IconBaseProps } from 'react-icons/lib'
 import { TbArrowRight } from 'react-icons/tb'
 
 import { Icons } from '@/client/components/icons'
-import { useNav } from '@/client/lib/hooks/use-nav'
+import { useNav } from '@/client/context/nav-provider'
 import { cn } from '@/client/lib/utils'
 
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui'
@@ -49,11 +49,11 @@ export const NavButton = React.forwardRef<HTMLButtonElement, NavButtonProps>(({ 
 NavButton.displayName = 'NavButton'
 
 type NavTooltipProps = React.ComponentProps<typeof Tooltip> & {
-	isVisible: boolean
 	content: React.ReactNode
 }
-export const NavTooltip = ({ isVisible, children, content, ...props }: NavTooltipProps) => {
-	if (!isVisible) return <>{children}</>
+export const NavTooltip = ({ children, content, ...props }: NavTooltipProps) => {
+	const { isNavOpen } = useNav()
+	if (isNavOpen) return <>{children}</>
 	return (
 		<Tooltip {...props} delayDuration={300}>
 			<TooltipTrigger asChild>{children}</TooltipTrigger>
@@ -64,22 +64,29 @@ export const NavTooltip = ({ isVisible, children, content, ...props }: NavToolti
 
 type NavTitleProps = {
 	title: string
-	isVisible: boolean
 }
-export const NavTitle = ({ title, isVisible, ...props }: NavTitleProps) => {
+export const NavTitle = ({ title, ...props }: NavTitleProps) => {
+	const { isNavOpen } = useNav()
 	return (
 		<AnimatePresence>
-			{isVisible && (
-				<motion.div
-					className="flex overflow-hidden rounded-lg"
-					initial={{ opacity: 0, height: 0 }}
-					animate={{ opacity: 1, height: '2rem' }}
-					exit={{ opacity: 0, height: 0 }}
-					{...props}
-				>
-					<span className="select-none px-3 py-2 text-xs font-medium text-muted-foreground">{title}</span>
-				</motion.div>
-			)}
+			<motion.div
+				initial={{
+					height: isNavOpen ? '2rem' : 0,
+					opacity: isNavOpen ? 1 : 0
+				}}
+				animate={{
+					height: isNavOpen ? '2rem' : 0,
+					opacity: isNavOpen ? 1 : 0
+				}}
+				exit={{
+					height: isNavOpen ? '2rem' : 0,
+					opacity: isNavOpen ? 0 : 1
+				}}
+				className="flex overflow-hidden rounded-lg"
+				{...props}
+			>
+				<span className="min-w-[224px] select-none px-3 py-2 text-xs font-medium text-muted-foreground">{title}</span>
+			</motion.div>
 		</AnimatePresence>
 	)
 }
@@ -102,12 +109,9 @@ export const NavLabel = ({ label, className, disableAnimation }: NavLabelProps) 
 	const { isNavOpen } = useNav()
 	return (
 		<motion.span
-			animate={{
-				display: isNavOpen ? 'block' : 'none',
-				opacity: isNavOpen ? 1 : 0
-			}}
+			animate={{ opacity: isNavOpen ? 1 : 0 }}
 			className={cn(
-				'hidden whitespace-pre text-sm transition duration-150',
+				'overflow-hidden whitespace-pre text-sm transition duration-150',
 				!disableAnimation && 'group-hover/navigation:translate-x-1.5',
 				className
 			)}
@@ -117,12 +121,10 @@ export const NavLabel = ({ label, className, disableAnimation }: NavLabelProps) 
 	)
 }
 
-type NavItemSideIconProps = IconBaseProps & {
-	isVisible: boolean
-}
-export const NavItemSideIcon = ({ className, isVisible }: NavItemSideIconProps) => {
+export const NavItemSideIcon = ({ className }: IconBaseProps) => {
+	const { isNavOpen } = useNav()
 	return (
-		isVisible && (
+		isNavOpen && (
 			<TbArrowRight
 				className={cn(
 					'ml-auto mr-1.5 size-4 flex-shrink-0 opacity-0 transition duration-150 group-hover/navigation:translate-x-1.5 group-hover/navigation:opacity-100',
