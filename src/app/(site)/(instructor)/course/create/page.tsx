@@ -4,7 +4,7 @@ import { PageContent, PageDescription, PageHeader, PageTitle, PageWrapper } from
 export default function Page() {
 	return (
 		<PageWrapper>
-			<PageBreadcrumbs baseCrumb="Instructor" withIcons />
+			<PageBreadcrumbs withIcons />
 			<PageHeader className="md:pt-4">
 				<PageTitle>Create Course</PageTitle>
 				<PageDescription>Create a new course</PageDescription>
