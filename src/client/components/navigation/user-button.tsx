@@ -28,7 +28,7 @@ import { cn, getEmail, getInitials } from '@/client/lib/utils'
 export const UserButton: React.FC<React.ComponentProps<typeof DropdownMenu>> = ({ ...props }) => {
 	const session = useSession()
 
-	const { isNavOpen, canNavOpen } = useNav()
+	const { isNavOpen } = useNav()
 	const { deviceSize } = useDeviceType()
 
 	const isMobile = deviceSize === 'mobile'
@@ -50,8 +50,8 @@ export const UserButton: React.FC<React.ComponentProps<typeof DropdownMenu>> = (
 				{!isMobile && (
 					<motion.div
 						animate={{
-							display: canNavOpen ? (isNavOpen ? 'flex' : 'none') : 'flex',
-							opacity: canNavOpen ? (isNavOpen ? 1 : 0) : 1
+							display: isNavOpen ? 'flex' : 'none',
+							opacity: isNavOpen ? 1 : 0
 						}}
 						className={cn(
 							'flex items-center justify-between whitespace-pre transition duration-150',
