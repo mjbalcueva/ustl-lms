@@ -82,7 +82,7 @@ export const NavTitle = ({ title, ...props }: NavTitleProps) => {
 					height: isNavOpen ? '2rem' : 0,
 					opacity: isNavOpen ? 0 : 1
 				}}
-				className="flex overflow-x-visible rounded-lg"
+				className="flex overflow-hidden rounded-lg"
 				{...props}
 			>
 				<span className="min-w-[224px] select-none px-3 py-2 text-xs font-medium text-muted-foreground">{title}</span>
@@ -109,9 +109,11 @@ export const NavLabel = ({ label, className, disableAnimation }: NavLabelProps) 
 	const { isNavOpen } = useNav()
 	return (
 		<motion.span
+			initial={{ opacity: isNavOpen ? 1 : 0 }}
 			animate={{ opacity: isNavOpen ? 1 : 0 }}
 			className={cn(
 				'whitespace-pre text-sm transition duration-150',
+				isNavOpen ? 'opacity-100' : 'opacity-0',
 				!disableAnimation && 'group-hover/navigation:translate-x-1.5',
 				className
 			)}
