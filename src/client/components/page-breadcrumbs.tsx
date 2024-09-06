@@ -21,15 +21,11 @@ export const PageBreadcrumbs = ({ withIcons = false }: PageBreadcrumbsProps) => 
 
 	const getBreadcrumbs = (links: Link[], currentPath: string[]): Link[] => {
 		for (const link of links) {
-			if (link.href === `/${currentPath.join('/')}`) {
-				return [link]
-			}
-			if (link.children) {
-				const childResult = getBreadcrumbs(link.children, currentPath)
-				if (childResult.length > 0) {
-					return [link, ...childResult]
-				}
-			}
+			if (link.href !== `/${currentPath.join('/')}` && !link.children) continue
+			if (link.href === `/${currentPath.join('/')}`) return [link]
+
+			const childResult = getBreadcrumbs(link.children ?? [], currentPath)
+			if (childResult.length > 0) return [link, ...childResult]
 		}
 		return []
 	}
