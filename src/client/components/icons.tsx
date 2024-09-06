@@ -2,6 +2,7 @@ import {
 	TbAlertTriangle,
 	TbChartHistogram,
 	TbCircleCheck,
+	TbCirclePlus,
 	TbDiamond,
 	TbInfoCircle,
 	TbInfoTriangle,
@@ -52,5 +53,8 @@ export const Icons = {
 	success: TbCircleCheck,
 	info: TbInfoCircle,
 	warning: TbAlertTriangle,
-	error: TbInfoTriangle
+	error: TbInfoTriangle,
+
+	// misc
+	plusCircle: TbCirclePlus
 }
