@@ -109,11 +109,9 @@ export const NavLabel = ({ label, className, disableAnimation }: NavLabelProps) 
 	const { isNavOpen } = useNav()
 	return (
 		<motion.span
-			initial={{ opacity: isNavOpen ? 1 : 0 }}
 			animate={{ opacity: isNavOpen ? 1 : 0 }}
 			className={cn(
-				'whitespace-pre text-sm transition duration-150',
-				isNavOpen ? 'opacity-100' : 'opacity-0',
+				'overflow-hidden whitespace-pre text-sm transition duration-150',
 				!disableAnimation && 'group-hover/navigation:translate-x-1.5',
 				className
 			)}
