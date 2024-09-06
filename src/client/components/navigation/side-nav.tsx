@@ -33,12 +33,10 @@ export const SideNav = ({ className, ...props }: React.ComponentProps<typeof mot
 			}}
 			{...props}
 		>
-			<NavTooltip content={site.label}>
-				<NavButton className="gap-2 !pl-2">
-					<NavIcon icon={site.icon} className="size-7" />
-					<NavLabel label={site.label} className="text-lg font-semibold tracking-wide" disableAnimation />
-				</NavButton>
-			</NavTooltip>
+			<NavButton className="gap-2 !pl-2 hover:cursor-default hover:bg-transparent">
+				<NavIcon icon={site.icon} className="size-7" />
+				<NavLabel label={site.label} className="text-lg font-semibold tracking-wide" disableAnimation />
+			</NavButton>
 
 			<Separator className="mb-4" />
 
