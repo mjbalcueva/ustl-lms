@@ -54,8 +54,8 @@ export const UserButton: React.FC<React.ComponentProps<typeof DropdownMenu>> = (
 							opacity: canNavOpen ? (isNavOpen ? 1 : 0) : 1
 						}}
 						className={cn(
-							'min-w-[168px] items-center justify-between whitespace-pre transition duration-150',
-							!isNavOpen && 'hidden max-w-[0px]'
+							'flex items-center justify-between whitespace-pre transition duration-150',
+							isNavOpen ? 'min-w-[168px]' : 'hidden max-w-[0px]'
 						)}
 					>
 						<div className="flex max-w-[9.5rem] flex-col items-start -space-y-0.5">
