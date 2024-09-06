@@ -39,7 +39,7 @@ export const NavButton = React.forwardRef<HTMLButtonElement, NavButtonProps>(({ 
 		<button
 			ref={ref}
 			className={cn(
-				'group/navigation mb-2 flex items-center justify-start gap-3 rounded-md px-5 py-2 outline-none ring-offset-background hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring sm:px-7 md:px-3',
+				'group/navigation mb-2 flex items-center justify-start gap-3 rounded-md px-5 py-2 outline-none ring-offset-background hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring md:px-3',
 				className
 			)}
 			{...props}
