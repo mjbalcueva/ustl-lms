@@ -29,6 +29,33 @@ model Post {
   @@map("post")
 }
 
+model Course {
+  id          String    @id @default(cuid())
+  userId      String
+  code        String    @unique
+  title       String
+  description String?
+  image       String?
+  isPublished Boolean   @default(false)
+  categoryId  String?
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category    Category? @relation(fields: [categoryId], references: [id])
+
+  @@index([code, categoryId])
+  @@map("course")
+}
+
+model Category {
+  id      String   @id @default(cuid())
+  name    String
+  courses Course[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("category")
+}
+
 // -----------------------------------------------------------------------------
 // Auth Models
 // -----------------------------------------------------------------------------
@@ -53,6 +80,7 @@ model User {
   twoFactorToken        TwoFactorToken[]
   twoFactorConfirmation TwoFactorConfirmation?
   posts                 Post[]
+  courses               Course[]
 
   @@map("user")
 }
