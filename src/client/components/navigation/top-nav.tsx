@@ -45,7 +45,7 @@ export const TopNav = ({ className, ...props }: React.ComponentProps<typeof moti
 					opacity: 1
 				}}
 				className={cn(
-					'sticky top-0 z-10 flex h-14 items-center justify-between border-b border-border px-2 backdrop-blur-xl sm:px-4 md:hidden',
+					'sticky top-0 z-10 flex h-14 items-center justify-between border-b border-border bg-card/40 px-2 backdrop-blur-xl sm:px-4 md:hidden',
 					className
 				)}
 				{...props}
