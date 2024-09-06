@@ -41,12 +41,19 @@ export const PageBreadcrumbs = ({ withIcons = false }: PageBreadcrumbsProps) => 
 					return (
 						<React.Fragment key={crumb.href}>
 							{index > 0 && <BreadcrumbSeparator />}
-							<BreadcrumbItem>
-								<BreadcrumbLink href={crumb.href} className="flex items-center space-x-1.5">
+							{index === 0 ? (
+								<BreadcrumbItem className="select-none gap-0 space-x-1.5">
 									{withIcons && Icon && <Icon className="size-4" />}
 									<span className="leading-none">{crumb.label}</span>
-								</BreadcrumbLink>
-							</BreadcrumbItem>
+								</BreadcrumbItem>
+							) : (
+								<BreadcrumbItem>
+									<BreadcrumbLink href={crumb.href} className="flex items-center space-x-1.5">
+										{withIcons && Icon && <Icon className="size-4" />}
+										<span className="leading-none">{crumb.label}</span>
+									</BreadcrumbLink>
+								</BreadcrumbItem>
+							)}
 						</React.Fragment>
 					)
 				})}
