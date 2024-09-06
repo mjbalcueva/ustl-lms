@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSession } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
@@ -38,20 +39,21 @@ const twoFactorSchema = z.object({
 type TwoFactorFormValues = z.infer<typeof twoFactorSchema>
 
 export const Toggle2FAForm = () => {
-	const session = useSession()
+	const router = useRouter()
+	const { data: session, update: updateSession } = useSession()
 
 	const form = useForm<TwoFactorFormValues>({
 		resolver: zodResolver(twoFactorSchema),
 		defaultValues: {
-			twoFactorEnabled: session?.data?.user?.isTwoFactorEnabled
+			twoFactorEnabled: session?.user?.isTwoFactorEnabled
 		}
 	})
 
 	const { mutate, isPending } = api.auth.toggle2FA.useMutation({
-		onSuccess: (data) => {
-			form.reset(form.getValues())
+		onSuccess: async (data) => {
+			await updateSession({ user: { ...session?.user, isTwoFactorEnabled: form.getValues().twoFactorEnabled } })
+			router.refresh()
 			toast.success(data.message)
-			window.location.reload()
 		},
 		onError: (error) => {
 			toast.error(error.message)
