@@ -3,7 +3,7 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
 
-import { links, site } from '@/shared/config/links'
+import { home, instructor, site } from '@/shared/config/links'
 
 import { Icons } from '@/client/components/icons'
 import { NavButton, NavIcon, NavItemSideIcon, NavLabel, NavLink } from '@/client/components/navigation/nav-item'
@@ -20,7 +20,7 @@ export const TopNav = ({ className, ...props }: React.ComponentProps<typeof moti
 	const MotionNavLink = useMemo(() => motion(NavLink), [])
 
 	const navLinks = useMemo(() => {
-		return [...(links.home ?? []), ...(links.instructor ?? [])]
+		return [...(home[0]?.children ?? []), ...(instructor[0]?.children ?? [])]
 	}, [])
 
 	const toggleScroll = useCallback((disable: boolean) => {

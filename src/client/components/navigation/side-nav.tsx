@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 
-import { links, site } from '@/shared/config/links'
+import { home, instructor, site } from '@/shared/config/links'
 
 import {
 	NavButton,
@@ -43,7 +43,7 @@ export const SideNav = ({ className, ...props }: React.ComponentProps<typeof mot
 			<Separator className="mb-4" />
 
 			<NavTitle title="Home" />
-			{links.home?.map((link) => (
+			{home[0]?.children?.map((link) => (
 				<NavTooltip key={link.href} content={link.label}>
 					<NavLink href={link.href ?? ''}>
 						<NavIcon icon={link.icon} />
@@ -56,7 +56,7 @@ export const SideNav = ({ className, ...props }: React.ComponentProps<typeof mot
 			<Separator className="mb-4 mt-2" />
 
 			<NavTitle title="Instructor Resources" />
-			{links.instructor?.map((link) => (
+			{instructor[0]?.children?.map((link) => (
 				<NavTooltip key={link.href} content={link.label}>
 					<NavLink href={link.href ?? ''}>
 						<NavIcon icon={link.icon} />
