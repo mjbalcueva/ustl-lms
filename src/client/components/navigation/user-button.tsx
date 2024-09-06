@@ -62,9 +62,7 @@ export const UserButton: React.FC<React.ComponentProps<typeof DropdownMenu>> = (
 							<span className="max-w-full truncate text-sm font-medium">{name}</span>
 							<span className="max-w-full truncate text-xs text-muted-foreground">{strippedEmail}</span>
 						</div>
-						<div className="relative rounded-md p-0.5">
-							<LuChevronRight className="hidden size-4 group-hover/user-button:block group-focus/user-button:block" />
-						</div>
+						<LuChevronRight className="mr-0.5 hidden size-4 group-hover/user-button:block group-focus/user-button:block" />
 					</motion.div>
 				)}
 			</DropdownMenuTrigger>
