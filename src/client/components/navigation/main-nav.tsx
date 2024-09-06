@@ -6,6 +6,7 @@ import { type motion } from 'framer-motion'
 import { SideNav } from '@/client/components/navigation/side-nav'
 import { TopNav } from '@/client/components/navigation/top-nav'
 import { useDeviceType } from '@/client/context/device-type-provider'
+import { NavProvider } from '@/client/context/nav-provider'
 import { cn } from '@/client/lib/utils'
 
 const inter = Inter({
@@ -13,7 +14,12 @@ const inter = Inter({
 	display: 'swap'
 })
 
-export const MainNav = ({ className, ...props }: React.ComponentProps<typeof motion.div>) => {
+type MainNavProps = React.ComponentProps<typeof motion.div> & {
+	className?: string
+	defaultNavOpen: boolean
+}
+
+export const MainNav = ({ className, defaultNavOpen, ...props }: MainNavProps) => {
 	const { deviceSize } = useDeviceType()
 
 	if (!deviceSize)
@@ -32,12 +38,12 @@ export const MainNav = ({ className, ...props }: React.ComponentProps<typeof mot
 		)
 
 	return (
-		<>
+		<NavProvider defaultNavOpen={defaultNavOpen}>
 			{deviceSize === 'mobile' ? (
 				<TopNav className={cn(className, inter.className)} {...props} />
 			) : (
 				<SideNav className={cn(className, inter.className)} {...props} />
 			)}
-		</>
+		</NavProvider>
 	)
 }

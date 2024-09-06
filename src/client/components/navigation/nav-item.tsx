@@ -7,7 +7,7 @@ import { type IconBaseProps } from 'react-icons/lib'
 import { TbArrowRight } from 'react-icons/tb'
 
 import { Icons } from '@/client/components/icons'
-import { useNav } from '@/client/lib/hooks/use-nav'
+import { useNav } from '@/client/context/nav-provider'
 import { cn } from '@/client/lib/utils'
 
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui'

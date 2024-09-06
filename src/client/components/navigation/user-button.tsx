@@ -22,7 +22,7 @@ import {
 	DropdownMenuTrigger
 } from '@/client/components/ui'
 import { useDeviceType } from '@/client/context/device-type-provider'
-import { useNav } from '@/client/lib/hooks/use-nav'
+import { useNav } from '@/client/context/nav-provider'
 import { getEmail, getInitials } from '@/client/lib/utils'
 
 export const UserButton: React.FC<React.ComponentProps<typeof DropdownMenu>> = ({ ...props }) => {

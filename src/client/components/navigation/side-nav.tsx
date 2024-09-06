@@ -15,7 +15,7 @@ import {
 } from '@/client/components/navigation/nav-item'
 import { UserButton } from '@/client/components/navigation/user-button'
 import { Separator } from '@/client/components/ui'
-import { useNav } from '@/client/lib/hooks/use-nav'
+import { useNav } from '@/client/context/nav-provider'
 import { cn } from '@/client/lib/utils'
 
 export const SideNav = ({ className, ...props }: React.ComponentProps<typeof motion.nav>) => {
