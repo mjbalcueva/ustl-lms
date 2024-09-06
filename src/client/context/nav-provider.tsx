@@ -17,7 +17,7 @@ export const NavProvider = ({ children, defaultNavOpen }: { children: React.Reac
 	const [canNavOpen, setCanNavOpen] = React.useState(true)
 
 	React.useEffect(() => {
-		document.cookie = `nav-open=${isNavOpen};`
+		document.cookie = `is-nav-open=${isNavOpen};`
 	}, [isNavOpen])
 
 	return (

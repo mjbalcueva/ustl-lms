@@ -107,7 +107,7 @@ export const TopNav = ({ className, ...props }: React.ComponentProps<typeof moti
 						>
 							{item.icon && <NavIcon icon={item.icon} className="size-5" />}
 							{item.label && <NavLabel label={item.label} />}
-							<NavItemSideIcon isVisible={isNavOpen} className="size-5" />
+							<NavItemSideIcon className="size-5" />
 						</MotionNavLink>
 					))}
 				</motion.aside>

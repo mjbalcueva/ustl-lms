@@ -23,7 +23,7 @@ import {
 } from '@/client/components/ui'
 import { useDeviceType } from '@/client/context/device-type-provider'
 import { useNav } from '@/client/context/nav-provider'
-import { getEmail, getInitials } from '@/client/lib/utils'
+import { cn, getEmail, getInitials } from '@/client/lib/utils'
 
 export const UserButton: React.FC<React.ComponentProps<typeof DropdownMenu>> = ({ ...props }) => {
 	const session = useSession()
@@ -53,7 +53,10 @@ export const UserButton: React.FC<React.ComponentProps<typeof DropdownMenu>> = (
 							display: canNavOpen ? (isNavOpen ? 'flex' : 'none') : 'flex',
 							opacity: canNavOpen ? (isNavOpen ? 1 : 0) : 1
 						}}
-						className="hidden min-w-[168px] items-center justify-between whitespace-pre transition duration-150"
+						className={cn(
+							'min-w-[168px] items-center justify-between whitespace-pre transition duration-150',
+							!isNavOpen && 'hidden max-w-[0px]'
+						)}
 					>
 						<div className="flex max-w-[9.5rem] flex-col items-start -space-y-0.5">
 							<span className="max-w-full truncate text-sm font-medium">{name}</span>

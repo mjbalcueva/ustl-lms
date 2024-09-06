@@ -9,7 +9,7 @@ import { DeviceTypeProvider, type DeviceType } from '@/client/context/device-typ
 
 export default async function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
 	const deviceSizeCookie = cookies().get('device-size')
-	const navOpenCookie = cookies().get('nav-open')
+	const navOpenCookie = cookies().get('is-nav-open')
 
 	let defaultDeviceSize: DeviceType = ''
 	if (deviceSizeCookie) defaultDeviceSize = JSON.parse(deviceSizeCookie.value) as DeviceType

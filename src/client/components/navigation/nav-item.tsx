@@ -64,22 +64,20 @@ export const NavTooltip = ({ isVisible, children, content, ...props }: NavToolti
 
 type NavTitleProps = {
 	title: string
-	isVisible: boolean
 }
-export const NavTitle = ({ title, isVisible, ...props }: NavTitleProps) => {
+export const NavTitle = ({ title, ...props }: NavTitleProps) => {
+	const { isNavOpen } = useNav()
 	return (
 		<AnimatePresence>
-			{isVisible && (
-				<motion.div
-					className="flex overflow-hidden rounded-lg"
-					initial={{ opacity: 0, height: 0 }}
-					animate={{ opacity: 1, height: '2rem' }}
-					exit={{ opacity: 0, height: 0 }}
-					{...props}
-				>
-					<span className="select-none px-3 py-2 text-xs font-medium text-muted-foreground">{title}</span>
-				</motion.div>
-			)}
+			<motion.div
+				className="flex overflow-hidden rounded-lg"
+				initial={{ opacity: isNavOpen ? 1 : 0, height: isNavOpen ? '2rem' : 0 }}
+				animate={{ opacity: isNavOpen ? 1 : 0, height: isNavOpen ? '2rem' : 0 }}
+				exit={{ opacity: isNavOpen ? 0 : 1, height: isNavOpen ? '2rem' : 0 }}
+				{...props}
+			>
+				<span className="select-none px-3 py-2 text-xs font-medium text-muted-foreground">{title}</span>
+			</motion.div>
 		</AnimatePresence>
 	)
 }
@@ -107,7 +105,8 @@ export const NavLabel = ({ label, className, disableAnimation }: NavLabelProps) 
 				opacity: isNavOpen ? 1 : 0
 			}}
 			className={cn(
-				'hidden whitespace-pre text-sm transition duration-150',
+				'whitespace-pre text-sm transition duration-150',
+				!isNavOpen && 'hidden',
 				!disableAnimation && 'group-hover/navigation:translate-x-1.5',
 				className
 			)}
@@ -117,12 +116,10 @@ export const NavLabel = ({ label, className, disableAnimation }: NavLabelProps) 
 	)
 }
 
-type NavItemSideIconProps = IconBaseProps & {
-	isVisible: boolean
-}
-export const NavItemSideIcon = ({ className, isVisible }: NavItemSideIconProps) => {
+export const NavItemSideIcon = ({ className }: IconBaseProps) => {
+	const { isNavOpen } = useNav()
 	return (
-		isVisible && (
+		isNavOpen && (
 			<TbArrowRight
 				className={cn(
 					'ml-auto mr-1.5 size-4 flex-shrink-0 opacity-0 transition duration-150 group-hover/navigation:translate-x-1.5 group-hover/navigation:opacity-100',
