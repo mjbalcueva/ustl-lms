@@ -33,7 +33,7 @@ export const SideNav = ({ className, ...props }: React.ComponentProps<typeof mot
 			}}
 			{...props}
 		>
-			<NavTooltip content={links.site?.[0]?.label} isVisible={!isNavOpen}>
+			<NavTooltip content={links.site?.[0]?.label}>
 				<NavButton className="gap-2 !pl-2">
 					{links.site?.[0]?.icon && <NavIcon icon={links.site?.[0]?.icon} className="size-7" />}
 					{links.site?.[0]?.label && (
@@ -46,7 +46,7 @@ export const SideNav = ({ className, ...props }: React.ComponentProps<typeof mot
 
 			<NavTitle title="Home" />
 			{links.home?.map((link) => (
-				<NavTooltip key={link.href} content={link.label} isVisible={!isNavOpen}>
+				<NavTooltip key={link.href} content={link.label}>
 					<NavLink href={link.href}>
 						<NavIcon icon={link.icon} />
 						<NavLabel label={link.label} />
@@ -59,7 +59,7 @@ export const SideNav = ({ className, ...props }: React.ComponentProps<typeof mot
 
 			<NavTitle title="Instructor Resources" />
 			{links.instructor?.map((link) => (
-				<NavTooltip key={link.href} content={link.label} isVisible={!isNavOpen}>
+				<NavTooltip key={link.href} content={link.label}>
 					<NavLink href={link.href}>
 						<NavIcon icon={link.icon} />
 						<NavLabel label={link.label} />
@@ -68,10 +68,10 @@ export const SideNav = ({ className, ...props }: React.ComponentProps<typeof mot
 				</NavTooltip>
 			))}
 
-			<NavTooltip content="Toggle Sidebar" isVisible={!isNavOpen}>
+			<NavTooltip content={isNavOpen ? 'Collapse Sidebar' : 'Expand Sidebar'}>
 				<NavButton className="mt-auto" onClick={() => setNavOpen(!isNavOpen)}>
 					<NavIcon icon={isNavOpen ? 'navbarClose' : 'navbarOpen'} />
-					<NavLabel label="Toggle Sidebar" disableAnimation />
+					<NavLabel label={isNavOpen ? 'Collapse Sidebar' : 'Expand Sidebar'} disableAnimation />
 				</NavButton>
 			</NavTooltip>
 

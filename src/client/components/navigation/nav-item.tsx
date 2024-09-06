@@ -49,11 +49,11 @@ export const NavButton = React.forwardRef<HTMLButtonElement, NavButtonProps>(({ 
 NavButton.displayName = 'NavButton'
 
 type NavTooltipProps = React.ComponentProps<typeof Tooltip> & {
-	isVisible: boolean
 	content: React.ReactNode
 }
-export const NavTooltip = ({ isVisible, children, content, ...props }: NavTooltipProps) => {
-	if (!isVisible) return <>{children}</>
+export const NavTooltip = ({ children, content, ...props }: NavTooltipProps) => {
+	const { isNavOpen } = useNav()
+	if (isNavOpen) return <>{children}</>
 	return (
 		<Tooltip {...props} delayDuration={300}>
 			<TooltipTrigger asChild>{children}</TooltipTrigger>
@@ -70,13 +70,22 @@ export const NavTitle = ({ title, ...props }: NavTitleProps) => {
 	return (
 		<AnimatePresence>
 			<motion.div
-				className="flex overflow-hidden rounded-lg"
-				initial={{ opacity: isNavOpen ? 1 : 0, height: isNavOpen ? '2rem' : 0 }}
-				animate={{ opacity: isNavOpen ? 1 : 0, height: isNavOpen ? '2rem' : 0 }}
-				exit={{ opacity: isNavOpen ? 0 : 1, height: isNavOpen ? '2rem' : 0 }}
+				initial={{
+					height: isNavOpen ? '2rem' : 0,
+					opacity: isNavOpen ? 1 : 0
+				}}
+				animate={{
+					height: isNavOpen ? '2rem' : 0,
+					opacity: isNavOpen ? 1 : 0
+				}}
+				exit={{
+					height: isNavOpen ? '2rem' : 0,
+					opacity: isNavOpen ? 0 : 1
+				}}
+				className="flex overflow-x-visible rounded-lg"
 				{...props}
 			>
-				<span className="select-none px-3 py-2 text-xs font-medium text-muted-foreground">{title}</span>
+				<span className="min-w-[224px] select-none px-3 py-2 text-xs font-medium text-muted-foreground">{title}</span>
 			</motion.div>
 		</AnimatePresence>
 	)
@@ -100,13 +109,9 @@ export const NavLabel = ({ label, className, disableAnimation }: NavLabelProps) 
 	const { isNavOpen } = useNav()
 	return (
 		<motion.span
-			animate={{
-				display: isNavOpen ? 'block' : 'none',
-				opacity: isNavOpen ? 1 : 0
-			}}
+			animate={{ opacity: isNavOpen ? 1 : 0 }}
 			className={cn(
 				'whitespace-pre text-sm transition duration-150',
-				!isNavOpen && 'hidden',
 				!disableAnimation && 'group-hover/navigation:translate-x-1.5',
 				className
 			)}
