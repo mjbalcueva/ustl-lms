@@ -1,7 +1,9 @@
 import {
 	TbAlertTriangle,
+	TbChalkboard,
 	TbChartHistogram,
 	TbCircleCheck,
+	TbCirclePlus,
 	TbDiamond,
 	TbInfoCircle,
 	TbInfoTriangle,
@@ -15,6 +17,7 @@ import {
 	TbPresentationAnalytics,
 	TbSchool,
 	TbSettings2,
+	TbSmartHome,
 	TbSunHigh,
 	TbTools,
 	TbUser
@@ -25,12 +28,14 @@ export const Icons = {
 	logo: TbDiamond,
 
 	// home
+	home: TbSmartHome,
 	dashboard: TbLayoutDashboard,
 	learning: TbSchool,
 	reports: TbChartHistogram,
 	chat: TbMessage,
 
 	// instructor
+	instructor: TbChalkboard,
 	course: TbTools,
 	analytics: TbPresentationAnalytics,
 
@@ -52,5 +57,8 @@ export const Icons = {
 	success: TbCircleCheck,
 	info: TbInfoCircle,
 	warning: TbAlertTriangle,
-	error: TbInfoTriangle
+	error: TbInfoTriangle,
+
+	// misc
+	plusCircle: TbCirclePlus
 }

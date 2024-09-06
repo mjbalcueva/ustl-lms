@@ -3,7 +3,7 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
 
-import { links } from '@/shared/config/links'
+import { home, instructor, site } from '@/shared/config/links'
 
 import { Icons } from '@/client/components/icons'
 import { NavButton, NavIcon, NavItemSideIcon, NavLabel, NavLink } from '@/client/components/navigation/nav-item'
@@ -20,7 +20,7 @@ export const TopNav = ({ className, ...props }: React.ComponentProps<typeof moti
 	const MotionNavLink = useMemo(() => motion(NavLink), [])
 
 	const navLinks = useMemo(() => {
-		return [...(links.home ?? []), ...(links.instructor ?? [])]
+		return [...(home[0]?.children ?? []), ...(instructor[0]?.children ?? [])]
 	}, [])
 
 	const toggleScroll = useCallback((disable: boolean) => {
@@ -45,7 +45,7 @@ export const TopNav = ({ className, ...props }: React.ComponentProps<typeof moti
 					opacity: 1
 				}}
 				className={cn(
-					'sticky top-0 z-10 flex h-14 items-center justify-between border-b border-border px-2 backdrop-blur-xl sm:px-4 md:hidden',
+					'sticky top-0 z-10 flex h-14 items-center justify-between border-b border-border bg-card/40 px-2 backdrop-blur-xl sm:px-4 md:hidden',
 					className
 				)}
 				{...props}
@@ -55,7 +55,7 @@ export const TopNav = ({ className, ...props }: React.ComponentProps<typeof moti
 				</NavButton>
 
 				<NavButton className="m-0 p-1.5">
-					{links.site?.[0]?.icon && <NavIcon icon={links.site?.[0]?.icon} className="size-7" />}
+					<NavIcon icon={site.icon} className="size-7" />
 				</NavButton>
 
 				<UserButton
@@ -83,7 +83,7 @@ export const TopNav = ({ className, ...props }: React.ComponentProps<typeof moti
 					{navLinks?.map((item, index) => (
 						<MotionNavLink
 							key={index}
-							href={item.href}
+							href={item.href ?? ''}
 							className="m-0 h-12 rounded-none border-b border-border md:rounded-md"
 							initial={{
 								y: -100,

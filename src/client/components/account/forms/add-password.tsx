@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -29,6 +30,8 @@ import {
 } from '@/client/components/ui'
 
 export const AddPasswordForm = () => {
+	const router = useRouter()
+
 	const form = useForm<AddPasswordSchema>({
 		resolver: zodResolver(addPasswordSchema),
 		defaultValues: {
@@ -40,8 +43,8 @@ export const AddPasswordForm = () => {
 	const { mutate, isPending } = api.auth.addPassword.useMutation({
 		onSuccess: (data) => {
 			form.reset()
+			router.refresh()
 			toast.success(data.message)
-			window.location.reload()
 		},
 		onError: (error) => {
 			toast.error(error.message)

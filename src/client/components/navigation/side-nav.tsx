@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 
-import { links } from '@/shared/config/links'
+import { home, instructor, site } from '@/shared/config/links'
 
 import {
 	NavButton,
@@ -24,7 +24,7 @@ export const SideNav = ({ className, ...props }: React.ComponentProps<typeof mot
 	return (
 		<motion.nav
 			className={cn(
-				'flex h-full flex-shrink-0 flex-col overflow-x-hidden overflow-y-scroll rounded-xl p-2 pb-4',
+				'flex h-full flex-shrink-0 flex-col overflow-y-auto overflow-x-hidden rounded-xl p-2 pb-4',
 				isNavOpen ? 'w-[240px]' : 'w-[60px]',
 				className
 			)}
@@ -33,21 +33,17 @@ export const SideNav = ({ className, ...props }: React.ComponentProps<typeof mot
 			}}
 			{...props}
 		>
-			<NavTooltip content={links.site?.[0]?.label}>
-				<NavButton className="gap-2 !pl-2">
-					{links.site?.[0]?.icon && <NavIcon icon={links.site?.[0]?.icon} className="size-7" />}
-					{links.site?.[0]?.label && (
-						<NavLabel label={links.site?.[0]?.label} className="text-lg font-semibold tracking-wide" />
-					)}
-				</NavButton>
-			</NavTooltip>
+			<NavButton className="gap-2 !pl-2 hover:cursor-default hover:bg-transparent">
+				<NavIcon icon={site.icon} className="size-7" />
+				<NavLabel label={site.label} className="text-lg font-semibold tracking-wide" disableAnimation />
+			</NavButton>
 
 			<Separator className="mb-4" />
 
 			<NavTitle title="Home" />
-			{links.home?.map((link) => (
+			{home[0]?.children?.map((link) => (
 				<NavTooltip key={link.href} content={link.label}>
-					<NavLink href={link.href}>
+					<NavLink href={link.href ?? ''}>
 						<NavIcon icon={link.icon} />
 						<NavLabel label={link.label} />
 						<NavItemSideIcon />
@@ -58,9 +54,9 @@ export const SideNav = ({ className, ...props }: React.ComponentProps<typeof mot
 			<Separator className="mb-4 mt-2" />
 
 			<NavTitle title="Instructor Resources" />
-			{links.instructor?.map((link) => (
+			{instructor[0]?.children?.map((link) => (
 				<NavTooltip key={link.href} content={link.label}>
-					<NavLink href={link.href}>
+					<NavLink href={link.href ?? ''}>
 						<NavIcon icon={link.icon} />
 						<NavLabel label={link.label} />
 						<NavItemSideIcon />

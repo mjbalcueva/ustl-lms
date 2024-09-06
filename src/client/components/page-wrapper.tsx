@@ -21,7 +21,9 @@ export const PageContainer = React.forwardRef<HTMLDivElement, React.HTMLAttribut
 PageContainer.displayName = 'PageContainer'
 
 export const PageHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-	({ className, ...props }, ref) => <div ref={ref} className={cn('space-y-2 p-4 pt-4 md:p-6', className)} {...props} />
+	({ className, ...props }, ref) => (
+		<div ref={ref} className={cn('space-y-2 px-2.5 py-4 sm:px-4 md:p-6', className)} {...props} />
+	)
 )
 PageHeader.displayName = 'PageHeader'
 
@@ -40,6 +42,6 @@ export const PageDescription = React.forwardRef<HTMLDivElement, React.HTMLAttrib
 PageDescription.displayName = 'PageDescription'
 
 export const PageContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-	({ className, ...props }, ref) => <div ref={ref} className={cn('px-4 md:px-6', className)} {...props} />
+	({ className, ...props }, ref) => <div ref={ref} className={cn('px-2.5 sm:px-4 md:px-6', className)} {...props} />
 )
 PageContent.displayName = 'PageContent'

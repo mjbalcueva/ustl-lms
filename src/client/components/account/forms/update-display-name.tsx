@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSession } from 'next-auth/react'
 import { useForm, type SubmitHandler } from 'react-hook-form'
@@ -21,20 +22,21 @@ import { Loader } from '@/client/components/loader'
 import { Button, Form, FormControl, FormField, FormItem, FormMessage, Input } from '@/client/components/ui'
 
 export const UpdateDisplayNameForm = () => {
-	const session = useSession()
+	const router = useRouter()
+	const { data: session, update: updateSession } = useSession()
 
 	const form = useForm<UpdateDisplayNameSchema>({
 		resolver: zodResolver(updateDisplayNameSchema),
 		defaultValues: {
-			name: session?.data?.user?.name ?? ''
+			name: session?.user?.name ?? ''
 		}
 	})
 
 	const { mutate, isPending } = api.profile.updateDisplayName.useMutation({
-		onSuccess: (data) => {
-			form.reset(form.getValues())
+		onSuccess: async (data) => {
+			await updateSession({ user: { ...session?.user, name: form.getValues().name } })
+			router.refresh()
 			toast.success(data.message)
-			window.location.reload()
 		},
 		onError: (error) => {
 			toast.error(error.message)
