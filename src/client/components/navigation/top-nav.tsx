@@ -3,7 +3,7 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
 
-import { links } from '@/shared/config/links'
+import { links, site } from '@/shared/config/links'
 
 import { Icons } from '@/client/components/icons'
 import { NavButton, NavIcon, NavItemSideIcon, NavLabel, NavLink } from '@/client/components/navigation/nav-item'
@@ -55,7 +55,7 @@ export const TopNav = ({ className, ...props }: React.ComponentProps<typeof moti
 				</NavButton>
 
 				<NavButton className="m-0 p-1.5">
-					{links.site?.[0]?.icon && <NavIcon icon={links.site?.[0]?.icon} className="size-7" />}
+					<NavIcon icon={site.icon} className="size-7" />
 				</NavButton>
 
 				<UserButton
@@ -83,7 +83,7 @@ export const TopNav = ({ className, ...props }: React.ComponentProps<typeof moti
 					{navLinks?.map((item, index) => (
 						<MotionNavLink
 							key={index}
-							href={item.href}
+							href={item.href ?? ''}
 							className="m-0 h-12 rounded-none border-b border-border md:rounded-md"
 							initial={{
 								y: -100,

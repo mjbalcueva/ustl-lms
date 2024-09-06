@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 
-import { links } from '@/shared/config/links'
+import { links, site } from '@/shared/config/links'
 
 import {
 	NavButton,
@@ -33,12 +33,10 @@ export const SideNav = ({ className, ...props }: React.ComponentProps<typeof mot
 			}}
 			{...props}
 		>
-			<NavTooltip content={links.site?.[0]?.label}>
+			<NavTooltip content={site.label}>
 				<NavButton className="gap-2 !pl-2">
-					{links.site?.[0]?.icon && <NavIcon icon={links.site?.[0]?.icon} className="size-7" />}
-					{links.site?.[0]?.label && (
-						<NavLabel label={links.site?.[0]?.label} className="text-lg font-semibold tracking-wide" />
-					)}
+					<NavIcon icon={site.icon} className="size-7" />
+					<NavLabel label={site.label} className="text-lg font-semibold tracking-wide" disableAnimation />
 				</NavButton>
 			</NavTooltip>
 
@@ -47,7 +45,7 @@ export const SideNav = ({ className, ...props }: React.ComponentProps<typeof mot
 			<NavTitle title="Home" />
 			{links.home?.map((link) => (
 				<NavTooltip key={link.href} content={link.label}>
-					<NavLink href={link.href}>
+					<NavLink href={link.href ?? ''}>
 						<NavIcon icon={link.icon} />
 						<NavLabel label={link.label} />
 						<NavItemSideIcon />
@@ -60,7 +58,7 @@ export const SideNav = ({ className, ...props }: React.ComponentProps<typeof mot
 			<NavTitle title="Instructor Resources" />
 			{links.instructor?.map((link) => (
 				<NavTooltip key={link.href} content={link.label}>
-					<NavLink href={link.href}>
+					<NavLink href={link.href ?? ''}>
 						<NavIcon icon={link.icon} />
 						<NavLabel label={link.label} />
 						<NavItemSideIcon />

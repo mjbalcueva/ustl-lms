@@ -92,10 +92,11 @@ export const NavTitle = ({ title, ...props }: NavTitleProps) => {
 }
 
 type NavIconProps = {
-	icon: keyof typeof Icons
+	icon?: keyof typeof Icons
 	className?: string
 }
 export const NavIcon = ({ icon, className }: NavIconProps) => {
+	if (!icon) return null
 	const Icon = Icons[icon]
 	return <Icon className={cn('size-5 flex-shrink-0', className)} />
 }
