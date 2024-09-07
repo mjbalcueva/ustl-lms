@@ -49,7 +49,7 @@ export const {
 					emailVerified: new Date(),
 					profile: {
 						update: {
-							image: existingUser?.profile?.image ? undefined : profile.image
+							image: existingUser?.profile?.image ? null : profile.image
 						}
 					}
 				}
