@@ -34,7 +34,8 @@ export const UpdateDisplayNameForm = () => {
 
 	const { mutate, isPending } = api.profile.updateDisplayName.useMutation({
 		onSuccess: async (data) => {
-			await updateSession({ user: { ...session?.user, name: form.getValues().name } })
+			const updatedUser = { ...session?.user, name: form.getValues().name }
+			await Promise.all([updateSession({ user: updatedUser }), form.reset({ name: updatedUser.name })])
 			router.refresh()
 			toast.success(data.message)
 		},
