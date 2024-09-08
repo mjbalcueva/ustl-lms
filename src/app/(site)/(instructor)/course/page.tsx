@@ -13,7 +13,7 @@ export default function Page() {
 
 			<PageHeader className="flex items-end justify-between space-y-0">
 				<div className="space-y-1.5">
-					<PageTitle className="text-3xl font-bold">Manage Your Courses</PageTitle>
+					<PageTitle className="font-bold">Manage Your Courses</PageTitle>
 					<PageDescription>Create, manage, and publish your courses!</PageDescription>
 				</div>
 				<Link href="/course/create" className={cn(buttonVariants(), 'h-10 w-10 sm:w-auto')}>
@@ -24,7 +24,7 @@ export default function Page() {
 			<PageContent>
 				<Card>
 					<CardHeader>
-						<CardTitle>Overview</CardTitle>
+						<CardTitle className="font-medium">Overview</CardTitle>
 						<CardDescription>You have [n] courses in total ([n] active).</CardDescription>
 					</CardHeader>
 					<CardContent></CardContent>
