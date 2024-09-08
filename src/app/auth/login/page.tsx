@@ -27,7 +27,7 @@ export default function LoginPage({ searchParams }: { searchParams: { callbackUr
 			<AuthCardContent>
 				<LoginForm />
 				<AuthCardSeparator label="Or continue with" />
-				<OAuthButton provider="google" label="Continue with Google" callbackUrl={searchParams.callbackUrl} />
+				<OAuthButton provider="google" label="Login with Google" callbackUrl={searchParams.callbackUrl} />
 			</AuthCardContent>
 			<AuthCardFooter>
 				<AuthCardLink href="/auth/register" label="Don't have an account?" />
