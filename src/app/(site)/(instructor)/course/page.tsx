@@ -14,9 +14,9 @@ export default function Page() {
 					<PageTitle className="font-bold">Courses</PageTitle>
 					<PageBreadcrumbs withIcons />
 				</div>
-				<Link href="/course/create" className={cn(buttonVariants(), 'h-10 w-10 sm:w-auto')}>
-					<Icons.plusCircle className="size-5 shrink-0 sm:mr-2" />
-					<span className="hidden sm:block">New Course</span>
+				<Link href="/course/create" className={cn(buttonVariants(), 'h-10 w-32')}>
+					<Icons.plusCircle className="mr-1 size-5 shrink-0" />
+					New Course
 				</Link>
 			</PageHeader>
 			<PageContent>
