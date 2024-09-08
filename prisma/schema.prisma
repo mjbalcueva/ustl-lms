@@ -32,7 +32,7 @@ model Post {
 model Course {
   id          String    @id @default(cuid())
   userId      String
-  code        String    @unique
+  code        String?
   title       String
   description String?
   image       String?
