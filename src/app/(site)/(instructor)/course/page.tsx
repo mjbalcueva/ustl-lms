@@ -1,10 +1,11 @@
 import Link from 'next/link'
 
 import { Icons } from '@/client/components/icons'
+import { CardPerformanceInsights } from '@/client/components/instructor/course/card-performance-insights'
 import { CardStatsMiniGroup } from '@/client/components/instructor/course/card-stats-mini-group'
 import { PageBreadcrumbs } from '@/client/components/page-breadcrumbs'
 import { PageContent, PageHeader, PageSection, PageTitle, PageWrapper } from '@/client/components/page-wrapper'
-import { buttonVariants, Card, CardDescription, CardHeader, CardTitle } from '@/client/components/ui'
+import { buttonVariants } from '@/client/components/ui'
 import { cn } from '@/client/lib/utils'
 
 export default function Page() {
@@ -27,12 +28,7 @@ export default function Page() {
 				</PageSection>
 
 				<PageSection className="!mt-1.5">
-					<Card>
-						<CardHeader>
-							<CardTitle className="font-medium">Course Statistics</CardTitle>
-							<CardDescription>You have [n] courses in total ([n] active).</CardDescription>
-						</CardHeader>
-					</Card>
+					<CardPerformanceInsights />
 				</PageSection>
 			</PageContent>
 		</PageWrapper>
