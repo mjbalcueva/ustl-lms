@@ -1,5 +1,6 @@
 import { CardPerformanceInsights } from '@/client/components/instructor/course/card-performance-insights'
 import { CardStatsMiniGroup } from '@/client/components/instructor/course/card-stats-mini-group'
+import { FilterButton } from '@/client/components/instructor/course/filter-button'
 import { NewCourseButton } from '@/client/components/instructor/course/new-course-button'
 import { SearchInput } from '@/client/components/instructor/course/search-input'
 import { PageBreadcrumbs } from '@/client/components/page-breadcrumbs'
@@ -26,7 +27,10 @@ export default function Page() {
 				</PageSection>
 
 				<PageSection>
-					<SearchInput />
+					<div className="flex items-center gap-4">
+						<SearchInput />
+						<FilterButton />
+					</div>
 				</PageSection>
 			</PageContent>
 		</PageWrapper>
