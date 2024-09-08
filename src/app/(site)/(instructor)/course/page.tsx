@@ -22,7 +22,7 @@ export default function Page() {
 			<PageContent>
 				<Card>
 					<CardHeader>
-						<CardTitle className="font-medium">Overview</CardTitle>
+						<CardTitle className="font-medium">Course Statistics</CardTitle>
 						<CardDescription>You have [n] courses in total ([n] active).</CardDescription>
 					</CardHeader>
 					<CardContent></CardContent>
