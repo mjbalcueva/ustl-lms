@@ -1,10 +1,11 @@
 import * as React from 'react'
+import { Slot } from '@radix-ui/react-slot'
 
 import { cn } from '@/client/lib/utils'
 
 export const PageWrapper = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
 	({ className, ...props }, ref) => (
-		<div
+		<main
 			ref={ref}
 			className={cn('flex-grow overflow-auto border-border bg-background md:rounded-xl md:border', className)}
 			{...props}
@@ -22,7 +23,7 @@ PageContainer.displayName = 'PageContainer'
 
 export const PageHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
 	({ className, ...props }, ref) => (
-		<div ref={ref} className={cn('space-y-2 px-2.5 py-4 sm:px-4 md:p-6', className)} {...props} />
+		<header ref={ref} className={cn('space-y-2 px-2.5 py-4 sm:px-4 md:p-6', className)} {...props} />
 	)
 )
 PageHeader.displayName = 'PageHeader'
@@ -41,7 +42,24 @@ export const PageDescription = React.forwardRef<HTMLDivElement, React.HTMLAttrib
 )
 PageDescription.displayName = 'PageDescription'
 
-export const PageContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-	({ className, ...props }, ref) => <div ref={ref} className={cn('px-2.5 sm:px-4 md:px-6', className)} {...props} />
+type PageContentProps = React.HTMLAttributes<HTMLDivElement> & {
+	asChild?: boolean
+}
+export const PageContent = React.forwardRef<HTMLDivElement, PageContentProps>(
+	({ className, asChild, ...props }, ref) => {
+		const Component = asChild ? Slot : 'div'
+		return <Component ref={ref} className={cn(className)} {...props} />
+	}
 )
 PageContent.displayName = 'PageContent'
+
+type PageSectionProps = React.HTMLAttributes<HTMLDivElement> & {
+	asChild?: boolean
+}
+export const PageSection = React.forwardRef<HTMLDivElement, PageSectionProps>(
+	({ className, asChild, ...props }, ref) => {
+		const Component = asChild ? Slot : 'section'
+		return <Component ref={ref} className={cn('px-2.5 sm:px-4 md:px-6', className)} {...props} />
+	}
+)
+PageSection.displayName = 'PageSection'

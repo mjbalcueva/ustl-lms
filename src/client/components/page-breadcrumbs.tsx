@@ -8,12 +8,14 @@ import { type Link } from '@/shared/types/navigation'
 
 import { Icons } from '@/client/components/icons'
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@/client/components/ui'
+import { cn } from '@/client/lib/utils'
 
 type PageBreadcrumbsProps = {
 	withIcons?: boolean
+	className?: string
 }
 
-export const PageBreadcrumbs = ({ withIcons = false }: PageBreadcrumbsProps) => {
+export const PageBreadcrumbs = ({ withIcons = false, className }: PageBreadcrumbsProps) => {
 	const pathname = usePathname()
 	const pathSegments = pathname.split('/').filter((segment) => segment !== '')
 
@@ -34,7 +36,7 @@ export const PageBreadcrumbs = ({ withIcons = false }: PageBreadcrumbsProps) => 
 
 	return (
 		<Breadcrumb>
-			<BreadcrumbList className="hidden px-4 pb-0 pt-3 md:flex md:px-6 md:pt-4">
+			<BreadcrumbList className={cn(className)}>
 				{breadcrumbs.map((crumb, index) => {
 					const Icon = crumb.icon ? Icons[crumb.icon] : null
 

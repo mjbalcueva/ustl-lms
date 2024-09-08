@@ -1,5 +1,5 @@
 import { UpdateDisplayNameForm } from '@/client/components/account/forms/update-display-name'
-import { PageContainer, PageContent, PageHeader, PageWrapper } from '@/client/components/page-wrapper'
+import { PageContainer, PageContent, PageHeader, PageSection, PageWrapper } from '@/client/components/page-wrapper'
 import { CardDescription, CardTitle } from '@/client/components/ui'
 
 export default async function Page() {
@@ -10,8 +10,11 @@ export default async function Page() {
 					<CardTitle>Your Profile</CardTitle>
 					<CardDescription>Manage your Scholar profile</CardDescription>
 				</PageHeader>
-				<PageContent>
-					<UpdateDisplayNameForm />
+
+				<PageContent asChild>
+					<PageSection>
+						<UpdateDisplayNameForm />
+					</PageSection>
 				</PageContent>
 			</PageContainer>
 		</PageWrapper>

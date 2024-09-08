@@ -46,12 +46,12 @@ export const instructor: Link[] = [
 		role: ['INSTRUCTOR'],
 		children: [
 			{
-				label: 'My Courses',
+				label: 'Courses',
 				href: '/course',
 				icon: 'course',
 				children: [
 					{
-						label: 'Create',
+						label: 'New Course',
 						href: '/course/create'
 					}
 				]

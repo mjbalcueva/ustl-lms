@@ -1,10 +1,15 @@
+import { LuSearch } from 'react-icons/lu'
 import {
 	TbAlertTriangle,
+	TbArchive,
+	TbBook,
+	TbBook2,
 	TbChalkboard,
 	TbChartHistogram,
 	TbCircleCheck,
 	TbCirclePlus,
 	TbDiamond,
+	TbEdit,
 	TbInfoCircle,
 	TbInfoTriangle,
 	TbLayoutDashboard,
@@ -59,6 +64,13 @@ export const Icons = {
 	warning: TbAlertTriangle,
 	error: TbInfoTriangle,
 
+	// course
+	totalCourse: TbBook,
+	publishedCourse: TbBook2,
+	draftCourse: TbEdit,
+	archivedCourse: TbArchive,
+
 	// misc
-	plusCircle: TbCirclePlus
+	plusCircle: TbCirclePlus,
+	search: LuSearch
 }

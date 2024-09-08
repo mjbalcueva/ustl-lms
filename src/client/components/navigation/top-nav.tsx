@@ -34,8 +34,8 @@ export const TopNav = ({ className, ...props }: React.ComponentProps<typeof moti
 
 	return (
 		<AnimatePresence>
-			<motion.nav
-				key="nav"
+			<motion.aside
+				key="aside"
 				initial={{
 					opacity: 1,
 					y: 0
@@ -65,11 +65,11 @@ export const TopNav = ({ className, ...props }: React.ComponentProps<typeof moti
 						toggleScroll(open)
 					}}
 				/>
-			</motion.nav>
+			</motion.aside>
 
 			{isNavOpen && (
-				<motion.aside
-					key="aside"
+				<motion.nav
+					key="nav"
 					initial="exit"
 					animate={isNavOpen ? 'open' : 'exit'}
 					exit="exit"
@@ -110,7 +110,7 @@ export const TopNav = ({ className, ...props }: React.ComponentProps<typeof moti
 							<NavItemSideIcon className="size-5" />
 						</MotionNavLink>
 					))}
-				</motion.aside>
+				</motion.nav>
 			)}
 		</AnimatePresence>
 	)

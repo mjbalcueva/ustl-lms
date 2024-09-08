@@ -51,7 +51,11 @@ export const Toggle2FAForm = () => {
 
 	const { mutate, isPending } = api.auth.toggle2FA.useMutation({
 		onSuccess: async (data) => {
-			await updateSession({ user: { ...session?.user, isTwoFactorEnabled: form.getValues().twoFactorEnabled } })
+			const updatedUser = { ...session?.user, isTwoFactorEnabled: form.getValues().twoFactorEnabled }
+			await Promise.all([
+				updateSession({ user: updatedUser }),
+				form.reset({ twoFactorEnabled: updatedUser.isTwoFactorEnabled })
+			])
 			router.refresh()
 			toast.success(data.message)
 		},

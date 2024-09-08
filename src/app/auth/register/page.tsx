@@ -24,7 +24,7 @@ export default function Page({ searchParams }: { searchParams: { callbackUrl?: s
 			<AuthCardContent>
 				<RegisterForm />
 				<AuthCardSeparator label="Or continue with" />
-				<OAuthButton provider="google" label="Continue with Google" callbackUrl={searchParams.callbackUrl} />
+				<OAuthButton provider="google" label="Register with Google" callbackUrl={searchParams.callbackUrl} />
 			</AuthCardContent>
 			<AuthCardFooter>
 				<AuthCardLink href="/auth/login" label="Already have an account?" />

@@ -8,6 +8,7 @@ import {
 	PageContent,
 	PageDescription,
 	PageHeader,
+	PageSection,
 	PageTitle,
 	PageWrapper
 } from '@/client/components/page-wrapper'
@@ -22,9 +23,13 @@ export default async function Page() {
 					<PageTitle>Account Settings</PageTitle>
 					<PageDescription>Manage your account security settings</PageDescription>
 				</PageHeader>
+
 				<PageContent className="space-y-4">
-					<Toggle2FAForm />
-					{session?.user.hasPassword ? <UpdatePasswordForm /> : <AddPasswordForm />}
+					<PageSection>
+						<Toggle2FAForm />
+					</PageSection>
+
+					<PageSection>{session?.user.hasPassword ? <UpdatePasswordForm /> : <AddPasswordForm />}</PageSection>
 				</PageContent>
 			</PageContainer>
 		</PageWrapper>

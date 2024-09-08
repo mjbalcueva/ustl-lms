@@ -1,34 +1,33 @@
-import Link from 'next/link'
-
-import { Icons } from '@/client/components/icons'
+import { CardPerformanceInsights } from '@/client/components/instructor/course/card-performance-insights'
+import { CardStatsMiniGroup } from '@/client/components/instructor/course/card-stats-mini-group'
+import { NewCourseButton } from '@/client/components/instructor/course/new-course-button'
+import { SearchInput } from '@/client/components/instructor/course/search-input'
 import { PageBreadcrumbs } from '@/client/components/page-breadcrumbs'
-import { PageContent, PageDescription, PageHeader, PageTitle, PageWrapper } from '@/client/components/page-wrapper'
-import { buttonVariants, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/client/components/ui'
-import { cn } from '@/client/lib/utils'
+import { PageContent, PageHeader, PageSection, PageTitle, PageWrapper } from '@/client/components/page-wrapper'
 
 export default function Page() {
 	return (
 		<PageWrapper>
-			<PageBreadcrumbs withIcons />
-
-			<PageHeader className="flex items-end justify-between space-y-0">
+			<PageHeader className="flex flex-wrap items-end justify-between gap-4 space-y-0">
 				<div className="space-y-1.5">
-					<PageTitle className="text-3xl font-bold">Manage Your Courses</PageTitle>
-					<PageDescription>Create, manage, and publish your courses!</PageDescription>
+					<PageTitle className="font-bold">Manage Your Courses</PageTitle>
+					<PageBreadcrumbs withIcons />
 				</div>
-				<Link href="/course/create" className={cn(buttonVariants(), 'h-10 w-10 sm:w-auto')}>
-					<Icons.plusCircle className="size-5 shrink-0 sm:mr-2" />
-					<span className="hidden sm:block">New Course</span>
-				</Link>
+				<NewCourseButton />
 			</PageHeader>
-			<PageContent>
-				<Card>
-					<CardHeader>
-						<CardTitle>Overview</CardTitle>
-						<CardDescription>You have [n] courses in total ([n] active).</CardDescription>
-					</CardHeader>
-					<CardContent></CardContent>
-				</Card>
+
+			<PageContent className="space-y-6">
+				<PageSection className="px-0 sm:px-0 md:px-0 lg:px-6">
+					<CardStatsMiniGroup />
+				</PageSection>
+
+				<PageSection className="!mt-3">
+					<CardPerformanceInsights />
+				</PageSection>
+
+				<PageSection>
+					<SearchInput />
+				</PageSection>
 			</PageContent>
 		</PageWrapper>
 	)
