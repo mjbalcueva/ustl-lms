@@ -1,3 +1,4 @@
+import { LuSearch } from 'react-icons/lu'
 import {
 	TbAlertTriangle,
 	TbArchive,
@@ -70,5 +71,6 @@ export const Icons = {
 	archivedCourse: TbArchive,
 
 	// misc
-	plusCircle: TbCirclePlus
+	plusCircle: TbCirclePlus,
+	search: LuSearch
 }

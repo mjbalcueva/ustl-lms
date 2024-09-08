@@ -5,7 +5,7 @@ import { CardPerformanceInsights } from '@/client/components/instructor/course/c
 import { CardStatsMiniGroup } from '@/client/components/instructor/course/card-stats-mini-group'
 import { PageBreadcrumbs } from '@/client/components/page-breadcrumbs'
 import { PageContent, PageHeader, PageSection, PageTitle, PageWrapper } from '@/client/components/page-wrapper'
-import { buttonVariants } from '@/client/components/ui'
+import { buttonVariants, Input } from '@/client/components/ui'
 import { cn } from '@/client/lib/utils'
 
 export default function Page() {
@@ -29,6 +29,13 @@ export default function Page() {
 
 				<PageSection className="!mt-1.5">
 					<CardPerformanceInsights />
+				</PageSection>
+
+				<PageSection>
+					<div className="relative max-w-xs flex-grow rounded-lg">
+						<Icons.search className="absolute left-2 size-4 translate-y-2/3 text-muted-foreground" />
+						<Input placeholder="Search courses" className="bg-card pl-8" />
+					</div>
 				</PageSection>
 			</PageContent>
 		</PageWrapper>
