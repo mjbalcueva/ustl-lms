@@ -1,13 +1,9 @@
-import Link from 'next/link'
-
-import { Icons } from '@/client/components/icons'
 import { CardPerformanceInsights } from '@/client/components/instructor/course/card-performance-insights'
 import { CardStatsMiniGroup } from '@/client/components/instructor/course/card-stats-mini-group'
+import { NewCourseButton } from '@/client/components/instructor/course/new-course-button'
 import { SearchInput } from '@/client/components/instructor/course/search-input'
 import { PageBreadcrumbs } from '@/client/components/page-breadcrumbs'
 import { PageContent, PageHeader, PageSection, PageTitle, PageWrapper } from '@/client/components/page-wrapper'
-import { buttonVariants } from '@/client/components/ui'
-import { cn } from '@/client/lib/utils'
 
 export default function Page() {
 	return (
@@ -17,10 +13,7 @@ export default function Page() {
 					<PageTitle className="font-bold">Manage Your Courses</PageTitle>
 					<PageBreadcrumbs withIcons />
 				</div>
-				<Link href="/course/create" className={cn(buttonVariants(), 'h-10 w-32')}>
-					<Icons.plusCircle className="mr-1 size-5 shrink-0" />
-					New Course
-				</Link>
+				<NewCourseButton />
 			</PageHeader>
 
 			<PageContent className="space-y-4">
