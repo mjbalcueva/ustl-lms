@@ -53,7 +53,9 @@ type PageSectionProps = React.HTMLAttributes<HTMLDivElement> & {
 export const PageSection = React.forwardRef<HTMLDivElement, PageSectionProps>(
 	({ className, asChild, ...props }, ref) => {
 		const Component = asChild ? Slot : 'section'
-		return <Component ref={ref} className={cn('pb-2.5 sm:pb-4 md:pb-6', className)} {...props} />
+		return (
+			<Component ref={ref} className={cn('mb-2.5 overflow-hidden rounded-lg sm:mb-4 md:mb-6', className)} {...props} />
+		)
 	}
 )
 PageSection.displayName = 'PageSection'

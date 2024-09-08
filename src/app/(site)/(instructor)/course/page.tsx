@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Icons } from '@/client/components/icons'
 import { PageBreadcrumbs } from '@/client/components/page-breadcrumbs'
 import { PageContent, PageHeader, PageSection, PageTitle, PageWrapper } from '@/client/components/page-wrapper'
-import { buttonVariants, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/client/components/ui'
+import { buttonVariants, Card, CardDescription, CardHeader, CardTitle } from '@/client/components/ui'
 import { cn } from '@/client/lib/utils'
 
 export default function Page() {
@@ -26,16 +26,6 @@ export default function Page() {
 							<CardTitle className="font-medium">Course Statistics</CardTitle>
 							<CardDescription>You have [n] courses in total ([n] active).</CardDescription>
 						</CardHeader>
-						<CardContent></CardContent>
-					</Card>
-				</PageSection>
-				<PageSection>
-					<Card>
-						<CardHeader>
-							<CardTitle className="font-medium">Course Statistics</CardTitle>
-							<CardDescription>You have [n] courses in total ([n] active).</CardDescription>
-						</CardHeader>
-						<CardContent></CardContent>
 					</Card>
 				</PageSection>
 			</PageContent>
