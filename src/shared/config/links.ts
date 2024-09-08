@@ -31,8 +31,7 @@ export const home: Link[] = [
 			{
 				label: 'Reports',
 				href: '/reports',
-				icon: 'reports',
-				role: ['STUDENT']
+				icon: 'reports'
 			}
 		]
 	}
@@ -41,9 +40,8 @@ export const home: Link[] = [
 export const instructor: Link[] = [
 	{
 		label: 'Instructor',
-		href: '/instructor',
 		icon: 'instructor',
-		role: ['INSTRUCTOR'],
+		roles: ['INSTRUCTOR'],
 		children: [
 			{
 				label: 'Courses',

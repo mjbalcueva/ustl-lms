@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useSession } from 'next-auth/react'
 
 import { home, instructor, site } from '@/shared/config/links'
 
@@ -20,6 +21,8 @@ import { cn } from '@/client/lib/utils'
 
 export const SideNav = ({ className, ...props }: React.ComponentProps<typeof motion.nav>) => {
 	const { isNavOpen, setNavOpen, canNavOpen } = useNav()
+	const { data: session } = useSession()
+	const userRole = session?.user.role
 
 	return (
 		<motion.nav
@@ -51,18 +54,22 @@ export const SideNav = ({ className, ...props }: React.ComponentProps<typeof mot
 				</NavTooltip>
 			))}
 
-			<Separator className="mb-4 mt-2" />
+			{userRole === 'INSTRUCTOR' && (
+				<>
+					<Separator className="mb-4 mt-2" />
 
-			<NavTitle title="Instructor Resources" />
-			{instructor[0]?.children?.map((link) => (
-				<NavTooltip key={link.href} content={link.label}>
-					<NavLink href={link.href ?? ''}>
-						<NavIcon icon={link.icon} />
-						<NavLabel label={link.label} />
-						<NavItemSideIcon />
-					</NavLink>
-				</NavTooltip>
-			))}
+					<NavTitle title="Instructor Resources" />
+					{instructor[0]?.children?.map((link) => (
+						<NavTooltip key={link.href} content={link.label}>
+							<NavLink href={link.href ?? ''}>
+								<NavIcon icon={link.icon} />
+								<NavLabel label={link.label} />
+								<NavItemSideIcon />
+							</NavLink>
+						</NavTooltip>
+					))}
+				</>
+			)}
 
 			<NavTooltip content={isNavOpen ? 'Collapse Sidebar' : 'Expand Sidebar'}>
 				<NavButton className="mt-auto" onClick={() => setNavOpen(!isNavOpen)}>
