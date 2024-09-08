@@ -4,26 +4,26 @@ const CardPerformanceInsights = () => {
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle className="font-medium">Performance Insights</CardTitle>
+				<CardTitle>Performance Insights</CardTitle>
 				<CardDescription>Overview of your course portfolio.</CardDescription>
 			</CardHeader>
 			<CardContent>
 				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
 					<div className="flex flex-col">
-						<span className="text-3xl font-bold">0</span>
-						<span className="text-sm text-muted-foreground">Enrolled Students</span>
+						<CardTitle className="text-3xl">0</CardTitle>
+						<CardDescription>Enrolled Students</CardDescription>
 					</div>
 					<div className="flex flex-col">
-						<span className="text-3xl font-bold">0</span>
-						<span className="text-sm text-muted-foreground">Created Lessons</span>
+						<CardTitle className="text-3xl">0</CardTitle>
+						<CardDescription>Created Lessons</CardDescription>
 					</div>
 					<div className="flex flex-col">
-						<span className="text-3xl font-bold">0</span>
-						<span className="text-sm text-muted-foreground">Average Rating</span>
+						<CardTitle className="text-3xl">0</CardTitle>
+						<CardDescription>Average Rating</CardDescription>
 					</div>
 					<div className="flex flex-col">
-						<span className="text-3xl font-bold">0%</span>
-						<span className="text-sm text-muted-foreground">Avg. Completion Rate</span>
+						<CardTitle className="text-3xl">0%</CardTitle>
+						<CardDescription>Avg. Completion Rate</CardDescription>
 					</div>
 				</div>
 			</CardContent>

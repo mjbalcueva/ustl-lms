@@ -16,12 +16,12 @@ export default function Page() {
 				<NewCourseButton />
 			</PageHeader>
 
-			<PageContent className="space-y-4">
+			<PageContent className="space-y-6">
 				<PageSection className="px-0 sm:px-0 md:px-0 lg:px-6">
 					<CardStatsMiniGroup />
 				</PageSection>
 
-				<PageSection className="!mt-1.5">
+				<PageSection className="!mt-3">
 					<CardPerformanceInsights />
 				</PageSection>
 

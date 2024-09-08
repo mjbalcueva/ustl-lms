@@ -18,7 +18,7 @@ const CardStatsMini = ({ icon, title, count, className }: CardStatsMiniProps) =>
 				<Icon className="size-4 text-muted-foreground" />
 			</CardHeader>
 			<CardContent>
-				<CardTitle className="text-4xl">{count}</CardTitle>
+				<CardTitle className="text-3xl">{count}</CardTitle>
 			</CardContent>
 		</Card>
 	)
