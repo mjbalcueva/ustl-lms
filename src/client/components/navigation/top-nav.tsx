@@ -9,6 +9,7 @@ import { Icons } from '@/client/components/icons'
 import { NavButton, NavIcon, NavItemSideIcon, NavLabel, NavLink } from '@/client/components/navigation/nav-item'
 import { UserButton } from '@/client/components/navigation/user-button'
 import { useNav } from '@/client/context/nav-provider'
+import { useFilteredLinks } from '@/client/lib/hooks/use-filtered-links'
 import { cn } from '@/client/lib/utils'
 
 export const TopNav = ({ className, ...props }: React.ComponentProps<typeof motion.div>) => {
@@ -19,9 +20,10 @@ export const TopNav = ({ className, ...props }: React.ComponentProps<typeof moti
 	const isUserButtonOpen = useRef(false)
 	const MotionNavLink = useMemo(() => motion(NavLink), [])
 
-	const navLinks = useMemo(() => {
-		return [...(home[0]?.children ?? []), ...(instructor[0]?.children ?? [])]
-	}, [])
+	const homeLinks = useFilteredLinks(home, 1)
+	const instructorLinks = useFilteredLinks(instructor, 1)
+
+	const navLinks = [...homeLinks, ...instructorLinks]
 
 	const toggleScroll = useCallback((disable: boolean) => {
 		document.getElementById('body')?.classList.toggle('overflow-hidden', disable)
@@ -80,7 +82,7 @@ export const TopNav = ({ className, ...props }: React.ComponentProps<typeof moti
 					onAnimationEnd={() => setNavOpen(false)}
 					className="fixed top-14 z-10 h-full w-full overflow-auto bg-card/50 text-card-foreground backdrop-blur-xl md:hidden"
 				>
-					{navLinks?.map((item, index) => (
+					{navLinks[0]?.children?.map((item, index) => (
 						<MotionNavLink
 							key={index}
 							href={item.href ?? ''}
