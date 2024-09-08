@@ -74,7 +74,7 @@ export const UserButton: React.FC<React.ComponentProps<typeof DropdownMenu>> = (
 				side={isMobile ? 'bottom' : 'left'}
 				sideOffset={isMobile ? 15 : 13}
 			>
-				{isMobile ? (
+				{isMobile || !isNavOpen ? (
 					<DropdownMenuLabel>
 						<span className="block">{name}</span>
 						<span className="block font-normal text-muted-foreground">{strippedEmail}</span>
