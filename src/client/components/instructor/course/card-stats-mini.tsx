@@ -10,7 +10,7 @@ type CardStatsMiniProps = {
 const CardStatsMini = ({ icon, title, count }: CardStatsMiniProps) => {
 	const Icon = Icons[icon]
 	return (
-		<Card>
+		<Card className="w-56 sm:w-64 lg:w-full">
 			<CardHeader className="flex-row justify-between pb-2">
 				<CardDescription>{title}</CardDescription>
 				<Icon className="size-4 text-muted-foreground" />
