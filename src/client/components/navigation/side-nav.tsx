@@ -2,7 +2,8 @@
 
 import { motion } from 'framer-motion'
 
-import { home, instructor, site } from '@/shared/config/links'
+import { site } from '@/shared/config/links'
+import { type Link } from '@/shared/types/navigation'
 
 import {
 	NavButton,
@@ -16,13 +17,14 @@ import {
 import { UserButton } from '@/client/components/navigation/user-button'
 import { Separator } from '@/client/components/ui'
 import { useNav } from '@/client/context/nav-provider'
-import { useFilteredLinks } from '@/client/lib/hooks/use-filtered-links'
 import { cn } from '@/client/lib/utils'
 
-export const SideNav = ({ className, ...props }: React.ComponentProps<typeof motion.nav>) => {
+type SideNavProps = React.ComponentProps<typeof motion.nav> & {
+	links: Link[]
+}
+
+export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 	const { isNavOpen, setNavOpen, canNavOpen } = useNav()
-	const filteredHome = useFilteredLinks(home, 1)
-	const filteredInstructor = useFilteredLinks(instructor, 1)
 
 	return (
 		<motion.nav
@@ -44,7 +46,7 @@ export const SideNav = ({ className, ...props }: React.ComponentProps<typeof mot
 			<Separator className="mb-4" />
 
 			<NavTitle title="Home" />
-			{filteredHome[0]?.children?.map((link) => (
+			{links[0]?.children?.map((link) => (
 				<NavTooltip key={link.href} content={link.label}>
 					<NavLink href={link.href ?? ''}>
 						<NavIcon icon={link.icon} />
@@ -54,12 +56,12 @@ export const SideNav = ({ className, ...props }: React.ComponentProps<typeof mot
 				</NavTooltip>
 			))}
 
-			{!!filteredInstructor[0]?.children?.length && (
+			{!!links[1]?.children?.length && (
 				<>
 					<Separator className="mb-4 mt-2" />
 
 					<NavTitle title="Instructor Resources" />
-					{filteredInstructor[0]?.children?.map((link) => (
+					{links[1]?.children?.map((link) => (
 						<NavTooltip key={link.href} content={link.label}>
 							<NavLink href={link.href ?? ''}>
 								<NavIcon icon={link.icon} />

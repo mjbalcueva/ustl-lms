@@ -9,7 +9,7 @@ import { type Link as NavLinks } from '@/shared/types/navigation'
  * @param level - The level of the links to filter.
  * @returns The filtered links.
  */
-export function useFilteredLinks(links: NavLinks[], level = 0): NavLinks[] {
+export function useLinkFilter(links: NavLinks[], level = 0): NavLinks[] {
 	const { data: session } = useSession()
 	const userRole = session?.user?.role
 
