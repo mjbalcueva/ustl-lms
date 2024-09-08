@@ -1,4 +1,4 @@
-import { UpdateDisplayNameForm } from '@/client/components/account/forms/update-display-name'
+import { UpdateDisplayNameForm } from '@/client/components/account/update-display-name'
 import { PageContainer, PageContent, PageHeader, PageSection, PageWrapper } from '@/client/components/page-wrapper'
 import { CardDescription, CardTitle } from '@/client/components/ui'
 
