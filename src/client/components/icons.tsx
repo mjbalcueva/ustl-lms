@@ -1,10 +1,14 @@
 import {
 	TbAlertTriangle,
+	TbArchive,
+	TbBook,
 	TbChalkboard,
 	TbChartHistogram,
 	TbCircleCheck,
 	TbCirclePlus,
+	TbCircleX,
 	TbDiamond,
+	TbEdit,
 	TbInfoCircle,
 	TbInfoTriangle,
 	TbLayoutDashboard,
@@ -58,6 +62,12 @@ export const Icons = {
 	info: TbInfoCircle,
 	warning: TbAlertTriangle,
 	error: TbInfoTriangle,
+
+	// course
+	totalCourse: TbBook,
+	publishedCourse: TbCircleCheck,
+	draftCourse: TbEdit,
+	archivedCourse: TbArchive,
 
 	// misc
 	plusCircle: TbCirclePlus
