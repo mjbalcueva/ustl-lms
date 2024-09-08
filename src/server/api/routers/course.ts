@@ -1,9 +1,9 @@
 import { createCourseSchema } from '@/shared/validations/course'
 
-import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc'
+import { createTRPCRouter, instructorProcedure } from '@/server/api/trpc'
 
 export const courseRouter = createTRPCRouter({
-	createCourse: protectedProcedure.input(createCourseSchema).mutation(async ({ ctx, input }) => {
+	createCourse: instructorProcedure.input(createCourseSchema).mutation(async ({ ctx, input }) => {
 		const { title } = input
 
 		await ctx.db.course.create({
