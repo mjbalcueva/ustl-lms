@@ -1,7 +1,6 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { useSession } from 'next-auth/react'
 
 import { home, instructor, site } from '@/shared/config/links'
 
@@ -17,12 +16,13 @@ import {
 import { UserButton } from '@/client/components/navigation/user-button'
 import { Separator } from '@/client/components/ui'
 import { useNav } from '@/client/context/nav-provider'
+import { useFilteredLinks } from '@/client/lib/hooks/use-filtered-links'
 import { cn } from '@/client/lib/utils'
 
 export const SideNav = ({ className, ...props }: React.ComponentProps<typeof motion.nav>) => {
 	const { isNavOpen, setNavOpen, canNavOpen } = useNav()
-	const { data: session } = useSession()
-	const userRole = session?.user.role
+	const filteredHome = useFilteredLinks(home, 1)
+	const filteredInstructor = useFilteredLinks(instructor, 1)
 
 	return (
 		<motion.nav
@@ -44,7 +44,7 @@ export const SideNav = ({ className, ...props }: React.ComponentProps<typeof mot
 			<Separator className="mb-4" />
 
 			<NavTitle title="Home" />
-			{home[0]?.children?.map((link) => (
+			{filteredHome[0]?.children?.map((link) => (
 				<NavTooltip key={link.href} content={link.label}>
 					<NavLink href={link.href ?? ''}>
 						<NavIcon icon={link.icon} />
@@ -54,12 +54,12 @@ export const SideNav = ({ className, ...props }: React.ComponentProps<typeof mot
 				</NavTooltip>
 			))}
 
-			{userRole === 'INSTRUCTOR' && (
+			{!!filteredInstructor[0]?.children?.length && (
 				<>
 					<Separator className="mb-4 mt-2" />
 
 					<NavTitle title="Instructor Resources" />
-					{instructor[0]?.children?.map((link) => (
+					{filteredInstructor[0]?.children?.map((link) => (
 						<NavTooltip key={link.href} content={link.label}>
 							<NavLink href={link.href ?? ''}>
 								<NavIcon icon={link.icon} />
