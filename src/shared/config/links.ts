@@ -51,7 +51,7 @@ export const instructor: Link[] = [
 				icon: 'course',
 				children: [
 					{
-						label: 'Create',
+						label: 'New Course',
 						href: '/course/create'
 					}
 				]
