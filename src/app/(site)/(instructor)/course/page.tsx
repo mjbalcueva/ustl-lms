@@ -3,9 +3,10 @@ import Link from 'next/link'
 import { Icons } from '@/client/components/icons'
 import { CardPerformanceInsights } from '@/client/components/instructor/course/card-performance-insights'
 import { CardStatsMiniGroup } from '@/client/components/instructor/course/card-stats-mini-group'
+import { SearchInput } from '@/client/components/instructor/course/search-input'
 import { PageBreadcrumbs } from '@/client/components/page-breadcrumbs'
 import { PageContent, PageHeader, PageSection, PageTitle, PageWrapper } from '@/client/components/page-wrapper'
-import { buttonVariants, Input } from '@/client/components/ui'
+import { buttonVariants } from '@/client/components/ui'
 import { cn } from '@/client/lib/utils'
 
 export default function Page() {
@@ -32,10 +33,7 @@ export default function Page() {
 				</PageSection>
 
 				<PageSection>
-					<div className="relative max-w-xs flex-grow rounded-lg">
-						<Icons.search className="absolute left-2 size-4 translate-y-2/3 text-muted-foreground" />
-						<Input placeholder="Search courses" className="bg-card pl-8" />
-					</div>
+					<SearchInput />
 				</PageSection>
 			</PageContent>
 		</PageWrapper>
