@@ -42,8 +42,14 @@ export const PageDescription = React.forwardRef<HTMLDivElement, React.HTMLAttrib
 )
 PageDescription.displayName = 'PageDescription'
 
-export const PageContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-	({ className, ...props }, ref) => <div ref={ref} className={cn('px-2.5 sm:px-4 md:px-6', className)} {...props} />
+type PageContentProps = React.HTMLAttributes<HTMLDivElement> & {
+	asChild?: boolean
+}
+export const PageContent = React.forwardRef<HTMLDivElement, PageContentProps>(
+	({ className, asChild, ...props }, ref) => {
+		const Component = asChild ? Slot : 'div'
+		return <Component ref={ref} className={cn(className)} {...props} />
+	}
 )
 PageContent.displayName = 'PageContent'
 
@@ -53,9 +59,7 @@ type PageSectionProps = React.HTMLAttributes<HTMLDivElement> & {
 export const PageSection = React.forwardRef<HTMLDivElement, PageSectionProps>(
 	({ className, asChild, ...props }, ref) => {
 		const Component = asChild ? Slot : 'section'
-		return (
-			<Component ref={ref} className={cn('mb-2.5 overflow-hidden rounded-lg sm:mb-4 md:mb-6', className)} {...props} />
-		)
+		return <Component ref={ref} className={cn('px-2.5 sm:px-4 md:px-6', className)} {...props} />
 	}
 )
 PageSection.displayName = 'PageSection'

@@ -29,8 +29,8 @@ export default function Page() {
 				</Link>
 			</PageHeader>
 
-			<PageContent>
-				<PageSection asChild>
+			<PageContent className="space-y-4">
+				<PageSection>
 					<ScrollArea>
 						<div className="flex gap-4 rounded-lg">
 							<CardStatsMini icon="totalCourse" title="Total Courses" count={0} />
