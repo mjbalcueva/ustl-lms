@@ -1,16 +1,18 @@
 import { Icons } from '@/client/components/icons'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/client/components/ui'
+import { cn } from '@/client/lib/utils'
 
 type CardStatsMiniProps = {
 	icon: keyof typeof Icons
 	title: string
 	count: number
+	className?: string
 }
 
-const CardStatsMini = ({ icon, title, count }: CardStatsMiniProps) => {
+const CardStatsMini = ({ icon, title, count, className }: CardStatsMiniProps) => {
 	const Icon = Icons[icon]
 	return (
-		<Card className="w-56 sm:w-64 lg:w-full">
+		<Card className={cn('w-56 overflow-hidden sm:w-64 lg:w-full', className)}>
 			<CardHeader className="flex-row justify-between pb-2">
 				<CardDescription>{title}</CardDescription>
 				<Icon className="size-4 text-muted-foreground" />

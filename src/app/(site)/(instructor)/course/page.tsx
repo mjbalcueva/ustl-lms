@@ -30,19 +30,29 @@ export default function Page() {
 			</PageHeader>
 
 			<PageContent className="space-y-4">
-				<PageSection>
-					<ScrollArea>
-						<div className="flex gap-4 rounded-lg">
-							<CardStatsMini icon="totalCourse" title="Total Courses" count={0} />
+				<PageSection className="px-0 sm:px-0 md:px-0 lg:px-6">
+					<ScrollArea scrollHideDelay={100}>
+						<div className="mb-2.5 flex gap-4">
+							<CardStatsMini
+								icon="totalCourse"
+								title="Total Courses"
+								count={0}
+								className="ml-2 sm:ml-4 md:ml-6 lg:ml-0"
+							/>
 							<CardStatsMini icon="publishedCourse" title="Published Courses" count={0} />
 							<CardStatsMini icon="draftCourse" title="Draft Courses" count={0} />
-							<CardStatsMini icon="archivedCourse" title="Archived Courses" count={0} />
+							<CardStatsMini
+								icon="archivedCourse"
+								title="Archived Courses"
+								count={0}
+								className="mr-2 sm:mr-4 md:mr-6 lg:mr-0"
+							/>
 						</div>
-						<ScrollBar orientation="horizontal" />
+						<ScrollBar orientation="horizontal" className="mx-2 sm:mx-4 md:mx-6 lg:mx-0" />
 					</ScrollArea>
 				</PageSection>
 
-				<PageSection>
+				<PageSection className="!mt-1.5">
 					<Card>
 						<CardHeader>
 							<CardTitle className="font-medium">Course Statistics</CardTitle>
