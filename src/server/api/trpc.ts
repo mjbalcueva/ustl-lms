@@ -128,3 +128,19 @@ export const protectedProcedure = t.procedure.use(timingMiddleware).use(({ ctx, 
 		}
 	})
 })
+
+/**
+ * Instructor (teacher) procedure
+ *
+ * This is a protected procedure that ensures the user is an instructor.
+ */
+export const instructorProcedure = protectedProcedure.use(({ ctx, next }) => {
+	if (ctx.session.user.role !== 'INSTRUCTOR')
+		throw new TRPCError({ code: 'UNAUTHORIZED', message: 'You are not authorized to access this resource.' })
+
+	return next({
+		ctx: {
+			session: { ...ctx.session, user: ctx.session.user }
+		}
+	})
+})

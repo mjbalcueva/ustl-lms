@@ -6,6 +6,6 @@ export interface Link {
 	label: string
 	href?: string
 	icon?: keyof typeof Icons
-	role?: UserRole[]
+	roles?: UserRole[]
 	children?: Link[]
 }

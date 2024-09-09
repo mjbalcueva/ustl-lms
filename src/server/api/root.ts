@@ -1,8 +1,8 @@
 import { authRouter } from '@/server/api/routers/auth'
+import { courseRouter } from '@/server/api/routers/course'
 import { postRouter } from '@/server/api/routers/post'
+import { profileRouter } from '@/server/api/routers/profile'
 import { createCallerFactory, createTRPCRouter } from '@/server/api/trpc'
-
-import { profileRouter } from './routers/profile'
 
 /**
  * This is the primary router for your server.
@@ -11,6 +11,7 @@ import { profileRouter } from './routers/profile'
  */
 export const appRouter = createTRPCRouter({
 	auth: authRouter,
+	course: courseRouter,
 	post: postRouter,
 	profile: profileRouter
 })

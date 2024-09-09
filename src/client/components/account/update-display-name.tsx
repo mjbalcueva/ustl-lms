@@ -17,7 +17,7 @@ import {
 	ItemHeader,
 	ItemTitle,
 	ItemWrapper
-} from '@/client/components/account/item-wrapper'
+} from '@/client/components/item-wrapper'
 import { Loader } from '@/client/components/loader'
 import { Button, Form, FormControl, FormField, FormItem, FormMessage, Input } from '@/client/components/ui'
 

@@ -3,7 +3,8 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
 
-import { home, instructor, site } from '@/shared/config/links'
+import { site } from '@/shared/config/links'
+import { type Link } from '@/shared/types/navigation'
 
 import { Icons } from '@/client/components/icons'
 import { NavButton, NavIcon, NavItemSideIcon, NavLabel, NavLink } from '@/client/components/navigation/nav-item'
@@ -11,17 +12,18 @@ import { UserButton } from '@/client/components/navigation/user-button'
 import { useNav } from '@/client/context/nav-provider'
 import { cn } from '@/client/lib/utils'
 
-export const TopNav = ({ className, ...props }: React.ComponentProps<typeof motion.div>) => {
+type TopNavProps = React.ComponentProps<typeof motion.div> & {
+	links: Link[]
+	className?: string
+}
+
+export const TopNav = ({ links, className, ...props }: TopNavProps) => {
 	const { isNavOpen, setNavOpen } = useNav()
 
 	const { scrollYProgress } = useScroll()
 	const [showNav, setShowNav] = useState(true)
 	const isUserButtonOpen = useRef(false)
 	const MotionNavLink = useMemo(() => motion(NavLink), [])
-
-	const navLinks = useMemo(() => {
-		return [...(home[0]?.children ?? []), ...(instructor[0]?.children ?? [])]
-	}, [])
 
 	const toggleScroll = useCallback((disable: boolean) => {
 		document.getElementById('body')?.classList.toggle('overflow-hidden', disable)
@@ -80,7 +82,7 @@ export const TopNav = ({ className, ...props }: React.ComponentProps<typeof moti
 					onAnimationEnd={() => setNavOpen(false)}
 					className="fixed top-14 z-10 h-full w-full overflow-auto bg-card/50 text-card-foreground backdrop-blur-xl md:hidden"
 				>
-					{navLinks?.map((item, index) => (
+					{links.map((item, index) => (
 						<MotionNavLink
 							key={index}
 							href={item.href ?? ''}

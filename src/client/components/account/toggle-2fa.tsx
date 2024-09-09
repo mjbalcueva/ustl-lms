@@ -19,7 +19,7 @@ import {
 	ItemInnerCard,
 	ItemTitle,
 	ItemWrapper
-} from '@/client/components/account/item-wrapper'
+} from '@/client/components/item-wrapper'
 import { Loader } from '@/client/components/loader'
 import {
 	Button,

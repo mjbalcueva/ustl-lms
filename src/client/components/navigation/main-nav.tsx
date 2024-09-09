@@ -3,10 +3,13 @@
 import { Inter } from 'next/font/google'
 import { type motion } from 'framer-motion'
 
+import { home, instructor } from '@/shared/config/links'
+
 import { SideNav } from '@/client/components/navigation/side-nav'
 import { TopNav } from '@/client/components/navigation/top-nav'
 import { useDeviceType } from '@/client/context/device-type-provider'
 import { NavProvider } from '@/client/context/nav-provider'
+import { useLinkFilter } from '@/client/lib/hooks/use-filtered-links'
 import { cn } from '@/client/lib/utils'
 
 const inter = Inter({
@@ -21,6 +24,7 @@ type MainNavProps = React.ComponentProps<typeof motion.div> & {
 
 export const MainNav = ({ className, defaultNavOpen, ...props }: MainNavProps) => {
 	const { deviceSize } = useDeviceType()
+	const navLinks = [...useLinkFilter(home, 1), ...useLinkFilter(instructor, 1)]
 
 	if (!deviceSize)
 		return (
@@ -40,9 +44,13 @@ export const MainNav = ({ className, defaultNavOpen, ...props }: MainNavProps) =
 	return (
 		<NavProvider defaultNavOpen={defaultNavOpen}>
 			{deviceSize === 'mobile' ? (
-				<TopNav className={cn(className, inter.className)} {...props} />
+				<TopNav
+					links={navLinks.flatMap((link) => link.children!)}
+					className={cn(className, inter.className)}
+					{...props}
+				/>
 			) : (
-				<SideNav className={cn(className, inter.className)} {...props} />
+				<SideNav links={navLinks} className={cn(className, inter.className)} {...props} />
 			)}
 		</NavProvider>
 	)

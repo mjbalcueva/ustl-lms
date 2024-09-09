@@ -10,6 +10,7 @@ import {
 	TbCirclePlus,
 	TbDiamond,
 	TbEdit,
+	TbFilter,
 	TbInfoCircle,
 	TbInfoTriangle,
 	TbLayoutDashboard,
@@ -71,6 +72,7 @@ export const Icons = {
 	archivedCourse: TbArchive,
 
 	// misc
+	filter: TbFilter,
 	plusCircle: TbCirclePlus,
 	search: LuSearch
 }

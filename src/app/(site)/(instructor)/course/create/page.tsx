@@ -1,15 +1,14 @@
-import { PageBreadcrumbs } from '@/client/components/page-breadcrumbs'
-import { PageContent, PageDescription, PageHeader, PageTitle, PageWrapper } from '@/client/components/page-wrapper'
+import { CreateCourseForm } from '@/client/components/instructor/course/forms/create-course'
+import { PageContainer, PageContent, PageWrapper } from '@/client/components/page-wrapper'
 
 export default function Page() {
 	return (
 		<PageWrapper>
-			<PageBreadcrumbs withIcons />
-			<PageHeader className="md:pt-4">
-				<PageTitle>Create Course</PageTitle>
-				<PageDescription>Create a new course</PageDescription>
-			</PageHeader>
-			<PageContent></PageContent>
+			<PageContainer className="h-full">
+				<PageContent className="grid h-full place-items-center">
+					<CreateCourseForm />
+				</PageContent>
+			</PageContainer>
 		</PageWrapper>
 	)
 }
