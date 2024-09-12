@@ -97,13 +97,7 @@ export const LoginForm = () => {
 								<FormItem>
 									<FormLabel className="text-card-foreground">Email Address</FormLabel>
 									<FormControl>
-										<Input
-											placeholder="Enter your email"
-											className="rounded-xl bg-background"
-											type="email"
-											autoComplete="email"
-											{...field}
-										/>
+										<Input placeholder="Enter your email" type="email" autoComplete="email" {...field} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>

@@ -62,7 +62,7 @@ export const UpdateDisplayNameForm = () => {
 							render={({ field }) => (
 								<FormItem>
 									<FormControl>
-										<Input className="rounded-xl sm:w-3/5" placeholder="Enter a new name" {...field} />
+										<Input className="sm:w-3/5" placeholder="Enter a new name" {...field} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>

@@ -43,12 +43,7 @@ export const RegisterForm = () => {
 						<FormItem>
 							<FormLabel className="text-card-foreground">Name</FormLabel>
 							<FormControl>
-								<Input
-									placeholder="What should we call you?"
-									className="rounded-xl bg-background"
-									autoComplete="name"
-									{...field}
-								/>
+								<Input placeholder="What should we call you?" autoComplete="name" {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -62,13 +57,7 @@ export const RegisterForm = () => {
 						<FormItem>
 							<FormLabel className="text-card-foreground">Email Address</FormLabel>
 							<FormControl>
-								<Input
-									placeholder="Enter your email"
-									className="rounded-xl bg-background"
-									type="email"
-									autoComplete="email"
-									{...field}
-								/>
+								<Input placeholder="Enter your email" type="email" autoComplete="email" {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -82,7 +71,7 @@ export const RegisterForm = () => {
 						<FormItem>
 							<FormLabel className="text-card-foreground">Password</FormLabel>
 							<FormControl>
-								<PasswordInput placeholder="Password" className="rounded-xl bg-background" {...field} />
+								<PasswordInput placeholder="Password" {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -93,7 +82,7 @@ export const RegisterForm = () => {
 				<FormResponse type="success" message={data?.message} />
 
 				<div className="pt-2">
-					<ButtonShining className="w-full rounded-xl" shiningClassName="bg-white/20" disabled={isPending}>
+					<ButtonShining className="w-full" shiningClassName="bg-white/20" disabled={isPending}>
 						{isPending && (
 							<span className="relative right-[4.5ch]">
 								<Loader />

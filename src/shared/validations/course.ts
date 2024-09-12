@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 export const createCourseSchema = z.object({
+	code: z.string().min(1, 'Code is required').max(16, 'Code must be less than 16 characters'),
 	title: z.string().min(1, 'Title is required').max(32, 'Title must be less than 32 characters')
 })
 

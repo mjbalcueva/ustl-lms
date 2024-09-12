@@ -40,13 +40,7 @@ export const ForgotPasswordForm = () => {
 						<FormItem>
 							<FormLabel className="text-card-foreground">Find your account</FormLabel>
 							<FormControl>
-								<Input
-									placeholder="Enter your email"
-									className="rounded-xl bg-background"
-									type="email"
-									autoComplete="email"
-									{...field}
-								/>
+								<Input placeholder="Enter your email" type="email" autoComplete="email" {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
