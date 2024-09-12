@@ -49,7 +49,7 @@ export const CreateCourseForm = () => {
 		<ItemWrapper className="h-fit w-full">
 			<ItemHeader>
 				<ItemTitle className="text-2xl font-semibold">Name your course</ItemTitle>
-				<ItemDescription>What do you want to call your course?</ItemDescription>
+				<ItemDescription>What would you like to call your course?</ItemDescription>
 			</ItemHeader>
 
 			<Form {...form}>
@@ -63,7 +63,7 @@ export const CreateCourseForm = () => {
 									<FormItem className="col-span-2 row-start-1 md:col-span-1">
 										<FormLabel className="text-card-foreground">Course Code</FormLabel>
 										<FormControl>
-											<Input className="rounded-xl" placeholder="Enter a course code" {...field} />
+											<Input placeholder="Enter a course code" {...field} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -77,7 +77,7 @@ export const CreateCourseForm = () => {
 									<FormItem className="col-span-3 row-start-2 md:col-span-2">
 										<FormLabel className="text-card-foreground">Course Title</FormLabel>
 										<FormControl>
-											<Input className="rounded-xl" placeholder="Enter a new name" {...field} />
+											<Input placeholder="Enter a new name" {...field} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>

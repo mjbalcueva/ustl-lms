@@ -73,7 +73,6 @@ export const UpdatePasswordForm = () => {
 									<FormLabel className="text-card-foreground">Current Password</FormLabel>
 									<FormControl>
 										<PasswordInput
-											className="rounded-xl"
 											parentClassName="sm:w-3/5"
 											placeholder="Enter current password"
 											autoComplete="current-password"
@@ -93,7 +92,6 @@ export const UpdatePasswordForm = () => {
 									<FormLabel className="text-card-foreground">New Password</FormLabel>
 									<FormControl>
 										<PasswordInput
-											className="rounded-xl"
 											parentClassName="sm:w-3/5"
 											placeholder="Enter new password"
 											autoComplete="new-password"
@@ -113,7 +111,6 @@ export const UpdatePasswordForm = () => {
 									<FormLabel className="text-card-foreground">Confirm New Password</FormLabel>
 									<FormControl>
 										<PasswordInput
-											className="rounded-xl"
 											parentClassName="sm:w-3/5"
 											placeholder="Confirm new password"
 											autoComplete="new-password"

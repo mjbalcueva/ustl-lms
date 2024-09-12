@@ -41,16 +41,17 @@ export const ResetPasswordForm = ({ token }: { token: string }) => {
 						<FormItem>
 							<FormLabel className="text-card-foreground">Password</FormLabel>
 							<FormControl>
-								<PasswordInput placeholder="Password" className="rounded-xl bg-background" {...field} />
+								<PasswordInput placeholder="Password" {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
 					)}
 				/>
+
 				<FormResponse type="error" message={error?.message} />
 				<FormResponse type="success" message={data?.message} />
 
-				<ButtonShining className="w-full rounded-xl" shiningClassName="bg-white/20" disabled={isPending}>
+				<ButtonShining className="w-full" shiningClassName="bg-white/20" disabled={isPending}>
 					{isPending && (
 						<span className="relative right-[7ch]">
 							<Loader />

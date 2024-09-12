@@ -28,7 +28,7 @@ const FilterButton = () => {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Button variant="card" className="font-normal">
+				<Button variant="card" className="rounded-xl font-normal shadow-sm">
 					<Icons.filter className="mr-2 h-4 w-4" />
 					Status
 				</Button>
