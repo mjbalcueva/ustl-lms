@@ -94,9 +94,9 @@ model User {
 
   profile               Profile?
   accounts              Account[]
-  verificationToken     VerificationToken[]
-  passwordResetToken    PasswordResetToken[]
-  twoFactorToken        TwoFactorToken[]
+  verificationTokens    VerificationToken[]
+  passwordResetTokens   PasswordResetToken[]
+  twoFactorTokens       TwoFactorToken[]
   twoFactorConfirmation TwoFactorConfirmation?
 
   posts   Post[]
