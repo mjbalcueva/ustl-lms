@@ -17,41 +17,60 @@ datasource db {
 }
 
 model Post {
-  id        Int      @id @default(autoincrement())
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  createdBy   User   @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  id          Int      @id @default(autoincrement())
   createdById String
+  name        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  createdBy User @relation(fields: [createdById], references: [id], onDelete: Cascade)
 
   @@index([name])
   @@map("post")
 }
 
 model Course {
-  id          String    @id @default(cuid())
-  userId      String
+  id          String   @id @default(cuid())
+  createdById String
   code        String
   title       String
   description String?
   image       String?
-  isPublished Boolean   @default(false)
   categoryId  String?
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  category    Category? @relation(fields: [categoryId], references: [id])
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  createdBy User      @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  category  Category? @relation(fields: [categoryId], references: [id])
+
+  attachment Attachment[]
 
   @@index([code, categoryId])
   @@map("course")
 }
 
-model Category {
-  id      String   @id @default(cuid())
-  name    String
-  courses Course[]
-
+model Attachment {
+  id        String   @id @default(cuid())
+  courseId  String
+  name      String
+  url       String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@index([courseId])
+  @@map("attachment")
+}
+
+model Category {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  courses Course[]
 
   @@map("category")
 }
@@ -61,26 +80,27 @@ model Category {
 // -----------------------------------------------------------------------------
 
 enum UserRole {
-  ADMIN
   INSTRUCTOR
   STUDENT
 }
 
 model User {
-  id                    String                 @id @default(cuid())
-  email                 String?                @unique
-  emailVerified         DateTime?              @map("email_verified")
-  password              String?
-  role                  UserRole               @default(STUDENT)
-  isTwoFactorEnabled    Boolean                @default(false)
+  id                 String    @id @default(cuid())
+  email              String?   @unique
+  emailVerified      DateTime? @map("email_verified")
+  password           String?
+  role               UserRole  @default(STUDENT)
+  isTwoFactorEnabled Boolean   @default(false)
+
   profile               Profile?
   accounts              Account[]
   verificationToken     VerificationToken[]
   passwordResetToken    PasswordResetToken[]
   twoFactorToken        TwoFactorToken[]
   twoFactorConfirmation TwoFactorConfirmation?
-  posts                 Post[]
-  courses               Course[]
+
+  posts   Post[]
+  courses Course[]
 
   @@map("user")
 }
@@ -93,7 +113,8 @@ model Profile {
   bio         String?
   dateOfBirth DateTime? @map("date_of_birth")
   gender      String?
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("profile")
 }
@@ -111,7 +132,8 @@ model Account {
   scope             String?
   id_token          String? @db.Text
   session_state     String?
-  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@map("account")
@@ -122,7 +144,8 @@ model VerificationToken {
   email   String
   token   String   @unique
   expires DateTime
-  user    User     @relation(fields: [email], references: [email], onDelete: Cascade)
+
+  user User @relation(fields: [email], references: [email], onDelete: Cascade)
 
   @@unique([email, token])
   @@map("verification_token")
@@ -133,7 +156,8 @@ model PasswordResetToken {
   email   String
   token   String   @unique
   expires DateTime
-  user    User     @relation(fields: [email], references: [email], onDelete: Cascade)
+
+  user User @relation(fields: [email], references: [email], onDelete: Cascade)
 
   @@unique([email, token])
   @@map("password_reset_token")
@@ -144,7 +168,8 @@ model TwoFactorToken {
   email   String
   token   String   @unique
   expires DateTime
-  user    User     @relation(fields: [email], references: [email], onDelete: Cascade)
+
+  user User @relation(fields: [email], references: [email], onDelete: Cascade)
 
   @@unique([email, token])
   @@map("two_factor_token")

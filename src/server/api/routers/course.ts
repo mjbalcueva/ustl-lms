@@ -10,7 +10,7 @@ export const courseRouter = createTRPCRouter({
 			data: {
 				code,
 				title,
-				userId: ctx.session.user.id!
+				createdById: ctx.session.user.id!
 			}
 		})
 
