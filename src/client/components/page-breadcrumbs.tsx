@@ -17,7 +17,7 @@ type PageBreadcrumbsProps = {
 
 export const PageBreadcrumbs = ({ withIcons = false, className }: PageBreadcrumbsProps) => {
 	const pathname = usePathname()
-	const pathSegments = pathname?.split('/').filter((segment) => segment !== '') ?? []
+	const pathSegments = pathname.split('/').filter((segment) => segment !== '')
 
 	const allLinks = [...home, ...instructor, ...account]
 
