@@ -19,29 +19,30 @@ export const PageBreadcrumbs = ({ withIcons = false, className }: PageBreadcrumb
 	const pathname = usePathname()
 	const pathSegments = pathname.split('/').filter((segment) => segment !== '')
 
+	console.log(pathSegments)
+
 	const allLinks = [...home, ...instructor, ...account]
 
-	const memoizedGetBreadcrumbs = React.useMemo(() => {
-		function getBreadcrumbs(links: Link[], currentPath: string[]): Link[] {
-			for (const link of links) {
-				if (link.href === `/${currentPath.join('/')}` && !link.children) return [link]
+	const memoizedGetBreadcrumbs = React.useCallback((links: Link[], currentPath: string[]): Link[] => {
+		for (const link of links) {
+			if (link.href === `/${currentPath.join('/')}` && !link.children) return [link]
 
-				const childResult = getBreadcrumbs(link.children ?? [], currentPath)
-				if (childResult.length > 0) return [link, ...childResult]
-			}
-			return []
+			const childResult = memoizedGetBreadcrumbs(link.children ?? [], currentPath)
+			if (childResult.length > 0) return [link, ...childResult]
 		}
-		return getBreadcrumbs
+		return []
 	}, [])
 
 	const breadcrumbs = memoizedGetBreadcrumbs(allLinks, pathSegments)
+
+	console.log(breadcrumbs)
 
 	return (
 		<Breadcrumb>
 			<BreadcrumbList className={cn(className)}>
 				{breadcrumbs.map((crumb, index) => {
 					const Icon = crumb.icon ? Icons[crumb.icon] : null
-					const noHref = crumb.href === undefined
+					const noHref = !crumb.href
 
 					return (
 						<React.Fragment key={crumb.label}>
