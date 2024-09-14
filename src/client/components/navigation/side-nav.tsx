@@ -29,7 +29,7 @@ export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 	return (
 		<motion.nav
 			className={cn(
-				'flex h-full flex-shrink-0 flex-col overflow-y-auto overflow-x-hidden rounded-xl p-2 pb-4',
+				'flex h-full flex-shrink-0 flex-col overflow-y-auto overflow-x-hidden rounded-xl p-2',
 				isNavOpen ? 'w-[240px]' : 'w-[60px]',
 				className
 			)}
@@ -38,12 +38,15 @@ export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 			}}
 			{...props}
 		>
-			<NavButton className="gap-2 !pl-2 hover:cursor-default hover:bg-transparent">
-				<NavIcon icon={site.icon} className="size-7" />
+			<NavButton className="gap-2 !px-1 py-1 hover:cursor-default hover:bg-transparent">
+				<NavIcon
+					icon={site.icon}
+					className="size-9 rounded-lg bg-gradient-to-b from-accent to-background p-1.5 text-foreground"
+				/>
 				<NavLabel label={site.label} className="text-lg font-semibold tracking-wide" disableAnimation />
 			</NavButton>
 
-			<Separator className="mb-4" />
+			<Separator className="mb-4 mt-2" />
 
 			<NavTitle title="Home" />
 			{links[0]?.children?.map((link) => (
