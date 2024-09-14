@@ -1,12 +1,17 @@
+import { api, HydrateClient } from '@/shared/trpc/server'
+
 import { PageContent, PageWrapper } from '@/client/components/page-wrapper'
 
-export default function Page({ params }: { params: { courseId: string } }) {
+export default async function Page({ params }: { params: { courseId: string } }) {
+	const getCourse = await api.course.getCourse({ courseId: params.courseId })
+
 	return (
-		<PageWrapper>
-			<PageContent>
-				rawr
-				<pre>{JSON.stringify(params.courseId, null, 2)}</pre>
-			</PageContent>
-		</PageWrapper>
+		<HydrateClient>
+			<PageWrapper>
+				<PageContent>
+					<pre>{JSON.stringify(getCourse, null, 2)}</pre>
+				</PageContent>
+			</PageWrapper>
+		</HydrateClient>
 	)
 }
