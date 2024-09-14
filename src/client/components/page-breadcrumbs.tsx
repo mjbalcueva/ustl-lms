@@ -21,18 +21,21 @@ export const PageBreadcrumbs = ({ withIcons = false, className }: PageBreadcrumb
 
 	const allLinks = [...home, ...instructor, ...account]
 
-	const getBreadcrumbs = (links: Link[], currentPath: string[]): Link[] => {
-		for (const link of links) {
-			if (link.href !== `/${currentPath.join('/')}` && !link.children) continue
-			if (link.href === `/${currentPath.join('/')}`) return [link]
+	const memoizedGetBreadcrumbs = React.useMemo(() => {
+		function getBreadcrumbs(links: Link[], currentPath: string[]): Link[] {
+			for (const link of links) {
+				if (link.href !== `/${currentPath.join('/')}` && !link.children) continue
+				if (link.href === `/${currentPath.join('/')}`) return [link]
 
-			const childResult = getBreadcrumbs(link.children ?? [], currentPath)
-			if (childResult.length > 0) return [link, ...childResult]
+				const childResult = getBreadcrumbs(link.children ?? [], currentPath)
+				if (childResult.length > 0) return [link, ...childResult]
+			}
+			return []
 		}
-		return []
-	}
+		return getBreadcrumbs
+	}, [])
 
-	const breadcrumbs = getBreadcrumbs(allLinks, pathSegments)
+	const breadcrumbs = memoizedGetBreadcrumbs(allLinks, pathSegments)
 
 	return (
 		<Breadcrumb>
