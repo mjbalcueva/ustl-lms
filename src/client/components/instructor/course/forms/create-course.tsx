@@ -8,7 +8,6 @@ import { toast } from 'sonner'
 import { api } from '@/shared/trpc/react'
 import { createCourseSchema, type CreateCourseSchema } from '@/shared/validations/course'
 
-import { Icons } from '@/client/components/icons'
 import {
 	ItemContent,
 	ItemDescription,
@@ -88,7 +87,6 @@ export const CreateCourseForm = () => {
 
 					<ItemFooter className="justify-end md:justify-between">
 						<div className="hidden items-center gap-1 sm:flex">
-							<Icons.info className="h-4 w-4 shrink-0 text-muted-foreground" />
 							<ItemFooterDescription>You can still change this later.</ItemFooterDescription>
 						</div>
 						<div className="flex gap-3">

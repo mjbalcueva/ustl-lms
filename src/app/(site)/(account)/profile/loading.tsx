@@ -15,8 +15,8 @@ export default function Loading() {
 		<PageWrapper>
 			<PageContainer>
 				<PageHeader>
-					<PageTitle>Account Settings</PageTitle>
-					<PageDescription>Manage your account security settings</PageDescription>
+					<PageTitle>Your Profile</PageTitle>
+					<PageDescription>Manage your Scholar profile</PageDescription>
 				</PageHeader>
 
 				<PageContent asChild>
