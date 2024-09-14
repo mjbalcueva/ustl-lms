@@ -25,7 +25,7 @@ export const PageBreadcrumbs = ({ withIcons = false, className }: PageBreadcrumb
 		function getBreadcrumbs(links: Link[], currentPath: string[]): Link[] {
 			for (const link of links) {
 				if (link.href !== `/${currentPath.join('/')}` && !link.children) continue
-				if (link.href === `/${currentPath.join('/')}`) return [link]
+				if (link.href === `/${currentPath.join('/')}` && !link.children) return [link]
 
 				const childResult = getBreadcrumbs(link.children ?? [], currentPath)
 				if (childResult.length > 0) return [link, ...childResult]
