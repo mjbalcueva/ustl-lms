@@ -24,7 +24,6 @@ export const PageBreadcrumbs = ({ withIcons = false, className }: PageBreadcrumb
 	const memoizedGetBreadcrumbs = React.useMemo(() => {
 		function getBreadcrumbs(links: Link[], currentPath: string[]): Link[] {
 			for (const link of links) {
-				if (link.href !== `/${currentPath.join('/')}` && !link.children) continue
 				if (link.href === `/${currentPath.join('/')}` && !link.children) return [link]
 
 				const childResult = getBreadcrumbs(link.children ?? [], currentPath)
@@ -42,13 +41,13 @@ export const PageBreadcrumbs = ({ withIcons = false, className }: PageBreadcrumb
 			<BreadcrumbList className={cn(className)}>
 				{breadcrumbs.map((crumb, index) => {
 					const Icon = crumb.icon ? Icons[crumb.icon] : null
-					const isFirst = index === 0
+					const noHref = crumb.href === undefined
 
 					return (
 						<React.Fragment key={crumb.label}>
 							{index > 0 && <BreadcrumbSeparator />}
-							<BreadcrumbItem className={cn(isFirst && 'select-none gap-0 space-x-1.5')}>
-								{isFirst ? (
+							<BreadcrumbItem className={cn(noHref && 'select-none gap-0 space-x-1.5')}>
+								{noHref ? (
 									<>
 										{withIcons && Icon && <Icon className="size-4" />}
 										<span className="leading-none">{crumb.label}</span>
