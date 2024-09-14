@@ -6,7 +6,7 @@ import { cn } from '@/client/lib/utils'
 
 const NewCourseButton = () => {
 	return (
-		<Link href="/course/create" className={cn(buttonVariants(), 'h-10 w-32')}>
+		<Link href="/courses/create" className={cn(buttonVariants(), 'h-10 w-32')}>
 			<Icons.plusCircle className="mr-1 size-5 shrink-0" />
 			New Course
 		</Link>
