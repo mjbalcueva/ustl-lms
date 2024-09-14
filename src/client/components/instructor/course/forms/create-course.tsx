@@ -34,7 +34,7 @@ export const CreateCourseForm = () => {
 	const { mutate, isPending } = api.course.createCourse.useMutation({
 		onSuccess: async (data) => {
 			form.reset()
-			router.refresh()
+			router.push(`/course/create/${data.course.id}`)
 			toast.success(data.message)
 		},
 		onError: (error) => {

@@ -6,7 +6,7 @@ export const courseRouter = createTRPCRouter({
 	createCourse: instructorProcedure.input(createCourseSchema).mutation(async ({ ctx, input }) => {
 		const { code, title } = input
 
-		await ctx.db.course.create({
+		const course = await ctx.db.course.create({
 			data: {
 				code,
 				title,
@@ -14,6 +14,6 @@ export const courseRouter = createTRPCRouter({
 			}
 		})
 
-		return { message: 'Course created!' }
+		return { message: 'Course created!', course }
 	})
 })
