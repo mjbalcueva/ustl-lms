@@ -23,7 +23,8 @@ const buttonVariants = cva(
 				xs: 'px-8 h-7 focus-visible:ring-offset-2',
 				sm: 'h-9 rounded-md px-3',
 				lg: 'h-11 rounded-md px-8',
-				link: 'h-7 text-xs focus-visible:ring-offset-2'
+				link: 'h-7 text-xs focus-visible:ring-offset-2',
+				card: 'h-8 rounded-md px-3'
 			}
 		},
 		defaultVariants: {

@@ -3,6 +3,9 @@ import { LuFile, LuLayoutDashboard, LuListChecks } from 'react-icons/lu'
 import { api, HydrateClient } from '@/shared/trpc/server'
 
 import { IconBadge } from '@/client/components/icon-badge'
+import { UpdateCode } from '@/client/components/instructor/course/forms/update-code'
+import { UpdateDescription } from '@/client/components/instructor/course/forms/update-description'
+import { UpdateTitle } from '@/client/components/instructor/course/forms/update-title'
 import { Breadcrumbs, type Crumb } from '@/client/components/page-breadcrumbs'
 import {
 	PageContent,
@@ -17,13 +20,15 @@ import { Separator } from '@/client/components/ui'
 export default async function Page({ params }: { params: { courseId: string } }) {
 	const { course } = await api.course.getCourse({ courseId: params.courseId })
 
+	if (!course) return
+
 	const requiredFields = [
-		course?.code,
-		course?.title,
-		course?.description,
-		course?.image,
-		course?.categoryId,
-		course?.isPublished
+		course.code,
+		course.title,
+		course.description,
+		course.image,
+		course.categoryId,
+		course.isPublished
 	]
 
 	const totalFields = requiredFields.length
@@ -34,13 +39,13 @@ export default async function Page({ params }: { params: { courseId: string } })
 		{ icon: 'instructor' },
 		{ label: 'Courses', href: '/courses' },
 		{ label: 'Edit' },
-		{ icon: 'draftCourse', label: course?.title }
+		{ icon: 'draftCourse', label: course.title }
 	]
 
 	return (
 		<HydrateClient>
 			<PageWrapper>
-				<PageHeader className="space-y-0 md:py-3">
+				<PageHeader className="hidden space-y-0 md:block md:py-3">
 					<Breadcrumbs crumbs={crumbs} />
 				</PageHeader>
 
@@ -52,26 +57,29 @@ export default async function Page({ params }: { params: { courseId: string } })
 				</PageHeader>
 
 				<PageContent>
-					<PageSection>
-						<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+					<PageSection className="grid grid-cols-1 gap-6 md:grid-cols-2">
+						<div>
+							<div className="flex items-center gap-x-2">
+								<IconBadge icon={LuLayoutDashboard} />
+								<h2 className="text-xl">Customize your course</h2>
+							</div>
+							<UpdateCode courseId={course.id} initialData={{ code: course.code }} />
+							<UpdateTitle courseId={course.id} initialData={{ title: course.title }} />
+							<UpdateDescription courseId={course.id} initialData={{ description: course.description ?? '' }} />
+						</div>
+
+						<div className="space-y-6">
 							<div>
 								<div className="flex items-center gap-x-2">
-									<IconBadge icon={LuLayoutDashboard} />
-									<h2 className="text-xl">Customize your course</h2>
+									<IconBadge icon={LuListChecks} />
+									<h2 className="text-xl">Course chapters</h2>
 								</div>
 							</div>
-							<div className="space-y-6">
-								<div>
-									<div className="flex items-center gap-x-2">
-										<IconBadge icon={LuListChecks} />
-										<h2 className="text-xl">Course chapters</h2>
-									</div>
-								</div>
-								<div>
-									<div className="flex items-center gap-x-2">
-										<IconBadge icon={LuFile} />
-										<h2 className="text-xl">Resources & Attachments</h2>
-									</div>
+
+							<div>
+								<div className="flex items-center gap-x-2">
+									<IconBadge icon={LuFile} />
+									<h2 className="text-xl">Resources & Attachments</h2>
 								</div>
 							</div>
 						</div>
