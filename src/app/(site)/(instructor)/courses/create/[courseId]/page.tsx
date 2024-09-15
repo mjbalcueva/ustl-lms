@@ -30,7 +30,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 		<HydrateClient>
 			<PageWrapper>
 				<PageHeader>
-					<div className="flex w-fit flex-col items-end gap-2 sm:flex-row">
+					<div className="flex w-fit flex-col gap-2 sm:flex-row sm:items-end">
 						<PageTitle className="font-bold">Course Setup</PageTitle>
 						<PageDescription>Completed {completionText}</PageDescription>
 					</div>
