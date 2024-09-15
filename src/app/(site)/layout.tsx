@@ -11,11 +11,8 @@ export default async function Layout({ children }: Readonly<{ children: React.Re
 	const deviceSizeCookie = cookies().get('device-size')
 	const navOpenCookie = cookies().get('is-nav-open')
 
-	let defaultDeviceSize: DeviceType = ''
-	if (deviceSizeCookie) defaultDeviceSize = JSON.parse(deviceSizeCookie.value) as DeviceType
-
-	let defaultNavOpen = false
-	if (navOpenCookie) defaultNavOpen = JSON.parse(navOpenCookie.value) as boolean
+	const defaultDeviceSize: DeviceType = deviceSizeCookie ? (JSON.parse(deviceSizeCookie.value) as DeviceType) : ''
+	const defaultNavOpen = navOpenCookie ? (JSON.parse(navOpenCookie.value) as boolean) : false
 
 	const session = await api.auth.getSession()
 
