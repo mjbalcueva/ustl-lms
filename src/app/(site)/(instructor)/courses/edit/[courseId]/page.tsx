@@ -3,6 +3,7 @@ import { LuFile, LuLayoutDashboard, LuListChecks } from 'react-icons/lu'
 import { api, HydrateClient } from '@/shared/trpc/server'
 
 import { IconBadge } from '@/client/components/icon-badge'
+import { UpdateTitle } from '@/client/components/instructor/course/forms/update-title'
 import { Breadcrumbs, type Crumb } from '@/client/components/page-breadcrumbs'
 import {
 	PageContent,
@@ -17,13 +18,15 @@ import { Separator } from '@/client/components/ui'
 export default async function Page({ params }: { params: { courseId: string } }) {
 	const { course } = await api.course.getCourse({ courseId: params.courseId })
 
+	if (!course) return
+
 	const requiredFields = [
-		course?.code,
-		course?.title,
-		course?.description,
-		course?.image,
-		course?.categoryId,
-		course?.isPublished
+		course.code,
+		course.title,
+		course.description,
+		course.image,
+		course.categoryId,
+		course.isPublished
 	]
 
 	const totalFields = requiredFields.length
@@ -34,7 +37,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 		{ icon: 'instructor' },
 		{ label: 'Courses', href: '/courses' },
 		{ label: 'Edit' },
-		{ icon: 'draftCourse', label: course?.title }
+		{ icon: 'draftCourse', label: course.title }
 	]
 
 	return (
@@ -58,6 +61,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 								<IconBadge icon={LuLayoutDashboard} />
 								<h2 className="text-xl">Customize your course</h2>
 							</div>
+							<UpdateTitle courseId={course.id} initialData={{ title: course.title }} />
 						</div>
 
 						<div className="space-y-6">
