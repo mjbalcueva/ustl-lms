@@ -4,7 +4,15 @@ import { FilterButton } from '@/client/components/instructor/course/filter-butto
 import { NewCourseButton } from '@/client/components/instructor/course/new-course-button'
 import { SearchInput } from '@/client/components/instructor/course/search-input'
 import { Breadcrumbs, type Crumb } from '@/client/components/page-breadcrumbs'
-import { PageContent, PageHeader, PageSection, PageTitle, PageWrapper } from '@/client/components/page-wrapper'
+import {
+	PageContent,
+	PageDescription,
+	PageHeader,
+	PageSection,
+	PageTitle,
+	PageWrapper
+} from '@/client/components/page-wrapper'
+import { Separator } from '@/client/components/ui'
 
 export default function Page() {
 	const crumbs: Crumb[] = [
@@ -15,10 +23,16 @@ export default function Page() {
 
 	return (
 		<PageWrapper>
+			<PageHeader className="hidden space-y-0 md:flex md:py-3">
+				<Breadcrumbs crumbs={crumbs} />
+			</PageHeader>
+
+			<Separator />
+
 			<PageHeader className="flex flex-wrap items-end justify-between gap-4 space-y-0">
 				<div className="space-y-1.5">
 					<PageTitle className="font-bold">Manage Your Courses</PageTitle>
-					<Breadcrumbs crumbs={crumbs} />
+					<PageDescription>View insights, manage your courses, and more.</PageDescription>
 				</div>
 				<NewCourseButton />
 			</PageHeader>

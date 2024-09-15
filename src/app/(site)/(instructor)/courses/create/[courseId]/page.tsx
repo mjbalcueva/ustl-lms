@@ -1,7 +1,18 @@
+import { LuFile, LuLayoutDashboard, LuListChecks } from 'react-icons/lu'
+
 import { api, HydrateClient } from '@/shared/trpc/server'
 
+import { IconBadge } from '@/client/components/icon-badge'
 import { Breadcrumbs, type Crumb } from '@/client/components/page-breadcrumbs'
-import { PageContent, PageDescription, PageHeader, PageTitle, PageWrapper } from '@/client/components/page-wrapper'
+import {
+	PageContent,
+	PageDescription,
+	PageHeader,
+	PageSection,
+	PageTitle,
+	PageWrapper
+} from '@/client/components/page-wrapper'
+import { Separator } from '@/client/components/ui'
 
 export default async function Page({ params }: { params: { courseId: string } }) {
 	const { course } = await api.course.getCourse({ courseId: params.courseId })
@@ -20,23 +31,52 @@ export default async function Page({ params }: { params: { courseId: string } })
 	const completionText = `(${completedFields}/${totalFields})`
 
 	const crumbs: Crumb[] = [
-		{ icon: 'instructor', label: 'Instructor' },
-		{ icon: 'course', label: 'Courses', href: '/courses' },
+		{ icon: 'instructor' },
+		{ label: 'Courses', href: '/courses' },
 		{ label: 'Create', href: '/courses/create' },
-		{ label: course?.title ?? '' }
+		{ icon: 'draftCourse', label: course?.title }
 	]
 
 	return (
 		<HydrateClient>
 			<PageWrapper>
-				<PageHeader>
-					<div className="flex w-fit flex-col gap-2 sm:flex-row sm:items-end">
-						<PageTitle className="font-bold">Course Setup</PageTitle>
-						<PageDescription>Completed {completionText}</PageDescription>
-					</div>
+				<PageHeader className="space-y-0 md:py-3">
 					<Breadcrumbs crumbs={crumbs} />
 				</PageHeader>
-				<PageContent></PageContent>
+
+				<Separator />
+
+				<PageHeader>
+					<PageTitle className="font-bold">Course Setup</PageTitle>
+					<PageDescription>Completed {completionText}</PageDescription>
+				</PageHeader>
+
+				<PageContent>
+					<PageSection>
+						<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+							<div>
+								<div className="flex items-center gap-x-2">
+									<IconBadge icon={LuLayoutDashboard} />
+									<h2 className="text-xl">Customize your course</h2>
+								</div>
+							</div>
+							<div className="space-y-6">
+								<div>
+									<div className="flex items-center gap-x-2">
+										<IconBadge icon={LuListChecks} />
+										<h2 className="text-xl">Course chapters</h2>
+									</div>
+								</div>
+								<div>
+									<div className="flex items-center gap-x-2">
+										<IconBadge icon={LuFile} />
+										<h2 className="text-xl">Resources & Attachments</h2>
+									</div>
+								</div>
+							</div>
+						</div>
+					</PageSection>
+				</PageContent>
 			</PageWrapper>
 		</HydrateClient>
 	)

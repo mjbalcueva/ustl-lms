@@ -2,8 +2,6 @@
 
 import * as React from 'react'
 
-import { type Link } from '@/shared/types/navigation'
-
 import { Icons } from '@/client/components/icons'
 import {
 	Breadcrumb,
@@ -14,7 +12,11 @@ import {
 	BreadcrumbSeparator
 } from '@/client/components/ui'
 
-export type Crumb = Omit<Link, 'children' | 'roles'>
+export type Crumb = {
+	label?: string
+	href?: string
+	icon?: keyof typeof Icons
+}
 
 export function Breadcrumbs({ crumbs }: { crumbs: Crumb[] }) {
 	return (
@@ -25,7 +27,7 @@ export function Breadcrumbs({ crumbs }: { crumbs: Crumb[] }) {
 						{index > 0 && <BreadcrumbSeparator />}
 						<BreadcrumbItem>
 							{index === crumbs.length - 1 ? (
-								<BreadcrumbPage className="flex items-center gap-1.5">
+								<BreadcrumbPage className="flex items-center gap-1.5 rounded-md bg-accent px-1.5 py-0.5">
 									{crumb.icon && <BreadcrumbIcon icon={crumb.icon} />}
 									{crumb.label}
 								</BreadcrumbPage>
