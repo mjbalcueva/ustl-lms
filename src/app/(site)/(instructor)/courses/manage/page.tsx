@@ -3,32 +3,22 @@ import { CardStatsMiniGroup } from '@/client/components/instructor/course/card-s
 import { FilterButton } from '@/client/components/instructor/course/filter-button'
 import { NewCourseButton } from '@/client/components/instructor/course/new-course-button'
 import { SearchInput } from '@/client/components/instructor/course/search-input'
-import {
-	BreadcrumbIcon,
-	BreadcrumbItem,
-	BreadcrumbLink,
-	Breadcrumbs,
-	BreadcrumbSeparator
-} from '@/client/components/page-breadcrumbs'
+import { Breadcrumbs, type Crumb } from '@/client/components/page-breadcrumbs'
 import { PageContent, PageHeader, PageSection, PageTitle, PageWrapper } from '@/client/components/page-wrapper'
 
 export default function Page() {
+	const crumbs: Crumb[] = [
+		{ icon: 'instructor', label: 'Instructor' },
+		{ icon: 'course', label: 'Courses', href: '/courses' },
+		{ label: 'Manage' }
+	]
+
 	return (
 		<PageWrapper>
 			<PageHeader className="flex flex-wrap items-end justify-between gap-4 space-y-0">
 				<div className="space-y-1.5">
 					<PageTitle className="font-bold">Manage Your Courses</PageTitle>
-					<Breadcrumbs>
-						<BreadcrumbItem>
-							<BreadcrumbIcon icon="instructor" />
-							Instructor
-						</BreadcrumbItem>
-						<BreadcrumbSeparator />
-						<BreadcrumbLink href="/courses/manage">
-							<BreadcrumbIcon icon="course" />
-							Courses
-						</BreadcrumbLink>
-					</Breadcrumbs>
+					<Breadcrumbs crumbs={crumbs} />
 				</div>
 				<NewCourseButton />
 			</PageHeader>
