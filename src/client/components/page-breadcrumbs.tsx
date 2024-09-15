@@ -18,7 +18,7 @@ export type Crumb = Omit<Link, 'children' | 'roles'>
 
 export function Breadcrumbs({ crumbs }: { crumbs: Crumb[] }) {
 	return (
-		<Breadcrumb className="w-fit">
+		<Breadcrumb className="hidden w-fit sm:block">
 			<BreadcrumbList>
 				{crumbs.map((crumb, index) => (
 					<React.Fragment key={index}>

@@ -30,15 +30,13 @@ export default async function Page({ params }: { params: { courseId: string } })
 		<HydrateClient>
 			<PageWrapper>
 				<PageHeader>
-					<div className="flex w-fit items-end justify-between space-x-2">
+					<div className="flex w-fit flex-col items-end gap-2 sm:flex-row">
 						<PageTitle className="font-bold">Course Setup</PageTitle>
-						<PageDescription>{completionText}</PageDescription>
+						<PageDescription>Completed {completionText}</PageDescription>
 					</div>
 					<Breadcrumbs crumbs={crumbs} />
 				</PageHeader>
-				<PageContent>
-					<pre>{JSON.stringify(course, null, 2)}</pre>
-				</PageContent>
+				<PageContent></PageContent>
 			</PageWrapper>
 		</HydrateClient>
 	)
