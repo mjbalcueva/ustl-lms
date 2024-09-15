@@ -40,7 +40,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 	return (
 		<HydrateClient>
 			<PageWrapper>
-				<PageHeader className="space-y-0 md:py-3">
+				<PageHeader className="hidden space-y-0 md:block md:py-3">
 					<Breadcrumbs crumbs={crumbs} />
 				</PageHeader>
 
@@ -52,26 +52,26 @@ export default async function Page({ params }: { params: { courseId: string } })
 				</PageHeader>
 
 				<PageContent>
-					<PageSection>
-						<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+					<PageSection className="grid grid-cols-1 gap-6 md:grid-cols-2">
+						<div>
+							<div className="flex items-center gap-x-2">
+								<IconBadge icon={LuLayoutDashboard} />
+								<h2 className="text-xl">Customize your course</h2>
+							</div>
+						</div>
+
+						<div className="space-y-6">
 							<div>
 								<div className="flex items-center gap-x-2">
-									<IconBadge icon={LuLayoutDashboard} />
-									<h2 className="text-xl">Customize your course</h2>
+									<IconBadge icon={LuListChecks} />
+									<h2 className="text-xl">Course chapters</h2>
 								</div>
 							</div>
-							<div className="space-y-6">
-								<div>
-									<div className="flex items-center gap-x-2">
-										<IconBadge icon={LuListChecks} />
-										<h2 className="text-xl">Course chapters</h2>
-									</div>
-								</div>
-								<div>
-									<div className="flex items-center gap-x-2">
-										<IconBadge icon={LuFile} />
-										<h2 className="text-xl">Resources & Attachments</h2>
-									</div>
+
+							<div>
+								<div className="flex items-center gap-x-2">
+									<IconBadge icon={LuFile} />
+									<h2 className="text-xl">Resources & Attachments</h2>
 								</div>
 							</div>
 						</div>
