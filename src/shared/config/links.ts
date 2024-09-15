@@ -46,17 +46,7 @@ export const instructor: Link[] = [
 			{
 				label: 'Courses',
 				href: '/courses/manage',
-				icon: 'course',
-				children: [
-					{
-						label: 'New Course',
-						href: '/courses/create'
-					},
-					{
-						label: 'Manage',
-						href: '/courses/manage'
-					}
-				]
+				icon: 'course'
 			},
 			{
 				label: 'Analytics',

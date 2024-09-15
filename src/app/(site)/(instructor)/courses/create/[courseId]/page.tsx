@@ -1,5 +1,6 @@
 import { api, HydrateClient } from '@/shared/trpc/server'
 
+import { Breadcrumbs, type Crumb } from '@/client/components/page-breadcrumbs'
 import { PageContent, PageDescription, PageHeader, PageTitle, PageWrapper } from '@/client/components/page-wrapper'
 
 export default async function Page({ params }: { params: { courseId: string } }) {
@@ -16,19 +17,24 @@ export default async function Page({ params }: { params: { courseId: string } })
 
 	const totalFields = requiredFields.length
 	const completedFields = requiredFields.filter(Boolean).length
-	const completionText = `(${completedFields} / ${totalFields})`
+	const completionText = `(${completedFields}/${totalFields})`
+
+	const crumbs: Crumb[] = [
+		{ icon: 'instructor', label: 'Instructor' },
+		{ icon: 'course', label: 'Courses', href: '/courses' },
+		{ label: 'Create', href: '/courses/create' },
+		{ label: course?.title ?? '' }
+	]
 
 	return (
 		<HydrateClient>
 			<PageWrapper>
-				<PageHeader className="flex flex-wrap items-end justify-between gap-4 space-y-0">
-					<div className="space-y-1.5">
-						<div className="flex items-end justify-between space-x-2">
-							<PageTitle className="font-bold">Course Setup</PageTitle>
-							<PageDescription>{completionText}</PageDescription>
-						</div>
-						{/* <PageBreadcrumbs /> */}
+				<PageHeader>
+					<div className="flex w-fit items-end justify-between space-x-2">
+						<PageTitle className="font-bold">Course Setup</PageTitle>
+						<PageDescription>{completionText}</PageDescription>
 					</div>
+					<Breadcrumbs crumbs={crumbs} />
 				</PageHeader>
 				<PageContent>
 					<pre>{JSON.stringify(course, null, 2)}</pre>

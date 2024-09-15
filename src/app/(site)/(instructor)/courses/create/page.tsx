@@ -5,7 +5,6 @@ export default function Page() {
 	return (
 		<PageWrapper>
 			<PageContainer className="h-full">
-				{/* <PageBreadcrumbs /> */}
 				<PageContent className="grid h-full pt-6 md:place-items-center">
 					<CreateCourseForm />
 				</PageContent>
