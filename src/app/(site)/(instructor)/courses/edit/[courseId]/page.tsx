@@ -4,6 +4,7 @@ import { api, HydrateClient } from '@/shared/trpc/server'
 
 import { IconBadge } from '@/client/components/icon-badge'
 import { UpdateCode } from '@/client/components/instructor/course/forms/update-code'
+import { UpdateDescription } from '@/client/components/instructor/course/forms/update-description'
 import { UpdateTitle } from '@/client/components/instructor/course/forms/update-title'
 import { Breadcrumbs, type Crumb } from '@/client/components/page-breadcrumbs'
 import {
@@ -64,6 +65,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 							</div>
 							<UpdateCode courseId={course.id} initialData={{ code: course.code }} />
 							<UpdateTitle courseId={course.id} initialData={{ title: course.title }} />
+							<UpdateDescription courseId={course.id} initialData={{ description: course.description ?? '' }} />
 						</div>
 
 						<div className="space-y-6">
