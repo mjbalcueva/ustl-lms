@@ -72,15 +72,25 @@ export const LoginForm = () => {
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel className="text-card-foreground">Two Factor Code</FormLabel>
-								<FormControl>
+								<FormControl className="max-w-[348px]">
 									<InputOTP maxLength={6} {...field}>
 										<InputOTPGroup>
-											<InputOTPSlot index={0} className="bg-background" />
-											<InputOTPSlot index={1} className="bg-background" />
-											<InputOTPSlot index={2} className="bg-background" />
-											<InputOTPSlot index={3} className="bg-background" />
-											<InputOTPSlot index={4} className="bg-background" />
-											<InputOTPSlot index={5} className="bg-background" />
+											<InputOTPSlot index={0} className="h-12 !rounded-lg bg-background" />
+										</InputOTPGroup>
+										<InputOTPGroup>
+											<InputOTPSlot index={1} className="h-12 !rounded-lg bg-background" />
+										</InputOTPGroup>
+										<InputOTPGroup>
+											<InputOTPSlot index={2} className="h-12 !rounded-lg bg-background" />
+										</InputOTPGroup>
+										<InputOTPGroup>
+											<InputOTPSlot index={3} className="h-12 !rounded-lg bg-background" />
+										</InputOTPGroup>
+										<InputOTPGroup>
+											<InputOTPSlot index={4} className="h-12 !rounded-lg bg-background" />
+										</InputOTPGroup>
+										<InputOTPGroup>
+											<InputOTPSlot index={5} className="h-12 !rounded-lg bg-background" />
 										</InputOTPGroup>
 									</InputOTP>
 								</FormControl>

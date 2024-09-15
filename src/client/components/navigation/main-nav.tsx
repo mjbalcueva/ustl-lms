@@ -19,30 +19,25 @@ const inter = Inter({
 
 type MainNavProps = React.ComponentProps<typeof motion.div> & {
 	className?: string
-	defaultNavOpen: boolean
 }
 
-export const MainNav = ({ className, defaultNavOpen, ...props }: MainNavProps) => {
+export const MainNav = ({ className, ...props }: MainNavProps) => {
 	const { deviceSize } = useDeviceType()
 	const navLinks = [...useLinkFilter(home, 1), ...useLinkFilter(instructor, 1)]
 
 	if (!deviceSize)
 		return (
-			<div className="fixed bottom-0 left-0 right-0 top-0 grid place-items-center bg-background">
+			<div className="fixed bottom-0 left-0 right-0 top-0 z-50 grid place-items-center bg-card">
 				<div className="flex flex-col items-center gap-6">
 					<h1 className="text-lg font-semibold">
-						{'Loading'.split('').map((char, index) => (
-							<span key={index} className="inline-block animate-bounce" style={{ animationDelay: `${index * 0.08}s` }}>
-								{char}
-							</span>
-						))}
+						<span className="inline-block animate-bounce">Loading</span>
 					</h1>
 				</div>
 			</div>
 		)
 
 	return (
-		<NavProvider defaultNavOpen={defaultNavOpen}>
+		<NavProvider>
 			{deviceSize === 'mobile' ? (
 				<TopNav
 					links={navLinks.flatMap((link) => link.children!)}

@@ -8,6 +8,7 @@ import { toast } from 'sonner'
 import { api } from '@/shared/trpc/react'
 import { addPasswordSchema, type AddPasswordSchema } from '@/shared/validations/add-password'
 
+import { Icons } from '@/client/components/icons'
 import {
 	ItemContent,
 	ItemDescription,
@@ -102,9 +103,12 @@ export const AddPasswordForm = () => {
 						/>
 					</ItemContent>
 
-					<ItemFooter>
-						<ItemFooterDescription>Your account doesn&apos;t have a password yet</ItemFooterDescription>
-						<Button className="ml-auto flex h-8 gap-1 text-sm" disabled={!form.formState.isDirty || isPending}>
+					<ItemFooter className="justify-end md:justify-between">
+						<div className="hidden items-center gap-2 sm:flex">
+							<Icons.info className="h-4 w-4 shrink-0 text-muted-foreground" />
+							<ItemFooterDescription>Your account doesn&apos;t have a password yet</ItemFooterDescription>
+						</div>
+						<Button className="flex h-8 gap-1 text-sm" type="submit" disabled={!form.formState.isDirty || isPending}>
 							{isPending && <Loader />}
 							{isPending ? 'Saving...' : 'Save'}
 						</Button>

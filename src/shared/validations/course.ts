@@ -6,3 +6,9 @@ export const createCourseSchema = z.object({
 })
 
 export type CreateCourseSchema = z.infer<typeof createCourseSchema>
+
+export const getCoursesSchema = z.object({
+	courseId: z.string().min(1, 'Course ID is required')
+})
+
+export type GetCoursesSchema = z.infer<typeof getCoursesSchema>

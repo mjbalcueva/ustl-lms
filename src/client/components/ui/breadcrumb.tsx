@@ -1,5 +1,5 @@
+import Link from 'next/link'
 import * as React from 'react'
-import { Slot } from '@radix-ui/react-slot'
 import { LuChevronRight, LuMoreHorizontal } from 'react-icons/lu'
 
 import { cn } from '@/client/lib/utils'
@@ -33,16 +33,9 @@ const BreadcrumbItem = React.forwardRef<HTMLLIElement, React.ComponentPropsWitho
 )
 BreadcrumbItem.displayName = 'BreadcrumbItem'
 
-const BreadcrumbLink = React.forwardRef<
-	HTMLAnchorElement,
-	React.ComponentPropsWithoutRef<'a'> & {
-		asChild?: boolean
-	}
->(({ asChild, className, ...props }, ref) => {
-	const Comp = asChild ? Slot : 'a'
-
-	return <Comp ref={ref} className={cn('transition-colors hover:text-foreground', className)} {...props} />
-})
+const BreadcrumbLink = ({ className, ...props }: React.ComponentPropsWithoutRef<typeof Link>) => {
+	return <Link className={cn('transition-colors hover:text-foreground', className)} {...props} />
+}
 BreadcrumbLink.displayName = 'BreadcrumbLink'
 
 const BreadcrumbPage = React.forwardRef<HTMLSpanElement, React.ComponentPropsWithoutRef<'span'>>(
@@ -52,7 +45,7 @@ const BreadcrumbPage = React.forwardRef<HTMLSpanElement, React.ComponentPropsWit
 			role="link"
 			aria-disabled="true"
 			aria-current="page"
-			className={cn('font-normal text-foreground', className)}
+			className={cn('font-normal text-foreground/90', className)}
 			{...props}
 		/>
 	)

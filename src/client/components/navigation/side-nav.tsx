@@ -24,7 +24,7 @@ type SideNavProps = React.ComponentProps<typeof motion.nav> & {
 }
 
 export const SideNav = ({ links, className, ...props }: SideNavProps) => {
-	const { isNavOpen, setNavOpen, canNavOpen } = useNav()
+	const { isNavOpen, setNavOpen } = useNav()
 
 	return (
 		<motion.nav
@@ -34,22 +34,25 @@ export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 				className
 			)}
 			animate={{
-				width: canNavOpen ? (isNavOpen ? '240px' : '60px') : '240px'
+				width: isNavOpen ? '240px' : '60px'
 			}}
 			{...props}
 		>
-			<NavButton className="gap-2 !pl-2 hover:cursor-default hover:bg-transparent">
-				<NavIcon icon={site.icon} className="size-7" />
+			<NavButton className="gap-2 !px-1 py-1 hover:cursor-default hover:bg-transparent">
+				<NavIcon
+					icon={site.icon}
+					className="size-9 rounded-lg bg-gradient-to-b from-accent to-background p-1.5 text-foreground/80"
+				/>
 				<NavLabel label={site.label} className="text-lg font-semibold tracking-wide" disableAnimation />
 			</NavButton>
 
-			<Separator className="mb-4" />
+			<Separator className="mb-4 mt-2" />
 
 			<NavTitle title="Home" />
 			{links[0]?.children?.map((link) => (
 				<NavTooltip key={link.href} content={link.label}>
 					<NavLink href={link.href ?? ''}>
-						<NavIcon icon={link.icon} />
+						<NavIcon icon={link.icon} className="text-foreground/80" />
 						<NavLabel label={link.label} />
 						<NavItemSideIcon />
 					</NavLink>
@@ -64,7 +67,7 @@ export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 					{links[1]?.children?.map((link) => (
 						<NavTooltip key={link.href} content={link.label}>
 							<NavLink href={link.href ?? ''}>
-								<NavIcon icon={link.icon} />
+								<NavIcon icon={link.icon} className="text-foreground/80" />
 								<NavLabel label={link.label} />
 								<NavItemSideIcon />
 							</NavLink>
@@ -75,7 +78,7 @@ export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 
 			<NavTooltip content={isNavOpen ? 'Collapse Sidebar' : 'Expand Sidebar'}>
 				<NavButton className="mt-auto" onClick={() => setNavOpen(!isNavOpen)}>
-					<NavIcon icon={isNavOpen ? 'navbarClose' : 'navbarOpen'} />
+					<NavIcon icon={isNavOpen ? 'navbarClose' : 'navbarOpen'} className="text-foreground/80" />
 					<NavLabel label={isNavOpen ? 'Collapse Sidebar' : 'Expand Sidebar'} disableAnimation />
 				</NavButton>
 			</NavTooltip>

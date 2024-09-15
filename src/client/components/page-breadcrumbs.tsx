@@ -1,66 +1,56 @@
 'use client'
 
-import { usePathname } from 'next/navigation'
 import * as React from 'react'
 
-import { account, home, instructor } from '@/shared/config/links'
-import { type Link } from '@/shared/types/navigation'
-
 import { Icons } from '@/client/components/icons'
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@/client/components/ui'
-import { cn } from '@/client/lib/utils'
+import {
+	Breadcrumb,
+	BreadcrumbItem,
+	BreadcrumbLink,
+	BreadcrumbList,
+	BreadcrumbPage,
+	BreadcrumbSeparator
+} from '@/client/components/ui'
 
-type PageBreadcrumbsProps = {
-	withIcons?: boolean
-	className?: string
+export type Crumb = {
+	label?: string
+	href?: string
+	icon?: keyof typeof Icons
 }
 
-export const PageBreadcrumbs = ({ withIcons = false, className }: PageBreadcrumbsProps) => {
-	const pathname = usePathname()
-	const pathSegments = pathname?.split('/').filter((segment) => segment !== '') ?? []
-
-	const allLinks = [...home, ...instructor, ...account]
-
-	const getBreadcrumbs = (links: Link[], currentPath: string[]): Link[] => {
-		for (const link of links) {
-			if (link.href !== `/${currentPath.join('/')}` && !link.children) continue
-			if (link.href === `/${currentPath.join('/')}`) return [link]
-
-			const childResult = getBreadcrumbs(link.children ?? [], currentPath)
-			if (childResult.length > 0) return [link, ...childResult]
-		}
-		return []
-	}
-
-	const breadcrumbs = getBreadcrumbs(allLinks, pathSegments)
-
+export function Breadcrumbs({ crumbs }: { crumbs: Crumb[] }) {
 	return (
-		<Breadcrumb>
-			<BreadcrumbList className={cn(className)}>
-				{breadcrumbs.map((crumb, index) => {
-					const Icon = crumb.icon ? Icons[crumb.icon] : null
-					const isFirst = index === 0
-
-					return (
-						<React.Fragment key={crumb.label}>
-							{index > 0 && <BreadcrumbSeparator />}
-							<BreadcrumbItem className={cn(isFirst && 'select-none gap-0 space-x-1.5')}>
-								{isFirst ? (
-									<>
-										{withIcons && Icon && <Icon className="size-4" />}
-										<span className="leading-none">{crumb.label}</span>
-									</>
-								) : (
-									<BreadcrumbLink href={crumb.href} className="flex items-center space-x-1.5">
-										{withIcons && Icon && <Icon className="size-4" />}
-										<span className="leading-none">{crumb.label}</span>
-									</BreadcrumbLink>
-								)}
-							</BreadcrumbItem>
-						</React.Fragment>
-					)
-				})}
+		<Breadcrumb className="hidden w-fit sm:block">
+			<BreadcrumbList>
+				{crumbs.map((crumb, index) => (
+					<React.Fragment key={index}>
+						{index > 0 && <BreadcrumbSeparator />}
+						<BreadcrumbItem>
+							{index === crumbs.length - 1 ? (
+								<BreadcrumbPage className="flex items-center gap-1.5 rounded-md bg-accent px-1.5 py-0.5">
+									{crumb.icon && <BreadcrumbIcon icon={crumb.icon} />}
+									{crumb.label}
+								</BreadcrumbPage>
+							) : crumb.href ? (
+								<BreadcrumbLink href={crumb.href} className="flex items-center gap-1.5">
+									{crumb.icon && <BreadcrumbIcon icon={crumb.icon} />}
+									{crumb.label}
+								</BreadcrumbLink>
+							) : (
+								<span className="flex items-center gap-1.5">
+									{crumb.icon && <BreadcrumbIcon icon={crumb.icon} />}
+									{crumb.label}
+								</span>
+							)}
+						</BreadcrumbItem>
+					</React.Fragment>
+				))}
 			</BreadcrumbList>
 		</Breadcrumb>
 	)
+}
+
+function BreadcrumbIcon({ icon }: { icon: keyof typeof Icons }) {
+	const Icon = Icons[icon]
+	return <Icon className="size-4" />
 }

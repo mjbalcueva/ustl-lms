@@ -1,4 +1,4 @@
-import { createCourseSchema } from '@/shared/validations/course'
+import { createCourseSchema, getCoursesSchema } from '@/shared/validations/course'
 
 import { createTRPCRouter, instructorProcedure } from '@/server/api/trpc'
 
@@ -6,7 +6,7 @@ export const courseRouter = createTRPCRouter({
 	createCourse: instructorProcedure.input(createCourseSchema).mutation(async ({ ctx, input }) => {
 		const { code, title } = input
 
-		await ctx.db.course.create({
+		const course = await ctx.db.course.create({
 			data: {
 				code,
 				title,
@@ -14,6 +14,16 @@ export const courseRouter = createTRPCRouter({
 			}
 		})
 
-		return { message: 'Course created!' }
+		return { message: 'Course created!', course }
+	}),
+
+	getCourse: instructorProcedure.input(getCoursesSchema).query(async ({ ctx, input }) => {
+		const { courseId } = input
+
+		const course = await ctx.db.course.findUnique({
+			where: { id: courseId, createdById: ctx.session.user.id! }
+		})
+
+		return { course }
 	})
 })
