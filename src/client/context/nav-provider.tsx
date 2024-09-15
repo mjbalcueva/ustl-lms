@@ -2,29 +2,19 @@
 
 import * as React from 'react'
 
+import { usePersistedState } from '../lib/hooks/use-persist-state'
+
 type NavContextType = {
 	isNavOpen: boolean
 	setNavOpen: (isNavOpen: boolean) => void
-	defaultNavOpen: boolean
-	canNavOpen: boolean
-	setCanNavOpen: (canNavOpen: boolean) => void
 }
 
 const NavContext = React.createContext<NavContextType | undefined>(undefined)
 
-export const NavProvider = ({ children, defaultNavOpen }: { children: React.ReactNode; defaultNavOpen: boolean }) => {
-	const [isNavOpen, setNavOpen] = React.useState(defaultNavOpen)
-	const [canNavOpen, setCanNavOpen] = React.useState(true)
+export const NavProvider = ({ children }: { children: React.ReactNode }) => {
+	const [isNavOpen, setNavOpen] = usePersistedState<boolean>('is-nav-open', false)
 
-	React.useEffect(() => {
-		document.cookie = `is-nav-open=${isNavOpen};`
-	}, [isNavOpen])
-
-	return (
-		<NavContext.Provider value={{ isNavOpen, setNavOpen, defaultNavOpen, canNavOpen, setCanNavOpen }}>
-			{children}
-		</NavContext.Provider>
-	)
+	return <NavContext.Provider value={{ isNavOpen, setNavOpen }}>{children}</NavContext.Provider>
 }
 
 export const useNav = () => {

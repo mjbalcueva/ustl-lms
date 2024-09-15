@@ -2,6 +2,8 @@
 
 import * as React from 'react'
 
+import { usePersistedState } from '@/client/lib/hooks/use-persist-state'
+
 type DeviceType = 'mobile' | 'tablet' | 'desktop' | '' | undefined
 
 type DeviceTypeContextType = {
@@ -10,11 +12,8 @@ type DeviceTypeContextType = {
 
 const DeviceTypeContext = React.createContext<DeviceTypeContextType | undefined>(undefined)
 
-const DeviceTypeProvider: React.FC<{ children: React.ReactNode; defaultDeviceSize: DeviceType }> = ({
-	children,
-	defaultDeviceSize
-}) => {
-	const [deviceSize, setDeviceSize] = React.useState<DeviceType>(defaultDeviceSize)
+const DeviceTypeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+	const [deviceSize, setDeviceSize] = usePersistedState<DeviceType>('device-size', '')
 
 	const getDeviceSize = (): DeviceType => {
 		if (window.matchMedia('(min-width: 1024px)').matches) return 'desktop'
@@ -26,14 +25,13 @@ const DeviceTypeProvider: React.FC<{ children: React.ReactNode; defaultDeviceSiz
 		const handleResize = () => {
 			const currentDeviceSize = getDeviceSize()
 			setDeviceSize(currentDeviceSize)
-			document.cookie = `device-size=${JSON.stringify(currentDeviceSize)}`
 		}
 
 		handleResize()
 		window.addEventListener('resize', handleResize)
 
 		return () => window.removeEventListener('resize', handleResize)
-	}, [])
+	}, [setDeviceSize])
 
 	return <DeviceTypeContext.Provider value={{ deviceSize }}>{children}</DeviceTypeContext.Provider>
 }

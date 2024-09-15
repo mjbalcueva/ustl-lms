@@ -19,10 +19,9 @@ const inter = Inter({
 
 type MainNavProps = React.ComponentProps<typeof motion.div> & {
 	className?: string
-	defaultNavOpen: boolean
 }
 
-export const MainNav = ({ className, defaultNavOpen, ...props }: MainNavProps) => {
+export const MainNav = ({ className, ...props }: MainNavProps) => {
 	const { deviceSize } = useDeviceType()
 	const navLinks = [...useLinkFilter(home, 1), ...useLinkFilter(instructor, 1)]
 
@@ -42,7 +41,7 @@ export const MainNav = ({ className, defaultNavOpen, ...props }: MainNavProps) =
 		)
 
 	return (
-		<NavProvider defaultNavOpen={defaultNavOpen}>
+		<NavProvider>
 			{deviceSize === 'mobile' ? (
 				<TopNav
 					links={navLinks.flatMap((link) => link.children!)}

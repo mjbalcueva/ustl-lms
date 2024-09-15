@@ -24,7 +24,7 @@ type SideNavProps = React.ComponentProps<typeof motion.nav> & {
 }
 
 export const SideNav = ({ links, className, ...props }: SideNavProps) => {
-	const { isNavOpen, setNavOpen, canNavOpen } = useNav()
+	const { isNavOpen, setNavOpen } = useNav()
 
 	return (
 		<motion.nav
@@ -34,7 +34,7 @@ export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 				className
 			)}
 			animate={{
-				width: canNavOpen ? (isNavOpen ? '240px' : '60px') : '240px'
+				width: isNavOpen ? '240px' : '60px'
 			}}
 			{...props}
 		>
