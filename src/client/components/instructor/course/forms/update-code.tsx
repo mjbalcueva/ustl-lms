@@ -7,7 +7,7 @@ import { LuPencil } from 'react-icons/lu'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
-import { updateTitleSchema, type UpdateTitleSchema } from '@/shared/validations/course'
+import { updateCodeSchema, type UpdateCodeSchema } from '@/shared/validations/course'
 
 import {
 	CardContent,
@@ -20,26 +20,26 @@ import {
 } from '@/client/components/instructor/course/card-wrapper'
 import { Button, Form, FormControl, FormField, FormItem, FormMessage, Input } from '@/client/components/ui'
 
-type UpdateTitleProps = {
+type UpdateCodeProps = {
 	courseId: string
 	initialData: {
-		title: string
+		code: string
 	}
 }
 
-export const UpdateTitle = ({ courseId, initialData }: UpdateTitleProps) => {
+export const UpdateCode = ({ courseId, initialData }: UpdateCodeProps) => {
 	const [isEditing, setIsEditing] = React.useState(false)
 	const toggleEdit = () => setIsEditing((current) => !current)
 
-	const form = useForm<UpdateTitleSchema>({
-		resolver: zodResolver(updateTitleSchema),
+	const form = useForm<UpdateCodeSchema>({
+		resolver: zodResolver(updateCodeSchema),
 		defaultValues: {
 			courseId,
-			title: initialData.title
+			code: initialData.code
 		}
 	})
 
-	const { mutate, isPending } = api.course.updateTitle.useMutation({
+	const { mutate, isPending } = api.course.updateCode.useMutation({
 		onSuccess: async (data) => {
 			form.reset()
 			toast.success(data.message)
@@ -50,21 +50,21 @@ export const UpdateTitle = ({ courseId, initialData }: UpdateTitleProps) => {
 		}
 	})
 
-	const onSubmit: SubmitHandler<UpdateTitleSchema> = (data) => mutate(data)
+	const onSubmit: SubmitHandler<UpdateCodeSchema> = (data) => mutate(data)
 
 	return (
 		<CardWrapper>
 			<CardHeader>
 				<div className="flex flex-col space-y-1.5">
-					<CardTitle>Course Title</CardTitle>
-					<CardDescription>Identify your course with a unique title, displayed in the course listing.</CardDescription>
+					<CardTitle>Course Code</CardTitle>
+					<CardDescription>Course catalog identifier</CardDescription>
 				</div>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
 					{isEditing ? (
 						'Cancel'
 					) : (
 						<>
-							<LuPencil className="mr-2 size-4" /> Edit Title
+							<LuPencil className="mr-2 size-4" /> Edit Code
 						</>
 					)}
 				</Button>
@@ -72,7 +72,7 @@ export const UpdateTitle = ({ courseId, initialData }: UpdateTitleProps) => {
 
 			{!isEditing && (
 				<CardContent>
-					<CardContentContainer>{initialData?.title}</CardContentContainer>
+					<CardContentContainer>{initialData?.code}</CardContentContainer>
 				</CardContent>
 			)}
 
@@ -82,11 +82,11 @@ export const UpdateTitle = ({ courseId, initialData }: UpdateTitleProps) => {
 						<CardContent>
 							<FormField
 								control={form.control}
-								name="title"
+								name="code"
 								render={({ field }) => (
 									<FormItem>
 										<FormControl>
-											<Input placeholder="e.g. 'Advanced web development'" disabled={isPending} {...field} />
+											<Input placeholder="e.g. 'CS101'" disabled={isPending} {...field} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>

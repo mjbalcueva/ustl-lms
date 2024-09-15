@@ -3,6 +3,7 @@ import { LuFile, LuLayoutDashboard, LuListChecks } from 'react-icons/lu'
 import { api, HydrateClient } from '@/shared/trpc/server'
 
 import { IconBadge } from '@/client/components/icon-badge'
+import { UpdateCode } from '@/client/components/instructor/course/forms/update-code'
 import { UpdateTitle } from '@/client/components/instructor/course/forms/update-title'
 import { Breadcrumbs, type Crumb } from '@/client/components/page-breadcrumbs'
 import {
@@ -61,6 +62,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 								<IconBadge icon={LuLayoutDashboard} />
 								<h2 className="text-xl">Customize your course</h2>
 							</div>
+							<UpdateCode courseId={course.id} initialData={{ code: course.code }} />
 							<UpdateTitle courseId={course.id} initialData={{ title: course.title }} />
 						</div>
 
