@@ -33,7 +33,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 	const crumbs: Crumb[] = [
 		{ icon: 'instructor' },
 		{ label: 'Courses', href: '/courses' },
-		{ label: 'Create', href: '/courses/create' },
+		{ label: 'Edit' },
 		{ icon: 'draftCourse', label: course?.title }
 	]
 
