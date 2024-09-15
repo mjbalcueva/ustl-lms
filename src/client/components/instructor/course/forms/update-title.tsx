@@ -9,7 +9,15 @@ import { toast } from 'sonner'
 import { api } from '@/shared/trpc/react'
 import { updateTitleSchema, type UpdateTitleSchema } from '@/shared/validations/course'
 
-import { CardWrapper } from '@/client/components/instructor/course/card-wrapper'
+import {
+	CardContent,
+	CardContentContainer,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+	CardWrapper
+} from '@/client/components/instructor/course/card-wrapper'
 import { Button, Form, FormControl, FormField, FormItem, FormMessage, Input } from '@/client/components/ui'
 
 type UpdateTitleProps = {
@@ -35,6 +43,7 @@ export const UpdateTitle = ({ courseId, initialData }: UpdateTitleProps) => {
 		onSuccess: async (data) => {
 			form.reset()
 			toast.success(data.message)
+			toggleEdit()
 		},
 		onError: (error) => {
 			toast.error(error.message)
@@ -45,8 +54,13 @@ export const UpdateTitle = ({ courseId, initialData }: UpdateTitleProps) => {
 
 	return (
 		<CardWrapper>
-			<div className="flex items-center justify-between font-medium">
-				Course Title
+			<CardHeader>
+				<div className="flex flex-col space-y-1.5">
+					<CardTitle>Course Title</CardTitle>
+					<CardDescription>
+						This is used to identify the course and will be displayed in the course listing.
+					</CardDescription>
+				</div>
 				<Button onClick={toggleEdit} variant="ghost" size="sm" className="bg-card">
 					{isEditing ? (
 						'Cancel'
@@ -56,30 +70,36 @@ export const UpdateTitle = ({ courseId, initialData }: UpdateTitleProps) => {
 						</>
 					)}
 				</Button>
-			</div>
+			</CardHeader>
 
-			{!isEditing && <p className="mt-2 text-sm dark:text-gray-300">{initialData?.title}</p>}
+			{!isEditing && (
+				<CardContent>
+					<CardContentContainer>{initialData?.title}</CardContentContainer>
+				</CardContent>
+			)}
 
 			{isEditing && (
 				<Form {...form}>
-					<form onSubmit={form.handleSubmit(onSubmit)} className="mt-4 space-y-4 dark:text-gray-300">
-						<FormField
-							control={form.control}
-							name="title"
-							render={({ field }) => (
-								<FormItem>
-									<FormControl>
-										<Input disabled={isPending} placeholder="e.g. 'Advanced web development'" {...field} />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<div className="flex items-center gap-x-2">
+					<form onSubmit={form.handleSubmit(onSubmit)}>
+						<CardContent>
+							<FormField
+								control={form.control}
+								name="title"
+								render={({ field }) => (
+									<FormItem>
+										<FormControl>
+											<Input disabled={isPending} placeholder="e.g. 'Advanced web development'" {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+						</CardContent>
+						<CardFooter>
 							<Button disabled={!form.formState.isDirty || isPending} type="submit" size="sm">
 								Save
 							</Button>
-						</div>
+						</CardFooter>
 					</form>
 				</Form>
 			)}
