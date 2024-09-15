@@ -3,7 +3,13 @@ import { CardStatsMiniGroup } from '@/client/components/instructor/course/card-s
 import { FilterButton } from '@/client/components/instructor/course/filter-button'
 import { NewCourseButton } from '@/client/components/instructor/course/new-course-button'
 import { SearchInput } from '@/client/components/instructor/course/search-input'
-import { PageBreadcrumbs } from '@/client/components/page-breadcrumbs'
+import {
+	BreadcrumbIcon,
+	BreadcrumbItem,
+	BreadcrumbLink,
+	Breadcrumbs,
+	BreadcrumbSeparator
+} from '@/client/components/page-breadcrumbs'
 import { PageContent, PageHeader, PageSection, PageTitle, PageWrapper } from '@/client/components/page-wrapper'
 
 export default function Page() {
@@ -12,7 +18,17 @@ export default function Page() {
 			<PageHeader className="flex flex-wrap items-end justify-between gap-4 space-y-0">
 				<div className="space-y-1.5">
 					<PageTitle className="font-bold">Manage Your Courses</PageTitle>
-					<PageBreadcrumbs withIcons />
+					<Breadcrumbs>
+						<BreadcrumbItem>
+							<BreadcrumbIcon icon="instructor" />
+							Instructor
+						</BreadcrumbItem>
+						<BreadcrumbSeparator />
+						<BreadcrumbLink href="/courses/manage">
+							<BreadcrumbIcon icon="course" />
+							Courses
+						</BreadcrumbLink>
+					</Breadcrumbs>
 				</div>
 				<NewCourseButton />
 			</PageHeader>

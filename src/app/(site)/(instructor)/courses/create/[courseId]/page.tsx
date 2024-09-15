@@ -1,6 +1,5 @@
 import { api, HydrateClient } from '@/shared/trpc/server'
 
-import { PageBreadcrumbs } from '@/client/components/page-breadcrumbs'
 import { PageContent, PageDescription, PageHeader, PageTitle, PageWrapper } from '@/client/components/page-wrapper'
 
 export default async function Page({ params }: { params: { courseId: string } }) {
@@ -28,7 +27,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 							<PageTitle className="font-bold">Course Setup</PageTitle>
 							<PageDescription>{completionText}</PageDescription>
 						</div>
-						<PageBreadcrumbs />
+						{/* <PageBreadcrumbs /> */}
 					</div>
 				</PageHeader>
 				<PageContent>
