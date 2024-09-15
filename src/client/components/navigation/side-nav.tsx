@@ -41,7 +41,7 @@ export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 			<NavButton className="gap-2 !px-1 py-1 hover:cursor-default hover:bg-transparent">
 				<NavIcon
 					icon={site.icon}
-					className="size-9 rounded-lg bg-gradient-to-b from-accent to-background p-1.5 text-foreground"
+					className="size-9 rounded-lg bg-gradient-to-b from-accent to-background p-1.5 text-foreground/80"
 				/>
 				<NavLabel label={site.label} className="text-lg font-semibold tracking-wide" disableAnimation />
 			</NavButton>
@@ -52,7 +52,7 @@ export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 			{links[0]?.children?.map((link) => (
 				<NavTooltip key={link.href} content={link.label}>
 					<NavLink href={link.href ?? ''}>
-						<NavIcon icon={link.icon} />
+						<NavIcon icon={link.icon} className="text-foreground/80" />
 						<NavLabel label={link.label} />
 						<NavItemSideIcon />
 					</NavLink>
@@ -67,7 +67,7 @@ export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 					{links[1]?.children?.map((link) => (
 						<NavTooltip key={link.href} content={link.label}>
 							<NavLink href={link.href ?? ''}>
-								<NavIcon icon={link.icon} />
+								<NavIcon icon={link.icon} className="text-foreground/80" />
 								<NavLabel label={link.label} />
 								<NavItemSideIcon />
 							</NavLink>
@@ -78,7 +78,7 @@ export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 
 			<NavTooltip content={isNavOpen ? 'Collapse Sidebar' : 'Expand Sidebar'}>
 				<NavButton className="mt-auto" onClick={() => setNavOpen(!isNavOpen)}>
-					<NavIcon icon={isNavOpen ? 'navbarClose' : 'navbarOpen'} />
+					<NavIcon icon={isNavOpen ? 'navbarClose' : 'navbarOpen'} className="text-foreground/80" />
 					<NavLabel label={isNavOpen ? 'Collapse Sidebar' : 'Expand Sidebar'} disableAnimation />
 				</NavButton>
 			</NavTooltip>
