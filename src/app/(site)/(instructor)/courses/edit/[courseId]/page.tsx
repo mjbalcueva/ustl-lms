@@ -1,4 +1,4 @@
-import { LuFile, LuLayoutDashboard, LuListChecks } from 'react-icons/lu'
+import { TbBook2, TbListDetails, TbPackage } from 'react-icons/tb'
 
 import { api, HydrateClient } from '@/shared/trpc/server'
 
@@ -61,7 +61,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 					<PageSection className="grid grid-cols-1 gap-6 md:grid-cols-2">
 						<div>
 							<div className="flex items-center gap-x-2">
-								<IconBadge icon={LuLayoutDashboard} />
+								<IconBadge icon={TbBook2} />
 								<h2 className="text-xl">Customize your course</h2>
 							</div>
 							<UpdateCode courseId={course.id} initialData={{ code: course.code }} />
@@ -72,14 +72,14 @@ export default async function Page({ params }: { params: { courseId: string } })
 						<div className="space-y-6">
 							<div>
 								<div className="flex items-center gap-x-2">
-									<IconBadge icon={LuListChecks} />
+									<IconBadge icon={TbListDetails} />
 									<h2 className="text-xl">Course chapters</h2>
 								</div>
 							</div>
 
 							<div>
 								<div className="flex items-center gap-x-2">
-									<IconBadge icon={LuFile} />
+									<IconBadge icon={TbPackage} />
 									<h2 className="text-xl">Resources & Attachments</h2>
 								</div>
 							</div>
