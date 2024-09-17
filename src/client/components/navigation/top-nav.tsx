@@ -86,7 +86,7 @@ export const TopNav = ({ links, className, ...props }: TopNavProps) => {
 						<MotionNavLink
 							key={index}
 							href={item.href ?? ''}
-							className="m-0 h-12 rounded-none border-b border-border md:rounded-md"
+							className="m-0 h-12 rounded-none border-b !border-border md:rounded-md"
 							initial={{
 								y: -100,
 								opacity: 0

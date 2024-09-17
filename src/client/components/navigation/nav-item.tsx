@@ -22,7 +22,10 @@ export const NavLink = React.forwardRef<HTMLAnchorElement, NavLinkProps>(({ clas
 		<Link
 			ref={ref}
 			className={cn(
-				'group/navigation mb-2 flex items-center justify-start gap-3 rounded-md px-5 py-2 outline-none ring-offset-background hover:bg-accent/40 focus-visible:ring-2 focus-visible:ring-ring sm:px-7 md:px-3 md:hover:bg-accent',
+				'group/navigation mb-1.5 flex items-center justify-start gap-3 rounded-md px-5 py-2 outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring sm:px-7 md:px-3',
+				'md:hover:bg-card dark:md:hover:bg-accent/70',
+				'border-background hover:border-border dark:border-card md:border',
+				'md:hover:shadow-[0_0_0_-2px_rgba(0,0,0,0.05),0_1px_2px_0_rgba(0,0,0,0.05)]',
 				className
 			)}
 			{...props}
@@ -39,7 +42,9 @@ export const NavButton = React.forwardRef<HTMLButtonElement, NavButtonProps>(({ 
 		<button
 			ref={ref}
 			className={cn(
-				'group/navigation mb-2 flex items-center justify-start gap-3 rounded-md px-5 py-2 outline-none ring-offset-background hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring md:px-3',
+				'group/navigation mb-1.5 flex items-center justify-start gap-3 rounded-md px-5 py-2 outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring md:px-3',
+				'md:hover:bg-card dark:md:hover:bg-accent/70',
+				'border border-background hover:border-border dark:border-card md:hover:shadow-[0_0_0_-2px_rgba(0,0,0,0.05),0_1px_2px_0_rgba(0,0,0,0.05)]',
 				className
 			)}
 			{...props}
