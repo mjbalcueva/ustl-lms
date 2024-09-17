@@ -1,5 +1,6 @@
 'use client'
 
+import { usePathname } from 'next/navigation'
 import { motion } from 'framer-motion'
 
 import { site } from '@/shared/config/links'
@@ -25,7 +26,7 @@ type SideNavProps = React.ComponentProps<typeof motion.nav> & {
 
 export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 	const { isNavOpen, setNavOpen } = useNav()
-	const currentPath = window.location.pathname.split('/')[1]
+	const currentPath = usePathname().split('/')[1]
 
 	return (
 		<motion.nav
@@ -56,7 +57,7 @@ export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 						href={link.href ?? ''}
 						className={cn(
 							currentPath === link.href?.split('/')[1] &&
-								'border border-border bg-card dark:bg-accent/70 md:shadow-[0_0_0_-2px_rgba(0,0,0,0.05),0_1px_2px_0_rgba(0,0,0,0.05)]'
+								'border border-border bg-card shadow-[0_0_0_-2px_rgba(0,0,0,0.05),0_1px_2px_0_rgba(0,0,0,0.05)] dark:bg-accent/70'
 						)}
 					>
 						<NavIcon icon={link.icon} className="text-foreground/80" />
@@ -77,7 +78,7 @@ export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 								href={link.href ?? ''}
 								className={cn(
 									currentPath === link.href?.split('/')[1] &&
-										'border border-border bg-card dark:bg-accent/70 md:shadow-[0_0_0_-2px_rgba(0,0,0,0.05),0_1px_2px_0_rgba(0,0,0,0.05)]'
+										'border border-border bg-card shadow-[0_0_0_-2px_rgba(0,0,0,0.05),0_1px_2px_0_rgba(0,0,0,0.05)] dark:bg-accent/70'
 								)}
 							>
 								<NavIcon icon={link.icon} className="text-foreground/80" />
