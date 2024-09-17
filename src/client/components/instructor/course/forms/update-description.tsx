@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, type SubmitHandler } from 'react-hook-form'
@@ -28,6 +29,8 @@ type UpdateDescriptionProps = {
 }
 
 export const UpdateDescription = ({ courseId, initialData }: UpdateDescriptionProps) => {
+	const router = useRouter()
+
 	const [isEditing, setIsEditing] = React.useState(false)
 	const toggleEdit = () => setIsEditing((current) => !current)
 
@@ -41,9 +44,13 @@ export const UpdateDescription = ({ courseId, initialData }: UpdateDescriptionPr
 
 	const { mutate, isPending } = api.course.updateDescription.useMutation({
 		onSuccess: async (data) => {
-			form.reset()
-			toast.success(data.message)
+			router.refresh()
+			form.reset({
+				courseId,
+				description: data.course.description ?? ''
+			})
 			toggleEdit()
+			toast.success(data.message)
 		},
 		onError: (error) => {
 			toast.error(error.message)
