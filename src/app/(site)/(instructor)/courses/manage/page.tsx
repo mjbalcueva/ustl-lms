@@ -23,7 +23,7 @@ export default function Page() {
 				<Breadcrumbs crumbs={crumbs} />
 			</PageHeader>
 
-			<Separator />
+			<Separator className="hidden md:block" />
 
 			<PageHeader className="flex flex-wrap items-end justify-between gap-4 space-y-0">
 				<div className="space-y-1.5">

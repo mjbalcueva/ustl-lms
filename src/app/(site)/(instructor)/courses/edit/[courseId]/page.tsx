@@ -50,7 +50,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 					<Breadcrumbs crumbs={crumbs} />
 				</PageHeader>
 
-				<Separator />
+				<Separator className="hidden md:block" />
 
 				<PageHeader>
 					<PageTitle className="font-bold">Course Setup</PageTitle>
