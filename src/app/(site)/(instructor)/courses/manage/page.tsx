@@ -15,11 +15,7 @@ import {
 import { Separator } from '@/client/components/ui'
 
 export default function Page() {
-	const crumbs: Crumb[] = [
-		{ icon: 'instructor', label: 'Instructor' },
-		{ icon: 'course', label: 'Courses', href: '/courses' },
-		{ label: 'Manage' }
-	]
+	const crumbs: Crumb[] = [{ icon: 'instructor' }, { label: 'Courses', href: '/courses' }, { label: 'Manage' }]
 
 	return (
 		<PageWrapper>
