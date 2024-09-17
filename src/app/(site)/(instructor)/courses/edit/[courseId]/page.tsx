@@ -6,6 +6,7 @@ import { IconBadge } from '@/client/components/icon-badge'
 import { UpdateCode } from '@/client/components/instructor/course/forms/update-code'
 import { UpdateDescription } from '@/client/components/instructor/course/forms/update-description'
 import { UpdateTitle } from '@/client/components/instructor/course/forms/update-title'
+import { NotFound } from '@/client/components/not-found'
 import { Breadcrumbs, type Crumb } from '@/client/components/page-breadcrumbs'
 import {
 	PageContent,
@@ -20,7 +21,7 @@ import { Separator } from '@/client/components/ui'
 export default async function Page({ params }: { params: { courseId: string } }) {
 	const { course } = await api.course.getCourse({ courseId: params.courseId })
 
-	if (!course) return
+	if (!course) return <NotFound />
 
 	const requiredFields = [
 		course.code,
