@@ -38,10 +38,7 @@ export const CardContent = ({ withSeparator, children, ...props }: CardContentPr
 type CardContentContainerProps = React.HTMLAttributes<HTMLDivElement>
 export const CardContentContainer = ({ children, ...props }: CardContentContainerProps) => {
 	return (
-		<div
-			className="flex h-10 items-center rounded-xl border border-input bg-card px-3 py-2 text-sm dark:bg-background"
-			{...props}
-		>
+		<div className="pb-2 text-sm" {...props}>
 			{children}
 		</div>
 	)
