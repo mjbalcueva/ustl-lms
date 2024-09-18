@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, type SubmitHandler } from 'react-hook-form'
-import { LuPencil, LuPlus } from 'react-icons/lu'
+import { LuPencil, LuPlusCircle } from 'react-icons/lu'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
@@ -65,8 +65,8 @@ export const UpdateDescription = ({ courseId, initialData }: UpdateDescriptionPr
 					<CardTitle>Course Description</CardTitle>
 				</div>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
-					{!isEditing && initialData.description && <LuPencil className="mr-1 size-4" />}
-					{!isEditing && <LuPlus className="mr-1 size-4" />}
+					{!isEditing && initialData.description && <LuPencil className="mr-2 size-4" />}
+					{!isEditing && !initialData.description && <LuPlusCircle className="mr-2 size-4" />}
 					{isEditing ? 'Cancel' : initialData.description ? 'Edit' : 'Add'}
 				</Button>
 			</CardHeader>

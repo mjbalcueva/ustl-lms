@@ -25,6 +25,12 @@ export type UpdateTitleSchema = z.infer<typeof updateTitleSchema>
 
 export const updateDescriptionSchema = z.object({
 	courseId: z.string().min(1, 'Course ID is required'),
-	description: z.string().min(1, 'Description is required').max(1024, 'Description must be less than 1024 characters')
+	description: z.string().max(1024, 'Description must be less than 1024 characters').optional()
 })
 export type UpdateDescriptionSchema = z.infer<typeof updateDescriptionSchema>
+
+export const updateImageSchema = z.object({
+	courseId: z.string().min(1, 'Course ID is required'),
+	image: z.string().optional()
+})
+export type UpdateImageSchema = z.infer<typeof updateImageSchema>
