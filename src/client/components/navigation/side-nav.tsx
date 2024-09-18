@@ -45,7 +45,11 @@ export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 					icon={site.icon}
 					className="size-9 rounded-lg bg-gradient-to-b from-accent to-background p-1.5 text-foreground/80"
 				/>
-				<NavLabel label={site.label} className="text-lg font-semibold tracking-wide" disableAnimation />
+				<NavLabel
+					label={site.label}
+					className="text-lg font-semibold tracking-wide text-card-foreground"
+					disableAnimation
+				/>
 			</NavButton>
 
 			<Separator className="mb-4 mt-1" />
@@ -61,7 +65,10 @@ export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 						)}
 					>
 						<NavIcon icon={link.icon} className="text-foreground/80" />
-						<NavLabel label={link.label} />
+						<NavLabel
+							label={link.label}
+							className={cn(currentPath === link.href?.split('/')[1] && 'text-card-foreground')}
+						/>
 						<NavItemSideIcon />
 					</NavLink>
 				</NavTooltip>
@@ -82,7 +89,10 @@ export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 								)}
 							>
 								<NavIcon icon={link.icon} className="text-foreground/80" />
-								<NavLabel label={link.label} />
+								<NavLabel
+									label={link.label}
+									className={cn(currentPath === link.href?.split('/')[1] && 'text-card-foreground')}
+								/>
 								<NavItemSideIcon />
 							</NavLink>
 						</NavTooltip>
