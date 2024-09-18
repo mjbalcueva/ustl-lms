@@ -65,13 +65,8 @@ export const UpdateTitle = ({ courseId, initialData }: UpdateTitleProps) => {
 					<CardTitle>Course Title</CardTitle>
 				</div>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
-					{isEditing ? (
-						'Cancel'
-					) : (
-						<>
-							<LuPencil className="mr-2 size-4" /> Edit
-						</>
-					)}
+					{!isEditing && initialData.title && <LuPencil className="mr-2 size-4" />}
+					{isEditing ? 'Cancel' : initialData.title ? 'Edit' : 'Add'}
 				</Button>
 			</CardHeader>
 
