@@ -27,7 +27,7 @@ export function Breadcrumbs({ crumbs }: { crumbs: Crumb[] }) {
 						{index > 0 && <BreadcrumbSeparator />}
 						<BreadcrumbItem>
 							{index === crumbs.length - 1 ? (
-								<BreadcrumbPage className="flex items-center gap-1.5 rounded-md bg-accent px-1.5 py-0.5">
+								<BreadcrumbPage className="flex items-center gap-1.5 rounded-md bg-muted px-1.5 py-0.5 text-muted-foreground hover:cursor-default hover:text-foreground">
 									{crumb.icon && <BreadcrumbIcon icon={crumb.icon} />}
 									{crumb.label}
 								</BreadcrumbPage>
@@ -37,7 +37,7 @@ export function Breadcrumbs({ crumbs }: { crumbs: Crumb[] }) {
 									{crumb.label}
 								</BreadcrumbLink>
 							) : (
-								<span className="flex items-center gap-1.5">
+								<span className="flex items-center gap-1.5 hover:cursor-default hover:text-foreground">
 									{crumb.icon && <BreadcrumbIcon icon={crumb.icon} />}
 									{crumb.label}
 								</span>

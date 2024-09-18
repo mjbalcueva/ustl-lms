@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, type SubmitHandler } from 'react-hook-form'
@@ -12,7 +13,6 @@ import { updateDescriptionSchema, type UpdateDescriptionSchema } from '@/shared/
 import {
 	CardContent,
 	CardContentContainer,
-	CardDescription,
 	CardFooter,
 	CardHeader,
 	CardTitle,
@@ -28,6 +28,8 @@ type UpdateDescriptionProps = {
 }
 
 export const UpdateDescription = ({ courseId, initialData }: UpdateDescriptionProps) => {
+	const router = useRouter()
+
 	const [isEditing, setIsEditing] = React.useState(false)
 	const toggleEdit = () => setIsEditing((current) => !current)
 
@@ -41,9 +43,13 @@ export const UpdateDescription = ({ courseId, initialData }: UpdateDescriptionPr
 
 	const { mutate, isPending } = api.course.updateDescription.useMutation({
 		onSuccess: async (data) => {
-			form.reset()
-			toast.success(data.message)
+			router.refresh()
+			form.reset({
+				courseId,
+				description: data.course.description ?? ''
+			})
 			toggleEdit()
+			toast.success(data.message)
 		},
 		onError: (error) => {
 			toast.error(error.message)
@@ -57,14 +63,13 @@ export const UpdateDescription = ({ courseId, initialData }: UpdateDescriptionPr
 			<CardHeader>
 				<div className="flex flex-col space-y-1.5">
 					<CardTitle>Course Description</CardTitle>
-					<CardDescription>Course catalog identifier</CardDescription>
 				</div>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
 					{isEditing ? (
 						'Cancel'
 					) : (
 						<>
-							<LuPencil className="mr-2 size-4" /> Edit Description
+							<LuPencil className="mr-2 size-4" /> Edit
 						</>
 					)}
 				</Button>

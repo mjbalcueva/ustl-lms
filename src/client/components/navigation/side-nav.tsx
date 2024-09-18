@@ -1,5 +1,6 @@
 'use client'
 
+import { usePathname } from 'next/navigation'
 import { motion } from 'framer-motion'
 
 import { site } from '@/shared/config/links'
@@ -25,11 +26,12 @@ type SideNavProps = React.ComponentProps<typeof motion.nav> & {
 
 export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 	const { isNavOpen, setNavOpen } = useNav()
+	const currentPath = usePathname().split('/')[1]
 
 	return (
 		<motion.nav
 			className={cn(
-				'flex h-full flex-shrink-0 flex-col overflow-y-auto overflow-x-hidden rounded-xl p-2 pb-4',
+				'flex h-full flex-shrink-0 flex-col overflow-y-auto overflow-x-hidden rounded-xl px-2 pb-4 pt-0.5',
 				isNavOpen ? 'w-[240px]' : 'w-[60px]',
 				className
 			)}
@@ -38,22 +40,35 @@ export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 			}}
 			{...props}
 		>
-			<NavButton className="gap-2 !px-1 py-1 hover:cursor-default hover:bg-transparent">
+			<NavButton className="gap-2 !px-1 py-1 hover:cursor-default hover:border-background hover:!bg-transparent hover:!shadow-none">
 				<NavIcon
 					icon={site.icon}
 					className="size-9 rounded-lg bg-gradient-to-b from-accent to-background p-1.5 text-foreground/80"
 				/>
-				<NavLabel label={site.label} className="text-lg font-semibold tracking-wide" disableAnimation />
+				<NavLabel
+					label={site.label}
+					className="text-lg font-semibold tracking-wide text-card-foreground"
+					disableAnimation
+				/>
 			</NavButton>
 
-			<Separator className="mb-4 mt-2" />
+			<Separator className="mb-4 mt-1" />
 
 			<NavTitle title="Home" />
 			{links[0]?.children?.map((link) => (
 				<NavTooltip key={link.href} content={link.label}>
-					<NavLink href={link.href ?? ''}>
+					<NavLink
+						href={link.href ?? ''}
+						className={cn(
+							currentPath === link.href?.split('/')[1] &&
+								'border border-border bg-card shadow-[0_0_0_-2px_rgba(0,0,0,0.05),0_1px_2px_0_rgba(0,0,0,0.05)] dark:bg-accent/70'
+						)}
+					>
 						<NavIcon icon={link.icon} className="text-foreground/80" />
-						<NavLabel label={link.label} />
+						<NavLabel
+							label={link.label}
+							className={cn(currentPath === link.href?.split('/')[1] && 'text-card-foreground')}
+						/>
 						<NavItemSideIcon />
 					</NavLink>
 				</NavTooltip>
@@ -66,9 +81,18 @@ export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 					<NavTitle title="Instructor Resources" />
 					{links[1]?.children?.map((link) => (
 						<NavTooltip key={link.href} content={link.label}>
-							<NavLink href={link.href ?? ''}>
+							<NavLink
+								href={link.href ?? ''}
+								className={cn(
+									currentPath === link.href?.split('/')[1] &&
+										'border border-border bg-card shadow-[0_0_0_-2px_rgba(0,0,0,0.05),0_1px_2px_0_rgba(0,0,0,0.05)] dark:bg-accent/70'
+								)}
+							>
 								<NavIcon icon={link.icon} className="text-foreground/80" />
-								<NavLabel label={link.label} />
+								<NavLabel
+									label={link.label}
+									className={cn(currentPath === link.href?.split('/')[1] && 'text-card-foreground')}
+								/>
 								<NavItemSideIcon />
 							</NavLink>
 						</NavTooltip>

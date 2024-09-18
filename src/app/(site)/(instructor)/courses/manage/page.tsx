@@ -15,11 +15,7 @@ import {
 import { Separator } from '@/client/components/ui'
 
 export default function Page() {
-	const crumbs: Crumb[] = [
-		{ icon: 'instructor', label: 'Instructor' },
-		{ icon: 'course', label: 'Courses', href: '/courses' },
-		{ label: 'Manage' }
-	]
+	const crumbs: Crumb[] = [{ icon: 'instructor' }, { label: 'Courses', href: '/courses' }, { label: 'Manage' }]
 
 	return (
 		<PageWrapper>
@@ -27,7 +23,7 @@ export default function Page() {
 				<Breadcrumbs crumbs={crumbs} />
 			</PageHeader>
 
-			<Separator />
+			<Separator className="hidden md:block" />
 
 			<PageHeader className="flex flex-wrap items-end justify-between gap-4 space-y-0">
 				<div className="space-y-1.5">
