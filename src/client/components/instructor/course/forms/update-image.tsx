@@ -76,7 +76,14 @@ export const UpdateImage = ({ courseId, initialData }: UpdateImageProps) => {
 				<CardContent>
 					{initialData.image ? (
 						<CardContentContainer>
-							<Image src={initialData.image} alt="Course Image" width={100} height={100} className="rounded-xl" />
+							<Image
+								src={initialData.image}
+								alt="Course Image"
+								width={1920}
+								height={1080}
+								className="rounded-xl border border-input"
+								priority
+							/>
 						</CardContentContainer>
 					) : (
 						<div className="flex items-center justify-center rounded-xl border border-input bg-card py-6 dark:bg-background">
