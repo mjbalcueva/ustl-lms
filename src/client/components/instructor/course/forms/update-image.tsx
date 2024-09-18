@@ -3,13 +3,10 @@
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import * as React from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm, type SubmitHandler } from 'react-hook-form'
 import { LuImage, LuPencil, LuPlusCircle } from 'react-icons/lu'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
-import { updateImageSchema, type UpdateImageSchema } from '@/shared/validations/course'
 
 import { FileUpload } from '@/client/components/file-upload'
 import {
@@ -19,7 +16,7 @@ import {
 	CardTitle,
 	CardWrapper
 } from '@/client/components/instructor/course/card-wrapper'
-import { Button, Form, FormControl, FormField, FormItem, FormMessage } from '@/client/components/ui'
+import { Button } from '@/client/components/ui'
 
 type UpdateImageProps = {
 	courseId: string
@@ -34,21 +31,9 @@ export const UpdateImage = ({ courseId, initialData }: UpdateImageProps) => {
 	const [isEditing, setIsEditing] = React.useState(false)
 	const toggleEdit = () => setIsEditing((current) => !current)
 
-	const form = useForm<UpdateImageSchema>({
-		resolver: zodResolver(updateImageSchema),
-		defaultValues: {
-			courseId,
-			image: initialData.image
-		}
-	})
-
 	const { mutate } = api.course.updateImage.useMutation({
 		onSuccess: async (data) => {
 			router.refresh()
-			form.reset({
-				courseId,
-				image: data.course.image ?? ''
-			})
 			toggleEdit()
 			toast.success(data.message)
 		},
@@ -56,8 +41,6 @@ export const UpdateImage = ({ courseId, initialData }: UpdateImageProps) => {
 			toast.error(error.message)
 		}
 	})
-
-	const onSubmit: SubmitHandler<UpdateImageSchema> = (data) => mutate(data)
 
 	return (
 		<CardWrapper>
@@ -94,24 +77,9 @@ export const UpdateImage = ({ courseId, initialData }: UpdateImageProps) => {
 			)}
 
 			{isEditing && (
-				<Form {...form}>
-					<form onSubmit={form.handleSubmit(onSubmit)}>
-						<CardContent>
-							<FormField
-								control={form.control}
-								name="image"
-								render={({ field }) => (
-									<FormItem>
-										<FormControl>
-											<FileUpload endpoint="imageUpload" onChange={field.onChange} />
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-						</CardContent>
-					</form>
-				</Form>
+				<CardContent>
+					<FileUpload endpoint="imageUpload" onChange={(url) => mutate({ courseId, image: url })} />
+				</CardContent>
 			)}
 		</CardWrapper>
 	)

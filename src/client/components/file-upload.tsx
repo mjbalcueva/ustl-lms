@@ -17,7 +17,6 @@ export const FileUpload = ({ onChange, endpoint }: FileUploadProps) => (
 		onUploadError={(error: Error) => {
 			toast.error(`ERROR! ${error?.message}`)
 		}}
-		// className="mt-0 rounded-xl border-2 border-dashed border-input bg-card p-4 dark:bg-background"
 		className="outline-none"
 		appearance={{
 			container:

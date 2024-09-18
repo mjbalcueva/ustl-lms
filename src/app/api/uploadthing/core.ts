@@ -1,43 +1,33 @@
 import { createUploadthing, type FileRouter } from 'uploadthing/next'
 import { UploadThingError } from 'uploadthing/server'
 
-import { auth } from '@/server/lib/auth'
+import { api } from '@/shared/trpc/server'
 
 const f = createUploadthing()
 
 const handleAuth = async () => {
-	const session = await auth()
+	const session = await api.auth.getSession()
 	if (!session) throw new UploadThingError('Unauthorized')
 
 	return { userId: session.user.id }
 }
 
-type handleUploadProps = {
-	metadata: { userId: string | undefined }
-	file: { url: string }
-	uploadType: string
-}
-
-const handleUpload = async ({ metadata, file, uploadType }: handleUploadProps) => {
-	console.log(`Upload complete for ${uploadType}:`, {
-		userId: metadata.userId,
-		fileUrl: file.url
-	})
-	return { uploadedBy: metadata.userId }
-}
+const handleUpload = async ({ metadata }: { metadata: { userId: string | undefined } }) => ({
+	uploadedBy: metadata.userId
+})
 
 export const ourFileRouter = {
 	imageUpload: f({ image: { maxFileSize: '4MB', maxFileCount: 1 } })
 		.middleware(() => handleAuth())
-		.onUploadComplete(({ metadata, file }) => handleUpload({ metadata, file, uploadType: 'imageUpload' })),
+		.onUploadComplete(({ metadata }) => handleUpload({ metadata })),
 
 	videoUpload: f({ video: { maxFileSize: '4GB', maxFileCount: 1 } })
 		.middleware(() => handleAuth())
-		.onUploadComplete(({ metadata, file }) => handleUpload({ metadata, file, uploadType: 'videoUpload' })),
+		.onUploadComplete(({ metadata }) => handleUpload({ metadata })),
 
 	attachmentUpload: f(['text', 'image', 'video', 'audio', 'pdf'])
 		.middleware(() => handleAuth())
-		.onUploadComplete(({ metadata, file }) => handleUpload({ metadata, file, uploadType: 'attachmentUpload' }))
+		.onUploadComplete(({ metadata }) => handleUpload({ metadata }))
 } satisfies FileRouter
 
 export type OurFileRouter = typeof ourFileRouter
