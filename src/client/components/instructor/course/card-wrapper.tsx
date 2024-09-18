@@ -1,10 +1,11 @@
 import * as React from 'react'
 
 import { Separator } from '@/client/components/ui'
+import { cn } from '@/client/lib/utils'
 
 type CardWrapperProps = React.HTMLAttributes<HTMLDivElement>
 export const CardWrapper = ({ ...props }: CardWrapperProps) => {
-	return <div className="my-2.5 rounded-xl border border-border bg-card shadow-sm sm:my-4 md:my-6" {...props} />
+	return <div className="mb-2.5 rounded-xl border border-border bg-card shadow-sm sm:mb-4 md:mb-5" {...props} />
 }
 
 type CardHeaderProps = React.HTMLAttributes<HTMLDivElement>
@@ -26,10 +27,10 @@ type CardContentProps = React.HTMLAttributes<HTMLDivElement> & {
 	withSeparator?: boolean
 	children: React.ReactNode
 }
-export const CardContent = ({ withSeparator, children, ...props }: CardContentProps) => {
+export const CardContent = ({ withSeparator, children, className, ...props }: CardContentProps) => {
 	return (
 		children && (
-			<div className="px-4 pb-4 pt-0 md:px-6" {...props}>
+			<div className={cn('px-4 pb-4 pt-0 md:px-6', className)} {...props}>
 				{withSeparator && <Separator className="mb-4" />}
 				{children}
 			</div>

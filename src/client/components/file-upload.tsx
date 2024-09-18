@@ -20,7 +20,7 @@ export const FileUpload = ({ onChange, endpoint }: FileUploadProps) => (
 		className="outline-none"
 		appearance={{
 			container:
-				'mt-0 rounded-xl border-2 border-dashed border-input bg-card p-4 outline-none ring-ring ring-offset-2 ring-offset-background focus:ring-2 dark:bg-background',
+				'!mt-0 rounded-xl border-2 border-dashed border-input bg-card p-4 outline-none ring-ring ring-offset-2 ring-offset-background focus:ring-2 dark:bg-background',
 			uploadIcon: 'text-foreground/90',
 			button: 'h-8 bg-primary px-3 text-sm text-primary-foreground'
 		}}
