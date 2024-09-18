@@ -61,7 +61,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 				<PageContent>
 					<PageSection className="grid grid-cols-1 gap-6 md:grid-cols-2">
 						<div>
-							<div className="flex items-center gap-x-2">
+							<div className="mb-2.5 flex items-center gap-x-2 sm:mb-4 md:mb-5">
 								<IconBadge icon={TbBook2} />
 								<h2 className="text-xl">Customize your course</h2>
 							</div>
@@ -73,14 +73,14 @@ export default async function Page({ params }: { params: { courseId: string } })
 
 						<div className="space-y-6">
 							<div>
-								<div className="flex items-center gap-x-2">
+								<div className="mb-2.5 flex items-center gap-x-2 sm:mb-4 md:mb-5">
 									<IconBadge icon={TbListDetails} />
 									<h2 className="text-xl">Course chapters</h2>
 								</div>
 							</div>
 
 							<div>
-								<div className="flex items-center gap-x-2">
+								<div className="mb-2.5 flex items-center gap-x-2 sm:mb-4 md:mb-5">
 									<IconBadge icon={TbPackage} />
 									<h2 className="text-xl">Resources & Attachments</h2>
 								</div>
