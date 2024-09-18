@@ -55,32 +55,28 @@ export const UpdateImage = ({ courseId, initialData }: UpdateImageProps) => {
 				</Button>
 			</CardHeader>
 
-			{!isEditing && (
-				<CardContent>
-					{initialData.image ? (
-						<CardContentContainer>
-							<Image
-								src={initialData.image}
-								alt="Course Image"
-								width={1920}
-								height={1080}
-								className="rounded-xl border border-input"
-								priority
-							/>
-						</CardContentContainer>
-					) : (
-						<div className="flex items-center justify-center rounded-xl border border-input bg-card py-6 dark:bg-background">
-							<LuImage className="size-10 text-card-foreground dark:text-muted-foreground" />
-						</div>
-					)}
-				</CardContent>
-			)}
+			<CardContent>
+				{!isEditing && initialData.image && (
+					<CardContentContainer>
+						<Image
+							src={initialData.image}
+							alt="Course Image"
+							width={1920}
+							height={1080}
+							className="rounded-xl border border-input"
+							priority
+						/>
+					</CardContentContainer>
+				)}
 
-			{isEditing && (
-				<CardContent>
-					<FileUpload endpoint="imageUpload" onChange={(url) => mutate({ courseId, image: url })} />
-				</CardContent>
-			)}
+				{!isEditing && !initialData.image && (
+					<div className="flex items-center justify-center rounded-xl border border-input bg-card py-6 dark:bg-background">
+						<LuImage className="size-10 text-card-foreground dark:text-muted-foreground" />
+					</div>
+				)}
+
+				{isEditing && <FileUpload endpoint="imageUpload" onChange={(url) => mutate({ courseId, image: url })} />}
+			</CardContent>
 		</CardWrapper>
 	)
 }
