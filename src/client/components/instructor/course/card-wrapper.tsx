@@ -4,7 +4,7 @@ import { Separator } from '@/client/components/ui'
 
 type CardWrapperProps = React.HTMLAttributes<HTMLDivElement>
 export const CardWrapper = ({ ...props }: CardWrapperProps) => {
-	return <div className="my-6 rounded-xl border border-border bg-card shadow-sm" {...props} />
+	return <div className="my-2.5 rounded-xl border border-border bg-card shadow-sm sm:my-4 md:my-6" {...props} />
 }
 
 type CardHeaderProps = React.HTMLAttributes<HTMLDivElement>
