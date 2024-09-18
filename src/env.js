@@ -27,7 +27,8 @@ export const env = createEnv({
 		POSTGRES_URL_NON_POOLING: z.string(),
 		POSTGRES_URL: z.string(),
 		POSTGRES_USER: z.string(),
-		RESEND_API_KEY: z.string()
+		RESEND_API_KEY: z.string(),
+		UPLOADTHING_TOKEN: z.string()
 	},
 
 	/**
@@ -58,7 +59,8 @@ export const env = createEnv({
 		POSTGRES_URL_NON_POOLING: process.env.POSTGRES_URL_NON_POOLING,
 		POSTGRES_URL: process.env.POSTGRES_URL,
 		POSTGRES_USER: process.env.POSTGRES_USER,
-		RESEND_API_KEY: process.env.RESEND_API_KEY
+		RESEND_API_KEY: process.env.RESEND_API_KEY,
+		UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN
 	},
 	/**
 	 * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
