@@ -3,6 +3,7 @@ import {
 	getCoursesSchema,
 	updateCodeSchema,
 	updateDescriptionSchema,
+	updateImageSchema,
 	updateTitleSchema
 } from '@/shared/validations/course'
 
@@ -64,5 +65,16 @@ export const courseRouter = createTRPCRouter({
 		})
 
 		return { message: 'Course description updated!', course }
+	}),
+
+	updateImage: instructorProcedure.input(updateImageSchema).mutation(async ({ ctx, input }) => {
+		const { courseId, image } = input
+
+		const course = await ctx.db.course.update({
+			where: { id: courseId, createdById: ctx.session.user.id! },
+			data: { image }
+		})
+
+		return { message: 'Course image updated!', course }
 	})
 })
