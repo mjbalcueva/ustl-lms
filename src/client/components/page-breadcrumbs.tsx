@@ -26,17 +26,21 @@ export function Breadcrumbs({ crumbs }: { crumbs: Crumb[] }) {
 					<React.Fragment key={index}>
 						{index > 0 && <BreadcrumbSeparator />}
 						<BreadcrumbItem>
-							{index === crumbs.length - 1 ? (
+							{index === crumbs.length - 1 && (
 								<BreadcrumbPage className="flex items-center gap-1.5 rounded-md bg-muted px-1.5 py-0.5 text-muted-foreground hover:cursor-default hover:text-foreground">
 									{crumb.icon && <BreadcrumbIcon icon={crumb.icon} />}
 									{crumb.label}
 								</BreadcrumbPage>
-							) : crumb.href ? (
+							)}
+
+							{index !== crumbs.length - 1 && crumb.href && (
 								<BreadcrumbLink href={crumb.href} className="flex items-center gap-1.5">
 									{crumb.icon && <BreadcrumbIcon icon={crumb.icon} />}
 									{crumb.label}
 								</BreadcrumbLink>
-							) : (
+							)}
+
+							{index !== crumbs.length - 1 && !crumb.href && (
 								<span className="flex items-center gap-1.5 hover:cursor-default hover:text-foreground">
 									{crumb.icon && <BreadcrumbIcon icon={crumb.icon} />}
 									{crumb.label}
