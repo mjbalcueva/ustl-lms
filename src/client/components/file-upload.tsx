@@ -17,6 +17,13 @@ export const FileUpload = ({ onChange, endpoint }: FileUploadProps) => (
 		onUploadError={(error: Error) => {
 			toast.error(`ERROR! ${error?.message}`)
 		}}
-		className="bg-card p-4 dark:bg-background"
+		// className="mt-0 rounded-xl border-2 border-dashed border-input bg-card p-4 dark:bg-background"
+		className="outline-none"
+		appearance={{
+			container:
+				'mt-0 rounded-xl border-2 border-dashed border-input bg-card p-4 outline-none ring-ring ring-offset-2 ring-offset-background focus:ring-2 dark:bg-background',
+			uploadIcon: 'text-foreground/90',
+			button: 'h-8 bg-primary px-3 text-sm text-primary-foreground'
+		}}
 	/>
 )
