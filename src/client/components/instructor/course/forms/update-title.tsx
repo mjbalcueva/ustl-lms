@@ -13,7 +13,6 @@ import { updateTitleSchema, type UpdateTitleSchema } from '@/shared/validations/
 import {
 	CardContent,
 	CardContentContainer,
-	CardDescription,
 	CardFooter,
 	CardHeader,
 	CardTitle,
@@ -64,14 +63,13 @@ export const UpdateTitle = ({ courseId, initialData }: UpdateTitleProps) => {
 			<CardHeader>
 				<div className="flex flex-col space-y-1.5">
 					<CardTitle>Course Title</CardTitle>
-					<CardDescription>Identify your course with a unique title, displayed in the course listing.</CardDescription>
 				</div>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
 					{isEditing ? (
 						'Cancel'
 					) : (
 						<>
-							<LuPencil className="mr-2 size-4" /> Edit Title
+							<LuPencil className="mr-2 size-4" /> Edit
 						</>
 					)}
 				</Button>

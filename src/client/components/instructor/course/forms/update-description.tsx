@@ -13,7 +13,6 @@ import { updateDescriptionSchema, type UpdateDescriptionSchema } from '@/shared/
 import {
 	CardContent,
 	CardContentContainer,
-	CardDescription,
 	CardFooter,
 	CardHeader,
 	CardTitle,
@@ -64,14 +63,13 @@ export const UpdateDescription = ({ courseId, initialData }: UpdateDescriptionPr
 			<CardHeader>
 				<div className="flex flex-col space-y-1.5">
 					<CardTitle>Course Description</CardTitle>
-					<CardDescription>Course catalog identifier</CardDescription>
 				</div>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
 					{isEditing ? (
 						'Cancel'
 					) : (
 						<>
-							<LuPencil className="mr-2 size-4" /> Edit Description
+							<LuPencil className="mr-2 size-4" /> Edit
 						</>
 					)}
 				</Button>

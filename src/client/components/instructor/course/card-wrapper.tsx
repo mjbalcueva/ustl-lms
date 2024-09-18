@@ -9,7 +9,7 @@ export const CardWrapper = ({ ...props }: CardWrapperProps) => {
 
 type CardHeaderProps = React.HTMLAttributes<HTMLDivElement>
 export const CardHeader = ({ ...props }: CardHeaderProps) => {
-	return <div className="flex items-start justify-between p-4 pt-6 font-medium md:px-6" {...props} />
+	return <div className="flex items-center justify-between p-4 font-medium md:px-6" {...props} />
 }
 
 type CardTitleProps = React.HTMLAttributes<HTMLDivElement>
@@ -28,10 +28,12 @@ type CardContentProps = React.HTMLAttributes<HTMLDivElement> & {
 }
 export const CardContent = ({ withSeparator, children, ...props }: CardContentProps) => {
 	return (
-		<div className="px-4 pb-6 pt-0 md:px-6" {...props}>
-			{withSeparator && <Separator className="mb-4" />}
-			{children}
-		</div>
+		children && (
+			<div className="px-4 pb-4 pt-0 md:px-6" {...props}>
+				{withSeparator && <Separator className="mb-4" />}
+				{children}
+			</div>
+		)
 	)
 }
 
@@ -48,8 +50,7 @@ type CardFooterProps = React.HTMLAttributes<HTMLDivElement>
 export const CardFooter = ({ ...props }: CardFooterProps) => {
 	return (
 		<>
-			<Separator />
-			<div className="flex items-center justify-end px-4 py-2 md:px-6" {...props} />
+			<div className="flex items-center justify-start px-4 pb-4 md:px-6" {...props} />
 		</>
 	)
 }
