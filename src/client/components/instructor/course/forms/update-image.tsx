@@ -69,7 +69,9 @@ export const UpdateImage = ({ courseId, initialData }: UpdateImageProps) => {
 					</div>
 				)}
 
-				{isEditing && <FileUpload endpoint="imageUpload" onChange={(url) => mutate({ courseId, image: url })} />}
+				{isEditing && (
+					<FileUpload endpoint="imageUpload" onChange={(url) => mutate({ courseId, imageUrl: url ?? '' })} />
+				)}
 			</CardContent>
 
 			{isEditing && (

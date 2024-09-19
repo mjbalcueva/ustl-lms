@@ -31,7 +31,7 @@ export type UpdateDescriptionSchema = z.infer<typeof updateDescriptionSchema>
 
 export const updateImageSchema = z.object({
 	courseId: z.string().min(1, 'Course ID is required'),
-	image: z.string().optional()
+	imageUrl: z.string().min(1, 'Image URL is required')
 })
 export type UpdateImageSchema = z.infer<typeof updateImageSchema>
 

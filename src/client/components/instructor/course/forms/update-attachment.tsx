@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import * as React from 'react'
-import { type Attachment, type Course } from '@prisma/client'
+import { type Attachment } from '@prisma/client'
 import { LuFile, LuLoader, LuPencil, LuPlusCircle, LuX } from 'react-icons/lu'
 import { toast } from 'sonner'
 
@@ -14,7 +14,7 @@ import { Button, CardFooter } from '@/client/components/ui'
 
 type UpdateAttachmentProps = {
 	courseId: string
-	initialData: Course & { attachment?: Attachment[] }
+	initialData: { attachment?: Attachment[] }
 }
 
 export const UpdateAttachment = ({ courseId, initialData }: UpdateAttachmentProps) => {

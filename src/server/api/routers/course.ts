@@ -78,7 +78,7 @@ export const courseRouter = createTRPCRouter({
 	}),
 
 	updateImage: instructorProcedure.input(updateImageSchema).mutation(async ({ ctx, input }) => {
-		const { courseId, image } = input
+		const { courseId, imageUrl } = input
 
 		const course = await ctx.db.course.findUnique({
 			where: { id: courseId, createdById: ctx.session.user.id! },
@@ -90,7 +90,7 @@ export const courseRouter = createTRPCRouter({
 
 		const updatedCourse = await ctx.db.course.update({
 			where: { id: courseId, createdById: ctx.session.user.id! },
-			data: { image }
+			data: { image: imageUrl }
 		})
 
 		return { message: 'Course image updated!', course: updatedCourse }

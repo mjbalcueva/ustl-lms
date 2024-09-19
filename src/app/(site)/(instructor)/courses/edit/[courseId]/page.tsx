@@ -82,7 +82,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 
 						<PageSection className="!px-0">
 							<SectionTitle title="Resources & Attachments" icon={TbPackage} />
-							<UpdateAttachment courseId={course.id} initialData={course} />
+							<UpdateAttachment courseId={course.id} initialData={{ attachment: course.attachment }} />
 						</PageSection>
 					</div>
 				</PageContent>
