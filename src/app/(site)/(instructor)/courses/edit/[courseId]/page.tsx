@@ -62,7 +62,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 				</PageHeader>
 
 				<PageContent className="gap-6 px-2.5 sm:px-4 md:flex md:flex-wrap md:px-6">
-					<PageSection className="!px-0 md:flex-grow">
+					<PageSection className="flex-1 !px-0">
 						<SectionTitle title="Customize your course" icon={TbBook2} />
 						<UpdateCode courseId={course.id} initialData={{ code: course.code }} />
 						<UpdateTitle courseId={course.id} initialData={{ title: course.title }} />
@@ -75,7 +75,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 						/>
 					</PageSection>
 
-					<div className="md:flex-grow">
+					<div className="flex flex-1 flex-col gap-6">
 						<PageSection className="!px-0">
 							<SectionTitle title="Course chapters" icon={TbListDetails} />
 						</PageSection>

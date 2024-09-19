@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { type Attachment, type Course } from '@prisma/client'
-import { LuPencil, LuPlusCircle } from 'react-icons/lu'
+import { LuFile, LuPencil, LuPlusCircle } from 'react-icons/lu'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
@@ -49,8 +49,24 @@ export const UpdateAttachment = ({ courseId, initialData }: UpdateAttachmentProp
 				</Button>
 			</CardHeader>
 
-			<CardContent isEmpty={!!initialData.attachment}>
+			<CardContent isEmpty={initialData.attachment?.length === 0}>
 				{!isEditing && initialData.attachment?.length === 0 && 'No attachment added'}
+
+				{!isEditing && !!initialData.attachment && (
+					<ol className="space-y-2">
+						{initialData.attachment.map((attachment) => (
+							<li
+								key={attachment.id}
+								className="flex items-center rounded-lg border border-border px-5 py-3 hover:border-input hover:bg-accent hover:text-accent-foreground"
+							>
+								<LuFile className="mr-2 size-4 flex-shrink-0" />
+
+								<p className="line-clamp-1 text-xs">{attachment.name}</p>
+							</li>
+						))}
+					</ol>
+				)}
+
 				{isEditing && (
 					<FileUpload endpoint="attachmentUpload" onChange={(url) => mutate({ courseId, attachmentUrl: url ?? '' })} />
 				)}

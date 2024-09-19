@@ -51,7 +51,7 @@ export const UpdateImage = ({ courseId, initialData }: UpdateImageProps) => {
 
 			<CardContent className="pb-5">
 				{!isEditing && initialData.image && (
-					<div className="relative aspect-video md:min-w-[400px]">
+					<div className="relative aspect-video min-w-[250px]">
 						<Image
 							src={initialData.image}
 							alt="Course Image"
