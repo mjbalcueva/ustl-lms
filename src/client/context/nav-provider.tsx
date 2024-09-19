@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 
-import { usePersistedState } from '../lib/hooks/use-persist-state'
+import { usePersistedState } from '@/client/lib/hooks/use-persist-state'
 
 type NavContextType = {
 	isNavOpen: boolean

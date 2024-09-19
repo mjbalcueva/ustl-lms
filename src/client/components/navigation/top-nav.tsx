@@ -19,10 +19,10 @@ type TopNavProps = React.ComponentProps<typeof motion.div> & {
 
 export const TopNav = ({ links, className, ...props }: TopNavProps) => {
 	const { isNavOpen, setNavOpen } = useNav()
-
-	const { scrollYProgress } = useScroll()
 	const [showNav, setShowNav] = useState(true)
+
 	const isUserButtonOpen = useRef(false)
+	const { scrollYProgress } = useScroll()
 	const MotionNavLink = useMemo(() => motion(NavLink), [])
 
 	const toggleScroll = useCallback((disable: boolean) => {
