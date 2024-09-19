@@ -63,7 +63,7 @@ export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 						href={link.href ?? ''}
 						className={cn(
 							currentPath === link.href?.split('/')[1] &&
-								'border border-border bg-card shadow-[0_0_0_-2px_rgba(0,0,0,0.05),0_1px_2px_0_rgba(0,0,0,0.05)] dark:bg-accent/70'
+								'border !border-border bg-card shadow-[0_0_0_-2px_rgba(0,0,0,0.05),0_1px_2px_0_rgba(0,0,0,0.05)] dark:bg-accent/70'
 						)}
 					>
 						<NavIcon icon={link.icon} className="text-foreground/80" />
@@ -87,7 +87,7 @@ export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 								href={link.href ?? ''}
 								className={cn(
 									currentPath === link.href?.split('/')[1] &&
-										'border border-border bg-card shadow-[0_0_0_-2px_rgba(0,0,0,0.05),0_1px_2px_0_rgba(0,0,0,0.05)] dark:bg-accent/70'
+										'border !border-border bg-card shadow-[0_0_0_-2px_rgba(0,0,0,0.05),0_1px_2px_0_rgba(0,0,0,0.05)] dark:bg-accent/70'
 								)}
 							>
 								<NavIcon icon={link.icon} className="text-foreground/80" />
