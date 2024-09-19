@@ -12,7 +12,6 @@ import { updateTitleSchema, type UpdateTitleSchema } from '@/shared/validations/
 
 import {
 	CardContent,
-	CardContentContainer,
 	CardFooter,
 	CardHeader,
 	CardTitle,
@@ -70,11 +69,7 @@ export const UpdateTitle = ({ courseId, initialData }: UpdateTitleProps) => {
 				</Button>
 			</CardHeader>
 
-			{!isEditing && (
-				<CardContent>
-					<CardContentContainer>{initialData?.title}</CardContentContainer>
-				</CardContent>
-			)}
+			{!isEditing && <CardContent>{initialData?.title}</CardContent>}
 
 			{isEditing && (
 				<Form {...form}>

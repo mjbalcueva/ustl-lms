@@ -12,7 +12,6 @@ import { updateDescriptionSchema, type UpdateDescriptionSchema } from '@/shared/
 
 import {
 	CardContent,
-	CardContentContainer,
 	CardFooter,
 	CardHeader,
 	CardTitle,
@@ -72,8 +71,8 @@ export const UpdateDescription = ({ courseId, initialData }: UpdateDescriptionPr
 			</CardHeader>
 
 			{!isEditing && (
-				<CardContent>
-					{initialData.description ? <CardContentContainer>{initialData.description}</CardContentContainer> : null}
+				<CardContent isEmpty={!initialData.description}>
+					{initialData.description ? initialData.description : 'No description added'}
 				</CardContent>
 			)}
 

@@ -12,7 +12,6 @@ import { updateCategorySchema, type UpdateCategorySchema } from '@/shared/valida
 
 import {
 	CardContent,
-	CardContentContainer,
 	CardFooter,
 	CardHeader,
 	CardTitle,
@@ -74,7 +73,7 @@ export const UpdateCategory = ({ courseId, categoryId, options }: UpdateCategory
 			</CardHeader>
 
 			{!isEditing && (
-				<CardContent>{categoryId ? <CardContentContainer>{categoryId}</CardContentContainer> : null}</CardContent>
+				<CardContent isEmpty={!categoryId}>{categoryId ? categoryId : 'No category selected'}</CardContent>
 			)}
 
 			{isEditing && (

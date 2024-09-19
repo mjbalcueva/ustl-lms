@@ -24,26 +24,21 @@ export const CardDescription = ({ ...props }: CardDescriptionProps) => {
 }
 
 type CardContentProps = React.HTMLAttributes<HTMLDivElement> & {
+	isEmpty?: boolean
 	withSeparator?: boolean
 	children: React.ReactNode
 }
-export const CardContent = ({ withSeparator, children, className, ...props }: CardContentProps) => {
+export const CardContent = ({ isEmpty, withSeparator, children, className, ...props }: CardContentProps) => {
 	return (
 		children && (
-			<div className={cn('px-4 pb-4 pt-0 md:px-6', className)} {...props}>
+			<div
+				className={cn('px-4 pb-4 pt-0 text-sm md:px-6 md:pb-6', isEmpty && 'italic text-muted-foreground', className)}
+				{...props}
+			>
 				{withSeparator && <Separator className="mb-4" />}
 				{children}
 			</div>
 		)
-	)
-}
-
-type CardContentContainerProps = React.HTMLAttributes<HTMLDivElement>
-export const CardContentContainer = ({ children, ...props }: CardContentContainerProps) => {
-	return (
-		<div className="pb-2 text-sm" {...props}>
-			{children}
-		</div>
 	)
 }
 
