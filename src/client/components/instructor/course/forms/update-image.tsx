@@ -10,7 +10,7 @@ import { api } from '@/shared/trpc/react'
 
 import { FileUpload } from '@/client/components/file-upload'
 import { CardContent, CardHeader, CardTitle, CardWrapper } from '@/client/components/instructor/course/card-wrapper'
-import { Button } from '@/client/components/ui'
+import { Button, CardFooter } from '@/client/components/ui'
 
 type UpdateImageProps = {
 	courseId: string
@@ -71,6 +71,14 @@ export const UpdateImage = ({ courseId, initialData }: UpdateImageProps) => {
 
 				{isEditing && <FileUpload endpoint="imageUpload" onChange={(url) => mutate({ courseId, image: url })} />}
 			</CardContent>
+
+			{isEditing && (
+				<CardFooter>
+					<span className="text-sm text-muted-foreground">
+						Upload a captivating course image that represents your content and engages your students.
+					</span>
+				</CardFooter>
+			)}
 		</CardWrapper>
 	)
 }
