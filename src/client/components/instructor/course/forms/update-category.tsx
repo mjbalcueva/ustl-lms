@@ -4,11 +4,11 @@ import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, type SubmitHandler } from 'react-hook-form'
-import { LuPencil } from 'react-icons/lu'
+import { LuPencil, LuPlusCircle } from 'react-icons/lu'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
-import { updateTitleSchema, type UpdateTitleSchema } from '@/shared/validations/course'
+import { updateCategorySchema, type UpdateCategorySchema } from '@/shared/validations/course'
 
 import {
 	CardContent,
@@ -17,35 +17,37 @@ import {
 	CardTitle,
 	CardWrapper
 } from '@/client/components/instructor/course/card-wrapper'
-import { Button, Form, FormControl, FormField, FormItem, FormMessage, Input } from '@/client/components/ui'
+import { Button, Combobox, Form, FormControl, FormField, FormItem, FormMessage } from '@/client/components/ui'
 
-type UpdateTitleProps = {
+type UpdateCategoryProps = {
 	courseId: string
-	initialData: {
-		title: string
-	}
+	categoryId: string
+	options: {
+		value: string
+		label: string
+	}[]
 }
 
-export const UpdateTitle = ({ courseId, initialData }: UpdateTitleProps) => {
+export const UpdateCategory = ({ courseId, categoryId, options }: UpdateCategoryProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
 	const toggleEdit = () => setIsEditing((current) => !current)
 
-	const form = useForm<UpdateTitleSchema>({
-		resolver: zodResolver(updateTitleSchema),
+	const form = useForm<UpdateCategorySchema>({
+		resolver: zodResolver(updateCategorySchema),
 		defaultValues: {
 			courseId,
-			title: initialData.title
+			categoryId
 		}
 	})
 
-	const { mutate, isPending } = api.course.updateTitle.useMutation({
+	const { mutate, isPending } = api.course.updateCategory.useMutation({
 		onSuccess: async (data) => {
 			router.refresh()
 			form.reset({
 				courseId,
-				title: data.course.title
+				categoryId: data.course.categoryId ?? ''
 			})
 			toggleEdit()
 			toast.success(data.message)
@@ -55,21 +57,24 @@ export const UpdateTitle = ({ courseId, initialData }: UpdateTitleProps) => {
 		}
 	})
 
-	const onSubmit: SubmitHandler<UpdateTitleSchema> = (data) => mutate(data)
+	const onSubmit: SubmitHandler<UpdateCategorySchema> = (data) => mutate(data)
 
 	return (
 		<CardWrapper>
 			<CardHeader>
 				<div className="flex flex-col space-y-1.5">
-					<CardTitle>Course Title</CardTitle>
+					<CardTitle>Course Category</CardTitle>
 				</div>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
-					{!isEditing && initialData.title && <LuPencil className="mr-2 size-4" />}
-					{isEditing ? 'Cancel' : initialData.title ? 'Edit' : 'Add'}
+					{!isEditing && categoryId && <LuPencil className="mr-2 size-4" />}
+					{!isEditing && !categoryId && <LuPlusCircle className="mr-2 size-4" />}
+					{isEditing ? 'Cancel' : categoryId ? 'Edit' : 'Add'}
 				</Button>
 			</CardHeader>
 
-			{!isEditing && <CardContent>{initialData?.title}</CardContent>}
+			{!isEditing && (
+				<CardContent isEmpty={!categoryId}>{categoryId ? categoryId : 'No category selected'}</CardContent>
+			)}
 
 			{isEditing && (
 				<Form {...form}>
@@ -77,11 +82,11 @@ export const UpdateTitle = ({ courseId, initialData }: UpdateTitleProps) => {
 						<CardContent>
 							<FormField
 								control={form.control}
-								name="title"
+								name="categoryId"
 								render={({ field }) => (
 									<FormItem>
 										<FormControl>
-											<Input placeholder="e.g. 'Advanced web development'" disabled={isPending} {...field} />
+											<Combobox options={options} selected={field.value} onChange={field.onChange} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>

@@ -2,11 +2,13 @@ import { TbBook2, TbListDetails, TbPackage } from 'react-icons/tb'
 
 import { api, HydrateClient } from '@/shared/trpc/server'
 
-import { IconBadge } from '@/client/components/icon-badge'
+import { UpdateAttachment } from '@/client/components/instructor/course/forms/update-attachment'
+import { UpdateCategory } from '@/client/components/instructor/course/forms/update-category'
 import { UpdateCode } from '@/client/components/instructor/course/forms/update-code'
 import { UpdateDescription } from '@/client/components/instructor/course/forms/update-description'
 import { UpdateImage } from '@/client/components/instructor/course/forms/update-image'
 import { UpdateTitle } from '@/client/components/instructor/course/forms/update-title'
+import { SectionTitle } from '@/client/components/instructor/course/section-title'
 import { NotFound } from '@/client/components/not-found'
 import { Breadcrumbs, type Crumb } from '@/client/components/page-breadcrumbs'
 import {
@@ -21,8 +23,16 @@ import { Separator } from '@/client/components/ui'
 
 export default async function Page({ params }: { params: { courseId: string } }) {
 	const { course } = await api.course.getCourse({ courseId: params.courseId })
+	const { categories } = await api.course.getCategories()
 
 	if (!course) return <NotFound />
+
+	const crumbs: Crumb[] = [
+		{ icon: 'instructor' },
+		{ label: 'Courses', href: '/courses' },
+		{ label: 'Edit' },
+		{ icon: 'draftCourse', label: course.title }
+	]
 
 	const requiredFields = [
 		course.code,
@@ -36,13 +46,6 @@ export default async function Page({ params }: { params: { courseId: string } })
 	const totalFields = requiredFields.length
 	const completedFields = requiredFields.filter(Boolean).length
 	const completionText = `(${completedFields}/${totalFields})`
-
-	const crumbs: Crumb[] = [
-		{ icon: 'instructor' },
-		{ label: 'Courses', href: '/courses' },
-		{ label: 'Edit' },
-		{ icon: 'draftCourse', label: course.title }
-	]
 
 	return (
 		<HydrateClient>
@@ -58,35 +61,30 @@ export default async function Page({ params }: { params: { courseId: string } })
 					<PageDescription>Completed {completionText}</PageDescription>
 				</PageHeader>
 
-				<PageContent>
-					<PageSection className="grid grid-cols-1 gap-6 md:grid-cols-2">
-						<div>
-							<div className="flex items-center gap-x-2">
-								<IconBadge icon={TbBook2} />
-								<h2 className="text-xl">Customize your course</h2>
-							</div>
-							<UpdateCode courseId={course.id} initialData={{ code: course.code }} />
-							<UpdateTitle courseId={course.id} initialData={{ title: course.title }} />
-							<UpdateDescription courseId={course.id} initialData={{ description: course.description ?? '' }} />
-							<UpdateImage courseId={course.id} initialData={{ image: course.image ?? '' }} />
-						</div>
-
-						<div className="space-y-6">
-							<div>
-								<div className="flex items-center gap-x-2">
-									<IconBadge icon={TbListDetails} />
-									<h2 className="text-xl">Course chapters</h2>
-								</div>
-							</div>
-
-							<div>
-								<div className="flex items-center gap-x-2">
-									<IconBadge icon={TbPackage} />
-									<h2 className="text-xl">Resources & Attachments</h2>
-								</div>
-							</div>
-						</div>
+				<PageContent className="gap-6 px-2.5 sm:px-4 md:flex md:flex-wrap md:px-6">
+					<PageSection className="flex-1 !px-0">
+						<SectionTitle title="Customize your course" icon={TbBook2} />
+						<UpdateCode courseId={course.id} initialData={{ code: course.code }} />
+						<UpdateTitle courseId={course.id} initialData={{ title: course.title }} />
+						<UpdateDescription courseId={course.id} initialData={{ description: course.description ?? '' }} />
+						<UpdateImage courseId={course.id} initialData={{ image: course.image ?? '' }} />
+						<UpdateCategory
+							courseId={course.id}
+							categoryId={course.categoryId ?? ''}
+							options={categories.map((category) => ({ value: category.id, label: category.name }))}
+						/>
 					</PageSection>
+
+					<div className="flex flex-1 flex-col gap-6">
+						<PageSection className="!px-0">
+							<SectionTitle title="Course chapters" icon={TbListDetails} />
+						</PageSection>
+
+						<PageSection className="!px-0">
+							<SectionTitle title="Resources & Attachments" icon={TbPackage} />
+							<UpdateAttachment courseId={course.id} initialData={{ attachment: course.attachment }} />
+						</PageSection>
+					</div>
 				</PageContent>
 			</PageWrapper>
 		</HydrateClient>

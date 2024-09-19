@@ -18,6 +18,7 @@ import {
 import { UserButton } from '@/client/components/navigation/user-button'
 import { Separator } from '@/client/components/ui'
 import { useNav } from '@/client/context/nav-provider'
+import { useLockScroll } from '@/client/lib/hooks/use-lock-scroll'
 import { cn } from '@/client/lib/utils'
 
 type SideNavProps = React.ComponentProps<typeof motion.nav> & {
@@ -26,6 +27,7 @@ type SideNavProps = React.ComponentProps<typeof motion.nav> & {
 
 export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 	const { isNavOpen, setNavOpen } = useNav()
+	const { setLockScroll } = useLockScroll()
 	const currentPath = usePathname().split('/')[1]
 
 	return (
@@ -43,7 +45,7 @@ export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 			<NavButton className="gap-2 !px-1 py-1 hover:cursor-default hover:border-background hover:!bg-transparent hover:!shadow-none">
 				<NavIcon
 					icon={site.icon}
-					className="size-9 rounded-lg border border-border bg-gradient-to-b from-card to-muted p-1.5 text-foreground/80 shadow-sm dark:border-none dark:from-accent dark:to-background"
+					className="size-9 rounded-lg border border-border bg-gradient-to-b from-card to-muted p-1.5 text-foreground/80 shadow-sm dark:border-border dark:from-accent dark:to-background"
 				/>
 				<NavLabel
 					label={site.label}
@@ -61,7 +63,7 @@ export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 						href={link.href ?? ''}
 						className={cn(
 							currentPath === link.href?.split('/')[1] &&
-								'border border-border bg-card shadow-[0_0_0_-2px_rgba(0,0,0,0.05),0_1px_2px_0_rgba(0,0,0,0.05)] dark:bg-accent/70'
+								'border !border-border bg-card shadow-[0_0_0_-2px_rgba(0,0,0,0.05),0_1px_2px_0_rgba(0,0,0,0.05)] dark:bg-accent/70'
 						)}
 					>
 						<NavIcon icon={link.icon} className="text-foreground/80" />
@@ -85,7 +87,7 @@ export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 								href={link.href ?? ''}
 								className={cn(
 									currentPath === link.href?.split('/')[1] &&
-										'border border-border bg-card shadow-[0_0_0_-2px_rgba(0,0,0,0.05),0_1px_2px_0_rgba(0,0,0,0.05)] dark:bg-accent/70'
+										'border !border-border bg-card shadow-[0_0_0_-2px_rgba(0,0,0,0.05),0_1px_2px_0_rgba(0,0,0,0.05)] dark:bg-accent/70'
 								)}
 							>
 								<NavIcon icon={link.icon} className="text-foreground/80" />
@@ -101,7 +103,13 @@ export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 			)}
 
 			<NavTooltip content={isNavOpen ? 'Collapse Sidebar' : 'Expand Sidebar'}>
-				<NavButton className="mt-auto" onClick={() => setNavOpen(!isNavOpen)}>
+				<NavButton
+					className="mt-auto"
+					onClick={() => {
+						setNavOpen(!isNavOpen)
+						setLockScroll(!isNavOpen)
+					}}
+				>
 					<NavIcon icon={isNavOpen ? 'navbarClose' : 'navbarOpen'} className="text-foreground/80" />
 					<NavLabel label={isNavOpen ? 'Collapse Sidebar' : 'Expand Sidebar'} disableAnimation />
 				</NavButton>

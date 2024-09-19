@@ -1,8 +1,11 @@
 import { UTApi } from 'uploadthing/server'
 
 import {
+	createAttachmentSchema,
 	createCourseSchema,
+	deleteAttachmentSchema,
 	getCoursesSchema,
+	updateCategorySchema,
 	updateCodeSchema,
 	updateDescriptionSchema,
 	updateImageSchema,
@@ -32,7 +35,10 @@ export const courseRouter = createTRPCRouter({
 		const { courseId } = input
 
 		const course = await ctx.db.course.findUnique({
-			where: { id: courseId, createdById: ctx.session.user.id! }
+			where: { id: courseId, createdById: ctx.session.user.id! },
+			include: {
+				attachment: { orderBy: { createdAt: 'desc' } }
+			}
 		})
 
 		return { course }
@@ -72,7 +78,7 @@ export const courseRouter = createTRPCRouter({
 	}),
 
 	updateImage: instructorProcedure.input(updateImageSchema).mutation(async ({ ctx, input }) => {
-		const { courseId, image } = input
+		const { courseId, imageUrl } = input
 
 		const course = await ctx.db.course.findUnique({
 			where: { id: courseId, createdById: ctx.session.user.id! },
@@ -84,9 +90,60 @@ export const courseRouter = createTRPCRouter({
 
 		const updatedCourse = await ctx.db.course.update({
 			where: { id: courseId, createdById: ctx.session.user.id! },
-			data: { image }
+			data: { image: imageUrl }
 		})
 
 		return { message: 'Course image updated!', course: updatedCourse }
+	}),
+
+	getCategories: instructorProcedure.query(async ({ ctx }) => {
+		const categories = await ctx.db.category.findMany({
+			orderBy: { name: 'asc' }
+		})
+		return { categories }
+	}),
+
+	updateCategory: instructorProcedure.input(updateCategorySchema).mutation(async ({ ctx, input }) => {
+		const { courseId, categoryId } = input
+
+		const course = await ctx.db.course.update({
+			where: { id: courseId, createdById: ctx.session.user.id! },
+			data: { categoryId }
+		})
+
+		return { message: 'Course category updated!', course }
+	}),
+
+	createAttachment: instructorProcedure.input(createAttachmentSchema).mutation(async ({ ctx, input }) => {
+		const { courseId, attachmentUrl } = input
+
+		const courseOwner = await ctx.db.course.findUnique({
+			where: { id: courseId, createdById: ctx.session.user.id! }
+		})
+
+		if (!courseOwner) throw new Error('Course not found')
+
+		const newAttachment = await ctx.db.attachment.create({
+			data: {
+				url: attachmentUrl,
+				courseId: courseId,
+				name: attachmentUrl.split('/').pop() ?? 'Untitled'
+			}
+		})
+
+		return { message: 'Course attachment updated!', newAttachment }
+	}),
+
+	deleteAttachment: instructorProcedure.input(deleteAttachmentSchema).mutation(async ({ ctx, input }) => {
+		const { attachmentId } = input
+
+		const attachment = await ctx.db.attachment.delete({
+			where: { id: attachmentId, course: { createdById: ctx.session.user.id! } }
+		})
+
+		const attachmentKey = attachment?.url.split('/f/')[1]
+		if (attachmentKey) await utapi.deleteFiles(attachmentKey)
+
+		return { message: 'Course attachment deleted!', attachment }
 	})
 })

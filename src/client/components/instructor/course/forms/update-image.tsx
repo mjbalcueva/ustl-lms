@@ -9,14 +9,8 @@ import { toast } from 'sonner'
 import { api } from '@/shared/trpc/react'
 
 import { FileUpload } from '@/client/components/file-upload'
-import {
-	CardContent,
-	CardContentContainer,
-	CardHeader,
-	CardTitle,
-	CardWrapper
-} from '@/client/components/instructor/course/card-wrapper'
-import { Button } from '@/client/components/ui'
+import { CardContent, CardHeader, CardTitle, CardWrapper } from '@/client/components/instructor/course/card-wrapper'
+import { Button, CardFooter } from '@/client/components/ui'
 
 type UpdateImageProps = {
 	courseId: string
@@ -55,18 +49,18 @@ export const UpdateImage = ({ courseId, initialData }: UpdateImageProps) => {
 				</Button>
 			</CardHeader>
 
-			<CardContent>
+			<CardContent className="pb-5">
 				{!isEditing && initialData.image && (
-					<CardContentContainer>
+					<div className="relative aspect-video min-w-[250px]">
 						<Image
 							src={initialData.image}
 							alt="Course Image"
-							width={1920}
-							height={1080}
+							fill
 							className="rounded-xl border border-input"
 							priority
+							sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
 						/>
-					</CardContentContainer>
+					</div>
 				)}
 
 				{!isEditing && !initialData.image && (
@@ -75,8 +69,18 @@ export const UpdateImage = ({ courseId, initialData }: UpdateImageProps) => {
 					</div>
 				)}
 
-				{isEditing && <FileUpload endpoint="imageUpload" onChange={(url) => mutate({ courseId, image: url })} />}
+				{isEditing && (
+					<FileUpload endpoint="imageUpload" onChange={(url) => mutate({ courseId, imageUrl: url ?? '' })} />
+				)}
 			</CardContent>
+
+			{isEditing && (
+				<CardFooter>
+					<span className="text-sm text-muted-foreground">
+						Upload a captivating course image that represents your content and engages your students.
+					</span>
+				</CardFooter>
+			)}
 		</CardWrapper>
 	)
 }

@@ -12,7 +12,6 @@ import { updateCodeSchema, type UpdateCodeSchema } from '@/shared/validations/co
 
 import {
 	CardContent,
-	CardContentContainer,
 	CardFooter,
 	CardHeader,
 	CardTitle,
@@ -70,11 +69,7 @@ export const UpdateCode = ({ courseId, initialData }: UpdateCodeProps) => {
 				</Button>
 			</CardHeader>
 
-			{!isEditing && (
-				<CardContent>
-					<CardContentContainer>{initialData?.code}</CardContentContainer>
-				</CardContent>
-			)}
+			{!isEditing && <CardContent>{initialData?.code}</CardContent>}
 
 			{isEditing && (
 				<Form {...form}>

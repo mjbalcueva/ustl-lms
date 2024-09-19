@@ -18,8 +18,8 @@ export const metadata: Metadata = {
 
 export default async function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
 	return (
-		<html lang="en" className={`${GeistSans.variable}`} suppressHydrationWarning>
-			<body id="body">
+		<html lang="en" className={`${GeistSans.variable} scroll-smooth`} suppressHydrationWarning>
+			<body>
 				<TRPCReactProvider>
 					<ThemeProvider>
 						{children}

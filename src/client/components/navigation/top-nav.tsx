@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
 
 import { site } from '@/shared/config/links'
@@ -10,6 +10,7 @@ import { Icons } from '@/client/components/icons'
 import { NavButton, NavIcon, NavItemSideIcon, NavLabel, NavLink } from '@/client/components/navigation/nav-item'
 import { UserButton } from '@/client/components/navigation/user-button'
 import { useNav } from '@/client/context/nav-provider'
+import { useLockScroll } from '@/client/lib/hooks/use-lock-scroll'
 import { cn } from '@/client/lib/utils'
 
 type TopNavProps = React.ComponentProps<typeof motion.div> & {
@@ -19,15 +20,13 @@ type TopNavProps = React.ComponentProps<typeof motion.div> & {
 
 export const TopNav = ({ links, className, ...props }: TopNavProps) => {
 	const { isNavOpen, setNavOpen } = useNav()
+	const { setLockScroll } = useLockScroll()
 
-	const { scrollYProgress } = useScroll()
 	const [showNav, setShowNav] = useState(true)
-	const isUserButtonOpen = useRef(false)
-	const MotionNavLink = useMemo(() => motion(NavLink), [])
 
-	const toggleScroll = useCallback((disable: boolean) => {
-		document.getElementById('body')?.classList.toggle('overflow-hidden', disable)
-	}, [])
+	const isUserButtonOpen = useRef(false)
+	const { scrollYProgress } = useScroll()
+	const MotionNavLink = useMemo(() => motion(NavLink), [])
 
 	useMotionValueEvent(scrollYProgress, 'change', (current) => {
 		const previous = scrollYProgress.getPrevious()!
@@ -52,7 +51,13 @@ export const TopNav = ({ links, className, ...props }: TopNavProps) => {
 				)}
 				{...props}
 			>
-				<NavButton className="m-0 p-2" onClick={() => setNavOpen(!isNavOpen)}>
+				<NavButton
+					className="m-0 p-2"
+					onClick={() => {
+						setNavOpen(!isNavOpen)
+						setLockScroll(!isNavOpen)
+					}}
+				>
 					{isNavOpen ? <Icons.navbarClose className="size-6" /> : <Icons.navbarOpen className="size-6" />}
 				</NavButton>
 
@@ -64,7 +69,7 @@ export const TopNav = ({ links, className, ...props }: TopNavProps) => {
 					onOpenChange={(open) => {
 						isUserButtonOpen.current = open
 						setNavOpen(false)
-						toggleScroll(open)
+						setLockScroll(open)
 					}}
 				/>
 			</motion.aside>
