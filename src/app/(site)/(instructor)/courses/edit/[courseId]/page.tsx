@@ -61,38 +61,34 @@ export default async function Page({ params }: { params: { courseId: string } })
 					<PageDescription>Completed {completionText}</PageDescription>
 				</PageHeader>
 
-				<PageContent>
-					<PageSection className="grid grid-cols-1 gap-6 md:grid-cols-2">
-						<div>
-							<div className="mb-2.5 flex items-center gap-x-2 sm:mb-4 md:mb-5">
-								<IconBadge icon={TbBook2} />
-								<h2 className="text-xl">Customize your course</h2>
-							</div>
-							<UpdateCode courseId={course.id} initialData={{ code: course.code }} />
-							<UpdateTitle courseId={course.id} initialData={{ title: course.title }} />
-							<UpdateDescription courseId={course.id} initialData={{ description: course.description ?? '' }} />
-							<UpdateImage courseId={course.id} initialData={{ image: course.image ?? '' }} />
-							<UpdateCategory
-								courseId={course.id}
-								categoryId={course.categoryId ?? ''}
-								options={categories.map((category) => ({ value: category.id, label: category.name }))}
-							/>
+				<PageContent className="grid gap-6 px-2.5 sm:px-4 md:grid-cols-2 md:px-6">
+					<PageSection className="!px-0 md:row-span-2">
+						<div className="mb-2.5 flex items-center gap-x-2 sm:mb-4 md:mb-5">
+							<IconBadge icon={TbBook2} />
+							<h2 className="text-xl">Customize your course</h2>
 						</div>
+						<UpdateCode courseId={course.id} initialData={{ code: course.code }} />
+						<UpdateTitle courseId={course.id} initialData={{ title: course.title }} />
+						<UpdateDescription courseId={course.id} initialData={{ description: course.description ?? '' }} />
+						<UpdateImage courseId={course.id} initialData={{ image: course.image ?? '' }} />
+						<UpdateCategory
+							courseId={course.id}
+							categoryId={course.categoryId ?? ''}
+							options={categories.map((category) => ({ value: category.id, label: category.name }))}
+						/>
+					</PageSection>
 
-						<div className="space-y-6">
-							<div>
-								<div className="mb-2.5 flex items-center gap-x-2 sm:mb-4 md:mb-5">
-									<IconBadge icon={TbListDetails} />
-									<h2 className="text-xl">Course chapters</h2>
-								</div>
-							</div>
+					<PageSection className="!px-0">
+						<div className="mb-2.5 flex items-center gap-x-2 sm:mb-4 md:mb-5">
+							<IconBadge icon={TbListDetails} />
+							<h2 className="text-xl">Course chapters</h2>
+						</div>
+					</PageSection>
 
-							<div>
-								<div className="mb-2.5 flex items-center gap-x-2 sm:mb-4 md:mb-5">
-									<IconBadge icon={TbPackage} />
-									<h2 className="text-xl">Resources & Attachments</h2>
-								</div>
-							</div>
+					<PageSection className="!px-0">
+						<div className="mb-2.5 flex items-center gap-x-2 sm:mb-4 md:mb-5">
+							<IconBadge icon={TbPackage} />
+							<h2 className="text-xl">Resources & Attachments</h2>
 						</div>
 					</PageSection>
 				</PageContent>
