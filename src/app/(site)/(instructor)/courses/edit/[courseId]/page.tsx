@@ -2,12 +2,12 @@ import { TbBook2, TbListDetails, TbPackage } from 'react-icons/tb'
 
 import { api, HydrateClient } from '@/shared/trpc/server'
 
-import { IconBadge } from '@/client/components/icon-badge'
 import { UpdateCategory } from '@/client/components/instructor/course/forms/update-category'
 import { UpdateCode } from '@/client/components/instructor/course/forms/update-code'
 import { UpdateDescription } from '@/client/components/instructor/course/forms/update-description'
 import { UpdateImage } from '@/client/components/instructor/course/forms/update-image'
 import { UpdateTitle } from '@/client/components/instructor/course/forms/update-title'
+import { SectionTitle } from '@/client/components/instructor/course/section-title'
 import { NotFound } from '@/client/components/not-found'
 import { Breadcrumbs, type Crumb } from '@/client/components/page-breadcrumbs'
 import {
@@ -62,10 +62,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 
 				<PageContent className="gap-6 px-2.5 sm:px-4 md:flex md:flex-wrap md:px-6">
 					<PageSection className="!px-0 md:flex-grow">
-						<div className="mb-2.5 flex items-center gap-x-2 sm:mb-4 md:mb-5">
-							<IconBadge icon={TbBook2} />
-							<h2 className="text-xl">Customize your course</h2>
-						</div>
+						<SectionTitle title="Customize your course" icon={TbBook2} />
 						<UpdateCode courseId={course.id} initialData={{ code: course.code }} />
 						<UpdateTitle courseId={course.id} initialData={{ title: course.title }} />
 						<UpdateDescription courseId={course.id} initialData={{ description: course.description ?? '' }} />
@@ -79,17 +76,11 @@ export default async function Page({ params }: { params: { courseId: string } })
 
 					<div className="md:flex-grow">
 						<PageSection className="!px-0">
-							<div className="mb-2.5 flex items-center gap-x-2 sm:mb-4 md:mb-5">
-								<IconBadge icon={TbListDetails} />
-								<h2 className="text-xl">Course chapters</h2>
-							</div>
+							<SectionTitle title="Course chapters" icon={TbListDetails} />
 						</PageSection>
 
 						<PageSection className="!px-0">
-							<div className="mb-2.5 flex items-center gap-x-2 sm:mb-4 md:mb-5">
-								<IconBadge icon={TbPackage} />
-								<h2 className="text-xl">Resources & Attachments</h2>
-							</div>
+							<SectionTitle title="Resources & Attachments" icon={TbPackage} />
 						</PageSection>
 					</div>
 				</PageContent>
