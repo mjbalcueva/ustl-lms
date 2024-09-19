@@ -18,6 +18,7 @@ import {
 import { UserButton } from '@/client/components/navigation/user-button'
 import { Separator } from '@/client/components/ui'
 import { useNav } from '@/client/context/nav-provider'
+import { useLockScroll } from '@/client/lib/hooks/use-lock-scroll'
 import { cn } from '@/client/lib/utils'
 
 type SideNavProps = React.ComponentProps<typeof motion.nav> & {
@@ -26,6 +27,7 @@ type SideNavProps = React.ComponentProps<typeof motion.nav> & {
 
 export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 	const { isNavOpen, setNavOpen } = useNav()
+	const { setLockScroll } = useLockScroll()
 	const currentPath = usePathname().split('/')[1]
 
 	return (
@@ -101,7 +103,13 @@ export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 			)}
 
 			<NavTooltip content={isNavOpen ? 'Collapse Sidebar' : 'Expand Sidebar'}>
-				<NavButton className="mt-auto" onClick={() => setNavOpen(!isNavOpen)}>
+				<NavButton
+					className="mt-auto"
+					onClick={() => {
+						setNavOpen(!isNavOpen)
+						setLockScroll(!isNavOpen)
+					}}
+				>
 					<NavIcon icon={isNavOpen ? 'navbarClose' : 'navbarOpen'} className="text-foreground/80" />
 					<NavLabel label={isNavOpen ? 'Collapse Sidebar' : 'Expand Sidebar'} disableAnimation />
 				</NavButton>
