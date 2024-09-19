@@ -3,6 +3,7 @@ import { TbBook2, TbListDetails, TbPackage } from 'react-icons/tb'
 import { api, HydrateClient } from '@/shared/trpc/server'
 
 import { IconBadge } from '@/client/components/icon-badge'
+import { UpdateCategory } from '@/client/components/instructor/course/forms/update-category'
 import { UpdateCode } from '@/client/components/instructor/course/forms/update-code'
 import { UpdateDescription } from '@/client/components/instructor/course/forms/update-description'
 import { UpdateImage } from '@/client/components/instructor/course/forms/update-image'
@@ -24,6 +25,13 @@ export default async function Page({ params }: { params: { courseId: string } })
 
 	if (!course) return <NotFound />
 
+	const crumbs: Crumb[] = [
+		{ icon: 'instructor' },
+		{ label: 'Courses', href: '/courses' },
+		{ label: 'Edit' },
+		{ icon: 'draftCourse', label: course.title }
+	]
+
 	const requiredFields = [
 		course.code,
 		course.title,
@@ -37,12 +45,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 	const completedFields = requiredFields.filter(Boolean).length
 	const completionText = `(${completedFields}/${totalFields})`
 
-	const crumbs: Crumb[] = [
-		{ icon: 'instructor' },
-		{ label: 'Courses', href: '/courses' },
-		{ label: 'Edit' },
-		{ icon: 'draftCourse', label: course.title }
-	]
+	const { categories } = await api.course.getCategories()
 
 	return (
 		<HydrateClient>
@@ -69,6 +72,11 @@ export default async function Page({ params }: { params: { courseId: string } })
 							<UpdateTitle courseId={course.id} initialData={{ title: course.title }} />
 							<UpdateDescription courseId={course.id} initialData={{ description: course.description ?? '' }} />
 							<UpdateImage courseId={course.id} initialData={{ image: course.image ?? '' }} />
+							<UpdateCategory
+								courseId={course.id}
+								categoryId={course.categoryId ?? ''}
+								options={categories.map((category) => ({ value: category.id, label: category.name }))}
+							/>
 						</div>
 
 						<div className="space-y-6">
