@@ -51,14 +51,16 @@ export const UpdateImage = ({ courseId, initialData }: UpdateImageProps) => {
 
 			<CardContent className="pb-5">
 				{!isEditing && initialData.image && (
-					<Image
-						src={initialData.image}
-						alt="Course Image"
-						width={1920}
-						height={1080}
-						className="rounded-xl border border-input"
-						priority
-					/>
+					<div className="relative aspect-video md:min-w-[400px]">
+						<Image
+							src={initialData.image}
+							alt="Course Image"
+							fill
+							className="rounded-xl border border-input"
+							priority
+							sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+						/>
+					</div>
 				)}
 
 				{!isEditing && !initialData.image && (

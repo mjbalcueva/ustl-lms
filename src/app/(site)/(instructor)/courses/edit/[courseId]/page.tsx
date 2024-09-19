@@ -22,6 +22,7 @@ import { Separator } from '@/client/components/ui'
 
 export default async function Page({ params }: { params: { courseId: string } }) {
 	const { course } = await api.course.getCourse({ courseId: params.courseId })
+	const { categories } = await api.course.getCategories()
 
 	if (!course) return <NotFound />
 
@@ -45,8 +46,6 @@ export default async function Page({ params }: { params: { courseId: string } })
 	const completedFields = requiredFields.filter(Boolean).length
 	const completionText = `(${completedFields}/${totalFields})`
 
-	const { categories } = await api.course.getCategories()
-
 	return (
 		<HydrateClient>
 			<PageWrapper>
@@ -61,8 +60,8 @@ export default async function Page({ params }: { params: { courseId: string } })
 					<PageDescription>Completed {completionText}</PageDescription>
 				</PageHeader>
 
-				<PageContent className="grid gap-6 px-2.5 sm:px-4 md:grid-cols-2 md:px-6">
-					<PageSection className="!px-0 md:row-span-2">
+				<PageContent className="gap-6 px-2.5 sm:px-4 md:flex md:flex-wrap md:px-6">
+					<PageSection className="!px-0 md:flex-grow">
 						<div className="mb-2.5 flex items-center gap-x-2 sm:mb-4 md:mb-5">
 							<IconBadge icon={TbBook2} />
 							<h2 className="text-xl">Customize your course</h2>
@@ -78,19 +77,21 @@ export default async function Page({ params }: { params: { courseId: string } })
 						/>
 					</PageSection>
 
-					<PageSection className="!px-0">
-						<div className="mb-2.5 flex items-center gap-x-2 sm:mb-4 md:mb-5">
-							<IconBadge icon={TbListDetails} />
-							<h2 className="text-xl">Course chapters</h2>
-						</div>
-					</PageSection>
+					<div className="md:flex-grow">
+						<PageSection className="!px-0">
+							<div className="mb-2.5 flex items-center gap-x-2 sm:mb-4 md:mb-5">
+								<IconBadge icon={TbListDetails} />
+								<h2 className="text-xl">Course chapters</h2>
+							</div>
+						</PageSection>
 
-					<PageSection className="!px-0">
-						<div className="mb-2.5 flex items-center gap-x-2 sm:mb-4 md:mb-5">
-							<IconBadge icon={TbPackage} />
-							<h2 className="text-xl">Resources & Attachments</h2>
-						</div>
-					</PageSection>
+						<PageSection className="!px-0">
+							<div className="mb-2.5 flex items-center gap-x-2 sm:mb-4 md:mb-5">
+								<IconBadge icon={TbPackage} />
+								<h2 className="text-xl">Resources & Attachments</h2>
+							</div>
+						</PageSection>
+					</div>
 				</PageContent>
 			</PageWrapper>
 		</HydrateClient>
