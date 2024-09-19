@@ -2,6 +2,7 @@ import { TbBook2, TbListDetails, TbPackage } from 'react-icons/tb'
 
 import { api, HydrateClient } from '@/shared/trpc/server'
 
+import { UpdateAttachment } from '@/client/components/instructor/course/forms/update-attachment'
 import { UpdateCategory } from '@/client/components/instructor/course/forms/update-category'
 import { UpdateCode } from '@/client/components/instructor/course/forms/update-code'
 import { UpdateDescription } from '@/client/components/instructor/course/forms/update-description'
@@ -81,6 +82,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 
 						<PageSection className="!px-0">
 							<SectionTitle title="Resources & Attachments" icon={TbPackage} />
+							<UpdateAttachment courseId={course.id} initialData={course} />
 						</PageSection>
 					</div>
 				</PageContent>

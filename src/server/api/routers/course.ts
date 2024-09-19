@@ -1,6 +1,7 @@
 import { UTApi } from 'uploadthing/server'
 
 import {
+	createAttachmentSchema,
 	createCourseSchema,
 	getCoursesSchema,
 	updateCategorySchema,
@@ -33,7 +34,10 @@ export const courseRouter = createTRPCRouter({
 		const { courseId } = input
 
 		const course = await ctx.db.course.findUnique({
-			where: { id: courseId, createdById: ctx.session.user.id! }
+			where: { id: courseId, createdById: ctx.session.user.id! },
+			include: {
+				attachment: { orderBy: { createdAt: 'desc' } }
+			}
 		})
 
 		return { course }
@@ -107,5 +111,25 @@ export const courseRouter = createTRPCRouter({
 		})
 
 		return { message: 'Course category updated!', course }
+	}),
+
+	createAttachment: instructorProcedure.input(createAttachmentSchema).mutation(async ({ ctx, input }) => {
+		const { courseId, attachmentUrl } = input
+
+		const courseOwner = await ctx.db.course.findUnique({
+			where: { id: courseId, createdById: ctx.session.user.id! }
+		})
+
+		if (!courseOwner) throw new Error('Course not found')
+
+		const newAttachment = await ctx.db.attachment.create({
+			data: {
+				url: attachmentUrl,
+				courseId: courseId,
+				name: attachmentUrl.split('/').pop() ?? 'Untitled'
+			}
+		})
+
+		return { message: 'Course attachment updated!', newAttachment }
 	})
 })

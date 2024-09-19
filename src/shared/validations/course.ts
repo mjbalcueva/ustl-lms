@@ -40,3 +40,9 @@ export const updateCategorySchema = z.object({
 	categoryId: z.string().min(1, 'Category ID is required')
 })
 export type UpdateCategorySchema = z.infer<typeof updateCategorySchema>
+
+export const createAttachmentSchema = z.object({
+	courseId: z.string().min(1, 'Course ID is required'),
+	attachmentUrl: z.string().min(1, 'Attachment URL is required')
+})
+export type CreateAttachmentSchema = z.infer<typeof createAttachmentSchema>
