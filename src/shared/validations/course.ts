@@ -46,3 +46,8 @@ export const createAttachmentSchema = z.object({
 	attachmentUrl: z.string().min(1, 'Attachment URL is required')
 })
 export type CreateAttachmentSchema = z.infer<typeof createAttachmentSchema>
+
+export const deleteAttachmentSchema = z.object({
+	attachmentId: z.string().min(1, 'Attachment ID is required')
+})
+export type DeleteAttachmentSchema = z.infer<typeof deleteAttachmentSchema>

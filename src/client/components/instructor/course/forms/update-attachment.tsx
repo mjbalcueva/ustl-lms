@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { type Attachment, type Course } from '@prisma/client'
-import { LuFile, LuPencil, LuPlusCircle } from 'react-icons/lu'
+import { LuFile, LuLoader, LuPencil, LuPlusCircle, LuX } from 'react-icons/lu'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
@@ -21,12 +21,24 @@ export const UpdateAttachment = ({ courseId, initialData }: UpdateAttachmentProp
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
+	const [deletingId, setDeletingId] = React.useState<string | null>(null)
 	const toggleEdit = () => setIsEditing((current) => !current)
 
-	const { mutate } = api.course.createAttachment.useMutation({
+	const { mutate: createAttachment } = api.course.createAttachment.useMutation({
 		onSuccess: async (data) => {
 			router.refresh()
 			toggleEdit()
+			toast.success(data.message)
+		},
+		onError: (error) => {
+			toast.error(error.message)
+		}
+	})
+
+	const { mutate: deleteAttachment } = api.course.deleteAttachment.useMutation({
+		onSuccess: async (data) => {
+			router.refresh()
+			setDeletingId(null)
 			toast.success(data.message)
 		},
 		onError: (error) => {
@@ -55,20 +67,33 @@ export const UpdateAttachment = ({ courseId, initialData }: UpdateAttachmentProp
 				{!isEditing && !!initialData.attachment && (
 					<ol className="space-y-2">
 						{initialData.attachment.map((attachment) => (
-							<li
-								key={attachment.id}
-								className="flex items-center rounded-lg border border-border px-5 py-3 hover:border-input hover:bg-accent hover:text-accent-foreground"
-							>
+							<li key={attachment.id} className="flex items-center rounded-lg border border-border px-5 py-3">
 								<LuFile className="mr-2 size-4 flex-shrink-0" />
-
 								<p className="line-clamp-1 text-xs">{attachment.name}</p>
+
+								{deletingId === attachment.id && <LuLoader className="ml-auto size-4 animate-spin" />}
+
+								{deletingId !== attachment.id && (
+									<button
+										className="ml-auto rounded-full hover:opacity-75"
+										onClick={() => {
+											setDeletingId(attachment.id)
+											deleteAttachment({ attachmentId: attachment.id })
+										}}
+									>
+										<LuX className="size-4" />
+									</button>
+								)}
 							</li>
 						))}
 					</ol>
 				)}
 
 				{isEditing && (
-					<FileUpload endpoint="attachmentUpload" onChange={(url) => mutate({ courseId, attachmentUrl: url ?? '' })} />
+					<FileUpload
+						endpoint="attachmentUpload"
+						onChange={(url) => createAttachment({ courseId, attachmentUrl: url ?? '' })}
+					/>
 				)}
 			</CardContent>
 

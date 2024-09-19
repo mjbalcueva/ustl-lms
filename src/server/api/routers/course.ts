@@ -3,6 +3,7 @@ import { UTApi } from 'uploadthing/server'
 import {
 	createAttachmentSchema,
 	createCourseSchema,
+	deleteAttachmentSchema,
 	getCoursesSchema,
 	updateCategorySchema,
 	updateCodeSchema,
@@ -131,5 +132,18 @@ export const courseRouter = createTRPCRouter({
 		})
 
 		return { message: 'Course attachment updated!', newAttachment }
+	}),
+
+	deleteAttachment: instructorProcedure.input(deleteAttachmentSchema).mutation(async ({ ctx, input }) => {
+		const { attachmentId } = input
+
+		const attachment = await ctx.db.attachment.delete({
+			where: { id: attachmentId, course: { createdById: ctx.session.user.id! } }
+		})
+
+		const attachmentKey = attachment?.url.split('/f/')[1]
+		if (attachmentKey) await utapi.deleteFiles(attachmentKey)
+
+		return { message: 'Course attachment deleted!', attachment }
 	})
 })
