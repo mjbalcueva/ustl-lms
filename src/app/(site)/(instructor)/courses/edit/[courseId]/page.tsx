@@ -10,15 +10,16 @@ import { UpdateImage } from '@/client/components/instructor/course/forms/update-
 import { UpdateTitle } from '@/client/components/instructor/course/forms/update-title'
 import { SectionTitle } from '@/client/components/instructor/course/section-title'
 import { NotFound } from '@/client/components/not-found'
-import { Breadcrumbs, type Crumb } from '@/client/components/page'
 import {
+	Breadcrumbs,
 	PageContent,
 	PageDescription,
 	PageHeader,
 	PageSection,
 	PageTitle,
-	PageWrapper
-} from '@/client/components/page-wrapper'
+	PageWrapper,
+	type Crumb
+} from '@/client/components/page'
 import { Separator } from '@/client/components/ui'
 
 export default async function Page({ params }: { params: { courseId: string } }) {

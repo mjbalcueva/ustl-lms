@@ -1,5 +1,5 @@
 import { UpdateDisplayNameForm } from '@/client/components/account/update-display-name'
-import { PageContainer, PageContent, PageHeader, PageSection, PageWrapper } from '@/client/components/page-wrapper'
+import { PageContainer, PageContent, PageHeader, PageSection, PageWrapper } from '@/client/components/page'
 import { CardDescription, CardTitle } from '@/client/components/ui'
 
 export default async function Page() {

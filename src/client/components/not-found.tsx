@@ -1,5 +1,4 @@
-import { Breadcrumbs, type Crumb } from '@/client/components/page'
-import { PageDescription, PageHeader, PageTitle, PageWrapper } from '@/client/components/page-wrapper'
+import { Breadcrumbs, PageDescription, PageHeader, PageTitle, PageWrapper, type Crumb } from '@/client/components/page'
 import { Separator } from '@/client/components/ui'
 
 const NotFound = () => {
