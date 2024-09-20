@@ -6,7 +6,7 @@ import { useForm, type SubmitHandler } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
-import { updatePasswordSchema, type UpdatePasswordSchema } from '@/shared/validations/update-password'
+import { updatePasswordSchema, type UpdatePasswordSchema } from '@/shared/validations/auth'
 
 import { Icons } from '@/client/components/icons'
 import {

@@ -42,3 +42,15 @@ export type ResetPasswordSchema = z.infer<typeof resetPasswordSchema>
 export const toggle2FASchema = z.object({
 	twoFactorEnabled: z.boolean()
 })
+
+export const updatePasswordSchema = z
+	.object({
+		currentPassword: z.string().min(6, 'Password must be at least 6 characters'),
+		newPassword: z.string().min(6, 'Password must be at least 6 characters'),
+		confirmPassword: z.string().min(6, 'Password must be at least 6 characters')
+	})
+	.refine((data) => data.newPassword === data.confirmPassword, {
+		message: "Passwords don't match",
+		path: ['confirmPassword']
+	})
+export type UpdatePasswordSchema = z.infer<typeof updatePasswordSchema>
