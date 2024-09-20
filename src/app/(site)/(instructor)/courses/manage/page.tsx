@@ -3,7 +3,7 @@ import { CardStatsMiniGroup } from '@/client/components/instructor/course/card-s
 import { FilterButton } from '@/client/components/instructor/course/filter-button'
 import { NewCourseButton } from '@/client/components/instructor/course/new-course-button'
 import { SearchInput } from '@/client/components/instructor/course/search-input'
-import { Breadcrumbs, type Crumb } from '@/client/components/page-breadcrumbs'
+import { Breadcrumbs, type Crumb } from '@/client/components/page'
 import {
 	PageContent,
 	PageDescription,

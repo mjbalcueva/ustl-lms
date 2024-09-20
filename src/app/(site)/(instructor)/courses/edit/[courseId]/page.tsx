@@ -10,7 +10,7 @@ import { UpdateImage } from '@/client/components/instructor/course/forms/update-
 import { UpdateTitle } from '@/client/components/instructor/course/forms/update-title'
 import { SectionTitle } from '@/client/components/instructor/course/section-title'
 import { NotFound } from '@/client/components/not-found'
-import { Breadcrumbs, type Crumb } from '@/client/components/page-breadcrumbs'
+import { Breadcrumbs, type Crumb } from '@/client/components/page'
 import {
 	PageContent,
 	PageDescription,

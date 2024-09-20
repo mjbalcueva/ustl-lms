@@ -1,4 +1,4 @@
-import { Breadcrumbs, type Crumb } from '@/client/components/page-breadcrumbs'
+import { Breadcrumbs, type Crumb } from '@/client/components/page'
 import { PageDescription, PageHeader, PageTitle, PageWrapper } from '@/client/components/page-wrapper'
 import { Separator } from '@/client/components/ui'
 
