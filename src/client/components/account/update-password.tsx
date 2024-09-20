@@ -6,7 +6,7 @@ import { useForm, type SubmitHandler } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
-import { updatePasswordSchema, type UpdatePasswordSchema } from '@/shared/validations/update-password'
+import { updatePasswordSchema, type UpdatePasswordSchema } from '@/shared/validations/auth'
 
 import { Icons } from '@/client/components/icons'
 import {
@@ -17,8 +17,7 @@ import {
 	ItemHeader,
 	ItemTitle,
 	ItemWrapper
-} from '@/client/components/item-wrapper'
-import { Loader } from '@/client/components/loader'
+} from '@/client/components/item'
 import {
 	Button,
 	Form,
@@ -27,6 +26,7 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
+	Loader,
 	PasswordInput
 } from '@/client/components/ui'
 

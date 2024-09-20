@@ -1,13 +1,15 @@
 import { TRPCError } from '@trpc/server'
 import { compare, hash } from 'bcryptjs'
 
-import { addPasswordSchema } from '@/shared/validations/add-password'
-import { forgotPasswordSchema } from '@/shared/validations/forgot-password'
-import { registerSchema } from '@/shared/validations/register'
-import { resetPasswordSchema } from '@/shared/validations/reset-password'
-import { toggle2FASchema } from '@/shared/validations/toggle-2fa'
-import { updatePasswordSchema } from '@/shared/validations/update-password'
-import { verifyEmailSchema } from '@/shared/validations/verify-email'
+import {
+	addPasswordSchema,
+	forgotPasswordSchema,
+	registerSchema,
+	resetPasswordSchema,
+	toggle2FASchema,
+	updatePasswordSchema,
+	verifyEmailSchema
+} from '@/shared/validations/auth'
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '@/server/api/trpc'
 import { sendPasswordResetEmail, sendVerificationEmail } from '@/server/lib/mail'
@@ -51,10 +53,6 @@ export const authRouter = createTRPCRouter({
 		await sendPasswordResetEmail(passwordResetToken.email, passwordResetToken.token)
 
 		return { message: 'Password reset email sent!' }
-	}),
-
-	getSession: publicProcedure.query(async ({ ctx }) => {
-		return ctx.session ?? null
 	}),
 
 	register: publicProcedure.input(registerSchema).mutation(async ({ ctx, input }) => {

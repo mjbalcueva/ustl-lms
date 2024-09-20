@@ -1,6 +1,15 @@
 import * as React from 'react'
 import { Slot } from '@radix-ui/react-slot'
 
+import { Icons } from '@/client/components/icons'
+import {
+	Breadcrumb,
+	BreadcrumbItem,
+	BreadcrumbLink,
+	BreadcrumbList,
+	BreadcrumbPage,
+	BreadcrumbSeparator
+} from '@/client/components/ui'
 import { cn } from '@/client/lib/utils'
 
 export const PageWrapper = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
@@ -8,7 +17,7 @@ export const PageWrapper = React.forwardRef<HTMLDivElement, React.HTMLAttributes
 		<main
 			ref={ref}
 			className={cn(
-				'flex-grow overflow-auto border-border bg-card dark:bg-background md:rounded-xl md:border',
+				'flex-grow overflow-auto border-border bg-card dark:bg-background md:rounded-xl md:border md:shadow-sm',
 				className
 			)}
 			{...props}
@@ -30,6 +39,52 @@ export const PageHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<
 	)
 )
 PageHeader.displayName = 'PageHeader'
+
+export type Crumb = {
+	label?: string
+	href?: string
+	icon?: keyof typeof Icons
+}
+export function Breadcrumbs({ crumbs }: { crumbs: Crumb[] }) {
+	const renderIcon = (icon: keyof typeof Icons) => {
+		const Icon = Icons[icon]
+		return <Icon className="size-4" />
+	}
+
+	return (
+		<Breadcrumb className="hidden w-fit sm:block">
+			<BreadcrumbList>
+				{crumbs.map((crumb, index) => (
+					<React.Fragment key={index}>
+						{index > 0 && <BreadcrumbSeparator />}
+						<BreadcrumbItem>
+							{index === crumbs.length - 1 && (
+								<BreadcrumbPage className="flex items-center gap-1.5 rounded-md bg-muted px-1.5 py-0.5 text-muted-foreground hover:cursor-default hover:text-foreground">
+									{crumb.icon && renderIcon(crumb.icon)}
+									{crumb.label}
+								</BreadcrumbPage>
+							)}
+
+							{index !== crumbs.length - 1 && crumb.href && (
+								<BreadcrumbLink href={crumb.href} className="flex items-center gap-1.5">
+									{crumb.icon && renderIcon(crumb.icon)}
+									{crumb.label}
+								</BreadcrumbLink>
+							)}
+
+							{index !== crumbs.length - 1 && !crumb.href && (
+								<span className="flex items-center gap-1.5 hover:cursor-default hover:text-foreground">
+									{crumb.icon && renderIcon(crumb.icon)}
+									{crumb.label}
+								</span>
+							)}
+						</BreadcrumbItem>
+					</React.Fragment>
+				))}
+			</BreadcrumbList>
+		</Breadcrumb>
+	)
+}
 
 export const PageTitle = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
 	({ className, ...props }, ref) => (

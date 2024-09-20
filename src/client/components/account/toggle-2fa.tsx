@@ -19,8 +19,7 @@ import {
 	ItemInnerCard,
 	ItemTitle,
 	ItemWrapper
-} from '@/client/components/item-wrapper'
-import { Loader } from '@/client/components/loader'
+} from '@/client/components/item'
 import {
 	Button,
 	Form,
@@ -29,6 +28,7 @@ import {
 	FormField,
 	FormItem,
 	FormLabel,
+	Loader,
 	Switch
 } from '@/client/components/ui'
 

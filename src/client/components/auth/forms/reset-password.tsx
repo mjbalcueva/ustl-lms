@@ -4,10 +4,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 
 import { api } from '@/shared/trpc/react'
-import { resetPasswordSchema, type ResetPasswordSchema } from '@/shared/validations/reset-password'
+import { resetPasswordSchema, type ResetPasswordSchema } from '@/shared/validations/auth'
 
 import { FormResponse } from '@/client/components/auth/form-response'
-import { Loader } from '@/client/components/loader'
 import {
 	ButtonShining,
 	Form,
@@ -16,6 +15,7 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
+	Loader,
 	PasswordInput
 } from '@/client/components/ui'
 

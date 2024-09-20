@@ -7,7 +7,7 @@ import { useForm, type SubmitHandler } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
-import { updateDisplayNameSchema, type UpdateDisplayNameSchema } from '@/shared/validations/update-display-name'
+import { updateDisplayNameSchema, type UpdateDisplayNameSchema } from '@/shared/validations/profile'
 
 import { Icons } from '@/client/components/icons'
 import {
@@ -18,9 +18,8 @@ import {
 	ItemHeader,
 	ItemTitle,
 	ItemWrapper
-} from '@/client/components/item-wrapper'
-import { Loader } from '@/client/components/loader'
-import { Button, Form, FormControl, FormField, FormItem, FormMessage, Input } from '@/client/components/ui'
+} from '@/client/components/item'
+import { Button, Form, FormControl, FormField, FormItem, FormMessage, Input, Loader } from '@/client/components/ui'
 
 export const UpdateDisplayNameForm = () => {
 	const router = useRouter()

@@ -8,7 +8,7 @@ import { LuPencil, LuPlusCircle } from 'react-icons/lu'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
-import { updateCategorySchema, type UpdateCategorySchema } from '@/shared/validations/course'
+import { updateCategorySchema, type UpdateCategorySchema } from '@/shared/validations/category'
 
 import {
 	CardContent,
@@ -42,7 +42,7 @@ export const UpdateCategory = ({ courseId, categoryId, options }: UpdateCategory
 		}
 	})
 
-	const { mutate, isPending } = api.course.updateCategory.useMutation({
+	const { mutate, isPending } = api.category.updateCategory.useMutation({
 		onSuccess: async (data) => {
 			router.refresh()
 			form.reset({
@@ -86,7 +86,12 @@ export const UpdateCategory = ({ courseId, categoryId, options }: UpdateCategory
 								render={({ field }) => (
 									<FormItem>
 										<FormControl>
-											<Combobox options={options} selected={field.value} onChange={field.onChange} />
+											<Combobox
+												options={options}
+												selected={field.value}
+												onChange={field.onChange}
+												label="Select Category..."
+											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>

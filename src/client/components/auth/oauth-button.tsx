@@ -4,8 +4,7 @@ import { useState } from 'react'
 import { signIn } from 'next-auth/react'
 import { FcGoogle } from 'react-icons/fc'
 
-import { Loader } from '@/client/components/loader'
-import { ButtonShining } from '@/client/components/ui'
+import { ButtonShining, Loader } from '@/client/components/ui'
 import { cn } from '@/client/lib/utils'
 
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes'

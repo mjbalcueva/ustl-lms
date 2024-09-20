@@ -6,7 +6,7 @@ import { AuthError } from 'next-auth'
 import { getTwoFactorConfirmationByUserId } from '@/shared/data/two-factor-confirmation'
 import { getTwoFactorTokenByEmail } from '@/shared/data/two-factor-token'
 import { getUserByEmail } from '@/shared/data/user'
-import { loginSchema, type LoginSchema } from '@/shared/validations/login'
+import { loginSchema, type LoginSchema } from '@/shared/validations/auth'
 
 import { signIn } from '@/server/lib/auth'
 import { db } from '@/server/lib/db'

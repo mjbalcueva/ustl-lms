@@ -6,7 +6,7 @@ import { api } from '@/shared/trpc/server'
 const f = createUploadthing()
 
 const handleAuth = async () => {
-	const session = await api.auth.getSession()
+	const session = await api.session.getSession()
 	if (!session) throw new UploadThingError('Unauthorized')
 
 	return { userId: session.user.id }

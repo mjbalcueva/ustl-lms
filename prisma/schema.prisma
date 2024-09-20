@@ -16,19 +16,6 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
-model Post {
-  id          Int      @id @default(autoincrement())
-  createdById String
-  name        String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  createdBy User @relation(fields: [createdById], references: [id], onDelete: Cascade)
-
-  @@index([name])
-  @@map("post")
-}
-
 model Course {
   id          String   @id @default(cuid())
   createdById String
@@ -99,7 +86,6 @@ model User {
   twoFactorTokens       TwoFactorToken[]
   twoFactorConfirmation TwoFactorConfirmation?
 
-  posts   Post[]
   courses Course[]
 
   @@map("user")

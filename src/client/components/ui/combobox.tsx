@@ -16,6 +16,7 @@ import {
 import { cn } from '@/client/lib/utils'
 
 type ComboboxProps = {
+	label: string
 	options: {
 		value: string
 		label: string
@@ -24,20 +25,20 @@ type ComboboxProps = {
 	onChange: (value: string) => void
 }
 
-export const Combobox = ({ options, selected, onChange }: ComboboxProps) => {
+export const Combobox = ({ label, options, selected, onChange }: ComboboxProps) => {
 	const [open, setOpen] = React.useState(false)
 
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
 			<PopoverTrigger asChild>
 				<Button variant="outline" role="combobox" aria-expanded={open} className="w-full justify-between">
-					{selected ? options.find((option) => option.value === selected)?.label : 'Select framework...'}
+					{selected ? options.find((option) => option.value === selected)?.label : label ? label : 'Select...'}
 					<LuChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
 				</Button>
 			</PopoverTrigger>
 			<PopoverContent className="p-0">
 				<Command>
-					<CommandInput placeholder="Search framework..." />
+					<CommandInput placeholder={label ? label : 'Search...'} />
 					<CommandList>
 						<CommandEmpty>No option found.</CommandEmpty>
 						<CommandGroup>

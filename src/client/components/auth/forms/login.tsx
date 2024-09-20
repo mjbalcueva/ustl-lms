@@ -5,12 +5,11 @@ import { useState, useTransition } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 
-import { loginSchema, type LoginSchema } from '@/shared/validations/login'
+import { loginSchema, type LoginSchema } from '@/shared/validations/auth'
 
 import { login } from '@/server/actions/login'
 
 import { FormResponse } from '@/client/components/auth/form-response'
-import { Loader } from '@/client/components/loader'
 import {
 	ButtonShining,
 	buttonVariants,
@@ -24,6 +23,7 @@ import {
 	InputOTP,
 	InputOTPGroup,
 	InputOTPSlot,
+	Loader,
 	PasswordInput
 } from '@/client/components/ui'
 import { cn } from '@/client/lib/utils'

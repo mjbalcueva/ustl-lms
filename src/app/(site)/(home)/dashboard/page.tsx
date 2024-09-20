@@ -1,17 +1,10 @@
 import { api, HydrateClient } from '@/shared/trpc/server'
 
-import {
-	PageContent,
-	PageDescription,
-	PageHeader,
-	PageSection,
-	PageTitle,
-	PageWrapper
-} from '@/client/components/page-wrapper'
+import { PageContent, PageDescription, PageHeader, PageSection, PageTitle, PageWrapper } from '@/client/components/page'
 
 export default async function Page() {
-	const session = await api.auth.getSession()
-	void api.auth.getSession.prefetch()
+	const session = await api.session.getSession()
+	void api.session.getSession.prefetch()
 
 	return (
 		<HydrateClient>
