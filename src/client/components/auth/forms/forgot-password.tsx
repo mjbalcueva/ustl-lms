@@ -7,7 +7,6 @@ import { api } from '@/shared/trpc/react'
 import { forgotPasswordSchema, type ForgotPasswordSchema } from '@/shared/validations/auth'
 
 import { FormResponse } from '@/client/components/auth/form-response'
-import { Loader } from '@/client/components/loader'
 import {
 	ButtonShining,
 	Form,
@@ -16,7 +15,8 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-	Input
+	Input,
+	Loader
 } from '@/client/components/ui'
 
 export const ForgotPasswordForm = () => {

@@ -7,7 +7,6 @@ import { api } from '@/shared/trpc/react'
 import { registerSchema, type RegisterSchema } from '@/shared/validations/auth'
 
 import { FormResponse } from '@/client/components/auth/form-response'
-import { Loader } from '@/client/components/loader'
 import {
 	ButtonShining,
 	Form,
@@ -17,6 +16,7 @@ import {
 	FormLabel,
 	FormMessage,
 	Input,
+	Loader,
 	PasswordInput
 } from '@/client/components/ui'
 

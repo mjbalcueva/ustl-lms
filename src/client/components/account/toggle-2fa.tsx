@@ -20,7 +20,6 @@ import {
 	ItemTitle,
 	ItemWrapper
 } from '@/client/components/item'
-import { Loader } from '@/client/components/loader'
 import {
 	Button,
 	Form,
@@ -29,6 +28,7 @@ import {
 	FormField,
 	FormItem,
 	FormLabel,
+	Loader,
 	Switch
 } from '@/client/components/ui'
 
