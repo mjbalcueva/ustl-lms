@@ -38,3 +38,7 @@ export const resetPasswordSchema = z.object({
 	token: z.string().optional()
 })
 export type ResetPasswordSchema = z.infer<typeof resetPasswordSchema>
+
+export const toggle2FASchema = z.object({
+	twoFactorEnabled: z.boolean()
+})

@@ -1,8 +1,13 @@
 import { TRPCError } from '@trpc/server'
 import { compare, hash } from 'bcryptjs'
 
-import { addPasswordSchema, forgotPasswordSchema, registerSchema, resetPasswordSchema } from '@/shared/validations/auth'
-import { toggle2FASchema } from '@/shared/validations/toggle-2fa'
+import {
+	addPasswordSchema,
+	forgotPasswordSchema,
+	registerSchema,
+	resetPasswordSchema,
+	toggle2FASchema
+} from '@/shared/validations/auth'
 import { updatePasswordSchema } from '@/shared/validations/update-password'
 import { verifyEmailSchema } from '@/shared/validations/verify-email'
 
