@@ -7,9 +7,9 @@ import {
 	registerSchema,
 	resetPasswordSchema,
 	toggle2FASchema,
-	updatePasswordSchema
+	updatePasswordSchema,
+	verifyEmailSchema
 } from '@/shared/validations/auth'
-import { verifyEmailSchema } from '@/shared/validations/verify-email'
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '@/server/api/trpc'
 import { sendPasswordResetEmail, sendVerificationEmail } from '@/server/lib/mail'

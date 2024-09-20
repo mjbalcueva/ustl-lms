@@ -54,3 +54,5 @@ export const updatePasswordSchema = z
 		path: ['confirmPassword']
 	})
 export type UpdatePasswordSchema = z.infer<typeof updatePasswordSchema>
+
+export const verifyEmailSchema = z.object({ token: z.string().optional() })
