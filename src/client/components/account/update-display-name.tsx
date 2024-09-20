@@ -7,7 +7,7 @@ import { useForm, type SubmitHandler } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
-import { updateDisplayNameSchema, type UpdateDisplayNameSchema } from '@/shared/validations/update-display-name'
+import { updateDisplayNameSchema, type UpdateDisplayNameSchema } from '@/shared/validations/profile'
 
 import { Icons } from '@/client/components/icons'
 import {

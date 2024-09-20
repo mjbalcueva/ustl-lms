@@ -1,4 +1,4 @@
-import { updateDisplayNameSchema } from '@/shared/validations/update-display-name'
+import { updateDisplayNameSchema } from '@/shared/validations/profile'
 
 import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc'
 
