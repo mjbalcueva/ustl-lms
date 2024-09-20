@@ -53,10 +53,6 @@ export const authRouter = createTRPCRouter({
 		return { message: 'Password reset email sent!' }
 	}),
 
-	getSession: publicProcedure.query(async ({ ctx }) => {
-		return ctx.session ?? null
-	}),
-
 	register: publicProcedure.input(registerSchema).mutation(async ({ ctx, input }) => {
 		const { name, email, password } = input
 

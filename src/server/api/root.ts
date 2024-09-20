@@ -4,6 +4,7 @@ import { categoryRouter } from '@/server/api/routers/category'
 import { courseRouter } from '@/server/api/routers/course'
 import { postRouter } from '@/server/api/routers/post'
 import { profileRouter } from '@/server/api/routers/profile'
+import { sessionRouter } from '@/server/api/routers/session'
 import { createCallerFactory, createTRPCRouter } from '@/server/api/trpc'
 
 /**
@@ -17,6 +18,7 @@ export const appRouter = createTRPCRouter({
 	category: categoryRouter,
 	course: courseRouter,
 	post: postRouter,
+	session: sessionRouter,
 	profile: profileRouter
 })
 

@@ -7,7 +7,7 @@ import { TooltipProvider } from '@/client/components/ui'
 import { DeviceTypeProvider } from '@/client/context/device-type-provider'
 
 export default async function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
-	const session = await api.auth.getSession()
+	const session = await api.session.getSession()
 
 	return (
 		<SessionProvider session={session}>
