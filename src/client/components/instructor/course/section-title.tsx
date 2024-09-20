@@ -1,6 +1,6 @@
 import { type IconType } from 'react-icons/lib'
 
-import { IconBadge } from '@/client/components/icon-badge'
+import { IconBadge } from '@/client/components/ui'
 
 const SectionTitle = ({ title, icon }: { title: string; icon: IconType }) => {
 	return (
