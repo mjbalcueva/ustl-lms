@@ -1,5 +1,3 @@
-import { UTApi } from 'uploadthing/server'
-
 import {
 	createCourseSchema,
 	getCoursesSchema,
@@ -10,8 +8,7 @@ import {
 } from '@/shared/validations/course'
 
 import { createTRPCRouter, instructorProcedure } from '@/server/api/trpc'
-
-const utapi = new UTApi()
+import { utapi } from '@/server/lib/utapi'
 
 export const courseRouter = createTRPCRouter({
 	createCourse: instructorProcedure.input(createCourseSchema).mutation(async ({ ctx, input }) => {

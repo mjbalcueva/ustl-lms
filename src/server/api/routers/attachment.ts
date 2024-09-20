@@ -1,10 +1,7 @@
-import { UTApi } from 'uploadthing/server'
-
 import { createAttachmentSchema, deleteAttachmentSchema } from '@/shared/validations/attachment'
 
 import { createTRPCRouter, instructorProcedure } from '@/server/api/trpc'
-
-const utapi = new UTApi()
+import { utapi } from '@/server/lib/utapi'
 
 export const attachmentRouter = createTRPCRouter({
 	createAttachment: instructorProcedure.input(createAttachmentSchema).mutation(async ({ ctx, input }) => {
@@ -13,7 +10,6 @@ export const attachmentRouter = createTRPCRouter({
 		const courseOwner = await ctx.db.course.findUnique({
 			where: { id: courseId, createdById: ctx.session.user.id! }
 		})
-
 		if (!courseOwner) throw new Error('Course not found')
 
 		const newAttachment = await ctx.db.attachment.create({
