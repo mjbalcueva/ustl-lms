@@ -23,7 +23,7 @@ import { Separator } from '@/client/components/ui'
 
 export default async function Page({ params }: { params: { courseId: string } }) {
 	const { course } = await api.course.getCourse({ courseId: params.courseId })
-	const { categories } = await api.course.getCategories()
+	const { categories } = await api.category.getCategories()
 
 	if (!course) return <NotFound />
 

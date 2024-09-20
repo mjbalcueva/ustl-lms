@@ -5,7 +5,6 @@ import {
 	createCourseSchema,
 	deleteAttachmentSchema,
 	getCoursesSchema,
-	updateCategorySchema,
 	updateCodeSchema,
 	updateDescriptionSchema,
 	updateImageSchema,
@@ -94,24 +93,6 @@ export const courseRouter = createTRPCRouter({
 		})
 
 		return { message: 'Course image updated!', course: updatedCourse }
-	}),
-
-	getCategories: instructorProcedure.query(async ({ ctx }) => {
-		const categories = await ctx.db.category.findMany({
-			orderBy: { name: 'asc' }
-		})
-		return { categories }
-	}),
-
-	updateCategory: instructorProcedure.input(updateCategorySchema).mutation(async ({ ctx, input }) => {
-		const { courseId, categoryId } = input
-
-		const course = await ctx.db.course.update({
-			where: { id: courseId, createdById: ctx.session.user.id! },
-			data: { categoryId }
-		})
-
-		return { message: 'Course category updated!', course }
 	}),
 
 	createAttachment: instructorProcedure.input(createAttachmentSchema).mutation(async ({ ctx, input }) => {
