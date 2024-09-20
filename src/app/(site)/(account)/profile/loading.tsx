@@ -1,4 +1,4 @@
-import { ItemContent, ItemFooter, ItemHeader, ItemWrapper } from '@/client/components/item-wrapper'
+import { ItemContent, ItemFooter, ItemHeader, ItemWrapper } from '@/client/components/item'
 import {
 	PageContainer,
 	PageContent,

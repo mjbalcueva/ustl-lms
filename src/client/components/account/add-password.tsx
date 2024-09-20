@@ -17,7 +17,7 @@ import {
 	ItemHeader,
 	ItemTitle,
 	ItemWrapper
-} from '@/client/components/item-wrapper'
+} from '@/client/components/item'
 import { Loader } from '@/client/components/loader'
 import {
 	Button,
