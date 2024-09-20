@@ -24,7 +24,7 @@ export const UpdateAttachment = ({ courseId, initialData }: UpdateAttachmentProp
 	const [deletingId, setDeletingId] = React.useState<string | null>(null)
 	const toggleEdit = () => setIsEditing((current) => !current)
 
-	const { mutate: createAttachment } = api.course.createAttachment.useMutation({
+	const { mutate: createAttachment } = api.attachment.createAttachment.useMutation({
 		onSuccess: async (data) => {
 			router.refresh()
 			toggleEdit()
@@ -35,7 +35,7 @@ export const UpdateAttachment = ({ courseId, initialData }: UpdateAttachmentProp
 		}
 	})
 
-	const { mutate: deleteAttachment } = api.course.deleteAttachment.useMutation({
+	const { mutate: deleteAttachment } = api.attachment.deleteAttachment.useMutation({
 		onSuccess: async (data) => {
 			router.refresh()
 			setDeletingId(null)
