@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 
 import { api } from '@/shared/trpc/react'
-import { registerSchema, type RegisterSchema } from '@/shared/validations/register'
+import { registerSchema, type RegisterSchema } from '@/shared/validations/auth'
 
 import { FormResponse } from '@/client/components/auth/form-response'
 import { Loader } from '@/client/components/loader'
