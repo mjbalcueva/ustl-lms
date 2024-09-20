@@ -86,7 +86,12 @@ export const UpdateCategory = ({ courseId, categoryId, options }: UpdateCategory
 								render={({ field }) => (
 									<FormItem>
 										<FormControl>
-											<Combobox options={options} selected={field.value} onChange={field.onChange} />
+											<Combobox
+												options={options}
+												selected={field.value}
+												onChange={field.onChange}
+												label="Select Category..."
+											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
