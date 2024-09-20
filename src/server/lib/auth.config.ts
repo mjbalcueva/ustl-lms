@@ -4,7 +4,7 @@ import Credentials from 'next-auth/providers/credentials'
 import Google from 'next-auth/providers/google'
 
 import { getUserByEmail } from '@/shared/data/user'
-import { loginSchema } from '@/shared/validations/login'
+import { loginSchema } from '@/shared/validations/auth'
 
 import { env } from '@/env'
 
