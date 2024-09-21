@@ -5,7 +5,7 @@ import { utapi } from '@/server/lib/utapi'
 
 export const attachmentRouter = createTRPCRouter({
 	createAttachment: instructorProcedure.input(createAttachmentSchema).mutation(async ({ ctx, input }) => {
-		const { courseId, attachmentUrl } = input
+		const { courseId, url, name } = input
 
 		const courseOwner = await ctx.db.course.findUnique({
 			where: { id: courseId, createdById: ctx.session.user.id! }
@@ -14,13 +14,13 @@ export const attachmentRouter = createTRPCRouter({
 
 		const newAttachment = await ctx.db.attachment.create({
 			data: {
-				url: attachmentUrl,
+				url,
 				courseId: courseId,
-				name: attachmentUrl.split('/').pop() ?? 'Untitled'
+				name
 			}
 		})
 
-		return { message: 'Course attachment updated!', newAttachment }
+		return { message: 'Course attachment created!', newAttachment }
 	}),
 
 	deleteAttachment: instructorProcedure.input(deleteAttachmentSchema).mutation(async ({ ctx, input }) => {
