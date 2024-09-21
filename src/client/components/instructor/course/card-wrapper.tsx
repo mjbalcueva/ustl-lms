@@ -37,7 +37,7 @@ export const CardContent = ({ isEmpty, withSeparator, children, className, ...pr
 	return (
 		children && (
 			<div
-				className={cn('px-4 pb-4 pt-0 text-sm md:px-6 md:pb-6', isEmpty && 'italic text-muted-foreground', className)}
+				className={cn('px-4 pb-4 pt-0 text-sm md:px-6', isEmpty && 'italic text-muted-foreground', className)}
 				{...props}
 			>
 				{withSeparator && <Separator className="mb-4" />}

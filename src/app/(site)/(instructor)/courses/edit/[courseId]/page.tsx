@@ -2,6 +2,7 @@ import { TbBook2, TbListDetails, TbPackage } from 'react-icons/tb'
 
 import { api, HydrateClient } from '@/shared/trpc/server'
 
+import { CreateChapters } from '@/client/components/instructor/course/forms/create-chapters'
 import { UpdateAttachment } from '@/client/components/instructor/course/forms/update-attachment'
 import { UpdateCategory } from '@/client/components/instructor/course/forms/update-category'
 import { UpdateCode } from '@/client/components/instructor/course/forms/update-code'
@@ -41,7 +42,8 @@ export default async function Page({ params }: { params: { courseId: string } })
 		course.description,
 		course.image,
 		course.categoryId,
-		course.isPublished
+		course.isPublished,
+		course.chapter.some((chapter) => chapter.isPublished)
 	]
 
 	const totalFields = requiredFields.length
@@ -79,6 +81,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 					<div className="flex flex-1 flex-col gap-6">
 						<PageSection className="!px-0">
 							<SectionTitle title="Course chapters" icon={TbListDetails} />
+							<CreateChapters courseId={course.id} initialData={{ chapters: course.chapter }} />
 						</PageSection>
 
 						<PageSection className="!px-0">
