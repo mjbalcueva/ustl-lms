@@ -16,8 +16,15 @@ export const chapterRouter = createTRPCRouter({
 			throw new TRPCError({ code: 'NOT_FOUND', message: 'Course not found' })
 		}
 
+		const lastChapter = await ctx.db.chapter.findFirst({
+			where: { courseId },
+			orderBy: { position: 'desc' }
+		})
+
+		const newPosition = lastChapter ? lastChapter.position + 1 : 1
+
 		const chapter = await ctx.db.chapter.create({
-			data: { title, courseId, position: 1 }
+			data: { title, courseId, position: newPosition }
 		})
 
 		return {

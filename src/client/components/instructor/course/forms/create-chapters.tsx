@@ -18,6 +18,7 @@ import {
 	CardTitle,
 	CardWrapper
 } from '@/client/components/instructor/course/card-wrapper'
+import { ChapterList } from '@/client/components/instructor/course/chapter-list'
 import { Button, Form, FormControl, FormField, FormItem, FormMessage, Input } from '@/client/components/ui'
 
 type UpdateDescriptionProps = {
@@ -72,7 +73,8 @@ export const CreateChapters = ({ courseId, initialData }: UpdateDescriptionProps
 
 			{!isEditing && (
 				<CardContent isEmpty={!hasChapters}>
-					{hasChapters ? initialData.chapters.map((chapter) => chapter.title) : 'No chapters found'}
+					{!hasChapters && 'No chapters'}
+					<ChapterList items={initialData.chapters} onEdit={() => {}} onReorder={() => {}} />
 				</CardContent>
 			)}
 
