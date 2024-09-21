@@ -51,13 +51,13 @@ export const ChapterList = ({ items, onEdit, onReorder }: ChapterListProps) => {
 		<DragDropContext onDragEnd={handleDragEnd}>
 			<Droppable droppableId="chapters">
 				{(provided) => (
-					<div {...provided.droppableProps} ref={provided.innerRef}>
+					<div ref={provided.innerRef} className="space-y-2" {...provided.droppableProps}>
 						{chapters.map((chapter, index) => (
 							<Draggable key={chapter.id} draggableId={chapter.id} index={index}>
 								{(provided) => (
 									<div
 										ref={provided.innerRef}
-										className={cn('item-center mb-2 flex rounded-xl border border-input bg-background')}
+										className={cn('item-center flex rounded-xl border border-input bg-background')}
 										{...provided.draggableProps}
 									>
 										<div
