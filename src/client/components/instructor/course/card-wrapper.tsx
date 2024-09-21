@@ -7,7 +7,7 @@ type CardWrapperProps = React.HTMLAttributes<HTMLDivElement>
 export const CardWrapper = ({ ...props }: CardWrapperProps) => {
 	return (
 		<div
-			className="mb-2.5 rounded-xl border border-border bg-card text-card-foreground shadow-sm sm:mb-4 md:mb-5"
+			className="mb-2.5 min-w-[350px] rounded-xl border border-border bg-card text-card-foreground shadow-sm sm:mb-4 md:mb-5"
 			{...props}
 		/>
 	)

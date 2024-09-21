@@ -5,7 +5,7 @@ import * as React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { type Chapter } from '@prisma/client'
 import { useForm, type SubmitHandler } from 'react-hook-form'
-import { LuPencil, LuPlusCircle } from 'react-icons/lu'
+import { LuPlusCircle } from 'react-icons/lu'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
@@ -63,13 +63,10 @@ export const CreateChapters = ({ courseId, initialData }: UpdateDescriptionProps
 	return (
 		<CardWrapper>
 			<CardHeader>
-				<div className="flex flex-col space-y-1.5">
-					<CardTitle>Course Chapters</CardTitle>
-				</div>
+				<CardTitle>Course Chapters</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
-					{!isEditing && hasChapters && <LuPencil className="mr-2 size-4" />}
-					{!isEditing && !hasChapters && <LuPlusCircle className="mr-2 size-4" />}
-					{isEditing ? 'Cancel' : hasChapters ? 'Edit' : 'Add'}
+					{!isEditing && <LuPlusCircle className="mr-2 size-4" />}
+					{isEditing ? 'Cancel' : 'Add'}
 				</Button>
 			</CardHeader>
 
