@@ -21,9 +21,10 @@ export const CreateCourseForm = () => {
 		}
 	})
 
-	const { mutate } = api.course.createCourse.useMutation({
+	const { mutate, isPending } = api.course.createCourse.useMutation({
 		onSuccess: async (data) => {
 			form.reset()
+
 			router.push(`/courses/edit/${data.course.id}`)
 			toast.success(data.message)
 		},
@@ -70,7 +71,7 @@ export const CreateCourseForm = () => {
 						<Button type="button" variant="outline" className="rounded-md">
 							Cancel
 						</Button>
-						<Button type="submit" className="rounded-md">
+						<Button type="submit" className="rounded-md" disabled={isPending}>
 							Create Course
 						</Button>
 					</div>
