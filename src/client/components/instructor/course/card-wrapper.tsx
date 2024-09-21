@@ -3,11 +3,13 @@ import * as React from 'react'
 import { Separator } from '@/client/components/ui'
 import { cn } from '@/client/lib/utils'
 
-type CardWrapperProps = React.HTMLAttributes<HTMLDivElement>
-export const CardWrapper = ({ ...props }: CardWrapperProps) => {
+export const CardWrapper = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
 	return (
 		<div
-			className="mb-2 min-w-[350px] rounded-xl border border-border bg-card text-card-foreground shadow-sm sm:mb-3 md:mb-4"
+			className={cn(
+				'mb-2 min-w-[350px] rounded-xl border border-border bg-card text-card-foreground shadow-sm sm:mb-3 md:mb-4',
+				className
+			)}
 			{...props}
 		/>
 	)

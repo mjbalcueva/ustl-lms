@@ -4,7 +4,6 @@ import * as React from 'react'
 import { DragDropContext, Draggable, Droppable, type DropResult } from '@hello-pangea/dnd'
 import { type Chapter } from '@prisma/client'
 import { LuGripVertical, LuPencil } from 'react-icons/lu'
-import { useIsMounted } from 'usehooks-ts'
 
 import { Badge } from '@/client/components/ui'
 import { cn } from '@/client/lib/utils'
@@ -17,7 +16,6 @@ type ChapterListProps = {
 
 export const ChapterList = ({ items, onEdit, onReorder }: ChapterListProps) => {
 	const [chapters, setChapters] = React.useState(items)
-	const isMounted = useIsMounted()
 
 	React.useEffect(() => {
 		setChapters(items)
@@ -45,8 +43,6 @@ export const ChapterList = ({ items, onEdit, onReorder }: ChapterListProps) => {
 		onReorder(bulkUpdateData)
 	}
 
-	if (!isMounted) return null
-
 	return (
 		<DragDropContext onDragEnd={handleDragEnd}>
 			<Droppable droppableId="chapters">
@@ -62,19 +58,19 @@ export const ChapterList = ({ items, onEdit, onReorder }: ChapterListProps) => {
 									>
 										<div
 											className={cn(
-												'flex h-10 items-center rounded-l-xl border-r border-input px-1 text-muted-foreground outline-none hover:bg-secondary hover:text-secondary-foreground focus:bg-secondary focus-visible:outline-ring'
+												'flex h-10 items-center rounded-l-xl px-1 text-muted-foreground outline-none hover:bg-secondary hover:text-secondary-foreground focus:bg-secondary focus-visible:outline-ring'
 											)}
 											{...provided.dragHandleProps}
 										>
 											<LuGripVertical className="size-5" />
 										</div>
-										<span className="flex flex-1 items-center px-2">{chapter.title}</span>
+										<span className="flex flex-1 items-center px-1">{chapter.title}</span>
 										<div className="flex items-center gap-x-1.5 pr-1">
 											<Badge variant={chapter.isPublished ? 'default' : 'secondary'} className="select-none">
 												{chapter.isPublished ? 'Published' : 'Draft'}
 											</Badge>
 											<button
-												className="rounded-lg p-2 outline-none hover:opacity-75 focus-visible:outline-ring"
+												className="rounded-lg px-2 py-0.5 outline-none hover:opacity-75 focus-visible:outline-ring"
 												onClick={() => onEdit(chapter.id)}
 											>
 												<LuPencil className="size-4" />
