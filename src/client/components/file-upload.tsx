@@ -4,7 +4,7 @@ import { toast } from 'sonner'
 import { type OurFileRouter } from '@/app/api/uploadthing/core'
 
 type FileUploadProps = {
-	onChange: (url?: string | undefined) => void
+	onChange: (url?: string, name?: string) => void
 	endpoint: keyof OurFileRouter
 }
 
@@ -12,7 +12,7 @@ export const FileUpload = ({ onChange, endpoint }: FileUploadProps) => (
 	<UploadDropzone<OurFileRouter, typeof endpoint>
 		endpoint={endpoint}
 		onClientUploadComplete={(res) => {
-			onChange(res[0]?.url)
+			onChange(res[0]?.url, res[0]?.name)
 		}}
 		onUploadError={(error: Error) => {
 			toast.error(`ERROR! ${error?.message}`)

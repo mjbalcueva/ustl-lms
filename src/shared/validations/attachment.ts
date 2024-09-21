@@ -2,7 +2,8 @@ import { z } from 'zod'
 
 export const createAttachmentSchema = z.object({
 	courseId: z.string().min(1, 'Course ID is required'),
-	attachmentUrl: z.string().min(1, 'Attachment URL is required')
+	url: z.string().min(1, 'Attachment URL is required'),
+	name: z.string().min(1, 'Attachment name is required')
 })
 export type CreateAttachmentSchema = z.infer<typeof createAttachmentSchema>
 

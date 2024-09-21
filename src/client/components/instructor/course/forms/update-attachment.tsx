@@ -92,7 +92,13 @@ export const UpdateAttachment = ({ courseId, initialData }: UpdateAttachmentProp
 				{isEditing && (
 					<FileUpload
 						endpoint="attachmentUpload"
-						onChange={(url) => createAttachment({ courseId, attachmentUrl: url ?? '' })}
+						onChange={(url, name) =>
+							createAttachment({
+								courseId,
+								url: url ?? '',
+								name: name ?? ''
+							})
+						}
 					/>
 				)}
 			</CardContent>

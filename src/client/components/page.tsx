@@ -66,7 +66,10 @@ export function Breadcrumbs({ crumbs }: { crumbs: Crumb[] }) {
 							)}
 
 							{index !== crumbs.length - 1 && crumb.href && (
-								<BreadcrumbLink href={crumb.href} className="flex items-center gap-1.5">
+								<BreadcrumbLink
+									href={crumb.href}
+									className="flex items-center gap-1.5 underline-offset-4 hover:underline"
+								>
 									{crumb.icon && renderIcon(crumb.icon)}
 									{crumb.label}
 								</BreadcrumbLink>

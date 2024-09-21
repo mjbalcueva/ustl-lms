@@ -59,6 +59,8 @@ export const UpdateCategory = ({ courseId, categoryId, options }: UpdateCategory
 
 	const onSubmit: SubmitHandler<UpdateCategorySchema> = (data) => mutate(data)
 
+	const selectedCategory = options.find((option) => option.value === categoryId)
+
 	return (
 		<CardWrapper>
 			<CardHeader>
@@ -73,7 +75,7 @@ export const UpdateCategory = ({ courseId, categoryId, options }: UpdateCategory
 			</CardHeader>
 
 			{!isEditing && (
-				<CardContent isEmpty={!categoryId}>{categoryId ? categoryId : 'No category selected'}</CardContent>
+				<CardContent isEmpty={!categoryId}>{categoryId ? selectedCategory?.label : 'No category selected'}</CardContent>
 			)}
 
 			{isEditing && (
