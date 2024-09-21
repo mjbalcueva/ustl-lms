@@ -19,6 +19,7 @@ import {
 	TbLogout,
 	TbMessage,
 	TbMoonStars,
+	TbNotes,
 	TbPaint,
 	TbPresentationAnalytics,
 	TbSchool,
@@ -70,6 +71,9 @@ export const Icons = {
 	publishedCourse: TbBook2,
 	draftCourse: TbEdit,
 	archivedCourse: TbArchive,
+
+	// chapter
+	chapter: TbNotes,
 
 	// misc
 	filter: TbFilter,

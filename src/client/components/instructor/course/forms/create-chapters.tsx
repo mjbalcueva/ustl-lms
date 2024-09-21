@@ -43,7 +43,7 @@ export const CreateChapters = ({ courseId, initialData }: UpdateDescriptionProps
 	})
 
 	const onEdit = (id: string) => {
-		router.push(`/instructor/courses/edit/${courseId}/chapters/${id}`)
+		router.push(`/courses/edit/${courseId}/chapters/${id}`)
 	}
 
 	const { mutate: reorder, isPending: isReordering } = api.chapter.reorderChapters.useMutation({
