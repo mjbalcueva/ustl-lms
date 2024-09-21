@@ -2,7 +2,12 @@ import { Breadcrumbs, PageDescription, PageHeader, PageTitle, PageWrapper, type 
 import { Separator } from '@/client/components/ui'
 
 const NotFound = () => {
-	const crumbs: Crumb[] = [{ icon: 'instructor' }, { label: '404', href: '/404' }, { label: 'Page Not Found' }]
+	const crumbs: Crumb[] = [
+		{ icon: 'instructor' },
+		{ label: 'Error' },
+		{ label: '404', href: '/404' },
+		{ label: 'Page Not Found' }
+	]
 
 	return (
 		<PageWrapper>

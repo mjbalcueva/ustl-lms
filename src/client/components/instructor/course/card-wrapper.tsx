@@ -3,11 +3,13 @@ import * as React from 'react'
 import { Separator } from '@/client/components/ui'
 import { cn } from '@/client/lib/utils'
 
-type CardWrapperProps = React.HTMLAttributes<HTMLDivElement>
-export const CardWrapper = ({ ...props }: CardWrapperProps) => {
+export const CardWrapper = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
 	return (
 		<div
-			className="mb-2.5 rounded-xl border border-border bg-card text-card-foreground shadow-sm sm:mb-4 md:mb-5"
+			className={cn(
+				'mb-2 min-w-[350px] rounded-xl border border-border bg-card text-card-foreground shadow-sm sm:mb-3 md:mb-4',
+				className
+			)}
 			{...props}
 		/>
 	)
@@ -37,7 +39,7 @@ export const CardContent = ({ isEmpty, withSeparator, children, className, ...pr
 	return (
 		children && (
 			<div
-				className={cn('px-4 pb-4 pt-0 text-sm md:px-6 md:pb-6', isEmpty && 'italic text-muted-foreground', className)}
+				className={cn('px-4 pb-4 pt-0 text-sm md:px-6', isEmpty && 'italic text-muted-foreground', className)}
 				{...props}
 			>
 				{withSeparator && <Separator className="mb-4" />}

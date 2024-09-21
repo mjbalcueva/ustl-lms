@@ -1,6 +1,7 @@
 import { attachmentRouter } from '@/server/api/routers/attachment'
 import { authRouter } from '@/server/api/routers/auth'
 import { categoryRouter } from '@/server/api/routers/category'
+import { chapterRouter } from '@/server/api/routers/chapter'
 import { courseRouter } from '@/server/api/routers/course'
 import { profileRouter } from '@/server/api/routers/profile'
 import { sessionRouter } from '@/server/api/routers/session'
@@ -15,6 +16,7 @@ export const appRouter = createTRPCRouter({
 	attachment: attachmentRouter,
 	auth: authRouter,
 	category: categoryRouter,
+	chapter: chapterRouter,
 	course: courseRouter,
 	session: sessionRouter,
 	profile: profileRouter
