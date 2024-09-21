@@ -62,7 +62,7 @@ export const ChapterList = ({ items, onEdit, onReorder }: ChapterListProps) => {
 									>
 										<div
 											className={cn(
-												'flex h-10 items-center rounded-l-xl border-r border-input px-1 text-muted-foreground hover:bg-secondary hover:text-secondary-foreground'
+												'flex h-10 items-center rounded-l-xl border-r border-input px-1 text-muted-foreground outline-none hover:bg-secondary hover:text-secondary-foreground focus:bg-secondary focus-visible:outline-ring'
 											)}
 											{...provided.dragHandleProps}
 										>
@@ -73,7 +73,10 @@ export const ChapterList = ({ items, onEdit, onReorder }: ChapterListProps) => {
 											<Badge variant={chapter.isPublished ? 'default' : 'secondary'} className="select-none">
 												{chapter.isPublished ? 'Published' : 'Draft'}
 											</Badge>
-											<button className="rounded-lg p-2 hover:opacity-75" onClick={() => onEdit(chapter.id)}>
+											<button
+												className="rounded-lg p-2 outline-none hover:opacity-75 focus-visible:outline-ring"
+												onClick={() => onEdit(chapter.id)}
+											>
 												<LuPencil className="size-4" />
 											</button>
 										</div>

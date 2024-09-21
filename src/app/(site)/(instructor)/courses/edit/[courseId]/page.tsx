@@ -64,8 +64,8 @@ export default async function Page({ params }: { params: { courseId: string } })
 					<PageDescription>Completed {completionText}</PageDescription>
 				</PageHeader>
 
-				<PageContent className="gap-6 px-2.5 sm:px-4 md:flex md:flex-wrap md:px-6">
-					<PageSection className="mb-8 flex-1 !px-0">
+				<PageContent className="gap-4 px-2.5 sm:px-4 md:flex md:flex-wrap md:gap-6 md:px-6">
+					<PageSection className="mb-6 flex-1 !px-0 md:mb-0">
 						<SectionTitle title="Customize your course" icon={TbBook2} />
 						<UpdateCode courseId={course.id} initialData={{ code: course.code }} />
 						<UpdateTitle courseId={course.id} initialData={{ title: course.title }} />
@@ -78,7 +78,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 						/>
 					</PageSection>
 
-					<div className="flex flex-1 flex-col gap-6">
+					<div className="flex flex-1 flex-col gap-4 md:gap-6">
 						<PageSection className="!px-0">
 							<SectionTitle title="Course chapters" icon={TbListDetails} />
 							<CreateChapters courseId={course.id} initialData={{ chapters: course.chapter }} />
