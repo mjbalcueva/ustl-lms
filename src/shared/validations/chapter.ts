@@ -17,3 +17,14 @@ export const updateChapterSchema = z.object({
 	)
 })
 export type UpdateChapterSchema = z.infer<typeof updateChapterSchema>
+
+export const reorderChaptersSchema = z.object({
+	courseId: z.string().min(1, 'Course ID is required'),
+	chapterList: z.array(
+		z.object({
+			id: z.string().min(1, 'Chapter ID is required'),
+			position: z.number()
+		})
+	)
+})
+export type ReorderChaptersSchema = z.infer<typeof reorderChaptersSchema>

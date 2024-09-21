@@ -42,7 +42,25 @@ export const CreateChapters = ({ courseId, initialData }: UpdateDescriptionProps
 		}
 	})
 
-	const { mutate, isPending } = api.chapter.createChapter.useMutation({
+	const onEdit = (id: string) => {
+		console.log(id)
+	}
+
+	const { mutate: reorderChapters } = api.chapter.reorderChapters.useMutation({
+		onSuccess: (data) => {
+			toast.success(data.message)
+		},
+
+		onError: (error) => {
+			toast.error(error.message)
+		}
+	})
+
+	const onReorder = async (updateData: { id: string; position: number }[]) => {
+		reorderChapters({ courseId, chapterList: updateData })
+	}
+
+	const { mutate: createChapter, isPending: isCreatingChapter } = api.chapter.createChapter.useMutation({
 		onSuccess: async (data) => {
 			router.refresh()
 			form.reset({
@@ -57,7 +75,7 @@ export const CreateChapters = ({ courseId, initialData }: UpdateDescriptionProps
 		}
 	})
 
-	const onSubmit: SubmitHandler<CreateChapterSchema> = (data) => mutate(data)
+	const onSubmit: SubmitHandler<CreateChapterSchema> = (data) => createChapter(data)
 
 	const hasChapters = initialData.chapters.length > 0
 
@@ -74,7 +92,7 @@ export const CreateChapters = ({ courseId, initialData }: UpdateDescriptionProps
 			{!isEditing && (
 				<CardContent isEmpty={!hasChapters}>
 					{!hasChapters && 'No chapters'}
-					<ChapterList items={initialData.chapters} onEdit={() => {}} onReorder={() => {}} />
+					<ChapterList items={initialData.chapters} onEdit={onEdit} onReorder={onReorder} />
 				</CardContent>
 			)}
 
@@ -88,7 +106,7 @@ export const CreateChapters = ({ courseId, initialData }: UpdateDescriptionProps
 								render={({ field }) => (
 									<FormItem className="flex-1">
 										<FormControl>
-											<Input placeholder="e.g. 'Introduction to the course'" disabled={isPending} {...field} />
+											<Input placeholder="e.g. 'Introduction to the course'" disabled={isCreatingChapter} {...field} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -96,7 +114,7 @@ export const CreateChapters = ({ courseId, initialData }: UpdateDescriptionProps
 							/>
 						</CardContent>
 						<CardFooter>
-							<Button type="submit" size="card" disabled={!form.formState.isDirty || isPending}>
+							<Button type="submit" size="card" disabled={!form.formState.isDirty || isCreatingChapter}>
 								Add
 							</Button>
 						</CardFooter>

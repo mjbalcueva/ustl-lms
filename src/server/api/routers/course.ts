@@ -32,7 +32,7 @@ export const courseRouter = createTRPCRouter({
 			where: { id: courseId, createdById: ctx.session.user.id! },
 			include: {
 				attachment: { orderBy: { createdAt: 'desc' } },
-				chapter: { orderBy: { createdAt: 'asc' } }
+				chapter: { orderBy: { position: 'asc' } }
 			}
 		})
 

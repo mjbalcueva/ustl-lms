@@ -1,6 +1,6 @@
 import { TRPCError } from '@trpc/server'
 
-import { createChapterSchema } from '@/shared/validations/chapter'
+import { createChapterSchema, reorderChaptersSchema } from '@/shared/validations/chapter'
 
 import { createTRPCRouter, instructorProcedure } from '@/server/api/trpc'
 
@@ -31,5 +31,20 @@ export const chapterRouter = createTRPCRouter({
 			chapterId: chapter.id,
 			message: 'Chapter created successfully'
 		}
+	}),
+
+	reorderChapters: instructorProcedure.input(reorderChaptersSchema).mutation(async ({ ctx, input }) => {
+		const { courseId, chapterList } = input
+
+		for (const chapter of chapterList) {
+			const newPosition = chapter.position + 1
+
+			await ctx.db.chapter.update({
+				where: { id: chapter.id, courseId },
+				data: { position: newPosition }
+			})
+		}
+
+		return { message: 'Chapters reordered successfully' }
 	})
 })
