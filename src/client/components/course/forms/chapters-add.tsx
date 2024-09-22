@@ -11,24 +11,31 @@ import { toast } from 'sonner'
 import { api } from '@/shared/trpc/react'
 import { createChapterSchema, type CreateChapterSchema } from '@/shared/validations/chapter'
 
+import { ChapterList } from '@/client/components/course/chapter-list'
 import {
+	Button,
+	Card,
 	CardContent,
 	CardFooter,
 	CardHeader,
 	CardTitle,
-	CardWrapper
-} from '@/client/components/instructor/course/card-wrapper'
-import { ChapterList } from '@/client/components/instructor/course/chapter-list'
-import { Button, Form, FormControl, FormField, FormItem, FormMessage, Input, Loader } from '@/client/components/ui'
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormMessage,
+	Input,
+	Loader
+} from '@/client/components/ui'
 
-type UpdateDescriptionProps = {
+type ChaptersAddProps = {
 	courseId: string
 	initialData: {
 		chapters: Chapter[]
 	}
 }
 
-export const CreateChapters = ({ courseId, initialData }: UpdateDescriptionProps) => {
+export const ChaptersAdd = ({ courseId, initialData }: ChaptersAddProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -77,7 +84,7 @@ export const CreateChapters = ({ courseId, initialData }: UpdateDescriptionProps
 	const hasChapters = initialData.chapters.length > 0
 
 	return (
-		<CardWrapper className="relative">
+		<Card className="relative">
 			{isReordering && (
 				<div className="absolute flex h-full w-full items-center justify-center rounded-xl bg-background/40">
 					<Loader variant="bars" size="medium" />
@@ -130,6 +137,6 @@ export const CreateChapters = ({ courseId, initialData }: UpdateDescriptionProps
 					<span className="text-sm text-muted-foreground">Drag and drop the chapters to reorder them</span>
 				</CardFooter>
 			)}
-		</CardWrapper>
+		</Card>
 	)
 }

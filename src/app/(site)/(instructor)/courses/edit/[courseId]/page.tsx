@@ -5,11 +5,11 @@ import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
 import { AttachmentEdit } from '@/client/components/course/forms/attachment-edit'
 import { CategoryEdit } from '@/client/components/course/forms/category-edit'
+import { ChaptersAdd } from '@/client/components/course/forms/chapters-add'
 import { CodeEdit } from '@/client/components/course/forms/code-edit'
 import { DescriptionEdit } from '@/client/components/course/forms/description-edit'
 import { ImageEdit } from '@/client/components/course/forms/image-edit'
 import { TitleEdit } from '@/client/components/course/forms/title-edit'
-import { CreateChapters } from '@/client/components/instructor/course/forms/create-chapters'
 import { NotFound } from '@/client/components/not-found'
 import {
 	PageBreadcrumbs,
@@ -81,7 +81,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 					<div className="flex flex-1 flex-col gap-4 md:gap-6">
 						<PageSection compactMode>
 							<PageSectionTitle title="Course chapters" icon={TbListDetails} />
-							<CreateChapters courseId={course.id} initialData={{ chapters: course.chapter }} />
+							<ChaptersAdd courseId={course.id} initialData={{ chapters: course.chapter }} />
 						</PageSection>
 
 						<PageSection compactMode>
