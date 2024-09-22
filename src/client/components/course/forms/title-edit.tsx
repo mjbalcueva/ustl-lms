@@ -11,22 +11,28 @@ import { api } from '@/shared/trpc/react'
 import { updateTitleSchema, type UpdateTitleSchema } from '@/shared/validations/course'
 
 import {
+	Button,
+	Card,
 	CardContent,
 	CardFooter,
 	CardHeader,
 	CardTitle,
-	CardWrapper
-} from '@/client/components/instructor/course/card-wrapper'
-import { Button, Form, FormControl, FormField, FormItem, FormMessage, Input } from '@/client/components/ui'
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormMessage,
+	Input
+} from '@/client/components/ui'
 
-type UpdateTitleProps = {
+type TitleEditProps = {
 	courseId: string
 	initialData: {
 		title: string
 	}
 }
 
-export const UpdateTitle = ({ courseId, initialData }: UpdateTitleProps) => {
+export const TitleEdit = ({ courseId, initialData }: TitleEditProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -58,7 +64,7 @@ export const UpdateTitle = ({ courseId, initialData }: UpdateTitleProps) => {
 	const onSubmit: SubmitHandler<UpdateTitleSchema> = (data) => mutate(data)
 
 	return (
-		<CardWrapper>
+		<Card>
 			<CardHeader>
 				<CardTitle>Course Title</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
@@ -94,6 +100,6 @@ export const UpdateTitle = ({ courseId, initialData }: UpdateTitleProps) => {
 					</form>
 				</Form>
 			)}
-		</CardWrapper>
+		</Card>
 	)
 }
