@@ -93,7 +93,7 @@ export function Breadcrumbs({ crumbs }: { crumbs: Crumb[] }) {
 
 export const PageTitle = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
 	({ className, ...props }, ref) => (
-		<h1 ref={ref} className={cn('w-fit text-2xl font-semibold leading-none tracking-tight', className)} {...props} />
+		<h1 ref={ref} className={cn('w-fit text-2xl font-semibold leading-none', className)} {...props} />
 	)
 )
 PageTitle.displayName = 'PageTitle'
@@ -130,9 +130,9 @@ PageSection.displayName = 'PageSection'
 
 export const PageSectionTitle = ({ title, icon }: { title: string; icon: IconType }) => {
 	return (
-		<div className="mb-2.5 flex items-center gap-x-2 sm:mb-4 md:mb-5">
+		<h2 className="mb-2.5 flex items-center gap-x-2 text-xl sm:mb-4 md:mb-5">
 			<IconBadge icon={icon} />
-			<h2 className="text-xl">{title}</h2>
-		</div>
+			{title}
+		</h2>
 	)
 }
