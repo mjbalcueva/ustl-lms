@@ -35,7 +35,10 @@ export const EditCodeForm = ({ courseId, initialData }: EditCodeProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
-	const toggleEdit = () => setIsEditing((current) => !current)
+	const toggleEdit = () => {
+		setIsEditing((current) => !current)
+		form.reset()
+	}
 
 	const form = useForm<UpdateCodeSchema>({
 		resolver: zodResolver(updateCodeSchema),

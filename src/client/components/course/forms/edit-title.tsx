@@ -36,7 +36,10 @@ export const EditTitleForm = ({ courseId, initialData }: EditTitleProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
-	const toggleEdit = () => setIsEditing((current) => !current)
+	const toggleEdit = () => {
+		setIsEditing((current) => !current)
+		form.reset()
+	}
 
 	const form = useForm<UpdateTitleSchema>({
 		resolver: zodResolver(updateTitleSchema),

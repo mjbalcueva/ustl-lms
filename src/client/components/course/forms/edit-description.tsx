@@ -36,7 +36,10 @@ export const EditDescriptionForm = ({ courseId, initialData }: EditDescriptionPr
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
-	const toggleEdit = () => setIsEditing((current) => !current)
+	const toggleEdit = () => {
+		setIsEditing((current) => !current)
+		form.reset()
+	}
 
 	const form = useForm<UpdateDescriptionSchema>({
 		resolver: zodResolver(updateDescriptionSchema),

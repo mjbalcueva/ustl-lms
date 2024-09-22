@@ -38,7 +38,10 @@ export const EditCategoriesForm = ({ courseId, categoryId, options }: EditCatego
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
-	const toggleEdit = () => setIsEditing((current) => !current)
+	const toggleEdit = () => {
+		setIsEditing((current) => !current)
+		form.reset()
+	}
 
 	const form = useForm<UpdateCategorySchema>({
 		resolver: zodResolver(updateCategorySchema),

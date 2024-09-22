@@ -72,10 +72,8 @@ export const EditImageForm = ({ courseId, initialData }: EditImageProps) => {
 			</CardContent>
 
 			{isEditing && (
-				<CardFooter>
-					<span className="text-sm text-muted-foreground">
-						Upload a captivating course image that represents your content and engages your students.
-					</span>
+				<CardFooter className="text-sm text-muted-foreground">
+					Upload a captivating course image that represents your content and engages your students.
 				</CardFooter>
 			)}
 		</Card>

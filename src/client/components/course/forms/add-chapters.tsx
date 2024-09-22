@@ -39,7 +39,10 @@ export const AddChaptersForm = ({ courseId, initialData }: AddChaptersProps) => 
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
-	const toggleEdit = () => setIsEditing((current) => !current)
+	const toggleEdit = () => {
+		setIsEditing((current) => !current)
+		form.reset()
+	}
 
 	const form = useForm<CreateChapterSchema>({
 		resolver: zodResolver(createChapterSchema),
@@ -133,9 +136,7 @@ export const AddChaptersForm = ({ courseId, initialData }: AddChaptersProps) => 
 			)}
 
 			{!isEditing && (
-				<CardFooter>
-					<span className="text-sm text-muted-foreground">Drag and drop the chapters to reorder them</span>
-				</CardFooter>
+				<CardFooter className="text-sm text-muted-foreground">Drag and drop the chapters to reorder them</CardFooter>
 			)}
 		</Card>
 	)
