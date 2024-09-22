@@ -127,8 +127,13 @@ export const AddChaptersForm = ({ courseId, initialData }: AddChaptersProps) => 
 							/>
 						</CardContent>
 						<CardFooter>
-							<Button type="submit" size="card" disabled={!form.formState.isDirty || isCreating}>
-								Add
+							<Button
+								type="submit"
+								size="card"
+								disabled={!form.formState.isDirty || isCreating}
+								variant={isCreating ? 'shine' : 'default'}
+							>
+								{isCreating ? 'Adding...' : 'Add'}
 							</Button>
 						</CardFooter>
 					</form>

@@ -98,10 +98,8 @@ export const AddAttachmentsForm = ({ courseId, initialData }: AddAttachmentsProp
 			</CardContent>
 
 			{isEditing && (
-				<CardFooter>
-					<span className="text-sm text-muted-foreground">
-						Add anything your students might need to complete the course
-					</span>
+				<CardFooter className="text-sm text-muted-foreground">
+					Add anything your students might need to complete the course
 				</CardFooter>
 			)}
 		</Card>
