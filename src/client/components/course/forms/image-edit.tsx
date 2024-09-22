@@ -9,23 +9,16 @@ import { toast } from 'sonner'
 import { api } from '@/shared/trpc/react'
 
 import { FileUpload } from '@/client/components/file-upload'
-import {
-	CardContent,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-	CardWrapper
-} from '@/client/components/instructor/course/card-wrapper'
-import { Button } from '@/client/components/ui'
+import { Button, Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/client/components/ui'
 
-type UpdateImageProps = {
+type ImageEditProps = {
 	courseId: string
 	initialData: {
 		image: string
 	}
 }
 
-export const UpdateImage = ({ courseId, initialData }: UpdateImageProps) => {
+export const ImageEdit = ({ courseId, initialData }: ImageEditProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -43,7 +36,7 @@ export const UpdateImage = ({ courseId, initialData }: UpdateImageProps) => {
 	})
 
 	return (
-		<CardWrapper>
+		<Card>
 			<CardHeader>
 				<CardTitle>Course Image</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
@@ -85,6 +78,6 @@ export const UpdateImage = ({ courseId, initialData }: UpdateImageProps) => {
 					</span>
 				</CardFooter>
 			)}
-		</CardWrapper>
+		</Card>
 	)
 }

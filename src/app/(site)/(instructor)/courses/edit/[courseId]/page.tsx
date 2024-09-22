@@ -3,13 +3,13 @@ import { TbBook2, TbListDetails, TbPackage } from 'react-icons/tb'
 import { api, HydrateClient } from '@/shared/trpc/server'
 import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
+import { CategoryEdit } from '@/client/components/course/forms/category-edit'
 import { CodeEdit } from '@/client/components/course/forms/code-edit'
+import { DescriptionEdit } from '@/client/components/course/forms/description-edit'
+import { ImageEdit } from '@/client/components/course/forms/image-edit'
 import { TitleEdit } from '@/client/components/course/forms/title-edit'
 import { CreateChapters } from '@/client/components/instructor/course/forms/create-chapters'
 import { UpdateAttachment } from '@/client/components/instructor/course/forms/update-attachment'
-import { UpdateCategory } from '@/client/components/instructor/course/forms/update-category'
-import { UpdateDescription } from '@/client/components/instructor/course/forms/update-description'
-import { UpdateImage } from '@/client/components/instructor/course/forms/update-image'
 import { NotFound } from '@/client/components/not-found'
 import {
 	PageBreadcrumbs,
@@ -69,9 +69,9 @@ export default async function Page({ params }: { params: { courseId: string } })
 						<PageSectionTitle title="Customize your course" icon={TbBook2} />
 						<CodeEdit courseId={course.id} initialData={{ code: course.code }} />
 						<TitleEdit courseId={course.id} initialData={{ title: course.title }} />
-						<UpdateDescription courseId={course.id} initialData={{ description: course.description ?? '' }} />
-						<UpdateImage courseId={course.id} initialData={{ image: course.image ?? '' }} />
-						<UpdateCategory
+						<DescriptionEdit courseId={course.id} initialData={{ description: course.description ?? '' }} />
+						<ImageEdit courseId={course.id} initialData={{ image: course.image ?? '' }} />
+						<CategoryEdit
 							courseId={course.id}
 							categoryId={course.categoryId ?? ''}
 							options={categories.map((category) => ({ value: category.id, label: category.name }))}

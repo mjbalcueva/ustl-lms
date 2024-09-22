@@ -11,22 +11,28 @@ import { api } from '@/shared/trpc/react'
 import { updateDescriptionSchema, type UpdateDescriptionSchema } from '@/shared/validations/course'
 
 import {
+	Button,
+	Card,
 	CardContent,
 	CardFooter,
 	CardHeader,
 	CardTitle,
-	CardWrapper
-} from '@/client/components/instructor/course/card-wrapper'
-import { Button, Form, FormControl, FormField, FormItem, FormMessage, Textarea } from '@/client/components/ui'
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormMessage,
+	Textarea
+} from '@/client/components/ui'
 
-type UpdateDescriptionProps = {
+type DescriptionEditProps = {
 	courseId: string
 	initialData: {
 		description: string
 	}
 }
 
-export const UpdateDescription = ({ courseId, initialData }: UpdateDescriptionProps) => {
+export const DescriptionEdit = ({ courseId, initialData }: DescriptionEditProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -58,7 +64,7 @@ export const UpdateDescription = ({ courseId, initialData }: UpdateDescriptionPr
 	const onSubmit: SubmitHandler<UpdateDescriptionSchema> = (data) => mutate(data)
 
 	return (
-		<CardWrapper>
+		<Card>
 			<CardHeader>
 				<CardTitle>Course Description</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
@@ -99,6 +105,6 @@ export const UpdateDescription = ({ courseId, initialData }: UpdateDescriptionPr
 					</form>
 				</Form>
 			)}
-		</CardWrapper>
+		</Card>
 	)
 }
