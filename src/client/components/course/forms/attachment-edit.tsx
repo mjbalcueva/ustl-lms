@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { type Attachment } from '@prisma/client'
-import { LuFile, LuLoader, LuPencil, LuPlusCircle, LuX } from 'react-icons/lu'
+import { LuFile, LuLoader, LuPlusCircle, LuX } from 'react-icons/lu'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
@@ -50,10 +50,8 @@ export const AttachmentEdit = ({ courseId, initialData }: AttachmentEditProps) =
 			<CardHeader>
 				<CardTitle>Course Attachment</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
-					{!isEditing && initialData.attachment && <LuPencil className="mr-2 size-4" />}
-					{!isEditing && !initialData.attachment && <LuPlusCircle className="mr-2 size-4" />}
-
-					{isEditing ? 'Cancel' : initialData.attachment ? 'Edit' : 'Add'}
+					{!isEditing && <LuPlusCircle className="mr-2 size-4" />}
+					{isEditing ? 'Cancel' : 'Add'}
 				</Button>
 			</CardHeader>
 
