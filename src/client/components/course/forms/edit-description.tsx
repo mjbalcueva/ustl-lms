@@ -11,22 +11,28 @@ import { api } from '@/shared/trpc/react'
 import { updateDescriptionSchema, type UpdateDescriptionSchema } from '@/shared/validations/course'
 
 import {
+	Button,
+	Card,
 	CardContent,
 	CardFooter,
 	CardHeader,
 	CardTitle,
-	CardWrapper
-} from '@/client/components/instructor/course/card-wrapper'
-import { Button, Form, FormControl, FormField, FormItem, FormMessage, Textarea } from '@/client/components/ui'
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormMessage,
+	Textarea
+} from '@/client/components/ui'
 
-type UpdateDescriptionProps = {
+type EditDescriptionProps = {
 	courseId: string
 	initialData: {
 		description: string
 	}
 }
 
-export const UpdateDescription = ({ courseId, initialData }: UpdateDescriptionProps) => {
+export const EditDescriptionForm = ({ courseId, initialData }: EditDescriptionProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -58,11 +64,9 @@ export const UpdateDescription = ({ courseId, initialData }: UpdateDescriptionPr
 	const onSubmit: SubmitHandler<UpdateDescriptionSchema> = (data) => mutate(data)
 
 	return (
-		<CardWrapper>
+		<Card>
 			<CardHeader>
-				<div className="flex flex-col space-y-1.5">
-					<CardTitle>Course Description</CardTitle>
-				</div>
+				<CardTitle>Course Description</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
 					{!isEditing && initialData.description && <LuPencil className="mr-2 size-4" />}
 					{!isEditing && !initialData.description && <LuPlusCircle className="mr-2 size-4" />}
@@ -101,6 +105,6 @@ export const UpdateDescription = ({ courseId, initialData }: UpdateDescriptionPr
 					</form>
 				</Form>
 			)}
-		</CardWrapper>
+		</Card>
 	)
 }

@@ -1,15 +1,15 @@
 import { api } from '@/shared/trpc/server'
+import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
 import { NotFound } from '@/client/components/not-found'
 import {
-	Breadcrumbs,
+	PageBreadcrumbs,
 	PageContent,
 	PageDescription,
 	PageHeader,
 	PageSection,
 	PageTitle,
-	PageWrapper,
-	type Crumb
+	PageWrapper
 } from '@/client/components/page'
 import { Separator } from '@/client/components/ui'
 
@@ -17,7 +17,7 @@ export default async function Page({ params }: { params: { courseId: string; cha
 	const { chapter } = await api.chapter.getChapter({ chapterId: params.chapterId })
 	if (!chapter) return <NotFound />
 
-	const crumbs: Crumb[] = [
+	const crumbs: Breadcrumb = [
 		{ icon: 'instructor' },
 		{ label: 'Courses', href: '/courses' },
 		{ label: 'Edit' },
@@ -29,7 +29,7 @@ export default async function Page({ params }: { params: { courseId: string; cha
 	return (
 		<PageWrapper>
 			<PageHeader className="hidden space-y-0 md:block md:py-3">
-				<Breadcrumbs crumbs={crumbs} />
+				<PageBreadcrumbs crumbs={crumbs} />
 			</PageHeader>
 
 			<Separator className="hidden md:block" />

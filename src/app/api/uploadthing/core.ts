@@ -1,12 +1,12 @@
 import { createUploadthing, type FileRouter } from 'uploadthing/next'
 import { UploadThingError } from 'uploadthing/server'
 
-import { api } from '@/shared/trpc/server'
+import { auth } from '@/server/lib/auth'
 
 const f = createUploadthing()
 
 const handleAuth = async () => {
-	const session = await api.session.getSession()
+	const session = await auth()
 	if (!session) throw new UploadThingError('Unauthorized')
 
 	return { userId: session.user.id }

@@ -45,7 +45,7 @@ export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 			<NavButton className="gap-2 !px-[0.22rem] py-1 hover:cursor-default hover:border-background hover:!bg-transparent hover:!shadow-none dark:hover:!border-card">
 				<NavIcon
 					icon={site.icon}
-					className="size-9 rounded-lg border border-border bg-gradient-to-b from-card to-muted p-1.5 text-foreground/80 shadow-sm dark:border-border dark:from-accent dark:to-background"
+					className="size-9 rounded-lg border border-border bg-gradient-to-b from-card to-card p-1.5 text-foreground/80 shadow-sm dark:border-border dark:from-accent dark:to-background"
 				/>
 				<NavLabel
 					label={site.label}

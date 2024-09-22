@@ -3,21 +3,20 @@
 import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { type Attachment } from '@prisma/client'
-import { LuFile, LuLoader, LuPencil, LuPlusCircle, LuX } from 'react-icons/lu'
+import { LuFile, LuLoader, LuPlusCircle, LuX } from 'react-icons/lu'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
 
 import { FileUpload } from '@/client/components/file-upload'
-import { CardContent, CardHeader, CardTitle, CardWrapper } from '@/client/components/instructor/course/card-wrapper'
-import { Button, CardFooter } from '@/client/components/ui'
+import { Button, Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/client/components/ui'
 
-type UpdateAttachmentProps = {
+type AddAttachmentsProps = {
 	courseId: string
 	initialData: { attachment?: Attachment[] }
 }
 
-export const UpdateAttachment = ({ courseId, initialData }: UpdateAttachmentProps) => {
+export const AddAttachmentsForm = ({ courseId, initialData }: AddAttachmentsProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -47,17 +46,12 @@ export const UpdateAttachment = ({ courseId, initialData }: UpdateAttachmentProp
 	})
 
 	return (
-		<CardWrapper>
+		<Card>
 			<CardHeader>
-				<div className="flex flex-col space-y-1.5">
-					<CardTitle>Course Attachment</CardTitle>
-				</div>
-
+				<CardTitle>Course Attachment</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
-					{!isEditing && initialData.attachment && <LuPencil className="mr-2 size-4" />}
-					{!isEditing && !initialData.attachment && <LuPlusCircle className="mr-2 size-4" />}
-
-					{isEditing ? 'Cancel' : initialData.attachment ? 'Edit' : 'Add'}
+					{!isEditing && <LuPlusCircle className="mr-2 size-4" />}
+					{isEditing ? 'Cancel' : 'Add'}
 				</Button>
 			</CardHeader>
 
@@ -110,6 +104,6 @@ export const UpdateAttachment = ({ courseId, initialData }: UpdateAttachmentProp
 					</span>
 				</CardFooter>
 			)}
-		</CardWrapper>
+		</Card>
 	)
 }

@@ -13,11 +13,7 @@ export const attachmentRouter = createTRPCRouter({
 		if (!courseOwner) throw new Error('Course not found')
 
 		const newAttachment = await ctx.db.attachment.create({
-			data: {
-				url,
-				courseId: courseId,
-				name
-			}
+			data: { courseId, url, name }
 		})
 
 		return { message: 'Course attachment created!', newAttachment }

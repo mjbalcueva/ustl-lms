@@ -11,15 +11,21 @@ import { api } from '@/shared/trpc/react'
 import { updateCategorySchema, type UpdateCategorySchema } from '@/shared/validations/category'
 
 import {
+	Button,
+	Card,
 	CardContent,
 	CardFooter,
 	CardHeader,
 	CardTitle,
-	CardWrapper
-} from '@/client/components/instructor/course/card-wrapper'
-import { Button, Combobox, Form, FormControl, FormField, FormItem, FormMessage } from '@/client/components/ui'
+	Combobox,
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormMessage
+} from '@/client/components/ui'
 
-type UpdateCategoryProps = {
+type EditCategoryProps = {
 	courseId: string
 	categoryId: string
 	options: {
@@ -28,7 +34,7 @@ type UpdateCategoryProps = {
 	}[]
 }
 
-export const UpdateCategory = ({ courseId, categoryId, options }: UpdateCategoryProps) => {
+export const EditCategoriesForm = ({ courseId, categoryId, options }: EditCategoryProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -62,7 +68,7 @@ export const UpdateCategory = ({ courseId, categoryId, options }: UpdateCategory
 	const selectedCategory = options.find((option) => option.value === categoryId)
 
 	return (
-		<CardWrapper>
+		<Card>
 			<CardHeader>
 				<div className="flex flex-col space-y-1.5">
 					<CardTitle>Course Category</CardTitle>
@@ -108,6 +114,6 @@ export const UpdateCategory = ({ courseId, categoryId, options }: UpdateCategory
 					</form>
 				</Form>
 			)}
-		</CardWrapper>
+		</Card>
 	)
 }

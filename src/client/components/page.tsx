@@ -1,5 +1,8 @@
 import * as React from 'react'
 import { Slot } from '@radix-ui/react-slot'
+import { type IconType } from 'react-icons/lib'
+
+import { type Breadcrumb as BreadcrumbType } from '@/shared/types/breadcrumbs'
 
 import { Icons } from '@/client/components/icons'
 import {
@@ -8,7 +11,8 @@ import {
 	BreadcrumbLink,
 	BreadcrumbList,
 	BreadcrumbPage,
-	BreadcrumbSeparator
+	BreadcrumbSeparator,
+	IconBadge
 } from '@/client/components/ui'
 import { cn } from '@/client/lib/utils'
 
@@ -40,19 +44,14 @@ export const PageHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<
 )
 PageHeader.displayName = 'PageHeader'
 
-export type Crumb = {
-	label?: string
-	href?: string
-	icon?: keyof typeof Icons
-}
-export function Breadcrumbs({ crumbs }: { crumbs: Crumb[] }) {
+export const PageBreadcrumbs = ({ crumbs }: { crumbs: BreadcrumbType }) => {
 	const renderIcon = (icon: keyof typeof Icons) => {
 		const Icon = Icons[icon]
 		return <Icon className="size-4" />
 	}
 
 	return (
-		<Breadcrumb className="hidden w-fit sm:block">
+		<Breadcrumb className="w-fit">
 			<BreadcrumbList>
 				{crumbs.map((crumb, index) => (
 					<React.Fragment key={index}>
@@ -91,7 +90,7 @@ export function Breadcrumbs({ crumbs }: { crumbs: Crumb[] }) {
 
 export const PageTitle = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
 	({ className, ...props }, ref) => (
-		<h1 ref={ref} className={cn('w-fit text-2xl font-semibold leading-none tracking-tight', className)} {...props} />
+		<h1 ref={ref} className={cn('w-fit text-2xl font-semibold leading-none', className)} {...props} />
 	)
 )
 PageTitle.displayName = 'PageTitle'
@@ -116,11 +115,21 @@ PageContent.displayName = 'PageContent'
 
 type PageSectionProps = React.HTMLAttributes<HTMLDivElement> & {
 	asChild?: boolean
+	compactMode?: boolean
 }
 export const PageSection = React.forwardRef<HTMLDivElement, PageSectionProps>(
-	({ className, asChild, ...props }, ref) => {
+	({ className, asChild, compactMode, ...props }, ref) => {
 		const Component = asChild ? Slot : 'section'
-		return <Component ref={ref} className={cn('px-2.5 sm:px-4 md:px-6', className)} {...props} />
+		return <Component ref={ref} className={cn(!compactMode && 'px-2.5 sm:px-4 md:px-6', className)} {...props} />
 	}
 )
 PageSection.displayName = 'PageSection'
+
+export const PageSectionTitle = ({ title, icon }: { title: string; icon: IconType }) => {
+	return (
+		<h2 className="mb-2.5 flex items-center gap-x-2 text-xl sm:mb-4 md:mb-5">
+			<IconBadge icon={icon} />
+			{title}
+		</h2>
+	)
+}

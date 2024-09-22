@@ -11,22 +11,28 @@ import { api } from '@/shared/trpc/react'
 import { updateTitleSchema, type UpdateTitleSchema } from '@/shared/validations/course'
 
 import {
+	Button,
+	Card,
 	CardContent,
 	CardFooter,
 	CardHeader,
 	CardTitle,
-	CardWrapper
-} from '@/client/components/instructor/course/card-wrapper'
-import { Button, Form, FormControl, FormField, FormItem, FormMessage, Input } from '@/client/components/ui'
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormMessage,
+	Input
+} from '@/client/components/ui'
 
-type UpdateTitleProps = {
+type EditTitleProps = {
 	courseId: string
 	initialData: {
 		title: string
 	}
 }
 
-export const UpdateTitle = ({ courseId, initialData }: UpdateTitleProps) => {
+export const EditTitleForm = ({ courseId, initialData }: EditTitleProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -58,11 +64,9 @@ export const UpdateTitle = ({ courseId, initialData }: UpdateTitleProps) => {
 	const onSubmit: SubmitHandler<UpdateTitleSchema> = (data) => mutate(data)
 
 	return (
-		<CardWrapper>
+		<Card>
 			<CardHeader>
-				<div className="flex flex-col space-y-1.5">
-					<CardTitle>Course Title</CardTitle>
-				</div>
+				<CardTitle>Course Title</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
 					{!isEditing && initialData.title && <LuPencil className="mr-2 size-4" />}
 					{isEditing ? 'Cancel' : initialData.title ? 'Edit' : 'Add'}
@@ -96,6 +100,6 @@ export const UpdateTitle = ({ courseId, initialData }: UpdateTitleProps) => {
 					</form>
 				</Form>
 			)}
-		</CardWrapper>
+		</Card>
 	)
 }

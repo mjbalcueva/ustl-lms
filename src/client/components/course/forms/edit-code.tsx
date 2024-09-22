@@ -11,22 +11,27 @@ import { api } from '@/shared/trpc/react'
 import { updateCodeSchema, type UpdateCodeSchema } from '@/shared/validations/course'
 
 import {
+	Button,
+	Card,
 	CardContent,
 	CardFooter,
 	CardHeader,
 	CardTitle,
-	CardWrapper
-} from '@/client/components/instructor/course/card-wrapper'
-import { Button, Form, FormControl, FormField, FormItem, FormMessage, Input } from '@/client/components/ui'
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormMessage,
+	Input
+} from '@/client/components/ui'
 
-type UpdateCodeProps = {
+type EditCodeProps = {
 	courseId: string
 	initialData: {
 		code: string
 	}
 }
-
-export const UpdateCode = ({ courseId, initialData }: UpdateCodeProps) => {
+export const EditCodeForm = ({ courseId, initialData }: EditCodeProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -58,11 +63,9 @@ export const UpdateCode = ({ courseId, initialData }: UpdateCodeProps) => {
 	const onSubmit: SubmitHandler<UpdateCodeSchema> = (data) => mutate(data)
 
 	return (
-		<CardWrapper>
+		<Card>
 			<CardHeader>
-				<div className="flex flex-col space-y-1.5">
-					<CardTitle>Course Code</CardTitle>
-				</div>
+				<CardTitle>Course Code</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
 					{!isEditing && initialData.code && <LuPencil className="mr-2 size-4" />}
 					{isEditing ? 'Cancel' : initialData.code ? 'Edit' : 'Add'}
@@ -96,6 +99,6 @@ export const UpdateCode = ({ courseId, initialData }: UpdateCodeProps) => {
 					</form>
 				</Form>
 			)}
-		</CardWrapper>
+		</Card>
 	)
 }

@@ -1,27 +1,28 @@
+import { type Breadcrumb } from '@/shared/types/breadcrumbs'
+
+import { AddCourseForm } from '@/client/components/course/forms/add-course'
 import { CardPerformanceInsights } from '@/client/components/instructor/course/card-performance-insights'
 import { CardStatsMiniGroup } from '@/client/components/instructor/course/card-stats-mini-group'
 import { FilterButton } from '@/client/components/instructor/course/filter-button'
-import { NewCourseButton } from '@/client/components/instructor/course/new-course-button'
 import { SearchInput } from '@/client/components/instructor/course/search-input'
 import {
-	Breadcrumbs,
+	PageBreadcrumbs,
 	PageContent,
 	PageDescription,
 	PageHeader,
 	PageSection,
 	PageTitle,
-	PageWrapper,
-	type Crumb
+	PageWrapper
 } from '@/client/components/page'
 import { Separator } from '@/client/components/ui'
 
 export default function Page() {
-	const crumbs: Crumb[] = [{ icon: 'instructor' }, { label: 'Courses', href: '/courses' }, { label: 'Manage' }]
+	const crumbs: Breadcrumb = [{ icon: 'instructor' }, { label: 'Courses', href: '/courses' }, { label: 'Manage' }]
 
 	return (
 		<PageWrapper>
 			<PageHeader className="hidden space-y-0 md:flex md:py-3">
-				<Breadcrumbs crumbs={crumbs} />
+				<PageBreadcrumbs crumbs={crumbs} />
 			</PageHeader>
 
 			<Separator className="hidden md:block" />
@@ -31,7 +32,7 @@ export default function Page() {
 					<PageTitle className="font-bold">Manage Your Courses</PageTitle>
 					<PageDescription>View insights, manage your courses, and more.</PageDescription>
 				</div>
-				<NewCourseButton />
+				<AddCourseForm />
 			</PageHeader>
 
 			<PageContent className="space-y-6">

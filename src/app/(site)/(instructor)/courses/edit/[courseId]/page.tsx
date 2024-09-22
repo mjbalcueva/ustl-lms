@@ -1,25 +1,25 @@
 import { TbBook2, TbListDetails, TbPackage } from 'react-icons/tb'
 
 import { api, HydrateClient } from '@/shared/trpc/server'
+import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
-import { CreateChapters } from '@/client/components/instructor/course/forms/create-chapters'
-import { UpdateAttachment } from '@/client/components/instructor/course/forms/update-attachment'
-import { UpdateCategory } from '@/client/components/instructor/course/forms/update-category'
-import { UpdateCode } from '@/client/components/instructor/course/forms/update-code'
-import { UpdateDescription } from '@/client/components/instructor/course/forms/update-description'
-import { UpdateImage } from '@/client/components/instructor/course/forms/update-image'
-import { UpdateTitle } from '@/client/components/instructor/course/forms/update-title'
-import { SectionTitle } from '@/client/components/instructor/course/section-title'
+import { AddAttachmentsForm } from '@/client/components/course/forms/add-attachments'
+import { AddChaptersForm } from '@/client/components/course/forms/add-chapters'
+import { EditCategoriesForm } from '@/client/components/course/forms/edit-categories'
+import { EditCodeForm } from '@/client/components/course/forms/edit-code'
+import { EditDescriptionForm } from '@/client/components/course/forms/edit-description'
+import { EditImageForm } from '@/client/components/course/forms/edit-image'
+import { EditTitleForm } from '@/client/components/course/forms/edit-title'
 import { NotFound } from '@/client/components/not-found'
 import {
-	Breadcrumbs,
+	PageBreadcrumbs,
 	PageContent,
 	PageDescription,
 	PageHeader,
 	PageSection,
+	PageSectionTitle,
 	PageTitle,
-	PageWrapper,
-	type Crumb
+	PageWrapper
 } from '@/client/components/page'
 import { Separator } from '@/client/components/ui'
 
@@ -29,7 +29,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 
 	if (!course) return <NotFound />
 
-	const crumbs: Crumb[] = [
+	const crumbs: Breadcrumb = [
 		{ icon: 'instructor' },
 		{ label: 'Courses', href: '/courses' },
 		{ label: 'Edit' },
@@ -54,7 +54,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 		<HydrateClient>
 			<PageWrapper>
 				<PageHeader className="hidden space-y-0 md:block md:py-3">
-					<Breadcrumbs crumbs={crumbs} />
+					<PageBreadcrumbs crumbs={crumbs} />
 				</PageHeader>
 
 				<Separator className="hidden md:block" />
@@ -65,13 +65,13 @@ export default async function Page({ params }: { params: { courseId: string } })
 				</PageHeader>
 
 				<PageContent className="gap-4 px-2.5 sm:px-4 md:flex md:flex-wrap md:gap-6 md:px-6">
-					<PageSection className="mb-6 flex-1 !px-0 md:mb-0">
-						<SectionTitle title="Customize your course" icon={TbBook2} />
-						<UpdateCode courseId={course.id} initialData={{ code: course.code }} />
-						<UpdateTitle courseId={course.id} initialData={{ title: course.title }} />
-						<UpdateDescription courseId={course.id} initialData={{ description: course.description ?? '' }} />
-						<UpdateImage courseId={course.id} initialData={{ image: course.image ?? '' }} />
-						<UpdateCategory
+					<PageSection className="mb-6 flex-1 md:mb-0" compactMode>
+						<PageSectionTitle title="Customize your course" icon={TbBook2} />
+						<EditCodeForm courseId={course.id} initialData={{ code: course.code }} />
+						<EditTitleForm courseId={course.id} initialData={{ title: course.title }} />
+						<EditDescriptionForm courseId={course.id} initialData={{ description: course.description ?? '' }} />
+						<EditImageForm courseId={course.id} initialData={{ image: course.image ?? '' }} />
+						<EditCategoriesForm
 							courseId={course.id}
 							categoryId={course.categoryId ?? ''}
 							options={categories.map((category) => ({ value: category.id, label: category.name }))}
@@ -79,14 +79,14 @@ export default async function Page({ params }: { params: { courseId: string } })
 					</PageSection>
 
 					<div className="flex flex-1 flex-col gap-4 md:gap-6">
-						<PageSection className="!px-0">
-							<SectionTitle title="Course chapters" icon={TbListDetails} />
-							<CreateChapters courseId={course.id} initialData={{ chapters: course.chapter }} />
+						<PageSection compactMode>
+							<PageSectionTitle title="Course chapters" icon={TbListDetails} />
+							<AddChaptersForm courseId={course.id} initialData={{ chapters: course.chapter }} />
 						</PageSection>
 
-						<PageSection className="!px-0">
-							<SectionTitle title="Resources & Attachments" icon={TbPackage} />
-							<UpdateAttachment courseId={course.id} initialData={{ attachment: course.attachment }} />
+						<PageSection compactMode>
+							<PageSectionTitle title="Resources & Attachments" icon={TbPackage} />
+							<AddAttachmentsForm courseId={course.id} initialData={{ attachment: course.attachment }} />
 						</PageSection>
 					</div>
 				</PageContent>
