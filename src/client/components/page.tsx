@@ -51,7 +51,7 @@ export const PageBreadcrumbs = ({ crumbs }: { crumbs: BreadcrumbType }) => {
 	}
 
 	return (
-		<Breadcrumb className="hidden w-fit sm:block">
+		<Breadcrumb className="w-fit">
 			<BreadcrumbList>
 				{crumbs.map((crumb, index) => (
 					<React.Fragment key={index}>
