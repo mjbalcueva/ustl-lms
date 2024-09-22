@@ -3,6 +3,7 @@ import { TbBook2, TbListDetails, TbPackage } from 'react-icons/tb'
 import { api, HydrateClient } from '@/shared/trpc/server'
 import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
+import { CodeEdit } from '@/client/components/course/forms/code-edit'
 import { CreateChapters } from '@/client/components/instructor/course/forms/create-chapters'
 import { UpdateAttachment } from '@/client/components/instructor/course/forms/update-attachment'
 import { UpdateCategory } from '@/client/components/instructor/course/forms/update-category'
@@ -67,6 +68,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 				<PageContent className="gap-4 px-2.5 sm:px-4 md:flex md:flex-wrap md:gap-6 md:px-6">
 					<PageSection className="mb-6 flex-1 md:mb-0" compactMode>
 						<PageSectionTitle title="Customize your course" icon={TbBook2} />
+						<CodeEdit courseId={course.id} initialData={{ code: course.code }} />
 						<UpdateCode courseId={course.id} initialData={{ code: course.code }} />
 						<UpdateTitle courseId={course.id} initialData={{ title: course.title }} />
 						<UpdateDescription courseId={course.id} initialData={{ description: course.description ?? '' }} />

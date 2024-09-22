@@ -9,8 +9,14 @@ import { toast } from 'sonner'
 import { api } from '@/shared/trpc/react'
 
 import { FileUpload } from '@/client/components/file-upload'
-import { CardContent, CardHeader, CardTitle, CardWrapper } from '@/client/components/instructor/course/card-wrapper'
-import { Button, CardFooter } from '@/client/components/ui'
+import {
+	CardContent,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+	CardWrapper
+} from '@/client/components/instructor/course/card-wrapper'
+import { Button } from '@/client/components/ui'
 
 type UpdateAttachmentProps = {
 	courseId: string
