@@ -63,21 +63,21 @@ export const EditDescriptionForm = ({ courseId, initialData }: EditDescriptionPr
 
 	const onSubmit: SubmitHandler<UpdateDescriptionSchema> = (data) => mutate(data)
 
+	const description = form.watch('description')
+
 	return (
 		<Card>
 			<CardHeader>
 				<CardTitle>Course Description</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
-					{!isEditing && initialData.description && <LuPencil className="mr-2 size-4" />}
-					{!isEditing && !initialData.description && <LuPlusCircle className="mr-2 size-4" />}
-					{isEditing ? 'Cancel' : initialData.description ? 'Edit' : 'Add'}
+					{!isEditing && description && <LuPencil className="mr-2 size-4" />}
+					{!isEditing && !description && <LuPlusCircle className="mr-2 size-4" />}
+					{isEditing ? 'Cancel' : description ? 'Edit' : 'Add'}
 				</Button>
 			</CardHeader>
 
 			{!isEditing && (
-				<CardContent isEmpty={!initialData.description}>
-					{initialData.description ? initialData.description : 'No description added'}
-				</CardContent>
+				<CardContent isEmpty={!description}>{description ? description : 'No description added'}</CardContent>
 			)}
 
 			{isEditing && (
@@ -98,8 +98,13 @@ export const EditDescriptionForm = ({ courseId, initialData }: EditDescriptionPr
 							/>
 						</CardContent>
 						<CardFooter>
-							<Button type="submit" size="card" disabled={!form.formState.isDirty || isPending}>
-								Save
+							<Button
+								type="submit"
+								size="card"
+								disabled={!form.formState.isDirty || isPending}
+								variant={isPending ? 'shine' : 'default'}
+							>
+								{isPending ? 'Saving...' : 'Save'}
 							</Button>
 						</CardFooter>
 					</form>

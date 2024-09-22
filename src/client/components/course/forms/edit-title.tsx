@@ -73,7 +73,7 @@ export const EditTitleForm = ({ courseId, initialData }: EditTitleProps) => {
 				</Button>
 			</CardHeader>
 
-			{!isEditing && <CardContent>{initialData?.title}</CardContent>}
+			{!isEditing && <CardContent>{form.watch('title')}</CardContent>}
 
 			{isEditing && (
 				<Form {...form}>
@@ -93,8 +93,13 @@ export const EditTitleForm = ({ courseId, initialData }: EditTitleProps) => {
 							/>
 						</CardContent>
 						<CardFooter>
-							<Button type="submit" size="card" disabled={!form.formState.isDirty || isPending}>
-								Save
+							<Button
+								type="submit"
+								size="card"
+								disabled={!form.formState.isDirty || isPending}
+								variant={isPending ? 'shine' : 'default'}
+							>
+								{isPending ? 'Saving...' : 'Save'}
 							</Button>
 						</CardFooter>
 					</form>

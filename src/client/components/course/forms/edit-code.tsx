@@ -62,17 +62,19 @@ export const EditCodeForm = ({ courseId, initialData }: EditCodeProps) => {
 
 	const onSubmit: SubmitHandler<UpdateCodeSchema> = (data) => mutate(data)
 
+	const code = form.watch('code')
+
 	return (
 		<Card>
 			<CardHeader>
 				<CardTitle>Course Code</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
-					{!isEditing && initialData.code && <LuPencil className="mr-2 size-4" />}
-					{isEditing ? 'Cancel' : initialData.code ? 'Edit' : 'Add'}
+					{!isEditing && code && <LuPencil className="mr-2 size-4" />}
+					{isEditing ? 'Cancel' : code ? 'Edit' : 'Add'}
 				</Button>
 			</CardHeader>
 
-			{!isEditing && <CardContent>{initialData?.code}</CardContent>}
+			{!isEditing && <CardContent>{code}</CardContent>}
 
 			{isEditing && (
 				<Form {...form}>
@@ -92,8 +94,13 @@ export const EditCodeForm = ({ courseId, initialData }: EditCodeProps) => {
 							/>
 						</CardContent>
 						<CardFooter>
-							<Button type="submit" size="card" disabled={!form.formState.isDirty || isPending}>
-								Save
+							<Button
+								type="submit"
+								size="card"
+								disabled={!form.formState.isDirty || isPending}
+								variant={isPending ? 'shine' : 'default'}
+							>
+								{isPending ? 'Saving...' : 'Save'}
 							</Button>
 						</CardFooter>
 					</form>

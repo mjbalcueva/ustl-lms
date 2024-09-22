@@ -61,7 +61,7 @@ export const AddAttachmentsForm = ({ courseId, initialData }: AddAttachmentsProp
 				{!isEditing && !!initialData.attachment && (
 					<ol className="space-y-2">
 						{initialData.attachment.map((attachment) => (
-							<li key={attachment.id} className="flex items-center rounded-lg border border-border px-5 py-3">
+							<li key={attachment.id} className="flex items-center rounded-xl border border-border px-5 py-3">
 								<LuFile className="mr-2 size-4 flex-shrink-0" />
 								<p className="line-clamp-1 text-xs">{attachment.name}</p>
 

@@ -15,7 +15,9 @@ const buttonVariants = cva(
 				secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
 				ghost: 'hover:bg-accent hover:text-accent-foreground',
 				link: 'text-foreground underline-offset-4 hover:underline',
-				card: 'bg-card text-card-foreground hover:bg-accent border border-input '
+				card: 'bg-card text-card-foreground hover:bg-accent border border-input ',
+				shine:
+					'text-primary-foreground animate-shine bg-gradient-to-r from-primary via-primary/75 to-primary bg-[length:400%_100%] '
 			},
 			size: {
 				default: 'h-10 px-4 py-2',
@@ -24,7 +26,7 @@ const buttonVariants = cva(
 				sm: 'h-9 rounded-md px-3',
 				lg: 'h-11 rounded-md px-8',
 				link: 'h-7 text-xs focus-visible:ring-offset-2',
-				card: 'h-8 rounded-md px-3'
+				card: 'h-8 rounded-xl px-3'
 			}
 		},
 		defaultVariants: {
