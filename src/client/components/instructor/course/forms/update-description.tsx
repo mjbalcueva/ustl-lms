@@ -60,9 +60,7 @@ export const UpdateDescription = ({ courseId, initialData }: UpdateDescriptionPr
 	return (
 		<CardWrapper>
 			<CardHeader>
-				<div className="flex flex-col space-y-1.5">
-					<CardTitle>Course Description</CardTitle>
-				</div>
+				<CardTitle>Course Description</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
 					{!isEditing && initialData.description && <LuPencil className="mr-2 size-4" />}
 					{!isEditing && !initialData.description && <LuPlusCircle className="mr-2 size-4" />}

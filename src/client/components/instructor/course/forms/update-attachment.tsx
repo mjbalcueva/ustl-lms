@@ -49,10 +49,7 @@ export const UpdateAttachment = ({ courseId, initialData }: UpdateAttachmentProp
 	return (
 		<CardWrapper>
 			<CardHeader>
-				<div className="flex flex-col space-y-1.5">
-					<CardTitle>Course Attachment</CardTitle>
-				</div>
-
+				<CardTitle>Course Attachment</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
 					{!isEditing && initialData.attachment && <LuPencil className="mr-2 size-4" />}
 					{!isEditing && !initialData.attachment && <LuPlusCircle className="mr-2 size-4" />}

@@ -39,9 +39,7 @@ export const UpdateImage = ({ courseId, initialData }: UpdateImageProps) => {
 	return (
 		<CardWrapper>
 			<CardHeader>
-				<div className="flex flex-col space-y-1.5">
-					<CardTitle>Course Image</CardTitle>
-				</div>
+				<CardTitle>Course Image</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
 					{!isEditing && initialData.image && <LuPencil className="mr-2 size-4" />}
 					{!isEditing && !initialData.image && <LuPlusCircle className="mr-2 size-4" />}

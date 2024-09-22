@@ -60,9 +60,7 @@ export const UpdateTitle = ({ courseId, initialData }: UpdateTitleProps) => {
 	return (
 		<CardWrapper>
 			<CardHeader>
-				<div className="flex flex-col space-y-1.5">
-					<CardTitle>Course Title</CardTitle>
-				</div>
+				<CardTitle>Course Title</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
 					{!isEditing && initialData.title && <LuPencil className="mr-2 size-4" />}
 					{isEditing ? 'Cancel' : initialData.title ? 'Edit' : 'Add'}
