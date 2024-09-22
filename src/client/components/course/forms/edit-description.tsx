@@ -63,7 +63,7 @@ export const EditDescriptionForm = ({ courseId, initialData }: EditDescriptionPr
 
 	const onSubmit: SubmitHandler<UpdateDescriptionSchema> = (data) => mutate(data)
 
-	const description = form.watch('description')
+	const description = form.getValues('description')
 
 	return (
 		<Card>

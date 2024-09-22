@@ -26,7 +26,7 @@ const buttonVariants = cva(
 				sm: 'h-9 rounded-md px-3',
 				lg: 'h-11 rounded-md px-8',
 				link: 'h-7 text-xs focus-visible:ring-offset-2',
-				card: 'h-8 rounded-xl px-3'
+				card: 'h-8 rounded-lg px-3'
 			}
 		},
 		defaultVariants: {

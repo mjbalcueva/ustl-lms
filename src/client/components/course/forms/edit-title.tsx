@@ -63,13 +63,15 @@ export const EditTitleForm = ({ courseId, initialData }: EditTitleProps) => {
 
 	const onSubmit: SubmitHandler<UpdateTitleSchema> = (data) => mutate(data)
 
+	const title = form.getValues('title')
+
 	return (
 		<Card>
 			<CardHeader>
 				<CardTitle>Course Title</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
-					{!isEditing && initialData.title && <LuPencil className="mr-2 size-4" />}
-					{isEditing ? 'Cancel' : initialData.title ? 'Edit' : 'Add'}
+					{!isEditing && title && <LuPencil className="mr-2 size-4" />}
+					{isEditing ? 'Cancel' : title ? 'Edit' : 'Add'}
 				</Button>
 			</CardHeader>
 

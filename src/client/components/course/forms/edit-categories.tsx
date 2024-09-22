@@ -65,7 +65,7 @@ export const EditCategoriesForm = ({ courseId, categoryId, options }: EditCatego
 
 	const onSubmit: SubmitHandler<UpdateCategorySchema> = (data) => mutate(data)
 
-	const selectedCategory = options.find((option) => option.value === categoryId)
+	const selectedCategory = options.find((option) => option.value === form.getValues('categoryId'))
 
 	return (
 		<Card>
@@ -107,8 +107,13 @@ export const EditCategoriesForm = ({ courseId, categoryId, options }: EditCatego
 							/>
 						</CardContent>
 						<CardFooter>
-							<Button type="submit" size="card" disabled={!form.formState.isDirty || isPending}>
-								Save
+							<Button
+								type="submit"
+								size="card"
+								disabled={!form.formState.isDirty || isPending}
+								variant={isPending ? 'shine' : 'default'}
+							>
+								{isPending ? 'Saving...' : 'Save'}
 							</Button>
 						</CardFooter>
 					</form>

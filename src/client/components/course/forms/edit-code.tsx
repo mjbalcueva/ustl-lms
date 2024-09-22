@@ -62,7 +62,7 @@ export const EditCodeForm = ({ courseId, initialData }: EditCodeProps) => {
 
 	const onSubmit: SubmitHandler<UpdateCodeSchema> = (data) => mutate(data)
 
-	const code = form.watch('code')
+	const code = form.getValues('code')
 
 	return (
 		<Card>
