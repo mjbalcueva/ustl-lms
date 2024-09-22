@@ -11,14 +11,14 @@ import { api } from '@/shared/trpc/react'
 import { FileUpload } from '@/client/components/file-upload'
 import { Button, Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/client/components/ui'
 
-type ImageEditProps = {
+type EditImageProps = {
 	courseId: string
 	initialData: {
 		image: string
 	}
 }
 
-export const ImageEdit = ({ courseId, initialData }: ImageEditProps) => {
+export const EditImageForm = ({ courseId, initialData }: EditImageProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)

@@ -3,13 +3,13 @@ import { TbBook2, TbListDetails, TbPackage } from 'react-icons/tb'
 import { api, HydrateClient } from '@/shared/trpc/server'
 import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
-import { AttachmentEdit } from '@/client/components/course/forms/attachment-edit'
-import { CategoryEdit } from '@/client/components/course/forms/category-edit'
-import { ChaptersAdd } from '@/client/components/course/forms/chapters-add'
-import { CodeEdit } from '@/client/components/course/forms/code-edit'
-import { DescriptionEdit } from '@/client/components/course/forms/description-edit'
-import { ImageEdit } from '@/client/components/course/forms/image-edit'
-import { TitleEdit } from '@/client/components/course/forms/title-edit'
+import { AddAttachmentsForm } from '@/client/components/course/forms/add-attachments'
+import { AddChaptersForm } from '@/client/components/course/forms/add-chapters'
+import { EditCategoriesForm } from '@/client/components/course/forms/edit-categories'
+import { EditCodeForm } from '@/client/components/course/forms/edit-code'
+import { EditDescriptionForm } from '@/client/components/course/forms/edit-description'
+import { EditImageForm } from '@/client/components/course/forms/edit-image'
+import { EditTitleForm } from '@/client/components/course/forms/edit-title'
 import { NotFound } from '@/client/components/not-found'
 import {
 	PageBreadcrumbs,
@@ -67,11 +67,11 @@ export default async function Page({ params }: { params: { courseId: string } })
 				<PageContent className="gap-4 px-2.5 sm:px-4 md:flex md:flex-wrap md:gap-6 md:px-6">
 					<PageSection className="mb-6 flex-1 md:mb-0" compactMode>
 						<PageSectionTitle title="Customize your course" icon={TbBook2} />
-						<CodeEdit courseId={course.id} initialData={{ code: course.code }} />
-						<TitleEdit courseId={course.id} initialData={{ title: course.title }} />
-						<DescriptionEdit courseId={course.id} initialData={{ description: course.description ?? '' }} />
-						<ImageEdit courseId={course.id} initialData={{ image: course.image ?? '' }} />
-						<CategoryEdit
+						<EditCodeForm courseId={course.id} initialData={{ code: course.code }} />
+						<EditTitleForm courseId={course.id} initialData={{ title: course.title }} />
+						<EditDescriptionForm courseId={course.id} initialData={{ description: course.description ?? '' }} />
+						<EditImageForm courseId={course.id} initialData={{ image: course.image ?? '' }} />
+						<EditCategoriesForm
 							courseId={course.id}
 							categoryId={course.categoryId ?? ''}
 							options={categories.map((category) => ({ value: category.id, label: category.name }))}
@@ -81,12 +81,12 @@ export default async function Page({ params }: { params: { courseId: string } })
 					<div className="flex flex-1 flex-col gap-4 md:gap-6">
 						<PageSection compactMode>
 							<PageSectionTitle title="Course chapters" icon={TbListDetails} />
-							<ChaptersAdd courseId={course.id} initialData={{ chapters: course.chapter }} />
+							<AddChaptersForm courseId={course.id} initialData={{ chapters: course.chapter }} />
 						</PageSection>
 
 						<PageSection compactMode>
 							<PageSectionTitle title="Resources & Attachments" icon={TbPackage} />
-							<AttachmentEdit courseId={course.id} initialData={{ attachment: course.attachment }} />
+							<AddAttachmentsForm courseId={course.id} initialData={{ attachment: course.attachment }} />
 						</PageSection>
 					</div>
 				</PageContent>

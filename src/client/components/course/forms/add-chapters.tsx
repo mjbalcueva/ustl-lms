@@ -28,14 +28,14 @@ import {
 	Loader
 } from '@/client/components/ui'
 
-type ChaptersAddProps = {
+type AddChaptersProps = {
 	courseId: string
 	initialData: {
 		chapters: Chapter[]
 	}
 }
 
-export const ChaptersAdd = ({ courseId, initialData }: ChaptersAddProps) => {
+export const AddChaptersForm = ({ courseId, initialData }: AddChaptersProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)

@@ -25,7 +25,7 @@ import {
 	FormMessage
 } from '@/client/components/ui'
 
-type CategoryEditProps = {
+type EditCategoryProps = {
 	courseId: string
 	categoryId: string
 	options: {
@@ -34,7 +34,7 @@ type CategoryEditProps = {
 	}[]
 }
 
-export const CategoryEdit = ({ courseId, categoryId, options }: CategoryEditProps) => {
+export const EditCategoriesForm = ({ courseId, categoryId, options }: EditCategoryProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)

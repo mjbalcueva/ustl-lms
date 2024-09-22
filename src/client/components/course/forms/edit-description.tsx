@@ -4,11 +4,11 @@ import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, type SubmitHandler } from 'react-hook-form'
-import { LuPencil } from 'react-icons/lu'
+import { LuPencil, LuPlusCircle } from 'react-icons/lu'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
-import { updateCodeSchema, type UpdateCodeSchema } from '@/shared/validations/course'
+import { updateDescriptionSchema, type UpdateDescriptionSchema } from '@/shared/validations/course'
 
 import {
 	Button,
@@ -22,35 +22,36 @@ import {
 	FormField,
 	FormItem,
 	FormMessage,
-	Input
+	Textarea
 } from '@/client/components/ui'
 
-type CodeEditProps = {
+type EditDescriptionProps = {
 	courseId: string
 	initialData: {
-		code: string
+		description: string
 	}
 }
-export const CodeEdit = ({ courseId, initialData }: CodeEditProps) => {
+
+export const EditDescriptionForm = ({ courseId, initialData }: EditDescriptionProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
 	const toggleEdit = () => setIsEditing((current) => !current)
 
-	const form = useForm<UpdateCodeSchema>({
-		resolver: zodResolver(updateCodeSchema),
+	const form = useForm<UpdateDescriptionSchema>({
+		resolver: zodResolver(updateDescriptionSchema),
 		defaultValues: {
 			courseId,
-			code: initialData.code
+			description: initialData.description
 		}
 	})
 
-	const { mutate, isPending } = api.course.updateCode.useMutation({
+	const { mutate, isPending } = api.course.updateDescription.useMutation({
 		onSuccess: async (data) => {
 			router.refresh()
 			form.reset({
 				courseId,
-				code: data.course.code
+				description: data.course.description ?? ''
 			})
 			toggleEdit()
 			toast.success(data.message)
@@ -60,19 +61,24 @@ export const CodeEdit = ({ courseId, initialData }: CodeEditProps) => {
 		}
 	})
 
-	const onSubmit: SubmitHandler<UpdateCodeSchema> = (data) => mutate(data)
+	const onSubmit: SubmitHandler<UpdateDescriptionSchema> = (data) => mutate(data)
 
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Course Code</CardTitle>
+				<CardTitle>Course Description</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
-					{!isEditing && initialData.code && <LuPencil className="mr-2 size-4" />}
-					{isEditing ? 'Cancel' : initialData.code ? 'Edit' : 'Add'}
+					{!isEditing && initialData.description && <LuPencil className="mr-2 size-4" />}
+					{!isEditing && !initialData.description && <LuPlusCircle className="mr-2 size-4" />}
+					{isEditing ? 'Cancel' : initialData.description ? 'Edit' : 'Add'}
 				</Button>
 			</CardHeader>
 
-			{!isEditing && <CardContent>{initialData?.code}</CardContent>}
+			{!isEditing && (
+				<CardContent isEmpty={!initialData.description}>
+					{initialData.description ? initialData.description : 'No description added'}
+				</CardContent>
+			)}
 
 			{isEditing && (
 				<Form {...form}>
@@ -80,11 +86,11 @@ export const CodeEdit = ({ courseId, initialData }: CodeEditProps) => {
 						<CardContent>
 							<FormField
 								control={form.control}
-								name="code"
+								name="description"
 								render={({ field }) => (
 									<FormItem>
 										<FormControl>
-											<Input placeholder="e.g. 'CS101'" disabled={isPending} {...field} />
+											<Textarea placeholder="e.g. 'CS101'" disabled={isPending} {...field} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>

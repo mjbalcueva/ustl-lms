@@ -8,7 +8,7 @@ import { LuPencil } from 'react-icons/lu'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
-import { updateTitleSchema, type UpdateTitleSchema } from '@/shared/validations/course'
+import { updateCodeSchema, type UpdateCodeSchema } from '@/shared/validations/course'
 
 import {
 	Button,
@@ -25,33 +25,32 @@ import {
 	Input
 } from '@/client/components/ui'
 
-type TitleEditProps = {
+type EditCodeProps = {
 	courseId: string
 	initialData: {
-		title: string
+		code: string
 	}
 }
-
-export const TitleEdit = ({ courseId, initialData }: TitleEditProps) => {
+export const EditCodeForm = ({ courseId, initialData }: EditCodeProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
 	const toggleEdit = () => setIsEditing((current) => !current)
 
-	const form = useForm<UpdateTitleSchema>({
-		resolver: zodResolver(updateTitleSchema),
+	const form = useForm<UpdateCodeSchema>({
+		resolver: zodResolver(updateCodeSchema),
 		defaultValues: {
 			courseId,
-			title: initialData.title
+			code: initialData.code
 		}
 	})
 
-	const { mutate, isPending } = api.course.updateTitle.useMutation({
+	const { mutate, isPending } = api.course.updateCode.useMutation({
 		onSuccess: async (data) => {
 			router.refresh()
 			form.reset({
 				courseId,
-				title: data.course.title
+				code: data.course.code
 			})
 			toggleEdit()
 			toast.success(data.message)
@@ -61,19 +60,19 @@ export const TitleEdit = ({ courseId, initialData }: TitleEditProps) => {
 		}
 	})
 
-	const onSubmit: SubmitHandler<UpdateTitleSchema> = (data) => mutate(data)
+	const onSubmit: SubmitHandler<UpdateCodeSchema> = (data) => mutate(data)
 
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Course Title</CardTitle>
+				<CardTitle>Course Code</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
-					{!isEditing && initialData.title && <LuPencil className="mr-2 size-4" />}
-					{isEditing ? 'Cancel' : initialData.title ? 'Edit' : 'Add'}
+					{!isEditing && initialData.code && <LuPencil className="mr-2 size-4" />}
+					{isEditing ? 'Cancel' : initialData.code ? 'Edit' : 'Add'}
 				</Button>
 			</CardHeader>
 
-			{!isEditing && <CardContent>{initialData?.title}</CardContent>}
+			{!isEditing && <CardContent>{initialData?.code}</CardContent>}
 
 			{isEditing && (
 				<Form {...form}>
@@ -81,11 +80,11 @@ export const TitleEdit = ({ courseId, initialData }: TitleEditProps) => {
 						<CardContent>
 							<FormField
 								control={form.control}
-								name="title"
+								name="code"
 								render={({ field }) => (
 									<FormItem>
 										<FormControl>
-											<Input placeholder="e.g. 'Advanced web development'" disabled={isPending} {...field} />
+											<Input placeholder="e.g. 'CS101'" disabled={isPending} {...field} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>

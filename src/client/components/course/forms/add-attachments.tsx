@@ -11,12 +11,12 @@ import { api } from '@/shared/trpc/react'
 import { FileUpload } from '@/client/components/file-upload'
 import { Button, Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/client/components/ui'
 
-type AttachmentEditProps = {
+type AddAttachmentsProps = {
 	courseId: string
 	initialData: { attachment?: Attachment[] }
 }
 
-export const AttachmentEdit = ({ courseId, initialData }: AttachmentEditProps) => {
+export const AddAttachmentsForm = ({ courseId, initialData }: AddAttachmentsProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)

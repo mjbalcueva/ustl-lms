@@ -27,7 +27,7 @@ import {
 	Separator
 } from '@/client/components/ui'
 
-export const CourseAdd = () => {
+export const AddCourseForm = () => {
 	const router = useRouter()
 
 	const form = useForm<CreateCourseSchema>({
