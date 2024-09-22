@@ -1,13 +1,13 @@
 import { SessionProvider } from 'next-auth/react'
 
-import { api } from '@/shared/trpc/server'
+import { auth } from '@/server/lib/auth'
 
 import { MainNav } from '@/client/components/navigation/main-nav'
 import { TooltipProvider } from '@/client/components/ui'
 import { DeviceTypeProvider } from '@/client/context/device-type-provider'
 
 export default async function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
-	const session = await api.session.getSession()
+	const session = await auth()
 
 	return (
 		<SessionProvider session={session}>
