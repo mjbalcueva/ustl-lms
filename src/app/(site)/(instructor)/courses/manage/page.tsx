@@ -1,9 +1,9 @@
 import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
+import { CourseAdd } from '@/client/components/course/forms/course-add'
 import { CardPerformanceInsights } from '@/client/components/instructor/course/card-performance-insights'
 import { CardStatsMiniGroup } from '@/client/components/instructor/course/card-stats-mini-group'
 import { FilterButton } from '@/client/components/instructor/course/filter-button'
-import { NewCourseButton } from '@/client/components/instructor/course/new-course-button'
 import { SearchInput } from '@/client/components/instructor/course/search-input'
 import {
 	PageBreadcrumbs,
@@ -32,7 +32,7 @@ export default function Page() {
 					<PageTitle className="font-bold">Manage Your Courses</PageTitle>
 					<PageDescription>View insights, manage your courses, and more.</PageDescription>
 				</div>
-				<NewCourseButton />
+				<CourseAdd />
 			</PageHeader>
 
 			<PageContent className="space-y-6">
