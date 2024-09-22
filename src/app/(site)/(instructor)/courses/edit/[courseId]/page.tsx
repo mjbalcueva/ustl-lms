@@ -7,7 +7,6 @@ import { CodeEdit } from '@/client/components/course/forms/code-edit'
 import { CreateChapters } from '@/client/components/instructor/course/forms/create-chapters'
 import { UpdateAttachment } from '@/client/components/instructor/course/forms/update-attachment'
 import { UpdateCategory } from '@/client/components/instructor/course/forms/update-category'
-import { UpdateCode } from '@/client/components/instructor/course/forms/update-code'
 import { UpdateDescription } from '@/client/components/instructor/course/forms/update-description'
 import { UpdateImage } from '@/client/components/instructor/course/forms/update-image'
 import { UpdateTitle } from '@/client/components/instructor/course/forms/update-title'
@@ -69,7 +68,6 @@ export default async function Page({ params }: { params: { courseId: string } })
 					<PageSection className="mb-6 flex-1 md:mb-0" compactMode>
 						<PageSectionTitle title="Customize your course" icon={TbBook2} />
 						<CodeEdit courseId={course.id} initialData={{ code: course.code }} />
-						<UpdateCode courseId={course.id} initialData={{ code: course.code }} />
 						<UpdateTitle courseId={course.id} initialData={{ title: course.title }} />
 						<UpdateDescription courseId={course.id} initialData={{ description: course.description ?? '' }} />
 						<UpdateImage courseId={course.id} initialData={{ image: course.image ?? '' }} />

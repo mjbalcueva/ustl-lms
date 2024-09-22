@@ -10,8 +10,20 @@ import { toast } from 'sonner'
 import { api } from '@/shared/trpc/react'
 import { updateCodeSchema, type UpdateCodeSchema } from '@/shared/validations/course'
 
-import { CardContent, CardFooter, CardHeader, CardTitle, CardWrapper } from '@/client/components/card'
-import { Button, Form, FormControl, FormField, FormItem, FormMessage, Input } from '@/client/components/ui'
+import {
+	Button,
+	Card,
+	CardContent,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormMessage,
+	Input
+} from '@/client/components/ui'
 
 type CodeEditProps = {
 	courseId: string
@@ -51,7 +63,7 @@ export const CodeEdit = ({ courseId, initialData }: CodeEditProps) => {
 	const onSubmit: SubmitHandler<UpdateCodeSchema> = (data) => mutate(data)
 
 	return (
-		<CardWrapper>
+		<Card>
 			<CardHeader>
 				<CardTitle>Course Code</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
@@ -87,6 +99,6 @@ export const CodeEdit = ({ courseId, initialData }: CodeEditProps) => {
 					</form>
 				</Form>
 			)}
-		</CardWrapper>
+		</Card>
 	)
 }
