@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { Slot } from '@radix-ui/react-slot'
+import { type IconType } from 'react-icons/lib'
 
 import { Icons } from '@/client/components/icons'
 import {
@@ -8,7 +9,8 @@ import {
 	BreadcrumbLink,
 	BreadcrumbList,
 	BreadcrumbPage,
-	BreadcrumbSeparator
+	BreadcrumbSeparator,
+	IconBadge
 } from '@/client/components/ui'
 import { cn } from '@/client/lib/utils'
 
@@ -116,11 +118,21 @@ PageContent.displayName = 'PageContent'
 
 type PageSectionProps = React.HTMLAttributes<HTMLDivElement> & {
 	asChild?: boolean
+	compactMode?: boolean
 }
 export const PageSection = React.forwardRef<HTMLDivElement, PageSectionProps>(
-	({ className, asChild, ...props }, ref) => {
+	({ className, asChild, compactMode, ...props }, ref) => {
 		const Component = asChild ? Slot : 'section'
-		return <Component ref={ref} className={cn('px-2.5 sm:px-4 md:px-6', className)} {...props} />
+		return <Component ref={ref} className={cn(!compactMode && 'px-2.5 sm:px-4 md:px-6', className)} {...props} />
 	}
 )
 PageSection.displayName = 'PageSection'
+
+export const PageSectionTitle = ({ title, icon }: { title: string; icon: IconType }) => {
+	return (
+		<div className="mb-2.5 flex items-center gap-x-2 sm:mb-4 md:mb-5">
+			<IconBadge icon={icon} />
+			<h2 className="text-xl">{title}</h2>
+		</div>
+	)
+}
