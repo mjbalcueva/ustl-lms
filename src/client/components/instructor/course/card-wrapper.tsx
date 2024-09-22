@@ -51,9 +51,5 @@ export const CardContent = ({ isEmpty, withSeparator, children, className, ...pr
 
 type CardFooterProps = React.HTMLAttributes<HTMLDivElement>
 export const CardFooter = ({ ...props }: CardFooterProps) => {
-	return (
-		<>
-			<div className="flex items-center justify-start px-4 pb-4 md:px-6" {...props} />
-		</>
-	)
+	return <div className="flex items-center justify-start px-4 pb-4 md:px-6" {...props} />
 }
