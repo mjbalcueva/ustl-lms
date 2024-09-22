@@ -2,6 +2,8 @@ import * as React from 'react'
 import { Slot } from '@radix-ui/react-slot'
 import { type IconType } from 'react-icons/lib'
 
+import { type Breadcrumb as BreadcrumbType } from '@/shared/types/breadcrumbs'
+
 import { Icons } from '@/client/components/icons'
 import {
 	Breadcrumb,
@@ -42,12 +44,7 @@ export const PageHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<
 )
 PageHeader.displayName = 'PageHeader'
 
-export type Crumb = {
-	label?: string
-	href?: string
-	icon?: keyof typeof Icons
-}
-export function Breadcrumbs({ crumbs }: { crumbs: Crumb[] }) {
+export const PageBreadcrumbs = ({ crumbs }: { crumbs: BreadcrumbType }) => {
 	const renderIcon = (icon: keyof typeof Icons) => {
 		const Icon = Icons[icon]
 		return <Icon className="size-4" />

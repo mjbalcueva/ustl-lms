@@ -1,8 +1,10 @@
-import { Breadcrumbs, PageDescription, PageHeader, PageTitle, PageWrapper, type Crumb } from '@/client/components/page'
+import { type Breadcrumb } from '@/shared/types/breadcrumbs'
+
+import { PageBreadcrumbs, PageDescription, PageHeader, PageTitle, PageWrapper } from '@/client/components/page'
 import { Separator } from '@/client/components/ui'
 
 const NotFound = () => {
-	const crumbs: Crumb[] = [
+	const crumbs: Breadcrumb = [
 		{ icon: 'instructor' },
 		{ label: 'Error' },
 		{ label: '404', href: '/404' },
@@ -12,7 +14,7 @@ const NotFound = () => {
 	return (
 		<PageWrapper>
 			<PageHeader className="hidden space-y-0 md:block md:py-3">
-				<Breadcrumbs crumbs={crumbs} />
+				<PageBreadcrumbs crumbs={crumbs} />
 			</PageHeader>
 
 			<Separator />

@@ -1,6 +1,7 @@
 import { TbBook2, TbListDetails, TbPackage } from 'react-icons/tb'
 
 import { api, HydrateClient } from '@/shared/trpc/server'
+import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
 import { CreateChapters } from '@/client/components/instructor/course/forms/create-chapters'
 import { UpdateAttachment } from '@/client/components/instructor/course/forms/update-attachment'
@@ -11,15 +12,14 @@ import { UpdateImage } from '@/client/components/instructor/course/forms/update-
 import { UpdateTitle } from '@/client/components/instructor/course/forms/update-title'
 import { NotFound } from '@/client/components/not-found'
 import {
-	Breadcrumbs,
+	PageBreadcrumbs,
 	PageContent,
 	PageDescription,
 	PageHeader,
 	PageSection,
 	PageSectionTitle,
 	PageTitle,
-	PageWrapper,
-	type Crumb
+	PageWrapper
 } from '@/client/components/page'
 import { Separator } from '@/client/components/ui'
 
@@ -29,7 +29,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 
 	if (!course) return <NotFound />
 
-	const crumbs: Crumb[] = [
+	const crumbs: Breadcrumb = [
 		{ icon: 'instructor' },
 		{ label: 'Courses', href: '/courses' },
 		{ label: 'Edit' },
@@ -54,7 +54,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 		<HydrateClient>
 			<PageWrapper>
 				<PageHeader className="hidden space-y-0 md:block md:py-3">
-					<Breadcrumbs crumbs={crumbs} />
+					<PageBreadcrumbs crumbs={crumbs} />
 				</PageHeader>
 
 				<Separator className="hidden md:block" />
