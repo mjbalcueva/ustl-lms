@@ -3,13 +3,13 @@ import { TbBook2, TbListDetails, TbPackage } from 'react-icons/tb'
 import { api, HydrateClient } from '@/shared/trpc/server'
 import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
+import { AttachmentEdit } from '@/client/components/course/forms/attachment-edit'
 import { CategoryEdit } from '@/client/components/course/forms/category-edit'
 import { CodeEdit } from '@/client/components/course/forms/code-edit'
 import { DescriptionEdit } from '@/client/components/course/forms/description-edit'
 import { ImageEdit } from '@/client/components/course/forms/image-edit'
 import { TitleEdit } from '@/client/components/course/forms/title-edit'
 import { CreateChapters } from '@/client/components/instructor/course/forms/create-chapters'
-import { UpdateAttachment } from '@/client/components/instructor/course/forms/update-attachment'
 import { NotFound } from '@/client/components/not-found'
 import {
 	PageBreadcrumbs,
@@ -86,7 +86,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 
 						<PageSection compactMode>
 							<PageSectionTitle title="Resources & Attachments" icon={TbPackage} />
-							<UpdateAttachment courseId={course.id} initialData={{ attachment: course.attachment }} />
+							<AttachmentEdit courseId={course.id} initialData={{ attachment: course.attachment }} />
 						</PageSection>
 					</div>
 				</PageContent>

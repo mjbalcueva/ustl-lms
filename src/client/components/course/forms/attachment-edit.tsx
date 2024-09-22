@@ -9,21 +9,14 @@ import { toast } from 'sonner'
 import { api } from '@/shared/trpc/react'
 
 import { FileUpload } from '@/client/components/file-upload'
-import {
-	CardContent,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-	CardWrapper
-} from '@/client/components/instructor/course/card-wrapper'
-import { Button } from '@/client/components/ui'
+import { Button, Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/client/components/ui'
 
-type UpdateAttachmentProps = {
+type AttachmentEditProps = {
 	courseId: string
 	initialData: { attachment?: Attachment[] }
 }
 
-export const UpdateAttachment = ({ courseId, initialData }: UpdateAttachmentProps) => {
+export const AttachmentEdit = ({ courseId, initialData }: AttachmentEditProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -53,7 +46,7 @@ export const UpdateAttachment = ({ courseId, initialData }: UpdateAttachmentProp
 	})
 
 	return (
-		<CardWrapper>
+		<Card>
 			<CardHeader>
 				<CardTitle>Course Attachment</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
@@ -113,6 +106,6 @@ export const UpdateAttachment = ({ courseId, initialData }: UpdateAttachmentProp
 					</span>
 				</CardFooter>
 			)}
-		</CardWrapper>
+		</Card>
 	)
 }
