@@ -3,12 +3,12 @@
 import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm, type SubmitHandler } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { TbEdit } from 'react-icons/tb'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
-import { updateTitleSchema, type UpdateTitleSchema } from '@/shared/validations/course'
+import { editChapterTitleSchema, type EditChapterTitleSchema } from '@/shared/validations/chapter'
 
 import {
 	Button,
@@ -25,14 +25,12 @@ import {
 	Input
 } from '@/client/components/ui'
 
-type EditTitleProps = {
-	courseId: string
-	initialData: {
-		title: string
-	}
+type EditChapterTitleProps = {
+	chapterId: string
+	initialTitle: string
 }
 
-export const EditTitleForm = ({ courseId, initialData }: EditTitleProps) => {
+export const EditChapterTitleForm = ({ chapterId, initialTitle }: EditChapterTitleProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -41,48 +39,43 @@ export const EditTitleForm = ({ courseId, initialData }: EditTitleProps) => {
 		form.reset()
 	}
 
-	const form = useForm<UpdateTitleSchema>({
-		resolver: zodResolver(updateTitleSchema),
+	const form = useForm<EditChapterTitleSchema>({
+		resolver: zodResolver(editChapterTitleSchema),
 		defaultValues: {
-			courseId,
-			title: initialData.title
+			chapterId,
+			title: initialTitle
 		}
 	})
+	const title = form.getValues('title')
 
-	const { mutate, isPending } = api.course.updateTitle.useMutation({
+	const { mutate, isPending } = api.chapter.editTitle.useMutation({
 		onSuccess: async (data) => {
-			router.refresh()
-			form.reset({
-				courseId,
-				title: data.course.title
-			})
 			toggleEdit()
+			form.reset({
+				chapterId,
+				title: data.newTitle
+			})
+			router.refresh()
 			toast.success(data.message)
 		},
-		onError: (error) => {
-			toast.error(error.message)
-		}
+		onError: (error) => toast.error(error.message)
 	})
-
-	const onSubmit: SubmitHandler<UpdateTitleSchema> = (data) => mutate(data)
-
-	const title = form.getValues('title')
 
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Course Title</CardTitle>
+				<CardTitle>Chapter Title</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
 					{!isEditing && title && <TbEdit className="mr-2 size-4" />}
 					{isEditing ? 'Cancel' : title ? 'Edit' : 'Add'}
 				</Button>
 			</CardHeader>
 
-			{!isEditing && <CardContent>{form.watch('title')}</CardContent>}
+			{!isEditing && <CardContent>{title}</CardContent>}
 
 			{isEditing && (
 				<Form {...form}>
-					<form onSubmit={form.handleSubmit(onSubmit)}>
+					<form onSubmit={form.handleSubmit((data) => mutate(data))}>
 						<CardContent>
 							<FormField
 								control={form.control}
@@ -90,7 +83,7 @@ export const EditTitleForm = ({ courseId, initialData }: EditTitleProps) => {
 								render={({ field }) => (
 									<FormItem>
 										<FormControl>
-											<Input placeholder="e.g. 'Advanced web development'" disabled={isPending} {...field} />
+											<Input placeholder="e.g. 'Chapter 1'" disabled={isPending} {...field} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>

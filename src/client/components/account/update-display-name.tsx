@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSession } from 'next-auth/react'
-import { useForm, type SubmitHandler } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
@@ -39,12 +39,8 @@ export const UpdateDisplayNameForm = () => {
 			router.refresh()
 			toast.success(data.message)
 		},
-		onError: (error) => {
-			toast.error(error.message)
-		}
+		onError: (error) => toast.error(error.message)
 	})
-
-	const onSubmit: SubmitHandler<UpdateDisplayNameSchema> = (data) => mutate(data)
 
 	return (
 		<ItemWrapper>
@@ -54,7 +50,7 @@ export const UpdateDisplayNameForm = () => {
 			</ItemHeader>
 
 			<Form {...form}>
-				<form onSubmit={form.handleSubmit(onSubmit)}>
+				<form onSubmit={form.handleSubmit((data) => mutate(data))}>
 					<ItemContent>
 						<FormField
 							control={form.control}

@@ -2,12 +2,12 @@
 
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm, type SubmitHandler } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { TbCirclePlus } from 'react-icons/tb'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
-import { createCourseSchema, type CreateCourseSchema } from '@/shared/validations/course'
+import { addCourseSchema, type AddCourseSchema } from '@/shared/validations/course'
 
 import {
 	Button,
@@ -32,27 +32,22 @@ import {
 export const AddCourseForm = () => {
 	const router = useRouter()
 
-	const form = useForm<CreateCourseSchema>({
-		resolver: zodResolver(createCourseSchema),
+	const form = useForm<AddCourseSchema>({
+		resolver: zodResolver(addCourseSchema),
 		defaultValues: {
 			code: '',
 			title: ''
 		}
 	})
 
-	const { mutate, isPending } = api.course.createCourse.useMutation({
+	const { mutate, isPending } = api.course.addCourse.useMutation({
 		onSuccess: async (data) => {
 			form.reset()
-
-			router.push(`/courses/edit/${data.course.id}`)
+			router.push(`/courses/edit/${data.newCourseId}`)
 			toast.success(data.message)
 		},
-		onError: (error) => {
-			toast.error(error.message)
-		}
+		onError: (error) => toast.error(error.message)
 	})
-
-	const onSubmit: SubmitHandler<CreateCourseSchema> = (data) => mutate(data)
 
 	return (
 		<Dialog>
@@ -70,7 +65,7 @@ export const AddCourseForm = () => {
 				</DialogHeader>
 				<Separator />
 				<Form {...form}>
-					<form onSubmit={form.handleSubmit(onSubmit)}>
+					<form onSubmit={form.handleSubmit((data) => mutate(data))}>
 						<div className="grid gap-4">
 							<FormField
 								control={form.control}

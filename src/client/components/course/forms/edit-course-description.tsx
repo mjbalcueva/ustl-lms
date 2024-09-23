@@ -3,12 +3,12 @@
 import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm, type SubmitHandler } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { TbCirclePlus, TbEdit } from 'react-icons/tb'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
-import { updateDescriptionSchema, type UpdateDescriptionSchema } from '@/shared/validations/course'
+import { editDescriptionSchema, type EditDescriptionSchema } from '@/shared/validations/course'
 
 import {
 	Button,
@@ -25,14 +25,12 @@ import {
 	Textarea
 } from '@/client/components/ui'
 
-type EditDescriptionProps = {
+type EditCourseDescriptionProps = {
 	courseId: string
-	initialData: {
-		description: string
-	}
+	initialDescription: string | null
 }
 
-export const EditDescriptionForm = ({ courseId, initialData }: EditDescriptionProps) => {
+export const EditCourseDescriptionForm = ({ courseId, initialDescription }: EditCourseDescriptionProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -41,32 +39,27 @@ export const EditDescriptionForm = ({ courseId, initialData }: EditDescriptionPr
 		form.reset()
 	}
 
-	const form = useForm<UpdateDescriptionSchema>({
-		resolver: zodResolver(updateDescriptionSchema),
+	const form = useForm<EditDescriptionSchema>({
+		resolver: zodResolver(editDescriptionSchema),
 		defaultValues: {
 			courseId,
-			description: initialData.description
+			description: initialDescription ?? ''
 		}
 	})
+	const description = form.getValues('description')
 
-	const { mutate, isPending } = api.course.updateDescription.useMutation({
+	const { mutate, isPending } = api.course.editDescription.useMutation({
 		onSuccess: async (data) => {
+			toggleEdit()
 			router.refresh()
 			form.reset({
 				courseId,
-				description: data.course.description ?? ''
+				description: data.newDescription ?? ''
 			})
-			toggleEdit()
 			toast.success(data.message)
 		},
-		onError: (error) => {
-			toast.error(error.message)
-		}
+		onError: (error) => toast.error(error.message)
 	})
-
-	const onSubmit: SubmitHandler<UpdateDescriptionSchema> = (data) => mutate(data)
-
-	const description = form.getValues('description')
 
 	return (
 		<Card>
@@ -85,7 +78,7 @@ export const EditDescriptionForm = ({ courseId, initialData }: EditDescriptionPr
 
 			{isEditing && (
 				<Form {...form}>
-					<form onSubmit={form.handleSubmit(onSubmit)}>
+					<form onSubmit={form.handleSubmit((data) => mutate(data))}>
 						<CardContent>
 							<FormField
 								control={form.control}

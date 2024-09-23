@@ -1,20 +1,22 @@
 import { TRPCError } from '@trpc/server'
 
-import { createChapterSchema, getChapterSchema, reorderChaptersSchema } from '@/shared/validations/chapter'
+import {
+	createChapterSchema,
+	editChapterTitleSchema,
+	getChapterSchema,
+	reorderChaptersSchema
+} from '@/shared/validations/chapter'
 
 import { createTRPCRouter, instructorProcedure } from '@/server/api/trpc'
 
 export const chapterRouter = createTRPCRouter({
-	createChapter: instructorProcedure.input(createChapterSchema).mutation(async ({ ctx, input }) => {
+	addChapter: instructorProcedure.input(createChapterSchema).mutation(async ({ ctx, input }) => {
 		const { courseId, title } = input
 
 		const course = await ctx.db.course.findUnique({
 			where: { id: courseId, createdById: ctx.session.user.id! }
 		})
-
-		if (!course) {
-			throw new TRPCError({ code: 'NOT_FOUND', message: 'Course not found' })
-		}
+		if (!course) throw new TRPCError({ code: 'NOT_FOUND', message: 'Course not found' })
 
 		const lastChapter = await ctx.db.chapter.findFirst({
 			where: { courseId },
@@ -23,13 +25,24 @@ export const chapterRouter = createTRPCRouter({
 
 		const newPosition = lastChapter ? lastChapter.position + 1 : 1
 
-		const chapter = await ctx.db.chapter.create({
+		await ctx.db.chapter.create({
 			data: { title, courseId, position: newPosition }
 		})
 
+		return { message: 'Chapter created successfully' }
+	}),
+
+	editTitle: instructorProcedure.input(editChapterTitleSchema).mutation(async ({ ctx, input }) => {
+		const { chapterId, title: title } = input
+
+		const chapter = await ctx.db.chapter.update({
+			where: { id: chapterId },
+			data: { title }
+		})
+
 		return {
-			chapterId: chapter.id,
-			message: 'Chapter created successfully'
+			newTitle: chapter.title,
+			message: 'Chapter title updated successfully'
 		}
 	}),
 

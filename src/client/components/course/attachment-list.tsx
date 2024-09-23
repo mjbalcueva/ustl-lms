@@ -19,13 +19,11 @@ export const AttachmentList = ({ items }: AttachmentListProps) => {
 
 	const { mutate } = api.attachment.deleteAttachment.useMutation({
 		onSuccess: async (data) => {
-			router.refresh()
 			setDeletingId(null)
+			router.refresh()
 			toast.success(data.message)
 		},
-		onError: (error) => {
-			toast.error(error.message)
-		}
+		onError: (error) => toast.error(error.message)
 	})
 
 	return (
