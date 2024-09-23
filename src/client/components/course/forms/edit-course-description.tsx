@@ -8,7 +8,7 @@ import { TbCirclePlus, TbEdit } from 'react-icons/tb'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
-import { editCourseDescriptionSchema, type EditCourseDescriptionSchema } from '@/shared/validations/course'
+import { editDescriptionSchema, type EditDescriptionSchema } from '@/shared/validations/course'
 
 import {
 	Button,
@@ -39,8 +39,8 @@ export const EditCourseDescriptionForm = ({ courseId, initialDescription }: Edit
 		form.reset()
 	}
 
-	const form = useForm<EditCourseDescriptionSchema>({
-		resolver: zodResolver(editCourseDescriptionSchema),
+	const form = useForm<EditDescriptionSchema>({
+		resolver: zodResolver(editDescriptionSchema),
 		defaultValues: {
 			courseId,
 			description: initialDescription ?? ''

@@ -3,8 +3,8 @@ import { TbBook2, TbListDetails, TbPackage } from 'react-icons/tb'
 import { api } from '@/shared/trpc/server'
 import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
-import { AddAttachmentsForm } from '@/client/components/course/forms/add-attachments'
-import { AddChaptersForm } from '@/client/components/course/forms/add-course-chapters'
+import { AddCourseAttachmentsForm } from '@/client/components/course/forms/add-course-attachments'
+import { AddCourseChaptersForm } from '@/client/components/course/forms/add-course-chapters'
 import { EditCourseCategoriesForm } from '@/client/components/course/forms/edit-course-categories'
 import { EditCourseCodeForm } from '@/client/components/course/forms/edit-course-code'
 import { EditCourseDescriptionForm } from '@/client/components/course/forms/edit-course-description'
@@ -72,7 +72,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 					<EditCourseImageForm courseId={course.id} initialImage={course.image} />
 					<EditCourseCategoriesForm
 						courseId={course.id}
-						categoryId={course.categoryId ?? ''}
+						categoryId={course.categoryId}
 						options={categories.map((category) => ({ value: category.id, label: category.name }))}
 					/>
 				</PageSection>
@@ -80,12 +80,12 @@ export default async function Page({ params }: { params: { courseId: string } })
 				<div className="flex flex-1 flex-col gap-4 md:gap-6">
 					<PageSection compactMode>
 						<PageSectionTitle title="Course chapters" icon={TbListDetails} />
-						<AddChaptersForm courseId={course.id} initialChapters={course.chapter} />
+						<AddCourseChaptersForm courseId={course.id} initialChapters={course.chapter} />
 					</PageSection>
 
 					<PageSection compactMode>
 						<PageSectionTitle title="Resources & Attachments" icon={TbPackage} />
-						<AddAttachmentsForm courseId={course.id} initialData={{ attachment: course.attachment }} />
+						<AddCourseAttachmentsForm courseId={course.id} initialAttachment={course.attachment} />
 					</PageSection>
 				</div>
 			</PageContent>

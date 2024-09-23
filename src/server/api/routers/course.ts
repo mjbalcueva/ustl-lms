@@ -1,20 +1,20 @@
 import {
-	createCourseSchema,
-	editCourseCodeSchema,
-	editCourseDescriptionSchema,
-	editCourseImageSchema,
-	editCourseTitleSchema,
-	getCoursesSchema
+	addCourseSchema,
+	editCodeSchema,
+	editDescriptionSchema,
+	editImageSchema,
+	editTitleSchema,
+	getCourseSchema
 } from '@/shared/validations/course'
 
 import { createTRPCRouter, instructorProcedure } from '@/server/api/trpc'
 import { utapi } from '@/server/lib/utapi'
 
 export const courseRouter = createTRPCRouter({
-	createCourse: instructorProcedure.input(createCourseSchema).mutation(async ({ ctx, input }) => {
+	addCourse: instructorProcedure.input(addCourseSchema).mutation(async ({ ctx, input }) => {
 		const { code, title } = input
 
-		const course = await ctx.db.course.create({
+		const { id: newCourseId } = await ctx.db.course.create({
 			data: {
 				code,
 				title,
@@ -22,10 +22,10 @@ export const courseRouter = createTRPCRouter({
 			}
 		})
 
-		return { message: 'Course created!', course }
+		return { message: 'Course created!', newCourseId }
 	}),
 
-	getCourse: instructorProcedure.input(getCoursesSchema).query(async ({ ctx, input }) => {
+	getCourse: instructorProcedure.input(getCourseSchema).query(async ({ ctx, input }) => {
 		const { courseId } = input
 
 		const course = await ctx.db.course.findUnique({
@@ -39,7 +39,7 @@ export const courseRouter = createTRPCRouter({
 		return { course }
 	}),
 
-	editCode: instructorProcedure.input(editCourseCodeSchema).mutation(async ({ ctx, input }) => {
+	editCode: instructorProcedure.input(editCodeSchema).mutation(async ({ ctx, input }) => {
 		const { courseId, code } = input
 
 		const { code: newCode } = await ctx.db.course.update({
@@ -50,7 +50,7 @@ export const courseRouter = createTRPCRouter({
 		return { message: 'Course code updated!', newCode }
 	}),
 
-	editTitle: instructorProcedure.input(editCourseTitleSchema).mutation(async ({ ctx, input }) => {
+	editTitle: instructorProcedure.input(editTitleSchema).mutation(async ({ ctx, input }) => {
 		const { courseId, title } = input
 
 		const { title: newTitle } = await ctx.db.course.update({
@@ -61,7 +61,7 @@ export const courseRouter = createTRPCRouter({
 		return { message: 'Course title updated!', newTitle }
 	}),
 
-	editDescription: instructorProcedure.input(editCourseDescriptionSchema).mutation(async ({ ctx, input }) => {
+	editDescription: instructorProcedure.input(editDescriptionSchema).mutation(async ({ ctx, input }) => {
 		const { courseId, description } = input
 
 		const { description: newDescription } = await ctx.db.course.update({
@@ -72,7 +72,7 @@ export const courseRouter = createTRPCRouter({
 		return { message: 'Course description updated!', newDescription }
 	}),
 
-	editImage: instructorProcedure.input(editCourseImageSchema).mutation(async ({ ctx, input }) => {
+	editImage: instructorProcedure.input(editImageSchema).mutation(async ({ ctx, input }) => {
 		const { courseId, imageUrl } = input
 
 		const course = await ctx.db.course.findUnique({

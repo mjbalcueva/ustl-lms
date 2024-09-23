@@ -28,12 +28,12 @@ import {
 	Loader
 } from '@/client/components/ui'
 
-type AddChaptersProps = {
+type AddCourseChaptersProps = {
 	courseId: string
 	initialChapters: Chapter[]
 }
 
-export const AddChaptersForm = ({ courseId, initialChapters }: AddChaptersProps) => {
+export const AddCourseChaptersForm = ({ courseId, initialChapters }: AddCourseChaptersProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -54,15 +54,13 @@ export const AddChaptersForm = ({ courseId, initialChapters }: AddChaptersProps)
 	const onEdit = (id: string) => router.push(`/courses/edit/${courseId}/chapters/${id}`)
 
 	const { mutate: reorderChapter, isPending: isReordering } = api.chapter.reorderChapters.useMutation({
-		onSuccess: (data) => {
-			toast.success(data.message)
-		},
+		onSuccess: (data) => toast.success(data.message),
 		onError: (error) => toast.error(error.message)
 	})
 
 	const onReorder = async (data: { id: string; position: number }[]) => reorderChapter({ courseId, chapterList: data })
 
-	const { mutate: addChapter, isPending: isCreating } = api.chapter.createChapter.useMutation({
+	const { mutate: addChapter, isPending: isCreating } = api.chapter.addChapter.useMutation({
 		onSuccess: async (data) => {
 			toggleEdit()
 			form.reset({

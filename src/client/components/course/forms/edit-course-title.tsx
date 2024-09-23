@@ -8,7 +8,7 @@ import { TbEdit } from 'react-icons/tb'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
-import { editCourseTitleSchema, type EditCourseTitleSchema } from '@/shared/validations/course'
+import { editTitleSchema, type EditTitleSchema } from '@/shared/validations/course'
 
 import {
 	Button,
@@ -39,8 +39,8 @@ export const EditCourseTitleForm = ({ courseId, initialTitle }: EditCourseTitleP
 		form.reset()
 	}
 
-	const form = useForm<EditCourseTitleSchema>({
-		resolver: zodResolver(editCourseTitleSchema),
+	const form = useForm<EditTitleSchema>({
+		resolver: zodResolver(editTitleSchema),
 		defaultValues: {
 			courseId,
 			title: initialTitle

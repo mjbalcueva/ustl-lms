@@ -27,7 +27,7 @@ import {
 
 type EditCourseCategoryProps = {
 	courseId: string
-	categoryId: string
+	categoryId: string | null
 	options: {
 		value: string
 		label: string
@@ -47,7 +47,7 @@ export const EditCourseCategoriesForm = ({ courseId, categoryId, options }: Edit
 		resolver: zodResolver(editCourseCategorySchema),
 		defaultValues: {
 			courseId,
-			categoryId
+			categoryId: categoryId ?? ''
 		}
 	})
 	const selectedCategory = options.find((option) => option.value === form.getValues('categoryId'))
