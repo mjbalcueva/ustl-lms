@@ -82,7 +82,12 @@ export const RegisterForm = () => {
 				<FormResponse type="success" message={data?.message} />
 
 				<div className="pt-2">
-					<ButtonShining className="w-full" shiningClassName="bg-white/20" disabled={isPending}>
+					<ButtonShining
+						className="w-full"
+						shiningClassName="bg-white/20"
+						disabled={isPending}
+						variant={isPending ? 'shine' : 'default'}
+					>
 						{isPending && (
 							<span className="relative right-[4.5ch]">
 								<Loader />

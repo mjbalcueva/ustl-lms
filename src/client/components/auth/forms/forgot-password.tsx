@@ -50,7 +50,12 @@ export const ForgotPasswordForm = () => {
 				<FormResponse type="error" message={error?.message} />
 				<FormResponse type="success" message={data?.message} />
 
-				<ButtonShining className="w-full rounded-xl" shiningClassName="bg-white/20" disabled={isPending}>
+				<ButtonShining
+					className="w-full rounded-xl"
+					shiningClassName="bg-white/20"
+					disabled={isPending}
+					variant={isPending ? 'shine' : 'default'}
+				>
 					{isPending && (
 						<span className="relative right-[7.2ch]">
 							<Loader />

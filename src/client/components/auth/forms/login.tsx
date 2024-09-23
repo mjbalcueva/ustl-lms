@@ -143,7 +143,12 @@ export const LoginForm = () => {
 				<FormResponse type="error" message={formError} />
 				<FormResponse type="success" message={formSuccess} />
 
-				<ButtonShining className="w-full rounded-xl" shiningClassName="bg-white/20" disabled={isPending}>
+				<ButtonShining
+					className="w-full rounded-xl"
+					shiningClassName="bg-white/20"
+					disabled={isPending}
+					variant={isPending ? 'shine' : 'default'}
+				>
 					{isPending && (
 						<span className={cn('relative', showTwoFactor ? 'right-[4ch]' : 'right-[3.4ch]')}>
 							<Loader />

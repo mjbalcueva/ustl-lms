@@ -51,7 +51,12 @@ export const ResetPasswordForm = ({ token }: { token: string }) => {
 				<FormResponse type="error" message={error?.message} />
 				<FormResponse type="success" message={data?.message} />
 
-				<ButtonShining className="w-full" shiningClassName="bg-white/20" disabled={isPending}>
+				<ButtonShining
+					className="w-full"
+					shiningClassName="bg-white/20"
+					disabled={isPending}
+					variant={isPending ? 'shine' : 'default'}
+				>
 					{isPending && (
 						<span className="relative right-[7ch]">
 							<Loader />
