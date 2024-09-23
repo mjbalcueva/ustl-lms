@@ -2,9 +2,9 @@ import {
 	createCourseSchema,
 	editCourseCodeSchema,
 	editCourseDescriptionSchema,
+	editCourseImageSchema,
 	editCourseTitleSchema,
-	getCoursesSchema,
-	updateImageSchema
+	getCoursesSchema
 } from '@/shared/validations/course'
 
 import { createTRPCRouter, instructorProcedure } from '@/server/api/trpc'
@@ -72,7 +72,7 @@ export const courseRouter = createTRPCRouter({
 		return { message: 'Course description updated!', newDescription }
 	}),
 
-	updateImage: instructorProcedure.input(updateImageSchema).mutation(async ({ ctx, input }) => {
+	editImage: instructorProcedure.input(editCourseImageSchema).mutation(async ({ ctx, input }) => {
 		const { courseId, imageUrl } = input
 
 		const course = await ctx.db.course.findUnique({
@@ -83,11 +83,11 @@ export const courseRouter = createTRPCRouter({
 		const oldImageKey = course?.image?.split('/f/')[1]
 		if (oldImageKey) await utapi.deleteFiles(oldImageKey)
 
-		const updatedCourse = await ctx.db.course.update({
+		await ctx.db.course.update({
 			where: { id: courseId, createdById: ctx.session.user.id! },
 			data: { image: imageUrl }
 		})
 
-		return { message: 'Course image updated!', course: updatedCourse }
+		return { message: 'Course image updated!' }
 	})
 })

@@ -50,17 +50,15 @@ export const EditCourseTitleForm = ({ courseId, initialTitle }: EditCourseTitleP
 
 	const { mutate, isPending } = api.course.editTitle.useMutation({
 		onSuccess: async (data) => {
-			router.refresh()
+			toggleEdit()
 			form.reset({
 				courseId,
 				title: data.newTitle
 			})
-			toggleEdit()
+			router.refresh()
 			toast.success(data.message)
 		},
-		onError: (error) => {
-			toast.error(error.message)
-		}
+		onError: (error) => toast.error(error.message)
 	})
 
 	return (

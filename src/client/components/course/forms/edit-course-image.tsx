@@ -11,28 +11,24 @@ import { api } from '@/shared/trpc/react'
 import { FileUpload } from '@/client/components/file-upload'
 import { Button, Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/client/components/ui'
 
-type EditImageProps = {
+type EditCourseImageProps = {
 	courseId: string
-	initialData: {
-		image: string
-	}
+	initialImage: string | null
 }
 
-export const EditImageForm = ({ courseId, initialData }: EditImageProps) => {
+export const EditCourseImageForm = ({ courseId, initialImage }: EditCourseImageProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
 	const toggleEdit = () => setIsEditing((current) => !current)
 
-	const { mutate } = api.course.updateImage.useMutation({
+	const { mutate } = api.course.editImage.useMutation({
 		onSuccess: async (data) => {
-			router.refresh()
 			toggleEdit()
+			router.refresh()
 			toast.success(data.message)
 		},
-		onError: (error) => {
-			toast.error(error.message)
-		}
+		onError: (error) => toast.error(error.message)
 	})
 
 	return (
@@ -40,17 +36,17 @@ export const EditImageForm = ({ courseId, initialData }: EditImageProps) => {
 			<CardHeader>
 				<CardTitle>Course Image</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
-					{!isEditing && initialData.image && <TbEdit className="mr-2 size-4" />}
-					{!isEditing && !initialData.image && <TbCirclePlus className="mr-2 size-4" />}
-					{isEditing ? 'Cancel' : initialData.image ? 'Edit' : 'Add'}
+					{!isEditing && initialImage && <TbEdit className="mr-2 size-4" />}
+					{!isEditing && !initialImage && <TbCirclePlus className="mr-2 size-4" />}
+					{isEditing ? 'Cancel' : initialImage ? 'Edit' : 'Add'}
 				</Button>
 			</CardHeader>
 
 			<CardContent className="pb-5">
-				{!isEditing && initialData.image && (
+				{!isEditing && initialImage && (
 					<div className="relative aspect-video">
 						<Image
-							src={initialData.image}
+							src={initialImage}
 							alt="Course Image"
 							fill
 							className="rounded-xl border border-input"
@@ -60,7 +56,7 @@ export const EditImageForm = ({ courseId, initialData }: EditImageProps) => {
 					</div>
 				)}
 
-				{!isEditing && !initialData.image && (
+				{!isEditing && !initialImage && (
 					<div className="flex h-[11.5rem] items-center justify-center rounded-xl border border-input bg-card dark:bg-background">
 						<TbLibraryPhoto className="size-10 text-card-foreground dark:text-muted-foreground" />
 					</div>

@@ -5,11 +5,11 @@ import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
 import { AddAttachmentsForm } from '@/client/components/course/forms/add-attachments'
 import { AddChaptersForm } from '@/client/components/course/forms/add-chapters'
-import { EditCategoriesForm } from '@/client/components/course/forms/edit-categories'
+import { EditCourseCategoriesForm } from '@/client/components/course/forms/edit-course-categories'
 import { EditCourseCodeForm } from '@/client/components/course/forms/edit-course-code'
 import { EditCourseDescriptionForm } from '@/client/components/course/forms/edit-course-description'
+import { EditCourseImageForm } from '@/client/components/course/forms/edit-course-image'
 import { EditCourseTitleForm } from '@/client/components/course/forms/edit-course-title'
-import { EditImageForm } from '@/client/components/course/forms/edit-image'
 import { NotFound } from '@/client/components/not-found'
 import {
 	PageBreadcrumbs,
@@ -69,8 +69,8 @@ export default async function Page({ params }: { params: { courseId: string } })
 					<EditCourseCodeForm courseId={course.id} initialCode={course.code} />
 					<EditCourseTitleForm courseId={course.id} initialTitle={course.title} />
 					<EditCourseDescriptionForm courseId={course.id} initialDescription={course.description} />
-					<EditImageForm courseId={course.id} initialData={{ image: course.image ?? '' }} />
-					<EditCategoriesForm
+					<EditCourseImageForm courseId={course.id} initialImage={course.image} />
+					<EditCourseCategoriesForm
 						courseId={course.id}
 						categoryId={course.categoryId ?? ''}
 						options={categories.map((category) => ({ value: category.id, label: category.name }))}

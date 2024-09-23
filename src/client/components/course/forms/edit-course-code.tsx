@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm, type SubmitHandler } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { TbEdit } from 'react-icons/tb'
 import { toast } from 'sonner'
 
@@ -49,20 +49,16 @@ export const EditCourseCodeForm = ({ courseId, initialCode }: EditCourseCodeProp
 
 	const { mutate, isPending } = api.course.editCode.useMutation({
 		onSuccess: async (data) => {
-			router.refresh()
+			toggleEdit()
 			form.reset({
 				courseId,
 				code: data.newCode
 			})
-			toggleEdit()
+			router.refresh()
 			toast.success(data.message)
 		},
-		onError: (error) => {
-			toast.error(error.message)
-		}
+		onError: (error) => toast.error(error.message)
 	})
-
-	const onSubmit: SubmitHandler<EditCourseCodeSchema> = (data) => mutate(data)
 
 	return (
 		<Card>
@@ -78,7 +74,7 @@ export const EditCourseCodeForm = ({ courseId, initialCode }: EditCourseCodeProp
 
 			{isEditing && (
 				<Form {...form}>
-					<form onSubmit={form.handleSubmit(onSubmit)}>
+					<form onSubmit={form.handleSubmit((data) => mutate(data))}>
 						<CardContent>
 							<FormField
 								control={form.control}

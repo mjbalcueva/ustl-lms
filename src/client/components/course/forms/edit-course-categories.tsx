@@ -3,12 +3,12 @@
 import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm, type SubmitHandler } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { TbCirclePlus, TbEdit } from 'react-icons/tb'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
-import { updateCategorySchema, type UpdateCategorySchema } from '@/shared/validations/category'
+import { editCourseCategorySchema, type EditCourseCategorySchema } from '@/shared/validations/category'
 
 import {
 	Button,
@@ -25,7 +25,7 @@ import {
 	FormMessage
 } from '@/client/components/ui'
 
-type EditCategoryProps = {
+type EditCourseCategoryProps = {
 	courseId: string
 	categoryId: string
 	options: {
@@ -34,7 +34,7 @@ type EditCategoryProps = {
 	}[]
 }
 
-export const EditCategoriesForm = ({ courseId, categoryId, options }: EditCategoryProps) => {
+export const EditCourseCategoriesForm = ({ courseId, categoryId, options }: EditCourseCategoryProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -43,32 +43,29 @@ export const EditCategoriesForm = ({ courseId, categoryId, options }: EditCatego
 		form.reset()
 	}
 
-	const form = useForm<UpdateCategorySchema>({
-		resolver: zodResolver(updateCategorySchema),
+	const form = useForm<EditCourseCategorySchema>({
+		resolver: zodResolver(editCourseCategorySchema),
 		defaultValues: {
 			courseId,
 			categoryId
 		}
 	})
+	const selectedCategory = options.find((option) => option.value === form.getValues('categoryId'))
 
-	const { mutate, isPending } = api.category.updateCategory.useMutation({
+	const { mutate, isPending } = api.category.editCategory.useMutation({
 		onSuccess: async (data) => {
-			router.refresh()
+			toggleEdit()
 			form.reset({
 				courseId,
-				categoryId: data.course.categoryId ?? ''
+				categoryId: data.newCategoryId ?? ''
 			})
-			toggleEdit()
+			router.refresh()
 			toast.success(data.message)
 		},
 		onError: (error) => {
 			toast.error(error.message)
 		}
 	})
-
-	const onSubmit: SubmitHandler<UpdateCategorySchema> = (data) => mutate(data)
-
-	const selectedCategory = options.find((option) => option.value === form.getValues('categoryId'))
 
 	return (
 		<Card>
@@ -89,7 +86,7 @@ export const EditCategoriesForm = ({ courseId, categoryId, options }: EditCatego
 
 			{isEditing && (
 				<Form {...form}>
-					<form onSubmit={form.handleSubmit(onSubmit)}>
+					<form onSubmit={form.handleSubmit((data) => mutate(data))}>
 						<CardContent>
 							<FormField
 								control={form.control}

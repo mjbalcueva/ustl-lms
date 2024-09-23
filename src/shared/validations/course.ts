@@ -29,8 +29,8 @@ export const editCourseDescriptionSchema = z.object({
 })
 export type EditCourseDescriptionSchema = z.infer<typeof editCourseDescriptionSchema>
 
-export const updateImageSchema = z.object({
+export const editCourseImageSchema = z.object({
 	courseId: z.string().min(1, 'Course ID is required'),
 	imageUrl: z.string().min(1, 'Image URL is required')
 })
-export type UpdateImageSchema = z.infer<typeof updateImageSchema>
+export type EditCourseImageSchema = z.infer<typeof editCourseImageSchema>
