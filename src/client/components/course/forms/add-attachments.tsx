@@ -3,24 +3,24 @@
 import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { type Attachment } from '@prisma/client'
-import { TbCirclePlus, TbFile, TbLoader2, TbX } from 'react-icons/tb'
+import { TbCirclePlus } from 'react-icons/tb'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
 
+import { AttachmentList } from '@/client/components/course/attachment-list'
 import { FileUpload } from '@/client/components/file-upload'
 import { Button, Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/client/components/ui'
 
 type AddAttachmentsProps = {
 	courseId: string
-	initialData: { attachment?: Attachment[] }
+	initialData: { attachment: Attachment[] }
 }
 
 export const AddAttachmentsForm = ({ courseId, initialData }: AddAttachmentsProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
-	const [deletingId, setDeletingId] = React.useState<string | null>(null)
 	const toggleEdit = () => setIsEditing((current) => !current)
 
 	const { mutate: createAttachment } = api.attachment.createAttachment.useMutation({
@@ -34,16 +34,7 @@ export const AddAttachmentsForm = ({ courseId, initialData }: AddAttachmentsProp
 		}
 	})
 
-	const { mutate: deleteAttachment } = api.attachment.deleteAttachment.useMutation({
-		onSuccess: async (data) => {
-			router.refresh()
-			setDeletingId(null)
-			toast.success(data.message)
-		},
-		onError: (error) => {
-			toast.error(error.message)
-		}
-	})
+	const hasAttachments = initialData.attachment?.length > 0
 
 	return (
 		<Card>
@@ -55,34 +46,9 @@ export const AddAttachmentsForm = ({ courseId, initialData }: AddAttachmentsProp
 				</Button>
 			</CardHeader>
 
-			<CardContent isEmpty={initialData.attachment?.length === 0}>
-				{!isEditing && initialData.attachment?.length === 0 && 'No attachment added'}
-
-				{!isEditing && !!initialData.attachment && (
-					<ol className="space-y-2">
-						{initialData.attachment.map((attachment) => (
-							<li key={attachment.id} className="flex items-center rounded-xl border border-border px-3 py-3">
-								<TbFile className="mr-2 size-4 flex-shrink-0" />
-								<p className="line-clamp-1 text-sm">{attachment.name}</p>
-
-								{deletingId === attachment.id && <TbLoader2 className="ml-auto size-4 animate-spin" />}
-
-								{deletingId !== attachment.id && (
-									<button
-										className="ml-auto rounded-full hover:opacity-75"
-										onClick={() => {
-											setDeletingId(attachment.id)
-											deleteAttachment({ attachmentId: attachment.id })
-										}}
-									>
-										<TbX className="size-4" />
-									</button>
-								)}
-							</li>
-						))}
-					</ol>
-				)}
-
+			<CardContent isEmpty={!hasAttachments}>
+				{!isEditing && !hasAttachments && 'No attachment added'}
+				{!isEditing && hasAttachments && <AttachmentList items={initialData.attachment} />}
 				{isEditing && (
 					<FileUpload
 						endpoint="attachmentUpload"

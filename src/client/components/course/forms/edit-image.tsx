@@ -61,7 +61,7 @@ export const EditImageForm = ({ courseId, initialData }: EditImageProps) => {
 				)}
 
 				{!isEditing && !initialData.image && (
-					<div className="flex aspect-video items-center justify-center rounded-xl border border-input bg-card dark:bg-background">
+					<div className="flex h-[11.5rem] items-center justify-center rounded-xl border border-input bg-card dark:bg-background">
 						<TbLibraryPhoto className="size-10 text-card-foreground dark:text-muted-foreground" />
 					</div>
 				)}
