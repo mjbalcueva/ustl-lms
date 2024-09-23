@@ -41,27 +41,28 @@ export const ChapterList = ({ items, onEdit, onReorder }: ChapterListProps) => {
 								{(provided) => (
 									<li
 										ref={provided.innerRef}
-										className="item-center flex rounded-xl border border-input bg-background"
+										className="flex h-10 items-center gap-2 rounded-xl border border-input bg-background"
 										{...provided.draggableProps}
 									>
 										<div
-											className="flex h-10 items-center rounded-l-xl px-1 text-muted-foreground outline-none hover:bg-secondary hover:text-secondary-foreground focus:bg-secondary focus-visible:outline-ring"
+											className="flex h-full items-center rounded-l-xl pl-2 pr-1 text-muted-foreground outline-none hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-ring"
 											{...provided.dragHandleProps}
 										>
 											<TbGripVertical className="size-4" />
 										</div>
-										<span className="flex flex-1 items-center px-1">{chapter.title}</span>
-										<div className="flex items-center gap-x-1.5 pr-1">
-											<Badge variant={chapter.isPublished ? 'default' : 'secondary'} className="select-none">
-												{chapter.isPublished ? 'Published' : 'Draft'}
-											</Badge>
-											<button
-												className="h-full rounded-r-xl pl-1 pr-1.5 outline-none hover:opacity-75 focus-visible:outline-ring"
-												onClick={() => onEdit(chapter.id)}
-											>
-												<TbEdit className="size-4" />
-											</button>
-										</div>
+
+										{chapter.title}
+
+										<Badge variant={chapter.isPublished ? 'default' : 'secondary'} className="ml-auto select-none">
+											{chapter.isPublished ? 'Published' : 'Draft'}
+										</Badge>
+
+										<button
+											className="h-full rounded-r-xl pl-1 pr-2 outline-none hover:opacity-75 focus-visible:outline-ring"
+											onClick={() => onEdit(chapter.id)}
+										>
+											<TbEdit className="size-4" />
+										</button>
 									</li>
 								)}
 							</Draggable>

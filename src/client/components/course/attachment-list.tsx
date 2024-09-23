@@ -31,13 +31,13 @@ export const AttachmentList = ({ items }: AttachmentListProps) => {
 	return (
 		<ol className="space-y-2">
 			{items.map((item) => (
-				<li key={item.id} className="flex items-center rounded-xl border border-border px-3 py-3">
-					<TbFile className="mr-2 size-4 flex-shrink-0" />
+				<li key={item.id} className="flex h-10 items-center rounded-xl border border-border pl-2.5">
+					<TbFile className="mr-2 size-4 flex-shrink-0 text-muted-foreground" />
 					{item.name}
 					{deletingId === item.id && <TbLoader2 className="ml-auto size-4 animate-spin" />}
 					{deletingId !== item.id && (
 						<button
-							className="ml-auto rounded-full hover:opacity-75"
+							className="ml-auto h-full rounded-r-xl pl-1 pr-2 outline-none hover:opacity-75 focus-visible:outline-ring"
 							onClick={() => {
 								setDeletingId(item.id)
 								mutate({ attachmentId: item.id })
