@@ -1,7 +1,6 @@
 import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
-import { PageBreadcrumbs, PageDescription, PageHeader, PageTitle, PageWrapper } from '@/client/components/page'
-import { Separator } from '@/client/components/ui'
+import { PageBreadcrumbs, PageDescription, PageHeader, PageTitle, PageWrapper, Separator } from '@/client/components/ui'
 
 const NotFound = () => {
 	const crumbs: Breadcrumb = [

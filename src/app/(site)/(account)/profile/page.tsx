@@ -7,7 +7,7 @@ import {
 	PageSection,
 	PageTitle,
 	PageWrapper
-} from '@/client/components/page'
+} from '@/client/components/ui'
 
 export default async function Page() {
 	return (

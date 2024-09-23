@@ -12,9 +12,9 @@ import {
 	PageHeader,
 	PageSection,
 	PageTitle,
-	PageWrapper
-} from '@/client/components/page'
-import { Separator } from '@/client/components/ui'
+	PageWrapper,
+	Separator
+} from '@/client/components/ui'
 
 export default function Page() {
 	const crumbs: Breadcrumb = [{ icon: 'instructor' }, { label: 'Courses', href: '/courses' }, { label: 'Manage' }]

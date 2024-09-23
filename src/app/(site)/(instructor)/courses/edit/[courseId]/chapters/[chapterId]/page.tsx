@@ -9,9 +9,9 @@ import {
 	PageHeader,
 	PageSection,
 	PageTitle,
-	PageWrapper
-} from '@/client/components/page'
-import { Separator } from '@/client/components/ui'
+	PageWrapper,
+	Separator
+} from '@/client/components/ui'
 
 export default async function Page({ params }: { params: { courseId: string; chapterId: string } }) {
 	const { chapter } = await api.chapter.getChapter({ chapterId: params.chapterId })

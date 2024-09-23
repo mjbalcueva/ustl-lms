@@ -1,4 +1,4 @@
-import { PageContent, PageDescription, PageHeader, PageTitle, PageWrapper } from '@/client/components/page'
+import { PageContent, PageDescription, PageHeader, PageTitle, PageWrapper } from '@/client/components/ui'
 
 export default function Page() {
 	return (

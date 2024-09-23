@@ -19,9 +19,9 @@ import {
 	PageSection,
 	PageSectionTitle,
 	PageTitle,
-	PageWrapper
-} from '@/client/components/page'
-import { Separator } from '@/client/components/ui'
+	PageWrapper,
+	Separator
+} from '@/client/components/ui'
 
 export default async function Page({ params }: { params: { courseId: string } }) {
 	const { course } = await api.course.getCourse({ courseId: params.courseId })
