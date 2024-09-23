@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm, type SubmitHandler } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { TbEdit } from 'react-icons/tb'
 import { toast } from 'sonner'
 
@@ -63,8 +63,6 @@ export const EditChapterTitleForm = ({ chapterId, initialTitle }: EditChapterTit
 		}
 	})
 
-	const onSubmit: SubmitHandler<EditChapterTitleSchema> = (data) => mutate(data)
-
 	return (
 		<Card>
 			<CardHeader>
@@ -79,7 +77,7 @@ export const EditChapterTitleForm = ({ chapterId, initialTitle }: EditChapterTit
 
 			{isEditing && (
 				<Form {...form}>
-					<form onSubmit={form.handleSubmit(onSubmit)}>
+					<form onSubmit={form.handleSubmit((data) => mutate(data))}>
 						<CardContent>
 							<FormField
 								control={form.control}
