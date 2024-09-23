@@ -31,10 +31,7 @@ export const AttachmentList = ({ items }: AttachmentListProps) => {
 	return (
 		<ol className="space-y-2">
 			{items.map((item) => (
-				<li
-					key={item.id}
-					className="flex h-10 items-center rounded-xl border border-border bg-card pl-2.5 dark:bg-background"
-				>
+				<li key={item.id} className="flex h-10 items-center rounded-xl border border-border pl-2.5">
 					<TbFile className="mr-2 size-4 flex-shrink-0 text-muted-foreground" />
 					{item.name}
 					{deletingId === item.id && <TbLoader2 className="ml-auto size-4 animate-spin" />}
