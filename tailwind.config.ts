@@ -119,7 +119,7 @@ const config = {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'caret-blink': 'caret-blink 1.25s ease-out infinite',
-				'shine': 'shine 4s ease-in-out infinite'
+				'shine': 'shine 6s ease-in-out infinite'
 			}
 		}
 	},
