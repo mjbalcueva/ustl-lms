@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { DragDropContext, Draggable, Droppable, type DropResult } from '@hello-pangea/dnd'
 import { type Chapter } from '@prisma/client'
-import { LuGripVertical, LuPencil } from 'react-icons/lu'
+import { TbEdit, TbGripVertical } from 'react-icons/tb'
 
 import { Badge } from '@/client/components/ui'
 import { cn } from '@/client/lib/utils'
@@ -62,7 +62,7 @@ export const ChapterList = ({ items, onEdit, onReorder }: ChapterListProps) => {
 											)}
 											{...provided.dragHandleProps}
 										>
-											<LuGripVertical className="size-5" />
+											<TbGripVertical className="size-4" />
 										</div>
 										<span className="flex flex-1 items-center px-1">{chapter.title}</span>
 										<div className="flex items-center gap-x-1.5 pr-1">
@@ -73,7 +73,7 @@ export const ChapterList = ({ items, onEdit, onReorder }: ChapterListProps) => {
 												className="rounded-lg px-2 py-0.5 outline-none hover:opacity-75 focus-visible:outline-ring"
 												onClick={() => onEdit(chapter.id)}
 											>
-												<LuPencil className="size-4" />
+												<TbEdit className="size-4" />
 											</button>
 										</div>
 									</div>

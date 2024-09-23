@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { type Attachment } from '@prisma/client'
-import { LuFile, LuLoader, LuPlusCircle, LuX } from 'react-icons/lu'
+import { TbCirclePlus, TbFile, TbLoader2, TbX } from 'react-icons/tb'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
@@ -50,7 +50,7 @@ export const AddAttachmentsForm = ({ courseId, initialData }: AddAttachmentsProp
 			<CardHeader>
 				<CardTitle>Course Attachment</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
-					{!isEditing && <LuPlusCircle className="mr-2 size-4" />}
+					{!isEditing && <TbCirclePlus className="mr-2 size-4" />}
 					{isEditing ? 'Cancel' : 'Add'}
 				</Button>
 			</CardHeader>
@@ -61,11 +61,11 @@ export const AddAttachmentsForm = ({ courseId, initialData }: AddAttachmentsProp
 				{!isEditing && !!initialData.attachment && (
 					<ol className="space-y-2">
 						{initialData.attachment.map((attachment) => (
-							<li key={attachment.id} className="flex items-center rounded-xl border border-border px-5 py-3">
-								<LuFile className="mr-2 size-4 flex-shrink-0" />
-								<p className="line-clamp-1 text-xs">{attachment.name}</p>
+							<li key={attachment.id} className="flex items-center rounded-xl border border-border px-3 py-3">
+								<TbFile className="mr-2 size-4 flex-shrink-0" />
+								<p className="line-clamp-1 text-sm">{attachment.name}</p>
 
-								{deletingId === attachment.id && <LuLoader className="ml-auto size-4 animate-spin" />}
+								{deletingId === attachment.id && <TbLoader2 className="ml-auto size-4 animate-spin" />}
 
 								{deletingId !== attachment.id && (
 									<button
@@ -75,7 +75,7 @@ export const AddAttachmentsForm = ({ courseId, initialData }: AddAttachmentsProp
 											deleteAttachment({ attachmentId: attachment.id })
 										}}
 									>
-										<LuX className="size-4" />
+										<TbX className="size-4" />
 									</button>
 								)}
 							</li>

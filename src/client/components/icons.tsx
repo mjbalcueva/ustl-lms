@@ -1,4 +1,4 @@
-import { LuLoader, LuSearch } from 'react-icons/lu'
+import { LuSearch } from 'react-icons/lu'
 import {
 	TbAlertTriangle,
 	TbArchive,
@@ -78,6 +78,5 @@ export const Icons = {
 	// misc
 	filter: TbFilter,
 	plusCircle: TbCirclePlus,
-	search: LuSearch,
-	loader: LuLoader
+	search: LuSearch
 }

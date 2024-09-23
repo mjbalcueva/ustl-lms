@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { signOut, useSession } from 'next-auth/react'
-import { LuChevronRight } from 'react-icons/lu'
+import { LuChevronsUpDown } from 'react-icons/lu'
 import { TbLogout } from 'react-icons/tb'
 import { useMediaQuery } from 'usehooks-ts'
 
@@ -62,7 +62,7 @@ export const UserButton: React.FC<React.ComponentProps<typeof DropdownMenu>> = (
 							<span className="max-w-full truncate text-sm font-medium">{name}</span>
 							<span className="max-w-full truncate text-xs text-muted-foreground">{strippedEmail}</span>
 						</div>
-						<LuChevronRight className="mr-0.5 hidden size-4 group-hover/user-button:block group-focus/user-button:block" />
+						<LuChevronsUpDown className="mr-1.5 hidden size-4 group-hover/user-button:block group-focus/user-button:block" />
 					</motion.div>
 				)}
 			</DropdownMenuTrigger>

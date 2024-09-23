@@ -3,12 +3,12 @@
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, type SubmitHandler } from 'react-hook-form'
+import { TbCirclePlus } from 'react-icons/tb'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
 import { createCourseSchema, type CreateCourseSchema } from '@/shared/validations/course'
 
-import { Icons } from '@/client/components/icons'
 import {
 	Button,
 	Dialog,
@@ -58,7 +58,7 @@ export const AddCourseForm = () => {
 		<Dialog>
 			<DialogTrigger asChild>
 				<Button className="h-10 w-32">
-					<Icons.plusCircle className="mr-1 size-5 shrink-0" />
+					<TbCirclePlus className="mr-1 size-5 shrink-0" />
 					New Course
 				</Button>
 			</DialogTrigger>

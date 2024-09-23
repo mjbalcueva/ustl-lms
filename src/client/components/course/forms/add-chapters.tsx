@@ -5,7 +5,7 @@ import * as React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { type Chapter } from '@prisma/client'
 import { useForm, type SubmitHandler } from 'react-hook-form'
-import { LuPlusCircle } from 'react-icons/lu'
+import { TbCirclePlus } from 'react-icons/tb'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
@@ -97,7 +97,7 @@ export const AddChaptersForm = ({ courseId, initialData }: AddChaptersProps) => 
 			<CardHeader>
 				<CardTitle>Course Chapters</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
-					{!isEditing && <LuPlusCircle className="mr-2 size-4" />}
+					{!isEditing && <TbCirclePlus className="mr-2 size-4" />}
 					{isEditing ? 'Cancel' : 'Add'}
 				</Button>
 			</CardHeader>

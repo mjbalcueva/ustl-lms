@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, type SubmitHandler } from 'react-hook-form'
-import { LuPencil } from 'react-icons/lu'
+import { TbEdit } from 'react-icons/tb'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
@@ -72,7 +72,7 @@ export const EditCodeForm = ({ courseId, initialData }: EditCodeProps) => {
 			<CardHeader>
 				<CardTitle>Course Code</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
-					{!isEditing && code && <LuPencil className="mr-2 size-4" />}
+					{!isEditing && code && <TbEdit className="mr-2 size-4" />}
 					{isEditing ? 'Cancel' : code ? 'Edit' : 'Add'}
 				</Button>
 			</CardHeader>

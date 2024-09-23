@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import * as React from 'react'
-import { LuImage, LuPencil, LuPlusCircle } from 'react-icons/lu'
+import { TbCirclePlus, TbEdit, TbLibraryPhoto } from 'react-icons/tb'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
@@ -40,15 +40,15 @@ export const EditImageForm = ({ courseId, initialData }: EditImageProps) => {
 			<CardHeader>
 				<CardTitle>Course Image</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
-					{!isEditing && initialData.image && <LuPencil className="mr-2 size-4" />}
-					{!isEditing && !initialData.image && <LuPlusCircle className="mr-2 size-4" />}
+					{!isEditing && initialData.image && <TbEdit className="mr-2 size-4" />}
+					{!isEditing && !initialData.image && <TbCirclePlus className="mr-2 size-4" />}
 					{isEditing ? 'Cancel' : initialData.image ? 'Edit' : 'Add'}
 				</Button>
 			</CardHeader>
 
 			<CardContent className="pb-5">
 				{!isEditing && initialData.image && (
-					<div className="relative aspect-video min-w-[250px]">
+					<div className="relative aspect-video">
 						<Image
 							src={initialData.image}
 							alt="Course Image"
@@ -61,8 +61,8 @@ export const EditImageForm = ({ courseId, initialData }: EditImageProps) => {
 				)}
 
 				{!isEditing && !initialData.image && (
-					<div className="flex items-center justify-center rounded-xl border border-input bg-card py-6 dark:bg-background">
-						<LuImage className="size-10 text-card-foreground dark:text-muted-foreground" />
+					<div className="flex aspect-video items-center justify-center rounded-xl border border-input bg-card dark:bg-background">
+						<TbLibraryPhoto className="size-10 text-card-foreground dark:text-muted-foreground" />
 					</div>
 				)}
 
