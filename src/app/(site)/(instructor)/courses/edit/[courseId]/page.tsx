@@ -29,13 +29,6 @@ export default async function Page({ params }: { params: { courseId: string } })
 
 	if (!course) return <NotFound item="course" />
 
-	const crumbs: Breadcrumb = [
-		{ icon: 'instructor' },
-		{ label: 'Courses', href: '/courses' },
-		{ label: 'Edit' },
-		{ icon: 'course', label: course.title }
-	]
-
 	const requiredFields = [
 		course.code,
 		course.title,
@@ -49,6 +42,13 @@ export default async function Page({ params }: { params: { courseId: string } })
 	const totalFields = requiredFields.length
 	const completedFields = requiredFields.filter(Boolean).length
 	const completionText = `(${completedFields}/${totalFields})`
+
+	const crumbs: Breadcrumb = [
+		{ icon: 'instructor' },
+		{ label: 'Courses', href: '/courses' },
+		{ label: 'Edit' },
+		{ icon: 'course', label: course.title }
+	]
 
 	return (
 		<HydrateClient>
