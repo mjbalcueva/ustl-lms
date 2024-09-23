@@ -6,6 +6,12 @@ export const createChapterSchema = z.object({
 })
 export type CreateChapterSchema = z.infer<typeof createChapterSchema>
 
+export const editChapterTitleSchema = z.object({
+	chapterId: z.string().min(1, 'Chapter ID is required'),
+	title: z.string().min(1, 'Title is required').max(32, 'Title must be less than 32 characters')
+})
+export type EditChapterTitleSchema = z.infer<typeof editChapterTitleSchema>
+
 export const getChapterSchema = z.object({
 	chapterId: z.string().min(1, 'Chapter ID is required')
 })
