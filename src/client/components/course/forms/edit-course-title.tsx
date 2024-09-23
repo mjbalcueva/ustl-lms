@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm, type SubmitHandler } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { TbEdit } from 'react-icons/tb'
 import { toast } from 'sonner'
 
@@ -27,12 +27,10 @@ import {
 
 type EditCourseTitleProps = {
 	courseId: string
-	initialData: {
-		title: string
-	}
+	initialTitle: string
 }
 
-export const EditCourseTitleForm = ({ courseId, initialData }: EditCourseTitleProps) => {
+export const EditCourseTitleForm = ({ courseId, initialTitle }: EditCourseTitleProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -45,9 +43,10 @@ export const EditCourseTitleForm = ({ courseId, initialData }: EditCourseTitlePr
 		resolver: zodResolver(editCourseTitleSchema),
 		defaultValues: {
 			courseId,
-			title: initialData.title
+			title: initialTitle
 		}
 	})
+	const title = form.getValues('title')
 
 	const { mutate, isPending } = api.course.editTitle.useMutation({
 		onSuccess: async (data) => {
@@ -64,10 +63,6 @@ export const EditCourseTitleForm = ({ courseId, initialData }: EditCourseTitlePr
 		}
 	})
 
-	const onSubmit: SubmitHandler<EditCourseTitleSchema> = (data) => mutate(data)
-
-	const title = form.getValues('title')
-
 	return (
 		<Card>
 			<CardHeader>
@@ -82,7 +77,7 @@ export const EditCourseTitleForm = ({ courseId, initialData }: EditCourseTitlePr
 
 			{isEditing && (
 				<Form {...form}>
-					<form onSubmit={form.handleSubmit(onSubmit)}>
+					<form onSubmit={form.handleSubmit((data) => mutate(data))}>
 						<CardContent>
 							<FormField
 								control={form.control}

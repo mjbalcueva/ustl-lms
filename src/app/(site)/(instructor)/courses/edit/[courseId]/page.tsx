@@ -67,7 +67,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 				<PageSection className="mb-6 flex-1 md:mb-0" compactMode>
 					<PageSectionTitle title="Customize your course" icon={TbBook2} />
 					<EditCodeForm courseId={course.id} initialData={{ code: course.code }} />
-					<EditCourseTitleForm courseId={course.id} initialData={{ title: course.title }} />
+					<EditCourseTitleForm courseId={course.id} initialTitle={course.title} />
 					<EditDescriptionForm courseId={course.id} initialData={{ description: course.description ?? '' }} />
 					<EditImageForm courseId={course.id} initialData={{ image: course.image ?? '' }} />
 					<EditCategoriesForm
