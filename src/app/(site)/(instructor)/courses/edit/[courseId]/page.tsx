@@ -33,7 +33,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 		{ icon: 'instructor' },
 		{ label: 'Courses', href: '/courses' },
 		{ label: 'Edit' },
-		{ icon: 'draftCourse', label: course.title }
+		{ icon: 'course', label: course.title }
 	]
 
 	const requiredFields = [

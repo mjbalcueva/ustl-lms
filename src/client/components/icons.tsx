@@ -19,6 +19,7 @@ import {
 	TbLogout,
 	TbMessage,
 	TbMoonStars,
+	TbNotebook,
 	TbNotes,
 	TbPaint,
 	TbPresentationAnalytics,
@@ -43,7 +44,7 @@ export const Icons = {
 
 	// instructor
 	instructor: TbChalkboard,
-	course: TbTools,
+	courses: TbTools,
 	analytics: TbPresentationAnalytics,
 
 	// account
@@ -67,6 +68,7 @@ export const Icons = {
 	error: TbInfoTriangle,
 
 	// course
+	course: TbNotebook,
 	totalCourse: TbBook,
 	publishedCourse: TbBook2,
 	draftCourse: TbEdit,

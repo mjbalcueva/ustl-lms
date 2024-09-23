@@ -21,7 +21,7 @@ export default async function Page({ params }: { params: { courseId: string; cha
 		{ icon: 'instructor' },
 		{ label: 'Courses', href: '/courses' },
 		{ label: 'Edit' },
-		{ icon: 'publishedCourse', label: chapter.course.title, href: `/courses/edit/${chapter.course.id}` },
+		{ icon: 'course', label: chapter.course.title, href: `/courses/edit/${chapter.course.id}` },
 		{ label: 'Chapters' },
 		{ icon: 'chapter', label: chapter.title }
 	]
