@@ -12,8 +12,10 @@ import { Icons } from '@/client/components/icons'
 import {
 	Button,
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogDescription,
+	DialogFooter,
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
@@ -98,14 +100,21 @@ export const AddCourseForm = () => {
 								)}
 							/>
 
-							<div className="flex justify-end gap-2">
-								<Button type="button" variant="outline" className="rounded-md">
-									Cancel
+							<DialogFooter>
+								<DialogClose asChild>
+									<Button type="button" variant="outline" className="rounded-md" onClick={() => form.reset()}>
+										Cancel
+									</Button>
+								</DialogClose>
+								<Button
+									type="submit"
+									disabled={isPending}
+									variant={isPending ? 'shine' : 'default'}
+									className="rounded-md"
+								>
+									{isPending ? 'Creating...' : 'Create Course'}
 								</Button>
-								<Button type="submit" className="rounded-md" disabled={isPending}>
-									Create Course
-								</Button>
-							</div>
+							</DialogFooter>
 						</div>
 					</form>
 				</Form>
