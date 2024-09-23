@@ -39,7 +39,7 @@ export const chapterRouter = createTRPCRouter({
 	}),
 
 	editTitle: instructorProcedure.input(editChapterTitleSchema).mutation(async ({ ctx, input }) => {
-		const { chapterId, title } = input
+		const { chapterId, title: title } = input
 
 		const chapter = await ctx.db.chapter.update({
 			where: { id: chapterId },

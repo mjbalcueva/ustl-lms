@@ -54,7 +54,7 @@ export default async function Page({ params }: { params: { courseId: string; cha
 			<PageContent className="gap-4 px-2.5 sm:px-4 md:flex md:flex-wrap md:gap-6 md:px-6">
 				<PageSection className="mb-6 flex-1 md:mb-0" compactMode>
 					<PageSectionTitle title="Customize your chapter" icon={TbBook2} />
-					<EditChapterTitleForm chapterId={chapter.id} title={chapter.title} />
+					<EditChapterTitleForm chapterId={chapter.id} initialTitle={chapter.title} />
 				</PageSection>
 
 				<div className="flex flex-1 flex-col gap-4 md:gap-6">

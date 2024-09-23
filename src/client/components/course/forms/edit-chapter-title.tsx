@@ -27,10 +27,10 @@ import {
 
 type EditChapterTitleProps = {
 	chapterId: string
-	title: string
+	initialTitle: string
 }
 
-export const EditChapterTitleForm = ({ chapterId, title }: EditChapterTitleProps) => {
+export const EditChapterTitleForm = ({ chapterId, initialTitle }: EditChapterTitleProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -43,9 +43,10 @@ export const EditChapterTitleForm = ({ chapterId, title }: EditChapterTitleProps
 		resolver: zodResolver(editChapterTitleSchema),
 		defaultValues: {
 			chapterId,
-			title
+			title: initialTitle
 		}
 	})
+	const title = form.getValues('title')
 
 	const { mutate, isPending } = api.chapter.editTitle.useMutation({
 		onSuccess: async (data) => {
@@ -64,19 +65,17 @@ export const EditChapterTitleForm = ({ chapterId, title }: EditChapterTitleProps
 
 	const onSubmit: SubmitHandler<EditChapterTitleSchema> = (data) => mutate(data)
 
-	const chapterTitle = form.getValues('title')
-
 	return (
 		<Card>
 			<CardHeader>
 				<CardTitle>Chapter Title</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
-					{!isEditing && chapterTitle && <TbEdit className="mr-2 size-4" />}
-					{isEditing ? 'Cancel' : chapterTitle ? 'Edit' : 'Add'}
+					{!isEditing && title && <TbEdit className="mr-2 size-4" />}
+					{isEditing ? 'Cancel' : title ? 'Edit' : 'Add'}
 				</Button>
 			</CardHeader>
 
-			{!isEditing && <CardContent>{chapterTitle}</CardContent>}
+			{!isEditing && <CardContent>{title}</CardContent>}
 
 			{isEditing && (
 				<Form {...form}>
@@ -88,7 +87,7 @@ export const EditChapterTitleForm = ({ chapterId, title }: EditChapterTitleProps
 								render={({ field }) => (
 									<FormItem>
 										<FormControl>
-											<Input placeholder="e.g. 'Advanced web development'" disabled={isPending} {...field} />
+											<Input placeholder="e.g. 'Chapter 1'" disabled={isPending} {...field} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>

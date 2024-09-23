@@ -7,9 +7,9 @@ import { AddAttachmentsForm } from '@/client/components/course/forms/add-attachm
 import { AddChaptersForm } from '@/client/components/course/forms/add-chapters'
 import { EditCategoriesForm } from '@/client/components/course/forms/edit-categories'
 import { EditCodeForm } from '@/client/components/course/forms/edit-code'
+import { EditCourseTitleForm } from '@/client/components/course/forms/edit-course-title'
 import { EditDescriptionForm } from '@/client/components/course/forms/edit-description'
 import { EditImageForm } from '@/client/components/course/forms/edit-image'
-import { EditTitleForm } from '@/client/components/course/forms/edit-title'
 import { NotFound } from '@/client/components/not-found'
 import {
 	PageBreadcrumbs,
@@ -67,7 +67,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 				<PageSection className="mb-6 flex-1 md:mb-0" compactMode>
 					<PageSectionTitle title="Customize your course" icon={TbBook2} />
 					<EditCodeForm courseId={course.id} initialData={{ code: course.code }} />
-					<EditTitleForm courseId={course.id} initialData={{ title: course.title }} />
+					<EditCourseTitleForm courseId={course.id} initialData={{ title: course.title }} />
 					<EditDescriptionForm courseId={course.id} initialData={{ description: course.description ?? '' }} />
 					<EditImageForm courseId={course.id} initialData={{ image: course.image ?? '' }} />
 					<EditCategoriesForm

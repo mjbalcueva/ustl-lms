@@ -8,7 +8,7 @@ import { TbEdit } from 'react-icons/tb'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
-import { updateTitleSchema, type UpdateTitleSchema } from '@/shared/validations/course'
+import { editCourseTitleSchema, type EditCourseTitleSchema } from '@/shared/validations/course'
 
 import {
 	Button,
@@ -25,14 +25,14 @@ import {
 	Input
 } from '@/client/components/ui'
 
-type EditTitleProps = {
+type EditCourseTitleProps = {
 	courseId: string
 	initialData: {
 		title: string
 	}
 }
 
-export const EditTitleForm = ({ courseId, initialData }: EditTitleProps) => {
+export const EditCourseTitleForm = ({ courseId, initialData }: EditCourseTitleProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -41,20 +41,20 @@ export const EditTitleForm = ({ courseId, initialData }: EditTitleProps) => {
 		form.reset()
 	}
 
-	const form = useForm<UpdateTitleSchema>({
-		resolver: zodResolver(updateTitleSchema),
+	const form = useForm<EditCourseTitleSchema>({
+		resolver: zodResolver(editCourseTitleSchema),
 		defaultValues: {
 			courseId,
 			title: initialData.title
 		}
 	})
 
-	const { mutate, isPending } = api.course.updateTitle.useMutation({
+	const { mutate, isPending } = api.course.editTitle.useMutation({
 		onSuccess: async (data) => {
 			router.refresh()
 			form.reset({
 				courseId,
-				title: data.course.title
+				title: data.newTitle
 			})
 			toggleEdit()
 			toast.success(data.message)
@@ -64,7 +64,7 @@ export const EditTitleForm = ({ courseId, initialData }: EditTitleProps) => {
 		}
 	})
 
-	const onSubmit: SubmitHandler<UpdateTitleSchema> = (data) => mutate(data)
+	const onSubmit: SubmitHandler<EditCourseTitleSchema> = (data) => mutate(data)
 
 	const title = form.getValues('title')
 
