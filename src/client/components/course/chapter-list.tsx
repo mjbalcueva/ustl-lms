@@ -6,7 +6,6 @@ import { type Chapter } from '@prisma/client'
 import { TbEdit, TbGripVertical } from 'react-icons/tb'
 
 import { Badge } from '@/client/components/ui'
-import { cn } from '@/client/lib/utils'
 
 type ChapterListProps = {
 	items: Chapter[]
@@ -21,45 +20,32 @@ export const ChapterList = ({ items, onEdit, onReorder }: ChapterListProps) => {
 		setChapters(items)
 	}, [items])
 
-	const handleDragEnd = (result: DropResult) => {
-		if (!result.destination) return
+	const handleDragEnd = ({ destination, source }: DropResult) => {
+		if (!destination || source.index === destination.index) return
 
-		const items = Array.from(chapters)
-		const [reorderedItem] = items.splice(result.source.index, 1)
-		items.splice(result.destination.index, 0, reorderedItem!)
+		const updatedChapters = Array.from(chapters)
+		const [movedChapter] = updatedChapters.splice(source.index, 1)
+		updatedChapters.splice(destination.index, 0, movedChapter!)
 
-		const startIndex = Math.min(result.source.index, result.destination.index)
-		const endIndex = Math.max(result.source.index, result.destination.index)
-
-		const updatedChapters = items.slice(startIndex, endIndex + 1)
-
-		setChapters(items)
-
-		const bulkUpdateData = updatedChapters.map((chapter) => ({
-			id: chapter.id,
-			position: items.findIndex((item) => item.id === chapter.id)
-		}))
-
-		onReorder(bulkUpdateData)
+		setChapters(updatedChapters)
+		onReorder(updatedChapters.map((chapter, index) => ({ id: chapter.id, position: index })))
 	}
 
 	return (
 		<DragDropContext onDragEnd={handleDragEnd}>
 			<Droppable droppableId="chapters">
 				{(provided) => (
-					<div ref={provided.innerRef} className="space-y-2" {...provided.droppableProps}>
+					<ol ref={provided.innerRef} className="space-y-2" {...provided.droppableProps}>
 						{chapters.map((chapter, index) => (
 							<Draggable key={chapter.id} draggableId={chapter.id} index={index}>
 								{(provided) => (
-									<div
+									<li
 										ref={provided.innerRef}
-										className={cn('item-center flex rounded-xl border border-input bg-background')}
+										className="item-center flex rounded-xl border border-input bg-background"
 										{...provided.draggableProps}
 									>
 										<div
-											className={cn(
-												'flex h-10 items-center rounded-l-xl px-1 text-muted-foreground outline-none hover:bg-secondary hover:text-secondary-foreground focus:bg-secondary focus-visible:outline-ring'
-											)}
+											className="flex h-10 items-center rounded-l-xl px-1 text-muted-foreground outline-none hover:bg-secondary hover:text-secondary-foreground focus:bg-secondary focus-visible:outline-ring"
 											{...provided.dragHandleProps}
 										>
 											<TbGripVertical className="size-4" />
@@ -70,18 +56,18 @@ export const ChapterList = ({ items, onEdit, onReorder }: ChapterListProps) => {
 												{chapter.isPublished ? 'Published' : 'Draft'}
 											</Badge>
 											<button
-												className="rounded-lg px-2 py-0.5 outline-none hover:opacity-75 focus-visible:outline-ring"
+												className="h-full rounded-r-xl pl-1 pr-1.5 outline-none hover:opacity-75 focus-visible:outline-ring"
 												onClick={() => onEdit(chapter.id)}
 											>
 												<TbEdit className="size-4" />
 											</button>
 										</div>
-									</div>
+									</li>
 								)}
 							</Draggable>
 						))}
 						{provided.placeholder}
-					</div>
+					</ol>
 				)}
 			</Droppable>
 		</DragDropContext>
