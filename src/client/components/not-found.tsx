@@ -1,13 +1,29 @@
+'use client'
+
+import { useRouter } from 'next/navigation'
+
 import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
-import { PageBreadcrumbs, PageDescription, PageHeader, PageTitle, PageWrapper, Separator } from '@/client/components/ui'
+import {
+	Button,
+	PageBreadcrumbs,
+	PageDescription,
+	PageHeader,
+	PageTitle,
+	PageWrapper,
+	Separator
+} from '@/client/components/ui'
 
-const NotFound = () => {
+const NotFound = ({ item = 'page' }: { item?: string }) => {
+	const router = useRouter()
+
+	const itemText = item.charAt(0).toUpperCase() + item.slice(1)
+
 	const crumbs: Breadcrumb = [
 		{ icon: 'instructor' },
 		{ label: 'Error' },
 		{ label: '404', href: '/404' },
-		{ label: 'Page Not Found' }
+		{ label: `${itemText} Not Found` }
 	]
 
 	return (
@@ -19,8 +35,13 @@ const NotFound = () => {
 			<Separator />
 
 			<PageHeader>
-				<PageTitle className="font-bold">404 - Page Not Found</PageTitle>
-				<PageDescription>The page you are looking for does not exist.</PageDescription>
+				<PageTitle className="font-bold">404 - {itemText} Not Found</PageTitle>
+				<PageDescription>
+					The {item} you are looking for does not exist. It might have been moved or deleted.
+				</PageDescription>
+				<Button size="link" variant="link" onClick={() => router.back()}>
+					Go back?
+				</Button>
 			</PageHeader>
 		</PageWrapper>
 	)

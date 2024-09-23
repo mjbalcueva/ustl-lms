@@ -38,12 +38,8 @@ export const chapterRouter = createTRPCRouter({
 
 		const chapter = await ctx.db.chapter.findUnique({
 			where: { id: chapterId },
-			include: { course: true }
+			include: { course: true, muxData: true }
 		})
-
-		if (!chapter) {
-			throw new TRPCError({ code: 'NOT_FOUND', message: 'Chapter not found' })
-		}
 
 		return { chapter }
 	}),

@@ -15,7 +15,7 @@ import {
 
 export default async function Page({ params }: { params: { courseId: string; chapterId: string } }) {
 	const { chapter } = await api.chapter.getChapter({ chapterId: params.chapterId })
-	if (!chapter) return <NotFound />
+	if (!chapter) return <NotFound item="chapter" />
 
 	const crumbs: Breadcrumb = [
 		{ icon: 'instructor' },
