@@ -40,7 +40,7 @@ const NotFound = ({ item = 'page' }: { item?: string }) => {
 					The {item} you are looking for does not exist. It might have been moved or deleted.
 				</PageDescription>
 				<Button size="link" variant="link" onClick={() => router.back()}>
-					Go back?
+					Go back.
 				</Button>
 			</PageHeader>
 		</PageWrapper>
