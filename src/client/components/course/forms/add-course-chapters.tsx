@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { type Chapter } from '@prisma/client'
-import { useForm, type SubmitHandler } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { TbCirclePlus } from 'react-icons/tb'
 import { toast } from 'sonner'
 
@@ -30,12 +30,10 @@ import {
 
 type AddChaptersProps = {
 	courseId: string
-	initialData: {
-		chapters: Chapter[]
-	}
+	initialChapters: Chapter[]
 }
 
-export const AddChaptersForm = ({ courseId, initialData }: AddChaptersProps) => {
+export const AddChaptersForm = ({ courseId, initialChapters }: AddChaptersProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -51,40 +49,31 @@ export const AddChaptersForm = ({ courseId, initialData }: AddChaptersProps) => 
 			title: ''
 		}
 	})
+	const hasChapters = initialChapters.length > 0
 
-	const onEdit = (id: string) => {
-		router.push(`/courses/edit/${courseId}/chapters/${id}`)
-	}
+	const onEdit = (id: string) => router.push(`/courses/edit/${courseId}/chapters/${id}`)
 
-	const { mutate: reorder, isPending: isReordering } = api.chapter.reorderChapters.useMutation({
+	const { mutate: reorderChapter, isPending: isReordering } = api.chapter.reorderChapters.useMutation({
 		onSuccess: (data) => {
 			toast.success(data.message)
 		},
-		onError: (error) => {
-			toast.error(error.message)
-		}
+		onError: (error) => toast.error(error.message)
 	})
 
-	const onReorder = async (data: { id: string; position: number }[]) => reorder({ courseId, chapterList: data })
+	const onReorder = async (data: { id: string; position: number }[]) => reorderChapter({ courseId, chapterList: data })
 
-	const { mutate: create, isPending: isCreating } = api.chapter.createChapter.useMutation({
+	const { mutate: addChapter, isPending: isCreating } = api.chapter.createChapter.useMutation({
 		onSuccess: async (data) => {
-			router.refresh()
+			toggleEdit()
 			form.reset({
 				courseId,
 				title: ''
 			})
-			toggleEdit()
+			router.refresh()
 			toast.success(data.message)
 		},
-		onError: (error) => {
-			toast.error(error.message)
-		}
+		onError: (error) => toast.error(error.message)
 	})
-
-	const onSubmit: SubmitHandler<CreateChapterSchema> = (data) => create(data)
-
-	const hasChapters = initialData.chapters.length > 0
 
 	return (
 		<Card className="relative">
@@ -105,13 +94,13 @@ export const AddChaptersForm = ({ courseId, initialData }: AddChaptersProps) => 
 			{!isEditing && (
 				<CardContent isEmpty={!hasChapters}>
 					{!hasChapters && 'No chapters'}
-					<ChapterList items={initialData.chapters} onEdit={onEdit} onReorder={onReorder} />
+					<ChapterList items={initialChapters} onEdit={onEdit} onReorder={onReorder} />
 				</CardContent>
 			)}
 
 			{isEditing && (
 				<Form {...form}>
-					<form onSubmit={form.handleSubmit(onSubmit)}>
+					<form onSubmit={form.handleSubmit((data) => addChapter(data))}>
 						<CardContent>
 							<FormField
 								control={form.control}

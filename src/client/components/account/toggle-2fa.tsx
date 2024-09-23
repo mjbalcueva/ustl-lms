@@ -59,12 +59,8 @@ export const Toggle2FAForm = () => {
 			router.refresh()
 			toast.success(data.message)
 		},
-		onError: (error) => {
-			toast.error(error.message)
-		}
+		onError: (error) => toast.error(error.message)
 	})
-
-	const onSubmit = (data: TwoFactorFormValues) => mutate(data)
 
 	return (
 		<ItemWrapper>
@@ -74,7 +70,7 @@ export const Toggle2FAForm = () => {
 			</ItemHeader>
 
 			<Form {...form}>
-				<form onSubmit={form.handleSubmit(onSubmit)}>
+				<form onSubmit={form.handleSubmit((data) => mutate(data))}>
 					<ItemContent withSeparator>
 						<ItemInnerCard>
 							<FormField

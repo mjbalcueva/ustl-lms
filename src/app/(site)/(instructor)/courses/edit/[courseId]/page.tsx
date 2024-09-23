@@ -4,7 +4,7 @@ import { api } from '@/shared/trpc/server'
 import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
 import { AddAttachmentsForm } from '@/client/components/course/forms/add-attachments'
-import { AddChaptersForm } from '@/client/components/course/forms/add-chapters'
+import { AddChaptersForm } from '@/client/components/course/forms/add-course-chapters'
 import { EditCourseCategoriesForm } from '@/client/components/course/forms/edit-course-categories'
 import { EditCourseCodeForm } from '@/client/components/course/forms/edit-course-code'
 import { EditCourseDescriptionForm } from '@/client/components/course/forms/edit-course-description'
@@ -80,7 +80,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 				<div className="flex flex-1 flex-col gap-4 md:gap-6">
 					<PageSection compactMode>
 						<PageSectionTitle title="Course chapters" icon={TbListDetails} />
-						<AddChaptersForm courseId={course.id} initialData={{ chapters: course.chapter }} />
+						<AddChaptersForm courseId={course.id} initialChapters={course.chapter} />
 					</PageSection>
 
 					<PageSection compactMode>

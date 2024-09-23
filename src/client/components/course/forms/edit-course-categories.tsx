@@ -62,9 +62,7 @@ export const EditCourseCategoriesForm = ({ courseId, categoryId, options }: Edit
 			router.refresh()
 			toast.success(data.message)
 		},
-		onError: (error) => {
-			toast.error(error.message)
-		}
+		onError: (error) => toast.error(error.message)
 	})
 
 	return (
