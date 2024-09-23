@@ -41,7 +41,7 @@ export const ChapterList = ({ items, onEdit, onReorder }: ChapterListProps) => {
 								{(provided) => (
 									<li
 										ref={provided.innerRef}
-										className="flex h-10 items-center gap-2 rounded-xl border border-input bg-background"
+										className="flex h-10 items-center gap-2 rounded-xl border border-input bg-card dark:bg-background"
 										{...provided.draggableProps}
 									>
 										<div
