@@ -6,7 +6,7 @@ import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 import { AddAttachmentsForm } from '@/client/components/course/forms/add-attachments'
 import { AddChaptersForm } from '@/client/components/course/forms/add-chapters'
 import { EditCategoriesForm } from '@/client/components/course/forms/edit-categories'
-import { EditCodeForm } from '@/client/components/course/forms/edit-code'
+import { EditCourseCodeForm } from '@/client/components/course/forms/edit-course-code'
 import { EditCourseTitleForm } from '@/client/components/course/forms/edit-course-title'
 import { EditDescriptionForm } from '@/client/components/course/forms/edit-description'
 import { EditImageForm } from '@/client/components/course/forms/edit-image'
@@ -66,7 +66,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 			<PageContent className="gap-4 px-2.5 sm:px-4 md:flex md:flex-wrap md:gap-6 md:px-6">
 				<PageSection className="mb-6 flex-1 md:mb-0" compactMode>
 					<PageSectionTitle title="Customize your course" icon={TbBook2} />
-					<EditCodeForm courseId={course.id} initialData={{ code: course.code }} />
+					<EditCourseCodeForm courseId={course.id} initialCode={course.code} />
 					<EditCourseTitleForm courseId={course.id} initialTitle={course.title} />
 					<EditDescriptionForm courseId={course.id} initialData={{ description: course.description ?? '' }} />
 					<EditImageForm courseId={course.id} initialData={{ image: course.image ?? '' }} />

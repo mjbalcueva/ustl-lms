@@ -1,8 +1,8 @@
 import {
 	createCourseSchema,
+	editCourseCodeSchema,
 	editCourseTitleSchema,
 	getCoursesSchema,
-	updateCodeSchema,
 	updateDescriptionSchema,
 	updateImageSchema
 } from '@/shared/validations/course'
@@ -39,15 +39,15 @@ export const courseRouter = createTRPCRouter({
 		return { course }
 	}),
 
-	updateCode: instructorProcedure.input(updateCodeSchema).mutation(async ({ ctx, input }) => {
+	editCode: instructorProcedure.input(editCourseCodeSchema).mutation(async ({ ctx, input }) => {
 		const { courseId, code } = input
 
-		const course = await ctx.db.course.update({
+		const { code: newCode } = await ctx.db.course.update({
 			where: { id: courseId, createdById: ctx.session.user.id! },
 			data: { code }
 		})
 
-		return { message: 'Course code updated!', course }
+		return { message: 'Course code updated!', newCode }
 	}),
 
 	editTitle: instructorProcedure.input(editCourseTitleSchema).mutation(async ({ ctx, input }) => {

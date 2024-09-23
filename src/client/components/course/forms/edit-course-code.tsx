@@ -8,7 +8,7 @@ import { TbEdit } from 'react-icons/tb'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
-import { updateCodeSchema, type UpdateCodeSchema } from '@/shared/validations/course'
+import { editCourseCodeSchema, type EditCourseCodeSchema } from '@/shared/validations/course'
 
 import {
 	Button,
@@ -25,13 +25,11 @@ import {
 	Input
 } from '@/client/components/ui'
 
-type EditCodeProps = {
+type EditCourseCodeProps = {
 	courseId: string
-	initialData: {
-		code: string
-	}
+	initialCode: string
 }
-export const EditCodeForm = ({ courseId, initialData }: EditCodeProps) => {
+export const EditCourseCodeForm = ({ courseId, initialCode }: EditCourseCodeProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -40,20 +38,21 @@ export const EditCodeForm = ({ courseId, initialData }: EditCodeProps) => {
 		form.reset()
 	}
 
-	const form = useForm<UpdateCodeSchema>({
-		resolver: zodResolver(updateCodeSchema),
+	const form = useForm<EditCourseCodeSchema>({
+		resolver: zodResolver(editCourseCodeSchema),
 		defaultValues: {
 			courseId,
-			code: initialData.code
+			code: initialCode
 		}
 	})
+	const code = form.getValues('code')
 
-	const { mutate, isPending } = api.course.updateCode.useMutation({
+	const { mutate, isPending } = api.course.editCode.useMutation({
 		onSuccess: async (data) => {
 			router.refresh()
 			form.reset({
 				courseId,
-				code: data.course.code
+				code: data.newCode
 			})
 			toggleEdit()
 			toast.success(data.message)
@@ -63,9 +62,7 @@ export const EditCodeForm = ({ courseId, initialData }: EditCodeProps) => {
 		}
 	})
 
-	const onSubmit: SubmitHandler<UpdateCodeSchema> = (data) => mutate(data)
-
-	const code = form.getValues('code')
+	const onSubmit: SubmitHandler<EditCourseCodeSchema> = (data) => mutate(data)
 
 	return (
 		<Card>
