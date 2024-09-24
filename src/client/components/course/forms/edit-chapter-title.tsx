@@ -26,11 +26,12 @@ import {
 } from '@/client/components/ui'
 
 type EditChapterTitleProps = {
-	chapterId: string
-	initialTitle: string
+	id: string
+	courseId: string
+	title: string
 }
 
-export const EditChapterTitleForm = ({ chapterId, initialTitle }: EditChapterTitleProps) => {
+export const EditChapterTitleForm = ({ id, courseId, title }: EditChapterTitleProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -41,20 +42,14 @@ export const EditChapterTitleForm = ({ chapterId, initialTitle }: EditChapterTit
 
 	const form = useForm<EditTitleSchema>({
 		resolver: zodResolver(editTitleSchema),
-		defaultValues: {
-			chapterId,
-			title: initialTitle
-		}
+		defaultValues: { id, courseId, title }
 	})
-	const title = form.getValues('title')
+	const formTitle = form.getValues('title')
 
 	const { mutate, isPending } = api.chapter.editTitle.useMutation({
-		onSuccess: async (data) => {
+		onSuccess: (data) => {
 			toggleEdit()
-			form.reset({
-				chapterId,
-				title: data.newTitle
-			})
+			form.reset({ id, courseId, title: data.newTitle })
 			router.refresh()
 			toast.success(data.message)
 		},
@@ -66,12 +61,12 @@ export const EditChapterTitleForm = ({ chapterId, initialTitle }: EditChapterTit
 			<CardHeader>
 				<CardTitle>Chapter Title</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
-					{!isEditing && title && <TbEdit className="mr-2 size-4" />}
-					{isEditing ? 'Cancel' : title ? 'Edit' : 'Add'}
+					{!isEditing && formTitle && <TbEdit className="mr-2 size-4" />}
+					{isEditing ? 'Cancel' : formTitle ? 'Edit' : 'Add'}
 				</Button>
 			</CardHeader>
 
-			{!isEditing && <CardContent>{title}</CardContent>}
+			{!isEditing && <CardContent>{formTitle}</CardContent>}
 
 			{isEditing && (
 				<Form {...form}>

@@ -34,10 +34,10 @@ export const chapterRouter = createTRPCRouter({
 	}),
 
 	editDescription: instructorProcedure.input(editDescriptionSchema).mutation(async ({ ctx, input }) => {
-		const { chapterId, description } = input
+		const { id, courseId, description } = input
 
 		const { description: newDescription } = await ctx.db.chapter.update({
-			where: { id: chapterId, course: { createdById: ctx.session.user.id! } },
+			where: { id, courseId, course: { createdById: ctx.session.user.id! } },
 			data: { description }
 		})
 
@@ -48,24 +48,24 @@ export const chapterRouter = createTRPCRouter({
 	}),
 
 	editTitle: instructorProcedure.input(editTitleSchema).mutation(async ({ ctx, input }) => {
-		const { chapterId, title: title } = input
+		const { id, courseId, title } = input
 
-		const chapter = await ctx.db.chapter.update({
-			where: { id: chapterId },
+		const { title: newTitle } = await ctx.db.chapter.update({
+			where: { id, courseId, course: { createdById: ctx.session.user.id! } },
 			data: { title }
 		})
 
 		return {
-			newTitle: chapter.title,
-			message: 'Chapter title updated successfully'
+			message: 'Chapter title updated successfully',
+			newTitle
 		}
 	}),
 
 	getChapter: instructorProcedure.input(getChapterSchema).query(async ({ ctx, input }) => {
-		const { chapterId } = input
+		const { id, courseId } = input
 
 		const chapter = await ctx.db.chapter.findUnique({
-			where: { id: chapterId },
+			where: { id, courseId },
 			include: { course: true, muxData: true }
 		})
 

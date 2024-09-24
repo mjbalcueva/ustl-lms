@@ -26,11 +26,12 @@ import {
 } from '@/client/components/ui'
 
 type EditChapterDescriptionProps = {
-	chapterId: string
-	initialDescription: string | null
+	id: string
+	courseId: string
+	description: string | null
 }
 
-export const EditChapterDescriptionForm = ({ chapterId, initialDescription }: EditChapterDescriptionProps) => {
+export const EditChapterDescriptionForm = ({ id, courseId, description }: EditChapterDescriptionProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -41,20 +42,14 @@ export const EditChapterDescriptionForm = ({ chapterId, initialDescription }: Ed
 
 	const form = useForm<EditDescriptionSchema>({
 		resolver: zodResolver(editDescriptionSchema),
-		defaultValues: {
-			chapterId,
-			description: initialDescription ?? ''
-		}
+		defaultValues: { id, courseId, description: description ?? '' }
 	})
-	const description = form.getValues('description')
+	const formDescription = form.getValues('description')
 
 	const { mutate, isPending } = api.chapter.editDescription.useMutation({
 		onSuccess: async (data) => {
 			toggleEdit()
-			form.reset({
-				chapterId,
-				description: data.newDescription ?? ''
-			})
+			form.reset({ id, courseId, description: data.newDescription ?? '' })
 			router.refresh()
 			toast.success(data.message)
 		},
@@ -66,14 +61,16 @@ export const EditChapterDescriptionForm = ({ chapterId, initialDescription }: Ed
 			<CardHeader>
 				<CardTitle>Chapter Description</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
-					{!isEditing && description && <TbEdit className="mr-2 size-4" />}
-					{!isEditing && !description && <TbCirclePlus className="mr-2 size-4" />}
-					{isEditing ? 'Cancel' : description ? 'Edit' : 'Add'}
+					{!isEditing && formDescription && <TbEdit className="mr-2 size-4" />}
+					{!isEditing && !formDescription && <TbCirclePlus className="mr-2 size-4" />}
+					{isEditing ? 'Cancel' : formDescription ? 'Edit' : 'Add'}
 				</Button>
 			</CardHeader>
 
 			{!isEditing && (
-				<CardContent isEmpty={!description}>{description ? description : 'No description added'}</CardContent>
+				<CardContent isEmpty={!formDescription}>
+					{formDescription ? formDescription : 'No description added'}
+				</CardContent>
 			)}
 
 			{isEditing && (

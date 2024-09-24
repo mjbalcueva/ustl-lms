@@ -19,7 +19,7 @@ import {
 } from '@/client/components/ui'
 
 export default async function Page({ params }: { params: { courseId: string; chapterId: string } }) {
-	const { chapter } = await api.chapter.getChapter({ chapterId: params.chapterId })
+	const { chapter } = await api.chapter.getChapter({ courseId: params.courseId, id: params.chapterId })
 
 	if (!chapter) return <NotFound item="chapter" />
 
@@ -55,8 +55,8 @@ export default async function Page({ params }: { params: { courseId: string; cha
 			<PageContent className="gap-4 px-2.5 sm:px-4 md:flex md:flex-wrap md:gap-6 md:px-6">
 				<PageSection className="mb-6 flex-1 md:mb-0" compactMode>
 					<PageSectionTitle title="Customize your chapter" icon={TbNotes} />
-					<EditChapterTitleForm chapterId={chapter.id} initialTitle={chapter.title} />
-					<EditChapterDescriptionForm chapterId={chapter.id} initialDescription={chapter.description} />
+					<EditChapterTitleForm id={chapter.id} courseId={chapter.course.id} title={chapter.title} />
+					<EditChapterDescriptionForm id={chapter.id} courseId={chapter.course.id} description={chapter.description} />
 				</PageSection>
 
 				<div className="flex flex-1 flex-col gap-4 md:gap-6">
