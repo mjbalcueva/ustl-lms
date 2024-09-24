@@ -33,7 +33,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 		course.code,
 		course.title,
 		course.description,
-		course.image,
+		course.imageUrl,
 		course.categoryId,
 		course.isPublished,
 		course.chapter.some((chapter) => chapter.isPublished)
@@ -69,7 +69,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 					<EditCourseCodeForm id={course.id} code={course.code} />
 					<EditCourseTitleForm id={course.id} title={course.title} />
 					<EditCourseDescriptionForm id={course.id} description={course.description} />
-					<EditCourseImageForm id={course.id} imageUrl={course.image} />
+					<EditCourseImageForm id={course.id} imageUrl={course.imageUrl} />
 					<EditCourseCategoriesForm
 						courseId={course.id}
 						categoryId={course.categoryId}

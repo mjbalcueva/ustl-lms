@@ -77,15 +77,15 @@ export const courseRouter = createTRPCRouter({
 
 		const course = await ctx.db.course.findUnique({
 			where: { id, createdById: ctx.session.user.id! },
-			select: { image: true }
+			select: { imageUrl: true }
 		})
 
-		const oldImageKey = course?.image?.split('/f/')[1]
+		const oldImageKey = course?.imageUrl?.split('/f/')[1]
 		if (oldImageKey) await utapi.deleteFiles(oldImageKey)
 
 		await ctx.db.course.update({
 			where: { id: id, createdById: ctx.session.user.id! },
-			data: { image: imageUrl }
+			data: { imageUrl }
 		})
 
 		return { message: 'Course image updated!' }
