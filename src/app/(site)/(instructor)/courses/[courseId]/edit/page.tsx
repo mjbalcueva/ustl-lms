@@ -71,7 +71,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 					<EditCourseDescriptionForm id={course.id} description={course.description} />
 					<EditCourseImageForm id={course.id} imageUrl={course.imageUrl} />
 					<EditCourseCategoriesForm
-						courseId={course.id}
+						id={course.id}
 						categoryId={course.categoryId}
 						options={categories.map((category) => ({ value: category.id, label: category.name }))}
 					/>
