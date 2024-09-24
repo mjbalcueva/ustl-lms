@@ -25,11 +25,7 @@ import {
 	Input
 } from '@/client/components/ui'
 
-type EditCourseCodeProps = {
-	courseId: string
-	initialCode: string
-}
-export const EditCourseCodeForm = ({ courseId, initialCode }: EditCourseCodeProps) => {
+export const EditCourseCodeForm = ({ id, code }: EditCodeSchema) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -40,20 +36,14 @@ export const EditCourseCodeForm = ({ courseId, initialCode }: EditCourseCodeProp
 
 	const form = useForm<EditCodeSchema>({
 		resolver: zodResolver(editCodeSchema),
-		defaultValues: {
-			courseId,
-			code: initialCode
-		}
+		defaultValues: { id, code }
 	})
-	const code = form.getValues('code')
+	const formCode = form.getValues('code')
 
 	const { mutate, isPending } = api.course.editCode.useMutation({
 		onSuccess: async (data) => {
 			toggleEdit()
-			form.reset({
-				courseId,
-				code: data.newCode
-			})
+			form.reset({ id, code: data.newCode })
 			router.refresh()
 			toast.success(data.message)
 		},
@@ -65,12 +55,12 @@ export const EditCourseCodeForm = ({ courseId, initialCode }: EditCourseCodeProp
 			<CardHeader>
 				<CardTitle>Course Code</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
-					{!isEditing && code && <TbEdit className="mr-2 size-4" />}
-					{isEditing ? 'Cancel' : code ? 'Edit' : 'Add'}
+					{!isEditing && formCode && <TbEdit className="mr-2 size-4" />}
+					{isEditing ? 'Cancel' : formCode ? 'Edit' : 'Add'}
 				</Button>
 			</CardHeader>
 
-			{!isEditing && <CardContent>{code}</CardContent>}
+			{!isEditing && <CardContent>{formCode}</CardContent>}
 
 			{isEditing && (
 				<Form {...form}>

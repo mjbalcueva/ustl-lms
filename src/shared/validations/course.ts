@@ -12,7 +12,7 @@ export const getCourseSchema = z.object({
 export type GetCourseSchema = z.infer<typeof getCourseSchema>
 
 export const editCodeSchema = z.object({
-	courseId: z.string().min(1, 'Course ID is required'),
+	id: z.string().min(1, 'Course ID is required'),
 	code: z.string().min(1, 'Code is required').max(16, 'Code must be less than 16 characters')
 })
 export type EditCodeSchema = z.infer<typeof editCodeSchema>

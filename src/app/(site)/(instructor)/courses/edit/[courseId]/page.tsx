@@ -66,7 +66,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 			<PageContent className="gap-4 px-2.5 sm:px-4 md:flex md:flex-wrap md:gap-6 md:px-6">
 				<PageSection className="mb-6 flex-1 md:mb-0" compactMode>
 					<PageSectionTitle title="Customize your course" icon={TbNotebook} />
-					<EditCourseCodeForm courseId={course.id} initialCode={course.code} />
+					<EditCourseCodeForm id={course.id} code={course.code} />
 					<EditCourseTitleForm courseId={course.id} initialTitle={course.title} />
 					<EditCourseDescriptionForm courseId={course.id} initialDescription={course.description} />
 					<EditCourseImageForm courseId={course.id} initialImage={course.image} />
