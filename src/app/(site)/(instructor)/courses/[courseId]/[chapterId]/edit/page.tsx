@@ -1,8 +1,9 @@
-import { TbBook2, TbListDetails, TbPackage } from 'react-icons/tb'
+import { TbListDetails, TbNotes, TbPackage } from 'react-icons/tb'
 
 import { api } from '@/shared/trpc/server'
 import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
+import { EditChapterDescriptionForm } from '@/client/components/course/forms/edit-chapter-description'
 import { EditChapterTitleForm } from '@/client/components/course/forms/edit-chapter-title'
 import { NotFound } from '@/client/components/not-found'
 import {
@@ -18,7 +19,7 @@ import {
 } from '@/client/components/ui'
 
 export default async function Page({ params }: { params: { courseId: string; chapterId: string } }) {
-	const { chapter } = await api.chapter.getChapter({ chapterId: params.chapterId })
+	const { chapter } = await api.chapter.getChapter({ courseId: params.courseId, id: params.chapterId })
 
 	if (!chapter) return <NotFound item="chapter" />
 
@@ -31,11 +32,10 @@ export default async function Page({ params }: { params: { courseId: string; cha
 
 	const crumbs: Breadcrumb = [
 		{ icon: 'instructor' },
-		{ label: 'Courses', href: '/courses' },
-		{ label: 'Edit' },
-		{ icon: 'course', label: chapter.course.title, href: `/courses/edit/${chapter.course.id}` },
-		{ label: 'Chapters' },
-		{ icon: 'chapter', label: chapter.title }
+		{ label: 'Courses', href: '/courses/manage' },
+		{ icon: 'course', label: chapter.course.title, href: `/courses/${chapter.course.id}/edit` },
+		{ icon: 'chapter', label: chapter.title, href: `/courses/${chapter.course.id}/${chapter.id}/edit` },
+		{ label: 'Edit' }
 	]
 
 	return (
@@ -53,8 +53,9 @@ export default async function Page({ params }: { params: { courseId: string; cha
 
 			<PageContent className="gap-4 px-2.5 sm:px-4 md:flex md:flex-wrap md:gap-6 md:px-6">
 				<PageSection className="mb-6 flex-1 md:mb-0" compactMode>
-					<PageSectionTitle title="Customize your chapter" icon={TbBook2} />
-					<EditChapterTitleForm chapterId={chapter.id} initialTitle={chapter.title} />
+					<PageSectionTitle title="Customize your chapter" icon={TbNotes} />
+					<EditChapterTitleForm id={chapter.id} courseId={chapter.course.id} title={chapter.title} />
+					<EditChapterDescriptionForm id={chapter.id} courseId={chapter.course.id} description={chapter.description} />
 				</PageSection>
 
 				<div className="flex flex-1 flex-col gap-4 md:gap-6">

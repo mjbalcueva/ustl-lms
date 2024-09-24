@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import * as React from 'react'
 import { DragDropContext, Draggable, Droppable, type DropResult } from '@hello-pangea/dnd'
 import { type Chapter } from '@prisma/client'
@@ -9,11 +10,10 @@ import { Badge } from '@/client/components/ui'
 
 type ChapterListProps = {
 	items: Chapter[]
-	onEdit: (id: string) => void
 	onReorder: (updateData: { id: string; position: number }[]) => void
 }
 
-export const ChapterList = ({ items, onEdit, onReorder }: ChapterListProps) => {
+export const ChapterList = ({ items, onReorder }: ChapterListProps) => {
 	const [chapters, setChapters] = React.useState(items)
 
 	React.useEffect(() => {
@@ -57,12 +57,12 @@ export const ChapterList = ({ items, onEdit, onReorder }: ChapterListProps) => {
 											{chapter.isPublished ? 'Published' : 'Draft'}
 										</Badge>
 
-										<button
-											className="h-full rounded-r-xl pl-1 pr-2 outline-none hover:opacity-75 focus-visible:outline-ring"
-											onClick={() => onEdit(chapter.id)}
+										<Link
+											className="flex h-full items-center justify-center rounded-r-xl pl-1 pr-2 outline-none hover:opacity-75 focus-visible:outline-ring"
+											href={`/courses/${chapter.courseId}/${chapter.id}/edit`}
 										>
 											<TbEdit className="size-4" />
-										</button>
+										</Link>
 									</li>
 								)}
 							</Draggable>

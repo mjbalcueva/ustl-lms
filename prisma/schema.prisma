@@ -19,7 +19,7 @@ model Course {
   code        String
   title       String
   description String?
-  image       String?
+  imageUrl    String?
   categoryId  String?
   isPublished Boolean  @default(false)
   createdAt   DateTime @default(now())

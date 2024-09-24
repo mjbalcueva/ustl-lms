@@ -9,7 +9,7 @@ import { TbCirclePlus } from 'react-icons/tb'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
-import { createChapterSchema, type CreateChapterSchema } from '@/shared/validations/chapter'
+import { addChapterSchema, type AddChapterSchema } from '@/shared/validations/chapter'
 
 import { ChapterList } from '@/client/components/course/chapter-list'
 import {
@@ -30,10 +30,10 @@ import {
 
 type AddCourseChaptersProps = {
 	courseId: string
-	initialChapters: Chapter[]
+	chapters: Chapter[]
 }
 
-export const AddCourseChaptersForm = ({ courseId, initialChapters }: AddCourseChaptersProps) => {
+export const AddCourseChaptersForm = ({ courseId, chapters }: AddCourseChaptersProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -42,25 +42,25 @@ export const AddCourseChaptersForm = ({ courseId, initialChapters }: AddCourseCh
 		form.reset()
 	}
 
-	const form = useForm<CreateChapterSchema>({
-		resolver: zodResolver(createChapterSchema),
+	const form = useForm<AddChapterSchema>({
+		resolver: zodResolver(addChapterSchema),
 		defaultValues: {
 			courseId,
 			title: ''
 		}
 	})
-	const hasChapters = initialChapters.length > 0
+	const hasChapters = chapters.length > 0
 
-	const onEdit = (id: string) => router.push(`/courses/edit/${courseId}/chapters/${id}`)
-
-	const { mutate: reorderChapter, isPending: isReordering } = api.chapter.reorderChapters.useMutation({
+	const { mutate: reorderChapter, isPending: isChapterReordering } = api.chapter.reorderChapters.useMutation({
 		onSuccess: (data) => toast.success(data.message),
 		onError: (error) => toast.error(error.message)
 	})
 
-	const onReorder = async (data: { id: string; position: number }[]) => reorderChapter({ courseId, chapterList: data })
+	const onReorder = async (data: { id: string; position: number }[]) => {
+		reorderChapter({ courseId, chapterList: data })
+	}
 
-	const { mutate: addChapter, isPending: isCreating } = api.chapter.addChapter.useMutation({
+	const { mutate: addChapter, isPending: isAdding } = api.chapter.addChapter.useMutation({
 		onSuccess: async (data) => {
 			toggleEdit()
 			form.reset({
@@ -75,7 +75,7 @@ export const AddCourseChaptersForm = ({ courseId, initialChapters }: AddCourseCh
 
 	return (
 		<Card className="relative">
-			{isReordering && (
+			{isChapterReordering && (
 				<div className="absolute flex h-full w-full items-center justify-center rounded-xl bg-background/40">
 					<Loader variant="bars" size="medium" />
 				</div>
@@ -92,7 +92,7 @@ export const AddCourseChaptersForm = ({ courseId, initialChapters }: AddCourseCh
 			{!isEditing && (
 				<CardContent isEmpty={!hasChapters}>
 					{!hasChapters && 'No chapters'}
-					<ChapterList items={initialChapters} onEdit={onEdit} onReorder={onReorder} />
+					<ChapterList items={chapters} onReorder={onReorder} />
 				</CardContent>
 			)}
 
@@ -106,7 +106,7 @@ export const AddCourseChaptersForm = ({ courseId, initialChapters }: AddCourseCh
 								render={({ field }) => (
 									<FormItem className="flex-1">
 										<FormControl>
-											<Input placeholder="e.g. 'Introduction to the course'" disabled={isCreating} {...field} />
+											<Input placeholder="e.g. 'Introduction to the course'" disabled={isAdding} {...field} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -117,10 +117,10 @@ export const AddCourseChaptersForm = ({ courseId, initialChapters }: AddCourseCh
 							<Button
 								type="submit"
 								size="card"
-								disabled={!form.formState.isDirty || isCreating}
-								variant={isCreating ? 'shine' : 'default'}
+								disabled={!form.formState.isDirty || isAdding}
+								variant={isAdding ? 'shine' : 'default'}
 							>
-								{isCreating ? 'Adding...' : 'Add'}
+								{isAdding ? 'Adding...' : 'Add'}
 							</Button>
 						</CardFooter>
 					</form>

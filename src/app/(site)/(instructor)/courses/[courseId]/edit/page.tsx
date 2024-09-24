@@ -1,4 +1,4 @@
-import { TbBook2, TbListDetails, TbPackage } from 'react-icons/tb'
+import { TbListDetails, TbNotebook, TbPackage } from 'react-icons/tb'
 
 import { api } from '@/shared/trpc/server'
 import { type Breadcrumb } from '@/shared/types/breadcrumbs'
@@ -33,7 +33,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 		course.code,
 		course.title,
 		course.description,
-		course.image,
+		course.imageUrl,
 		course.categoryId,
 		course.isPublished,
 		course.chapter.some((chapter) => chapter.isPublished)
@@ -45,9 +45,9 @@ export default async function Page({ params }: { params: { courseId: string } })
 
 	const crumbs: Breadcrumb = [
 		{ icon: 'instructor' },
-		{ label: 'Courses', href: '/courses' },
-		{ label: 'Edit' },
-		{ icon: 'course', label: course.title }
+		{ label: 'Courses', href: '/courses/manage' },
+		{ icon: 'course', label: course.title, href: `/courses/${course.id}/edit` },
+		{ label: 'Edit' }
 	]
 
 	return (
@@ -65,13 +65,13 @@ export default async function Page({ params }: { params: { courseId: string } })
 
 			<PageContent className="gap-4 px-2.5 sm:px-4 md:flex md:flex-wrap md:gap-6 md:px-6">
 				<PageSection className="mb-6 flex-1 md:mb-0" compactMode>
-					<PageSectionTitle title="Customize your course" icon={TbBook2} />
-					<EditCourseCodeForm courseId={course.id} initialCode={course.code} />
-					<EditCourseTitleForm courseId={course.id} initialTitle={course.title} />
-					<EditCourseDescriptionForm courseId={course.id} initialDescription={course.description} />
-					<EditCourseImageForm courseId={course.id} initialImage={course.image} />
+					<PageSectionTitle title="Customize your course" icon={TbNotebook} />
+					<EditCourseCodeForm id={course.id} code={course.code} />
+					<EditCourseTitleForm id={course.id} title={course.title} />
+					<EditCourseDescriptionForm id={course.id} description={course.description} />
+					<EditCourseImageForm id={course.id} imageUrl={course.imageUrl} />
 					<EditCourseCategoriesForm
-						courseId={course.id}
+						id={course.id}
 						categoryId={course.categoryId}
 						options={categories.map((category) => ({ value: category.id, label: category.name }))}
 					/>
@@ -80,12 +80,12 @@ export default async function Page({ params }: { params: { courseId: string } })
 				<div className="flex flex-1 flex-col gap-4 md:gap-6">
 					<PageSection compactMode>
 						<PageSectionTitle title="Course chapters" icon={TbListDetails} />
-						<AddCourseChaptersForm courseId={course.id} initialChapters={course.chapter} />
+						<AddCourseChaptersForm courseId={course.id} chapters={course.chapter} />
 					</PageSection>
 
 					<PageSection compactMode>
 						<PageSectionTitle title="Resources & Attachments" icon={TbPackage} />
-						<AddCourseAttachmentsForm courseId={course.id} initialAttachment={course.attachment} />
+						<AddCourseAttachmentsForm courseId={course.id} attachments={course.attachment} />
 					</PageSection>
 				</div>
 			</PageContent>

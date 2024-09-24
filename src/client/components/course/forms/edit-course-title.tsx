@@ -25,12 +25,7 @@ import {
 	Input
 } from '@/client/components/ui'
 
-type EditCourseTitleProps = {
-	courseId: string
-	initialTitle: string
-}
-
-export const EditCourseTitleForm = ({ courseId, initialTitle }: EditCourseTitleProps) => {
+export const EditCourseTitleForm = ({ id, title }: EditTitleSchema) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -41,20 +36,14 @@ export const EditCourseTitleForm = ({ courseId, initialTitle }: EditCourseTitleP
 
 	const form = useForm<EditTitleSchema>({
 		resolver: zodResolver(editTitleSchema),
-		defaultValues: {
-			courseId,
-			title: initialTitle
-		}
+		defaultValues: { id, title }
 	})
-	const title = form.getValues('title')
+	const formTitle = form.getValues('title')
 
 	const { mutate, isPending } = api.course.editTitle.useMutation({
 		onSuccess: async (data) => {
 			toggleEdit()
-			form.reset({
-				courseId,
-				title: data.newTitle
-			})
+			form.reset({ id, title: data.newTitle })
 			router.refresh()
 			toast.success(data.message)
 		},
@@ -66,12 +55,12 @@ export const EditCourseTitleForm = ({ courseId, initialTitle }: EditCourseTitleP
 			<CardHeader>
 				<CardTitle>Course Title</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
-					{!isEditing && title && <TbEdit className="mr-2 size-4" />}
-					{isEditing ? 'Cancel' : title ? 'Edit' : 'Add'}
+					{!isEditing && formTitle && <TbEdit className="mr-2 size-4" />}
+					{isEditing ? 'Cancel' : formTitle ? 'Edit' : 'Add'}
 				</Button>
 			</CardHeader>
 
-			{!isEditing && <CardContent>{form.watch('title')}</CardContent>}
+			{!isEditing && <CardContent>{formTitle}</CardContent>}
 
 			{isEditing && (
 				<Form {...form}>

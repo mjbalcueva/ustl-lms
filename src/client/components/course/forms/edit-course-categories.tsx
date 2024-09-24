@@ -25,16 +25,14 @@ import {
 	FormMessage
 } from '@/client/components/ui'
 
-type EditCourseCategoryProps = {
-	courseId: string
-	categoryId: string | null
+type EditCourseCategoryProps = EditCourseCategorySchema & {
 	options: {
 		value: string
 		label: string
 	}[]
 }
 
-export const EditCourseCategoriesForm = ({ courseId, categoryId, options }: EditCourseCategoryProps) => {
+export const EditCourseCategoriesForm = ({ id, categoryId, options }: EditCourseCategoryProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -45,20 +43,14 @@ export const EditCourseCategoriesForm = ({ courseId, categoryId, options }: Edit
 
 	const form = useForm<EditCourseCategorySchema>({
 		resolver: zodResolver(editCourseCategorySchema),
-		defaultValues: {
-			courseId,
-			categoryId: categoryId ?? ''
-		}
+		defaultValues: { id, categoryId: categoryId ?? '' }
 	})
 	const selectedCategory = options.find((option) => option.value === form.getValues('categoryId'))
 
 	const { mutate, isPending } = api.category.editCategory.useMutation({
 		onSuccess: async (data) => {
 			toggleEdit()
-			form.reset({
-				courseId,
-				categoryId: data.newCategoryId ?? ''
-			})
+			form.reset({ id, categoryId: data.newCategoryId ?? '' })
 			router.refresh()
 			toast.success(data.message)
 		},
@@ -94,7 +86,7 @@ export const EditCourseCategoriesForm = ({ courseId, categoryId, options }: Edit
 										<FormControl>
 											<Combobox
 												options={options}
-												selected={field.value}
+												selected={field.value ?? ''}
 												onChange={field.onChange}
 												label="Select Category..."
 											/>

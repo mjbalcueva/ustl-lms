@@ -11,10 +11,10 @@ export const categoryRouter = createTRPCRouter({
 	}),
 
 	editCategory: instructorProcedure.input(editCourseCategorySchema).mutation(async ({ ctx, input }) => {
-		const { courseId, categoryId } = input
+		const { id, categoryId } = input
 
 		const { categoryId: newCategoryId } = await ctx.db.course.update({
-			where: { id: courseId, createdById: ctx.session.user.id! },
+			where: { id, createdById: ctx.session.user.id! },
 			data: { categoryId }
 		})
 

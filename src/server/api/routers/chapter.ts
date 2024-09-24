@@ -1,8 +1,7 @@
-import { TRPCError } from '@trpc/server'
-
 import {
-	createChapterSchema,
-	editChapterTitleSchema,
+	addChapterSchema,
+	editDescriptionSchema,
+	editTitleSchema,
 	getChapterSchema,
 	reorderChaptersSchema
 } from '@/shared/validations/chapter'
@@ -10,16 +9,11 @@ import {
 import { createTRPCRouter, instructorProcedure } from '@/server/api/trpc'
 
 export const chapterRouter = createTRPCRouter({
-	addChapter: instructorProcedure.input(createChapterSchema).mutation(async ({ ctx, input }) => {
+	addChapter: instructorProcedure.input(addChapterSchema).mutation(async ({ ctx, input }) => {
 		const { courseId, title } = input
 
-		const course = await ctx.db.course.findUnique({
-			where: { id: courseId, createdById: ctx.session.user.id! }
-		})
-		if (!course) throw new TRPCError({ code: 'NOT_FOUND', message: 'Course not found' })
-
 		const lastChapter = await ctx.db.chapter.findFirst({
-			where: { courseId },
+			where: { courseId, course: { createdById: ctx.session.user.id! } },
 			orderBy: { position: 'desc' }
 		})
 
@@ -32,25 +26,39 @@ export const chapterRouter = createTRPCRouter({
 		return { message: 'Chapter created successfully' }
 	}),
 
-	editTitle: instructorProcedure.input(editChapterTitleSchema).mutation(async ({ ctx, input }) => {
-		const { chapterId, title: title } = input
+	editDescription: instructorProcedure.input(editDescriptionSchema).mutation(async ({ ctx, input }) => {
+		const { id, courseId, description } = input
 
-		const chapter = await ctx.db.chapter.update({
-			where: { id: chapterId },
+		const { description: newDescription } = await ctx.db.chapter.update({
+			where: { id, courseId, course: { createdById: ctx.session.user.id! } },
+			data: { description }
+		})
+
+		return {
+			message: 'Chapter description updated successfully',
+			newDescription
+		}
+	}),
+
+	editTitle: instructorProcedure.input(editTitleSchema).mutation(async ({ ctx, input }) => {
+		const { id, courseId, title } = input
+
+		const { title: newTitle } = await ctx.db.chapter.update({
+			where: { id, courseId, course: { createdById: ctx.session.user.id! } },
 			data: { title }
 		})
 
 		return {
-			newTitle: chapter.title,
-			message: 'Chapter title updated successfully'
+			message: 'Chapter title updated successfully',
+			newTitle
 		}
 	}),
 
 	getChapter: instructorProcedure.input(getChapterSchema).query(async ({ ctx, input }) => {
-		const { chapterId } = input
+		const { id, courseId } = input
 
 		const chapter = await ctx.db.chapter.findUnique({
-			where: { id: chapterId },
+			where: { id, courseId },
 			include: { course: true, muxData: true }
 		})
 

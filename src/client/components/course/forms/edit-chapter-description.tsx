@@ -4,11 +4,11 @@ import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { TbEdit } from 'react-icons/tb'
+import { TbCirclePlus, TbEdit } from 'react-icons/tb'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
-import { editCodeSchema, type EditCodeSchema } from '@/shared/validations/course'
+import { editDescriptionSchema, type EditDescriptionSchema } from '@/shared/validations/chapter'
 
 import {
 	Button,
@@ -22,10 +22,16 @@ import {
 	FormField,
 	FormItem,
 	FormMessage,
-	Input
+	Textarea
 } from '@/client/components/ui'
 
-export const EditCourseCodeForm = ({ id, code }: EditCodeSchema) => {
+type EditChapterDescriptionProps = {
+	id: string
+	courseId: string
+	description: string | null
+}
+
+export const EditChapterDescriptionForm = ({ id, courseId, description }: EditChapterDescriptionProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -34,16 +40,16 @@ export const EditCourseCodeForm = ({ id, code }: EditCodeSchema) => {
 		form.reset()
 	}
 
-	const form = useForm<EditCodeSchema>({
-		resolver: zodResolver(editCodeSchema),
-		defaultValues: { id, code }
+	const form = useForm<EditDescriptionSchema>({
+		resolver: zodResolver(editDescriptionSchema),
+		defaultValues: { id, courseId, description: description ?? '' }
 	})
-	const formCode = form.getValues('code')
+	const formDescription = form.getValues('description')
 
-	const { mutate, isPending } = api.course.editCode.useMutation({
+	const { mutate, isPending } = api.chapter.editDescription.useMutation({
 		onSuccess: async (data) => {
 			toggleEdit()
-			form.reset({ id, code: data.newCode })
+			form.reset({ id, courseId, description: data.newDescription ?? '' })
 			router.refresh()
 			toast.success(data.message)
 		},
@@ -53,14 +59,19 @@ export const EditCourseCodeForm = ({ id, code }: EditCodeSchema) => {
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Course Code</CardTitle>
+				<CardTitle>Chapter Description</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
-					{!isEditing && formCode && <TbEdit className="mr-2 size-4" />}
-					{isEditing ? 'Cancel' : formCode ? 'Edit' : 'Add'}
+					{!isEditing && formDescription && <TbEdit className="mr-2 size-4" />}
+					{!isEditing && !formDescription && <TbCirclePlus className="mr-2 size-4" />}
+					{isEditing ? 'Cancel' : formDescription ? 'Edit' : 'Add'}
 				</Button>
 			</CardHeader>
 
-			{!isEditing && <CardContent>{formCode}</CardContent>}
+			{!isEditing && (
+				<CardContent isEmpty={!formDescription}>
+					{formDescription ? formDescription : 'No description added'}
+				</CardContent>
+			)}
 
 			{isEditing && (
 				<Form {...form}>
@@ -68,11 +79,11 @@ export const EditCourseCodeForm = ({ id, code }: EditCodeSchema) => {
 						<CardContent>
 							<FormField
 								control={form.control}
-								name="code"
+								name="description"
 								render={({ field }) => (
 									<FormItem>
 										<FormControl>
-											<Input placeholder="e.g. 'CS101'" disabled={isPending} {...field} />
+											<Textarea placeholder="e.g. 'This is a chapter description'" disabled={isPending} {...field} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>
