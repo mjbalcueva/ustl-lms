@@ -2,7 +2,8 @@ import { TRPCError } from '@trpc/server'
 
 import {
 	createChapterSchema,
-	editChapterTitleSchema,
+	editDescriptionSchema,
+	editTitleSchema,
 	getChapterSchema,
 	reorderChaptersSchema
 } from '@/shared/validations/chapter'
@@ -32,7 +33,21 @@ export const chapterRouter = createTRPCRouter({
 		return { message: 'Chapter created successfully' }
 	}),
 
-	editTitle: instructorProcedure.input(editChapterTitleSchema).mutation(async ({ ctx, input }) => {
+	editDescription: instructorProcedure.input(editDescriptionSchema).mutation(async ({ ctx, input }) => {
+		const { chapterId, description } = input
+
+		const { description: newDescription } = await ctx.db.chapter.update({
+			where: { id: chapterId, course: { createdById: ctx.session.user.id! } },
+			data: { description }
+		})
+
+		return {
+			message: 'Chapter description updated successfully',
+			newDescription
+		}
+	}),
+
+	editTitle: instructorProcedure.input(editTitleSchema).mutation(async ({ ctx, input }) => {
 		const { chapterId, title: title } = input
 
 		const chapter = await ctx.db.chapter.update({

@@ -4,11 +4,11 @@ import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { TbEdit } from 'react-icons/tb'
+import { TbCirclePlus, TbEdit } from 'react-icons/tb'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
-import { editTitleSchema, type EditTitleSchema } from '@/shared/validations/chapter'
+import { editDescriptionSchema, type EditDescriptionSchema } from '@/shared/validations/chapter'
 
 import {
 	Button,
@@ -22,15 +22,15 @@ import {
 	FormField,
 	FormItem,
 	FormMessage,
-	Input
+	Textarea
 } from '@/client/components/ui'
 
-type EditChapterTitleProps = {
+type EditChapterDescriptionProps = {
 	chapterId: string
-	initialTitle: string
+	initialDescription: string | null
 }
 
-export const EditChapterTitleForm = ({ chapterId, initialTitle }: EditChapterTitleProps) => {
+export const EditChapterDescriptionForm = ({ chapterId, initialDescription }: EditChapterDescriptionProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -39,23 +39,23 @@ export const EditChapterTitleForm = ({ chapterId, initialTitle }: EditChapterTit
 		form.reset()
 	}
 
-	const form = useForm<EditTitleSchema>({
-		resolver: zodResolver(editTitleSchema),
+	const form = useForm<EditDescriptionSchema>({
+		resolver: zodResolver(editDescriptionSchema),
 		defaultValues: {
 			chapterId,
-			title: initialTitle
+			description: initialDescription ?? ''
 		}
 	})
-	const title = form.getValues('title')
+	const description = form.getValues('description')
 
-	const { mutate, isPending } = api.chapter.editTitle.useMutation({
+	const { mutate, isPending } = api.chapter.editDescription.useMutation({
 		onSuccess: async (data) => {
 			toggleEdit()
+			router.refresh()
 			form.reset({
 				chapterId,
-				title: data.newTitle
+				description: data.newDescription ?? ''
 			})
-			router.refresh()
 			toast.success(data.message)
 		},
 		onError: (error) => toast.error(error.message)
@@ -64,14 +64,17 @@ export const EditChapterTitleForm = ({ chapterId, initialTitle }: EditChapterTit
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Chapter Title</CardTitle>
+				<CardTitle>Chapter Description</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
-					{!isEditing && title && <TbEdit className="mr-2 size-4" />}
-					{isEditing ? 'Cancel' : title ? 'Edit' : 'Add'}
+					{!isEditing && description && <TbEdit className="mr-2 size-4" />}
+					{!isEditing && !description && <TbCirclePlus className="mr-2 size-4" />}
+					{isEditing ? 'Cancel' : description ? 'Edit' : 'Add'}
 				</Button>
 			</CardHeader>
 
-			{!isEditing && <CardContent>{title}</CardContent>}
+			{!isEditing && (
+				<CardContent isEmpty={!description}>{description ? description : 'No description added'}</CardContent>
+			)}
 
 			{isEditing && (
 				<Form {...form}>
@@ -79,11 +82,11 @@ export const EditChapterTitleForm = ({ chapterId, initialTitle }: EditChapterTit
 						<CardContent>
 							<FormField
 								control={form.control}
-								name="title"
+								name="description"
 								render={({ field }) => (
 									<FormItem>
 										<FormControl>
-											<Input placeholder="e.g. 'Chapter 1'" disabled={isPending} {...field} />
+											<Textarea placeholder="e.g. 'This is a chapter description'" disabled={isPending} {...field} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>

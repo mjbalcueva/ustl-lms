@@ -1,8 +1,9 @@
-import { TbBook2, TbListDetails, TbPackage } from 'react-icons/tb'
+import { TbListDetails, TbNotes, TbPackage } from 'react-icons/tb'
 
 import { api } from '@/shared/trpc/server'
 import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
+import { EditChapterDescriptionForm } from '@/client/components/course/forms/edit-chapter-description'
 import { EditChapterTitleForm } from '@/client/components/course/forms/edit-chapter-title'
 import { NotFound } from '@/client/components/not-found'
 import {
@@ -53,8 +54,9 @@ export default async function Page({ params }: { params: { courseId: string; cha
 
 			<PageContent className="gap-4 px-2.5 sm:px-4 md:flex md:flex-wrap md:gap-6 md:px-6">
 				<PageSection className="mb-6 flex-1 md:mb-0" compactMode>
-					<PageSectionTitle title="Customize your chapter" icon={TbBook2} />
+					<PageSectionTitle title="Customize your chapter" icon={TbNotes} />
 					<EditChapterTitleForm chapterId={chapter.id} initialTitle={chapter.title} />
+					<EditChapterDescriptionForm chapterId={chapter.id} initialDescription={chapter.description} />
 				</PageSection>
 
 				<div className="flex flex-1 flex-col gap-4 md:gap-6">
