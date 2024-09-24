@@ -1,10 +1,10 @@
 import { z } from 'zod'
 
-export const createChapterSchema = z.object({
+export const addChapterSchema = z.object({
 	courseId: z.string().min(1, 'Course ID is required'),
 	title: z.string().min(1, 'Title is required').max(32, 'Title must be less than 32 characters')
 })
-export type CreateChapterSchema = z.infer<typeof createChapterSchema>
+export type AddChapterSchema = z.infer<typeof addChapterSchema>
 
 export const editDescriptionSchema = z.object({
 	id: z.string().min(1, 'Chapter ID is required'),

@@ -45,9 +45,9 @@ export default async function Page({ params }: { params: { courseId: string } })
 
 	const crumbs: Breadcrumb = [
 		{ icon: 'instructor' },
-		{ label: 'Courses', href: '/courses' },
-		{ label: 'Edit' },
-		{ icon: 'course', label: course.title }
+		{ label: 'Courses', href: '/courses/manage' },
+		{ icon: 'course', label: course.title, href: `/courses/edit/${course.id}` },
+		{ label: 'Edit' }
 	]
 
 	return (
@@ -80,7 +80,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 				<div className="flex flex-1 flex-col gap-4 md:gap-6">
 					<PageSection compactMode>
 						<PageSectionTitle title="Course chapters" icon={TbListDetails} />
-						<AddCourseChaptersForm courseId={course.id} initialChapters={course.chapter} />
+						<AddCourseChaptersForm courseId={course.id} chapters={course.chapter} />
 					</PageSection>
 
 					<PageSection compactMode>
