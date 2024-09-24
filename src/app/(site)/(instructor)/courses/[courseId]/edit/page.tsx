@@ -67,9 +67,9 @@ export default async function Page({ params }: { params: { courseId: string } })
 				<PageSection className="mb-6 flex-1 md:mb-0" compactMode>
 					<PageSectionTitle title="Customize your course" icon={TbNotebook} />
 					<EditCourseCodeForm id={course.id} code={course.code} />
-					<EditCourseTitleForm courseId={course.id} initialTitle={course.title} />
-					<EditCourseDescriptionForm courseId={course.id} initialDescription={course.description} />
-					<EditCourseImageForm courseId={course.id} initialImage={course.image} />
+					<EditCourseTitleForm id={course.id} title={course.title} />
+					<EditCourseDescriptionForm id={course.id} description={course.description} />
+					<EditCourseImageForm id={course.id} imageUrl={course.image} />
 					<EditCourseCategoriesForm
 						courseId={course.id}
 						categoryId={course.categoryId}
@@ -85,7 +85,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 
 					<PageSection compactMode>
 						<PageSectionTitle title="Resources & Attachments" icon={TbPackage} />
-						<AddCourseAttachmentsForm courseId={course.id} initialAttachment={course.attachment} />
+						<AddCourseAttachmentsForm courseId={course.id} attachments={course.attachment} />
 					</PageSection>
 				</div>
 			</PageContent>

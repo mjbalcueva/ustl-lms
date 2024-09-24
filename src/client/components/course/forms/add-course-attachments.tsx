@@ -14,16 +14,16 @@ import { Button, Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/
 
 type AddCourseAttachmentProps = {
 	courseId: string
-	initialAttachment: Attachment[]
+	attachments: Attachment[]
 }
 
-export const AddCourseAttachmentsForm = ({ courseId, initialAttachment }: AddCourseAttachmentProps) => {
+export const AddCourseAttachmentsForm = ({ courseId, attachments }: AddCourseAttachmentProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
 	const toggleEdit = () => setIsEditing((current) => !current)
 
-	const { mutate: createAttachment } = api.attachment.addAttachment.useMutation({
+	const { mutate } = api.attachment.addAttachment.useMutation({
 		onSuccess: async (data) => {
 			toggleEdit()
 			router.refresh()
@@ -32,7 +32,7 @@ export const AddCourseAttachmentsForm = ({ courseId, initialAttachment }: AddCou
 		onError: (error) => toast.error(error.message)
 	})
 
-	const hasAttachments = initialAttachment?.length > 0
+	const hasAttachments = attachments?.length > 0
 
 	return (
 		<Card>
@@ -46,12 +46,12 @@ export const AddCourseAttachmentsForm = ({ courseId, initialAttachment }: AddCou
 
 			<CardContent isEmpty={!hasAttachments}>
 				{!isEditing && !hasAttachments && 'No attachment added'}
-				{!isEditing && hasAttachments && <AttachmentList items={initialAttachment} />}
+				{!isEditing && hasAttachments && <AttachmentList items={attachments} />}
 				{isEditing && (
 					<FileUpload
 						endpoint="attachmentUpload"
 						onChange={(url, name) =>
-							createAttachment({
+							mutate({
 								courseId,
 								url: url ?? '',
 								name: name ?? ''

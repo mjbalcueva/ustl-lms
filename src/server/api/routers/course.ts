@@ -51,10 +51,10 @@ export const courseRouter = createTRPCRouter({
 	}),
 
 	editTitle: instructorProcedure.input(editTitleSchema).mutation(async ({ ctx, input }) => {
-		const { courseId, title } = input
+		const { id, title } = input
 
 		const { title: newTitle } = await ctx.db.course.update({
-			where: { id: courseId, createdById: ctx.session.user.id! },
+			where: { id, createdById: ctx.session.user.id! },
 			data: { title }
 		})
 
@@ -62,7 +62,7 @@ export const courseRouter = createTRPCRouter({
 	}),
 
 	editDescription: instructorProcedure.input(editDescriptionSchema).mutation(async ({ ctx, input }) => {
-		const { courseId, description } = input
+		const { id: courseId, description } = input
 
 		const { description: newDescription } = await ctx.db.course.update({
 			where: { id: courseId, createdById: ctx.session.user.id! },
@@ -73,10 +73,10 @@ export const courseRouter = createTRPCRouter({
 	}),
 
 	editImage: instructorProcedure.input(editImageSchema).mutation(async ({ ctx, input }) => {
-		const { courseId, imageUrl } = input
+		const { id, imageUrl } = input
 
 		const course = await ctx.db.course.findUnique({
-			where: { id: courseId, createdById: ctx.session.user.id! },
+			where: { id, createdById: ctx.session.user.id! },
 			select: { image: true }
 		})
 
@@ -84,7 +84,7 @@ export const courseRouter = createTRPCRouter({
 		if (oldImageKey) await utapi.deleteFiles(oldImageKey)
 
 		await ctx.db.course.update({
-			where: { id: courseId, createdById: ctx.session.user.id! },
+			where: { id: id, createdById: ctx.session.user.id! },
 			data: { image: imageUrl }
 		})
 

@@ -18,19 +18,19 @@ export const editCodeSchema = z.object({
 export type EditCodeSchema = z.infer<typeof editCodeSchema>
 
 export const editTitleSchema = z.object({
-	courseId: z.string().min(1, 'Course ID is required'),
+	id: z.string().min(1, 'Course ID is required'),
 	title: z.string().min(1, 'Title is required').max(32, 'Title must be less than 32 characters')
 })
 export type EditTitleSchema = z.infer<typeof editTitleSchema>
 
 export const editDescriptionSchema = z.object({
-	courseId: z.string().min(1, 'Course ID is required'),
-	description: z.string().max(1024, 'Description must be less than 1024 characters').optional()
+	id: z.string().min(1, 'Course ID is required'),
+	description: z.string().max(1024, 'Description must be less than 1024 characters').nullable()
 })
 export type EditDescriptionSchema = z.infer<typeof editDescriptionSchema>
 
 export const editImageSchema = z.object({
-	courseId: z.string().min(1, 'Course ID is required'),
-	imageUrl: z.string().min(1, 'Image URL is required')
+	id: z.string().min(1, 'Course ID is required'),
+	imageUrl: z.string().nullable()
 })
 export type EditImageSchema = z.infer<typeof editImageSchema>

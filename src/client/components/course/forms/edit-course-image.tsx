@@ -7,16 +7,12 @@ import { TbCirclePlus, TbEdit, TbLibraryPhoto } from 'react-icons/tb'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
+import { type EditImageSchema } from '@/shared/validations/course'
 
 import { FileUpload } from '@/client/components/file-upload'
 import { Button, Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/client/components/ui'
 
-type EditCourseImageProps = {
-	courseId: string
-	initialImage: string | null
-}
-
-export const EditCourseImageForm = ({ courseId, initialImage }: EditCourseImageProps) => {
+export const EditCourseImageForm = ({ id, imageUrl }: EditImageSchema) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -36,17 +32,17 @@ export const EditCourseImageForm = ({ courseId, initialImage }: EditCourseImageP
 			<CardHeader>
 				<CardTitle>Course Image</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
-					{!isEditing && initialImage && <TbEdit className="mr-2 size-4" />}
-					{!isEditing && !initialImage && <TbCirclePlus className="mr-2 size-4" />}
-					{isEditing ? 'Cancel' : initialImage ? 'Edit' : 'Add'}
+					{!isEditing && imageUrl && <TbEdit className="mr-2 size-4" />}
+					{!isEditing && !imageUrl && <TbCirclePlus className="mr-2 size-4" />}
+					{isEditing ? 'Cancel' : imageUrl ? 'Edit' : 'Add'}
 				</Button>
 			</CardHeader>
 
 			<CardContent className="pb-5">
-				{!isEditing && initialImage && (
+				{!isEditing && imageUrl && (
 					<div className="relative aspect-video">
 						<Image
-							src={initialImage}
+							src={imageUrl}
 							alt="Course Image"
 							fill
 							className="rounded-xl border border-input"
@@ -56,15 +52,13 @@ export const EditCourseImageForm = ({ courseId, initialImage }: EditCourseImageP
 					</div>
 				)}
 
-				{!isEditing && !initialImage && (
+				{!isEditing && !imageUrl && (
 					<div className="flex h-[11.5rem] items-center justify-center rounded-xl border border-input bg-card dark:bg-background">
 						<TbLibraryPhoto className="size-10 text-card-foreground dark:text-muted-foreground" />
 					</div>
 				)}
 
-				{isEditing && (
-					<FileUpload endpoint="imageUpload" onChange={(url) => mutate({ courseId, imageUrl: url ?? '' })} />
-				)}
+				{isEditing && <FileUpload endpoint="imageUpload" onChange={(url) => mutate({ id: id, imageUrl: url ?? '' })} />}
 			</CardContent>
 
 			{isEditing && (
