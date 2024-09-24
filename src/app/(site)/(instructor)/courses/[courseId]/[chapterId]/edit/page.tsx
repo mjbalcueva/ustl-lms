@@ -33,7 +33,7 @@ export default async function Page({ params }: { params: { courseId: string; cha
 	const crumbs: Breadcrumb = [
 		{ icon: 'instructor' },
 		{ label: 'Courses', href: '/courses/manage' },
-		{ icon: 'course', label: chapter.course.title, href: `/courses/edit/${chapter.course.id}` },
+		{ icon: 'course', label: chapter.course.title, href: `/courses/${chapter.course.id}/edit` },
 		{ icon: 'chapter', label: chapter.title, href: `/courses/${chapter.course.id}/${chapter.id}/edit` },
 		{ label: 'Edit' }
 	]

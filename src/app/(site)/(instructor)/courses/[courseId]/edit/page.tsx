@@ -46,7 +46,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 	const crumbs: Breadcrumb = [
 		{ icon: 'instructor' },
 		{ label: 'Courses', href: '/courses/manage' },
-		{ icon: 'course', label: course.title, href: `/courses/edit/${course.id}` },
+		{ icon: 'course', label: course.title, href: `/courses/${course.id}/edit` },
 		{ label: 'Edit' }
 	]
 

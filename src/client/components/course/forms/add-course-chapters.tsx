@@ -51,8 +51,6 @@ export const AddCourseChaptersForm = ({ courseId, chapters }: AddCourseChaptersP
 	})
 	const hasChapters = chapters.length > 0
 
-	const onEdit = (id: string) => router.push(`/courses/${courseId}/${id}/edit`)
-
 	const { mutate: reorderChapter, isPending: isReordering } = api.chapter.reorderChapters.useMutation({
 		onSuccess: (data) => toast.success(data.message),
 		onError: (error) => toast.error(error.message)
@@ -93,7 +91,7 @@ export const AddCourseChaptersForm = ({ courseId, chapters }: AddCourseChaptersP
 			{!isEditing && (
 				<CardContent isEmpty={!hasChapters}>
 					{!hasChapters && 'No chapters'}
-					<ChapterList items={chapters} onEdit={onEdit} onReorder={onReorder} />
+					<ChapterList items={chapters} onReorder={onReorder} />
 				</CardContent>
 			)}
 
