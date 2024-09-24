@@ -60,7 +60,7 @@ export const EditCourseTitleForm = ({ id, title }: EditTitleSchema) => {
 				</Button>
 			</CardHeader>
 
-			{!isEditing && <CardContent>{form.watch('title')}</CardContent>}
+			{!isEditing && <CardContent>{formTitle}</CardContent>}
 
 			{isEditing && (
 				<Form {...form}>
