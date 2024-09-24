@@ -51,15 +51,16 @@ export const AddCourseChaptersForm = ({ courseId, chapters }: AddCourseChaptersP
 	})
 	const hasChapters = chapters.length > 0
 
-	const { mutate: reorderChapter, isPending: isReordering } = api.chapter.reorderChapters.useMutation({
+	const { mutate: reorderChapter, isPending: isChapterReordering } = api.chapter.reorderChapters.useMutation({
 		onSuccess: (data) => toast.success(data.message),
 		onError: (error) => toast.error(error.message)
 	})
 
-	const onReorder = async (data: { id: string; position: number }[]) =>
-		reorderChapter({ courseId: courseId, chapterList: data })
+	const onReorder = async (data: { id: string; position: number }[]) => {
+		reorderChapter({ courseId, chapterList: data })
+	}
 
-	const { mutate: addChapter, isPending: isCreating } = api.chapter.addChapter.useMutation({
+	const { mutate: addChapter, isPending: isAdding } = api.chapter.addChapter.useMutation({
 		onSuccess: async (data) => {
 			toggleEdit()
 			form.reset({
@@ -74,7 +75,7 @@ export const AddCourseChaptersForm = ({ courseId, chapters }: AddCourseChaptersP
 
 	return (
 		<Card className="relative">
-			{isReordering && (
+			{isChapterReordering && (
 				<div className="absolute flex h-full w-full items-center justify-center rounded-xl bg-background/40">
 					<Loader variant="bars" size="medium" />
 				</div>
@@ -105,7 +106,7 @@ export const AddCourseChaptersForm = ({ courseId, chapters }: AddCourseChaptersP
 								render={({ field }) => (
 									<FormItem className="flex-1">
 										<FormControl>
-											<Input placeholder="e.g. 'Introduction to the course'" disabled={isCreating} {...field} />
+											<Input placeholder="e.g. 'Introduction to the course'" disabled={isAdding} {...field} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -116,10 +117,10 @@ export const AddCourseChaptersForm = ({ courseId, chapters }: AddCourseChaptersP
 							<Button
 								type="submit"
 								size="card"
-								disabled={!form.formState.isDirty || isCreating}
-								variant={isCreating ? 'shine' : 'default'}
+								disabled={!form.formState.isDirty || isAdding}
+								variant={isAdding ? 'shine' : 'default'}
 							>
-								{isCreating ? 'Adding...' : 'Add'}
+								{isAdding ? 'Adding...' : 'Add'}
 							</Button>
 						</CardFooter>
 					</form>
