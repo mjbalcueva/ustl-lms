@@ -51,11 +51,11 @@ export const EditCourseDescriptionForm = ({ courseId, initialDescription }: Edit
 	const { mutate, isPending } = api.course.editDescription.useMutation({
 		onSuccess: async (data) => {
 			toggleEdit()
-			router.refresh()
 			form.reset({
 				courseId,
 				description: data.newDescription ?? ''
 			})
+			router.refresh()
 			toast.success(data.message)
 		},
 		onError: (error) => toast.error(error.message)

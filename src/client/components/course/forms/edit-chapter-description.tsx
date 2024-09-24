@@ -51,11 +51,11 @@ export const EditChapterDescriptionForm = ({ chapterId, initialDescription }: Ed
 	const { mutate, isPending } = api.chapter.editDescription.useMutation({
 		onSuccess: async (data) => {
 			toggleEdit()
-			router.refresh()
 			form.reset({
 				chapterId,
 				description: data.newDescription ?? ''
 			})
+			router.refresh()
 			toast.success(data.message)
 		},
 		onError: (error) => toast.error(error.message)
