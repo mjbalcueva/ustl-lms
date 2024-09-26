@@ -22,7 +22,7 @@ import { cn } from '@/client/lib/utils'
 type TextStyle = Omit<FormatAction, 'value' | 'icon' | 'action' | 'isActive' | 'canExecute'> & {
 	element: keyof JSX.IntrinsicElements
 	level?: Level
-	className: string
+	className?: string
 	icon: IconType
 }
 
@@ -31,7 +31,6 @@ const formatActions: TextStyle[] = [
 		label: 'Heading 1',
 		element: 'h1',
 		level: 1,
-		className: 'm-0 grow text-3xl font-extrabold',
 		shortcuts: ['mod', 'alt', '1'],
 		icon: TbH1
 	},
@@ -39,7 +38,6 @@ const formatActions: TextStyle[] = [
 		label: 'Heading 2',
 		element: 'h2',
 		level: 2,
-		className: 'm-0 grow text-xl font-bold',
 		shortcuts: ['mod', 'alt', '2'],
 		icon: TbH2
 	},
@@ -47,7 +45,6 @@ const formatActions: TextStyle[] = [
 		label: 'Heading 3',
 		element: 'h3',
 		level: 3,
-		className: 'm-0 grow text-lg font-semibold',
 		shortcuts: ['mod', 'alt', '3'],
 		icon: TbH3
 	},
@@ -55,7 +52,6 @@ const formatActions: TextStyle[] = [
 		label: 'Heading 4',
 		element: 'h4',
 		level: 4,
-		className: 'm-0 grow text-base font-semibold',
 		shortcuts: ['mod', 'alt', '4'],
 		icon: TbH4
 	},
@@ -63,7 +59,6 @@ const formatActions: TextStyle[] = [
 		label: 'Heading 5',
 		element: 'h5',
 		level: 5,
-		className: 'm-0 grow text-sm font-normal',
 		shortcuts: ['mod', 'alt', '5'],
 		icon: TbH5
 	},
@@ -71,14 +66,12 @@ const formatActions: TextStyle[] = [
 		label: 'Heading 6',
 		element: 'h6',
 		level: 6,
-		className: 'm-0 grow text-sm font-normal',
 		shortcuts: ['mod', 'alt', '6'],
 		icon: TbH6
 	},
 	{
 		label: 'Paragraph',
 		element: 'p',
-		className: 'grow',
 		shortcuts: ['mod', 'alt', '0'],
 		icon: TbLetterCase
 	}
@@ -118,7 +111,7 @@ export const UpdateTextStyle: React.FC<UpdateTextStyleProps> = React.memo(
 					aria-label={label}
 				>
 					<div className="flex items-center gap-2">
-						<Icon className={className} />
+						<Icon className="size-4 shrink-0" />
 						<Element className={className}>{label}</Element>
 					</div>
 					<ShortcutKey keys={shortcuts} />
@@ -139,7 +132,6 @@ export const UpdateTextStyle: React.FC<UpdateTextStyleProps> = React.memo(
 			<DropdownMenu>
 				<DropdownMenuTrigger asChild>
 					<EditorToolbarButton
-						isActive={editor.isActive('heading') || editor.isActive('paragraph')}
 						tooltip="Text styles"
 						aria-label="Text styles"
 						pressed={editor.isActive('heading') || editor.isActive('paragraph')}
@@ -149,11 +141,10 @@ export const UpdateTextStyle: React.FC<UpdateTextStyleProps> = React.memo(
 						variant={variant}
 					>
 						{activeStyle?.icon && <activeStyle.icon className="size-5 shrink-0" />}
-						{/* <span className="text-sm">{activeStyle?.label}</span> */}
 						<CaretDownIcon className="size-4 shrink-0" />
 					</EditorToolbarButton>
 				</DropdownMenuTrigger>
-				<DropdownMenuContent align="start" className="w-full">
+				<DropdownMenuContent align="start" className="w-full space-y-1">
 					{filteredActions.map(renderMenuItem)}
 				</DropdownMenuContent>
 			</DropdownMenu>
