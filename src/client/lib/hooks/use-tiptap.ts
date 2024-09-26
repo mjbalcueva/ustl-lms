@@ -8,7 +8,6 @@ import { useEditor } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
 
 import { useTiptapThrottle } from '@/client/lib/hooks/use-tiptap-throttle'
-import { BackgroundColor } from '@/client/lib/tiptap/extensions/background-color'
 import { CodeBlockLowlight } from '@/client/lib/tiptap/extensions/code-block-low-light'
 import { Color } from '@/client/lib/tiptap/extensions/color'
 import { HorizontalRule } from '@/client/lib/tiptap/extensions/horizontal-rule'
@@ -43,7 +42,6 @@ const createExtensions = (placeholder: string) => [
 	}),
 	Link,
 	Image,
-	BackgroundColor,
 	Color,
 	TextStyle,
 	Selection,

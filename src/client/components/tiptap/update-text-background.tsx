@@ -16,13 +16,13 @@ import {
 } from '@/client/components/ui'
 import type { toggleVariants } from '@/client/components/ui'
 
-interface ColorItem {
+type ColorItem = {
 	color: string
 	label: string
 	darkLabel?: string
 }
 
-interface ColorPalette {
+type ColorPalette = {
 	label: string
 	colors: ColorItem[]
 	inverse: string
@@ -31,7 +31,7 @@ interface ColorPalette {
 const COLORS: ColorPalette[] = [
 	{
 		label: 'Palette 1',
-		inverse: 'text-foreground',
+		inverse: 'text-white',
 		colors: [
 			{ color: 'bg-background', label: 'Default' },
 			{ color: 'bg-blue-500', label: 'Bold blue' },
@@ -44,7 +44,7 @@ const COLORS: ColorPalette[] = [
 	},
 	{
 		label: 'Palette 2',
-		inverse: 'text-foreground',
+		inverse: 'text-white',
 		colors: [
 			{ color: 'bg-gray-500', label: 'Gray' },
 			{ color: 'bg-blue-400', label: 'Blue' },
@@ -57,7 +57,7 @@ const COLORS: ColorPalette[] = [
 	},
 	{
 		label: 'Palette 3',
-		inverse: 'text-foreground',
+		inverse: 'text-black',
 		colors: [
 			{ color: 'bg-white', label: 'White', darkLabel: 'Black' },
 			{ color: 'bg-blue-200', label: 'Blue subtle' },

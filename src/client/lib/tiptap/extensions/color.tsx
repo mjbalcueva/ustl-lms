@@ -2,7 +2,7 @@ import { Extension } from '@tiptap/core'
 
 import '@tiptap/extension-text-style'
 
-export type BackgroundColorOptions = {
+export type ColorOptions = {
 	types: string[]
 }
 
@@ -18,11 +18,21 @@ declare module '@tiptap/core' {
 			 */
 			unsetBackgroundColor: () => ReturnType
 		}
+		foregroundColor: {
+			/**
+			 * Set the foreground color
+			 */
+			setForegroundColor: (color: string) => ReturnType
+			/**
+			 * Unset the foreground color
+			 */
+			unsetForegroundColor: () => ReturnType
+		}
 	}
 }
 
-export const BackgroundColor = Extension.create<BackgroundColorOptions>({
-	name: 'backgroundColor',
+export const Color = Extension.create<ColorOptions>({
+	name: 'color',
 
 	addOptions() {
 		return {
@@ -49,6 +59,21 @@ export const BackgroundColor = Extension.create<BackgroundColorOptions>({
 								class: attributes.backgroundColor as string
 							}
 						}
+					},
+					foregroundColor: {
+						default: null,
+						parseHTML: (element) =>
+							element.classList.contains('text-')
+								? element.className.split(' ').find((cls) => cls.startsWith('text-'))
+								: null,
+						renderHTML: (attributes) => {
+							if (!attributes.foregroundColor) {
+								return {}
+							}
+							return {
+								class: attributes.foregroundColor as string
+							}
+						}
 					}
 				}
 			}
@@ -66,6 +91,16 @@ export const BackgroundColor = Extension.create<BackgroundColorOptions>({
 				() =>
 				({ chain }) => {
 					return chain().setMark('textStyle', { backgroundColor: null }).removeEmptyTextStyle().run()
+				},
+			setForegroundColor:
+				(color) =>
+				({ chain }) => {
+					return chain().setMark('textStyle', { foregroundColor: color }).run()
+				},
+			unsetForegroundColor:
+				() =>
+				({ chain }) => {
+					return chain().setMark('textStyle', { foregroundColor: null }).removeEmptyTextStyle().run()
 				}
 		}
 	}
