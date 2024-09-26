@@ -18,21 +18,23 @@ export const TiptapEditor = React.forwardRef<HTMLDivElement, TiptapEditorProps>(
 		const editor = useTiptapEditor({
 			value,
 			onUpdate,
+			editorProps: {
+				attributes: {
+					class: cn(
+						'dark-bg-background min-h-20 rounded-xl border border-input px-3 py-2 shadow-sm outline-none focus:ring-2 focus:ring-ring ring-0 focus:ring-offset-2 focus:ring-offset-background',
+						editorContentClassName
+					)
+				}
+			},
 			...props
 		})
 
 		if (!editor) return null
 
 		return (
-			<div ref={ref} className={cn('space-y-2', className)}>
+			<div ref={ref} className={cn('space-y-1.5', className)}>
 				<EditorToolbar editor={editor} />
-				<EditorContent
-					editor={editor}
-					className={cn(
-						'dark-bg-background min-h-20 rounded-xl border border-input px-3 py-2 shadow-sm',
-						editorContentClassName
-					)}
-				/>
+				<EditorContent editor={editor} className="rounded-xl" />
 			</div>
 		)
 	}
