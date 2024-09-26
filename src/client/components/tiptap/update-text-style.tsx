@@ -132,8 +132,8 @@ export const UpdateTextStyle: React.FC<UpdateTextStyleProps> = React.memo(
 			<DropdownMenu>
 				<DropdownMenuTrigger asChild>
 					<EditorToolbarButton
-						tooltip="Text styles"
-						aria-label="Text styles"
+						tooltip={activeStyle?.label}
+						aria-label={activeStyle?.label}
 						pressed={editor.isActive('heading') || editor.isActive('paragraph')}
 						className="justify-between"
 						disabled={editor.isActive('codeBlock')}
