@@ -1,33 +1,12 @@
 import * as React from 'react'
 import type { Editor } from '@tiptap/react'
 import type { VariantProps } from 'class-variance-authority'
-import { TbBackground, TbCheck, TbChevronDown } from 'react-icons/tb'
+import { TbBackground, TbChevronDown } from 'react-icons/tb'
 
+import { ColorPicker, type ColorPalette } from '@/client/components/tiptap/color-picker'
 import { EditorToolbarButton } from '@/client/components/tiptap/editor-toolbar-button'
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-	ToggleGroup,
-	ToggleGroupItem,
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger
-} from '@/client/components/ui'
+import { Popover, PopoverContent, PopoverTrigger } from '@/client/components/ui'
 import type { toggleVariants } from '@/client/components/ui'
-import { useUserTheme } from '@/client/lib/hooks/use-user-theme'
-
-interface ColorItem {
-	cssVar: string
-	label: string
-	darkLabel?: string
-}
-
-interface ColorPalette {
-	label: string
-	colors: ColorItem[]
-	inverse: string
-}
 
 const COLORS: ColorPalette[] = [
 	{
@@ -70,70 +49,6 @@ const COLORS: ColorPalette[] = [
 		]
 	}
 ]
-
-const MemoizedHighlightButton = React.memo<{
-	color: ColorItem
-	isSelected: boolean
-	inverse: string
-	onClick: (value: string) => void
-}>(({ color, isSelected, inverse, onClick }) => {
-	const { mode } = useUserTheme()
-	const isDarkMode = mode === 'dark'
-	const label = isDarkMode && color.darkLabel ? color.darkLabel : color.label
-
-	return (
-		<Tooltip>
-			<TooltipTrigger asChild>
-				<ToggleGroupItem
-					className="relative size-7 rounded-md p-0"
-					value={color.cssVar}
-					aria-label={label}
-					style={{ backgroundColor: color.cssVar }}
-					onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-						e.preventDefault()
-						onClick(color.cssVar)
-					}}
-				>
-					{isSelected && <TbCheck className="absolute inset-0 m-auto size-6" style={{ color: inverse }} />}
-				</ToggleGroupItem>
-			</TooltipTrigger>
-			<TooltipContent side="bottom">
-				<p>{label}</p>
-			</TooltipContent>
-		</Tooltip>
-	)
-})
-
-MemoizedHighlightButton.displayName = 'MemoizedHighlightButton'
-
-const MemoizedHighlightPicker = React.memo<{
-	palette: ColorPalette
-	selectedColor: string
-	inverse: string
-	onColorChange: (value: string) => void
-}>(({ palette, selectedColor, inverse, onColorChange }) => (
-	<ToggleGroup
-		type="single"
-		value={selectedColor}
-		onValueChange={(value: string) => {
-			if (value) onColorChange(value)
-		}}
-		className="gap-1.5"
-	>
-		{palette.colors.map((color, index) => (
-			<MemoizedHighlightButton
-				key={index}
-				inverse={inverse}
-				color={color}
-				isSelected={selectedColor === color.cssVar}
-				onClick={onColorChange}
-			/>
-		))}
-	</ToggleGroup>
-))
-
-MemoizedHighlightPicker.displayName = 'MemoizedHighlightPicker'
-
 type UpdateTextHighlightProps = VariantProps<typeof toggleVariants> & {
 	editor: Editor
 }
@@ -145,7 +60,7 @@ export const UpdateTextHighlight: React.FC<UpdateTextHighlightProps> = ({ editor
 	const handleColorChange = React.useCallback(
 		(value: string) => {
 			setSelectedColor(value)
-			editor.chain().setHighlight({ color: value }).run() // Update highlight color
+			editor.chain().setHighlight({ color: value }).run()
 		},
 		[editor]
 	)
@@ -165,7 +80,7 @@ export const UpdateTextHighlight: React.FC<UpdateTextHighlightProps> = ({ editor
 			<PopoverContent align="start" className="w-full">
 				<div className="space-y-1.5">
 					{COLORS.map((palette, index) => (
-						<MemoizedHighlightPicker
+						<ColorPicker
 							key={index}
 							palette={palette}
 							inverse={palette.inverse}
