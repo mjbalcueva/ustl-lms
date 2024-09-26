@@ -2,7 +2,7 @@ import { Extension } from '@tiptap/core'
 
 import '@tiptap/extension-text-style'
 
-export interface BackgroundColorOptions {
+export type BackgroundColorOptions = {
 	types: string[]
 }
 
@@ -37,13 +37,16 @@ export const BackgroundColor = Extension.create<BackgroundColorOptions>({
 				attributes: {
 					backgroundColor: {
 						default: null,
-						parseHTML: (element) => element.style.backgroundColor?.replace(/['"]+/g, ''),
+						parseHTML: (element) =>
+							element.classList.contains('bg-')
+								? element.className.split(' ').find((cls) => cls.startsWith('bg-'))
+								: null,
 						renderHTML: (attributes) => {
 							if (!attributes.backgroundColor) {
 								return {}
 							}
 							return {
-								style: `background-color: ${attributes.backgroundColor}`
+								class: attributes.backgroundColor as string
 							}
 						}
 					}

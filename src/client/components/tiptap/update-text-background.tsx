@@ -15,10 +15,9 @@ import {
 	TooltipTrigger
 } from '@/client/components/ui'
 import type { toggleVariants } from '@/client/components/ui'
-import { useUserTheme } from '@/client/lib/hooks/use-user-theme'
 
 interface ColorItem {
-	cssVar: string
+	color: string
 	label: string
 	darkLabel?: string
 }
@@ -32,41 +31,41 @@ interface ColorPalette {
 const COLORS: ColorPalette[] = [
 	{
 		label: 'Palette 1',
-		inverse: 'hsl(var(--background))',
+		inverse: 'text-foreground',
 		colors: [
-			{ cssVar: 'none', label: 'Default' },
-			{ cssVar: 'var(--mt-accent-bold-blue)', label: 'Bold blue' },
-			{ cssVar: 'var(--mt-accent-bold-teal)', label: 'Bold teal' },
-			{ cssVar: 'var(--mt-accent-bold-green)', label: 'Bold green' },
-			{ cssVar: 'var(--mt-accent-bold-orange)', label: 'Bold orange' },
-			{ cssVar: 'var(--mt-accent-bold-red)', label: 'Bold red' },
-			{ cssVar: 'var(--mt-accent-bold-purple)', label: 'Bold purple' }
+			{ color: 'bg-background', label: 'Default' },
+			{ color: 'bg-blue-500', label: 'Bold blue' },
+			{ color: 'bg-teal-500', label: 'Bold teal' },
+			{ color: 'bg-green-500', label: 'Bold green' },
+			{ color: 'bg-orange-500', label: 'Bold orange' },
+			{ color: 'bg-red-500', label: 'Bold red' },
+			{ color: 'bg-purple-500', label: 'Bold purple' }
 		]
 	},
 	{
 		label: 'Palette 2',
-		inverse: 'hsl(var(--background))',
+		inverse: 'text-foreground',
 		colors: [
-			{ cssVar: 'var(--mt-accent-gray)', label: 'Gray' },
-			{ cssVar: 'var(--mt-accent-blue)', label: 'Blue' },
-			{ cssVar: 'var(--mt-accent-teal)', label: 'Teal' },
-			{ cssVar: 'var(--mt-accent-green)', label: 'Green' },
-			{ cssVar: 'var(--mt-accent-orange)', label: 'Orange' },
-			{ cssVar: 'var(--mt-accent-red)', label: 'Red' },
-			{ cssVar: 'var(--mt-accent-purple)', label: 'Purple' }
+			{ color: 'bg-gray-500', label: 'Gray' },
+			{ color: 'bg-blue-400', label: 'Blue' },
+			{ color: 'bg-teal-400', label: 'Teal' },
+			{ color: 'bg-green-400', label: 'Green' },
+			{ color: 'bg-orange-400', label: 'Orange' },
+			{ color: 'bg-red-400', label: 'Red' },
+			{ color: 'bg-purple-400', label: 'Purple' }
 		]
 	},
 	{
 		label: 'Palette 3',
-		inverse: 'hsl(var(--foreground))',
+		inverse: 'text-foreground',
 		colors: [
-			{ cssVar: 'hsl(var(--background))', label: 'White', darkLabel: 'Black' },
-			{ cssVar: 'var(--mt-accent-blue-subtler)', label: 'Blue subtle' },
-			{ cssVar: 'var(--mt-accent-teal-subtler)', label: 'Teal subtle' },
-			{ cssVar: 'var(--mt-accent-green-subtler)', label: 'Green subtle' },
-			{ cssVar: 'var(--mt-accent-yellow-subtler)', label: 'Yellow subtle' },
-			{ cssVar: 'var(--mt-accent-red-subtler)', label: 'Red subtle' },
-			{ cssVar: 'var(--mt-accent-purple-subtler)', label: 'Purple subtle' }
+			{ color: 'bg-white', label: 'White', darkLabel: 'Black' },
+			{ color: 'bg-blue-200', label: 'Blue subtle' },
+			{ color: 'bg-teal-200', label: 'Teal subtle' },
+			{ color: 'bg-green-200', label: 'Green subtle' },
+			{ color: 'bg-yellow-200', label: 'Yellow subtle' },
+			{ color: 'bg-red-200', label: 'Red subtle' },
+			{ color: 'bg-purple-200', label: 'Purple subtle' }
 		]
 	}
 ]
@@ -77,28 +76,23 @@ const MemoizedColorButton = React.memo<{
 	inverse: string
 	onClick: (value: string) => void
 }>(({ color, isSelected, inverse, onClick }) => {
-	const { mode } = useUserTheme()
-	const isDarkMode = mode === 'dark'
-	const label = isDarkMode && color.darkLabel ? color.darkLabel : color.label
-
 	return (
 		<Tooltip>
 			<TooltipTrigger asChild>
 				<ToggleGroupItem
-					className="relative size-7 rounded-md p-0"
-					value={color.cssVar}
-					aria-label={label}
-					style={{ backgroundColor: color.cssVar }}
+					className={`relative size-7 rounded-md p-0 ${color.color} hover:${color.color}`}
+					value={color.color}
+					aria-label={color.label}
 					onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
 						e.preventDefault()
-						onClick(color.cssVar)
+						onClick(color.color)
 					}}
 				>
-					{isSelected && <TbCheck className="absolute inset-0 m-auto size-6" style={{ color: inverse }} />}
+					{isSelected && <TbCheck className={`absolute inset-0 m-auto size-6 ${inverse}`} />}
 				</ToggleGroupItem>
 			</TooltipTrigger>
 			<TooltipContent side="bottom">
-				<p>{label}</p>
+				<p>{color.label}</p>
 			</TooltipContent>
 		</Tooltip>
 	)
@@ -125,7 +119,7 @@ const MemoizedColorPicker = React.memo<{
 				key={index}
 				inverse={inverse}
 				color={color}
-				isSelected={selectedColor === color.cssVar}
+				isSelected={selectedColor === color.color}
 				onClick={onColorChange}
 			/>
 		))}
@@ -139,8 +133,7 @@ type UpdateTextBackgroundProps = VariantProps<typeof toggleVariants> & {
 }
 
 export const UpdateTextBackground: React.FC<UpdateTextBackgroundProps> = ({ editor, size, variant }) => {
-	// Change to get the background color attribute
-	const bgColor = (editor.getAttributes('textStyle')?.backgroundColor as string | undefined) ?? 'transparent'
+	const bgColor = (editor.getAttributes('textStyle')?.backgroundColor as string | undefined) ?? 'bg-transparent'
 	const [selectedColor, setSelectedColor] = React.useState(bgColor)
 
 	const handleColorChange = React.useCallback(

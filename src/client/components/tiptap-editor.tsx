@@ -34,7 +34,7 @@ export const TiptapEditor = React.forwardRef<HTMLDivElement, TiptapEditorProps>(
 		return (
 			<div ref={ref} className={cn('space-y-1.5', className)}>
 				<EditorToolbar editor={editor} />
-				<EditorContent editor={editor} className="rounded-xl" />
+				<EditorContent editor={editor} className="rounded-xl text-black dark:text-white" />
 			</div>
 		)
 	}
