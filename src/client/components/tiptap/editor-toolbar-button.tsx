@@ -5,14 +5,15 @@ import { Toggle, Tooltip, TooltipContent, TooltipTrigger } from '@/client/compon
 import { cn } from '@/client/lib/utils'
 
 type EditorToolbarButtonProps = React.ComponentPropsWithoutRef<typeof Toggle> & {
+	isActive?: boolean
 	tooltip?: string
 	tooltipOptions?: TooltipContentProps
 }
 
 export const EditorToolbarButton = React.forwardRef<HTMLButtonElement, EditorToolbarButtonProps>(
-	({ children, tooltip, className, tooltipOptions, ...props }, ref) => {
+	({ isActive, children, tooltip, className, size = 'xs', tooltipOptions, ...props }, ref) => {
 		const toggleButton = (
-			<Toggle size="sm" ref={ref} className={cn('rounded-lg', className)} {...props}>
+			<Toggle size={size} ref={ref} className={cn('rounded-lg', { 'bg-accent': isActive }, className)} {...props}>
 				{children}
 			</Toggle>
 		)

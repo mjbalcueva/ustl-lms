@@ -83,7 +83,7 @@ type UpdateTextStyleProps = VariantProps<typeof toggleVariants> & {
 }
 
 export const UpdateTextStyle: React.FC<UpdateTextStyleProps> = React.memo(
-	({ editor, activeLevels = [1, 2, 3, 4, 5, 6], size = 'sm', variant }) => {
+	({ editor, activeLevels = [1, 2, 3, 4, 5, 6], size, variant }) => {
 		const filteredActions = useMemo(
 			() => formatActions.filter((action) => !action.level || activeLevels.includes(action.level)),
 			[activeLevels]
