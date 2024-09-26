@@ -1,10 +1,9 @@
 import React, { useCallback, useMemo } from 'react'
-import { CaretDownIcon } from '@radix-ui/react-icons'
 import type { Level } from '@tiptap/extension-heading'
 import type { Editor } from '@tiptap/react'
 import type { VariantProps } from 'class-variance-authority'
 import { type IconType } from 'react-icons/lib'
-import { TbH1, TbH2, TbH3, TbH4, TbH5, TbH6, TbLetterCase } from 'react-icons/tb'
+import { TbChevronDown, TbH1, TbH2, TbH3, TbH4, TbH5, TbH6, TbLetterCase } from 'react-icons/tb'
 
 import { type FormatAction } from '@/shared/types/tiptap'
 
@@ -141,7 +140,7 @@ export const UpdateTextStyle: React.FC<UpdateTextStyleProps> = React.memo(
 						variant={variant}
 					>
 						{activeStyle?.icon && <activeStyle.icon className="size-5 shrink-0" />}
-						<CaretDownIcon className="size-4 shrink-0" />
+						<TbChevronDown className="size-3 shrink-0" />
 					</EditorToolbarButton>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align="start" className="w-full space-y-1">

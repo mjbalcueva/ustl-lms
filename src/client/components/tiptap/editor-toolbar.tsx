@@ -5,6 +5,8 @@ import { UpdateTextFormating } from '@/client/components/tiptap/update-text-form
 import { UpdateTextStyle } from '@/client/components/tiptap/update-text-style'
 import { Separator } from '@/client/components/ui'
 
+import { UpdateTextBackground } from './update-text-background'
+
 export const EditorToolbar = ({ editor }: { editor: Editor }) => (
 	<div className="shrink-0 overflow-x-auto rounded-xl border border-input">
 		<div className="flex w-max items-center gap-px space-x-1 p-1">
@@ -13,6 +15,7 @@ export const EditorToolbar = ({ editor }: { editor: Editor }) => (
 			<UpdateTextFormating editor={editor} />
 			<Separator orientation="vertical" className="h-7" />
 			<UpdateTextForeground editor={editor} />
+			<UpdateTextBackground editor={editor} />
 		</div>
 	</div>
 )

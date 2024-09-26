@@ -1,7 +1,7 @@
 import * as React from 'react'
 import type { Editor } from '@tiptap/react'
 import type { VariantProps } from 'class-variance-authority'
-import { TbCheck, TbChevronDown, TbTextColor } from 'react-icons/tb'
+import { TbBackground, TbCheck, TbChevronDown } from 'react-icons/tb'
 
 import { EditorToolbarButton } from '@/client/components/tiptap/editor-toolbar-button'
 import {
@@ -34,7 +34,7 @@ const COLORS: ColorPalette[] = [
 		label: 'Palette 1',
 		inverse: 'hsl(var(--background))',
 		colors: [
-			{ cssVar: 'hsl(var(--foreground))', label: 'Default' },
+			{ cssVar: 'none', label: 'Default' },
 			{ cssVar: 'var(--mt-accent-bold-blue)', label: 'Bold blue' },
 			{ cssVar: 'var(--mt-accent-bold-teal)', label: 'Bold teal' },
 			{ cssVar: 'var(--mt-accent-bold-green)', label: 'Bold green' },
@@ -134,31 +134,38 @@ const MemoizedColorPicker = React.memo<{
 
 MemoizedColorPicker.displayName = 'MemoizedColorPicker'
 
-type UpdateTextForegroundProps = VariantProps<typeof toggleVariants> & {
+type UpdateTextBackgroundProps = VariantProps<typeof toggleVariants> & {
 	editor: Editor
 }
 
-export const UpdateTextForeground: React.FC<UpdateTextForegroundProps> = ({ editor, size, variant }) => {
-	const color = (editor.getAttributes('textStyle')?.color as string | undefined) ?? 'hsl(var(--foreground))'
-	const [selectedColor, setSelectedColor] = React.useState(color)
+export const UpdateTextBackground: React.FC<UpdateTextBackgroundProps> = ({ editor, size, variant }) => {
+	// Change to get the background color attribute
+	const bgColor = (editor.getAttributes('textStyle')?.backgroundColor as string | undefined) ?? 'transparent'
+	const [selectedColor, setSelectedColor] = React.useState(bgColor)
 
 	const handleColorChange = React.useCallback(
 		(value: string) => {
 			setSelectedColor(value)
-			editor.chain().setColor(value).run()
+			editor.chain().setBackgroundColor(value).run()
 		},
 		[editor]
 	)
 
 	React.useEffect(() => {
-		setSelectedColor(color)
-	}, [color])
+		setSelectedColor(bgColor)
+	}, [bgColor])
 
 	return (
 		<Popover>
 			<PopoverTrigger asChild>
-				<EditorToolbarButton tooltip="Text color" aria-label="Text color" size={size} variant={variant}>
-					<TbTextColor className="size-5" />
+				<EditorToolbarButton
+					tooltip="Background color"
+					aria-label="Background color"
+					className="w-12"
+					size={size}
+					variant={variant}
+				>
+					<TbBackground className="size-5" />
 					<TbChevronDown className="size-3" />
 				</EditorToolbarButton>
 			</PopoverTrigger>

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import type { Editor } from '@tiptap/core'
+import type { AnyExtension, Editor } from '@tiptap/core'
 import { Placeholder } from '@tiptap/extension-placeholder'
 import { TextStyle } from '@tiptap/extension-text-style'
 import { Typography } from '@tiptap/extension-typography'
@@ -8,6 +8,7 @@ import { useEditor } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
 
 import { useTiptapThrottle } from '@/client/lib/hooks/use-tiptap-throttle'
+import { BackgroundColor } from '@/client/lib/tiptap/extensions/background-color'
 import { CodeBlockLowlight } from '@/client/lib/tiptap/extensions/code-block-low-light'
 import { Color } from '@/client/lib/tiptap/extensions/color'
 import { HorizontalRule } from '@/client/lib/tiptap/extensions/horizontal-rule'
@@ -42,6 +43,7 @@ const createExtensions = (placeholder: string) => [
 	}),
 	Link,
 	Image,
+	BackgroundColor,
 	Color,
 	TextStyle,
 	Selection,
@@ -82,7 +84,7 @@ export const useTiptapEditor = ({
 	const handleBlur = React.useCallback((editor: Editor) => onBlur?.(getOutput(editor, output)), [output, onBlur])
 
 	const editor = useEditor({
-		extensions: createExtensions(placeholder),
+		extensions: createExtensions(placeholder) as AnyExtension[],
 		editorProps: {
 			attributes: {
 				autocomplete: 'off',
