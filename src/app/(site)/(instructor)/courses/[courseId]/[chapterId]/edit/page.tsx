@@ -3,7 +3,7 @@ import { TbListDetails, TbNotes, TbPackage } from 'react-icons/tb'
 import { api } from '@/shared/trpc/server'
 import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
-import { EditChapterDescriptionForm } from '@/client/components/course/forms/edit-chapter-description'
+import { EditChapterContentForm } from '@/client/components/course/forms/edit-chapter-content'
 import { EditChapterTitleForm } from '@/client/components/course/forms/edit-chapter-title'
 import { NotFound } from '@/client/components/not-found'
 import {
@@ -23,7 +23,7 @@ export default async function Page({ params }: { params: { courseId: string; cha
 
 	if (!chapter) return <NotFound item="chapter" />
 
-	const requiredFields = [chapter.title, chapter.description, chapter.videoUrl]
+	const requiredFields = [chapter.title, chapter.content, chapter.videoUrl]
 
 	const totalFields = requiredFields.length
 	const completedFields = requiredFields.filter(Boolean).length
@@ -55,7 +55,7 @@ export default async function Page({ params }: { params: { courseId: string; cha
 				<PageSection className="mb-6 flex-1 md:mb-0" compactMode>
 					<PageSectionTitle title="Customize your chapter" icon={TbNotes} />
 					<EditChapterTitleForm id={chapter.id} courseId={chapter.course.id} title={chapter.title} />
-					<EditChapterDescriptionForm id={chapter.id} courseId={chapter.course.id} description={chapter.description} />
+					<EditChapterContentForm id={chapter.id} courseId={chapter.course.id} content={chapter.content} />
 				</PageSection>
 
 				<div className="flex flex-1 flex-col gap-4 md:gap-6">

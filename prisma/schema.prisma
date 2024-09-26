@@ -64,7 +64,7 @@ model Chapter {
   id          String   @id @default(cuid())
   courseId    String
   title       String
-  description String?
+  content     String?
   videoUrl    String?
   position    Int
   isPublished Boolean  @default(false)

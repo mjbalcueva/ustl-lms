@@ -8,7 +8,7 @@ import { TbCirclePlus, TbEdit } from 'react-icons/tb'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
-import { editDescriptionSchema, type EditDescriptionSchema } from '@/shared/validations/chapter'
+import { editContentSchema, type EditContentSchema } from '@/shared/validations/chapter'
 
 import { TiptapEditor } from '@/client/components/tiptap-editor'
 import {
@@ -25,13 +25,13 @@ import {
 	FormMessage
 } from '@/client/components/ui'
 
-type EditChapterDescriptionProps = {
+type EditChapterContentProps = {
 	id: string
 	courseId: string
-	description: string | null
+	content: string | null
 }
 
-export const EditChapterDescriptionForm = ({ id, courseId, description }: EditChapterDescriptionProps) => {
+export const EditChapterContentForm = ({ id, courseId, content }: EditChapterContentProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -40,16 +40,16 @@ export const EditChapterDescriptionForm = ({ id, courseId, description }: EditCh
 		form.reset()
 	}
 
-	const form = useForm<EditDescriptionSchema>({
-		resolver: zodResolver(editDescriptionSchema),
-		defaultValues: { id, courseId, description: description ?? '' }
+	const form = useForm<EditContentSchema>({
+		resolver: zodResolver(editContentSchema),
+		defaultValues: { id, courseId, content: content ?? '' }
 	})
-	const formDescription = form.getValues('description')
+	const formContent = form.getValues('content')
 
-	const { mutate, isPending } = api.chapter.editDescription.useMutation({
+	const { mutate, isPending } = api.chapter.editContent.useMutation({
 		onSuccess: async (data) => {
 			toggleEdit()
-			form.reset({ id, courseId, description: data.newDescription ?? '' })
+			form.reset({ id, courseId, content: data.newContent ?? '' })
 			router.refresh()
 			toast.success(data.message)
 		},
@@ -59,21 +59,17 @@ export const EditChapterDescriptionForm = ({ id, courseId, description }: EditCh
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Chapter Description</CardTitle>
+				<CardTitle>Chapter Content</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
-					{!isEditing && formDescription && <TbEdit className="mr-2 size-4" />}
-					{!isEditing && !formDescription && <TbCirclePlus className="mr-2 size-4" />}
-					{isEditing ? 'Cancel' : formDescription ? 'Edit' : 'Add'}
+					{!isEditing && formContent && <TbEdit className="mr-2 size-4" />}
+					{!isEditing && !formContent && <TbCirclePlus className="mr-2 size-4" />}
+					{isEditing ? 'Cancel' : formContent ? 'Edit' : 'Add'}
 				</Button>
 			</CardHeader>
 
 			{!isEditing && (
-				<CardContent isEmpty={!formDescription}>
-					{formDescription ? (
-						<TiptapEditor content={formDescription} editable={false} injectCSS={true} />
-					) : (
-						'No description added'
-					)}
+				<CardContent isEmpty={!formContent}>
+					{formContent ? <TiptapEditor content={formContent} editable={false} injectCSS={true} /> : 'No content added'}
 				</CardContent>
 			)}
 
@@ -83,12 +79,12 @@ export const EditChapterDescriptionForm = ({ id, courseId, description }: EditCh
 						<CardContent>
 							<FormField
 								control={form.control}
-								name="description"
+								name="content"
 								render={({ field }) => (
 									<FormItem>
 										<FormControl>
 											<TiptapEditor
-												placeholder="Add a description"
+												placeholder="Add a content"
 												throttleDelay={2000}
 												output="html"
 												autofocus={true}
