@@ -10,6 +10,7 @@ import { toast } from 'sonner'
 import { api } from '@/shared/trpc/react'
 import { editDescriptionSchema, type EditDescriptionSchema } from '@/shared/validations/chapter'
 
+import { TiptapEditor } from '@/client/components/tiptap-editor'
 import {
 	Button,
 	Card,
@@ -21,8 +22,7 @@ import {
 	FormControl,
 	FormField,
 	FormItem,
-	FormMessage,
-	Textarea
+	FormMessage
 } from '@/client/components/ui'
 
 type EditChapterDescriptionProps = {
@@ -83,7 +83,7 @@ export const EditChapterDescriptionForm = ({ id, courseId, description }: EditCh
 								render={({ field }) => (
 									<FormItem>
 										<FormControl>
-											<Textarea placeholder="e.g. 'This is a chapter description'" disabled={isPending} {...field} />
+											<TiptapEditor placeholder="Add a description" {...field} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>
