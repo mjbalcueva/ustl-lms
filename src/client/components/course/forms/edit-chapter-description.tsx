@@ -69,11 +69,13 @@ export const EditChapterDescriptionForm = ({ id, courseId, description }: EditCh
 
 			{!isEditing && (
 				<CardContent isEmpty={!formDescription}>
-					{formDescription ? formDescription : 'No description added'}
+					{formDescription ? (
+						<TiptapEditor content={formDescription} editable={false} injectCSS={true} />
+					) : (
+						'No description added'
+					)}
 				</CardContent>
 			)}
-
-			{isEditing && <CardContent>{form.watch('description')}</CardContent>}
 
 			{isEditing && (
 				<Form {...form}>

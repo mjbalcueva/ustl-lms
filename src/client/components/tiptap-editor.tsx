@@ -14,27 +14,28 @@ export type TiptapEditorProps = Omit<UseTiptapEditorProps, 'onUpdate'> & {
 }
 
 export const TiptapEditor = React.forwardRef<HTMLDivElement, TiptapEditorProps>(
-	({ value, onUpdate, className, editorContentClassName, ...props }, ref) => {
+	({ value, editable, onUpdate, className, editorContentClassName, ...props }, ref) => {
 		const editor = useTiptapEditor({
 			value,
+			editable,
 			onUpdate,
-			editorProps: {
-				attributes: {
-					class: cn(
-						'dark-bg-background min-h-20 rounded-xl border border-input px-3 py-2 shadow-sm outline-none focus:ring-2 focus:ring-ring ring-0 focus:ring-offset-2 focus:ring-offset-background',
-						editorContentClassName
-					)
-				}
-			},
 			...props
 		})
 
 		if (!editor) return null
 
+		if (!editable) return <EditorContent editor={editor} className="cursor-default text-black dark:text-white" />
+
 		return (
 			<div ref={ref} className={cn('space-y-1.5', className)}>
 				<EditorToolbar editor={editor} />
-				<EditorContent editor={editor} className="rounded-xl text-black dark:text-white" />
+				<EditorContent
+					editor={editor}
+					className={cn(
+						'min-h-20 rounded-xl border border-input px-3 py-2 text-black shadow-sm outline-none ring-0 focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background dark:bg-background dark:text-white',
+						editorContentClassName
+					)}
+				/>
 			</div>
 		)
 	}
