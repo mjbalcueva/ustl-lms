@@ -21,6 +21,8 @@ export function getEmail(email: string) {
 	return `${email.split('@')[0]}`
 }
 
+// Tiptap
+
 export function getOutput(editor: Editor, format: TiptapEditorProps['output']) {
 	if (format === 'json') {
 		return editor.getJSON()

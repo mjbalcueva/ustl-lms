@@ -9,7 +9,7 @@ export type AddChapterSchema = z.infer<typeof addChapterSchema>
 export const editDescriptionSchema = z.object({
 	id: z.string().min(1, 'Chapter ID is required'),
 	courseId: z.string().min(1, 'Course ID is required'),
-	description: z.string().max(32, 'Description must be less than 32 characters')
+	description: z.string()
 })
 export type EditDescriptionSchema = z.infer<typeof editDescriptionSchema>
 

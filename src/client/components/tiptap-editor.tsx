@@ -2,21 +2,22 @@ import * as React from 'react'
 import { EditorContent } from '@tiptap/react'
 import type { Content } from '@tiptap/react'
 
+import { EditorToolbar } from '@/client/components/tiptap/editor-toolbar'
 import { useTiptapEditor, type UseTiptapEditorProps } from '@/client/lib/hooks/use-tiptap'
 import { cn } from '@/client/lib/utils'
 
-export interface TiptapEditorProps extends Omit<UseTiptapEditorProps, 'onUpdate'> {
+export type TiptapEditorProps = Omit<UseTiptapEditorProps, 'onUpdate'> & {
 	value?: Content
-	onChange?: (value: Content) => void
+	onUpdate?: (value: Content) => void
 	className?: string
 	editorContentClassName?: string
 }
 
 export const TiptapEditor = React.forwardRef<HTMLDivElement, TiptapEditorProps>(
-	({ value, onChange, className, editorContentClassName, ...props }, ref) => {
+	({ value, onUpdate, className, editorContentClassName, ...props }, ref) => {
 		const editor = useTiptapEditor({
 			value,
-			onUpdate: onChange,
+			onUpdate,
 			...props
 		})
 
@@ -24,6 +25,7 @@ export const TiptapEditor = React.forwardRef<HTMLDivElement, TiptapEditorProps>(
 
 		return (
 			<div ref={ref} className={cn('space-y-2', className)}>
+				<EditorToolbar editor={editor} />
 				<EditorContent
 					editor={editor}
 					className={cn(

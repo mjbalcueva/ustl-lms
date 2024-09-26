@@ -73,6 +73,8 @@ export const EditChapterDescriptionForm = ({ id, courseId, description }: EditCh
 				</CardContent>
 			)}
 
+			{isEditing && <CardContent>{form.watch('description')}</CardContent>}
+
 			{isEditing && (
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit((data) => mutate(data))}>
@@ -83,7 +85,17 @@ export const EditChapterDescriptionForm = ({ id, courseId, description }: EditCh
 								render={({ field }) => (
 									<FormItem>
 										<FormControl>
-											<TiptapEditor placeholder="Add a description" {...field} />
+											<TiptapEditor
+												placeholder="Add a description"
+												throttleDelay={2000}
+												output="html"
+												autofocus={true}
+												immediatelyRender={true}
+												editable={true}
+												injectCSS={true}
+												onUpdate={field.onChange}
+												{...field}
+											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
