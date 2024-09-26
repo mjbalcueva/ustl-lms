@@ -1,7 +1,7 @@
 import * as React from 'react'
 import type { Editor } from '@tiptap/react'
 import type { VariantProps } from 'class-variance-authority'
-import { TbCheck, TbChevronDown, TbTextColor } from 'react-icons/tb'
+import { TbBackground, TbCheck, TbChevronDown } from 'react-icons/tb'
 
 import { EditorToolbarButton } from '@/client/components/tiptap/editor-toolbar-button'
 import {
@@ -158,7 +158,7 @@ export const UpdateTextHighlight: React.FC<UpdateTextHighlightProps> = ({ editor
 		<Popover>
 			<PopoverTrigger asChild>
 				<EditorToolbarButton tooltip="Text color" aria-label="Text color" size={size} variant={variant}>
-					<TbTextColor className="size-5" />
+					<TbBackground className="size-5" />
 					<TbChevronDown className="size-3" />
 				</EditorToolbarButton>
 			</PopoverTrigger>

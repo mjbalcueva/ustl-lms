@@ -44,7 +44,9 @@ const createExtensions = (placeholder: string) => [
 	Link,
 	Image,
 	Color,
-	Highlight,
+	Highlight.configure({
+		multicolor: true
+	}),
 	TextStyle,
 	Selection,
 	Typography,
