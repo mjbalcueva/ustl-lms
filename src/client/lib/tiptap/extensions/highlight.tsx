@@ -1,7 +1,7 @@
-import { Color as TiptapColor } from '@tiptap/extension-color'
+import { Highlight as TiptapHighlight } from '@tiptap/extension-highlight'
 import { Plugin } from '@tiptap/pm/state'
 
-export const Color = TiptapColor.extend({
+export const Highlight = TiptapHighlight.extend({
 	addProseMirrorPlugins() {
 		return [
 			...(this.parent?.() ?? []),
@@ -9,7 +9,7 @@ export const Color = TiptapColor.extend({
 				props: {
 					handleKeyDown: (_, event) => {
 						if (event.key === 'Enter') {
-							this.editor.commands.unsetColor()
+							this.editor.commands.unsetHighlight()
 						}
 						return false
 					}

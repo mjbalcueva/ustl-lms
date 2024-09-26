@@ -10,6 +10,7 @@ import { StarterKit } from '@tiptap/starter-kit'
 import { useTiptapThrottle } from '@/client/lib/hooks/use-tiptap-throttle'
 import { CodeBlockLowlight } from '@/client/lib/tiptap/extensions/code-block-low-light'
 import { Color } from '@/client/lib/tiptap/extensions/color'
+import { Highlight } from '@/client/lib/tiptap/extensions/highlight'
 import { HorizontalRule } from '@/client/lib/tiptap/extensions/horizontal-rule'
 import { Image } from '@/client/lib/tiptap/extensions/image'
 import { Link } from '@/client/lib/tiptap/extensions/link'
@@ -43,6 +44,7 @@ const createExtensions = (placeholder: string) => [
 	Link,
 	Image,
 	Color,
+	Highlight,
 	TextStyle,
 	Selection,
 	Typography,
