@@ -25,13 +25,7 @@ import {
 	Input
 } from '@/client/components/ui'
 
-type EditChapterTitleProps = {
-	id: string
-	courseId: string
-	title: string
-}
-
-export const EditChapterTitleForm = ({ id, courseId, title }: EditChapterTitleProps) => {
+export const EditChapterTitleForm = ({ id, courseId, title }: EditTitleSchema) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)

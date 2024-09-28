@@ -26,13 +26,7 @@ import {
 	Separator
 } from '@/client/components/ui'
 
-type EditChapterContentProps = {
-	id: string
-	courseId: string
-	content: string | null
-}
-
-export const EditChapterContentForm = ({ id, courseId, content }: EditChapterContentProps) => {
+export const EditChapterContentForm = ({ id, courseId, content }: EditContentSchema) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
