@@ -69,7 +69,11 @@ export const EditChapterContentForm = ({ id, courseId, content }: EditChapterCon
 
 			{!isEditing && (
 				<CardContent isEmpty={!formContent}>
-					{formContent ? <TiptapEditor content={formContent} editable={false} injectCSS={true} /> : 'No content added'}
+					{formContent ? (
+						<TiptapEditor content={formContent} editable={false} injectCSS={true} immediatelyRender={false} />
+					) : (
+						'No content added'
+					)}
 				</CardContent>
 			)}
 
@@ -88,7 +92,7 @@ export const EditChapterContentForm = ({ id, courseId, content }: EditChapterCon
 												throttleDelay={2000}
 												output="html"
 												autofocus={true}
-												immediatelyRender={true}
+												immediatelyRender={false}
 												editable={true}
 												injectCSS={true}
 												onUpdate={field.onChange}
