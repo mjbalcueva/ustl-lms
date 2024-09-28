@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import * as React from 'react'
+import MuxPlayer from '@mux/mux-player-react'
 import { type Chapter, type MuxData } from '@prisma/client'
 import { TbCirclePlus, TbEdit, TbVideoPlus } from 'react-icons/tb'
 import { toast } from 'sonner'
@@ -37,7 +38,7 @@ export const EditChapterVideoForm = ({ id, courseId, initialData }: EditChapterV
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Chapter Video</CardTitle>
+				<CardTitle>Topic Video</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
 					{!isEditing && videoUrl && <TbEdit className="mr-2 size-4" />}
 					{!isEditing && !videoUrl && <TbCirclePlus className="mr-2 size-4" />}
@@ -52,7 +53,14 @@ export const EditChapterVideoForm = ({ id, courseId, initialData }: EditChapterV
 
 				{!isEditing &&
 					(videoUrl ? (
-						'Video Uploaded'
+						<MuxPlayer
+							playbackId={initialData.muxData?.playbackId}
+							title={initialData.title}
+							accentColor="#737373"
+							primaryColor="#fafafa"
+							className="aspect-video overflow-hidden rounded-xl border border-input"
+							disableTracking
+						/>
 					) : (
 						<div className="flex h-[11.5rem] items-center justify-center rounded-xl border border-input bg-card dark:bg-background">
 							<TbVideoPlus className="size-10 text-card-foreground dark:text-muted-foreground" />
