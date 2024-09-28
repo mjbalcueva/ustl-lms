@@ -39,33 +39,34 @@ export const EditCourseImageForm = ({ id, imageUrl }: EditImageSchema) => {
 			</CardHeader>
 
 			<CardContent className="pb-5">
-				{!isEditing && imageUrl && (
-					<div className="relative aspect-video">
-						<Image
-							src={imageUrl}
-							alt="Course Image"
-							fill
-							className="rounded-xl border border-input"
-							priority
-							sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-						/>
-					</div>
-				)}
-
-				{!isEditing && !imageUrl && (
-					<div className="flex h-[11.5rem] items-center justify-center rounded-xl border border-input bg-card dark:bg-background">
-						<TbLibraryPhoto className="size-10 text-card-foreground dark:text-muted-foreground" />
-					</div>
-				)}
-
 				{isEditing && <FileUpload endpoint="imageUpload" onChange={(url) => mutate({ id: id, imageUrl: url ?? '' })} />}
+
+				{!isEditing &&
+					(imageUrl ? (
+						<div className="relative aspect-video">
+							<Image
+								src={imageUrl}
+								alt="Course Image"
+								fill
+								className="rounded-xl border border-input"
+								priority
+								sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+							/>
+						</div>
+					) : (
+						<div className="flex h-[11.5rem] items-center justify-center rounded-xl border border-input bg-card dark:bg-background">
+							<TbLibraryPhoto className="size-10 text-card-foreground dark:text-muted-foreground" />
+						</div>
+					))}
 			</CardContent>
 
-			{isEditing && (
-				<CardFooter className="text-sm text-muted-foreground">
-					Upload a captivating course image that represents your content and engages your students.
-				</CardFooter>
-			)}
+			<CardFooter className="text-sm text-muted-foreground">
+				{isEditing && 'Upload a captivating course image that represents your content and engages your students.'}
+				{!isEditing &&
+					(imageUrl
+						? 'Your course image is now visible. It helps attract students and represents your content.'
+						: 'Upload an image to enhance your course.')}
+			</CardFooter>
 		</Card>
 	)
 }

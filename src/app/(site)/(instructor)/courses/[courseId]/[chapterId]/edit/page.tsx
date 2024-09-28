@@ -6,6 +6,7 @@ import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 import { AddChapterAttachmentsForm } from '@/client/components/course/forms/add-chapter-attachments'
 import { EditChapterContentForm } from '@/client/components/course/forms/edit-chapter-content'
 import { EditChapterTitleForm } from '@/client/components/course/forms/edit-chapter-title'
+import { EditChapterVideoForm } from '@/client/components/course/forms/edit-chapter-video'
 import { NotFound } from '@/client/components/not-found'
 import {
 	PageBreadcrumbs,
@@ -62,6 +63,7 @@ export default async function Page({ params }: { params: { courseId: string; cha
 				<div className="flex flex-1 flex-col gap-4 md:gap-6">
 					<PageSection compactMode>
 						<PageSectionTitle title="Add a video" icon={TbVideo} />
+						<EditChapterVideoForm id={chapter.id} courseId={chapter.course.id} initialData={chapter} />
 					</PageSection>
 
 					<PageSection compactMode>

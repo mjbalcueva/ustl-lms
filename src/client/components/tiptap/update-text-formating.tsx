@@ -10,7 +10,7 @@ import type { toggleVariants } from '@/client/components/ui'
 
 type TextStyleAction = 'bold' | 'italic' | 'strikethrough' | 'code' | 'clearFormatting'
 
-interface TextStyle extends FormatAction {
+type TextStyle = FormatAction & {
 	value: TextStyleAction
 }
 

@@ -9,7 +9,7 @@ export type AddChapterSchema = z.infer<typeof addChapterSchema>
 export const editContentSchema = z.object({
 	id: z.string().min(1, 'Chapter ID is required'),
 	courseId: z.string().min(1, 'Course ID is required'),
-	content: z.string()
+	content: z.string().nullable()
 })
 export type EditContentSchema = z.infer<typeof editContentSchema>
 
@@ -19,6 +19,13 @@ export const editTitleSchema = z.object({
 	title: z.string().min(1, 'Title is required').max(32, 'Title must be less than 32 characters')
 })
 export type EditTitleSchema = z.infer<typeof editTitleSchema>
+
+export const editVideoSchema = z.object({
+	id: z.string().min(1, 'Chapter ID is required'),
+	courseId: z.string().min(1, 'Course ID is required'),
+	videoUrl: z.string().nullable()
+})
+export type EditVideoSchema = z.infer<typeof editVideoSchema>
 
 export const getChapterSchema = z.object({
 	id: z.string().min(1, 'Chapter ID is required'),

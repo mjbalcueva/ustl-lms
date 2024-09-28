@@ -22,7 +22,7 @@ export const TiptapEditor = React.forwardRef<HTMLDivElement, TiptapEditorProps>(
 			...props
 		})
 
-		if (!editor) return null
+		if (!editor) return 'Loading...'
 
 		if (!editable) return <EditorContent editor={editor} className={cn('minimal-tiptap-editor', 'cursor-default')} />
 

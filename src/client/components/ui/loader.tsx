@@ -261,11 +261,10 @@ const LOADERS = {
 
 const DEFAULT_SPINNER = 'ring'
 
-export interface LoaderProps
-	extends Omit<React.ComponentPropsWithoutRef<'svg'>, 'display' | 'opacity' | 'intent'>,
-		LoaderVariantProps {
-	variant?: keyof typeof LOADERS
-}
+export type LoaderProps = Omit<React.ComponentPropsWithoutRef<'svg'>, 'display' | 'opacity' | 'intent'> &
+	LoaderVariantProps & {
+		variant?: keyof typeof LOADERS
+	}
 
 const Loader = React.forwardRef<SVGSVGElement, LoaderProps>((props, ref) => {
 	const { className, variant = DEFAULT_SPINNER, intent, size, ...spinnerProps } = props

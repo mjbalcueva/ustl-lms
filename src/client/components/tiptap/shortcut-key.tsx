@@ -5,7 +5,7 @@ import * as React from 'react'
 import { getShortcutKeys } from '@/client/lib/shortcuts'
 import { cn } from '@/client/lib/utils'
 
-export interface ShortcutKeyProps extends React.HTMLAttributes<HTMLSpanElement> {
+export type ShortcutKeyProps = React.HTMLAttributes<HTMLSpanElement> & {
 	keys: string[]
 }
 

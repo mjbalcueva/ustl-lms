@@ -13,7 +13,7 @@ import {
 	Text
 } from '@react-email/components'
 
-interface VerificationEmailProps {
+type VerificationEmailProps = {
 	email?: string
 	confirmLink?: string
 }
