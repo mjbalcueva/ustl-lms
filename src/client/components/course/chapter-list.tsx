@@ -6,7 +6,7 @@ import { DragDropContext, Draggable, Droppable, type DropResult } from '@hello-p
 import { type Chapter } from '@prisma/client'
 import { TbEdit, TbGripVertical } from 'react-icons/tb'
 
-import { Badge } from '@/client/components/ui'
+import { Badge, Tooltip, TooltipContent, TooltipTrigger } from '@/client/components/ui'
 
 type ChapterListProps = {
 	items: Chapter[]
@@ -57,12 +57,17 @@ export const ChapterList = ({ items, onReorder }: ChapterListProps) => {
 											{chapter.isPublished ? 'Published' : 'Draft'}
 										</Badge>
 
-										<Link
-											className="flex h-full items-center justify-center rounded-r-xl pl-1 pr-2 outline-none hover:opacity-75 focus-visible:outline-ring"
-											href={`/courses/${chapter.courseId}/${chapter.id}/edit`}
-										>
-											<TbEdit className="size-4" />
-										</Link>
+										<Tooltip>
+											<TooltipTrigger asChild>
+												<Link
+													className="flex h-full items-center justify-center rounded-r-xl pl-1 pr-2 outline-none hover:opacity-75 focus-visible:outline-ring"
+													href={`/courses/${chapter.courseId}/${chapter.id}/edit`}
+												>
+													<TbEdit className="size-4" />
+												</Link>
+											</TooltipTrigger>
+											<TooltipContent>Edit</TooltipContent>
+										</Tooltip>
 									</li>
 								)}
 							</Draggable>
