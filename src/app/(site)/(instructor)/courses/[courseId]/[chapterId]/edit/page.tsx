@@ -47,13 +47,13 @@ export default async function Page({ params }: { params: { courseId: string; cha
 			<Separator className="hidden md:block" />
 
 			<PageHeader>
-				<PageTitle>Chapter</PageTitle>
+				<PageTitle>Topic Setup</PageTitle>
 				<PageDescription>Completed {completionText}</PageDescription>
 			</PageHeader>
 
 			<PageContent className="gap-4 px-2.5 sm:px-4 md:flex md:flex-wrap md:gap-6 md:px-6">
 				<PageSection className="mb-6 flex-1 md:mb-0" compactMode>
-					<PageSectionTitle title="Customize your chapter" icon={TbNotes} />
+					<PageSectionTitle title="Customize your topic" icon={TbNotes} />
 					<EditChapterTitleForm id={chapter.id} courseId={chapter.course.id} title={chapter.title} />
 					<EditChapterContentForm id={chapter.id} courseId={chapter.course.id} content={chapter.content} />
 				</PageSection>

@@ -37,7 +37,7 @@ export const AddCourseAttachmentsForm = ({ courseId, attachments }: AddCourseAtt
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Course Attachment</CardTitle>
+				<CardTitle>Attach General Source Material</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
 					{!isEditing && <TbCirclePlus className="mr-2 size-4" />}
 					{isEditing ? 'Cancel' : 'Add'}
@@ -45,7 +45,7 @@ export const AddCourseAttachmentsForm = ({ courseId, attachments }: AddCourseAtt
 			</CardHeader>
 
 			<CardContent isEmpty={!hasAttachments}>
-				{!isEditing && !hasAttachments && 'No attachment added'}
+				{!isEditing && !hasAttachments && 'No resource added'}
 				{!isEditing && hasAttachments && <AttachmentList items={attachments} />}
 				{isEditing && (
 					<FileUpload

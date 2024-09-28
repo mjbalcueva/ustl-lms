@@ -59,7 +59,7 @@ export const EditChapterTitleForm = ({ id, courseId, title }: EditChapterTitlePr
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Chapter Title</CardTitle>
+				<CardTitle>Title</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
 					{!isEditing && formTitle && <TbEdit className="mr-2 size-4" />}
 					{isEditing ? 'Cancel' : formTitle ? 'Edit' : 'Add'}
@@ -78,7 +78,7 @@ export const EditChapterTitleForm = ({ id, courseId, title }: EditChapterTitlePr
 								render={({ field }) => (
 									<FormItem>
 										<FormControl>
-											<Input placeholder="e.g. 'Chapter 1'" disabled={isPending} {...field} />
+											<Input placeholder="e.g. 'Week 1'" disabled={isPending} {...field} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>

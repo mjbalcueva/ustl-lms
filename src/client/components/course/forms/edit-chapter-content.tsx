@@ -59,7 +59,7 @@ export const EditChapterContentForm = ({ id, courseId, content }: EditChapterCon
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Chapter Content</CardTitle>
+				<CardTitle>Content</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
 					{!isEditing && formContent && <TbEdit className="mr-2 size-4" />}
 					{!isEditing && !formContent && <TbCirclePlus className="mr-2 size-4" />}
