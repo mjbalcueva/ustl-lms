@@ -1,4 +1,4 @@
-import { TbNotes, TbVideo } from 'react-icons/tb'
+import { TbNotes, TbPaperclip, TbVideo } from 'react-icons/tb'
 
 import { api } from '@/shared/trpc/server'
 import { type Breadcrumb } from '@/shared/types/breadcrumbs'
@@ -58,9 +58,15 @@ export default async function Page({ params }: { params: { courseId: string; cha
 					<EditChapterContentForm id={chapter.id} courseId={chapter.course.id} content={chapter.content} />
 				</PageSection>
 
-				<PageSection className="flex-1" compactMode>
-					<PageSectionTitle title="Add a video" icon={TbVideo} />
-				</PageSection>
+				<div className="flex flex-1 flex-col gap-4 md:gap-6">
+					<PageSection compactMode>
+						<PageSectionTitle title="Add a video" icon={TbVideo} />
+					</PageSection>
+
+					<PageSection compactMode>
+						<PageSectionTitle title="Attachments" icon={TbPaperclip} />
+					</PageSection>
+				</div>
 			</PageContent>
 		</PageWrapper>
 	)
