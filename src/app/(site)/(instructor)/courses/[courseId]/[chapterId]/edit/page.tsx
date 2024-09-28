@@ -47,7 +47,7 @@ export default async function Page({ params }: { params: { courseId: string; cha
 			<Separator className="hidden md:block" />
 
 			<PageHeader>
-				<PageTitle>Topic Setup</PageTitle>
+				<PageTitle className="font-bold">Topic Setup</PageTitle>
 				<PageDescription>Completed {completionText}</PageDescription>
 			</PageHeader>
 
