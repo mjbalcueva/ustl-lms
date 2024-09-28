@@ -3,6 +3,7 @@ import { TbNotes, TbPaperclip, TbVideo } from 'react-icons/tb'
 import { api } from '@/shared/trpc/server'
 import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
+import { AddChapterAttachmentsForm } from '@/client/components/course/forms/add-chapter-attachments'
 import { EditChapterContentForm } from '@/client/components/course/forms/edit-chapter-content'
 import { EditChapterTitleForm } from '@/client/components/course/forms/edit-chapter-title'
 import { NotFound } from '@/client/components/not-found'
@@ -65,6 +66,11 @@ export default async function Page({ params }: { params: { courseId: string; cha
 
 					<PageSection compactMode>
 						<PageSectionTitle title="Attachments" icon={TbPaperclip} />
+						<AddChapterAttachmentsForm
+							courseId={chapter.course.id}
+							chapterId={chapter.id}
+							attachments={chapter.attachment}
+						/>
 					</PageSection>
 				</div>
 			</PageContent>

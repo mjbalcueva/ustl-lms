@@ -31,7 +31,10 @@ export const courseRouter = createTRPCRouter({
 		const course = await ctx.db.course.findUnique({
 			where: { id: courseId, createdById: ctx.session.user.id! },
 			include: {
-				attachment: { orderBy: { createdAt: 'desc' } },
+				attachment: {
+					where: { chapterId: null },
+					orderBy: { createdAt: 'desc' }
+				},
 				chapter: { orderBy: { position: 'asc' } }
 			}
 		})

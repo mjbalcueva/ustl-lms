@@ -17,7 +17,7 @@ export const AttachmentList = ({ items }: AttachmentListProps) => {
 
 	const [deletingId, setDeletingId] = React.useState<string | null>(null)
 
-	const { mutate } = api.attachment.deleteAttachment.useMutation({
+	const { mutate } = api.attachment.deleteCourseAttachment.useMutation({
 		onSuccess: async (data) => {
 			setDeletingId(null)
 			router.refresh()
