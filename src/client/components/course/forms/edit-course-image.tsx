@@ -39,26 +39,25 @@ export const EditCourseImageForm = ({ id, imageUrl }: EditImageSchema) => {
 			</CardHeader>
 
 			<CardContent className="pb-5">
-				{!isEditing && imageUrl && (
-					<div className="relative aspect-video">
-						<Image
-							src={imageUrl}
-							alt="Course Image"
-							fill
-							className="rounded-xl border border-input"
-							priority
-							sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-						/>
-					</div>
-				)}
-
-				{!isEditing && !imageUrl && (
-					<div className="flex h-[11.5rem] items-center justify-center rounded-xl border border-input bg-card dark:bg-background">
-						<TbLibraryPhoto className="size-10 text-card-foreground dark:text-muted-foreground" />
-					</div>
-				)}
-
 				{isEditing && <FileUpload endpoint="imageUpload" onChange={(url) => mutate({ id: id, imageUrl: url ?? '' })} />}
+
+				{!isEditing &&
+					(imageUrl ? (
+						<div className="relative aspect-video">
+							<Image
+								src={imageUrl}
+								alt="Course Image"
+								fill
+								className="rounded-xl border border-input"
+								priority
+								sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+							/>
+						</div>
+					) : (
+						<div className="flex h-[11.5rem] items-center justify-center rounded-xl border border-input bg-card dark:bg-background">
+							<TbLibraryPhoto className="size-10 text-card-foreground dark:text-muted-foreground" />
+						</div>
+					))}
 			</CardContent>
 
 			<CardFooter className="text-sm text-muted-foreground">
