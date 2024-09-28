@@ -1,8 +1,7 @@
 import * as React from 'react'
-import { CaretDownIcon, ListBulletIcon } from '@radix-ui/react-icons'
 import type { Editor } from '@tiptap/react'
 import type { VariantProps } from 'class-variance-authority'
-import { TbList, TbListNumbers } from 'react-icons/tb'
+import { TbChevronDown, TbList, TbListNumbers } from 'react-icons/tb'
 
 import type { FormatAction } from '@/shared/types/tiptap'
 
@@ -57,8 +56,8 @@ export const UpdateTextListings: React.FC<UpdateTextListingsProps> = ({
 			mainActionCount={mainActionCount}
 			dropdownIcon={
 				<>
-					<ListBulletIcon className="size-5" />
-					<CaretDownIcon className="size-5" />
+					<TbList className="size-5" />
+					<TbChevronDown className="size-3" />
 				</>
 			}
 			dropdownTooltip="Lists"
