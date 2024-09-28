@@ -71,7 +71,7 @@ type UpdateTextFormatingProps = VariantProps<typeof toggleVariants> & {
 export const UpdateTextFormating: React.FC<UpdateTextFormatingProps> = ({
 	editor,
 	activeActions = formatActions.map((action) => action.value),
-	mainActionCount = 5,
+	mainActionCount = 2,
 	size,
 	variant
 }) => {
