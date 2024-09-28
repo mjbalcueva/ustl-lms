@@ -2,11 +2,13 @@ import {
 	addChapterSchema,
 	editContentSchema,
 	editTitleSchema,
+	editVideoSchema,
 	getChapterSchema,
 	reorderChaptersSchema
 } from '@/shared/validations/chapter'
 
 import { createTRPCRouter, instructorProcedure } from '@/server/api/trpc'
+import { utapi } from '@/server/lib/utapi'
 
 export const chapterRouter = createTRPCRouter({
 	addChapter: instructorProcedure.input(addChapterSchema).mutation(async ({ ctx, input }) => {
@@ -52,6 +54,25 @@ export const chapterRouter = createTRPCRouter({
 			message: 'Chapter title updated successfully',
 			newTitle
 		}
+	}),
+
+	editVideo: instructorProcedure.input(editVideoSchema).mutation(async ({ ctx, input }) => {
+		const { id, courseId, videoUrl } = input
+
+		const chapter = await ctx.db.chapter.findUnique({
+			where: { id, courseId, course: { createdById: ctx.session.user.id! } },
+			select: { videoUrl: true }
+		})
+
+		const oldVideoKey = chapter?.videoUrl?.split('/f/')[1]
+		if (oldVideoKey) await utapi.deleteFiles(oldVideoKey)
+
+		await ctx.db.chapter.update({
+			where: { id, courseId, course: { createdById: ctx.session.user.id! } },
+			data: { videoUrl }
+		})
+
+		return { message: 'Course image updated!' }
 	}),
 
 	getChapter: instructorProcedure.input(getChapterSchema).query(async ({ ctx, input }) => {
