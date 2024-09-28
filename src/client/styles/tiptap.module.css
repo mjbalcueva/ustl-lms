@@ -4,7 +4,7 @@
 }
 
 .minimal-tiptap-editor .ProseMirror ol {
-	@apply list-decimal;
+	@apply ml-4 list-decimal;
 }
 
 .minimal-tiptap-editor .ProseMirror ol ol {
@@ -16,6 +16,7 @@
 }
 
 .minimal-tiptap-editor .ProseMirror ul {
+	@apply ml-4;
 	list-style: disc;
 }
 
