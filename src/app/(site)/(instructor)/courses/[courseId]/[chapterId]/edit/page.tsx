@@ -65,7 +65,7 @@ export default async function Page({ params }: { params: { courseId: string; cha
 					</PageSection>
 
 					<PageSection compactMode>
-						<PageSectionTitle title="Attachments" icon={TbPaperclip} />
+						<PageSectionTitle title="Add attachments" icon={TbPaperclip} />
 						<AddChapterAttachmentsForm
 							courseId={chapter.course.id}
 							chapterId={chapter.id}

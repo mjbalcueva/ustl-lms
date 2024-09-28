@@ -38,7 +38,7 @@ export const AddChapterAttachmentsForm = ({ courseId, chapterId, attachments }: 
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Add Attachments</CardTitle>
+				<CardTitle>Attachments</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
 					{!isEditing && <TbCirclePlus className="mr-2 size-4" />}
 					{isEditing ? 'Cancel' : 'Add'}
