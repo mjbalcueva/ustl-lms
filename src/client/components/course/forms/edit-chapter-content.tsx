@@ -22,7 +22,8 @@ import {
 	FormControl,
 	FormField,
 	FormItem,
-	FormMessage
+	FormMessage,
+	Separator
 } from '@/client/components/ui'
 
 type EditChapterContentProps = {
@@ -70,7 +71,10 @@ export const EditChapterContentForm = ({ id, courseId, content }: EditChapterCon
 			{!isEditing && (
 				<CardContent isEmpty={!formContent}>
 					{formContent ? (
-						<TiptapEditor content={formContent} editable={false} injectCSS={true} immediatelyRender={false} />
+						<>
+							<Separator className="mb-4" />
+							<TiptapEditor content={formContent} editable={false} injectCSS={true} immediatelyRender={false} />
+						</>
 					) : (
 						'No content added'
 					)}
