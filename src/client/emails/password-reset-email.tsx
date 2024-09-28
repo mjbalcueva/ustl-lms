@@ -13,7 +13,7 @@ import {
 	Text
 } from '@react-email/components'
 
-interface PasswordEmailProps {
+type PasswordEmailProps = {
 	email?: string
 	resetLink?: string
 }

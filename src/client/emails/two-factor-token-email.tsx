@@ -13,7 +13,7 @@ import {
 	Text
 } from '@react-email/components'
 
-interface TwoFactorTokenEmailProps {
+type TwoFactorTokenEmailProps = {
 	email?: string
 	token?: string
 }
