@@ -61,11 +61,13 @@ export const EditCourseImageForm = ({ id, imageUrl }: EditImageSchema) => {
 				{isEditing && <FileUpload endpoint="imageUpload" onChange={(url) => mutate({ id: id, imageUrl: url ?? '' })} />}
 			</CardContent>
 
-			{isEditing && (
-				<CardFooter className="text-sm text-muted-foreground">
-					Upload a captivating course image that represents your content and engages your students.
-				</CardFooter>
-			)}
+			<CardFooter className="text-sm text-muted-foreground">
+				{isEditing && 'Upload a captivating course image that represents your content and engages your students.'}
+				{!isEditing &&
+					(imageUrl
+						? 'Your course image is now visible. It helps attract students and represents your content.'
+						: 'Upload an image to enhance your course.')}
+			</CardFooter>
 		</Card>
 	)
 }
