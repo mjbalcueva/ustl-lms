@@ -1,3 +1,5 @@
+import Mux from '@mux/mux-node'
+
 import {
 	addChapterSchema,
 	editContentSchema,
@@ -9,6 +11,10 @@ import {
 
 import { createTRPCRouter, instructorProcedure } from '@/server/api/trpc'
 import { utapi } from '@/server/lib/utapi'
+
+import { env } from '@/env'
+
+const { video } = new Mux({ tokenId: env.MUX_TOKEN_ID, tokenSecret: env.MUX_TOKEN_SECRET })
 
 export const chapterRouter = createTRPCRouter({
 	addChapter: instructorProcedure.input(addChapterSchema).mutation(async ({ ctx, input }) => {
@@ -67,12 +73,37 @@ export const chapterRouter = createTRPCRouter({
 		const oldVideoKey = chapter?.videoUrl?.split('/f/')[1]
 		if (oldVideoKey) await utapi.deleteFiles(oldVideoKey)
 
-		await ctx.db.chapter.update({
+		const updatedChapter = await ctx.db.chapter.update({
 			where: { id, courseId, course: { createdById: ctx.session.user.id! } },
 			data: { videoUrl }
 		})
 
-		return { message: 'Course image updated!' }
+		const existingMuxData = await ctx.db.muxData.findFirst({
+			where: { chapterId: id }
+		})
+
+		if (existingMuxData) {
+			await video.assets.delete(existingMuxData.assetId)
+			await ctx.db.muxData.delete({
+				where: { id: existingMuxData.id }
+			})
+		}
+
+		const asset = await video.assets.create({
+			input: [{ url: videoUrl ?? '' }],
+			playback_policy: ['public'],
+			test: false
+		})
+
+		await ctx.db.muxData.create({
+			data: {
+				chapterId: id,
+				assetId: asset.id,
+				playbackId: asset.playback_ids?.[0]?.id ?? ''
+			}
+		})
+
+		return { message: 'Chapter video updated successfully', chapter: updatedChapter }
 	}),
 
 	getChapter: instructorProcedure.input(getChapterSchema).query(async ({ ctx, input }) => {
