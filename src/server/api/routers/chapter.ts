@@ -1,6 +1,6 @@
 import {
 	addChapterSchema,
-	editDescriptionSchema,
+	editContentSchema,
 	editTitleSchema,
 	getChapterSchema,
 	reorderChaptersSchema
@@ -26,17 +26,17 @@ export const chapterRouter = createTRPCRouter({
 		return { message: 'Chapter created successfully' }
 	}),
 
-	editDescription: instructorProcedure.input(editDescriptionSchema).mutation(async ({ ctx, input }) => {
-		const { id, courseId, description } = input
+	editContent: instructorProcedure.input(editContentSchema).mutation(async ({ ctx, input }) => {
+		const { id, courseId, content } = input
 
-		const { description: newDescription } = await ctx.db.chapter.update({
+		const { content: newContent } = await ctx.db.chapter.update({
 			where: { id, courseId, course: { createdById: ctx.session.user.id! } },
-			data: { description }
+			data: { content }
 		})
 
 		return {
-			message: 'Chapter description updated successfully',
-			newDescription
+			message: 'Chapter content updated successfully',
+			newContent
 		}
 	}),
 
@@ -59,7 +59,7 @@ export const chapterRouter = createTRPCRouter({
 
 		const chapter = await ctx.db.chapter.findUnique({
 			where: { id, courseId },
-			include: { course: true, muxData: true }
+			include: { attachment: true, course: true, muxData: true }
 		})
 
 		return { chapter }

@@ -12,18 +12,19 @@ import { AttachmentList } from '@/client/components/course/attachment-list'
 import { FileUpload } from '@/client/components/file-upload'
 import { Button, Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/client/components/ui'
 
-type AddCourseAttachmentProps = {
+type AddChapterAttachmentProps = {
 	courseId: string
+	chapterId: string
 	attachments: Attachment[]
 }
 
-export const AddCourseAttachmentsForm = ({ courseId, attachments }: AddCourseAttachmentProps) => {
+export const AddChapterAttachmentsForm = ({ courseId, chapterId, attachments }: AddChapterAttachmentProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
 	const toggleEdit = () => setIsEditing((current) => !current)
 
-	const { mutate } = api.attachment.addCourseAttachment.useMutation({
+	const { mutate } = api.attachment.addChapterAttachment.useMutation({
 		onSuccess: async (data) => {
 			toggleEdit()
 			router.refresh()
@@ -37,7 +38,7 @@ export const AddCourseAttachmentsForm = ({ courseId, attachments }: AddCourseAtt
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Course Reference Material</CardTitle>
+				<CardTitle>Attachments</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
 					{!isEditing && <TbCirclePlus className="mr-2 size-4" />}
 					{isEditing ? 'Cancel' : 'Add'}
@@ -53,6 +54,7 @@ export const AddCourseAttachmentsForm = ({ courseId, attachments }: AddCourseAtt
 						onChange={(url, name) =>
 							mutate({
 								courseId,
+								chapterId,
 								url: url ?? '',
 								name: name ?? ''
 							})

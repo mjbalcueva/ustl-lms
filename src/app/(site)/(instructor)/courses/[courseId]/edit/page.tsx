@@ -59,7 +59,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 			<Separator className="hidden md:block" />
 
 			<PageHeader>
-				<PageTitle className="font-bold">Course Setup</PageTitle>
+				<PageTitle>Course Setup</PageTitle>
 				<PageDescription>Completed {completionText}</PageDescription>
 			</PageHeader>
 
@@ -79,12 +79,12 @@ export default async function Page({ params }: { params: { courseId: string } })
 
 				<div className="flex flex-1 flex-col gap-4 md:gap-6">
 					<PageSection compactMode>
-						<PageSectionTitle title="Course chapters" icon={TbListDetails} />
+						<PageSectionTitle title="Course Outline" icon={TbListDetails} />
 						<AddCourseChaptersForm courseId={course.id} chapters={course.chapter} />
 					</PageSection>
 
 					<PageSection compactMode>
-						<PageSectionTitle title="Resources & Attachments" icon={TbPackage} />
+						<PageSectionTitle title="Additional References" icon={TbPackage} />
 						<AddCourseAttachmentsForm courseId={course.id} attachments={course.attachment} />
 					</PageSection>
 				</div>

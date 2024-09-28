@@ -82,7 +82,7 @@ export const AddCourseChaptersForm = ({ courseId, chapters }: AddCourseChaptersP
 			)}
 
 			<CardHeader>
-				<CardTitle>Course Chapters</CardTitle>
+				<CardTitle>Course Topics</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
 					{!isEditing && <TbCirclePlus className="mr-2 size-4" />}
 					{isEditing ? 'Cancel' : 'Add'}
@@ -106,7 +106,7 @@ export const AddCourseChaptersForm = ({ courseId, chapters }: AddCourseChaptersP
 								render={({ field }) => (
 									<FormItem className="flex-1">
 										<FormControl>
-											<Input placeholder="e.g. 'Introduction to the course'" disabled={isAdding} {...field} />
+											<Input placeholder="e.g. 'Week 1'" disabled={isAdding} {...field} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>

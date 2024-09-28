@@ -38,12 +38,14 @@ model Course {
 model Attachment {
   id        String   @id @default(cuid())
   courseId  String
+  chapterId String?
   name      String
   url       String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  course  Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  chapter Chapter? @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 
   @@index([courseId])
   @@map("attachment")
@@ -64,15 +66,16 @@ model Chapter {
   id          String   @id @default(cuid())
   courseId    String
   title       String
-  description String?
+  content     String?
   videoUrl    String?
   position    Int
   isPublished Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  muxData      MuxData?
+  attachment   Attachment[]
   course       Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  muxData      MuxData?
   userProgress UserProgress[]
 
   @@index([courseId, position])
