@@ -3,6 +3,7 @@ import { TbNotes, TbPaperclip, TbVideo } from 'react-icons/tb'
 import { api } from '@/shared/trpc/server'
 import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
+import { Banner } from '@/client/components/banner'
 import { AddChapterAttachmentsForm } from '@/client/components/course/forms/add-chapter-attachments'
 import { EditChapterContentForm } from '@/client/components/course/forms/edit-chapter-content'
 import { EditChapterTitleForm } from '@/client/components/course/forms/edit-chapter-title'
@@ -47,6 +48,10 @@ export default async function Page({ params }: { params: { courseId: string; cha
 			</PageHeader>
 
 			<Separator className="hidden md:block" />
+
+			{!chapter.isPublished && (
+				<Banner label="This chapter is not published. It will not be visible to students." variant="warning" />
+			)}
 
 			<PageHeader>
 				<PageTitle>Topic Setup</PageTitle>
