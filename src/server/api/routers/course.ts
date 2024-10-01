@@ -26,23 +26,6 @@ export const courseRouter = createTRPCRouter({
 		return { message: 'Course created!', newCourseId }
 	}),
 
-	getCourse: instructorProcedure.input(getCourseSchema).query(async ({ ctx, input }) => {
-		const { courseId } = input
-
-		const course = await ctx.db.course.findUnique({
-			where: { id: courseId, createdById: ctx.session.user.id! },
-			include: {
-				attachment: {
-					where: { chapterId: null },
-					orderBy: { createdAt: 'desc' }
-				},
-				chapter: { orderBy: { position: 'asc' } }
-			}
-		})
-
-		return { course }
-	}),
-
 	editCode: instructorProcedure.input(editCodeSchema).mutation(async ({ ctx, input }) => {
 		const { id, code } = input
 
@@ -93,6 +76,23 @@ export const courseRouter = createTRPCRouter({
 		})
 
 		return { message: 'Course image updated!' }
+	}),
+
+	getCourse: instructorProcedure.input(getCourseSchema).query(async ({ ctx, input }) => {
+		const { courseId } = input
+
+		const course = await ctx.db.course.findUnique({
+			where: { id: courseId, createdById: ctx.session.user.id! },
+			include: {
+				attachment: {
+					where: { chapterId: null },
+					orderBy: { createdAt: 'desc' }
+				},
+				chapter: { orderBy: { position: 'asc' } }
+			}
+		})
+
+		return { course }
 	}),
 
 	togglePublish: instructorProcedure.input(toggleCoursePublishSchema).mutation(async ({ ctx, input }) => {
