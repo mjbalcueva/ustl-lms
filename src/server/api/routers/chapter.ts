@@ -2,12 +2,12 @@ import Mux from '@mux/mux-node'
 
 import {
 	addChapterSchema,
+	chapterActionsSchema,
 	editContentSchema,
 	editTitleSchema,
 	editVideoSchema,
 	getChapterSchema,
-	reorderChaptersSchema,
-	toggleChapterPublishSchema
+	reorderChaptersSchema
 } from '@/shared/validations/chapter'
 
 import { createTRPCRouter, instructorProcedure } from '@/server/api/trpc'
@@ -33,6 +33,47 @@ export const chapterRouter = createTRPCRouter({
 		})
 
 		return { message: 'Chapter created successfully' }
+	}),
+
+	deleteChapter: instructorProcedure.input(chapterActionsSchema).mutation(async ({ ctx, input }) => {
+		const { id, courseId } = input
+
+		// delete the chapter video from mux
+		const chapter = await ctx.db.chapter.findUnique({
+			where: { id, courseId, course: { createdById: ctx.session.user.id! } },
+			select: { videoUrl: true }
+		})
+
+		const oldVideoKey = chapter?.videoUrl?.split('/f/')[1]
+		if (oldVideoKey) await utapi.deleteFiles(oldVideoKey)
+
+		const existingMuxData = await ctx.db.muxData.findFirst({
+			where: { chapterId: id }
+		})
+
+		if (existingMuxData) {
+			await video.assets.delete(existingMuxData.assetId)
+			await ctx.db.muxData.delete({
+				where: { id: existingMuxData.id }
+			})
+		}
+
+		// delete all the chapter attachments in uploadthing
+		const attachments = await ctx.db.attachment.findMany({
+			where: { chapterId: id }
+		})
+
+		for (const attachment of attachments) {
+			const attachmentKey = attachment.url.split('/f/')[1]
+			if (attachmentKey) await utapi.deleteFiles(attachmentKey)
+		}
+
+		// delete the chapter
+		await ctx.db.chapter.delete({
+			where: { id, courseId, course: { createdById: ctx.session.user.id! } }
+		})
+
+		return { message: 'Chapter deleted successfully' }
 	}),
 
 	editContent: instructorProcedure.input(editContentSchema).mutation(async ({ ctx, input }) => {
@@ -118,7 +159,7 @@ export const chapterRouter = createTRPCRouter({
 		return { chapter }
 	}),
 
-	toggleChapterPublish: instructorProcedure.input(toggleChapterPublishSchema).mutation(async ({ ctx, input }) => {
+	toggleChapterPublish: instructorProcedure.input(chapterActionsSchema).mutation(async ({ ctx, input }) => {
 		const { id, courseId, isPublished } = input
 
 		const chapter = await ctx.db.chapter.update({

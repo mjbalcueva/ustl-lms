@@ -5,10 +5,10 @@ import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
 import { Banner } from '@/client/components/banner'
 import { AddChapterAttachmentsForm } from '@/client/components/course/forms/add-chapter-attachments'
+import { ChapterActions } from '@/client/components/course/forms/chapter-actions'
 import { EditChapterContentForm } from '@/client/components/course/forms/edit-chapter-content'
 import { EditChapterTitleForm } from '@/client/components/course/forms/edit-chapter-title'
 import { EditChapterVideoForm } from '@/client/components/course/forms/edit-chapter-video'
-import { ToggleChapterPublish } from '@/client/components/course/forms/toggle-chapter-publish'
 import { NotFound } from '@/client/components/not-found'
 import {
 	PageBreadcrumbs,
@@ -59,7 +59,7 @@ export default async function Page({ params }: { params: { courseId: string; cha
 					<PageTitle>Topic Setup</PageTitle>
 					<PageDescription>Completed {completionText}</PageDescription>
 				</div>
-				<ToggleChapterPublish id={chapter.id} courseId={chapter.course.id} isPublished={chapter.isPublished} />
+				<ChapterActions id={chapter.id} courseId={chapter.course.id} isPublished={chapter.isPublished} />
 			</PageHeader>
 
 			<PageContent className="gap-4 px-2.5 sm:px-4 md:flex md:flex-wrap md:gap-6 md:px-6">
