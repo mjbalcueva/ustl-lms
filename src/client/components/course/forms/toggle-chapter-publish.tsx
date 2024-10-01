@@ -2,7 +2,6 @@
 
 import { useRouter } from 'next/navigation'
 import * as React from 'react'
-import { TbCircleCheck, TbHelpCircle } from 'react-icons/tb'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
@@ -29,23 +28,13 @@ export const ToggleChapterPublish = ({ id, courseId, isPublished }: ToggleChapte
 				mutate({ id, courseId, isPublished: !isPublished })
 			}}
 		>
-			{isPublished ? (
-				isPending ? (
-					'Unpublishing...'
-				) : (
-					<>
-						<TbCircleCheck className="mr-1.5 size-5" />
-						Topic Published
-					</>
-				)
-			) : isPending ? (
-				'Publishing...'
-			) : (
-				<>
-					<TbHelpCircle className="mr-1.5 size-5" />
-					Publish Topic
-				</>
-			)}
+			{isPublished
+				? isPending
+					? 'Unpublishing...'
+					: 'Unpublish Topic'
+				: isPending
+					? 'Publishing...'
+					: 'Publish Topic'}
 		</Button>
 	)
 }
