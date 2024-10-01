@@ -57,7 +57,7 @@ export default async function Page({ params }: { params: { courseId: string; cha
 			<PageHeader className="flex items-center justify-between space-y-0">
 				<div className="space-y-2">
 					<PageTitle>Topic Setup</PageTitle>
-					<PageDescription>Completed {completionText}</PageDescription>
+					<PageDescription>Filled {completionText}</PageDescription>
 				</div>
 				<ChapterActions id={chapter.id} courseId={chapter.course.id} isPublished={chapter.isPublished} />
 			</PageHeader>

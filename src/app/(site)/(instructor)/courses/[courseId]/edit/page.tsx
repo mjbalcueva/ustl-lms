@@ -67,7 +67,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 			<PageHeader className="flex items-center justify-between space-y-0">
 				<div className="space-y-2">
 					<PageTitle>Course Setup</PageTitle>
-					<PageDescription>Completed {completionText}</PageDescription>
+					<PageDescription>Filled {completionText}</PageDescription>
 				</div>
 				<CourseActions id={course.id} isPublished={course.isPublished} />
 			</PageHeader>
