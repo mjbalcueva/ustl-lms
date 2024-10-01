@@ -3,7 +3,6 @@ import { TbNotes, TbPaperclip, TbVideo } from 'react-icons/tb'
 import { api } from '@/shared/trpc/server'
 import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
-import { Banner } from '@/client/components/banner'
 import { AddChapterAttachmentsForm } from '@/client/components/course/forms/add-chapter-attachments'
 import { ChapterActions } from '@/client/components/course/forms/chapter-actions'
 import { EditChapterContentForm } from '@/client/components/course/forms/edit-chapter-content'
@@ -11,6 +10,7 @@ import { EditChapterTitleForm } from '@/client/components/course/forms/edit-chap
 import { EditChapterVideoForm } from '@/client/components/course/forms/edit-chapter-video'
 import { NotFound } from '@/client/components/not-found'
 import {
+	Banner,
 	PageBreadcrumbs,
 	PageContent,
 	PageDescription,

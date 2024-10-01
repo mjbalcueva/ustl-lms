@@ -3,7 +3,6 @@ import { TbListDetails, TbNotebook, TbPackage } from 'react-icons/tb'
 import { api } from '@/shared/trpc/server'
 import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
-import { Banner } from '@/client/components/banner'
 import { AddCourseAttachmentsForm } from '@/client/components/course/forms/add-course-attachments'
 import { AddCourseChaptersForm } from '@/client/components/course/forms/add-course-chapters'
 import { CourseActions } from '@/client/components/course/forms/course-actions'
@@ -14,6 +13,7 @@ import { EditCourseImageForm } from '@/client/components/course/forms/edit-cours
 import { EditCourseTitleForm } from '@/client/components/course/forms/edit-course-title'
 import { NotFound } from '@/client/components/not-found'
 import {
+	Banner,
 	PageBreadcrumbs,
 	PageContent,
 	PageDescription,
