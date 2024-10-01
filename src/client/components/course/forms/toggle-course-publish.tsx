@@ -6,14 +6,14 @@ import { TbCircleCheck, TbHelpCircle } from 'react-icons/tb'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
-import { type ToggleChapterPublishSchema } from '@/shared/validations/chapter'
+import { type ToggleCoursePublishSchema } from '@/shared/validations/course'
 
 import { Button } from '@/client/components/ui'
 
-export const ToggleChapterPublish = ({ id, courseId, isPublished }: ToggleChapterPublishSchema) => {
+export const ToggleCoursePublish = ({ id, isPublished }: ToggleCoursePublishSchema) => {
 	const router = useRouter()
 
-	const { mutate, isPending } = api.chapter.toggleChapterPublish.useMutation({
+	const { mutate, isPending } = api.course.togglePublish.useMutation({
 		onSuccess: (data) => {
 			toast.success(data.message)
 			router.refresh()
@@ -26,7 +26,7 @@ export const ToggleChapterPublish = ({ id, courseId, isPublished }: ToggleChapte
 			disabled={isPending}
 			variant={isPending ? 'shine' : 'default'}
 			onClick={() => {
-				mutate({ id, courseId, isPublished: !isPublished })
+				mutate({ id, isPublished: !isPublished })
 			}}
 		>
 			{isPublished ? (
@@ -35,7 +35,7 @@ export const ToggleChapterPublish = ({ id, courseId, isPublished }: ToggleChapte
 				) : (
 					<>
 						<TbCircleCheck className="mr-1.5 size-5" />
-						Topic Published
+						Course Published
 					</>
 				)
 			) : isPending ? (
@@ -43,7 +43,7 @@ export const ToggleChapterPublish = ({ id, courseId, isPublished }: ToggleChapte
 			) : (
 				<>
 					<TbHelpCircle className="mr-1.5 size-5" />
-					Publish Topic
+					Publish Course
 				</>
 			)}
 		</Button>

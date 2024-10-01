@@ -3,6 +3,7 @@ import { TbListDetails, TbNotebook, TbPackage } from 'react-icons/tb'
 import { api } from '@/shared/trpc/server'
 import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
+import { Banner } from '@/client/components/banner'
 import { AddCourseAttachmentsForm } from '@/client/components/course/forms/add-course-attachments'
 import { AddCourseChaptersForm } from '@/client/components/course/forms/add-course-chapters'
 import { EditCourseCategoriesForm } from '@/client/components/course/forms/edit-course-categories'
@@ -10,6 +11,7 @@ import { EditCourseCodeForm } from '@/client/components/course/forms/edit-course
 import { EditCourseDescriptionForm } from '@/client/components/course/forms/edit-course-description'
 import { EditCourseImageForm } from '@/client/components/course/forms/edit-course-image'
 import { EditCourseTitleForm } from '@/client/components/course/forms/edit-course-title'
+import { ToggleCoursePublish } from '@/client/components/course/forms/toggle-course-publish'
 import { NotFound } from '@/client/components/not-found'
 import {
 	PageBreadcrumbs,
@@ -58,9 +60,16 @@ export default async function Page({ params }: { params: { courseId: string } })
 
 			<Separator className="hidden md:block" />
 
-			<PageHeader>
-				<PageTitle>Course Setup</PageTitle>
-				<PageDescription>Completed {completionText}</PageDescription>
+			{!course.isPublished && (
+				<Banner label="This course is not published. It will not be visible to students." variant="warning" />
+			)}
+
+			<PageHeader className="flex items-center justify-between space-y-0">
+				<div className="space-y-2">
+					<PageTitle>Course Setup</PageTitle>
+					<PageDescription>Completed {completionText}</PageDescription>
+				</div>
+				<ToggleCoursePublish id={course.id} isPublished={course.isPublished} />
 			</PageHeader>
 
 			<PageContent className="gap-4 px-2.5 sm:px-4 md:flex md:flex-wrap md:gap-6 md:px-6">

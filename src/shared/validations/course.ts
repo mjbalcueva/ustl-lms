@@ -34,3 +34,9 @@ export const editImageSchema = z.object({
 	imageUrl: z.string().nullable()
 })
 export type EditImageSchema = z.infer<typeof editImageSchema>
+
+export const toggleCoursePublishSchema = z.object({
+	id: z.string().min(1, 'Course ID is required'),
+	isPublished: z.boolean()
+})
+export type ToggleCoursePublishSchema = z.infer<typeof toggleCoursePublishSchema>
