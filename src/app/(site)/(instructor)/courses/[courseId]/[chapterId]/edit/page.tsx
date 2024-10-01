@@ -27,7 +27,7 @@ export default async function Page({ params }: { params: { courseId: string; cha
 
 	if (!chapter) return <NotFound item="chapter" />
 
-	const requiredFields = [chapter.title, chapter.content, chapter.videoUrl]
+	const requiredFields = [chapter.title, chapter.content, chapter.videoUrl, chapter.attachment]
 
 	const totalFields = requiredFields.length
 	const completedFields = requiredFields.filter(Boolean).length

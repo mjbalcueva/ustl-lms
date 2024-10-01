@@ -37,8 +37,8 @@ export default async function Page({ params }: { params: { courseId: string } })
 		course.description,
 		course.imageUrl,
 		course.categoryId,
-		course.isPublished,
-		course.chapter.some((chapter) => chapter.isPublished)
+		course.chapter.some((chapter) => chapter.isPublished),
+		course.attachment.some((attachment) => !attachment.chapterId)
 	]
 
 	const totalFields = requiredFields.length
