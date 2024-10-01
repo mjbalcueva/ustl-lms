@@ -6,10 +6,11 @@ export const addCourseSchema = z.object({
 })
 export type AddCourseSchema = z.infer<typeof addCourseSchema>
 
-export const getCourseSchema = z.object({
-	courseId: z.string().min(1, 'Course ID is required')
+export const courseActionsSchema = z.object({
+	id: z.string().min(1, 'Course ID is required'),
+	isPublished: z.boolean()
 })
-export type GetCourseSchema = z.infer<typeof getCourseSchema>
+export type CourseActionsSchema = z.infer<typeof courseActionsSchema>
 
 export const editCodeSchema = z.object({
 	id: z.string().min(1, 'Course ID is required'),
@@ -34,6 +35,11 @@ export const editImageSchema = z.object({
 	imageUrl: z.string().nullable()
 })
 export type EditImageSchema = z.infer<typeof editImageSchema>
+
+export const getCourseSchema = z.object({
+	courseId: z.string().min(1, 'Course ID is required')
+})
+export type GetCourseSchema = z.infer<typeof getCourseSchema>
 
 export const toggleCoursePublishSchema = z.object({
 	id: z.string().min(1, 'Course ID is required'),

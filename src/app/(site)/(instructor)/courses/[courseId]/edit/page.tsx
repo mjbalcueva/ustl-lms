@@ -6,12 +6,12 @@ import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 import { Banner } from '@/client/components/banner'
 import { AddCourseAttachmentsForm } from '@/client/components/course/forms/add-course-attachments'
 import { AddCourseChaptersForm } from '@/client/components/course/forms/add-course-chapters'
+import { CourseActions } from '@/client/components/course/forms/course-actions'
 import { EditCourseCategoriesForm } from '@/client/components/course/forms/edit-course-categories'
 import { EditCourseCodeForm } from '@/client/components/course/forms/edit-course-code'
 import { EditCourseDescriptionForm } from '@/client/components/course/forms/edit-course-description'
 import { EditCourseImageForm } from '@/client/components/course/forms/edit-course-image'
 import { EditCourseTitleForm } from '@/client/components/course/forms/edit-course-title'
-import { ToggleCoursePublish } from '@/client/components/course/forms/toggle-course-publish'
 import { NotFound } from '@/client/components/not-found'
 import {
 	PageBreadcrumbs,
@@ -69,7 +69,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 					<PageTitle>Course Setup</PageTitle>
 					<PageDescription>Completed {completionText}</PageDescription>
 				</div>
-				<ToggleCoursePublish id={course.id} isPublished={course.isPublished} />
+				<CourseActions id={course.id} isPublished={course.isPublished} />
 			</PageHeader>
 
 			<PageContent className="gap-4 px-2.5 sm:px-4 md:flex md:flex-wrap md:gap-6 md:px-6">

@@ -1,5 +1,3 @@
-import Mux from '@mux/mux-node'
-
 import {
 	addChapterSchema,
 	chapterActionsSchema,
@@ -11,11 +9,8 @@ import {
 } from '@/shared/validations/chapter'
 
 import { createTRPCRouter, instructorProcedure } from '@/server/api/trpc'
+import { video } from '@/server/lib/mux'
 import { utapi } from '@/server/lib/utapi'
-
-import { env } from '@/env'
-
-const { video } = new Mux({ tokenId: env.MUX_TOKEN_ID, tokenSecret: env.MUX_TOKEN_SECRET })
 
 export const chapterRouter = createTRPCRouter({
 	addChapter: instructorProcedure.input(addChapterSchema).mutation(async ({ ctx, input }) => {
