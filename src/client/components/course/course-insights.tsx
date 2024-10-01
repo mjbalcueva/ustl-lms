@@ -1,9 +1,9 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/client/components/ui'
 
-const CardPerformanceInsights = () => {
+export const CourseInsights = () => {
 	return (
 		<Card>
-			<CardHeader>
+			<CardHeader className="flex-col items-start">
 				<CardTitle>Performance Insights</CardTitle>
 				<CardDescription>Overview of your course portfolio.</CardDescription>
 			</CardHeader>
@@ -30,5 +30,3 @@ const CardPerformanceInsights = () => {
 		</Card>
 	)
 }
-
-export { CardPerformanceInsights }
