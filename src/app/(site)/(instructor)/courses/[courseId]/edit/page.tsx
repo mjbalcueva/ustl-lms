@@ -5,6 +5,7 @@ import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
 import { AddCourseAttachmentsForm } from '@/client/components/course/forms/add-course-attachments'
 import { AddCourseChaptersForm } from '@/client/components/course/forms/add-course-chapters'
+import { CourseActions } from '@/client/components/course/forms/course-actions'
 import { EditCourseCategoriesForm } from '@/client/components/course/forms/edit-course-categories'
 import { EditCourseCodeForm } from '@/client/components/course/forms/edit-course-code'
 import { EditCourseDescriptionForm } from '@/client/components/course/forms/edit-course-description'
@@ -12,6 +13,7 @@ import { EditCourseImageForm } from '@/client/components/course/forms/edit-cours
 import { EditCourseTitleForm } from '@/client/components/course/forms/edit-course-title'
 import { NotFound } from '@/client/components/not-found'
 import {
+	Banner,
 	PageBreadcrumbs,
 	PageContent,
 	PageDescription,
@@ -35,8 +37,8 @@ export default async function Page({ params }: { params: { courseId: string } })
 		course.description,
 		course.imageUrl,
 		course.categoryId,
-		course.isPublished,
-		course.chapter.some((chapter) => chapter.isPublished)
+		course.chapter.some((chapter) => chapter.isPublished),
+		course.attachment.some((attachment) => !attachment.chapterId)
 	]
 
 	const totalFields = requiredFields.length
@@ -58,9 +60,16 @@ export default async function Page({ params }: { params: { courseId: string } })
 
 			<Separator className="hidden md:block" />
 
-			<PageHeader>
-				<PageTitle>Course Setup</PageTitle>
-				<PageDescription>Completed {completionText}</PageDescription>
+			{!course.isPublished && (
+				<Banner label="This course is not published. It will not be visible to students." variant="warning" />
+			)}
+
+			<PageHeader className="flex items-center justify-between space-y-0">
+				<div className="space-y-2">
+					<PageTitle>Course Setup</PageTitle>
+					<PageDescription>Filled {completionText}</PageDescription>
+				</div>
+				<CourseActions id={course.id} isPublished={course.isPublished} />
 			</PageHeader>
 
 			<PageContent className="gap-4 px-2.5 sm:px-4 md:flex md:flex-wrap md:gap-6 md:px-6">

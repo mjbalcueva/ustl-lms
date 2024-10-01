@@ -48,7 +48,7 @@ export const EditCourseImageForm = ({ id, imageUrl }: EditImageSchema) => {
 								src={imageUrl}
 								alt="Course Image"
 								fill
-								className="rounded-xl border border-input"
+								className="rounded-xl border border-input object-cover"
 								priority
 								sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
 							/>

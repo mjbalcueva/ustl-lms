@@ -6,6 +6,13 @@ export const addChapterSchema = z.object({
 })
 export type AddChapterSchema = z.infer<typeof addChapterSchema>
 
+export const chapterActionsSchema = z.object({
+	id: z.string().min(1, 'Chapter ID is required'),
+	courseId: z.string().min(1, 'Course ID is required'),
+	isPublished: z.boolean()
+})
+export type ChapterActionsSchema = z.infer<typeof chapterActionsSchema>
+
 export const editContentSchema = z.object({
 	id: z.string().min(1, 'Chapter ID is required'),
 	courseId: z.string().min(1, 'Course ID is required'),

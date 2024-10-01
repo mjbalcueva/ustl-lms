@@ -4,11 +4,13 @@ import { api } from '@/shared/trpc/server'
 import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
 import { AddChapterAttachmentsForm } from '@/client/components/course/forms/add-chapter-attachments'
+import { ChapterActions } from '@/client/components/course/forms/chapter-actions'
 import { EditChapterContentForm } from '@/client/components/course/forms/edit-chapter-content'
 import { EditChapterTitleForm } from '@/client/components/course/forms/edit-chapter-title'
 import { EditChapterVideoForm } from '@/client/components/course/forms/edit-chapter-video'
 import { NotFound } from '@/client/components/not-found'
 import {
+	Banner,
 	PageBreadcrumbs,
 	PageContent,
 	PageDescription,
@@ -25,7 +27,7 @@ export default async function Page({ params }: { params: { courseId: string; cha
 
 	if (!chapter) return <NotFound item="chapter" />
 
-	const requiredFields = [chapter.title, chapter.content, chapter.videoUrl]
+	const requiredFields = [chapter.title, chapter.content, chapter.videoUrl, chapter.attachment]
 
 	const totalFields = requiredFields.length
 	const completedFields = requiredFields.filter(Boolean).length
@@ -48,9 +50,16 @@ export default async function Page({ params }: { params: { courseId: string; cha
 
 			<Separator className="hidden md:block" />
 
-			<PageHeader>
-				<PageTitle>Topic Setup</PageTitle>
-				<PageDescription>Completed {completionText}</PageDescription>
+			{!chapter.isPublished && (
+				<Banner label="This chapter is not published. It will not be visible to students." variant="warning" />
+			)}
+
+			<PageHeader className="flex items-center justify-between space-y-0">
+				<div className="space-y-2">
+					<PageTitle>Topic Setup</PageTitle>
+					<PageDescription>Filled {completionText}</PageDescription>
+				</div>
+				<ChapterActions id={chapter.id} courseId={chapter.course.id} isPublished={chapter.isPublished} />
 			</PageHeader>
 
 			<PageContent className="gap-4 px-2.5 sm:px-4 md:flex md:flex-wrap md:gap-6 md:px-6">
