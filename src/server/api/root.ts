@@ -3,6 +3,7 @@ import { authRouter } from '@/server/api/routers/auth'
 import { categoryRouter } from '@/server/api/routers/category'
 import { chapterRouter } from '@/server/api/routers/chapter'
 import { courseRouter } from '@/server/api/routers/course'
+import { instructorRouter } from '@/server/api/routers/instructor'
 import { profileRouter } from '@/server/api/routers/profile'
 import { sessionRouter } from '@/server/api/routers/session'
 import { createCallerFactory, createTRPCRouter } from '@/server/api/trpc'
@@ -18,8 +19,9 @@ export const appRouter = createTRPCRouter({
 	category: categoryRouter,
 	chapter: chapterRouter,
 	course: courseRouter,
-	session: sessionRouter,
-	profile: profileRouter
+	instructor: instructorRouter,
+	profile: profileRouter,
+	session: sessionRouter
 })
 
 // export type definition of API
