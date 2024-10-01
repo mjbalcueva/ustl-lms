@@ -9,10 +9,10 @@ type CardStatsMiniProps = {
 	className?: string
 }
 
-const CardStatsMini = ({ icon, title, count, className }: CardStatsMiniProps) => {
+export const CourseStats = ({ icon, title, count, className }: CardStatsMiniProps) => {
 	const Icon = Icons[icon]
 	return (
-		<Card className={cn('w-full min-w-52 overflow-hidden', className)}>
+		<Card className={cn('w-full !min-w-52 overflow-hidden', className)}>
 			<CardHeader className="flex-row justify-between pb-2">
 				<CardDescription>{title}</CardDescription>
 				<Icon className="size-4 text-muted-foreground" />
@@ -23,5 +23,3 @@ const CardStatsMini = ({ icon, title, count, className }: CardStatsMiniProps) =>
 		</Card>
 	)
 }
-
-export { CardStatsMini }

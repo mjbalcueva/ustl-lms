@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/client/components/ui'
 
-const CardPerformanceInsights = () => {
+export const CourseInsights = () => {
 	return (
 		<Card>
 			<CardHeader>
@@ -30,5 +30,3 @@ const CardPerformanceInsights = () => {
 		</Card>
 	)
 }
-
-export { CardPerformanceInsights }

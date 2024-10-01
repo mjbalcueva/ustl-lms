@@ -1,21 +1,21 @@
 'use client'
 
-import { CardStatsMini } from '@/client/components/instructor/course/card-stats-mini'
+import { CourseStats } from '@/client/components/course/course-stats'
 import { ScrollArea, ScrollBar } from '@/client/components/ui'
 import { useDeviceType } from '@/client/context/device-type-provider'
 
-const CardStatsMiniGroup = () => {
+export const CourseStatsGroup = () => {
 	const { deviceSize } = useDeviceType()
 
 	const isMobile = deviceSize === 'mobile'
 
 	return (
 		<ScrollArea scrollHideDelay={!isMobile ? 0 : 600} type="hover">
-			<div className="mb-2.5 flex gap-4">
-				<CardStatsMini icon="totalCourse" title="Total Courses" count={0} className="ml-2 sm:ml-4 md:ml-6 lg:ml-0" />
-				<CardStatsMini icon="publishedCourse" title="Published Courses" count={0} />
-				<CardStatsMini icon="draftCourse" title="Draft Courses" count={0} />
-				<CardStatsMini
+			<div className="flex gap-4">
+				<CourseStats icon="totalCourse" title="Total Courses" count={0} className="ml-2 sm:ml-4 md:ml-6 lg:ml-0" />
+				<CourseStats icon="publishedCourse" title="Published Courses" count={0} />
+				<CourseStats icon="draftCourse" title="Draft Courses" count={0} />
+				<CourseStats
 					icon="archivedCourse"
 					title="Archived Courses"
 					count={0}
@@ -26,5 +26,3 @@ const CardStatsMiniGroup = () => {
 		</ScrollArea>
 	)
 }
-
-export { CardStatsMiniGroup }

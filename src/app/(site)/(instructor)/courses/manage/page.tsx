@@ -1,10 +1,8 @@
 import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
+import { CourseInsights } from '@/client/components/course/course-insights'
+import { CourseStatsGroup } from '@/client/components/course/course-stats-group'
 import { AddCourseForm } from '@/client/components/course/forms/add-course'
-import { CardPerformanceInsights } from '@/client/components/instructor/course/card-performance-insights'
-import { CardStatsMiniGroup } from '@/client/components/instructor/course/card-stats-mini-group'
-import { FilterButton } from '@/client/components/instructor/course/filter-button'
-import { SearchInput } from '@/client/components/instructor/course/search-input'
 import {
 	PageBreadcrumbs,
 	PageContent,
@@ -37,18 +35,11 @@ export default function Page() {
 
 			<PageContent className="space-y-6">
 				<PageSection className="px-0 sm:px-0 md:px-0 lg:px-6">
-					<CardStatsMiniGroup />
+					<CourseStatsGroup />
 				</PageSection>
 
 				<PageSection className="!mt-3">
-					<CardPerformanceInsights />
-				</PageSection>
-
-				<PageSection>
-					<div className="flex items-center gap-4">
-						<SearchInput />
-						<FilterButton />
-					</div>
+					<CourseInsights />
 				</PageSection>
 			</PageContent>
 		</PageWrapper>
