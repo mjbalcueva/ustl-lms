@@ -1,13 +1,15 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { TbTrash } from 'react-icons/tb'
+import { TbLoader2, TbTrash } from 'react-icons/tb'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
 import { type CourseActionsSchema } from '@/shared/validations/course'
 
 import { Button } from '@/client/components/ui'
+
+import { ConfirmModal } from '../../confirm-modal'
 
 export const CourseActions = ({ id, isPublished }: CourseActionsSchema) => {
 	const router = useRouter()
@@ -46,17 +48,17 @@ export const CourseActions = ({ id, isPublished }: CourseActionsSchema) => {
 						: 'Publish Course'}
 			</Button>
 
-			<Button
-				size="icon"
-				disabled={isDeleting}
-				variant={'destructive'}
-				onClick={() => {
+			<ConfirmModal
+				title="Are you sure you want to delete this course?"
+				description="This action cannot be undone. This will permanently delete your course and remove your data from our servers."
+				onConfirm={() => {
 					deleteCourse({ id, isPublished })
 				}}
-				className="size-9 rounded-md"
 			>
-				<TbTrash className="size-5" />
-			</Button>
+				<Button size="icon" disabled={isDeleting} variant={'destructive'} className="size-9 rounded-md">
+					{isDeleting ? <TbLoader2 className="size-5 animate-spin" /> : <TbTrash className="size-5" />}
+				</Button>
+			</ConfirmModal>
 		</div>
 	)
 }
