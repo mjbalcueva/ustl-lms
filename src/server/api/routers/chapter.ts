@@ -6,7 +6,8 @@ import {
 	editTitleSchema,
 	editVideoSchema,
 	getChapterSchema,
-	reorderChaptersSchema
+	reorderChaptersSchema,
+	toggleChapterPublishSchema
 } from '@/shared/validations/chapter'
 
 import { createTRPCRouter, instructorProcedure } from '@/server/api/trpc'
@@ -115,6 +116,17 @@ export const chapterRouter = createTRPCRouter({
 		})
 
 		return { chapter }
+	}),
+
+	toggleChapterPublish: instructorProcedure.input(toggleChapterPublishSchema).mutation(async ({ ctx, input }) => {
+		const { id, courseId, isPublished } = input
+
+		const chapter = await ctx.db.chapter.update({
+			where: { id, courseId, course: { createdById: ctx.session.user.id! } },
+			data: { isPublished }
+		})
+
+		return { message: `Chapter ${isPublished ? 'published' : 'unpublished'} successfully`, chapter }
 	}),
 
 	reorderChapters: instructorProcedure.input(reorderChaptersSchema).mutation(async ({ ctx, input }) => {

@@ -33,6 +33,13 @@ export const getChapterSchema = z.object({
 })
 export type GetChapterSchema = z.infer<typeof getChapterSchema>
 
+export const toggleChapterPublishSchema = z.object({
+	id: z.string().min(1, 'Chapter ID is required'),
+	courseId: z.string().min(1, 'Course ID is required'),
+	isPublished: z.boolean()
+})
+export type ToggleChapterPublishSchema = z.infer<typeof toggleChapterPublishSchema>
+
 export const reorderChaptersSchema = z.object({
 	courseId: z.string().min(1, 'Course ID is required'),
 	chapterList: z.array(

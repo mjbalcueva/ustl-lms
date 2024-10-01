@@ -8,6 +8,7 @@ import { AddChapterAttachmentsForm } from '@/client/components/course/forms/add-
 import { EditChapterContentForm } from '@/client/components/course/forms/edit-chapter-content'
 import { EditChapterTitleForm } from '@/client/components/course/forms/edit-chapter-title'
 import { EditChapterVideoForm } from '@/client/components/course/forms/edit-chapter-video'
+import { ToggleChapterPublish } from '@/client/components/course/forms/toggle-chapter-publish'
 import { NotFound } from '@/client/components/not-found'
 import {
 	PageBreadcrumbs,
@@ -53,9 +54,12 @@ export default async function Page({ params }: { params: { courseId: string; cha
 				<Banner label="This chapter is not published. It will not be visible to students." variant="warning" />
 			)}
 
-			<PageHeader>
-				<PageTitle>Topic Setup</PageTitle>
-				<PageDescription>Completed {completionText}</PageDescription>
+			<PageHeader className="flex items-center justify-between space-y-0">
+				<div className="space-y-2">
+					<PageTitle>Topic Setup</PageTitle>
+					<PageDescription>Completed {completionText}</PageDescription>
+				</div>
+				<ToggleChapterPublish id={chapter.id} courseId={chapter.course.id} isPublished={chapter.isPublished} />
 			</PageHeader>
 
 			<PageContent className="gap-4 px-2.5 sm:px-4 md:flex md:flex-wrap md:gap-6 md:px-6">
