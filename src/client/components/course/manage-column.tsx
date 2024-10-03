@@ -13,7 +13,6 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger
 } from '@/client/components/ui'
-import { cn } from '@/client/lib/utils'
 
 export const columns: ColumnDef<Course>[] = [
 	{
@@ -39,11 +38,11 @@ export const columns: ColumnDef<Course>[] = [
 		}
 	},
 	{
-		accessorKey: 'isPublished',
+		accessorKey: 'status',
 		header: ({ column }) => {
 			return (
 				<Button variant="ghost" size="sm" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-					Published
+					Status
 					<LuArrowUpDown className="ml-2 size-3" />
 				</Button>
 			)
@@ -53,13 +52,7 @@ export const columns: ColumnDef<Course>[] = [
 
 			const isPublished = status === 'PUBLISHED'
 
-			return (
-				<Badge
-					className={cn(isPublished ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground')}
-				>
-					{isPublished ? 'Published' : 'Draft'}
-				</Badge>
-			)
+			return <Badge variant={isPublished ? 'default' : 'secondary'}>{isPublished ? 'Published' : 'Draft'}</Badge>
 		}
 	},
 	{
