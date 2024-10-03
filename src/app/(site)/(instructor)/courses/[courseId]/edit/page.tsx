@@ -37,7 +37,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 		course.description,
 		course.imageUrl,
 		course.categoryId,
-		course.chapter.some((chapter) => chapter.isPublished),
+		course.chapter.some((chapter) => chapter.status === 'PUBLISHED'),
 		course.attachment.some((attachment) => !attachment.chapterId)
 	]
 

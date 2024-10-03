@@ -42,6 +42,8 @@ export default async function Page({ params }: { params: { courseId: string; cha
 		{ label: 'Edit' }
 	]
 
+	const isPublished = chapter.status === 'PUBLISHED'
+
 	return (
 		<PageWrapper>
 			<PageHeader className="hidden space-y-0 md:block md:py-3">
@@ -50,7 +52,7 @@ export default async function Page({ params }: { params: { courseId: string; cha
 
 			<Separator className="hidden md:block" />
 
-			{!chapter.isPublished && (
+			{!isPublished && (
 				<Banner label="This chapter is not published. It will not be visible to students." variant="warning" />
 			)}
 
@@ -59,7 +61,7 @@ export default async function Page({ params }: { params: { courseId: string; cha
 					<PageTitle>Topic Setup</PageTitle>
 					<PageDescription>Filled {completionText}</PageDescription>
 				</div>
-				<ChapterActions id={chapter.id} courseId={chapter.course.id} isPublished={chapter.isPublished} />
+				<ChapterActions id={chapter.id} courseId={chapter.course.id} status={chapter.status} />
 			</PageHeader>
 
 			<PageContent className="gap-4 px-2.5 sm:px-4 md:flex md:flex-wrap md:gap-6 md:px-6">
