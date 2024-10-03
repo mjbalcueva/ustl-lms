@@ -1,4 +1,4 @@
-import { CourseStatus } from '@prisma/client'
+import { Status } from '@prisma/client'
 import { z } from 'zod'
 
 export const addCourseSchema = z.object({
@@ -9,7 +9,7 @@ export type AddCourseSchema = z.infer<typeof addCourseSchema>
 
 export const courseActionsSchema = z.object({
 	id: z.string().min(1, 'Course ID is required'),
-	status: z.nativeEnum(CourseStatus)
+	status: z.nativeEnum(Status)
 })
 export type CourseActionsSchema = z.infer<typeof courseActionsSchema>
 
@@ -39,7 +39,7 @@ export type EditImageSchema = z.infer<typeof editImageSchema>
 
 export const editStatusSchema = z.object({
 	id: z.string().min(1, 'Course ID is required'),
-	status: z.nativeEnum(CourseStatus)
+	status: z.nativeEnum(Status)
 })
 export type EditStatusSchema = z.infer<typeof editStatusSchema>
 
