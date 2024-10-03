@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation'
 import { TbListDetails, TbNotebook, TbPackage } from 'react-icons/tb'
 
 import { api } from '@/shared/trpc/server'
@@ -26,6 +27,9 @@ import {
 } from '@/client/components/ui'
 
 export default async function Page({ params }: { params: { courseId: string } }) {
+	const session = await api.session.getSession()
+	if (session?.user?.role !== 'INSTRUCTOR') redirect('/dashboard')
+
 	const { course } = await api.course.getCourse({ courseId: params.courseId })
 	const { categories } = await api.category.getCategories()
 
@@ -37,7 +41,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 		course.description,
 		course.imageUrl,
 		course.categoryId,
-		course.chapter.some((chapter) => chapter.isPublished),
+		course.chapter.some((chapter) => chapter.status === 'PUBLISHED'),
 		course.attachment.some((attachment) => !attachment.chapterId)
 	]
 
@@ -52,6 +56,8 @@ export default async function Page({ params }: { params: { courseId: string } })
 		{ label: 'Edit' }
 	]
 
+	const isPublished = course.status === 'PUBLISHED'
+
 	return (
 		<PageWrapper>
 			<PageHeader className="hidden space-y-0 md:block md:py-3">
@@ -60,7 +66,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 
 			<Separator className="hidden md:block" />
 
-			{!course.isPublished && (
+			{!isPublished && (
 				<Banner label="This course is not published. It will not be visible to students." variant="warning" />
 			)}
 
@@ -69,7 +75,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 					<PageTitle>Course Setup</PageTitle>
 					<PageDescription>Filled {completionText}</PageDescription>
 				</div>
-				<CourseActions id={course.id} isPublished={course.isPublished} />
+				<CourseActions id={course.id} status={course.status} />
 			</PageHeader>
 
 			<PageContent className="gap-4 px-2.5 sm:px-4 md:flex md:flex-wrap md:gap-6 md:px-6">

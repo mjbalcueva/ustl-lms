@@ -1,4 +1,4 @@
-import { type UserRole } from '@prisma/client'
+import { type Role } from '@prisma/client'
 import NextAuth, { type DefaultSession } from 'next-auth'
 import { type DefaultJWT } from 'next-auth/jwt'
 
@@ -12,7 +12,7 @@ import { db } from '@/server/lib/db'
 declare module 'next-auth' {
 	interface Session extends DefaultSession {
 		user: {
-			role: UserRole
+			role: Role
 			isTwoFactorEnabled: boolean
 			hasPassword: boolean
 		} & DefaultSession['user']
@@ -21,7 +21,7 @@ declare module 'next-auth' {
 
 declare module 'next-auth/jwt' {
 	interface JWT extends DefaultJWT {
-		role: UserRole
+		role: Role
 		isTwoFactorEnabled: boolean
 		hasPassword: boolean
 	}

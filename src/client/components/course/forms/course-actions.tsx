@@ -11,10 +11,10 @@ import { Button } from '@/client/components/ui'
 
 import { ConfirmModal } from '../../confirm-modal'
 
-export const CourseActions = ({ id, isPublished }: CourseActionsSchema) => {
+export const CourseActions = ({ id, status }: CourseActionsSchema) => {
 	const router = useRouter()
 
-	const { mutate: togglePublish, isPending: isPublishing } = api.course.togglePublish.useMutation({
+	const { mutate: editStatus, isPending: isEditingStatus } = api.course.editStatus.useMutation({
 		onSuccess: (data) => {
 			toast.success(data.message)
 			router.refresh()
@@ -29,21 +29,23 @@ export const CourseActions = ({ id, isPublished }: CourseActionsSchema) => {
 		}
 	})
 
+	const isPublished = status === 'PUBLISHED'
+
 	return (
 		<div className="flex items-center gap-2">
 			<Button
 				size="sm"
-				disabled={isPublishing}
-				variant={isPublishing ? 'shine' : 'default'}
+				disabled={isEditingStatus}
+				variant={isEditingStatus ? 'shine' : 'default'}
 				onClick={() => {
-					togglePublish({ id, isPublished: !isPublished })
+					editStatus({ id, status: isPublished ? 'DRAFT' : 'PUBLISHED' })
 				}}
 			>
 				{isPublished
-					? isPublishing
+					? isEditingStatus
 						? 'Unpublishing...'
 						: 'Unpublish Course'
-					: isPublishing
+					: isEditingStatus
 						? 'Publishing...'
 						: 'Publish Course'}
 			</Button>
@@ -52,7 +54,7 @@ export const CourseActions = ({ id, isPublished }: CourseActionsSchema) => {
 				title="Are you sure you want to delete this course?"
 				description="This action cannot be undone. This will permanently delete your course and remove your data from our servers."
 				onConfirm={() => {
-					deleteCourse({ id, isPublished })
+					deleteCourse({ id, status })
 				}}
 			>
 				<Button size="icon" disabled={isDeleting} variant={'destructive'} className="size-9 rounded-md">

@@ -13,6 +13,14 @@ datasource db {
 // Course Models
 // -----------------------------------------------------------------------------
 
+enum Status {
+  PUBLISHED
+  DRAFT
+  ARCHIVED
+
+  @@map("status")
+}
+
 model Course {
   id          String   @id @default(cuid())
   createdById String
@@ -21,7 +29,7 @@ model Course {
   description String?
   imageUrl    String?
   categoryId  String?
-  isPublished Boolean  @default(false)
+  status      Status   @default(DRAFT)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -63,15 +71,15 @@ model Category {
 }
 
 model Chapter {
-  id          String   @id @default(cuid())
-  courseId    String
-  title       String
-  content     String?
-  videoUrl    String?
-  position    Int
-  isPublished Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  courseId  String
+  title     String
+  content   String?
+  videoUrl  String?
+  position  Int
+  status    Status   @default(DRAFT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   attachment   Attachment[]
   course       Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
@@ -112,9 +120,11 @@ model UserProgress {
 // Auth Models
 // -----------------------------------------------------------------------------
 
-enum UserRole {
+enum Role {
   INSTRUCTOR
   STUDENT
+
+  @@map("role")
 }
 
 model User {
@@ -122,7 +132,7 @@ model User {
   email              String?   @unique
   emailVerified      DateTime? @map("email_verified")
   password           String?
-  role               UserRole  @default(STUDENT)
+  role               Role      @default(STUDENT)
   isTwoFactorEnabled Boolean   @default(false)
 
   profile               Profile?

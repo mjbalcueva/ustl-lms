@@ -36,42 +36,46 @@ export const ChapterList = ({ items, onReorder }: ChapterListProps) => {
 			<Droppable droppableId="chapters">
 				{(provided) => (
 					<ol ref={provided.innerRef} className="space-y-2" {...provided.droppableProps}>
-						{chapters.map((chapter, index) => (
-							<Draggable key={chapter.id} draggableId={chapter.id} index={index}>
-								{(provided) => (
-									<li
-										ref={provided.innerRef}
-										className="flex h-10 items-center gap-2 rounded-xl border border-input bg-card dark:bg-background"
-										{...provided.draggableProps}
-									>
-										<div
-											className="flex h-full items-center rounded-l-xl pl-2 pr-1 text-muted-foreground outline-none hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-ring"
-											{...provided.dragHandleProps}
+						{chapters.map((chapter, index) => {
+							const isPublished = chapter.status === 'PUBLISHED'
+
+							return (
+								<Draggable key={chapter.id} draggableId={chapter.id} index={index}>
+									{(provided) => (
+										<li
+											ref={provided.innerRef}
+											className="flex h-10 items-center gap-2 rounded-xl border border-input bg-card dark:bg-background"
+											{...provided.draggableProps}
 										>
-											<TbGripVertical className="size-4" />
-										</div>
+											<div
+												className="flex h-full items-center rounded-l-xl pl-2 pr-1 text-muted-foreground outline-none hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-ring"
+												{...provided.dragHandleProps}
+											>
+												<TbGripVertical className="size-4" />
+											</div>
 
-										{chapter.title}
+											{chapter.title}
 
-										<Badge variant={chapter.isPublished ? 'default' : 'secondary'} className="ml-auto select-none">
-											{chapter.isPublished ? 'Published' : 'Draft'}
-										</Badge>
+											<Badge variant={isPublished ? 'default' : 'secondary'} className="ml-auto select-none">
+												{isPublished ? 'Published' : 'Draft'}
+											</Badge>
 
-										<Tooltip>
-											<TooltipTrigger asChild>
-												<Link
-													className="flex h-full items-center justify-center rounded-r-xl pl-1 pr-2 outline-none hover:opacity-75 focus-visible:outline-ring"
-													href={`/courses/${chapter.courseId}/${chapter.id}/edit`}
-												>
-													<TbEdit className="size-4" />
-												</Link>
-											</TooltipTrigger>
-											<TooltipContent>Edit</TooltipContent>
-										</Tooltip>
-									</li>
-								)}
-							</Draggable>
-						))}
+											<Tooltip>
+												<TooltipTrigger asChild>
+													<Link
+														className="flex h-full items-center justify-center rounded-r-xl pl-1 pr-2 outline-none hover:opacity-75 focus-visible:outline-ring"
+														href={`/courses/${chapter.courseId}/${chapter.id}/edit`}
+													>
+														<TbEdit className="size-4" />
+													</Link>
+												</TooltipTrigger>
+												<TooltipContent>Edit</TooltipContent>
+											</Tooltip>
+										</li>
+									)}
+								</Draggable>
+							)
+						})}
 						{provided.placeholder}
 					</ol>
 				)}

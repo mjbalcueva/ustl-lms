@@ -4,9 +4,9 @@ import {
 	editCodeSchema,
 	editDescriptionSchema,
 	editImageSchema,
+	editStatusSchema,
 	editTitleSchema,
-	getCourseSchema,
-	toggleCoursePublishSchema
+	getCourseSchema
 } from '@/shared/validations/course'
 
 import { createTRPCRouter, instructorProcedure } from '@/server/api/trpc'
@@ -122,6 +122,17 @@ export const courseRouter = createTRPCRouter({
 		return { message: 'Course image updated!' }
 	}),
 
+	editStatus: instructorProcedure.input(editStatusSchema).mutation(async ({ ctx, input }) => {
+		const { id, status } = input
+
+		await ctx.db.course.update({
+			where: { id, createdById: ctx.session.user.id! },
+			data: { status }
+		})
+
+		return { message: 'Course status updated!' }
+	}),
+
 	getCourse: instructorProcedure.input(getCourseSchema).query(async ({ ctx, input }) => {
 		const { courseId } = input
 
@@ -137,16 +148,5 @@ export const courseRouter = createTRPCRouter({
 		})
 
 		return { course }
-	}),
-
-	togglePublish: instructorProcedure.input(toggleCoursePublishSchema).mutation(async ({ ctx, input }) => {
-		const { id, isPublished } = input
-
-		await ctx.db.course.update({
-			where: { id, createdById: ctx.session.user.id! },
-			data: { isPublished }
-		})
-
-		return { message: 'Course published!' }
 	})
 })

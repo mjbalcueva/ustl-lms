@@ -154,15 +154,15 @@ export const chapterRouter = createTRPCRouter({
 		return { chapter }
 	}),
 
-	toggleChapterPublish: instructorProcedure.input(chapterActionsSchema).mutation(async ({ ctx, input }) => {
-		const { id, courseId, isPublished } = input
+	editStatus: instructorProcedure.input(chapterActionsSchema).mutation(async ({ ctx, input }) => {
+		const { id, courseId, status } = input
 
 		const chapter = await ctx.db.chapter.update({
 			where: { id, courseId, course: { createdById: ctx.session.user.id! } },
-			data: { isPublished }
+			data: { status }
 		})
 
-		return { message: `Chapter ${isPublished ? 'published' : 'unpublished'} successfully`, chapter }
+		return { message: `Chapter ${status === 'PUBLISHED' ? 'published' : 'unpublished'} successfully`, chapter }
 	}),
 
 	reorderChapters: instructorProcedure.input(reorderChaptersSchema).mutation(async ({ ctx, input }) => {

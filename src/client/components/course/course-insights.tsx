@@ -4,7 +4,7 @@ export const CourseInsights = () => {
 	return (
 		<Card>
 			<CardHeader className="flex-col items-start">
-				<CardTitle>Performance Insights</CardTitle>
+				<CardTitle>Insights</CardTitle>
 				<CardDescription>Overview of your course portfolio.</CardDescription>
 			</CardHeader>
 			<CardContent>

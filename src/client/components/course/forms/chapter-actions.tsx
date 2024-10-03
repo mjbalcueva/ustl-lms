@@ -11,10 +11,10 @@ import { Button } from '@/client/components/ui'
 
 import { ConfirmModal } from '../../confirm-modal'
 
-export const ChapterActions = ({ id, courseId, isPublished }: ChapterActionsSchema) => {
+export const ChapterActions = ({ id, courseId, status }: ChapterActionsSchema) => {
 	const router = useRouter()
 
-	const { mutate: togglePublish, isPending: isPublishing } = api.chapter.toggleChapterPublish.useMutation({
+	const { mutate: editStatus, isPending: isEditingStatus } = api.chapter.editStatus.useMutation({
 		onSuccess: (data) => {
 			toast.success(data.message)
 			router.refresh()
@@ -33,17 +33,17 @@ export const ChapterActions = ({ id, courseId, isPublished }: ChapterActionsSche
 		<div className="flex items-center gap-2">
 			<Button
 				size="sm"
-				disabled={isPublishing}
-				variant={isPublishing ? 'shine' : 'default'}
+				disabled={isEditingStatus}
+				variant={isEditingStatus ? 'shine' : 'default'}
 				onClick={() => {
-					togglePublish({ id, courseId, isPublished: !isPublished })
+					editStatus({ id, courseId, status: status === 'PUBLISHED' ? 'DRAFT' : 'PUBLISHED' })
 				}}
 			>
-				{isPublished
-					? isPublishing
+				{status === 'PUBLISHED'
+					? isEditingStatus
 						? 'Unpublishing...'
 						: 'Unpublish Topic'
-					: isPublishing
+					: isEditingStatus
 						? 'Publishing...'
 						: 'Publish Topic'}
 			</Button>
@@ -52,7 +52,7 @@ export const ChapterActions = ({ id, courseId, isPublished }: ChapterActionsSche
 				title="Are you sure you want to delete this chapter?"
 				description="This action cannot be undone. This will permanently delete your chapter and remove your data from our servers."
 				onConfirm={() => {
-					deleteChapter({ id, courseId, isPublished })
+					deleteChapter({ id, courseId, status })
 				}}
 			>
 				<Button size="icon" disabled={isDeleting} variant={'destructive'} className="size-9 rounded-md">
