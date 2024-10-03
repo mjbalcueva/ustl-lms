@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation'
 import { TbListDetails, TbNotebook, TbPackage } from 'react-icons/tb'
 
 import { api } from '@/shared/trpc/server'
@@ -26,6 +27,9 @@ import {
 } from '@/client/components/ui'
 
 export default async function Page({ params }: { params: { courseId: string } }) {
+	const session = await api.session.getSession()
+	if (session?.user?.role !== 'INSTRUCTOR') redirect('/dashboard')
+
 	const { course } = await api.course.getCourse({ courseId: params.courseId })
 	const { categories } = await api.category.getCategories()
 

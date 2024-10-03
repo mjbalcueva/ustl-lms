@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation'
 import { TbNotes, TbPaperclip, TbVideo } from 'react-icons/tb'
 
 import { api } from '@/shared/trpc/server'
@@ -23,6 +24,9 @@ import {
 } from '@/client/components/ui'
 
 export default async function Page({ params }: { params: { courseId: string; chapterId: string } }) {
+	const session = await api.session.getSession()
+	if (session?.user?.role !== 'INSTRUCTOR') redirect('/dashboard')
+
 	const { chapter } = await api.chapter.getChapter({ courseId: params.courseId, id: params.chapterId })
 
 	if (!chapter) return <NotFound item="chapter" />

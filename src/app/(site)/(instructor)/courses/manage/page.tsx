@@ -1,3 +1,5 @@
+import { redirect } from 'next/navigation'
+
 import { api } from '@/shared/trpc/server'
 import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
@@ -18,6 +20,9 @@ import {
 } from '@/client/components/ui'
 
 export default async function Page() {
+	const session = await api.session.getSession()
+	if (session?.user?.role !== 'INSTRUCTOR') redirect('/dashboard')
+
 	const courses = await api.instructor.getCourses()
 
 	if (!courses) return null
