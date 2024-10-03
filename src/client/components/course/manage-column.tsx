@@ -49,7 +49,9 @@ export const columns: ColumnDef<Course>[] = [
 			)
 		},
 		cell: ({ row }) => {
-			const { isPublished } = row.original
+			const { status } = row.original
+
+			const isPublished = status === 'PUBLISHED'
 
 			return (
 				<Badge

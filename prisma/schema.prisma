@@ -13,17 +13,23 @@ datasource db {
 // Course Models
 // -----------------------------------------------------------------------------
 
+enum CourseStatus {
+  PUBLISHED
+  DRAFT
+  ARCHIVED
+}
+
 model Course {
-  id          String   @id @default(cuid())
+  id          String       @id @default(cuid())
   createdById String
   code        String
   title       String
   description String?
   imageUrl    String?
   categoryId  String?
-  isPublished Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  status      CourseStatus @default(DRAFT)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 
   createdBy User      @relation(fields: [createdById], references: [id], onDelete: Cascade)
   category  Category? @relation(fields: [categoryId], references: [id])

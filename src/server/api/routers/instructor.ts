@@ -15,8 +15,8 @@ export const instructorRouter = createTRPCRouter({
 		})
 
 		const totalCourses = courses.length
-		const publishedCourses = courses.filter((course) => course.isPublished).length
-		const drafts = courses.filter((course) => !course.isPublished).length
+		const publishedCourses = courses.filter((course) => course.status === 'PUBLISHED').length
+		const drafts = courses.filter((course) => course.status === 'DRAFT').length
 
 		return { totalCourses, publishedCourses, drafts }
 	})
