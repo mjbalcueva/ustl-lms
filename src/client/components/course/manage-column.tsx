@@ -17,22 +17,22 @@ import { cn } from '@/client/lib/utils'
 
 export const columns: ColumnDef<Course>[] = [
 	{
-		accessorKey: 'title',
+		accessorKey: 'code',
 		header: ({ column }) => {
 			return (
 				<Button variant="ghost" size="sm" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-					Title
+					Code
 					<LuArrowUpDown className="ml-2 size-3" />
 				</Button>
 			)
 		}
 	},
 	{
-		accessorKey: 'description',
+		accessorKey: 'title',
 		header: ({ column }) => {
 			return (
 				<Button variant="ghost" size="sm" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-					Description
+					Title
 					<LuArrowUpDown className="ml-2 size-3" />
 				</Button>
 			)
