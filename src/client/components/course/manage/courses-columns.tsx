@@ -26,9 +26,10 @@ export const getColumns = (): ColumnDef<Course>[] => {
 			header: ({ column }) => <DataTableColumnHeader column={column} title="Code" />,
 			cell: ({ row }) => {
 				const code = row.original.code
-
-				return <div className="truncate font-medium">{code}</div>
-			}
+				return <Badge variant="outline">{code}</Badge>
+			},
+			enableSorting: false,
+			enableHiding: false
 		},
 		{
 			accessorKey: 'title',
@@ -66,6 +67,11 @@ export const getColumns = (): ColumnDef<Course>[] => {
 		{
 			accessorKey: 'createdAt',
 			header: ({ column }) => <DataTableColumnHeader column={column} title="Created At" />,
+			cell: ({ cell }) => formatDate(cell.getValue() as Date)
+		},
+		{
+			accessorKey: 'updatedAt',
+			header: ({ column }) => <DataTableColumnHeader column={column} title="Updated At" />,
 			cell: ({ cell }) => formatDate(cell.getValue() as Date)
 		},
 		{
