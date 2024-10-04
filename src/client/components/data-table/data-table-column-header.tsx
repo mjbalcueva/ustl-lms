@@ -12,16 +12,16 @@ import {
 } from '@/client/components/ui'
 import { cn } from '@/client/lib/utils'
 
-type CoursesColumnHeaderProps<TData, TValue> = React.HTMLAttributes<HTMLDivElement> & {
+type DataTableColumnHeaderProps<TData, TValue> = React.HTMLAttributes<HTMLDivElement> & {
 	column: Column<TData, TValue>
 	title: string
 }
 
-export const CoursesColumnHeader = <TData, TValue>({
+export const DataTableColumnHeader = <TData, TValue>({
 	column,
 	title,
 	className
-}: CoursesColumnHeaderProps<TData, TValue>) => {
+}: DataTableColumnHeaderProps<TData, TValue>) => {
 	if (!column.getCanSort() && !column.getCanHide()) {
 		return <div className={cn(className)}>{title}</div>
 	}

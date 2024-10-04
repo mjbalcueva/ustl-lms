@@ -17,13 +17,13 @@ import {
 } from '@/client/components/ui'
 import { formatDate } from '@/client/lib/utils'
 
-import { CoursesColumnHeader } from './courses-column-header'
+import { DataTableColumnHeader } from '../../data-table/data-table-column-header'
 
 export const getColumns = (): ColumnDef<Course>[] => {
 	return [
 		{
 			accessorKey: 'code',
-			header: ({ column }) => <CoursesColumnHeader column={column} title="Code" />,
+			header: ({ column }) => <DataTableColumnHeader column={column} title="Code" />,
 			cell: ({ row }) => {
 				const code = row.original.code
 
@@ -32,7 +32,7 @@ export const getColumns = (): ColumnDef<Course>[] => {
 		},
 		{
 			accessorKey: 'title',
-			header: ({ column }) => <CoursesColumnHeader column={column} title="Title" />,
+			header: ({ column }) => <DataTableColumnHeader column={column} title="Title" />,
 			cell: ({ row }) => {
 				const title = row.original.title
 
@@ -45,7 +45,7 @@ export const getColumns = (): ColumnDef<Course>[] => {
 		},
 		{
 			accessorKey: 'status',
-			header: ({ column }) => <CoursesColumnHeader column={column} title="Status" />,
+			header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
 			cell: ({ row }) => {
 				const status = row.original.status
 
@@ -65,7 +65,7 @@ export const getColumns = (): ColumnDef<Course>[] => {
 		},
 		{
 			accessorKey: 'createdAt',
-			header: ({ column }) => <CoursesColumnHeader column={column} title="Created At" />,
+			header: ({ column }) => <DataTableColumnHeader column={column} title="Created At" />,
 			cell: ({ cell }) => formatDate(cell.getValue() as Date)
 		},
 		{
