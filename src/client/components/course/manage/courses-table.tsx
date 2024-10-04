@@ -15,10 +15,9 @@ type Course = RouterOutputs['instructor']['getCourses'][number]
 
 type CoursesTableProps = {
 	courses: Course[]
-	pageCount: number
 }
 
-export const CoursesTable = ({ courses, pageCount }: CoursesTableProps) => {
+export const CoursesTable = ({ courses }: CoursesTableProps) => {
 	const columns = React.useMemo(() => getColumns(), [])
 
 	const filterFields: CoursesFilterField<Course>[] = [
@@ -41,7 +40,6 @@ export const CoursesTable = ({ courses, pageCount }: CoursesTableProps) => {
 	const { table } = useCourseDataTable({
 		data: courses,
 		columns,
-		pageCount,
 		filterFields,
 		initialState: {
 			sorting: [{ id: 'createdAt', desc: true }],

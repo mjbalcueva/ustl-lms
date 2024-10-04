@@ -55,11 +55,17 @@ export const CoursesColumnHeader = <TData, TValue>({
 				<DropdownMenuContent align="start">
 					{column.getCanSort() && (
 						<>
-							<DropdownMenuItem aria-label="Sort ascending" onClick={() => column.toggleSorting(false)}>
+							<DropdownMenuItem
+								aria-label="Sort ascending"
+								onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+							>
 								<LuArrowUp className="mr-2 size-3.5 text-muted-foreground/70" aria-hidden="true" />
 								Asc
 							</DropdownMenuItem>
-							<DropdownMenuItem aria-label="Sort descending" onClick={() => column.toggleSorting(true)}>
+							<DropdownMenuItem
+								aria-label="Sort descending"
+								onClick={() => column.toggleSorting(column.getIsSorted() === 'desc')}
+							>
 								<LuArrowDown className="mr-2 size-3.5 text-muted-foreground/70" aria-hidden="true" />
 								Desc
 							</DropdownMenuItem>
