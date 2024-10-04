@@ -102,14 +102,14 @@ const searchParamsSchema = z.object({
 	sort: z.string().optional()
 })
 
-export function useCourseDataTable<TData>({
+export const useDataTable = <TData>({
 	filterFields = [],
 	enableAdvancedFilter = false,
 	method = 'replace',
 	scroll = false,
 	startTransition,
 	...props
-}: UseDataTableProps<TData>) {
+}: UseDataTableProps<TData>) => {
 	const router = useRouter()
 	const pathname = usePathname()
 	const searchParams = useSearchParams()

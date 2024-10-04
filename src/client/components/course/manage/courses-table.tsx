@@ -9,7 +9,7 @@ import { type CoursesFilterField } from '@/shared/types/courses'
 import { getColumns } from '@/client/components/course/manage/courses-columns'
 import { DataTable } from '@/client/components/data-table/data-table'
 import { DataTableToolbar } from '@/client/components/data-table/data-table-toolbar'
-import { useCourseDataTable } from '@/client/lib/hooks/use-course-data-table'
+import { useDataTable } from '@/client/lib/hooks/use-data-table'
 
 type Course = RouterOutputs['instructor']['getCourses'][number]
 
@@ -37,7 +37,7 @@ export const CoursesTable = ({ courses }: CoursesTableProps) => {
 		}
 	]
 
-	const { table } = useCourseDataTable({
+	const { table } = useDataTable({
 		data: courses,
 		columns,
 		filterFields,
