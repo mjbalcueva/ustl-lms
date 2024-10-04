@@ -29,7 +29,8 @@ export const getColumns = (): ColumnDef<Course>[] => {
 				return <Badge variant="outline">{code}</Badge>
 			},
 			enableSorting: false,
-			enableHiding: false
+			enableHiding: false,
+			size: 1
 		},
 		{
 			accessorKey: 'title',
@@ -42,7 +43,8 @@ export const getColumns = (): ColumnDef<Course>[] => {
 						<span className="max-w-[31.25rem] truncate font-medium">{title}</span>
 					</div>
 				)
-			}
+			},
+			size: 95
 		},
 		{
 			accessorKey: 'status',
@@ -62,17 +64,20 @@ export const getColumns = (): ColumnDef<Course>[] => {
 			},
 			filterFn: (row, id, value) => {
 				return Array.isArray(value) && value.includes(row.getValue(id))
-			}
+			},
+			size: 1
 		},
 		{
 			accessorKey: 'createdAt',
 			header: ({ column }) => <DataTableColumnHeader column={column} title="Created At" />,
-			cell: ({ cell }) => formatDate(cell.getValue() as Date)
+			cell: ({ cell }) => formatDate(cell.getValue() as Date),
+			size: 1
 		},
 		{
 			accessorKey: 'updatedAt',
 			header: ({ column }) => <DataTableColumnHeader column={column} title="Updated At" />,
-			cell: ({ cell }) => formatDate(cell.getValue() as Date)
+			cell: ({ cell }) => formatDate(cell.getValue() as Date),
+			size: 1
 		},
 		{
 			id: 'actions',
@@ -102,7 +107,7 @@ export const getColumns = (): ColumnDef<Course>[] => {
 					</DropdownMenu>
 				)
 			},
-			size: 40
+			size: 1
 		}
 	]
 }
