@@ -1,12 +1,12 @@
 import * as React from 'react'
 import { flexRender, type Table as TanstackTable } from '@tanstack/react-table'
 
-import { DataTablePagination } from '@/client/components/course/manage/course-data-table-pagination'
+import { DataTablePagination } from '@/client/components/data-table/data-table-pagination'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/client/components/ui'
 import { getCommonPinningStyles } from '@/client/lib/data-table'
 import { cn } from '@/client/lib/utils'
 
-interface DataTableProps<TData> extends React.HTMLAttributes<HTMLDivElement> {
+type DataTableProps<TData> = React.HTMLAttributes<HTMLDivElement> & {
 	/**
 	 * The table instance returned from useDataTable hook with pagination, sorting, filtering, etc.
 	 * @type TanstackTable<TData>
@@ -14,7 +14,7 @@ interface DataTableProps<TData> extends React.HTMLAttributes<HTMLDivElement> {
 	table: TanstackTable<TData>
 }
 
-export function DataTable<TData>({ table, children, className, ...props }: DataTableProps<TData>) {
+export const DataTable = <TData,>({ table, children, className, ...props }: DataTableProps<TData>) => {
 	return (
 		<div className={cn('w-full space-y-2.5 overflow-auto', className)} {...props}>
 			{children}

@@ -24,79 +24,78 @@ import { type CoursesFilterField } from '@/shared/types/courses'
 import { useDebounce } from '@/client/lib/hooks/use-debounce'
 import { useQueryString } from '@/client/lib/hooks/use-query-string'
 
-interface UseDataTableProps<TData>
-	extends Omit<
-			TableOptions<TData>,
-			'pageCount' | 'getCoreRowModel' | 'manualFiltering' | 'manualPagination' | 'manualSorting'
-		>,
-		Required<Pick<TableOptions<TData>, 'pageCount'>> {
-	/**
-	 * Defines filter fields for the table. Supports both dynamic faceted filters and search filters.
-	 * - Faceted filters are rendered when `options` are provided for a filter field.
-	 * - Otherwise, search filters are rendered.
-	 *
-	 * The indie filter field `value` represents the corresponding column name in the database table.
-	 * @default []
-	 * @type { label: string, value: keyof TData, placeholder?: string, options?: { label: string, value: string, icon?: React.ComponentType<{ className?: string }> }[] }[]
-	 * @example
-	 * ```ts
-	 * // Render a search filter
-	 * const filterFields = [
-	 *   { label: "Title", value: "title", placeholder: "Search titles" }
-	 * ];
-	 * // Render a faceted filter
-	 * const filterFields = [
-	 *   {
-	 *     label: "Status",
-	 *     value: "status",
-	 *     options: [
-	 *       { label: "Todo", value: "todo" },
-	 *       { label: "In Progress", value: "in-progress" },
-	 *     ]
-	 *   }
-	 * ];
-	 * ```
-	 */
-	filterFields?: CoursesFilterField<TData>[]
+type UseDataTableProps<TData> = Omit<
+	TableOptions<TData>,
+	'pageCount' | 'getCoreRowModel' | 'manualFiltering' | 'manualPagination' | 'manualSorting'
+> &
+	Required<Pick<TableOptions<TData>, 'pageCount'>> & {
+		/**
+		 * Defines filter fields for the table. Supports both dynamic faceted filters and search filters.
+		 * - Faceted filters are rendered when `options` are provided for a filter field.
+		 * - Otherwise, search filters are rendered.
+		 *
+		 * The indie filter field `value` represents the corresponding column name in the database table.
+		 * @default []
+		 * @type { label: string, value: keyof TData, placeholder?: string, options?: { label: string, value: string, icon?: React.ComponentType<{ className?: string }> }[] }[]
+		 * @example
+		 * ```ts
+		 * // Render a search filter
+		 * const filterFields = [
+		 *   { label: "Title", value: "title", placeholder: "Search titles" }
+		 * ];
+		 * // Render a faceted filter
+		 * const filterFields = [
+		 *   {
+		 *     label: "Status",
+		 *     value: "status",
+		 *     options: [
+		 *       { label: "Todo", value: "todo" },
+		 *       { label: "In Progress", value: "in-progress" },
+		 *     ]
+		 *   }
+		 * ];
+		 * ```
+		 */
+		filterFields?: CoursesFilterField<TData>[]
 
-	/**
-	 * Enable notion like column filters.
-	 * Advanced filters and column filters cannot be used at the same time.
-	 * @default false
-	 * @type boolean
-	 */
-	enableAdvancedFilter?: boolean
+		/**
+		 * Enable notion like column filters.
+		 * Advanced filters and column filters cannot be used at the same time.
+		 * @default false
+		 * @type boolean
+		 */
+		enableAdvancedFilter?: boolean
 
-	/**
-	 * The method to use when updating the URL.
-	 * - "push" - Pushes a new entry onto the history stack.
-	 * - "replace" - Replaces the current entry on the history stack.
-	 * @default "replace"
-	 */
-	method?: 'push' | 'replace'
+		/**
+		 * The method to use when updating the URL.
+		 * - "push" - Pushes a new entry onto the history stack.
+		 * - "replace" - Replaces the current entry on the history stack.
+		 * @default "replace"
+		 */
+		method?: 'push' | 'replace'
 
-	/**
-	 * Indicates whether the page should scroll to the top when the URL changes.
-	 * @default false
-	 */
-	scroll?: boolean
+		/**
+		 * Indicates whether the page should scroll to the top when the URL changes.
+		 * @default false
+		 */
+		scroll?: boolean
 
-	/**
-	 * A callback function that is called before updating the URL.
-	 * Can be use to retrieve the loading state of the route transition.
-	 * @see https://react.dev/reference/react/useTransition
-	 *
-	 */
-	startTransition?: React.TransitionStartFunction
+		/**
+		 * A callback function that is called before updating the URL.
+		 * Can be use to retrieve the loading state of the route transition.
+		 * @see https://react.dev/reference/react/useTransition
+		 *
+		 */
+		startTransition?: React.TransitionStartFunction
 
-	// Extend to make the sorting id typesafe
-	initialState?: Omit<Partial<TableState>, 'sorting'> & {
-		sorting?: {
-			id: Extract<keyof TData, string>
-			desc: boolean
-		}[]
+		// Extend to make the sorting id typesafe
+		initialState?: Omit<Partial<TableState>, 'sorting'> & {
+			sorting?: {
+				id: Extract<keyof TData, string>
+				desc: boolean
+			}[]
+		}
 	}
-}
 
 const searchParamsSchema = z.object({
 	page: z.coerce.number().default(1),

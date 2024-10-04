@@ -20,7 +20,7 @@ import {
 } from '@/client/components/ui'
 import { cn } from '@/client/lib/utils'
 
-interface DataTableFacetedFilterProps<TData, TValue> {
+type DataTableFacetedFilterProps<TData, TValue> = {
 	column?: Column<TData, TValue>
 	title?: string
 	options: Option[]

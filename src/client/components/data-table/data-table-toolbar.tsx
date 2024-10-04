@@ -6,8 +6,8 @@ import { TbX } from 'react-icons/tb'
 
 import { type CoursesFilterField } from '@/shared/types/courses'
 
-import { DataTableFacetedFilter } from '@/client/components/course/manage/courses-data-table-faceted-filter'
-import { DataTableViewOptions } from '@/client/components/course/manage/courses-data-table-view-options'
+import { DataTableFacetedFilter } from '@/client/components/data-table/data-table-faceted-filter'
+import { DataTableViewOptions } from '@/client/components/data-table/data-table-view-options'
 import { Button, Input } from '@/client/components/ui'
 import { cn } from '@/client/lib/utils'
 
@@ -16,13 +16,13 @@ type DataTableToolbarProps<TData> = React.HTMLAttributes<HTMLDivElement> & {
 	filterFields?: CoursesFilterField<TData>[]
 }
 
-export function DataTableToolbar<TData>({
+export const DataTableToolbar = <TData,>({
 	table,
 	filterFields = [],
 	children,
 	className,
 	...props
-}: DataTableToolbarProps<TData>) {
+}: DataTableToolbarProps<TData>) => {
 	const isFiltered = table.getState().columnFilters.length > 0
 
 	// Memoize computation of searchableColumns and filterableColumns

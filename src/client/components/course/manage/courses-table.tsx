@@ -6,9 +6,9 @@ import { Status } from '@prisma/client'
 import { type RouterOutputs } from '@/shared/trpc/react'
 import { type CoursesFilterField } from '@/shared/types/courses'
 
-import { DataTable } from '@/client/components/course/manage/course-data-table'
 import { getColumns } from '@/client/components/course/manage/courses-columns'
-import { DataTableToolbar } from '@/client/components/course/manage/courses-data-table-toolbar'
+import { DataTable } from '@/client/components/data-table/data-table'
+import { DataTableToolbar } from '@/client/components/data-table/data-table-toolbar'
 import { useCourseDataTable } from '@/client/lib/hooks/use-course-data-table'
 
 type Course = RouterOutputs['instructor']['getCourses'][number]

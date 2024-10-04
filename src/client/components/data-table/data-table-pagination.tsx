@@ -3,15 +3,15 @@ import { TbChevronLeft, TbChevronLeftPipe, TbChevronRight, TbChevronRightPipe } 
 
 import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/client/components/ui'
 
-interface DataTablePaginationProps<TData> {
+type DataTablePaginationProps<TData> = {
 	table: Table<TData>
 	pageSizeOptions?: number[]
 }
 
-export function DataTablePagination<TData>({
+export const DataTablePagination = <TData,>({
 	table,
 	pageSizeOptions = [10, 20, 30, 40, 50]
-}: DataTablePaginationProps<TData>) {
+}: DataTablePaginationProps<TData>) => {
 	return (
 		<div className="flex w-full flex-col-reverse items-center justify-between gap-4 overflow-auto p-1 pl-4 sm:flex-row sm:gap-8">
 			<div className="flex-1 whitespace-nowrap text-sm text-muted-foreground">
