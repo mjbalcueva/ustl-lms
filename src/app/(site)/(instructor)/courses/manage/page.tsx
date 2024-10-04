@@ -54,7 +54,7 @@ export default async function Page() {
 				</PageSection>
 
 				<PageSection>
-					<CoursesTable courses={courses} />
+					<CoursesTable data={courses} />
 				</PageSection>
 			</PageContent>
 		</PageWrapper>

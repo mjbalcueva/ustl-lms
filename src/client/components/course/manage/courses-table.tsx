@@ -14,10 +14,10 @@ import { useDataTable } from '@/client/lib/hooks/use-data-table'
 type Course = RouterOutputs['instructor']['getCourses'][number]
 
 type CoursesTableProps = {
-	courses: Course[]
+	data: Course[]
 }
 
-export const CoursesTable = ({ courses }: CoursesTableProps) => {
+export const CoursesTable = ({ data }: CoursesTableProps) => {
 	const columns = React.useMemo(() => getColumns(), [])
 
 	const filterFields: DataTableFilterField<Course>[] = [
@@ -38,12 +38,13 @@ export const CoursesTable = ({ courses }: CoursesTableProps) => {
 	]
 
 	const { table } = useDataTable({
-		data: courses,
+		data,
 		columns,
 		filterFields,
 		initialState: {
-			sorting: [{ id: 'createdAt', desc: true }],
-			columnPinning: { right: ['actions'] }
+			sorting: [{ id: 'updatedAt', desc: true }],
+			columnPinning: { right: ['actions'] },
+			columnVisibility: { updatedAt: false }
 		},
 		getRowId: (originalRow) => originalRow.id
 	})
