@@ -5,7 +5,7 @@ export type Option = {
 	withCount?: boolean
 }
 
-export type CoursesFilterField<TData> = {
+export type DataTableFilterField<TData> = {
 	label: string
 	value: keyof TData
 	placeholder?: string

@@ -19,7 +19,7 @@ import {
 } from '@tanstack/react-table'
 import { z } from 'zod'
 
-import { type CoursesFilterField } from '@/shared/types/courses'
+import { type DataTableFilterField } from '@/shared/types/data-table'
 
 import { useDebounce } from '@/client/lib/hooks/use-debounce'
 import { useQueryString } from '@/client/lib/hooks/use-query-string'
@@ -55,7 +55,7 @@ type UseDataTableProps<TData> = Omit<
 	 * ];
 	 * ```
 	 */
-	filterFields?: CoursesFilterField<TData>[]
+	filterFields?: DataTableFilterField<TData>[]
 
 	/**
 	 * Enable notion like column filters.

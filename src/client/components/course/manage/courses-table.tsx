@@ -4,7 +4,7 @@ import * as React from 'react'
 import { Status } from '@prisma/client'
 
 import { type RouterOutputs } from '@/shared/trpc/react'
-import { type CoursesFilterField } from '@/shared/types/courses'
+import { type DataTableFilterField } from '@/shared/types/data-table'
 
 import { getColumns } from '@/client/components/course/manage/courses-columns'
 import { DataTable } from '@/client/components/data-table/data-table'
@@ -20,7 +20,7 @@ type CoursesTableProps = {
 export const CoursesTable = ({ courses }: CoursesTableProps) => {
 	const columns = React.useMemo(() => getColumns(), [])
 
-	const filterFields: CoursesFilterField<Course>[] = [
+	const filterFields: DataTableFilterField<Course>[] = [
 		{
 			label: 'Title',
 			value: 'title',

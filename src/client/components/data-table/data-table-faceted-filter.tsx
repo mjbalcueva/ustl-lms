@@ -1,7 +1,7 @@
 import { type Column } from '@tanstack/react-table'
 import { TbCheck, TbCirclePlus } from 'react-icons/tb'
 
-import { type Option } from '@/shared/types/courses'
+import { type Option } from '@/shared/types/data-table'
 
 import {
 	Badge,
