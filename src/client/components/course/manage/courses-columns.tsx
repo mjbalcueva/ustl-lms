@@ -22,15 +22,22 @@ import { CoursesColumnHeader } from './courses-column-header'
 export const getColumns = (): ColumnDef<Course>[] => {
 	return [
 		{
+			accessorKey: 'code',
+			header: ({ column }) => <CoursesColumnHeader column={column} title="Code" />,
+			cell: ({ row }) => {
+				const code = row.original.code
+
+				return <div className="truncate font-medium">{code}</div>
+			}
+		},
+		{
 			accessorKey: 'title',
 			header: ({ column }) => <CoursesColumnHeader column={column} title="Title" />,
 			cell: ({ row }) => {
 				const title = row.original.title
-				const code = row.original.code
 
 				return (
 					<div className="flex space-x-2">
-						{title && <Badge variant="outline">{code}</Badge>}
 						<span className="max-w-[31.25rem] truncate font-medium">{title}</span>
 					</div>
 				)
@@ -47,7 +54,7 @@ export const getColumns = (): ColumnDef<Course>[] => {
 				const isPublished = status === 'PUBLISHED'
 
 				return (
-					<div className="flex w-[6.25rem] items-center">
+					<div className="flex items-center">
 						<Badge variant={isPublished ? 'default' : 'secondary'}>{isPublished ? 'Published' : 'Draft'}</Badge>
 					</div>
 				)
@@ -59,11 +66,6 @@ export const getColumns = (): ColumnDef<Course>[] => {
 		{
 			accessorKey: 'createdAt',
 			header: ({ column }) => <CoursesColumnHeader column={column} title="Created At" />,
-			cell: ({ cell }) => formatDate(cell.getValue() as Date)
-		},
-		{
-			accessorKey: 'updatedAt',
-			header: ({ column }) => <CoursesColumnHeader column={column} title="Updated At" />,
 			cell: ({ cell }) => formatDate(cell.getValue() as Date)
 		},
 		{

@@ -40,9 +40,9 @@ export const CoursesColumnHeader = <TData, TValue>({
 						}
 						variant="ghost"
 						size="sm"
-						className="-ml-3 h-8 data-[state=open]:bg-accent"
+						className="-ml-3 h-8 rounded-lg data-[state=open]:bg-accent"
 					>
-						<span>{title}</span>
+						{title}
 						{column.getCanSort() && column.getIsSorted() === 'desc' ? (
 							<LuArrowDown className="ml-2 size-4" aria-hidden="true" />
 						) : column.getIsSorted() === 'asc' ? (

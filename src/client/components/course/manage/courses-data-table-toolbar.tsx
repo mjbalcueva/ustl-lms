@@ -45,7 +45,7 @@ export function DataTableToolbar<TData>({
 									placeholder={column.placeholder}
 									value={(table.getColumn(String(column.value))?.getFilterValue() as string) ?? ''}
 									onChange={(event) => table.getColumn(String(column.value))?.setFilterValue(event.target.value)}
-									className="h-8 w-40 lg:w-64"
+									className="w-40 border-border !bg-card md:w-72"
 								/>
 							)
 					)}
@@ -65,7 +65,7 @@ export function DataTableToolbar<TData>({
 					<Button
 						aria-label="Reset filters"
 						variant="ghost"
-						className="h-8 px-2 lg:px-3"
+						className="h-10 px-2 lg:px-3"
 						onClick={() => table.resetColumnFilters()}
 					>
 						Reset

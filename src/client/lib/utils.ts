@@ -1,7 +1,5 @@
-import { type Status } from '@prisma/client'
 import { type Editor } from '@tiptap/core'
 import { clsx, type ClassValue } from 'clsx'
-import { TbArchive, TbBook2, TbCircle, TbEdit } from 'react-icons/tb'
 import { twMerge } from 'tailwind-merge'
 
 import { type TiptapEditorProps } from '@/client/components/tiptap-editor'
@@ -69,19 +67,4 @@ export function formatDate(date: Date | string | number, opts: Intl.DateTimeForm
 		year: opts.year ?? 'numeric',
 		...opts
 	}).format(new Date(date))
-}
-
-/**
- * Returns the appropriate status icon based on the provided status.
- * @param status - The status of the course.
- * @returns A React component representing the status icon.
- */
-export function getStatusIcon(status: Status) {
-	const statusIcons = {
-		PUBLISHED: TbBook2,
-		DRAFT: TbEdit,
-		ARCHIVED: TbArchive
-	}
-
-	return statusIcons[status] || TbCircle
 }
