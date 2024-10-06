@@ -11,12 +11,12 @@ import {
 	useReactTable,
 	type ColumnDef,
 	type ColumnFiltersState,
-	type Table as DataTableUI,
 	type SortingState
 } from '@tanstack/react-table'
 
 import { type DataTableFilterField } from '@/shared/types/data-table'
 
+import { getColumns } from '@/client/components/course/data-table/data-table-column'
 import { DataTablePagination } from '@/client/components/course/data-table/data-table-pagination'
 import { DataTableToolbar } from '@/client/components/course/data-table/data-table-toolbar'
 import {
@@ -30,13 +30,11 @@ import {
 	TableRow
 } from '@/client/components/ui'
 
-import { getColumns } from './data-table-column'
-
 type DataTableProps<TData> = {
 	data: TData[]
 }
 
-export function DataTable<TData>({ data }: DataTableProps<TData>) {
+export function DataTable<TData extends Course>({ data }: DataTableProps<TData>) {
 	const columns = React.useMemo(() => getColumns(), [])
 
 	const [sorting, setSorting] = React.useState<SortingState>([])
@@ -62,11 +60,11 @@ export function DataTable<TData>({ data }: DataTableProps<TData>) {
 		}
 	})
 
-	const filterFields: DataTableFilterField<Course>[] = [
+	const filterFields: DataTableFilterField<TData>[] = [
 		{
 			label: 'Title',
 			value: 'title',
-			placeholder: 'Filter courses titles...'
+			placeholder: 'Filter titles...'
 		},
 		{
 			label: 'Status',

@@ -16,18 +16,25 @@ type DataTableToolbarProps<TData> = React.HTMLAttributes<HTMLDivElement> & {
 	filterFields?: DataTableFilterField<TData>[]
 }
 
-export const DataTableToolbar = <TData,>({
+export function DataTableToolbar<TData>({
 	table,
 	filterFields = [],
 	className,
 	...props
-}: DataTableToolbarProps<TData>) => {
+}: DataTableToolbarProps<TData>) {
 	const isFiltered = table.getState().columnFilters.length > 0
 
 	const { searchableColumns, filterableColumns } = React.useMemo(() => {
 		return {
-			searchableColumns: filterFields.filter((field) => !field.options),
-			filterableColumns: filterFields.filter((field) => field.options)
+			searchableColumns: filterFields.filter(
+				(field): field is DataTableFilterField<TData> & { options?: never } => !field.options
+			),
+			filterableColumns: filterFields.filter(
+				(
+					field
+				): field is DataTableFilterField<TData> & { options: NonNullable<DataTableFilterField<TData>['options']> } =>
+					!!field.options
+			)
 		}
 	}, [filterFields])
 
@@ -37,12 +44,12 @@ export const DataTableToolbar = <TData,>({
 				{searchableColumns.length > 0 &&
 					searchableColumns.map(
 						(column) =>
-							table.getColumn(column.value ? String(column.value) : '') && (
+							table.getColumn(column.value as string) && (
 								<Input
-									key={String(column.value)}
+									key={column.value as string}
 									placeholder={column.placeholder}
-									value={(table.getColumn(String(column.value))?.getFilterValue() as string) ?? ''}
-									onChange={(event) => table.getColumn(String(column.value))?.setFilterValue(event.target.value)}
+									value={(table.getColumn(column.value as string)?.getFilterValue() as string) ?? ''}
+									onChange={(event) => table.getColumn(column.value as string)?.setFilterValue(event.target.value)}
 									className="w-40 border-border !bg-card md:w-72"
 								/>
 							)
@@ -50,12 +57,12 @@ export const DataTableToolbar = <TData,>({
 				{filterableColumns.length > 0 &&
 					filterableColumns.map(
 						(column) =>
-							table.getColumn(column.value ? String(column.value) : '') && (
+							table.getColumn(column.value as string) && (
 								<DataTableFacetedFilter
-									key={String(column.value)}
-									column={table.getColumn(column.value ? String(column.value) : '')}
+									key={column.value as string}
+									column={table.getColumn(column.value as string)}
 									title={column.label}
-									options={column.options ?? []}
+									options={column.options}
 								/>
 							)
 					)}
