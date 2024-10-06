@@ -11,7 +11,7 @@ export function usePalettes(): ColorPalette[] {
 			label: 'Palette 1',
 			inverse: 'hsl(var(--background))',
 			colors: [
-				{ cssVar: colorSet.White, label: 'Default' },
+				{ cssVar: 'hsl(var(--foreground))', label: 'Default' },
 				{ cssVar: colorSet.AccentBoldBlue, label: 'Bold blue' },
 				{ cssVar: colorSet.AccentBoldTeal, label: 'Bold teal' },
 				{ cssVar: colorSet.AccentBoldGreen, label: 'Bold green' },
@@ -24,7 +24,7 @@ export function usePalettes(): ColorPalette[] {
 			label: 'Palette 2',
 			inverse: 'hsl(var(--background))',
 			colors: [
-				{ cssVar: colorSet.AccentGray, label: 'Gray' },
+				{ cssVar: colorSet.Black, label: 'Black' },
 				{ cssVar: colorSet.AccentBlue, label: 'Blue' },
 				{ cssVar: colorSet.AccentTeal, label: 'Teal' },
 				{ cssVar: colorSet.AccentGreen, label: 'Green' },
@@ -37,7 +37,7 @@ export function usePalettes(): ColorPalette[] {
 			label: 'Palette 3',
 			inverse: 'hsl(var(--foreground))',
 			colors: [
-				{ cssVar: 'hsl(var(--background))', label: 'White', darkLabel: 'Black' },
+				{ cssVar: colorSet.White, label: 'White' },
 				{ cssVar: colorSet.AccentBlueSubtler, label: 'Blue subtle' },
 				{ cssVar: colorSet.AccentTealSubtler, label: 'Teal subtle' },
 				{ cssVar: colorSet.AccentGreenSubtler, label: 'Green subtle' },

@@ -11,15 +11,15 @@ export const CourseInsights = () => {
 				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
 					<div className="flex flex-col">
 						<CardTitle className="text-3xl">0</CardTitle>
-						<CardDescription>Enrolled Students</CardDescription>
+						<CardDescription>Total Students</CardDescription>
 					</div>
 					<div className="flex flex-col">
 						<CardTitle className="text-3xl">0</CardTitle>
-						<CardDescription>Created Lessons</CardDescription>
+						<CardDescription>Created Topics</CardDescription>
 					</div>
 					<div className="flex flex-col">
 						<CardTitle className="text-3xl">0</CardTitle>
-						<CardDescription>Average Rating</CardDescription>
+						<CardDescription>Average Student Rating</CardDescription>
 					</div>
 					<div className="flex flex-col">
 						<CardTitle className="text-3xl">0%</CardTitle>

@@ -1,6 +1,7 @@
 export const Colors = {
 	light: {
 		White: '#ffffff',
+		Black: '#000000',
 		CodeBackground: '#082b781f',
 		CodeColor: '#d4d4d4',
 		Secondary: '#9d9d9f',
@@ -34,6 +35,7 @@ export const Colors = {
 	},
 	dark: {
 		White: '#ffffff',
+		Black: '#000000',
 		CodeBackground: '#ffffff13',
 		CodeColor: '#2c2e33',
 		Secondary: '#595a5c',

@@ -5,9 +5,8 @@ import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
 import { CourseInsights } from '@/client/components/course/course-insights'
 import { CourseStatsGroup } from '@/client/components/course/course-stats-group'
+import { DataTable } from '@/client/components/course/data-table/data-table'
 import { AddCourseForm } from '@/client/components/course/forms/add-course'
-import { columns } from '@/client/components/course/manage-column'
-import { ManageDataTable } from '@/client/components/course/manage-data-table'
 import {
 	PageBreadcrumbs,
 	PageContent,
@@ -55,7 +54,7 @@ export default async function Page() {
 				</PageSection>
 
 				<PageSection>
-					<ManageDataTable columns={columns} data={courses} />
+					<DataTable data={courses} />
 				</PageSection>
 			</PageContent>
 		</PageWrapper>
