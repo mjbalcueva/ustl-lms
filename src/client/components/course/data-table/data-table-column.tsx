@@ -7,6 +7,7 @@ import { type ColumnDef } from '@tanstack/react-table'
 import { LuPencil, LuTrash } from 'react-icons/lu'
 import { TbDots } from 'react-icons/tb'
 
+import { DataTableColumnHeader } from '@/client/components/course/data-table/data-table-column-header'
 import {
 	Badge,
 	Button,
@@ -16,8 +17,6 @@ import {
 	DropdownMenuTrigger
 } from '@/client/components/ui'
 import { formatDate } from '@/client/lib/utils'
-
-import { DataTableColumnHeader } from '../../data-table/data-table-column-header'
 
 export const getColumns = (): ColumnDef<Course>[] => {
 	return [
@@ -38,11 +37,7 @@ export const getColumns = (): ColumnDef<Course>[] => {
 			cell: ({ row }) => {
 				const title = row.original.title
 
-				return (
-					<div className="flex space-x-2">
-						<span className="max-w-[31.25rem] truncate font-medium">{title}</span>
-					</div>
-				)
+				return <div className="max-w-[31.25rem] truncate font-medium">{title}</div>
 			},
 			size: 95
 		},
@@ -56,11 +51,7 @@ export const getColumns = (): ColumnDef<Course>[] => {
 
 				const isPublished = status === 'PUBLISHED'
 
-				return (
-					<div className="flex items-center">
-						<Badge variant={isPublished ? 'default' : 'secondary'}>{isPublished ? 'Published' : 'Draft'}</Badge>
-					</div>
-				)
+				return <Badge variant={isPublished ? 'default' : 'secondary'}>{isPublished ? 'Published' : 'Draft'}</Badge>
 			},
 			filterFn: (row, id, value) => {
 				return Array.isArray(value) && value.includes(row.getValue(id))

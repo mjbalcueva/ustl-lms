@@ -6,8 +6,8 @@ import { TbX } from 'react-icons/tb'
 
 import { type DataTableFilterField } from '@/shared/types/data-table'
 
-import { DataTableFacetedFilter } from '@/client/components/data-table/data-table-faceted-filter'
-import { DataTableViewOptions } from '@/client/components/data-table/data-table-view-options'
+import { DataTableFacetedFilter } from '@/client/components/course/data-table/data-table-faceted-filter'
+import { DataTableViewOptions } from '@/client/components/course/data-table/data-table-view-options'
 import { Button, Input } from '@/client/components/ui'
 import { cn } from '@/client/lib/utils'
 
@@ -19,13 +19,11 @@ type DataTableToolbarProps<TData> = React.HTMLAttributes<HTMLDivElement> & {
 export const DataTableToolbar = <TData,>({
 	table,
 	filterFields = [],
-	children,
 	className,
 	...props
 }: DataTableToolbarProps<TData>) => {
 	const isFiltered = table.getState().columnFilters.length > 0
 
-	// Memoize computation of searchableColumns and filterableColumns
 	const { searchableColumns, filterableColumns } = React.useMemo(() => {
 		return {
 			searchableColumns: filterFields.filter((field) => !field.options),
@@ -73,10 +71,7 @@ export const DataTableToolbar = <TData,>({
 					</Button>
 				)}
 			</div>
-			<div className="flex items-center gap-2">
-				{children}
-				<DataTableViewOptions table={table} />
-			</div>
+			<DataTableViewOptions table={table} />
 		</div>
 	)
 }

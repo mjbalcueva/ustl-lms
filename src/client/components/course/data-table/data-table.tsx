@@ -1,16 +1,24 @@
 'use client'
 
 import * as React from 'react'
+import { Status, type Course } from '@prisma/client'
 import {
 	flexRender,
 	getCoreRowModel,
+	getFilteredRowModel,
 	getPaginationRowModel,
 	getSortedRowModel,
 	useReactTable,
 	type ColumnDef,
+	type ColumnFiltersState,
+	type Table as DataTableUI,
 	type SortingState
 } from '@tanstack/react-table'
 
+import { type DataTableFilterField } from '@/shared/types/data-table'
+
+import { DataTablePagination } from '@/client/components/course/data-table/data-table-pagination'
+import { DataTableToolbar } from '@/client/components/course/data-table/data-table-toolbar'
 import {
 	ScrollArea,
 	ScrollBar,
@@ -22,36 +30,58 @@ import {
 	TableRow
 } from '@/client/components/ui'
 
-import { DataTablePagination } from '../data-table/data-table-pagination'
+import { getColumns } from './data-table-column'
 
-type DataTableProps<TData, TValue> = {
-	columns: ColumnDef<TData, TValue>[]
+type DataTableProps<TData> = {
 	data: TData[]
 }
 
-export function ManageDataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
+export function DataTable<TData>({ data }: DataTableProps<TData>) {
+	const columns = React.useMemo(() => getColumns(), [])
+
 	const [sorting, setSorting] = React.useState<SortingState>([])
+	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
 
 	const table = useReactTable({
 		data,
-		columns,
+		columns: columns as ColumnDef<TData, unknown>[],
 		getCoreRowModel: getCoreRowModel(),
+		getFilteredRowModel: getFilteredRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
-		onSortingChange: setSorting,
 		getSortedRowModel: getSortedRowModel(),
+		onColumnFiltersChange: setColumnFilters,
+		onSortingChange: setSorting,
 		state: {
+			columnFilters,
 			sorting
 		},
 		initialState: {
-			pagination: {
-				pageSize: 5
-			},
+			columnFilters,
+			pagination: { pageSize: 5 },
 			sorting
 		}
 	})
 
+	const filterFields: DataTableFilterField<Course>[] = [
+		{
+			label: 'Title',
+			value: 'title',
+			placeholder: 'Filter courses titles...'
+		},
+		{
+			label: 'Status',
+			value: 'status',
+			options: Object.values(Status).map((status) => ({
+				label: status.charAt(0).toUpperCase() + status.slice(1).toLowerCase(),
+				value: status,
+				withCount: true
+			}))
+		}
+	]
+
 	return (
 		<div className="space-y-2.5 pb-24">
+			<DataTableToolbar table={table} filterFields={filterFields} />
 			<ScrollArea className="rounded-xl border shadow-sm">
 				<Table>
 					<TableHeader>
