@@ -82,7 +82,7 @@ export const AddCourseChaptersForm = ({ courseId, chapters }: AddCourseChaptersP
 			)}
 
 			<CardHeader>
-				<CardTitle>Course Topics</CardTitle>
+				<CardTitle>Course Builder</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
 					{!isEditing && <TbCirclePlus className="mr-2 size-4" />}
 					{isEditing ? 'Cancel' : 'Add'}
