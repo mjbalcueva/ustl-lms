@@ -24,13 +24,11 @@ export const getColumns = (): ColumnDef<Course>[] => [
 		header: ({ column }) => <DataTableColumnHeader column={column} title="Code" />,
 		cell: ({ row }) => <Badge variant="outline">{row.original.code}</Badge>,
 		enableSorting: false,
-		enableHiding: false,
-		size: 100
+		enableHiding: false
 	},
 	{
 		accessorKey: 'title',
-		header: ({ column }) => <DataTableColumnHeader column={column} title="Title" />,
-		size: 400
+		header: ({ column }) => <DataTableColumnHeader column={column} title="Title" className="min-w-40" />
 	},
 	{
 		accessorKey: 'status',
@@ -39,27 +37,24 @@ export const getColumns = (): ColumnDef<Course>[] => [
 			const isPublished = row.original.status === 'PUBLISHED'
 			return isPublished ? <Badge>Published</Badge> : <Badge variant="secondary">Draft</Badge>
 		},
-		filterFn: (row, id, value) => Array.isArray(value) && value.includes(row.getValue(id)),
-		size: 100
+		filterFn: (row, id, value) => Array.isArray(value) && value.includes(row.getValue(id))
 	},
 	{
 		accessorKey: 'createdAt',
 		header: ({ column }) => <DataTableColumnHeader column={column} title="Created" />,
-		cell: ({ cell }) => formatDate(cell.getValue() as Date),
-		size: 120
+		cell: ({ cell }) => formatDate(cell.getValue() as Date)
 	},
 	{
 		accessorKey: 'updatedAt',
 		header: ({ column }) => <DataTableColumnHeader column={column} title="Updated" />,
-		cell: ({ cell }) => formatDate(cell.getValue() as Date),
-		size: 120
+		cell: ({ cell }) => formatDate(cell.getValue() as Date)
 	},
 	{
 		id: 'actions',
 		cell: ({ row }) => (
 			<DropdownMenu>
 				<DropdownMenuTrigger asChild>
-					<Button aria-label="Open menu" variant="ghost" className="size-8 p-0 data-[state=open]:bg-muted">
+					<Button aria-label="Open menu" variant="ghost" className="size-8 rounded-lg p-0 data-[state=open]:bg-muted">
 						<TbDots className="size-4" aria-hidden="true" />
 					</Button>
 				</DropdownMenuTrigger>
@@ -76,7 +71,6 @@ export const getColumns = (): ColumnDef<Course>[] => [
 					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>
-		),
-		size: 50
+		)
 	}
 ]

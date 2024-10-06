@@ -21,7 +21,7 @@ export function DataTableViewOptions<TData>({ table }: DataTableViewOptionsProps
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Button aria-label="Toggle columns" variant="outline" className="ml-auto flex h-10">
+				<Button aria-label="Toggle columns" variant="outline" className="ml-auto flex h-9">
 					<LuSettings className="mr-2 size-4" />
 					View
 				</Button>

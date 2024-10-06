@@ -36,7 +36,7 @@ export const DataTableFacetedFilter = <TData, TValue>({
 	return (
 		<Popover>
 			<PopoverTrigger asChild>
-				<Button variant="outline" size="sm" className="h-10 rounded-xl border-dashed">
+				<Button variant="outline" size="sm" className="h-9 rounded-xl border-dashed">
 					<TbCirclePlus className="mr-2 size-4" />
 					{title}
 					{selectedValues?.size > 0 && (
@@ -85,6 +85,7 @@ export const DataTableFacetedFilter = <TData, TValue>({
 											const filterValues = Array.from(selectedValues)
 											column?.setFilterValue(filterValues.length ? filterValues : undefined)
 										}}
+										className="rounded-lg"
 									>
 										<div
 											className={cn(
@@ -111,7 +112,7 @@ export const DataTableFacetedFilter = <TData, TValue>({
 								<CommandGroup>
 									<CommandItem
 										onSelect={() => column?.setFilterValue(undefined)}
-										className="justify-center text-center"
+										className="justify-center rounded-lg text-center"
 									>
 										Clear filters
 									</CommandItem>
