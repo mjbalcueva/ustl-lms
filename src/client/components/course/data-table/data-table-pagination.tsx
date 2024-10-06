@@ -10,10 +10,10 @@ type DataTablePaginationProps<TData> = {
 
 export const DataTablePagination = <TData,>({
 	table,
-	pageSizeOptions = [5, 10, 15, 20, 25]
+	pageSizeOptions = [10, 20, 30, 40, 50]
 }: DataTablePaginationProps<TData>) => {
 	return (
-		<div className="flex w-full items-center justify-end gap-4 p-1 pl-4 sm:flex-row sm:gap-6 lg:gap-8">
+		<div className="flex w-full items-center justify-end gap-4 pl-4 sm:flex-row sm:gap-6 lg:gap-8">
 			<div className="flex items-center space-x-2">
 				<p className="whitespace-nowrap text-sm font-medium">Rows per page</p>
 				<Select

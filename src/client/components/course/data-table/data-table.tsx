@@ -55,8 +55,10 @@ export function DataTable<TData extends Course>({ data }: DataTableProps<TData>)
 		},
 		initialState: {
 			columnFilters,
-			pagination: { pageSize: 5 },
-			sorting
+			sorting,
+			columnVisibility: {
+				createdAt: false
+			}
 		}
 	})
 
