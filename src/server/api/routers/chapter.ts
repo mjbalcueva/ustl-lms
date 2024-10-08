@@ -1,7 +1,8 @@
 import {
 	addChapterSchema,
-	chapterActionsSchema,
+	deleteChapterSchema,
 	editContentSchema,
+	editStatusSchema,
 	editTitleSchema,
 	editVideoSchema,
 	getChapterSchema,
@@ -30,12 +31,12 @@ export const chapterRouter = createTRPCRouter({
 		return { message: 'Chapter created successfully' }
 	}),
 
-	deleteChapter: instructorProcedure.input(chapterActionsSchema).mutation(async ({ ctx, input }) => {
-		const { id, courseId } = input
+	deleteChapter: instructorProcedure.input(deleteChapterSchema).mutation(async ({ ctx, input }) => {
+		const { id } = input
 
 		// delete the chapter video from mux
 		const chapter = await ctx.db.chapter.findUnique({
-			where: { id, courseId, course: { createdById: ctx.session.user.id! } },
+			where: { id, course: { createdById: ctx.session.user.id! } },
 			select: { videoUrl: true }
 		})
 
@@ -65,7 +66,7 @@ export const chapterRouter = createTRPCRouter({
 
 		// delete the chapter
 		await ctx.db.chapter.delete({
-			where: { id, courseId, course: { createdById: ctx.session.user.id! } }
+			where: { id, course: { createdById: ctx.session.user.id! } }
 		})
 
 		return { message: 'Chapter deleted successfully' }
@@ -154,7 +155,7 @@ export const chapterRouter = createTRPCRouter({
 		return { chapter }
 	}),
 
-	editStatus: instructorProcedure.input(chapterActionsSchema).mutation(async ({ ctx, input }) => {
+	editStatus: instructorProcedure.input(editStatusSchema).mutation(async ({ ctx, input }) => {
 		const { id, courseId, status } = input
 
 		const chapter = await ctx.db.chapter.update({

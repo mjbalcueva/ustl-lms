@@ -7,11 +7,10 @@ export const addCourseSchema = z.object({
 })
 export type AddCourseSchema = z.infer<typeof addCourseSchema>
 
-export const courseActionsSchema = z.object({
-	id: z.string().min(1, 'Course ID is required'),
-	status: z.nativeEnum(Status)
+export const deleteCourseSchema = z.object({
+	id: z.string().min(1, 'Course ID is required')
 })
-export type CourseActionsSchema = z.infer<typeof courseActionsSchema>
+export type DeleteCourseSchema = z.infer<typeof deleteCourseSchema>
 
 export const editCodeSchema = z.object({
 	id: z.string().min(1, 'Course ID is required'),

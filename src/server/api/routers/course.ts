@@ -1,6 +1,6 @@
 import {
 	addCourseSchema,
-	courseActionsSchema,
+	deleteCourseSchema,
 	editCodeSchema,
 	editDescriptionSchema,
 	editImageSchema,
@@ -28,10 +28,9 @@ export const courseRouter = createTRPCRouter({
 		return { message: 'Course created!', newCourseId }
 	}),
 
-	deleteCourse: instructorProcedure.input(courseActionsSchema).mutation(async ({ ctx, input }) => {
+	deleteCourse: instructorProcedure.input(deleteCourseSchema).mutation(async ({ ctx, input }) => {
 		const { id } = input
 
-		// for each chapters, delete videos from mux and upload thing
 		const course = await ctx.db.course.findUnique({
 			where: { id, createdById: ctx.session.user.id! },
 			include: { chapter: true }
