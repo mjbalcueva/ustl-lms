@@ -13,47 +13,18 @@ datasource db {
 // Course Models
 // -----------------------------------------------------------------------------
 
-enum Status {
-  PUBLISHED
-  DRAFT
-  ARCHIVED
-
-  @@map("status")
-}
-
-model Course {
-  id          String   @id @default(cuid())
-  createdById String
-  code        String
-  title       String
-  description String?
-  imageUrl    String?
-  categoryId  String?
-  status      Status   @default(DRAFT)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  createdBy User      @relation(fields: [createdById], references: [id], onDelete: Cascade)
-  category  Category? @relation(fields: [categoryId], references: [id])
-
-  attachment Attachment[]
-  chapter    Chapter[]
-
-  @@index([code, categoryId])
-  @@map("course")
-}
-
 model Attachment {
-  id                     String   @id @default(cuid())
-  courseId               String
+  id        String   @id @default(cuid())
+  name      String
+  url       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  courseId               String?
   chapterId              String?
   assignmentSubmissionId String?
-  name                   String
-  url                    String
-  createdAt              DateTime @default(now())
-  updatedAt              DateTime @updatedAt
 
-  course               Course                @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  course               Course?               @relation(fields: [courseId], references: [id], onDelete: Cascade)
   chapter              Chapter?              @relation(fields: [chapterId], references: [id], onDelete: Cascade)
   assignmentSubmission AssignmentSubmission? @relation(fields: [assignmentSubmissionId], references: [id])
 
@@ -72,6 +43,36 @@ model Category {
   @@map("category")
 }
 
+enum Status {
+  PUBLISHED
+  DRAFT
+  ARCHIVED
+
+  @@map("status")
+}
+
+model Course {
+  id          String   @id @default(cuid())
+  code        String
+  title       String
+  description String?
+  imageUrl    String?
+  status      Status   @default(DRAFT)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  createdById String
+  categoryId  String?
+  attachment  Attachment[]
+  chapter     Chapter[]
+
+  createdBy User      @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  category  Category? @relation(fields: [categoryId], references: [id])
+
+  @@index([code, categoryId])
+  @@map("course")
+}
+
 enum ChapterType {
   ASSESSMENT
   ASSIGNMENT
@@ -82,7 +83,6 @@ enum ChapterType {
 
 model Chapter {
   id        String      @id @default(cuid())
-  courseId  String
   title     String
   content   String?
   videoUrl  String?
@@ -92,13 +92,14 @@ model Chapter {
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
 
-  course  Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  muxData MuxData?
-
+  courseId     String
+  muxData      MuxData?
   assessments  Assessment[]
   assignments  Assignment[]
   attachment   Attachment[]
   userProgress UserProgress[]
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@index([courseId, position])
   @@map("chapter")
@@ -106,30 +107,30 @@ model Chapter {
 
 model Assessment {
   id            String    @id @default(cuid())
-  chapterId     String
   title         String
   instructions  String?
   startAt       DateTime?
   endAt         DateTime?
   submissionDue DateTime?
 
-  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  chapterId String
+  sections  AssessmentSection[]
 
-  sections AssessmentSection[]
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 
   @@map("assessment")
 }
 
 model AssessmentSection {
   id           String  @id @default(cuid())
-  assessmentId String
   title        String
   instructions String?
   position     Int
 
-  assessment Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  assessmentId String
+  questions    AssessmentQuestion[]
 
-  questions AssessmentQuestion[]
+  assessment Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
 
   @@map("assessment_section")
 }
@@ -144,27 +145,28 @@ enum QuestionType {
 }
 
 model AssessmentQuestion {
-  id        String       @id @default(cuid())
-  sectionId String
-  question  String
-  type      QuestionType
-  options   Json?
-  answer    Json?
-  points    Float
+  id       String       @id @default(cuid())
+  type     QuestionType
+  question String
+  options  Json?
+  answer   Json?
+  points   Float
+
+  sectionId        String
+  assessmentAnswer AssessmentAnswer[]
 
   section AssessmentSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
-
-  assessmentAnswer AssessmentAnswer[]
 
   @@map("assessment_question")
 }
 
 model AssessmentAnswer {
-  id         String  @id @default(cuid())
+  id        String  @id @default(cuid())
+  answer    Json
+  isCorrect Boolean
+
   studentId  String
   questionId String
-  answer     Json
-  isCorrect  Boolean
 
   student  User               @relation(fields: [studentId], references: [id], onDelete: Cascade)
   question AssessmentQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
@@ -174,32 +176,32 @@ model AssessmentAnswer {
 
 model Assignment {
   id            String    @id @default(cuid())
-  chapterId     String
   title         String
   instructions  String?
   startAt       DateTime?
   endAt         DateTime?
   submissionDue DateTime?
 
-  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
-
+  chapterId  String
   submission AssignmentSubmission[]
+
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 
   @@map("assignment")
 }
 
 model AssignmentSubmission {
-  id           String    @id @default(cuid())
-  studentId    String
+  id          String    @id @default(cuid())
+  content     String?
+  submittedAt DateTime?
+  grade       Float?
+
   assignmentId String
-  content      String?
-  submittedAt  DateTime?
-  grade        Float?
+  studentId    String
+  attachment   Attachment[]
 
   student    User       @relation(fields: [studentId], references: [id], onDelete: Cascade)
   assignment Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
-
-  attachment Attachment[]
 
   @@map("assignment_submission")
 }
@@ -218,10 +220,11 @@ model MuxData {
 model UserProgress {
   id          String   @id @default(cuid())
   userId      String
-  chapterId   String
   isCompleted Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  chapterId String
 
   chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 
@@ -258,7 +261,7 @@ model User {
 
   courses              Course[]
   assignmentSubmission AssignmentSubmission[]
-  AssessmentAnswer     AssessmentAnswer[]
+  assessmentAnswer     AssessmentAnswer[]
 
   @@map("user")
 }
