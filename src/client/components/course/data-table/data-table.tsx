@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { Status, type Course } from '@prisma/client'
 import {
@@ -13,10 +14,12 @@ import {
 	type ColumnFiltersState,
 	type SortingState
 } from '@tanstack/react-table'
+import { toast } from 'sonner'
 
+import { api } from '@/shared/trpc/react'
 import { type DataTableFilterField } from '@/shared/types/data-table'
 
-import { getColumns } from '@/client/components/course/data-table/data-table-column'
+import { useColumns } from '@/client/components/course/data-table/data-table-column'
 import { DataTablePagination } from '@/client/components/course/data-table/data-table-pagination'
 import { DataTableToolbar } from '@/client/components/course/data-table/data-table-toolbar'
 import {
@@ -35,7 +38,19 @@ type DataTableProps<TData> = {
 }
 
 export function DataTable<TData extends Course>({ data }: DataTableProps<TData>) {
-	const columns = React.useMemo(() => getColumns(), [])
+	const router = useRouter()
+
+	const { mutateAsync } = api.course.deleteCourse.useMutation({
+		onSuccess: (data) => {
+			toast.success(data.message)
+			router.refresh()
+		}
+	})
+
+	// const columns = React.useMemo(() => useColumns(mutateAsync), [mutateAsync])
+	const columns = useColumns(async (id: string) => {
+		await mutateAsync({ id })
+	})
 
 	const [sorting, setSorting] = React.useState<SortingState>([])
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
