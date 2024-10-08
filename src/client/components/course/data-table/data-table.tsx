@@ -125,7 +125,7 @@ export function DataTable<TData extends Course>({ data }: DataTableProps<TData>)
 							))
 						) : (
 							<TableRow>
-								<TableCell colSpan={columns.length} className="h-24 text-center">
+								<TableCell colSpan={columns.length} className="h-24 !bg-card text-center">
 									No results.
 								</TableCell>
 							</TableRow>
