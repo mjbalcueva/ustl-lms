@@ -1,7 +1,7 @@
 'use client'
 
 import type { Table } from '@tanstack/react-table'
-import { LuSettings } from 'react-icons/lu'
+import { LuSettings2 } from 'react-icons/lu'
 
 import {
 	Button,
@@ -21,13 +21,13 @@ export function DataTableViewOptions<TData>({ table }: DataTableViewOptionsProps
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Button aria-label="Toggle columns" variant="outline" className="ml-auto flex h-9">
-					<LuSettings className="mr-2 size-4" />
+				<Button aria-label="Display properties" variant="outline" className="ml-auto flex h-9">
+					<LuSettings2 className="mr-2 size-4" />
 					View
 				</Button>
 			</DropdownMenuTrigger>
-			<DropdownMenuContent align="end" className="w-40">
-				<DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+			<DropdownMenuContent align="end" className="w-48">
+				<DropdownMenuLabel>Display properties</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				{table
 					.getAllColumns()
@@ -36,11 +36,11 @@ export function DataTableViewOptions<TData>({ table }: DataTableViewOptionsProps
 						return (
 							<DropdownMenuCheckboxItem
 								key={column.id}
-								className="capitalize"
+								className="truncate capitalize"
 								checked={column.getIsVisible()}
 								onCheckedChange={(value) => column.toggleVisibility(!!value)}
 							>
-								<span className="truncate">{column.id}</span>
+								{column.id}
 							</DropdownMenuCheckboxItem>
 						)
 					})}
