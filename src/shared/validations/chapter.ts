@@ -1,9 +1,10 @@
-import { Status } from '@prisma/client'
+import { ChapterType, Status } from '@prisma/client'
 import { z } from 'zod'
 
 export const addChapterSchema = z.object({
 	courseId: z.string().min(1, 'Course ID is required'),
-	title: z.string().min(1, 'Title is required').max(32, 'Title must be less than 32 characters')
+	title: z.string().min(1, 'Title is required').max(32, 'Title must be less than 32 characters'),
+	type: z.nativeEnum(ChapterType)
 })
 export type AddChapterSchema = z.infer<typeof addChapterSchema>
 

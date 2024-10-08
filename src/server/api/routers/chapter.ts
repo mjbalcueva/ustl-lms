@@ -15,7 +15,7 @@ import { utapi } from '@/server/lib/utapi'
 
 export const chapterRouter = createTRPCRouter({
 	addChapter: instructorProcedure.input(addChapterSchema).mutation(async ({ ctx, input }) => {
-		const { courseId, title } = input
+		const { courseId, title, type } = input
 
 		const lastChapter = await ctx.db.chapter.findFirst({
 			where: { courseId, course: { createdById: ctx.session.user.id! } },
@@ -25,7 +25,7 @@ export const chapterRouter = createTRPCRouter({
 		const newPosition = lastChapter ? lastChapter.position + 1 : 1
 
 		await ctx.db.chapter.create({
-			data: { title, courseId, position: newPosition }
+			data: { title, courseId, position: newPosition, type }
 		})
 
 		return { message: 'Chapter created successfully' }
