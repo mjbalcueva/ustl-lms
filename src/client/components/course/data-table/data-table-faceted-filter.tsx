@@ -36,7 +36,7 @@ export const DataTableFacetedFilter = <TData, TValue>({
 	return (
 		<Popover>
 			<PopoverTrigger asChild>
-				<Button variant="outline" size="sm" className="h-9 rounded-xl border-dashed">
+				<Button variant="ghost" size="sm" className="h-9 rounded-xl border-[1.5px] border-dashed border-border">
 					<TbCirclePlus className="mr-2 size-4" />
 					{title}
 					{selectedValues?.size > 0 && (

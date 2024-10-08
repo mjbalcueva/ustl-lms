@@ -48,7 +48,7 @@ export const DataTableColumnHeader = <TData, TValue>({
 						) : column.getIsSorted() === 'asc' ? (
 							<LuArrowUp className="ml-2 size-4" aria-hidden="true" />
 						) : (
-							<LuChevronsUpDown className="ml-2 size-4" aria-hidden="true" />
+							<LuChevronsUpDown className="ml-2 size-4 text-muted-foreground/70" aria-hidden="true" />
 						)}
 					</Button>
 				</DropdownMenuTrigger>
