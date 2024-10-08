@@ -44,16 +44,18 @@ model Course {
 }
 
 model Attachment {
-  id        String   @id @default(cuid())
-  courseId  String
-  chapterId String?
-  name      String
-  url       String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                     String   @id @default(cuid())
+  courseId               String
+  chapterId              String?
+  assignmentSubmissionId String?
+  name                   String
+  url                    String
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
 
-  course  Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  chapter Chapter? @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  course               Course                @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  chapter              Chapter?              @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  assignmentSubmission AssignmentSubmission? @relation(fields: [assignmentSubmissionId], references: [id])
 
   @@index([courseId])
   @@map("attachment")
@@ -70,24 +72,136 @@ model Category {
   @@map("category")
 }
 
+enum ChapterType {
+  ASSESSMENT
+  ASSIGNMENT
+  LESSON
+
+  @@map("chapter_type")
+}
+
 model Chapter {
-  id        String   @id @default(cuid())
+  id        String      @id @default(cuid())
   courseId  String
   title     String
   content   String?
   videoUrl  String?
   position  Int
-  status    Status   @default(DRAFT)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  type      ChapterType @default(LESSON)
+  status    Status      @default(DRAFT)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
 
+  course  Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  muxData MuxData?
+
+  assessments  Assessment[]
+  assignments  Assignment[]
   attachment   Attachment[]
-  course       Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  muxData      MuxData?
   userProgress UserProgress[]
 
   @@index([courseId, position])
   @@map("chapter")
+}
+
+model Assessment {
+  id            String    @id @default(cuid())
+  chapterId     String
+  title         String
+  instructions  String?
+  startAt       DateTime?
+  endAt         DateTime?
+  submissionDue DateTime?
+
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  sections AssessmentSection[]
+
+  @@map("assessment")
+}
+
+model AssessmentSection {
+  id           String  @id @default(cuid())
+  assessmentId String
+  title        String
+  instructions String?
+  position     Int
+
+  assessment Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+
+  questions AssessmentQuestion[]
+
+  @@map("assessment_section")
+}
+
+enum QuestionType {
+  MULTIPLE_CHOICE // multiple choice, single answer
+  MULTIPLE_SELECT // multiple correct answers
+  TRUE_FALSE // true/false
+  ESSAY // essay, free response
+
+  @@map("question_type")
+}
+
+model AssessmentQuestion {
+  id        String       @id @default(cuid())
+  sectionId String
+  question  String
+  type      QuestionType
+  options   Json?
+  answer    Json?
+  points    Float
+
+  section AssessmentSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+
+  assessmentAnswer AssessmentAnswer[]
+
+  @@map("assessment_question")
+}
+
+model AssessmentAnswer {
+  id         String  @id @default(cuid())
+  studentId  String
+  questionId String
+  answer     Json
+  isCorrect  Boolean
+
+  student  User               @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  question AssessmentQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@map("assessment_answer")
+}
+
+model Assignment {
+  id            String    @id @default(cuid())
+  chapterId     String
+  title         String
+  instructions  String?
+  startAt       DateTime?
+  endAt         DateTime?
+  submissionDue DateTime?
+
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  submission AssignmentSubmission[]
+
+  @@map("assignment")
+}
+
+model AssignmentSubmission {
+  id           String    @id @default(cuid())
+  studentId    String
+  assignmentId String
+  content      String?
+  submittedAt  DateTime?
+  grade        Float?
+
+  student    User       @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  assignment Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+
+  attachment Attachment[]
+
+  @@map("assignment_submission")
 }
 
 model MuxData {
@@ -142,7 +256,9 @@ model User {
   twoFactorTokens       TwoFactorToken[]
   twoFactorConfirmation TwoFactorConfirmation?
 
-  courses Course[]
+  courses              Course[]
+  assignmentSubmission AssignmentSubmission[]
+  AssessmentAnswer     AssessmentAnswer[]
 
   @@map("user")
 }
