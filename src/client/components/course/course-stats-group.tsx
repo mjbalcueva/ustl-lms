@@ -1,21 +1,18 @@
 'use client'
 
-import { api } from '@/shared/trpc/react'
+import { type Course } from '@prisma/client'
 
 import { CourseStats } from '@/client/components/course/course-stats'
-import { CourseStatsGroupSkeleton } from '@/client/components/skeleton/course-stats-group-skeleton'
 import { ScrollArea, ScrollBar } from '@/client/components/ui'
 import { useDeviceType } from '@/client/context/device-type-provider'
 
-export const CourseStatsGroup = () => {
+export const CourseStatsGroup = ({ courses }: { courses: Course[] }) => {
 	const { deviceSize } = useDeviceType()
-
 	const isMobile = deviceSize === 'mobile'
 
-	const { data } = api.instructor.getCourseStats.useQuery()
-	if (!data) return <CourseStatsGroupSkeleton />
-
-	const { totalCourses, publishedCourses, drafts } = data
+	const totalCourses = courses.length
+	const publishedCourses = courses.filter((course) => course.status === 'PUBLISHED').length
+	const drafts = courses.filter((course) => course.status === 'DRAFT').length
 
 	return (
 		<ScrollArea scrollHideDelay={!isMobile ? 0 : 600} type="hover">
