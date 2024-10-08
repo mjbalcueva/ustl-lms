@@ -10,7 +10,7 @@ type DataTablePaginationProps<TData> = {
 
 export const DataTablePagination = <TData,>({
 	table,
-	pageSizeOptions = [10, 20, 30, 40, 50]
+	pageSizeOptions = [5, 10, 15, 20, 25]
 }: DataTablePaginationProps<TData>) => {
 	return (
 		<div className="flex w-full items-center justify-end gap-4 pl-4 sm:flex-row sm:gap-6 lg:gap-8">
@@ -34,7 +34,9 @@ export const DataTablePagination = <TData,>({
 					</SelectContent>
 				</Select>
 			</div>
-
+			<div className="flex items-center justify-center text-sm font-medium">
+				Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+			</div>
 			<div className="flex items-center space-x-2">
 				<Button
 					aria-label="Go to first page"
