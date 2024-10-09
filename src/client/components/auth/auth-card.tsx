@@ -1,7 +1,10 @@
+'use client'
+
 import Link from 'next/link'
 import * as React from 'react'
+import { signOut } from 'next-auth/react'
 
-import { buttonVariants, Separator } from '@/client/components/ui'
+import { Button, buttonVariants, Separator } from '@/client/components/ui'
 import { cn } from '@/client/lib/utils'
 
 export const AuthCard = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
@@ -76,3 +79,19 @@ export const AuthCardLink = React.forwardRef<
 	</Link>
 ))
 AuthCardLink.displayName = 'AuthCardLink'
+
+export const AuthCardLogoutButton = React.forwardRef<HTMLButtonElement, React.ComponentPropsWithoutRef<typeof Button>>(
+	({ className, ...props }, ref) => (
+		<Button
+			ref={ref}
+			variant="link"
+			size="link"
+			className={cn(className)}
+			onClick={() => signOut({ callbackUrl: '/auth/login' })}
+			{...props}
+		>
+			Logout
+		</Button>
+	)
+)
+AuthCardLogoutButton.displayName = 'AuthCardLogoutButton'

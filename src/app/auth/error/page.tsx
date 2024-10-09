@@ -6,7 +6,8 @@ import {
 	AuthCardContent,
 	AuthCardFooter,
 	AuthCardHeader,
-	AuthCardLink
+	AuthCardLink,
+	AuthCardLogoutButton
 } from '@/client/components/auth/auth-card'
 
 export const metadata: Metadata = {
@@ -44,7 +45,11 @@ export default function Page({ searchParams }: { searchParams: { error: ErrorPag
 				<Image src="/assets/error.svg" alt="Error" width={200} height={200} priority />
 			</AuthCardContent>
 			<AuthCardFooter>
-				<AuthCardLink href="/auth/login" label="Back to login" />
+				{searchParams.error === 'AccessDenied' || searchParams.error === 'Configuration' ? (
+					<AuthCardLogoutButton />
+				) : (
+					<AuthCardLink href="/auth/login" label="Back to login" />
+				)}
 				<AuthCardLink href="/privacy" label="Privacy" className="!ml-auto" />
 				<AuthCardLink href="/terms" label="Terms" />
 			</AuthCardFooter>
