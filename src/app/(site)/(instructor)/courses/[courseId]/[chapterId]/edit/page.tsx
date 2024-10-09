@@ -31,7 +31,7 @@ export default async function Page({ params }: { params: { courseId: string; cha
 
 	if (!chapter) return <NotFound item="chapter" />
 
-	const requiredFields = [chapter.title, chapter.content, chapter.videoUrl, chapter.attachment]
+	const requiredFields = [chapter.title, chapter.content, chapter.videoUrl, chapter.attachments]
 
 	const totalFields = requiredFields.length
 	const completedFields = requiredFields.filter(Boolean).length
@@ -86,7 +86,7 @@ export default async function Page({ params }: { params: { courseId: string; cha
 						<AddChapterAttachmentsForm
 							courseId={chapter.course.id}
 							chapterId={chapter.id}
-							attachments={chapter.attachment}
+							attachments={chapter.attachments}
 						/>
 					</PageSection>
 				</div>

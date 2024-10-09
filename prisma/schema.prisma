@@ -113,14 +113,13 @@ model Chapter {
   updatedAt DateTime    @updatedAt
 
   courseId        String
-  muxDataId       String?
+  muxData         MuxData?
   attachments     Attachment[]
   assessments     Assessment[]
   submissions     Submission[]
   chapterProgress ChapterProgress[]
 
-  course  Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  muxData MuxData?
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@index([courseId, position])
   @@map("chapter")

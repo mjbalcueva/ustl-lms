@@ -14,7 +14,7 @@ export const categoryRouter = createTRPCRouter({
 		const { id, categoryId } = input
 
 		const { categoryId: newCategoryId } = await ctx.db.course.update({
-			where: { id, createdById: ctx.session.user.id! },
+			where: { id, instructorId: ctx.session.user.id! },
 			data: { categoryId }
 		})
 
