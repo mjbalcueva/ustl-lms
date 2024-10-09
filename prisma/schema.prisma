@@ -20,15 +20,15 @@ model Attachment {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  courseId               String?
-  chapterId              String?
-  assignmentSubmissionId String?
+  courseId     String?
+  chapterId    String?
+  submissionId String?
 
-  course               Course?               @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  chapter              Chapter?              @relation(fields: [chapterId], references: [id], onDelete: Cascade)
-  assignmentSubmission AssignmentSubmission? @relation(fields: [assignmentSubmissionId], references: [id])
+  course     Course?     @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  chapter    Chapter?    @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  submission Submission? @relation(fields: [submissionId], references: [id])
 
-  @@index([courseId, chapterId, assignmentSubmissionId])
+  @@index([courseId, chapterId, submissionId])
   @@map("attachment")
 }
 
@@ -43,7 +43,7 @@ model Category {
   @@map("category")
 }
 
-model CourseEnrollment {
+model Enrollment {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -56,7 +56,7 @@ model CourseEnrollment {
 
   @@unique([userId, courseId])
   @@index([userId, courseId])
-  @@map("course_enrollment")
+  @@map("enrollment")
 }
 
 enum Status {
@@ -81,7 +81,7 @@ model Course {
   categoryId       String?
   attachment       Attachment[]
   chapter          Chapter[]
-  courseEnrollment CourseEnrollment[]
+  courseEnrollment Enrollment[]
 
   createdBy User      @relation(fields: [createdById], references: [id], onDelete: Cascade)
   category  Category? @relation(fields: [categoryId], references: [id])
@@ -103,17 +103,20 @@ model Chapter {
   title     String
   content   String?
   videoUrl  String?
-  position  Int
   type      ChapterType @default(LESSON)
   status    Status      @default(DRAFT)
+  position  Int
+  startAt   DateTime?
+  endAt     DateTime?
+  dueAt     DateTime?
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
 
   courseId        String
   muxData         MuxData?
-  assessments     Assessment[]
-  assignments     Assignment[]
   attachment      Attachment[]
+  assessments     Assessment[]
+  submissions     Submission[]
   chapterProgress ChapterProgress[]
 
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
@@ -123,35 +126,18 @@ model Chapter {
 }
 
 model Assessment {
-  id            String    @id @default(cuid())
-  title         String
-  instructions  String?
-  startAt       DateTime?
-  endAt         DateTime?
-  submissionDue DateTime?
-
-  chapterId String
-  sections  AssessmentSection[]
-
-  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
-
-  @@index([chapterId])
-  @@map("assessment")
-}
-
-model AssessmentSection {
   id           String  @id @default(cuid())
   title        String
   instructions String?
   position     Int
 
-  assessmentId String
-  questions    AssessmentQuestion[]
+  chapterId String
+  questions Question[]
 
-  assessment Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  chapter Chapter? @relation(fields: [chapterId], references: [id])
 
-  @@index([assessmentId, position])
-  @@map("assessment_section")
+  @@index([chapterId, position])
+  @@map("assessment")
 }
 
 enum QuestionType {
@@ -163,72 +149,54 @@ enum QuestionType {
   @@map("question_type")
 }
 
-model AssessmentQuestion {
-  id       String       @id @default(cuid())
-  type     QuestionType
-  question String
-  options  Json?
-  answer   Json?
-  points   Float
+model Question {
+  id            String       @id @default(cuid())
+  type          QuestionType
+  question      String
+  options       Json?
+  correctAnswer Json?
+  points        Float
 
-  sectionId        String
-  assessmentAnswer AssessmentAnswer[]
+  sectionId String
+  answer    Answer?
 
-  section AssessmentSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  section Assessment @relation(fields: [sectionId], references: [id], onDelete: Cascade)
 
   @@index([sectionId])
-  @@map("assessment_question")
+  @@map("question")
 }
 
-model AssessmentAnswer {
+model Answer {
   id        String  @id @default(cuid())
   answer    Json
   isCorrect Boolean
 
   studentId  String
-  questionId String
+  questionId String @unique
 
-  student  User               @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  question AssessmentQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  student  User     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
 
-  @@unique([studentId, questionId])
   @@index([studentId, questionId])
-  @@map("assessment_answer")
+  @@map("answer")
 }
 
-model Assignment {
-  id            String    @id @default(cuid())
-  title         String
-  instructions  String?
-  startAt       DateTime?
-  endAt         DateTime?
-  submissionDue DateTime?
-
-  chapterId  String
-  submission AssignmentSubmission[]
-
-  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
-
-  @@index([chapterId])
-  @@map("assignment")
-}
-
-model AssignmentSubmission {
+model Submission {
   id          String    @id @default(cuid())
   content     String?
   submittedAt DateTime?
   grade       Float?
 
-  studentId    String
-  assignmentId String
-  attachment   Attachment[]
+  studentId  String
+  chapterId  String
+  attachment Attachment[]
 
-  student    User       @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  assignment Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  student User    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 
-  @@unique([studentId, assignmentId])
-  @@index([studentId, assignmentId])
-  @@map("assignment_submission")
+  @@unique([studentId, chapterId])
+  @@index([studentId, chapterId])
+  @@map("submission")
 }
 
 model MuxData {
@@ -287,11 +255,11 @@ model User {
   twoFactorTokens       TwoFactorToken[]
   twoFactorConfirmation TwoFactorConfirmation?
 
-  courseEnrollment     CourseEnrollment[]
+  courseEnrollment     Enrollment[]
   courses              Course[]
   chapterProgress      ChapterProgress[]
-  assessmentAnswer     AssessmentAnswer[]
-  assignmentSubmission AssignmentSubmission[]
+  assessmentAnswer     Answer[]
+  assignmentSubmission Submission[]
 
   @@index([email])
   @@map("user")
