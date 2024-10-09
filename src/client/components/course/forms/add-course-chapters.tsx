@@ -127,7 +127,7 @@ export const AddCourseChaptersForm = ({ courseId, chapters }: AddCourseChaptersP
 									<FormItem className="w-1/3">
 										<Select onValueChange={field.onChange} defaultValue={ChapterType.LESSON}>
 											<FormControl>
-												<SelectTrigger className="rounded-xl" disabled={isAdding}>
+												<SelectTrigger className="bg-card dark:bg-background" disabled={isAdding}>
 													<SelectValue />
 												</SelectTrigger>
 											</FormControl>
