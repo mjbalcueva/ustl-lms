@@ -26,7 +26,7 @@ model Attachment {
 
   course     Course?     @relation(fields: [courseId], references: [id], onDelete: Cascade)
   chapter    Chapter?    @relation(fields: [chapterId], references: [id], onDelete: Cascade)
-  submission Submission? @relation(fields: [submissionId], references: [id])
+  submission Submission? @relation(fields: [submissionId], references: [id], onDelete: Cascade)
 
   @@index([courseId, chapterId, submissionId])
   @@map("attachment")
@@ -34,7 +34,7 @@ model Attachment {
 
 model Category {
   id        String   @id @default(cuid())
-  name      String
+  name      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -77,14 +77,14 @@ model Course {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  createdById      String
-  categoryId       String?
-  attachment       Attachment[]
-  chapter          Chapter[]
-  courseEnrollment Enrollment[]
+  instructorId String
+  categoryId   String?
+  attachments  Attachment[]
+  chapters     Chapter[]
+  enrollments  Enrollment[]
 
-  createdBy User      @relation(fields: [createdById], references: [id], onDelete: Cascade)
-  category  Category? @relation(fields: [categoryId], references: [id])
+  instructor User      @relation(fields: [instructorId], references: [id], onDelete: Cascade)
+  category   Category? @relation(fields: [categoryId], references: [id])
 
   @@index([code, categoryId])
   @@map("course")
@@ -113,13 +113,14 @@ model Chapter {
   updatedAt DateTime    @updatedAt
 
   courseId        String
-  muxData         MuxData?
-  attachment      Attachment[]
+  muxDataId       String?
+  attachments     Attachment[]
   assessments     Assessment[]
   submissions     Submission[]
   chapterProgress ChapterProgress[]
 
-  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  course  Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  muxData MuxData?
 
   @@index([courseId, position])
   @@map("chapter")
@@ -134,17 +135,17 @@ model Assessment {
   chapterId String
   questions Question[]
 
-  chapter Chapter? @relation(fields: [chapterId], references: [id])
+  chapter Chapter @relation(fields: [chapterId], references: [id])
 
   @@index([chapterId, position])
   @@map("assessment")
 }
 
 enum QuestionType {
-  MULTIPLE_CHOICE // multiple choice, single answer
-  MULTIPLE_SELECT // multiple correct answers
-  TRUE_FALSE // true/false
-  ESSAY // essay, free response
+  MULTIPLE_CHOICE
+  MULTIPLE_SELECT
+  TRUE_FALSE
+  ESSAY
 
   @@map("question_type")
 }
@@ -157,12 +158,12 @@ model Question {
   correctAnswer Json?
   points        Float
 
-  sectionId String
-  answer    Answer?
+  assessmentId String
+  answer       Answer?
 
-  section Assessment @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  assessment Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
 
-  @@index([sectionId])
+  @@index([assessmentId])
   @@map("question")
 }
 
@@ -187,9 +188,9 @@ model Submission {
   submittedAt DateTime?
   grade       Float?
 
-  studentId  String
-  chapterId  String
-  attachment Attachment[]
+  studentId   String
+  chapterId   String
+  attachments Attachment[]
 
   student User    @relation(fields: [studentId], references: [id], onDelete: Cascade)
   chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
@@ -255,11 +256,11 @@ model User {
   twoFactorTokens       TwoFactorToken[]
   twoFactorConfirmation TwoFactorConfirmation?
 
-  courseEnrollment     Enrollment[]
-  courses              Course[]
-  chapterProgress      ChapterProgress[]
-  assessmentAnswer     Answer[]
-  assignmentSubmission Submission[]
+  enrollments           Enrollment[]
+  courses               Course[]
+  chapterProgress       ChapterProgress[]
+  assessmentAnswers     Answer[]
+  assignmentSubmissions Submission[]
 
   @@index([email])
   @@map("user")
@@ -342,5 +343,5 @@ model TwoFactorConfirmation {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId])
-  @@map("two_factor_confimation")
+  @@map("two_factor_confirmation")
 }
