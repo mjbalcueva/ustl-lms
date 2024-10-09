@@ -1,18 +1,17 @@
-import { Status } from '@prisma/client'
+import { ChapterType, Status } from '@prisma/client'
 import { z } from 'zod'
 
 export const addChapterSchema = z.object({
 	courseId: z.string().min(1, 'Course ID is required'),
-	title: z.string().min(1, 'Title is required').max(32, 'Title must be less than 32 characters')
+	title: z.string().min(1, 'Title is required').max(32, 'Title must be less than 32 characters'),
+	type: z.nativeEnum(ChapterType)
 })
 export type AddChapterSchema = z.infer<typeof addChapterSchema>
 
-export const chapterActionsSchema = z.object({
-	id: z.string().min(1, 'Chapter ID is required'),
-	courseId: z.string().min(1, 'Course ID is required'),
-	status: z.nativeEnum(Status)
+export const deleteChapterSchema = z.object({
+	id: z.string().min(1, 'Chapter ID is required')
 })
-export type ChapterActionsSchema = z.infer<typeof chapterActionsSchema>
+export type DeleteChapterSchema = z.infer<typeof deleteChapterSchema>
 
 export const editContentSchema = z.object({
 	id: z.string().min(1, 'Chapter ID is required'),
@@ -20,6 +19,13 @@ export const editContentSchema = z.object({
 	content: z.string().nullable()
 })
 export type EditContentSchema = z.infer<typeof editContentSchema>
+
+export const editStatusSchema = z.object({
+	id: z.string().min(1, 'Chapter ID is required'),
+	courseId: z.string().min(1, 'Course ID is required'),
+	status: z.nativeEnum(Status)
+})
+export type EditStatusSchema = z.infer<typeof editStatusSchema>
 
 export const editTitleSchema = z.object({
 	id: z.string().min(1, 'Chapter ID is required'),

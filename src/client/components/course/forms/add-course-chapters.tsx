@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { type Chapter } from '@prisma/client'
+import { ChapterType, type Chapter } from '@prisma/client'
 import { useForm } from 'react-hook-form'
 import { TbCirclePlus } from 'react-icons/tb'
 import { toast } from 'sonner'
@@ -25,7 +25,12 @@ import {
 	FormItem,
 	FormMessage,
 	Input,
-	Loader
+	Loader,
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue
 } from '@/client/components/ui'
 
 type AddCourseChaptersProps = {
@@ -46,7 +51,8 @@ export const AddCourseChaptersForm = ({ courseId, chapters }: AddCourseChaptersP
 		resolver: zodResolver(addChapterSchema),
 		defaultValues: {
 			courseId,
-			title: ''
+			title: '',
+			type: ChapterType.LESSON
 		}
 	})
 	const hasChapters = chapters.length > 0
@@ -65,7 +71,8 @@ export const AddCourseChaptersForm = ({ courseId, chapters }: AddCourseChaptersP
 			toggleEdit()
 			form.reset({
 				courseId,
-				title: ''
+				title: '',
+				type: ChapterType.LESSON
 			})
 			router.refresh()
 			toast.success(data.message)
@@ -82,7 +89,7 @@ export const AddCourseChaptersForm = ({ courseId, chapters }: AddCourseChaptersP
 			)}
 
 			<CardHeader>
-				<CardTitle>Course Topics</CardTitle>
+				<CardTitle>Course Builder</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
 					{!isEditing && <TbCirclePlus className="mr-2 size-4" />}
 					{isEditing ? 'Cancel' : 'Add'}
@@ -99,7 +106,7 @@ export const AddCourseChaptersForm = ({ courseId, chapters }: AddCourseChaptersP
 			{isEditing && (
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit((data) => addChapter(data))}>
-						<CardContent>
+						<CardContent className="flex gap-2">
 							<FormField
 								control={form.control}
 								name="title"
@@ -112,7 +119,32 @@ export const AddCourseChaptersForm = ({ courseId, chapters }: AddCourseChaptersP
 									</FormItem>
 								)}
 							/>
+
+							<FormField
+								control={form.control}
+								name="type"
+								render={({ field }) => (
+									<FormItem className="w-1/3">
+										<Select onValueChange={field.onChange} defaultValue={ChapterType.LESSON}>
+											<FormControl>
+												<SelectTrigger className="rounded-xl" disabled={isAdding}>
+													<SelectValue />
+												</SelectTrigger>
+											</FormControl>
+											<SelectContent>
+												{Object.values(ChapterType).map((type) => (
+													<SelectItem key={type} value={type}>
+														{type.charAt(0).toUpperCase() + type.slice(1).toLowerCase()}
+													</SelectItem>
+												))}
+											</SelectContent>
+										</Select>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
 						</CardContent>
+
 						<CardFooter>
 							<Button
 								type="submit"

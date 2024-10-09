@@ -44,6 +44,7 @@ export const AddCourseForm = () => {
 		onSuccess: async (data) => {
 			form.reset()
 			router.push(`/courses/${data.newCourseId}/edit`)
+			router.refresh()
 			toast.success(data.message)
 		},
 		onError: (error) => toast.error(error.message)

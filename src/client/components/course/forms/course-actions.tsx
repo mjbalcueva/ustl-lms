@@ -5,13 +5,14 @@ import { TbLoader2, TbTrash } from 'react-icons/tb'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
-import { type CourseActionsSchema } from '@/shared/validations/course'
+import { type DeleteCourseSchema, type EditStatusSchema } from '@/shared/validations/course'
 
+import { ConfirmModal } from '@/client/components/confirm-modal'
 import { Button } from '@/client/components/ui'
 
-import { ConfirmModal } from '../../confirm-modal'
+type CourseActionsProps = DeleteCourseSchema & EditStatusSchema
 
-export const CourseActions = ({ id, status }: CourseActionsSchema) => {
+export const CourseActions = ({ id, status }: CourseActionsProps) => {
 	const router = useRouter()
 
 	const { mutate: editStatus, isPending: isEditingStatus } = api.course.editStatus.useMutation({
@@ -37,9 +38,7 @@ export const CourseActions = ({ id, status }: CourseActionsSchema) => {
 				size="sm"
 				disabled={isEditingStatus}
 				variant={isEditingStatus ? 'shine' : 'default'}
-				onClick={() => {
-					editStatus({ id, status: isPublished ? 'DRAFT' : 'PUBLISHED' })
-				}}
+				onClick={() => editStatus({ id, status: isPublished ? 'DRAFT' : 'PUBLISHED' })}
 			>
 				{isPublished
 					? isEditingStatus
@@ -53,9 +52,7 @@ export const CourseActions = ({ id, status }: CourseActionsSchema) => {
 			<ConfirmModal
 				title="Are you sure you want to delete this course?"
 				description="This action cannot be undone. This will permanently delete your course and remove your data from our servers."
-				onConfirm={() => {
-					deleteCourse({ id, status })
-				}}
+				onConfirm={() => deleteCourse({ id })}
 			>
 				<Button size="icon" disabled={isDeleting} variant={'destructive'} className="size-9 rounded-md">
 					{isDeleting ? <TbLoader2 className="size-5 animate-spin" /> : <TbTrash className="size-5" />}

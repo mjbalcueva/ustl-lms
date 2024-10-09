@@ -1,7 +1,8 @@
 import {
 	addChapterSchema,
-	chapterActionsSchema,
+	deleteChapterSchema,
 	editContentSchema,
+	editStatusSchema,
 	editTitleSchema,
 	editVideoSchema,
 	getChapterSchema,
@@ -14,28 +15,28 @@ import { utapi } from '@/server/lib/utapi'
 
 export const chapterRouter = createTRPCRouter({
 	addChapter: instructorProcedure.input(addChapterSchema).mutation(async ({ ctx, input }) => {
-		const { courseId, title } = input
+		const { courseId, title, type } = input
 
 		const lastChapter = await ctx.db.chapter.findFirst({
-			where: { courseId, course: { createdById: ctx.session.user.id! } },
+			where: { courseId, course: { instructorId: ctx.session.user.id! } },
 			orderBy: { position: 'desc' }
 		})
 
 		const newPosition = lastChapter ? lastChapter.position + 1 : 1
 
 		await ctx.db.chapter.create({
-			data: { title, courseId, position: newPosition }
+			data: { title, courseId, position: newPosition, type }
 		})
 
 		return { message: 'Chapter created successfully' }
 	}),
 
-	deleteChapter: instructorProcedure.input(chapterActionsSchema).mutation(async ({ ctx, input }) => {
-		const { id, courseId } = input
+	deleteChapter: instructorProcedure.input(deleteChapterSchema).mutation(async ({ ctx, input }) => {
+		const { id } = input
 
 		// delete the chapter video from mux
 		const chapter = await ctx.db.chapter.findUnique({
-			where: { id, courseId, course: { createdById: ctx.session.user.id! } },
+			where: { id, course: { instructorId: ctx.session.user.id! } },
 			select: { videoUrl: true }
 		})
 
@@ -65,7 +66,7 @@ export const chapterRouter = createTRPCRouter({
 
 		// delete the chapter
 		await ctx.db.chapter.delete({
-			where: { id, courseId, course: { createdById: ctx.session.user.id! } }
+			where: { id, course: { instructorId: ctx.session.user.id! } }
 		})
 
 		return { message: 'Chapter deleted successfully' }
@@ -75,7 +76,7 @@ export const chapterRouter = createTRPCRouter({
 		const { id, courseId, content } = input
 
 		const { content: newContent } = await ctx.db.chapter.update({
-			where: { id, courseId, course: { createdById: ctx.session.user.id! } },
+			where: { id, courseId, course: { instructorId: ctx.session.user.id! } },
 			data: { content }
 		})
 
@@ -89,7 +90,7 @@ export const chapterRouter = createTRPCRouter({
 		const { id, courseId, title } = input
 
 		const { title: newTitle } = await ctx.db.chapter.update({
-			where: { id, courseId, course: { createdById: ctx.session.user.id! } },
+			where: { id, courseId, course: { instructorId: ctx.session.user.id! } },
 			data: { title }
 		})
 
@@ -103,7 +104,7 @@ export const chapterRouter = createTRPCRouter({
 		const { id, courseId, videoUrl } = input
 
 		const chapter = await ctx.db.chapter.findUnique({
-			where: { id, courseId, course: { createdById: ctx.session.user.id! } },
+			where: { id, courseId, course: { instructorId: ctx.session.user.id! } },
 			select: { videoUrl: true }
 		})
 
@@ -111,7 +112,7 @@ export const chapterRouter = createTRPCRouter({
 		if (oldVideoKey) await utapi.deleteFiles(oldVideoKey)
 
 		const updatedChapter = await ctx.db.chapter.update({
-			where: { id, courseId, course: { createdById: ctx.session.user.id! } },
+			where: { id, courseId, course: { instructorId: ctx.session.user.id! } },
 			data: { videoUrl }
 		})
 
@@ -148,17 +149,17 @@ export const chapterRouter = createTRPCRouter({
 
 		const chapter = await ctx.db.chapter.findUnique({
 			where: { id, courseId },
-			include: { attachment: true, course: true, muxData: true }
+			include: { attachments: true, course: true, muxData: true }
 		})
 
 		return { chapter }
 	}),
 
-	editStatus: instructorProcedure.input(chapterActionsSchema).mutation(async ({ ctx, input }) => {
+	editStatus: instructorProcedure.input(editStatusSchema).mutation(async ({ ctx, input }) => {
 		const { id, courseId, status } = input
 
 		const chapter = await ctx.db.chapter.update({
-			where: { id, courseId, course: { createdById: ctx.session.user.id! } },
+			where: { id, courseId, course: { instructorId: ctx.session.user.id! } },
 			data: { status }
 		})
 

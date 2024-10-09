@@ -13,7 +13,7 @@ export const attachmentRouter = createTRPCRouter({
 		const { courseId, url, name } = input
 
 		const courseOwner = await ctx.db.course.findUnique({
-			where: { id: courseId, createdById: ctx.session.user.id! }
+			where: { id: courseId, instructorId: ctx.session.user.id! }
 		})
 		if (!courseOwner) throw new Error('Course not found')
 
@@ -28,7 +28,7 @@ export const attachmentRouter = createTRPCRouter({
 		const { courseId, chapterId, url, name } = input
 
 		const chapterOwner = await ctx.db.chapter.findUnique({
-			where: { id: chapterId, course: { createdById: ctx.session.user.id! } }
+			where: { id: chapterId, course: { instructorId: ctx.session.user.id! } }
 		})
 		if (!chapterOwner) throw new Error('Chapter not found')
 
@@ -43,7 +43,7 @@ export const attachmentRouter = createTRPCRouter({
 		const { attachmentId } = input
 
 		const attachment = await ctx.db.attachment.delete({
-			where: { id: attachmentId, course: { createdById: ctx.session.user.id! } }
+			where: { id: attachmentId, course: { instructorId: ctx.session.user.id! } }
 		})
 
 		const attachmentKey = attachment?.url.split('/f/')[1]
@@ -56,7 +56,7 @@ export const attachmentRouter = createTRPCRouter({
 		const { attachmentId } = input
 
 		const attachment = await ctx.db.attachment.delete({
-			where: { id: attachmentId, chapter: { course: { createdById: ctx.session.user.id! } } }
+			where: { id: attachmentId, chapter: { course: { instructorId: ctx.session.user.id! } } }
 		})
 
 		const attachmentKey = attachment?.url.split('/f/')[1]

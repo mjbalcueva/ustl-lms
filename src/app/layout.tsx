@@ -6,7 +6,7 @@ import { GeistSans } from 'geist/font/sans'
 import { siteConfig } from '@/shared/config/site'
 import { TRPCReactProvider } from '@/shared/trpc/react'
 
-import { TailwindSizeIndicator } from '@/client/components/tailwind-size-indicator'
+// import { TailwindSizeIndicator } from '@/client/components/tailwind-size-indicator'
 import { Toaster } from '@/client/components/ui'
 import { ThemeProvider } from '@/client/context/theme-provider'
 
@@ -24,7 +24,7 @@ export default async function Layout({ children }: Readonly<{ children: React.Re
 					<ThemeProvider>
 						{children}
 						<Toaster />
-						<TailwindSizeIndicator />
+						{/* <TailwindSizeIndicator /> */}
 					</ThemeProvider>
 				</TRPCReactProvider>
 			</body>

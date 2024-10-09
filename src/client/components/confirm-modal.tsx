@@ -1,3 +1,5 @@
+import * as React from 'react'
+
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -18,8 +20,19 @@ type ConfirmModalProps = {
 }
 
 export const ConfirmModal = ({ onConfirm, title, description, children }: ConfirmModalProps) => {
+	const [open, setOpen] = React.useState(false)
+
+	const handleOpenChange = (newOpen: boolean) => {
+		setOpen(newOpen)
+	}
+
+	const handleConfirm = () => {
+		onConfirm()
+		setOpen(false)
+	}
+
 	return (
-		<AlertDialog>
+		<AlertDialog open={open} onOpenChange={handleOpenChange}>
 			<AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
 			<AlertDialogContent>
 				<AlertDialogHeader>
@@ -28,7 +41,7 @@ export const ConfirmModal = ({ onConfirm, title, description, children }: Confir
 				</AlertDialogHeader>
 				<AlertDialogFooter>
 					<AlertDialogCancel className="rounded-md">Cancel</AlertDialogCancel>
-					<AlertDialogAction className="rounded-md" onClick={onConfirm}>
+					<AlertDialogAction className="rounded-md" onClick={handleConfirm}>
 						Continue
 					</AlertDialogAction>
 				</AlertDialogFooter>

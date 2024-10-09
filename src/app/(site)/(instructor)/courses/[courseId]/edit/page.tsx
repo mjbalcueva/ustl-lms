@@ -41,8 +41,8 @@ export default async function Page({ params }: { params: { courseId: string } })
 		course.description,
 		course.imageUrl,
 		course.categoryId,
-		course.chapter.some((chapter) => chapter.status === 'PUBLISHED'),
-		course.attachment.some((attachment) => !attachment.chapterId)
+		course.chapters.some((chapter) => chapter.status === 'PUBLISHED'),
+		course.attachments.some((attachment) => !attachment.chapterId)
 	]
 
 	const totalFields = requiredFields.length
@@ -95,12 +95,12 @@ export default async function Page({ params }: { params: { courseId: string } })
 				<div className="flex flex-1 flex-col gap-4 md:gap-6">
 					<PageSection compactMode>
 						<PageSectionTitle title="Course Outline" icon={TbListDetails} />
-						<AddCourseChaptersForm courseId={course.id} chapters={course.chapter} />
+						<AddCourseChaptersForm courseId={course.id} chapters={course.chapters} />
 					</PageSection>
 
 					<PageSection compactMode>
 						<PageSectionTitle title="Additional References" icon={TbPackage} />
-						<AddCourseAttachmentsForm courseId={course.id} attachments={course.attachment} />
+						<AddCourseAttachmentsForm courseId={course.id} attachments={course.attachments} />
 					</PageSection>
 				</div>
 			</PageContent>

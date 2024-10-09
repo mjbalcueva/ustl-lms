@@ -46,7 +46,7 @@ export default async function Page() {
 
 			<PageContent className="space-y-6">
 				<PageSection className="px-0 sm:px-0 md:px-0 lg:px-6">
-					<CourseStatsGroup />
+					<CourseStatsGroup courses={courses} />
 				</PageSection>
 
 				<PageSection className="!mt-3">
