@@ -7,7 +7,7 @@ import { TbX } from 'react-icons/tb'
 import { Icons } from '@/client/components/icons'
 import { cn } from '@/client/lib/utils'
 
-const bannerVariants = cva('border text-center px-4 py-3 text-sm flex items-center w-full', {
+const bannerVariants = cva('border text-center px-4 py-3 text-sm flex items-center w-full font-medium', {
 	variants: {
 		variant: {
 			info: 'bg-blue-200/80 dark:bg-blue-300/60 text-blue-900 dark:text-blue-950 backdrop-blur-xl',

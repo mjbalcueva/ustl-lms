@@ -56,8 +56,6 @@ export default async function Page({ params }: { params: { courseId: string } })
 		{ label: 'Edit' }
 	]
 
-	const isPublished = course.status === 'PUBLISHED'
-
 	return (
 		<PageWrapper>
 			<PageHeader className="hidden space-y-0 md:block md:py-3">
@@ -66,8 +64,15 @@ export default async function Page({ params }: { params: { courseId: string } })
 
 			<Separator className="hidden md:block" />
 
-			{!isPublished && (
-				<Banner label="This course is not published. It will not be visible to students." variant="warning" />
+			{course.status !== 'PUBLISHED' && (
+				<Banner
+					label={
+						course.status === 'DRAFT'
+							? 'This course is not published. It will not be visible to students.'
+							: 'This course is archived. It remains accessible to existing students but is hidden from new enrollments.'
+					}
+					variant={course.status === 'DRAFT' ? 'warning' : 'info'}
+				/>
 			)}
 
 			<PageHeader className="flex items-center justify-between space-y-0">

@@ -60,13 +60,14 @@ export default async function Page({ params }: { params: { courseId: string; cha
 
 			<Separator className="hidden md:block" />
 
-			{chapter.status === 'DRAFT' && (
-				<Banner label="This chapter is not published. It will not be visible to students." variant="warning" />
-			)}
-			{chapter.status === 'ARCHIVED' && (
+			{chapter.status !== 'PUBLISHED' && (
 				<Banner
-					label="This chapter is archived. Existing students can access it, but new enrollments are not allowed."
-					variant="info"
+					label={
+						chapter.status === 'DRAFT'
+							? 'This chapter is not published. It will not be visible to students.'
+							: 'This chapter is archived. It remains accessible to students who have previously accessed it but is hidden from new participants.'
+					}
+					variant={chapter.status === 'DRAFT' ? 'warning' : 'info'}
 				/>
 			)}
 
