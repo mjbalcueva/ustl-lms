@@ -32,6 +32,7 @@ import {
 	SelectTrigger,
 	SelectValue
 } from '@/client/components/ui'
+import { capitalize } from '@/client/lib/utils'
 
 type AddCourseChaptersProps = {
 	courseId: string
@@ -134,7 +135,7 @@ export const AddCourseChaptersForm = ({ courseId, chapters }: AddCourseChaptersP
 											<SelectContent>
 												{Object.values(ChapterType).map((type) => (
 													<SelectItem key={type} value={type}>
-														{type.charAt(0).toUpperCase() + type.slice(1).toLowerCase()}
+														{capitalize(type)}
 													</SelectItem>
 												))}
 											</SelectContent>

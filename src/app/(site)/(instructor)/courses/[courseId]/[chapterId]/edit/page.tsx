@@ -22,6 +22,7 @@ import {
 	PageWrapper,
 	Separator
 } from '@/client/components/ui'
+import { capitalize } from '@/client/lib/utils'
 
 export default async function Page({ params }: { params: { courseId: string; chapterId: string } }) {
 	const session = await api.session.getSession()
@@ -62,7 +63,7 @@ export default async function Page({ params }: { params: { courseId: string; cha
 
 			<PageHeader className="flex items-center justify-between space-y-0">
 				<div className="space-y-2">
-					<PageTitle>Topic Setup</PageTitle>
+					<PageTitle>{capitalize(chapter.type)} Setup</PageTitle>
 					<PageDescription>Filled {completionText}</PageDescription>
 				</div>
 				<ChapterActions id={chapter.id} courseId={chapter.course.id} status={chapter.status} />
