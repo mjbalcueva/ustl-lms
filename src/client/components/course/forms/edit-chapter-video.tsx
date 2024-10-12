@@ -69,11 +69,11 @@ export const EditChapterVideoForm = ({ id, courseId, initialData }: EditChapterV
 			</CardContent>
 
 			<CardFooter className="text-sm text-muted-foreground">
-				{isEditing && 'Upload a pre-recorded video or relevant content to enhance your course.'}
+				{isEditing && 'Upload a pre-recorded video or relevant content to enhance your chapter.'}
 				{!isEditing &&
 					(videoUrl
 						? 'Videos may take a few minutes to process. Refresh the page if the video does not appear.'
-						: 'Upload a video to enhance your course.')}
+						: 'Upload a video to enhance your chapter.')}
 			</CardFooter>
 		</Card>
 	)
