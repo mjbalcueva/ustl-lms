@@ -71,7 +71,12 @@ export default async function Page({ params }: { params: { courseId: string; cha
 					<PageTitle>{capitalize(chapter.type)} Setup</PageTitle>
 					<PageDescription>Filled {completionText}</PageDescription>
 				</div>
-				<ChapterActions id={chapter.id} courseId={chapter.course.id} status={chapter.status} />
+				<ChapterActions
+					id={chapter.id}
+					courseId={chapter.course.id}
+					status={chapter.status}
+					chapterType={chapter.type}
+				/>
 			</PageHeader>
 
 			<PageContent className="gap-4 px-2.5 sm:px-4 md:flex md:flex-wrap md:gap-6 md:px-6">

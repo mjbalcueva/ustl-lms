@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { type ChapterType } from '@prisma/client'
 import { LuArchive, LuTrash } from 'react-icons/lu'
 import { TbDots } from 'react-icons/tb'
 import { toast } from 'sonner'
@@ -16,10 +17,14 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger
 } from '@/client/components/ui'
+import { capitalize } from '@/client/lib/utils'
 
-type ChapterActionsProps = DeleteChapterSchema & EditStatusSchema
+type ChapterActionsProps = DeleteChapterSchema &
+	EditStatusSchema & {
+		chapterType: ChapterType
+	}
 
-export const ChapterActions = ({ id, courseId, status }: ChapterActionsProps) => {
+export const ChapterActions = ({ id, courseId, status, chapterType }: ChapterActionsProps) => {
 	const router = useRouter()
 
 	const { mutate: editStatus, isPending: isEditingStatus } = api.chapter.editStatus.useMutation({
@@ -48,10 +53,10 @@ export const ChapterActions = ({ id, courseId, status }: ChapterActionsProps) =>
 				{status === 'PUBLISHED'
 					? isEditingStatus
 						? 'Unpublishing...'
-						: 'Unpublish Topic'
+						: `Unpublish ${capitalize(chapterType)}`
 					: isEditingStatus
 						? 'Publishing...'
-						: 'Publish Topic'}
+						: `Publish ${capitalize(chapterType)}`}
 			</Button>
 
 			<DropdownMenu>
