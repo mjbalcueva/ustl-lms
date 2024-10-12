@@ -53,7 +53,7 @@ export const ChapterActions = ({ id, courseId, status, chapterType }: ChapterAct
 		<div className="flex items-center gap-2">
 			<Button
 				size="sm"
-				disabled={isEditingStatus}
+				disabled={isEditingStatus || status === 'ARCHIVED'}
 				variant={isEditingStatus ? 'shine' : 'default'}
 				onClick={() => editStatus({ id, courseId, status: status === 'PUBLISHED' ? 'DRAFT' : 'PUBLISHED' })}
 			>
@@ -68,15 +68,16 @@ export const ChapterActions = ({ id, courseId, status, chapterType }: ChapterAct
 
 			<DropdownMenu>
 				<DropdownMenuTrigger asChild>
-					<Button aria-label="Open menu" variant="secondary" className="size-9 rounded-md p-0">
+					<Button aria-label="Open menu" variant="ghost" className="size-9 rounded-md p-0">
 						<TbDots className="size-4" aria-hidden="true" />
 					</Button>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align="end" className="w-40">
 					<DropdownMenuItem onSelect={(e) => e.preventDefault()} onClick={() => archiveChapter({ id })}>
 						<LuArchive className="mr-2 size-4" />
-						Archive
+						{status === 'ARCHIVED' ? 'Unarchive' : 'Archive'}
 					</DropdownMenuItem>
+
 					<ConfirmModal
 						title="Are you sure you want to delete this chapter?"
 						description="This action cannot be undone. This will permanently delete your chapter and remove your data from our servers."
