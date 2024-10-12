@@ -15,12 +15,6 @@ type ChapterListProps = {
 	onReorder: (updateData: { id: string; position: number }[]) => void
 }
 
-const chapterTypeIcons = {
-	LESSON: { Icon: Icons.LESSON, color: 'text-blue-500' },
-	ASSIGNMENT: { Icon: Icons.ASSIGNMENT, color: 'text-green-500' },
-	ASSESSMENT: { Icon: Icons.ASSESSMENT, color: 'text-orange-500' }
-} as const
-
 export const ChapterList = ({ items, onReorder }: ChapterListProps) => {
 	const [chapters, setChapters] = React.useState(items)
 
@@ -39,6 +33,12 @@ export const ChapterList = ({ items, onReorder }: ChapterListProps) => {
 		onReorder(updatedChapters.map((chapter, index) => ({ id: chapter.id, position: index })))
 	}
 
+	const chapterTypeIcons = {
+		LESSON: { Icon: Icons.LESSON, color: 'text-blue-500' },
+		ASSIGNMENT: { Icon: Icons.ASSIGNMENT, color: 'text-green-500' },
+		ASSESSMENT: { Icon: Icons.ASSESSMENT, color: 'text-orange-500' }
+	} as const
+
 	return (
 		<DragDropContext onDragEnd={handleDragEnd}>
 			<Droppable droppableId="chapters">
@@ -46,6 +46,7 @@ export const ChapterList = ({ items, onReorder }: ChapterListProps) => {
 					<ol ref={provided.innerRef} className="space-y-2" {...provided.droppableProps}>
 						{chapters.map((chapter, index) => {
 							const isPublished = chapter.status === 'PUBLISHED'
+							const isArchived = chapter.status === 'ARCHIVED'
 							const { Icon, color } = chapterTypeIcons[chapter.type as keyof typeof chapterTypeIcons]
 
 							return (
@@ -74,7 +75,7 @@ export const ChapterList = ({ items, onReorder }: ChapterListProps) => {
 											{chapter.title}
 
 											<Badge variant={isPublished ? 'default' : 'secondary'} className="ml-auto select-none">
-												{isPublished ? 'Published' : 'Draft'}
+												{isPublished ? 'Published' : isArchived ? 'Archived' : 'Draft'}
 											</Badge>
 
 											<Tooltip>

@@ -1,5 +1,6 @@
 import {
 	addChapterSchema,
+	archiveChapterSchema,
 	deleteChapterSchema,
 	editContentSchema,
 	editStatusSchema,
@@ -29,6 +30,29 @@ export const chapterRouter = createTRPCRouter({
 		})
 
 		return { message: 'Chapter created successfully' }
+	}),
+
+	archiveChapter: instructorProcedure.input(archiveChapterSchema).mutation(async ({ ctx, input }) => {
+		const { id } = input
+
+		const chapter = await ctx.db.chapter.findUnique({
+			where: { id, course: { instructorId: ctx.session.user.id! } },
+			select: { status: true }
+		})
+
+		if (!chapter) {
+			throw new Error('Chapter not found')
+		}
+
+		const newStatus = chapter.status === 'ARCHIVED' ? 'DRAFT' : 'ARCHIVED'
+
+		await ctx.db.chapter.update({
+			where: { id, course: { instructorId: ctx.session.user.id! } },
+			data: { status: newStatus }
+		})
+
+		const action = newStatus === 'ARCHIVED' ? 'archived' : 'unarchived'
+		return { message: `Chapter ${action} successfully` }
 	}),
 
 	deleteChapter: instructorProcedure.input(deleteChapterSchema).mutation(async ({ ctx, input }) => {

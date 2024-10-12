@@ -34,6 +34,13 @@ export const ChapterActions = ({ id, courseId, status, chapterType }: ChapterAct
 		}
 	})
 
+	const { mutate: archiveChapter } = api.chapter.archiveChapter.useMutation({
+		onSuccess: (data) => {
+			toast.success(data.message)
+			router.refresh()
+		}
+	})
+
 	const { mutate: deleteChapter } = api.chapter.deleteChapter.useMutation({
 		onSuccess: (data) => {
 			toast.success(data.message)
@@ -66,7 +73,7 @@ export const ChapterActions = ({ id, courseId, status, chapterType }: ChapterAct
 					</Button>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align="end" className="w-40">
-					<DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+					<DropdownMenuItem onSelect={(e) => e.preventDefault()} onClick={() => archiveChapter({ id })}>
 						<LuArchive className="mr-2 size-4" />
 						Archive
 					</DropdownMenuItem>
