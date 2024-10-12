@@ -160,9 +160,11 @@ export const chapterRouter = createTRPCRouter({
 
 		try {
 			const chapter = await ctx.db.chapter.updateMany({
-				where: { id, courseId },
+				where: { id, courseId, course: { instructorId: ctx.session.user.id! } },
 				data: { status }
 			})
+
+			if (chapter.count === 0) throw new Error('Chapter not found or you are not authorized to update it.')
 
 			const statusMessages: Record<string, string> = {
 				PUBLISHED: 'Chapter published successfully',
@@ -172,7 +174,7 @@ export const chapterRouter = createTRPCRouter({
 
 			const message = statusMessages[status] ?? 'Chapter status updated successfully'
 
-			return { message, chapter }
+			return { message }
 		} catch (error) {
 			console.error('Error updating chapter status:', error)
 			throw new Error('Failed to update chapter status. Please try again later.')

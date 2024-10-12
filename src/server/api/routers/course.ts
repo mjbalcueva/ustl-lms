@@ -124,12 +124,27 @@ export const courseRouter = createTRPCRouter({
 	editStatus: instructorProcedure.input(editStatusSchema).mutation(async ({ ctx, input }) => {
 		const { id, status } = input
 
-		await ctx.db.course.update({
-			where: { id, instructorId: ctx.session.user.id! },
-			data: { status }
-		})
+		try {
+			const course = await ctx.db.course.updateMany({
+				where: { id, instructorId: ctx.session.user.id! },
+				data: { status }
+			})
 
-		return { message: 'Course status updated!' }
+			if (course.count === 0) throw new Error('Course not found or you are not authorized to update it.')
+
+			const statusMessages: Record<string, string> = {
+				PUBLISHED: 'Course published successfully',
+				DRAFT: 'Course saved as draft',
+				ARCHIVED: 'Course archived successfully'
+			}
+
+			const message = statusMessages[status] ?? 'Course status updated successfully'
+
+			return { message }
+		} catch (error) {
+			console.error('Error updating course status:', error)
+			throw new Error('Failed to update course status. Please try again later.')
+		}
 	}),
 
 	getCourse: instructorProcedure.input(getCourseSchema).query(async ({ ctx, input }) => {

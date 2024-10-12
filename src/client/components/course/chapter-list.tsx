@@ -74,7 +74,10 @@ export const ChapterList = ({ items, onReorder }: ChapterListProps) => {
 
 											{chapter.title}
 
-											<Badge variant={isPublished ? 'default' : 'secondary'} className="ml-auto select-none">
+											<Badge
+												variant={isPublished ? 'default' : isArchived ? 'outline' : 'secondary'}
+												className="ml-auto select-none"
+											>
 												{isPublished ? 'Published' : isArchived ? 'Archived' : 'Draft'}
 											</Badge>
 

@@ -36,8 +36,14 @@ export const useColumns = (mutateAsync: (id: string) => Promise<void>): ColumnDe
 			accessorKey: 'status',
 			header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
 			cell: ({ row }) => {
-				const isPublished = row.original.status === 'PUBLISHED'
-				return isPublished ? <Badge>Published</Badge> : <Badge variant="secondary">Draft</Badge>
+				switch (row.original.status) {
+					case 'PUBLISHED':
+						return <Badge>Published</Badge>
+					case 'ARCHIVED':
+						return <Badge variant="outline">Archived</Badge>
+					default:
+						return <Badge variant="secondary">Draft</Badge>
+				}
 			},
 			filterFn: (row, id, value) => Array.isArray(value) && value.includes(row.getValue(id))
 		},

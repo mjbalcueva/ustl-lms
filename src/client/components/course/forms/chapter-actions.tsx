@@ -62,7 +62,7 @@ export const ChapterActions = ({ id, courseId, status, chapterType }: ChapterAct
 			<Button
 				size="sm"
 				disabled={isEditingStatus || status === 'ARCHIVED'}
-				variant="default"
+				variant={isEditingStatus ? 'shine' : 'default'}
 				onClick={() => handleStatusChange(status === 'PUBLISHED' ? 'DRAFT' : 'PUBLISHED')}
 			>
 				{getStatusButtonLabel()}

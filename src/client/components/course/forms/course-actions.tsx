@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { type Status } from '@prisma/client'
 import { LuArchive, LuTrash } from 'react-icons/lu'
 import { TbDots } from 'react-icons/tb'
 import { toast } from 'sonner'
@@ -37,23 +38,30 @@ export const CourseActions = ({ id, status }: CourseActionsProps) => {
 		}
 	})
 
-	const isPublished = status === 'PUBLISHED'
+	const handleStatusChange = (newStatus: Status) => {
+		editStatus({ id, status: newStatus })
+	}
+
+	const getStatusButtonLabel = () => {
+		if (isEditingStatus) return 'Loading...'
+
+		switch (status) {
+			case 'PUBLISHED':
+				return `Unpublish Course`
+			default:
+				return `Publish Course`
+		}
+	}
 
 	return (
 		<div className="flex items-center gap-2">
 			<Button
 				size="sm"
-				disabled={isEditingStatus}
+				disabled={isEditingStatus || status === 'ARCHIVED'}
 				variant={isEditingStatus ? 'shine' : 'default'}
-				onClick={() => editStatus({ id, status: isPublished ? 'DRAFT' : 'PUBLISHED' })}
+				onClick={() => handleStatusChange(status === 'PUBLISHED' ? 'DRAFT' : 'PUBLISHED')}
 			>
-				{isPublished
-					? isEditingStatus
-						? 'Unpublishing...'
-						: 'Unpublish Course'
-					: isEditingStatus
-						? 'Publishing...'
-						: 'Publish Course'}
+				{getStatusButtonLabel()}
 			</Button>
 
 			<DropdownMenu>
@@ -63,9 +71,13 @@ export const CourseActions = ({ id, status }: CourseActionsProps) => {
 					</Button>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align="end" className="w-40">
-					<DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+					<DropdownMenuItem
+						onSelect={(e) => e.preventDefault()}
+						disabled={isEditingStatus}
+						onClick={() => handleStatusChange(status === 'ARCHIVED' ? 'DRAFT' : 'ARCHIVED')}
+					>
 						<LuArchive className="mr-2 size-4" />
-						Archive
+						{status === 'ARCHIVED' ? 'Unarchive' : 'Archive'}
 					</DropdownMenuItem>
 					<ConfirmModal
 						title="Are you sure you want to delete this course?"
