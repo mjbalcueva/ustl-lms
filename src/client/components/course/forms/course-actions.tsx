@@ -83,6 +83,8 @@ export const CourseActions = ({ id, status }: CourseActionsProps) => {
 						title="Are you sure you want to delete this course?"
 						description="This action cannot be undone. This will permanently delete your course and remove your data from our servers."
 						onConfirm={() => deleteCourse({ id })}
+						actionLabel="Delete"
+						variant="destructive"
 					>
 						<DropdownMenuItem onSelect={(e) => e.preventDefault()}>
 							<LuTrash className="mr-2 size-4" />
