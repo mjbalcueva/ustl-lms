@@ -9,6 +9,7 @@ import { ChapterActions } from '@/client/components/course/forms/chapter-actions
 import { EditChapterContentForm } from '@/client/components/course/forms/edit-chapter-content'
 import { EditChapterTitleForm } from '@/client/components/course/forms/edit-chapter-title'
 import { EditChapterVideoForm } from '@/client/components/course/forms/edit-chapter-video'
+import { type Icons } from '@/client/components/icons'
 import { NotFound } from '@/client/components/not-found'
 import {
 	Banner,
@@ -43,7 +44,11 @@ export default async function Page({ params }: { params: { courseId: string; cha
 		{ icon: 'instructor' },
 		{ label: 'Courses', href: '/courses/manage' },
 		{ icon: 'course', label: chapter.course.title, href: `/courses/${chapter.course.id}/edit` },
-		{ icon: 'chapter', label: chapter.title, href: `/courses/${chapter.course.id}/${chapter.id}/edit` },
+		{
+			icon: chapter.type as keyof typeof Icons,
+			label: chapter.title,
+			href: `/courses/${chapter.course.id}/${chapter.id}/edit`
+		},
 		{ label: 'Edit' }
 	]
 

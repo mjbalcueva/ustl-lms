@@ -8,6 +8,7 @@ import {
 	TbChartHistogram,
 	TbCircleCheck,
 	TbCirclePlus,
+	TbClipboardList,
 	TbDiamond,
 	TbEdit,
 	TbFilter,
@@ -28,7 +29,8 @@ import {
 	TbSmartHome,
 	TbSunHigh,
 	TbTools,
-	TbUser
+	TbUser,
+	TbWriting
 } from 'react-icons/tb'
 
 export const Icons = {
@@ -76,6 +78,9 @@ export const Icons = {
 
 	// chapter
 	chapter: TbNotes,
+	LESSON: TbNotes,
+	ASSIGNMENT: TbClipboardList,
+	ASSESSMENT: TbWriting,
 
 	// misc
 	filter: TbFilter,

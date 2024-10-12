@@ -4,8 +4,9 @@ import Link from 'next/link'
 import * as React from 'react'
 import { DragDropContext, Draggable, Droppable, type DropResult } from '@hello-pangea/dnd'
 import { type Chapter } from '@prisma/client'
-import { TbBook, TbClipboardList, TbEdit, TbGripVertical, TbWriting } from 'react-icons/tb'
+import { TbEdit, TbGripVertical } from 'react-icons/tb'
 
+import { Icons } from '@/client/components/icons'
 import { Badge, Separator, Tooltip, TooltipContent, TooltipTrigger } from '@/client/components/ui'
 import { capitalize, cn } from '@/client/lib/utils'
 
@@ -15,9 +16,9 @@ type ChapterListProps = {
 }
 
 const chapterTypeIcons = {
-	LESSON: { Icon: TbBook, className: 'text-blue-500' },
-	ASSIGNMENT: { Icon: TbClipboardList, className: 'text-green-500' },
-	ASSESSMENT: { Icon: TbWriting, className: 'text-orange-500' }
+	LESSON: { Icon: Icons.LESSON, color: 'text-blue-500' },
+	ASSIGNMENT: { Icon: Icons.ASSIGNMENT, color: 'text-green-500' },
+	ASSESSMENT: { Icon: Icons.ASSESSMENT, color: 'text-orange-500' }
 } as const
 
 export const ChapterList = ({ items, onReorder }: ChapterListProps) => {
@@ -45,7 +46,7 @@ export const ChapterList = ({ items, onReorder }: ChapterListProps) => {
 					<ol ref={provided.innerRef} className="space-y-2" {...provided.droppableProps}>
 						{chapters.map((chapter, index) => {
 							const isPublished = chapter.status === 'PUBLISHED'
-							const { Icon, className } = chapterTypeIcons[chapter.type as keyof typeof chapterTypeIcons]
+							const { Icon, color } = chapterTypeIcons[chapter.type as keyof typeof chapterTypeIcons]
 
 							return (
 								<Draggable key={chapter.id} draggableId={chapter.id} index={index}>
@@ -64,10 +65,10 @@ export const ChapterList = ({ items, onReorder }: ChapterListProps) => {
 											</div>
 
 											<Tooltip>
-												<TooltipTrigger>
-													<Icon className={cn('size-5', className)} />
+												<TooltipTrigger className="cursor-default">
+													<Icon className={cn('size-5 dark:text-opacity-75', color)} />
 												</TooltipTrigger>
-												<TooltipContent className="text-xs">{capitalize(chapter.type)}</TooltipContent>
+												<TooltipContent>{capitalize(chapter.type)}</TooltipContent>
 											</Tooltip>
 
 											{chapter.title}

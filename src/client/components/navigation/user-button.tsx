@@ -4,7 +4,6 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { signOut, useSession } from 'next-auth/react'
 import { LuChevronsUpDown } from 'react-icons/lu'
-import { TbLogout } from 'react-icons/tb'
 import { useMediaQuery } from 'usehooks-ts'
 
 import { Icons } from '@/client/components/icons'
@@ -106,7 +105,7 @@ export const UserButton: React.FC<React.ComponentProps<typeof DropdownMenu>> = (
 				<DropdownMenuSeparator className="border" />
 
 				<DropdownMenuItem className="cursor-pointer" onClick={() => signOut()}>
-					<TbLogout className="mr-2 h-4 w-4" />
+					<Icons.logout className="mr-2 h-4 w-4" />
 					<span>Log out</span>
 				</DropdownMenuItem>
 			</DropdownMenuContent>

@@ -1,6 +1,6 @@
 import { cva, type VariantProps } from 'class-variance-authority'
-import { TbAlertTriangle, TbCircleCheck, TbInfoCircle } from 'react-icons/tb'
 
+import { Icons } from '@/client/components/icons'
 import { cn } from '@/client/lib/utils'
 
 const bannerVariants = cva('border text-center px-4 py-3 text-sm flex items-center w-full', {
@@ -17,9 +17,9 @@ const bannerVariants = cva('border text-center px-4 py-3 text-sm flex items-cent
 })
 
 const iconMap = {
-	info: TbInfoCircle,
-	success: TbCircleCheck,
-	warning: TbAlertTriangle
+	info: Icons.info,
+	success: Icons.success,
+	warning: Icons.warning
 }
 
 type BannerProps = VariantProps<typeof bannerVariants> & {
