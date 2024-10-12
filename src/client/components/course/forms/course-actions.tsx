@@ -66,7 +66,7 @@ export const CourseActions = ({ id, status }: CourseActionsProps) => {
 
 			<DropdownMenu>
 				<DropdownMenuTrigger asChild>
-					<Button aria-label="Open menu" variant="secondary" className="size-9 rounded-md p-0">
+					<Button aria-label="Open menu" variant="ghost" className="size-9 rounded-md p-0">
 						<TbDots className="size-4" aria-hidden="true" />
 					</Button>
 				</DropdownMenuTrigger>
