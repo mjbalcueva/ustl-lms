@@ -1,14 +1,21 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { TbLoader2, TbTrash } from 'react-icons/tb'
+import { LuArchive, LuTrash } from 'react-icons/lu'
+import { TbDots } from 'react-icons/tb'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
 import { type DeleteCourseSchema, type EditStatusSchema } from '@/shared/validations/course'
 
 import { ConfirmModal } from '@/client/components/confirm-modal'
-import { Button } from '@/client/components/ui'
+import {
+	Button,
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger
+} from '@/client/components/ui'
 
 type CourseActionsProps = DeleteCourseSchema & EditStatusSchema
 
@@ -22,7 +29,7 @@ export const CourseActions = ({ id, status }: CourseActionsProps) => {
 		}
 	})
 
-	const { mutate: deleteCourse, isPending: isDeleting } = api.course.deleteCourse.useMutation({
+	const { mutate: deleteCourse } = api.course.deleteCourse.useMutation({
 		onSuccess: (data) => {
 			toast.success(data.message)
 			router.push(`/courses/manage`)
@@ -49,15 +56,29 @@ export const CourseActions = ({ id, status }: CourseActionsProps) => {
 						: 'Publish Course'}
 			</Button>
 
-			<ConfirmModal
-				title="Are you sure you want to delete this course?"
-				description="This action cannot be undone. This will permanently delete your course and remove your data from our servers."
-				onConfirm={() => deleteCourse({ id })}
-			>
-				<Button size="icon" disabled={isDeleting} variant={'destructive'} className="size-9 rounded-md">
-					{isDeleting ? <TbLoader2 className="size-5 animate-spin" /> : <TbTrash className="size-5" />}
-				</Button>
-			</ConfirmModal>
+			<DropdownMenu>
+				<DropdownMenuTrigger asChild>
+					<Button aria-label="Open menu" variant="secondary" className="size-9 rounded-md p-0">
+						<TbDots className="size-4" aria-hidden="true" />
+					</Button>
+				</DropdownMenuTrigger>
+				<DropdownMenuContent align="end" className="w-40">
+					<DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+						<LuArchive className="mr-2 size-4" />
+						Archive
+					</DropdownMenuItem>
+					<ConfirmModal
+						title="Are you sure you want to delete this course?"
+						description="This action cannot be undone. This will permanently delete your course and remove your data from our servers."
+						onConfirm={() => deleteCourse({ id })}
+					>
+						<DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+							<LuTrash className="mr-2 size-4" />
+							Delete
+						</DropdownMenuItem>
+					</ConfirmModal>
+				</DropdownMenuContent>
+			</DropdownMenu>
 		</div>
 	)
 }
