@@ -1,4 +1,8 @@
+'use client'
+
+import { useState } from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
+import { TbX } from 'react-icons/tb'
 
 import { Icons } from '@/client/components/icons'
 import { cn } from '@/client/lib/utils'
@@ -27,12 +31,26 @@ type BannerProps = VariantProps<typeof bannerVariants> & {
 }
 
 export const Banner = ({ label, variant }: BannerProps) => {
+	const [isVisible, setIsVisible] = useState(true)
 	const Icon = iconMap[variant ?? 'warning']
 
+	const handleClose = () => {
+		setIsVisible(false)
+	}
+
+	if (!isVisible) return null
+
 	return (
-		<div className={cn(bannerVariants({ variant }))}>
+		<div className={cn(bannerVariants({ variant }), 'relative')}>
 			<Icon className="mr-2 size-4 shrink-0" />
 			{label}
+			<button
+				onClick={handleClose}
+				className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1 hover:bg-black/5"
+				aria-label="Close banner"
+			>
+				<TbX className="size-4" />
+			</button>
 		</div>
 	)
 }
