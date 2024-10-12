@@ -12,6 +12,7 @@ import { EditChapterVideoForm } from '@/client/components/course/forms/edit-chap
 import { type Icons } from '@/client/components/icons'
 import { NotFound } from '@/client/components/not-found'
 import {
+	Badge,
 	Banner,
 	PageBreadcrumbs,
 	PageContent,
@@ -73,7 +74,12 @@ export default async function Page({ params }: { params: { courseId: string; cha
 
 			<PageHeader className="flex items-center justify-between space-y-0">
 				<div className="space-y-2">
-					<PageTitle>{capitalize(chapter.type)} Setup</PageTitle>
+					<PageTitle>
+						{capitalize(chapter.type)} Setup
+						<Badge variant="outline" className="ml-2">
+							{chapter.status}
+						</Badge>
+					</PageTitle>
 					<PageDescription>Filled {completionText}</PageDescription>
 				</div>
 				<ChapterActions

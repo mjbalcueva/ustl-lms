@@ -14,6 +14,7 @@ import { EditCourseImageForm } from '@/client/components/course/forms/edit-cours
 import { EditCourseTitleForm } from '@/client/components/course/forms/edit-course-title'
 import { NotFound } from '@/client/components/not-found'
 import {
+	Badge,
 	Banner,
 	PageBreadcrumbs,
 	PageContent,
@@ -77,7 +78,12 @@ export default async function Page({ params }: { params: { courseId: string } })
 
 			<PageHeader className="flex items-center justify-between space-y-0">
 				<div className="space-y-2">
-					<PageTitle>Course Setup</PageTitle>
+					<PageTitle>
+						Course Setup
+						<Badge variant="outline" className="ml-2">
+							{course.status}
+						</Badge>
+					</PageTitle>
 					<PageDescription>Filled {completionText}</PageDescription>
 				</div>
 				<CourseActions id={course.id} status={course.status} />
