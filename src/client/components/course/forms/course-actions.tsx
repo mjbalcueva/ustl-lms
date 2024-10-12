@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { type Status } from '@prisma/client'
 import { LuArchive, LuTrash } from 'react-icons/lu'
-import { TbDots } from 'react-icons/tb'
+import { TbArchiveOff, TbDots } from 'react-icons/tb'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
@@ -76,7 +76,7 @@ export const CourseActions = ({ id, status }: CourseActionsProps) => {
 						disabled={isEditingStatus}
 						onClick={() => handleStatusChange(status === 'ARCHIVED' ? 'DRAFT' : 'ARCHIVED')}
 					>
-						<LuArchive className="mr-2 size-4" />
+						{status === 'ARCHIVED' ? <TbArchiveOff className="mr-2 size-4" /> : <LuArchive className="mr-2 size-4" />}
 						{status === 'ARCHIVED' ? 'Unarchive' : 'Archive'}
 					</DropdownMenuItem>
 					<ConfirmModal

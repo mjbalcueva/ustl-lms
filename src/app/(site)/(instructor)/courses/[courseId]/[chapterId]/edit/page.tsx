@@ -92,7 +92,7 @@ export default async function Page({ params }: { params: { courseId: string; cha
 
 			<PageContent className="gap-4 px-2.5 sm:px-4 md:flex md:flex-wrap md:gap-6 md:px-6">
 				<PageSection className="mb-6 flex-1 md:mb-0" compactMode>
-					<PageSectionTitle title="Customize your topic" icon={TbNotes} />
+					<PageSectionTitle title={`Customize your ${chapter.type.toLowerCase()}`} icon={TbNotes} />
 					<EditChapterTitleForm id={chapter.id} courseId={chapter.course.id} title={chapter.title} />
 					<EditChapterContentForm id={chapter.id} courseId={chapter.course.id} content={chapter.content} />
 				</PageSection>
