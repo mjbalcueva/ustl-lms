@@ -1,6 +1,5 @@
 import {
 	addChapterSchema,
-	archiveChapterSchema,
 	deleteChapterSchema,
 	editContentSchema,
 	editStatusSchema,
@@ -30,29 +29,6 @@ export const chapterRouter = createTRPCRouter({
 		})
 
 		return { message: 'Chapter created successfully' }
-	}),
-
-	archiveChapter: instructorProcedure.input(archiveChapterSchema).mutation(async ({ ctx, input }) => {
-		const { id } = input
-
-		const chapter = await ctx.db.chapter.findUnique({
-			where: { id, course: { instructorId: ctx.session.user.id! } },
-			select: { status: true }
-		})
-
-		if (!chapter) {
-			throw new Error('Chapter not found')
-		}
-
-		const newStatus = chapter.status === 'ARCHIVED' ? 'DRAFT' : 'ARCHIVED'
-
-		await ctx.db.chapter.update({
-			where: { id, course: { instructorId: ctx.session.user.id! } },
-			data: { status: newStatus }
-		})
-
-		const action = newStatus === 'ARCHIVED' ? 'archived' : 'unarchived'
-		return { message: `Chapter ${action} successfully` }
 	}),
 
 	deleteChapter: instructorProcedure.input(deleteChapterSchema).mutation(async ({ ctx, input }) => {
@@ -182,12 +158,25 @@ export const chapterRouter = createTRPCRouter({
 	editStatus: instructorProcedure.input(editStatusSchema).mutation(async ({ ctx, input }) => {
 		const { id, courseId, status } = input
 
-		const chapter = await ctx.db.chapter.update({
-			where: { id, courseId, course: { instructorId: ctx.session.user.id! } },
-			data: { status }
-		})
+		try {
+			const chapter = await ctx.db.chapter.updateMany({
+				where: { id, courseId },
+				data: { status }
+			})
 
-		return { message: `Chapter ${status === 'PUBLISHED' ? 'published' : 'unpublished'} successfully`, chapter }
+			const statusMessages: Record<string, string> = {
+				PUBLISHED: 'Chapter published successfully',
+				DRAFT: 'Chapter saved as draft',
+				ARCHIVED: 'Chapter archived successfully'
+			}
+
+			const message = statusMessages[status] ?? 'Chapter status updated successfully'
+
+			return { message, chapter }
+		} catch (error) {
+			console.error('Error updating chapter status:', error)
+			throw new Error('Failed to update chapter status. Please try again later.')
+		}
 	}),
 
 	reorderChapters: instructorProcedure.input(reorderChaptersSchema).mutation(async ({ ctx, input }) => {

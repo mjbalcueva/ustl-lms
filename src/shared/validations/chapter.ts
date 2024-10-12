@@ -8,11 +8,6 @@ export const addChapterSchema = z.object({
 })
 export type AddChapterSchema = z.infer<typeof addChapterSchema>
 
-export const archiveChapterSchema = z.object({
-	id: z.string().min(1, 'Chapter ID is required')
-})
-export type ArchiveChapterSchema = z.infer<typeof archiveChapterSchema>
-
 export const deleteChapterSchema = z.object({
 	id: z.string().min(1, 'Chapter ID is required')
 })

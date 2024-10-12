@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { type ChapterType } from '@prisma/client'
+import { type ChapterType, type Status } from '@prisma/client'
 import { LuArchive, LuTrash } from 'react-icons/lu'
 import { TbDots } from 'react-icons/tb'
 import { toast } from 'sonner'
@@ -34,13 +34,6 @@ export const ChapterActions = ({ id, courseId, status, chapterType }: ChapterAct
 		}
 	})
 
-	const { mutate: archiveChapter } = api.chapter.archiveChapter.useMutation({
-		onSuccess: (data) => {
-			toast.success(data.message)
-			router.refresh()
-		}
-	})
-
 	const { mutate: deleteChapter } = api.chapter.deleteChapter.useMutation({
 		onSuccess: (data) => {
 			toast.success(data.message)
@@ -49,21 +42,30 @@ export const ChapterActions = ({ id, courseId, status, chapterType }: ChapterAct
 		}
 	})
 
+	const handleStatusChange = (newStatus: Status) => {
+		editStatus({ id, courseId, status: newStatus })
+	}
+
+	const getStatusButtonLabel = () => {
+		if (isEditingStatus) return 'Loading...'
+
+		switch (status) {
+			case 'PUBLISHED':
+				return `Unpublish ${capitalize(chapterType)}`
+			default:
+				return `Publish ${capitalize(chapterType)}`
+		}
+	}
+
 	return (
 		<div className="flex items-center gap-2">
 			<Button
 				size="sm"
 				disabled={isEditingStatus || status === 'ARCHIVED'}
-				variant={isEditingStatus ? 'shine' : 'default'}
-				onClick={() => editStatus({ id, courseId, status: status === 'PUBLISHED' ? 'DRAFT' : 'PUBLISHED' })}
+				variant="default"
+				onClick={() => handleStatusChange(status === 'PUBLISHED' ? 'DRAFT' : 'PUBLISHED')}
 			>
-				{status === 'PUBLISHED'
-					? isEditingStatus
-						? 'Unpublishing...'
-						: `Unpublish ${capitalize(chapterType)}`
-					: isEditingStatus
-						? 'Publishing...'
-						: `Publish ${capitalize(chapterType)}`}
+				{getStatusButtonLabel()}
 			</Button>
 
 			<DropdownMenu>
@@ -72,8 +74,12 @@ export const ChapterActions = ({ id, courseId, status, chapterType }: ChapterAct
 						<TbDots className="size-4" aria-hidden="true" />
 					</Button>
 				</DropdownMenuTrigger>
+
 				<DropdownMenuContent align="end" className="w-40">
-					<DropdownMenuItem onSelect={(e) => e.preventDefault()} onClick={() => archiveChapter({ id })}>
+					<DropdownMenuItem
+						onSelect={(e) => e.preventDefault()}
+						onClick={() => handleStatusChange(status === 'ARCHIVED' ? 'DRAFT' : 'ARCHIVED')}
+					>
 						<LuArchive className="mr-2 size-4" />
 						{status === 'ARCHIVED' ? 'Unarchive' : 'Archive'}
 					</DropdownMenuItem>
