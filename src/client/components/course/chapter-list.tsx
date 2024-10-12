@@ -4,14 +4,21 @@ import Link from 'next/link'
 import * as React from 'react'
 import { DragDropContext, Draggable, Droppable, type DropResult } from '@hello-pangea/dnd'
 import { type Chapter } from '@prisma/client'
-import { TbEdit, TbGripVertical } from 'react-icons/tb'
+import { TbBook, TbClipboardList, TbEdit, TbGripVertical, TbWriting } from 'react-icons/tb'
 
-import { Badge, Tooltip, TooltipContent, TooltipTrigger } from '@/client/components/ui'
+import { Badge, Separator, Tooltip, TooltipContent, TooltipTrigger } from '@/client/components/ui'
+import { capitalize, cn } from '@/client/lib/utils'
 
 type ChapterListProps = {
 	items: Chapter[]
 	onReorder: (updateData: { id: string; position: number }[]) => void
 }
+
+const chapterTypeIcons = {
+	LESSON: { Icon: TbBook, className: 'text-blue-500' },
+	ASSIGNMENT: { Icon: TbClipboardList, className: 'text-green-500' },
+	ASSESSMENT: { Icon: TbWriting, className: 'text-orange-500' }
+} as const
 
 export const ChapterList = ({ items, onReorder }: ChapterListProps) => {
 	const [chapters, setChapters] = React.useState(items)
@@ -38,6 +45,7 @@ export const ChapterList = ({ items, onReorder }: ChapterListProps) => {
 					<ol ref={provided.innerRef} className="space-y-2" {...provided.droppableProps}>
 						{chapters.map((chapter, index) => {
 							const isPublished = chapter.status === 'PUBLISHED'
+							const { Icon, className } = chapterTypeIcons[chapter.type as keyof typeof chapterTypeIcons]
 
 							return (
 								<Draggable key={chapter.id} draggableId={chapter.id} index={index}>
@@ -48,11 +56,19 @@ export const ChapterList = ({ items, onReorder }: ChapterListProps) => {
 											{...provided.draggableProps}
 										>
 											<div
-												className="flex h-full items-center rounded-l-xl pl-2 pr-1 text-muted-foreground outline-none hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-ring"
+												className="flex h-full items-center justify-between rounded-l-xl pl-2 text-muted-foreground outline-none hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-ring"
 												{...provided.dragHandleProps}
 											>
 												<TbGripVertical className="size-4" />
+												<Separator orientation="vertical" className="ml-1" />
 											</div>
+
+											<Tooltip>
+												<TooltipTrigger>
+													<Icon className={cn('size-5', className)} />
+												</TooltipTrigger>
+												<TooltipContent className="text-xs">{capitalize(chapter.type)}</TooltipContent>
+											</Tooltip>
 
 											{chapter.title}
 
