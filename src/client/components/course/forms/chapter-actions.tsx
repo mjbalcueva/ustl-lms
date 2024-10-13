@@ -53,34 +53,24 @@ export const ChapterActions = ({ id, courseId, status, type }: ChapterActionsPro
 		}
 	})
 
-	const handleStatusChange = (newStatus: Status) => {
-		editStatus({ id, courseId, status: newStatus })
-	}
+	const handleStatusChange = (newStatus: Status) => editStatus({ id, courseId, status: newStatus })
 
-	const getStatusButtonLabel = () => {
-		if (isEditingStatus) return 'Loading...'
+	const getStatusButtonLabel = () =>
+		isEditingStatus
+			? 'Loading...'
+			: status === 'PUBLISHED'
+				? `Unpublish ${capitalize(type)}`
+				: `Publish ${capitalize(type)}`
 
-		switch (status) {
-			case 'PUBLISHED':
-				return `Unpublish ${capitalize(type)}`
-			default:
-				return `Publish ${capitalize(type)}`
-		}
-	}
-
-	const handleTypeChange = (newType: ChapterType) => {
-		editType({ id, courseId, type: newType })
-	}
+	const handleTypeChange = (newType: ChapterType) => editType({ id, courseId, type: newType })
 
 	const getChapterTypeIcon = (type: ChapterType) => {
-		switch (type) {
-			case 'ASSESSMENT':
-				return <Icons.ASSESSMENT className="mr-2 size-4" />
-			case 'ASSIGNMENT':
-				return <Icons.ASSIGNMENT className="mr-2 size-4" />
-			default:
-				return <Icons.LESSON className="mr-2 size-4" />
+		const iconMap = {
+			ASSESSMENT: <Icons.ASSESSMENT className="mr-2 size-4" />,
+			ASSIGNMENT: <Icons.ASSIGNMENT className="mr-2 size-4" />,
+			LESSON: <Icons.LESSON className="mr-2 size-4" />
 		}
+		return iconMap[type] || iconMap.LESSON
 	}
 
 	return (
@@ -116,7 +106,6 @@ export const ChapterActions = ({ id, courseId, status, type }: ChapterActionsPro
 							<DropdownMenuRadioGroup value={type} onValueChange={(value) => handleTypeChange(value as ChapterType)}>
 								{Object.values(ChapterType).map((type) => (
 									<DropdownMenuRadioItem key={type} value={type}>
-										{/* {getChapterTypeIcon(type)} */}
 										{capitalize(type)}
 									</DropdownMenuRadioItem>
 								))}
@@ -124,10 +113,7 @@ export const ChapterActions = ({ id, courseId, status, type }: ChapterActionsPro
 						</DropdownMenuSubContent>
 					</DropdownMenuSub>
 
-					<DropdownMenuItem
-						onSelect={(e) => e.preventDefault()}
-						onClick={() => handleStatusChange(status === 'ARCHIVED' ? 'DRAFT' : 'ARCHIVED')}
-					>
+					<DropdownMenuItem onClick={() => handleStatusChange(status === 'ARCHIVED' ? 'DRAFT' : 'ARCHIVED')}>
 						{status === 'ARCHIVED' ? <TbArchiveOff className="mr-2 size-4" /> : <LuArchive className="mr-2 size-4" />}
 						{status === 'ARCHIVED' ? 'Unarchive' : 'Archive'}
 					</DropdownMenuItem>
