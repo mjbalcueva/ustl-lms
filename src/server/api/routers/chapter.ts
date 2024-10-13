@@ -4,6 +4,7 @@ import {
 	editContentSchema,
 	editStatusSchema,
 	editTitleSchema,
+	editTypeSchema,
 	editVideoSchema,
 	getChapterSchema,
 	reorderChaptersSchema
@@ -179,6 +180,17 @@ export const chapterRouter = createTRPCRouter({
 			console.error('Error updating chapter status:', error)
 			throw new Error('Failed to update chapter status. Please try again later.')
 		}
+	}),
+
+	editType: instructorProcedure.input(editTypeSchema).mutation(async ({ ctx, input }) => {
+		const { id, courseId, type } = input
+
+		const { type: newType } = await ctx.db.chapter.update({
+			where: { id, courseId, course: { instructorId: ctx.session.user.id! } },
+			data: { type }
+		})
+
+		return { message: 'Chapter type updated successfully', newType }
 	}),
 
 	reorderChapters: instructorProcedure.input(reorderChaptersSchema).mutation(async ({ ctx, input }) => {

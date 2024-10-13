@@ -34,6 +34,13 @@ export const editTitleSchema = z.object({
 })
 export type EditTitleSchema = z.infer<typeof editTitleSchema>
 
+export const editTypeSchema = z.object({
+	id: z.string().min(1, 'Chapter ID is required'),
+	courseId: z.string().min(1, 'Course ID is required'),
+	type: z.nativeEnum(ChapterType)
+})
+export type EditTypeSchema = z.infer<typeof editTypeSchema>
+
 export const editVideoSchema = z.object({
 	id: z.string().min(1, 'Chapter ID is required'),
 	courseId: z.string().min(1, 'Course ID is required'),

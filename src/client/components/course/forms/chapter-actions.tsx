@@ -1,31 +1,34 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { type ChapterType, type Status } from '@prisma/client'
+import { ChapterType, type Status } from '@prisma/client'
 import { LuArchive, LuTrash } from 'react-icons/lu'
 import { TbArchiveOff, TbDots } from 'react-icons/tb'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
-import { type DeleteChapterSchema, type EditStatusSchema } from '@/shared/validations/chapter'
+import { type DeleteChapterSchema, type EditStatusSchema, type EditTypeSchema } from '@/shared/validations/chapter'
 
 import { ConfirmModal } from '@/client/components/confirm-modal'
+import { Icons } from '@/client/components/icons'
 import {
 	Button,
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
+	DropdownMenuRadioGroup,
+	DropdownMenuRadioItem,
 	DropdownMenuSeparator,
+	DropdownMenuSub,
+	DropdownMenuSubContent,
+	DropdownMenuSubTrigger,
 	DropdownMenuTrigger
 } from '@/client/components/ui'
 import { capitalize } from '@/client/lib/utils'
 
-type ChapterActionsProps = DeleteChapterSchema &
-	EditStatusSchema & {
-		chapterType: ChapterType
-	}
+type ChapterActionsProps = DeleteChapterSchema & EditStatusSchema & EditTypeSchema
 
-export const ChapterActions = ({ id, courseId, status, chapterType }: ChapterActionsProps) => {
+export const ChapterActions = ({ id, courseId, status, type }: ChapterActionsProps) => {
 	const router = useRouter()
 
 	const { mutate: editStatus, isPending: isEditingStatus } = api.chapter.editStatus.useMutation({
@@ -35,7 +38,14 @@ export const ChapterActions = ({ id, courseId, status, chapterType }: ChapterAct
 		}
 	})
 
-	const { mutate: deleteChapter } = api.chapter.deleteChapter.useMutation({
+	const { mutate: editType, isPending: isEditingType } = api.chapter.editType.useMutation({
+		onSuccess: (data) => {
+			toast.success(data.message)
+			router.refresh()
+		}
+	})
+
+	const { mutate: deleteChapter, isPending: isDeletingChapter } = api.chapter.deleteChapter.useMutation({
 		onSuccess: (data) => {
 			toast.success(data.message)
 			router.push(`/courses/${courseId}/edit`)
@@ -52,9 +62,24 @@ export const ChapterActions = ({ id, courseId, status, chapterType }: ChapterAct
 
 		switch (status) {
 			case 'PUBLISHED':
-				return `Unpublish ${capitalize(chapterType)}`
+				return `Unpublish ${capitalize(type)}`
 			default:
-				return `Publish ${capitalize(chapterType)}`
+				return `Publish ${capitalize(type)}`
+		}
+	}
+
+	const handleTypeChange = (newType: ChapterType) => {
+		editType({ id, courseId, type: newType })
+	}
+
+	const getChapterTypeIcon = (type: ChapterType) => {
+		switch (type) {
+			case 'ASSESSMENT':
+				return <Icons.ASSESSMENT className="mr-2 size-4" />
+			case 'ASSIGNMENT':
+				return <Icons.ASSIGNMENT className="mr-2 size-4" />
+			default:
+				return <Icons.LESSON className="mr-2 size-4" />
 		}
 	}
 
@@ -62,8 +87,8 @@ export const ChapterActions = ({ id, courseId, status, chapterType }: ChapterAct
 		<div className="flex items-center gap-2">
 			<Button
 				size="sm"
-				disabled={isEditingStatus || status === 'ARCHIVED'}
-				variant={isEditingStatus ? 'shine' : 'default'}
+				disabled={isEditingStatus || isEditingType || isDeletingChapter || status === 'ARCHIVED'}
+				variant={isEditingStatus || isEditingType || isDeletingChapter ? 'shine' : 'default'}
 				onClick={() => handleStatusChange(status === 'PUBLISHED' ? 'DRAFT' : 'PUBLISHED')}
 			>
 				{getStatusButtonLabel()}
@@ -71,12 +96,34 @@ export const ChapterActions = ({ id, courseId, status, chapterType }: ChapterAct
 
 			<DropdownMenu>
 				<DropdownMenuTrigger asChild>
-					<Button aria-label="Open menu" variant="ghost" className="size-9 rounded-md p-0">
+					<Button
+						aria-label="Open menu"
+						variant="ghost"
+						className="size-9 rounded-md p-0"
+						disabled={isEditingStatus || isEditingType}
+					>
 						<TbDots className="size-4" aria-hidden="true" />
 					</Button>
 				</DropdownMenuTrigger>
 
 				<DropdownMenuContent align="end" className="w-40">
+					<DropdownMenuSub>
+						<DropdownMenuSubTrigger>
+							{getChapterTypeIcon(type)}
+							{capitalize(type)}
+						</DropdownMenuSubTrigger>
+						<DropdownMenuSubContent className="min-w-40" sideOffset={8}>
+							<DropdownMenuRadioGroup value={type} onValueChange={(value) => handleTypeChange(value as ChapterType)}>
+								{Object.values(ChapterType).map((type) => (
+									<DropdownMenuRadioItem key={type} value={type}>
+										{/* {getChapterTypeIcon(type)} */}
+										{capitalize(type)}
+									</DropdownMenuRadioItem>
+								))}
+							</DropdownMenuRadioGroup>
+						</DropdownMenuSubContent>
+					</DropdownMenuSub>
+
 					<DropdownMenuItem
 						onSelect={(e) => e.preventDefault()}
 						onClick={() => handleStatusChange(status === 'ARCHIVED' ? 'DRAFT' : 'ARCHIVED')}
