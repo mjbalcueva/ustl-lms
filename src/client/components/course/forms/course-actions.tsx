@@ -30,7 +30,7 @@ export const CourseActions = ({ id, status }: CourseActionsProps) => {
 		}
 	})
 
-	const { mutate: deleteCourse } = api.course.deleteCourse.useMutation({
+	const { mutate: deleteCourse, isPending: isDeletingCourse } = api.course.deleteCourse.useMutation({
 		onSuccess: (data) => {
 			toast.success(data.message)
 			router.push(`/courses/manage`)
@@ -38,26 +38,16 @@ export const CourseActions = ({ id, status }: CourseActionsProps) => {
 		}
 	})
 
-	const handleStatusChange = (newStatus: Status) => {
-		editStatus({ id, status: newStatus })
-	}
+	const handleStatusChange = (newStatus: Status) => editStatus({ id, status: newStatus })
 
-	const getStatusButtonLabel = () => {
-		if (isEditingStatus) return 'Loading...'
-
-		switch (status) {
-			case 'PUBLISHED':
-				return `Unpublish Course`
-			default:
-				return `Publish Course`
-		}
-	}
+	const getStatusButtonLabel = () =>
+		isEditingStatus ? 'Loading...' : status === 'PUBLISHED' ? `Unpublish Course` : `Publish Course`
 
 	return (
 		<div className="flex items-center gap-2">
 			<Button
 				size="sm"
-				disabled={isEditingStatus || status === 'ARCHIVED'}
+				disabled={isEditingStatus || isDeletingCourse || status === 'ARCHIVED'}
 				variant={isEditingStatus ? 'shine' : 'default'}
 				onClick={() => handleStatusChange(status === 'PUBLISHED' ? 'DRAFT' : 'PUBLISHED')}
 			>
@@ -66,13 +56,17 @@ export const CourseActions = ({ id, status }: CourseActionsProps) => {
 
 			<DropdownMenu>
 				<DropdownMenuTrigger asChild>
-					<Button aria-label="Open menu" variant="ghost" className="size-9 rounded-md p-0">
+					<Button
+						aria-label="Open menu"
+						variant="ghost"
+						className="size-9 rounded-md p-0"
+						disabled={isEditingStatus || isDeletingCourse}
+					>
 						<TbDots className="size-4" aria-hidden="true" />
 					</Button>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align="end" className="w-40">
 					<DropdownMenuItem
-						onSelect={(e) => e.preventDefault()}
 						disabled={isEditingStatus}
 						onClick={() => handleStatusChange(status === 'ARCHIVED' ? 'DRAFT' : 'ARCHIVED')}
 					>

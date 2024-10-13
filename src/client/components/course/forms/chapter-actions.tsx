@@ -90,7 +90,7 @@ export const ChapterActions = ({ id, courseId, status, type }: ChapterActionsPro
 						aria-label="Open menu"
 						variant="ghost"
 						className="size-9 rounded-md p-0"
-						disabled={isEditingStatus || isEditingType}
+						disabled={isEditingStatus || isEditingType || isDeletingChapter}
 					>
 						<TbDots className="size-4" aria-hidden="true" />
 					</Button>
