@@ -81,7 +81,7 @@ export const useColumns = (mutateAsync: (id: string) => Promise<void>): ColumnDe
 							variant="destructive"
 						>
 							<DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-								<LuTrash className="mr-2 size-4" />
+								<LuTrash className="mr-2 size-4 text-destructive" />
 								Delete
 							</DropdownMenuItem>
 						</ConfirmModal>

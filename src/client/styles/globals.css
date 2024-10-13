@@ -112,7 +112,7 @@ body,
 		--secondary-foreground: 40 30% 85%;
 		--accent: 220 10% 15%;
 		--accent-foreground: 220 29% 81%;
-		--destructive: 2 90% 60%;
+		--destructive: 2 70% 50%;
 		--destructive-foreground: 0 0% 100%;
 		--ring: 40 75% 61%;
 		--radius: 0.5rem;
@@ -168,7 +168,7 @@ body,
 		--secondary-foreground: 130 18% 75%;
 		--accent: 215.01 14.31% 14.8%;
 		--accent-foreground: 222 10.73% 78.29%;
-		--destructive: 0 99% 53%;
+		--destructive: 0 70% 40%;
 		--destructive-foreground: 0 0% 100%;
 		--ring: 129.66 44.16% 38.63%;
 		--radius: 0.5rem;

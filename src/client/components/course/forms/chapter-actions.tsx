@@ -15,6 +15,7 @@ import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
+	DropdownMenuSeparator,
 	DropdownMenuTrigger
 } from '@/client/components/ui'
 import { capitalize } from '@/client/lib/utils'
@@ -84,6 +85,8 @@ export const ChapterActions = ({ id, courseId, status, chapterType }: ChapterAct
 						{status === 'ARCHIVED' ? 'Unarchive' : 'Archive'}
 					</DropdownMenuItem>
 
+					<DropdownMenuSeparator />
+
 					<ConfirmModal
 						title="Are you sure you want to delete this chapter?"
 						description="This action cannot be undone. This will permanently delete your chapter and remove your data from our servers."
@@ -92,7 +95,7 @@ export const ChapterActions = ({ id, courseId, status, chapterType }: ChapterAct
 						variant="destructive"
 					>
 						<DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-							<LuTrash className="mr-2 size-4" />
+							<LuTrash className="mr-2 size-4 text-destructive" />
 							Delete
 						</DropdownMenuItem>
 					</ConfirmModal>
