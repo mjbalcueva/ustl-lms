@@ -94,12 +94,12 @@ export default async function Page({ params }: { params: { courseId: string; cha
 
 				<div className="flex flex-1 flex-col gap-4 md:gap-6">
 					<PageSection compactMode>
-						<PageSectionTitle title="Add a video" icon={TbVideo} />
+						<PageSectionTitle title="Lecture video" icon={TbVideo} />
 						<EditChapterVideoForm id={chapter.id} courseId={chapter.course.id} initialData={chapter} />
 					</PageSection>
 
 					<PageSection compactMode>
-						<PageSectionTitle title="Add learning materials" icon={TbPaperclip} />
+						<PageSectionTitle title="Learning materials" icon={TbPaperclip} />
 						<AddChapterAttachmentsForm
 							courseId={chapter.course.id}
 							chapterId={chapter.id}
