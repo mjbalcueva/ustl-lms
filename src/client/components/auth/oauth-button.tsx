@@ -27,7 +27,8 @@ export const OAuthButton = ({ callbackUrl, label, provider, className, ...props 
 	const handleClick = async () => {
 		setIsLoading(true)
 		await signIn(provider, {
-			callbackUrl: callbackUrl ?? DEFAULT_LOGIN_REDIRECT
+			callbackUrl: callbackUrl ?? DEFAULT_LOGIN_REDIRECT,
+			prompt: 'select_account'
 		})
 	}
 

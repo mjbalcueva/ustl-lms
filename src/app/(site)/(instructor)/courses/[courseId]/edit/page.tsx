@@ -1,9 +1,9 @@
 import { redirect } from 'next/navigation'
-import { TbListDetails, TbNotebook, TbPackage } from 'react-icons/tb'
 
 import { api } from '@/shared/trpc/server'
 import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
+import { CollapsibleSection } from '@/client/components/collapsible-section'
 import { AddCourseAttachmentsForm } from '@/client/components/course/forms/add-course-attachments'
 import { AddCourseChaptersForm } from '@/client/components/course/forms/add-course-chapters'
 import { CourseActions } from '@/client/components/course/forms/course-actions'
@@ -14,13 +14,12 @@ import { EditCourseImageForm } from '@/client/components/course/forms/edit-cours
 import { EditCourseTitleForm } from '@/client/components/course/forms/edit-course-title'
 import { NotFound } from '@/client/components/not-found'
 import {
+	Badge,
 	Banner,
 	PageBreadcrumbs,
 	PageContent,
 	PageDescription,
 	PageHeader,
-	PageSection,
-	PageSectionTitle,
 	PageTitle,
 	PageWrapper,
 	Separator
@@ -56,8 +55,6 @@ export default async function Page({ params }: { params: { courseId: string } })
 		{ label: 'Edit' }
 	]
 
-	const isPublished = course.status === 'PUBLISHED'
-
 	return (
 		<PageWrapper>
 			<PageHeader className="hidden space-y-0 md:block md:py-3">
@@ -66,21 +63,32 @@ export default async function Page({ params }: { params: { courseId: string } })
 
 			<Separator className="hidden md:block" />
 
-			{!isPublished && (
-				<Banner label="This course is not published. It will not be visible to students." variant="warning" />
+			{course.status !== 'PUBLISHED' && (
+				<Banner
+					label={
+						course.status === 'DRAFT'
+							? 'This course is not published. It will not be visible to students.'
+							: 'This course is archived. It remains accessible to existing students but is hidden from new enrollments.'
+					}
+					variant={course.status === 'DRAFT' ? 'warning' : 'info'}
+				/>
 			)}
 
-			<PageHeader className="flex items-center justify-between space-y-0">
-				<div className="space-y-2">
-					<PageTitle>Course Setup</PageTitle>
+			<PageHeader className="flex flex-wrap items-center justify-between">
+				<div>
+					<PageTitle>
+						Course Setup
+						<Badge variant="outline" className="ml-2">
+							{course.status}
+						</Badge>
+					</PageTitle>
 					<PageDescription>Filled {completionText}</PageDescription>
 				</div>
 				<CourseActions id={course.id} status={course.status} />
 			</PageHeader>
 
 			<PageContent className="gap-4 px-2.5 sm:px-4 md:flex md:flex-wrap md:gap-6 md:px-6">
-				<PageSection className="mb-6 flex-1 md:mb-0" compactMode>
-					<PageSectionTitle title="Customize your course" icon={TbNotebook} />
+				<CollapsibleSection title="Customize your course" iconName="Tb/TbNotebook" className="mb-6 flex-1 md:mb-0">
 					<EditCourseCodeForm id={course.id} code={course.code} />
 					<EditCourseTitleForm id={course.id} title={course.title} />
 					<EditCourseDescriptionForm id={course.id} description={course.description} />
@@ -90,18 +98,16 @@ export default async function Page({ params }: { params: { courseId: string } })
 						categoryId={course.categoryId}
 						options={categories.map((category) => ({ value: category.id, label: category.name }))}
 					/>
-				</PageSection>
+				</CollapsibleSection>
 
 				<div className="flex flex-1 flex-col gap-4 md:gap-6">
-					<PageSection compactMode>
-						<PageSectionTitle title="Course Outline" icon={TbListDetails} />
+					<CollapsibleSection title="Course Outline" iconName="Tb/TbListDetails">
 						<AddCourseChaptersForm courseId={course.id} chapters={course.chapters} />
-					</PageSection>
+					</CollapsibleSection>
 
-					<PageSection compactMode>
-						<PageSectionTitle title="Additional References" icon={TbPackage} />
+					<CollapsibleSection title="Additional References" iconName="Tb/TbPackage">
 						<AddCourseAttachmentsForm courseId={course.id} attachments={course.attachments} />
-					</PageSection>
+					</CollapsibleSection>
 				</div>
 			</PageContent>
 		</PageWrapper>

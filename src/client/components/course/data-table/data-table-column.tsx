@@ -4,8 +4,8 @@ import Link from 'next/link'
 import * as React from 'react'
 import { type Course } from '@prisma/client'
 import { type ColumnDef } from '@tanstack/react-table'
-import { LuPencil, LuTrash } from 'react-icons/lu'
-import { TbDots } from 'react-icons/tb'
+import { LuTrash } from 'react-icons/lu'
+import { TbDots, TbEdit } from 'react-icons/tb'
 
 import { ConfirmModal } from '@/client/components/confirm-modal'
 import { DataTableColumnHeader } from '@/client/components/course/data-table/data-table-column-header'
@@ -36,8 +36,14 @@ export const useColumns = (mutateAsync: (id: string) => Promise<void>): ColumnDe
 			accessorKey: 'status',
 			header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
 			cell: ({ row }) => {
-				const isPublished = row.original.status === 'PUBLISHED'
-				return isPublished ? <Badge>Published</Badge> : <Badge variant="secondary">Draft</Badge>
+				switch (row.original.status) {
+					case 'PUBLISHED':
+						return <Badge>Published</Badge>
+					case 'ARCHIVED':
+						return <Badge variant="outline">Archived</Badge>
+					default:
+						return <Badge variant="secondary">Draft</Badge>
+				}
 			},
 			filterFn: (row, id, value) => Array.isArray(value) && value.includes(row.getValue(id))
 		},
@@ -63,7 +69,7 @@ export const useColumns = (mutateAsync: (id: string) => Promise<void>): ColumnDe
 					<DropdownMenuContent align="end" className="w-40">
 						<Link href={`/courses/${row.original.id}/edit`}>
 							<DropdownMenuItem>
-								<LuPencil className="mr-2 size-3.5" />
+								<TbEdit className="mr-2 size-4" />
 								Edit
 							</DropdownMenuItem>
 						</Link>
@@ -71,9 +77,11 @@ export const useColumns = (mutateAsync: (id: string) => Promise<void>): ColumnDe
 							title="Are you sure you want to delete this course?"
 							description="This action cannot be undone. This will permanently delete your course and remove your data from our servers."
 							onConfirm={() => mutateAsync(row.original.id)}
+							actionLabel="Delete"
+							variant="destructive"
 						>
 							<DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-								<LuTrash className="mr-2 size-3.5" />
+								<LuTrash className="mr-2 size-4 text-destructive" />
 								Delete
 							</DropdownMenuItem>
 						</ConfirmModal>

@@ -9,17 +9,27 @@ import {
 	AlertDialogFooter,
 	AlertDialogHeader,
 	AlertDialogTitle,
-	AlertDialogTrigger
+	AlertDialogTrigger,
+	type ButtonProps
 } from '@/client/components/ui'
 
 type ConfirmModalProps = {
 	onConfirm: () => void
 	children: React.ReactNode
+	actionLabel: string
 	title: string
 	description: string
+	variant?: ButtonProps['variant']
 }
 
-export const ConfirmModal = ({ onConfirm, title, description, children }: ConfirmModalProps) => {
+export const ConfirmModal = ({
+	onConfirm,
+	title,
+	description,
+	children,
+	actionLabel,
+	variant = 'default'
+}: ConfirmModalProps) => {
 	const [open, setOpen] = React.useState(false)
 
 	const handleOpenChange = (newOpen: boolean) => {
@@ -41,8 +51,8 @@ export const ConfirmModal = ({ onConfirm, title, description, children }: Confir
 				</AlertDialogHeader>
 				<AlertDialogFooter>
 					<AlertDialogCancel className="rounded-md">Cancel</AlertDialogCancel>
-					<AlertDialogAction className="rounded-md" onClick={handleConfirm}>
-						Continue
+					<AlertDialogAction className="rounded-md" onClick={handleConfirm} variant={variant}>
+						{actionLabel}
 					</AlertDialogAction>
 				</AlertDialogFooter>
 			</AlertDialogContent>

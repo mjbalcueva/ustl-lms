@@ -4,6 +4,7 @@ import {
 	editContentSchema,
 	editStatusSchema,
 	editTitleSchema,
+	editTypeSchema,
 	editVideoSchema,
 	getChapterSchema,
 	reorderChaptersSchema
@@ -158,12 +159,38 @@ export const chapterRouter = createTRPCRouter({
 	editStatus: instructorProcedure.input(editStatusSchema).mutation(async ({ ctx, input }) => {
 		const { id, courseId, status } = input
 
-		const chapter = await ctx.db.chapter.update({
+		try {
+			const chapter = await ctx.db.chapter.updateMany({
+				where: { id, courseId, course: { instructorId: ctx.session.user.id! } },
+				data: { status }
+			})
+
+			if (chapter.count === 0) throw new Error('Chapter not found or you are not authorized to update it.')
+
+			const statusMessages: Record<string, string> = {
+				PUBLISHED: 'Chapter published successfully',
+				DRAFT: 'Chapter saved as draft',
+				ARCHIVED: 'Chapter archived successfully'
+			}
+
+			const message = statusMessages[status] ?? 'Chapter status updated successfully'
+
+			return { message }
+		} catch (error) {
+			console.error('Error updating chapter status:', error)
+			throw new Error('Failed to update chapter status. Please try again later.')
+		}
+	}),
+
+	editType: instructorProcedure.input(editTypeSchema).mutation(async ({ ctx, input }) => {
+		const { id, courseId, type } = input
+
+		const { type: newType } = await ctx.db.chapter.update({
 			where: { id, courseId, course: { instructorId: ctx.session.user.id! } },
-			data: { status }
+			data: { type }
 		})
 
-		return { message: `Chapter ${status === 'PUBLISHED' ? 'published' : 'unpublished'} successfully`, chapter }
+		return { message: 'Chapter type updated successfully', newType }
 	}),
 
 	reorderChapters: instructorProcedure.input(reorderChaptersSchema).mutation(async ({ ctx, input }) => {

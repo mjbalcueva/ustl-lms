@@ -1,5 +1,5 @@
 import { cva, type VariantProps } from 'class-variance-authority'
-import { type IconBase } from 'react-icons/lib'
+import { type IconType } from 'react-icons/lib'
 
 import { cn } from '@/client/lib/utils'
 
@@ -42,7 +42,7 @@ const iconVariants = cva('', {
 type BackgroundVariantsProps = VariantProps<typeof backgroundVariants>
 type IconVariantsProps = VariantProps<typeof iconVariants>
 
-type IconBadgeProps = BackgroundVariantsProps & IconVariantsProps & { icon: typeof IconBase }
+type IconBadgeProps = BackgroundVariantsProps & IconVariantsProps & { icon: IconType }
 
 export const IconBadge = ({ icon: Icon, variant, size }: IconBadgeProps) => {
 	return (

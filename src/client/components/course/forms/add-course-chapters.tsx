@@ -32,6 +32,7 @@ import {
 	SelectTrigger,
 	SelectValue
 } from '@/client/components/ui'
+import { capitalize } from '@/client/lib/utils'
 
 type AddCourseChaptersProps = {
 	courseId: string
@@ -127,14 +128,14 @@ export const AddCourseChaptersForm = ({ courseId, chapters }: AddCourseChaptersP
 									<FormItem className="w-1/3">
 										<Select onValueChange={field.onChange} defaultValue={ChapterType.LESSON}>
 											<FormControl>
-												<SelectTrigger className="rounded-xl" disabled={isAdding}>
+												<SelectTrigger className="bg-card dark:bg-background" disabled={isAdding}>
 													<SelectValue />
 												</SelectTrigger>
 											</FormControl>
 											<SelectContent>
 												{Object.values(ChapterType).map((type) => (
 													<SelectItem key={type} value={type}>
-														{type.charAt(0).toUpperCase() + type.slice(1).toLowerCase()}
+														{capitalize(type)}
 													</SelectItem>
 												))}
 											</SelectContent>
