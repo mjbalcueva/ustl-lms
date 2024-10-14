@@ -1,9 +1,9 @@
 import { redirect } from 'next/navigation'
-import { TbListDetails, TbNotebook, TbPackage } from 'react-icons/tb'
 
 import { api } from '@/shared/trpc/server'
 import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
+import { CollapsibleSection } from '@/client/components/collapsible-section'
 import { AddCourseAttachmentsForm } from '@/client/components/course/forms/add-course-attachments'
 import { AddCourseChaptersForm } from '@/client/components/course/forms/add-course-chapters'
 import { CourseActions } from '@/client/components/course/forms/course-actions'
@@ -20,8 +20,6 @@ import {
 	PageContent,
 	PageDescription,
 	PageHeader,
-	PageSection,
-	PageSectionTitle,
 	PageTitle,
 	PageWrapper,
 	Separator
@@ -76,8 +74,8 @@ export default async function Page({ params }: { params: { courseId: string } })
 				/>
 			)}
 
-			<PageHeader className="flex items-center justify-between space-y-0">
-				<div className="space-y-2">
+			<PageHeader className="flex flex-wrap items-center justify-between">
+				<div>
 					<PageTitle>
 						Course Setup
 						<Badge variant="outline" className="ml-2">
@@ -90,8 +88,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 			</PageHeader>
 
 			<PageContent className="gap-4 px-2.5 sm:px-4 md:flex md:flex-wrap md:gap-6 md:px-6">
-				<PageSection className="mb-6 flex-1 md:mb-0" compactMode>
-					<PageSectionTitle title="Customize your course" icon={TbNotebook} />
+				<CollapsibleSection title="Customize your course" iconName="Tb/TbNotebook" className="mb-6 flex-1 md:mb-0">
 					<EditCourseCodeForm id={course.id} code={course.code} />
 					<EditCourseTitleForm id={course.id} title={course.title} />
 					<EditCourseDescriptionForm id={course.id} description={course.description} />
@@ -101,18 +98,16 @@ export default async function Page({ params }: { params: { courseId: string } })
 						categoryId={course.categoryId}
 						options={categories.map((category) => ({ value: category.id, label: category.name }))}
 					/>
-				</PageSection>
+				</CollapsibleSection>
 
 				<div className="flex flex-1 flex-col gap-4 md:gap-6">
-					<PageSection compactMode>
-						<PageSectionTitle title="Course Outline" icon={TbListDetails} />
+					<CollapsibleSection title="Course Outline" iconName="Tb/TbListDetails">
 						<AddCourseChaptersForm courseId={course.id} chapters={course.chapters} />
-					</PageSection>
+					</CollapsibleSection>
 
-					<PageSection compactMode>
-						<PageSectionTitle title="Additional References" icon={TbPackage} />
+					<CollapsibleSection title="Additional References" iconName="Tb/TbPackage">
 						<AddCourseAttachmentsForm courseId={course.id} attachments={course.attachments} />
-					</PageSection>
+					</CollapsibleSection>
 				</div>
 			</PageContent>
 		</PageWrapper>

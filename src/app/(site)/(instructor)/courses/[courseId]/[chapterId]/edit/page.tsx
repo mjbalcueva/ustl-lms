@@ -71,7 +71,7 @@ export default async function Page({ params }: { params: { courseId: string; cha
 			)}
 
 			<PageHeader className="flex flex-wrap items-center justify-between">
-				<div className="space-y-0">
+				<div>
 					<PageTitle>
 						{capitalize(chapter.type)} Setup
 						<Badge variant="outline" className="ml-2">
