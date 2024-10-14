@@ -1,9 +1,9 @@
 import { redirect } from 'next/navigation'
-import { TbNotes, TbPaperclip, TbVideo } from 'react-icons/tb'
 
 import { api } from '@/shared/trpc/server'
 import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
+import { CollapsibleSection } from '@/client/components/collapsible-section'
 import { AddChapterAttachmentsForm } from '@/client/components/course/forms/add-chapter-attachments'
 import { ChapterActions } from '@/client/components/course/forms/chapter-actions'
 import { EditChapterContentForm } from '@/client/components/course/forms/edit-chapter-content'
@@ -18,8 +18,6 @@ import {
 	PageContent,
 	PageDescription,
 	PageHeader,
-	PageSection,
-	PageSectionTitle,
 	PageTitle,
 	PageWrapper,
 	Separator
@@ -72,8 +70,8 @@ export default async function Page({ params }: { params: { courseId: string; cha
 				/>
 			)}
 
-			<PageHeader className="flex items-center justify-between space-y-0">
-				<div className="space-y-2">
+			<PageHeader className="flex flex-wrap items-center justify-between">
+				<div className="space-y-0">
 					<PageTitle>
 						{capitalize(chapter.type)} Setup
 						<Badge variant="outline" className="ml-2">
@@ -86,26 +84,27 @@ export default async function Page({ params }: { params: { courseId: string; cha
 			</PageHeader>
 
 			<PageContent className="gap-4 px-2.5 sm:px-4 md:flex md:flex-wrap md:gap-6 md:px-6">
-				<PageSection className="mb-6 flex-1 md:mb-0" compactMode>
-					<PageSectionTitle title={`Customize your ${chapter.type.toLowerCase()}`} icon={TbNotes} />
+				<CollapsibleSection
+					title={`Customize your ${chapter.type.toLowerCase()}`}
+					iconName="Tb/TbNotes"
+					className="mb-6 flex-1 md:mb-0"
+				>
 					<EditChapterTitleForm id={chapter.id} courseId={chapter.course.id} title={chapter.title} />
 					<EditChapterContentForm id={chapter.id} courseId={chapter.course.id} content={chapter.content} />
-				</PageSection>
+				</CollapsibleSection>
 
 				<div className="flex flex-1 flex-col gap-4 md:gap-6">
-					<PageSection compactMode>
-						<PageSectionTitle title="Lecture video" icon={TbVideo} />
+					<CollapsibleSection title="Lecture video" iconName="Tb/TbVideo">
 						<EditChapterVideoForm id={chapter.id} courseId={chapter.course.id} initialData={chapter} />
-					</PageSection>
+					</CollapsibleSection>
 
-					<PageSection compactMode>
-						<PageSectionTitle title="Learning materials" icon={TbPaperclip} />
+					<CollapsibleSection title="Learning materials" iconName="Tb/TbPaperclip">
 						<AddChapterAttachmentsForm
 							courseId={chapter.course.id}
 							chapterId={chapter.id}
 							attachments={chapter.attachments}
 						/>
-					</PageSection>
+					</CollapsibleSection>
 				</div>
 			</PageContent>
 		</PageWrapper>

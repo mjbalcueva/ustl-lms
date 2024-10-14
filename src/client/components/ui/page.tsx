@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Slot } from '@radix-ui/react-slot'
 import { type IconType } from 'react-icons/lib'
+import { LuChevronsUpDown } from 'react-icons/lu'
 
 import { type Breadcrumb as BreadcrumbType } from '@/shared/types/breadcrumbs'
 
@@ -12,6 +13,7 @@ import {
 	BreadcrumbList,
 	BreadcrumbPage,
 	BreadcrumbSeparator,
+	Button,
 	IconBadge
 } from '@/client/components/ui'
 import { cn } from '@/client/lib/utils'
@@ -125,11 +127,19 @@ export const PageSection = React.forwardRef<HTMLDivElement, PageSectionProps>(
 )
 PageSection.displayName = 'PageSection'
 
-export const PageSectionTitle = ({ title, icon }: { title: string; icon: IconType }) => {
+type PageSectionTitleProps = React.HTMLAttributes<HTMLDivElement> & {
+	title: string
+	icon: IconType
+	toggle?: () => void
+}
+export const PageSectionTitle = ({ title, icon, toggle }: PageSectionTitleProps) => {
 	return (
 		<h2 className="mb-2.5 flex items-center gap-x-2 text-xl sm:mb-4 md:mb-5">
 			<IconBadge icon={icon} />
 			{title}
+			<Button size="xs" variant="ghost" className="ml-auto size-7 rounded-lg px-0" onClick={toggle}>
+				<LuChevronsUpDown className="size-4" />
+			</Button>
 		</h2>
 	)
 }
