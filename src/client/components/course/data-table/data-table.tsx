@@ -40,17 +40,28 @@ type DataTableProps<TData> = {
 export function DataTable<TData extends Course>({ data }: DataTableProps<TData>) {
 	const router = useRouter()
 
-	const { mutateAsync } = api.course.deleteCourse.useMutation({
+	const { mutateAsync: editStatus } = api.course.editStatus.useMutation({
 		onSuccess: (data) => {
 			toast.success(data.message)
 			router.refresh()
 		}
 	})
 
-	// const columns = React.useMemo(() => useColumns(mutateAsync), [mutateAsync])
-	const columns = useColumns(async (id: string) => {
-		await mutateAsync({ id })
+	const { mutateAsync: deleteCourse } = api.course.deleteCourse.useMutation({
+		onSuccess: (data) => {
+			toast.success(data.message)
+			router.refresh()
+		}
 	})
+
+	const columns = useColumns(
+		async (id: string, status: Status) => {
+			await editStatus({ id, status })
+		},
+		async (id: string) => {
+			await deleteCourse({ id })
+		}
+	)
 
 	const [sorting, setSorting] = React.useState<SortingState>([])
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])

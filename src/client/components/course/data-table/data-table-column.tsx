@@ -2,10 +2,10 @@
 
 import Link from 'next/link'
 import * as React from 'react'
-import { type Course } from '@prisma/client'
+import { Status, type Course } from '@prisma/client'
 import { type ColumnDef } from '@tanstack/react-table'
-import { LuTrash } from 'react-icons/lu'
-import { TbDots, TbEdit } from 'react-icons/tb'
+import { LuArchive, LuTrash } from 'react-icons/lu'
+import { TbCircle, TbCircleCheck, TbCircleDashed, TbDots, TbEdit } from 'react-icons/tb'
 
 import { ConfirmModal } from '@/client/components/confirm-modal'
 import { DataTableColumnHeader } from '@/client/components/course/data-table/data-table-column-header'
@@ -15,11 +15,20 @@ import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
+	DropdownMenuRadioGroup,
+	DropdownMenuRadioItem,
+	DropdownMenuSeparator,
+	DropdownMenuSub,
+	DropdownMenuSubContent,
+	DropdownMenuSubTrigger,
 	DropdownMenuTrigger
 } from '@/client/components/ui'
-import { formatDate } from '@/client/lib/utils'
+import { capitalize, formatDate } from '@/client/lib/utils'
 
-export const useColumns = (mutateAsync: (id: string) => Promise<void>): ColumnDef<Course>[] => {
+export const useColumns = (
+	editStatus: (id: string, status: Status) => Promise<void>,
+	deleteCourse: (id: string) => Promise<void>
+): ColumnDef<Course>[] => {
 	return [
 		{
 			accessorKey: 'code',
@@ -73,10 +82,41 @@ export const useColumns = (mutateAsync: (id: string) => Promise<void>): ColumnDe
 								Edit
 							</DropdownMenuItem>
 						</Link>
+
+						<DropdownMenuSub>
+							<DropdownMenuSubTrigger>
+								<TbCircle className="mr-2 size-4" />
+								Status
+							</DropdownMenuSubTrigger>
+							<DropdownMenuSubContent className="w-40" sideOffset={8}>
+								<DropdownMenuRadioGroup
+									value={row.original.status}
+									onValueChange={(value) => editStatus(row.original.id, value as Status)}
+								>
+									{Object.values(Status).map((status) => {
+										const IconMap = {
+											PUBLISHED: TbCircleCheck,
+											DRAFT: TbCircleDashed,
+											ARCHIVED: LuArchive
+										}
+										const Icon = IconMap[status]
+										return (
+											<DropdownMenuRadioItem key={status} value={status}>
+												<Icon className="mr-2 size-4" />
+												{capitalize(status)}
+											</DropdownMenuRadioItem>
+										)
+									})}
+								</DropdownMenuRadioGroup>
+							</DropdownMenuSubContent>
+						</DropdownMenuSub>
+
+						<DropdownMenuSeparator />
+
 						<ConfirmModal
 							title="Are you sure you want to delete this course?"
 							description="This action cannot be undone. This will permanently delete your course and remove your data from our servers."
-							onConfirm={() => mutateAsync(row.original.id)}
+							onConfirm={() => deleteCourse(row.original.id)}
 							actionLabel="Delete"
 							variant="destructive"
 						>
