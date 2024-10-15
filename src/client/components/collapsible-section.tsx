@@ -41,7 +41,7 @@ export const CollapsibleSection = ({
 			<Collapsible open={isOpen}>
 				<CollapsibleTrigger asChild>
 					<h2
-						className="mb-2.5 flex select-none items-center gap-x-2 text-xl sm:mb-4 md:mb-5 md:min-w-[350px]"
+						className="mb-2.5 flex select-none items-center gap-x-2 text-xl underline-offset-2 hover:cursor-pointer hover:underline sm:mb-4 md:mb-5 md:min-w-[350px]"
 						onClick={toggleCollapsible}
 					>
 						<IconBadge icon={IconComponent} />
