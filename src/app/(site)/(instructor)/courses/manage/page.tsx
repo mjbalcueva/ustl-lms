@@ -14,9 +14,9 @@ import {
 	PageHeader,
 	PageSection,
 	PageTitle,
-	PageWrapper,
-	Separator
-} from '@/client/components/ui'
+	PageWrapper
+} from '@/client/components/ui/page'
+import { Separator } from '@/client/components/ui/separator'
 
 export default async function Page() {
 	const session = await api.session.getSession()

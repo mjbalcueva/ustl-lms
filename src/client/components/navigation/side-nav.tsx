@@ -16,7 +16,7 @@ import {
 	NavTooltip
 } from '@/client/components/navigation/nav-item'
 import { UserButton } from '@/client/components/navigation/user-button'
-import { Separator } from '@/client/components/ui'
+import { Separator } from '@/client/components/ui/separator'
 import { useNav } from '@/client/context/nav-provider'
 import { useLockScroll } from '@/client/lib/hooks/use-lock-scroll'
 import { cn } from '@/client/lib/utils'

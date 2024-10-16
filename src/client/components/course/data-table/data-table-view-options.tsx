@@ -1,17 +1,17 @@
 'use client'
 
-import type { Table } from '@tanstack/react-table'
+import { type Table } from '@tanstack/react-table'
 import { LuSettings2 } from 'react-icons/lu'
 
+import { Button } from '@/client/components/ui/button'
 import {
-	Button,
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
 	DropdownMenuContent,
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger
-} from '@/client/components/ui'
+} from '@/client/components/ui/dropdown-menu'
 
 type DataTableViewOptionsProps<TData> = {
 	table: Table<TData>
@@ -21,7 +21,11 @@ export function DataTableViewOptions<TData>({ table }: DataTableViewOptionsProps
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Button aria-label="Display properties" variant="outline" className="ml-auto flex h-9 bg-card dark:bg-background">
+				<Button
+					aria-label="Display properties"
+					variant="outline"
+					className="ml-auto flex h-9 bg-card dark:bg-background"
+				>
 					<LuSettings2 className="mr-2 size-4" />
 					View
 				</Button>

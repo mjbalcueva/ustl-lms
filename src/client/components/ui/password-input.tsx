@@ -3,7 +3,8 @@
 import * as React from 'react'
 import { LuEye, LuEyeOff } from 'react-icons/lu'
 
-import { Button, Input } from '@/client/components/ui'
+import { Button } from '@/client/components/ui/button'
+import { Input } from '@/client/components/ui/input'
 import { cn } from '@/client/lib/utils'
 
 type PasswordInputProps = React.ComponentProps<typeof Input> & {

@@ -1,7 +1,8 @@
 import * as React from 'react'
-import type { TooltipContentProps } from '@radix-ui/react-tooltip'
+import { type TooltipContentProps } from '@radix-ui/react-tooltip'
 
-import { Toggle, Tooltip, TooltipContent, TooltipTrigger } from '@/client/components/ui'
+import { Toggle } from '@/client/components/ui/toggle'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/client/components/ui/tooltip'
 import { cn } from '@/client/lib/utils'
 
 type EditorToolbarButtonProps = React.ComponentPropsWithoutRef<typeof Toggle> & {

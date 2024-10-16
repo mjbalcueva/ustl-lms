@@ -10,20 +10,10 @@ import { toast } from 'sonner'
 import { api } from '@/shared/trpc/react'
 import { editTitleSchema, type EditTitleSchema } from '@/shared/validations/chapter'
 
-import {
-	Button,
-	Card,
-	CardContent,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormMessage,
-	Input
-} from '@/client/components/ui'
+import { Button } from '@/client/components/ui/button'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/client/components/ui/card'
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/client/components/ui/form'
+import { Input } from '@/client/components/ui/input'
 
 export const EditChapterTitleForm = ({ id, courseId, title }: EditTitleSchema) => {
 	const router = useRouter()

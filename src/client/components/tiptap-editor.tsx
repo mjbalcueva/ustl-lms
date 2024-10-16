@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { EditorContent } from '@tiptap/react'
-import type { Content } from '@tiptap/react'
+import { EditorContent, type Content } from '@tiptap/react'
 
 import { EditorToolbar } from '@/client/components/tiptap/editor-toolbar'
 import { useTiptapEditor, type UseTiptapEditorProps } from '@/client/lib/hooks/use-tiptap'

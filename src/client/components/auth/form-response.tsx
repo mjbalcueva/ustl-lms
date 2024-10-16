@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 
-import { Icons } from '@/client/components/icons'
+import { Icons } from '@/client/components/ui/icons'
 import { cn } from '@/client/lib/utils'
 
 const formResponseVariants = cva('flex items-center rounded-xl border p-3', {

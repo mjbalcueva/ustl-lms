@@ -5,20 +5,18 @@ import { LuCheck, LuChevronsUpDown } from 'react-icons/lu'
 import { TbCirclePlus, TbX } from 'react-icons/tb'
 
 import { AddCategoryForm } from '@/client/components/course/forms/add-category'
+import { Badge } from '@/client/components/ui/badge'
+import { Button } from '@/client/components/ui/button'
 import {
-	Badge,
-	Button,
 	Command,
 	CommandEmpty,
 	CommandGroup,
 	CommandInput,
 	CommandItem,
 	CommandList,
-	CommandSeparator,
-	Popover,
-	PopoverContent,
-	PopoverTrigger
-} from '@/client/components/ui'
+	CommandSeparator
+} from '@/client/components/ui/command'
+import { Popover, PopoverContent, PopoverTrigger } from '@/client/components/ui/popover'
 import { cn } from '@/client/lib/utils'
 
 type CategoriesComboboxProps = {

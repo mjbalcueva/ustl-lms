@@ -7,11 +7,11 @@ import { type ColumnDef } from '@tanstack/react-table'
 import { LuArchive, LuTrash } from 'react-icons/lu'
 import { TbCircle, TbCircleCheck, TbCircleDashed, TbDots, TbEdit } from 'react-icons/tb'
 
-import { ConfirmModal } from '@/client/components/confirm-modal'
 import { DataTableColumnHeader } from '@/client/components/course/data-table/data-table-column-header'
+import { Badge } from '@/client/components/ui/badge'
+import { Button } from '@/client/components/ui/button'
+import { ConfirmModal } from '@/client/components/ui/confirm-modal'
 import {
-	Badge,
-	Button,
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
@@ -22,7 +22,7 @@ import {
 	DropdownMenuSubContent,
 	DropdownMenuSubTrigger,
 	DropdownMenuTrigger
-} from '@/client/components/ui'
+} from '@/client/components/ui/dropdown-menu'
 import { capitalize, formatDate } from '@/client/lib/utils'
 
 export const useColumns = (

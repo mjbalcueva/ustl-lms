@@ -1,6 +1,7 @@
 'use client'
 
-import { ScrollArea, ScrollBar, Skeleton } from '@/client/components/ui'
+import { ScrollArea, ScrollBar } from '@/client/components/ui/scroll-area'
+import { Skeleton } from '@/client/components/ui/skeleton'
 import { useDeviceType } from '@/client/context/device-type-provider'
 
 export const CourseStatsGroupSkeleton = () => {

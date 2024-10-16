@@ -1,7 +1,8 @@
 import * as React from 'react'
 import { TbCheck } from 'react-icons/tb'
 
-import { ToggleGroup, ToggleGroupItem, Tooltip, TooltipContent, TooltipTrigger } from '@/client/components/ui'
+import { ToggleGroup, ToggleGroupItem } from '@/client/components/ui/toggle-group'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/client/components/ui/tooltip'
 import { useUserTheme } from '@/client/lib/hooks/use-user-theme'
 
 export type ColorItem = {

@@ -2,14 +2,14 @@ import { type Column } from '@tanstack/react-table'
 import { LuArrowDown, LuArrowUp, LuChevronsUpDown } from 'react-icons/lu'
 import { RxEyeNone } from 'react-icons/rx'
 
+import { Button } from '@/client/components/ui/button'
 import {
-	Button,
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger
-} from '@/client/components/ui'
+} from '@/client/components/ui/dropdown-menu'
 import { cn } from '@/client/lib/utils'
 
 type DataTableColumnHeaderProps<TData, TValue> = React.HTMLAttributes<HTMLDivElement> & {

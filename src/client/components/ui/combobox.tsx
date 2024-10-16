@@ -1,18 +1,16 @@
 import * as React from 'react'
 import { LuCheck, LuChevronsUpDown } from 'react-icons/lu'
 
+import { Button } from '@/client/components/ui/button'
 import {
-	Button,
 	Command,
 	CommandEmpty,
 	CommandGroup,
 	CommandInput,
 	CommandItem,
-	CommandList,
-	Popover,
-	PopoverContent,
-	PopoverTrigger
-} from '@/client/components/ui'
+	CommandList
+} from '@/client/components/ui/command'
+import { Popover, PopoverContent, PopoverTrigger } from '@/client/components/ui/popover'
 import { cn } from '@/client/lib/utils'
 
 type ComboboxProps = {

@@ -1,4 +1,4 @@
-import { ItemContent, ItemFooter, ItemHeader, ItemWrapper } from '@/client/components/item'
+import { ItemContent, ItemFooter, ItemHeader, ItemWrapper } from '@/client/components/ui/item'
 import {
 	PageContainer,
 	PageContent,
@@ -6,9 +6,9 @@ import {
 	PageHeader,
 	PageSection,
 	PageTitle,
-	PageWrapper,
-	Skeleton
-} from '@/client/components/ui'
+	PageWrapper
+} from '@/client/components/ui/page'
+import { Skeleton } from '@/client/components/ui/skeleton'
 
 export default function Loading() {
 	return (

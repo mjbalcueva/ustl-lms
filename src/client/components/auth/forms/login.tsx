@@ -10,22 +10,13 @@ import { loginSchema, type LoginSchema } from '@/shared/validations/auth'
 import { login } from '@/server/actions/login'
 
 import { FormResponse } from '@/client/components/auth/form-response'
-import {
-	ButtonShining,
-	buttonVariants,
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-	Input,
-	InputOTP,
-	InputOTPGroup,
-	InputOTPSlot,
-	Loader,
-	PasswordInput
-} from '@/client/components/ui'
+import { buttonVariants } from '@/client/components/ui/button'
+import { ButtonShining } from '@/client/components/ui/button-shining'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/client/components/ui/form'
+import { Input } from '@/client/components/ui/input'
+import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/client/components/ui/input-otp'
+import { Loader } from '@/client/components/ui/loader'
+import { PasswordInput } from '@/client/components/ui/password-input'
 import { cn } from '@/client/lib/utils'
 
 export const LoginForm = () => {

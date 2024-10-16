@@ -6,8 +6,8 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { type IconBaseProps } from 'react-icons/lib'
 import { TbArrowRight } from 'react-icons/tb'
 
-import { Icons } from '@/client/components/icons'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/client/components/ui'
+import { Icons } from '@/client/components/ui/icons'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/client/components/ui/tooltip'
 import { useNav } from '@/client/context/nav-provider'
 import { cn } from '@/client/lib/utils'
 

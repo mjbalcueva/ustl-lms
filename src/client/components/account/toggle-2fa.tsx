@@ -10,6 +10,8 @@ import { z } from 'zod'
 
 import { api } from '@/shared/trpc/react'
 
+import { Button } from '@/client/components/ui/button'
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/client/components/ui/form'
 import {
 	ItemContent,
 	ItemDescription,
@@ -19,18 +21,9 @@ import {
 	ItemInnerCard,
 	ItemTitle,
 	ItemWrapper
-} from '@/client/components/item'
-import {
-	Button,
-	Form,
-	FormControl,
-	FormDescription,
-	FormField,
-	FormItem,
-	FormLabel,
-	Loader,
-	Switch
-} from '@/client/components/ui'
+} from '@/client/components/ui/item'
+import { Loader } from '@/client/components/ui/loader'
+import { Switch } from '@/client/components/ui/switch'
 
 const twoFactorSchema = z.object({
 	twoFactorEnabled: z.boolean()

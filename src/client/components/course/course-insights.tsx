@@ -1,4 +1,4 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/client/components/ui'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/client/components/ui/card'
 
 export const CourseInsights = () => {
 	return (

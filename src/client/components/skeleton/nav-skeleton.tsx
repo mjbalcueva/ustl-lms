@@ -1,4 +1,5 @@
-import { Separator, Skeleton } from '@/client/components/ui'
+import { Separator } from '@/client/components/ui/separator'
+import { Skeleton } from '@/client/components/ui/skeleton'
 
 export const NavSkeleton = () => {
 	return (

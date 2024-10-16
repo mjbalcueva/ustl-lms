@@ -4,15 +4,9 @@ import { useRouter } from 'next/navigation'
 
 import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
-import {
-	Button,
-	PageBreadcrumbs,
-	PageDescription,
-	PageHeader,
-	PageTitle,
-	PageWrapper,
-	Separator
-} from '@/client/components/ui'
+import { Button } from '@/client/components/ui/button'
+import { PageBreadcrumbs, PageDescription, PageHeader, PageTitle, PageWrapper } from '@/client/components/ui/page'
+import { Separator } from '@/client/components/ui/separator'
 
 const NotFound = ({ item = 'page' }: { item?: string }) => {
 	const router = useRouter()

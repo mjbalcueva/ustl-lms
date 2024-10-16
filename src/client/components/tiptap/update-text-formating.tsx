@@ -1,12 +1,12 @@
 import * as React from 'react'
-import type { Editor } from '@tiptap/react'
-import type { VariantProps } from 'class-variance-authority'
+import { type Editor } from '@tiptap/react'
+import { type VariantProps } from 'class-variance-authority'
 import { TbBold, TbClearFormatting, TbCode, TbDots, TbItalic, TbStrikethrough } from 'react-icons/tb'
 
 import { type FormatAction } from '@/shared/types/tiptap'
 
 import { EditorToolbarSection } from '@/client/components/tiptap/editor-toolbar-section'
-import type { toggleVariants } from '@/client/components/ui'
+import { type toggleVariants } from '@/client/components/ui/toggle'
 
 type TextStyleAction = 'bold' | 'italic' | 'strikethrough' | 'code' | 'clearFormatting'
 

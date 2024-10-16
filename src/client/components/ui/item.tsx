@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 
-import { Separator } from '@/client/components/ui'
+import { Separator } from '@/client/components/ui/separator'
 import { cn } from '@/client/lib/utils'
 
 export const ItemWrapper = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(

@@ -1,14 +1,19 @@
 import * as React from 'react'
-import type { Editor } from '@tiptap/react'
-import type { VariantProps } from 'class-variance-authority'
+import { type Editor } from '@tiptap/react'
+import { type VariantProps } from 'class-variance-authority'
 import { TbCaretDown } from 'react-icons/tb'
 
 import { type FormatAction } from '@/shared/types/tiptap'
 
 import { EditorToolbarButton } from '@/client/components/tiptap/editor-toolbar-button'
 import { ShortcutKey } from '@/client/components/tiptap/shortcut-key'
-import type { toggleVariants } from '@/client/components/ui'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/client/components/ui'
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger
+} from '@/client/components/ui/dropdown-menu'
+import { type toggleVariants } from '@/client/components/ui/toggle'
 import { cn } from '@/client/lib/utils'
 
 type EditorToolbarSectionProps = VariantProps<typeof toggleVariants> & {

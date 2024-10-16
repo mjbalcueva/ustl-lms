@@ -1,5 +1,4 @@
-import type { SVGProps } from 'react'
-import React from 'react'
+import React, { type SVGProps } from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { TbLoader, TbLoader2 } from 'react-icons/tb'
 

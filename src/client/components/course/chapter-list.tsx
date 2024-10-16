@@ -6,8 +6,10 @@ import { DragDropContext, Draggable, Droppable, type DropResult } from '@hello-p
 import { type Chapter } from '@prisma/client'
 import { TbEdit, TbGripVertical } from 'react-icons/tb'
 
-import { Icons } from '@/client/components/icons'
-import { Badge, Separator, Tooltip, TooltipContent, TooltipTrigger } from '@/client/components/ui'
+import { Badge } from '@/client/components/ui/badge'
+import { Icons } from '@/client/components/ui/icons'
+import { Separator } from '@/client/components/ui/separator'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/client/components/ui/tooltip'
 import { capitalize, cn } from '@/client/lib/utils'
 
 type ChapterListProps = {

@@ -4,7 +4,8 @@ import Link from 'next/link'
 import * as React from 'react'
 import { signOut } from 'next-auth/react'
 
-import { Button, buttonVariants, Separator } from '@/client/components/ui'
+import { Button, buttonVariants } from '@/client/components/ui/button'
+import { Separator } from '@/client/components/ui/separator'
 import { cn } from '@/client/lib/utils'
 
 export const AuthCard = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(

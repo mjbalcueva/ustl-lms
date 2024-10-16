@@ -9,7 +9,10 @@ import { toast } from 'sonner'
 import { api } from '@/shared/trpc/react'
 import { updateDisplayNameSchema, type UpdateDisplayNameSchema } from '@/shared/validations/profile'
 
-import { Icons } from '@/client/components/icons'
+import { Button } from '@/client/components/ui/button'
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/client/components/ui/form'
+import { Icons } from '@/client/components/ui/icons'
+import { Input } from '@/client/components/ui/input'
 import {
 	ItemContent,
 	ItemDescription,
@@ -18,8 +21,8 @@ import {
 	ItemHeader,
 	ItemTitle,
 	ItemWrapper
-} from '@/client/components/item'
-import { Button, Form, FormControl, FormField, FormItem, FormMessage, Input, Loader } from '@/client/components/ui'
+} from '@/client/components/ui/item'
+import { Loader } from '@/client/components/ui/loader'
 
 export const UpdateDisplayNameForm = () => {
 	const router = useRouter()

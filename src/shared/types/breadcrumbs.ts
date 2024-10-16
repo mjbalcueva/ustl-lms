@@ -1,4 +1,4 @@
-import { type Icons } from '@/client/components/icons'
+import { type Icons } from '@/client/components/ui/icons'
 
 export type Breadcrumb = {
 	label?: string

@@ -1,4 +1,4 @@
-import { PageContent, PageDescription, PageHeader, PageTitle, PageWrapper } from '@/client/components/ui'
+import { PageContent, PageDescription, PageHeader, PageTitle, PageWrapper } from '@/client/components/ui/page'
 
 export default async function Page() {
 	return (

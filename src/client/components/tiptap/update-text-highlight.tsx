@@ -1,12 +1,12 @@
 import * as React from 'react'
-import type { Editor } from '@tiptap/react'
-import type { VariantProps } from 'class-variance-authority'
+import { type Editor } from '@tiptap/react'
+import { type VariantProps } from 'class-variance-authority'
 import { TbBackground, TbChevronDown } from 'react-icons/tb'
 
 import { ColorPicker } from '@/client/components/tiptap/color-picker'
 import { EditorToolbarButton } from '@/client/components/tiptap/editor-toolbar-button'
-import { Popover, PopoverContent, PopoverTrigger } from '@/client/components/ui'
-import type { toggleVariants } from '@/client/components/ui'
+import { Popover, PopoverContent, PopoverTrigger } from '@/client/components/ui/popover'
+import { type toggleVariants } from '@/client/components/ui/toggle'
 import { usePalettes } from '@/client/lib/tiptap/palette'
 
 type UpdateTextHighlightProps = VariantProps<typeof toggleVariants> & {
