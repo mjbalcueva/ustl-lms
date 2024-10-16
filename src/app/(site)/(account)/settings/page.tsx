@@ -11,7 +11,7 @@ import {
 	PageSection,
 	PageTitle,
 	PageWrapper
-} from '@/client/components/ui'
+} from '@/client/components/ui/page'
 
 export default async function Page() {
 	const session = await auth()

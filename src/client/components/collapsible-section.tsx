@@ -3,16 +3,10 @@
 import { useMemo, useState } from 'react'
 import { LuChevronRight } from 'react-icons/lu'
 
-import {
-	Button,
-	Collapsible,
-	CollapsibleContent,
-	CollapsibleTrigger,
-	IconBadge,
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger
-} from '@/client/components/ui'
+import { Button } from '@/client/components/ui/button'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/client/components/ui/collapsible'
+import { IconBadge } from '@/client/components/ui/icon-badge'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/client/components/ui/tooltip'
 import { getIcon, type IconIdentifier } from '@/client/lib/icon-loader'
 
 type CollapsibleSectionProps = React.ComponentProps<typeof Collapsible> & {

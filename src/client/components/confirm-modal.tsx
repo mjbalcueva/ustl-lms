@@ -9,9 +9,9 @@ import {
 	AlertDialogFooter,
 	AlertDialogHeader,
 	AlertDialogTitle,
-	AlertDialogTrigger,
-	type ButtonProps
-} from '@/client/components/ui'
+	AlertDialogTrigger
+} from '@/client/components/ui/alert-dialog'
+import { type ButtonProps } from '@/client/components/ui/button'
 
 type ConfirmModalProps = {
 	onConfirm: () => void

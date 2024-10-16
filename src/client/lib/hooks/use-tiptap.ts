@@ -1,10 +1,9 @@
 import * as React from 'react'
-import type { AnyExtension, Editor } from '@tiptap/core'
+import { type AnyExtension, type Editor } from '@tiptap/core'
 import { Placeholder } from '@tiptap/extension-placeholder'
 import { TextStyle } from '@tiptap/extension-text-style'
 import { Typography } from '@tiptap/extension-typography'
-import type { Content, UseEditorOptions } from '@tiptap/react'
-import { useEditor } from '@tiptap/react'
+import { useEditor, type Content, type UseEditorOptions } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
 
 import { useTiptapThrottle } from '@/client/lib/hooks/use-tiptap-throttle'

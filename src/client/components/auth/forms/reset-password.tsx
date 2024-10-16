@@ -7,17 +7,10 @@ import { api } from '@/shared/trpc/react'
 import { resetPasswordSchema, type ResetPasswordSchema } from '@/shared/validations/auth'
 
 import { FormResponse } from '@/client/components/auth/form-response'
-import {
-	ButtonShining,
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-	Loader,
-	PasswordInput
-} from '@/client/components/ui'
+import { ButtonShining } from '@/client/components/ui/button-shining'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/client/components/ui/form'
+import { Loader } from '@/client/components/ui/loader'
+import { PasswordInput } from '@/client/components/ui/password-input'
 
 export const ResetPasswordForm = ({ token }: { token: string }) => {
 	const form = useForm<ResetPasswordSchema>({

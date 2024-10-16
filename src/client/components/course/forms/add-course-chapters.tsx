@@ -12,26 +12,12 @@ import { api } from '@/shared/trpc/react'
 import { addChapterSchema, type AddChapterSchema } from '@/shared/validations/chapter'
 
 import { ChapterList } from '@/client/components/course/chapter-list'
-import {
-	Button,
-	Card,
-	CardContent,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormMessage,
-	Input,
-	Loader,
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue
-} from '@/client/components/ui'
+import { Button } from '@/client/components/ui/button'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/client/components/ui/card'
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/client/components/ui/form'
+import { Input } from '@/client/components/ui/input'
+import { Loader } from '@/client/components/ui/loader'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/client/components/ui/select'
 import { capitalize } from '@/client/lib/utils'
 
 type AddCourseChaptersProps = {

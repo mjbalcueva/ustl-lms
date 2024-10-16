@@ -11,20 +11,10 @@ import { api } from '@/shared/trpc/react'
 import { editContentSchema, type EditContentSchema } from '@/shared/validations/chapter'
 
 import { TiptapEditor } from '@/client/components/tiptap-editor'
-import {
-	Button,
-	Card,
-	CardContent,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormMessage,
-	Separator
-} from '@/client/components/ui'
+import { Button } from '@/client/components/ui/button'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/client/components/ui/card'
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/client/components/ui/form'
+import { Separator } from '@/client/components/ui/separator'
 
 export const EditChapterContentForm = ({ id, courseId, content }: EditContentSchema) => {
 	const router = useRouter()

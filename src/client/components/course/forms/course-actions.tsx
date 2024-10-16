@@ -10,13 +10,13 @@ import { api } from '@/shared/trpc/react'
 import { type DeleteCourseSchema, type EditStatusSchema } from '@/shared/validations/course'
 
 import { ConfirmModal } from '@/client/components/confirm-modal'
+import { Button } from '@/client/components/ui/button'
 import {
-	Button,
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger
-} from '@/client/components/ui'
+} from '@/client/components/ui/dropdown-menu'
 
 type CourseActionsProps = DeleteCourseSchema & EditStatusSchema
 

@@ -2,7 +2,14 @@ import { HydrateClient } from '@/shared/trpc/server'
 
 import { auth } from '@/server/lib/auth'
 
-import { PageContent, PageDescription, PageHeader, PageSection, PageTitle, PageWrapper } from '@/client/components/ui'
+import {
+	PageContent,
+	PageDescription,
+	PageHeader,
+	PageSection,
+	PageTitle,
+	PageWrapper
+} from '@/client/components/ui/page'
 
 export default async function Page() {
 	const session = await auth()

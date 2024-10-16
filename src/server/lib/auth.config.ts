@@ -1,5 +1,5 @@
 import { compare } from 'bcryptjs'
-import type { NextAuthConfig } from 'next-auth'
+import { type NextAuthConfig } from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 import Google from 'next-auth/providers/google'
 

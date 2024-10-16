@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react'
-import type { Level } from '@tiptap/extension-heading'
-import type { Editor } from '@tiptap/react'
-import type { VariantProps } from 'class-variance-authority'
+import { type Level } from '@tiptap/extension-heading'
+import { type Editor } from '@tiptap/react'
+import { type VariantProps } from 'class-variance-authority'
 import { type IconType } from 'react-icons/lib'
 import { TbChevronDown, TbH1, TbH2, TbH3, TbH4, TbH5, TbH6, TbLetterCase } from 'react-icons/tb'
 
@@ -13,9 +13,9 @@ import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
-	DropdownMenuTrigger,
-	type toggleVariants
-} from '@/client/components/ui'
+	DropdownMenuTrigger
+} from '@/client/components/ui/dropdown-menu'
+import { type toggleVariants } from '@/client/components/ui/toggle'
 import { cn } from '@/client/lib/utils'
 
 type TextStyle = Omit<FormatAction, 'value' | 'icon' | 'action' | 'isActive' | 'canExecute'> & {

@@ -9,17 +9,15 @@ import { useMediaQuery } from 'usehooks-ts'
 import { Icons } from '@/client/components/icons'
 import { PreferenceDrawer } from '@/client/components/navigation/preference-drawer'
 import { PreferenceDropdown } from '@/client/components/navigation/preference-dropdown'
+import { Avatar, AvatarFallback, AvatarImage } from '@/client/components/ui/avatar'
 import {
-	Avatar,
-	AvatarFallback,
-	AvatarImage,
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger
-} from '@/client/components/ui'
+} from '@/client/components/ui/dropdown-menu'
 import { useDeviceType } from '@/client/context/device-type-provider'
 import { useNav } from '@/client/context/nav-provider'
 import { cn, getEmail, getInitials } from '@/client/lib/utils'

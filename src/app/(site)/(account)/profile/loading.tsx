@@ -6,9 +6,9 @@ import {
 	PageHeader,
 	PageSection,
 	PageTitle,
-	PageWrapper,
-	Skeleton
-} from '@/client/components/ui'
+	PageWrapper
+} from '@/client/components/ui/page'
+import { Skeleton } from '@/client/components/ui/skeleton'
 
 export default function Loading() {
 	return (

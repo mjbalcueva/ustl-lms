@@ -9,8 +9,8 @@ import { toast } from 'sonner'
 import { api } from '@/shared/trpc/react'
 import { addCategorySchema, type AddCategorySchema } from '@/shared/validations/category'
 
+import { Button } from '@/client/components/ui/button'
 import {
-	Button,
 	Dialog,
 	DialogClose,
 	DialogContent,
@@ -18,16 +18,11 @@ import {
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
-	DialogTrigger,
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-	Input,
-	Separator
-} from '@/client/components/ui'
+	DialogTrigger
+} from '@/client/components/ui/dialog'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/client/components/ui/form'
+import { Input } from '@/client/components/ui/input'
+import { Separator } from '@/client/components/ui/separator'
 
 type AddCategoryFormProps = React.ComponentPropsWithoutRef<typeof DialogTrigger>
 

@@ -1,12 +1,12 @@
 import * as React from 'react'
-import type { Editor } from '@tiptap/react'
-import type { VariantProps } from 'class-variance-authority'
+import { type Editor } from '@tiptap/react'
+import { type VariantProps } from 'class-variance-authority'
 import { TbChevronDown, TbList, TbListNumbers } from 'react-icons/tb'
 
-import type { FormatAction } from '@/shared/types/tiptap'
+import { type FormatAction } from '@/shared/types/tiptap'
 
 import { EditorToolbarSection } from '@/client/components/tiptap/editor-toolbar-section'
-import type { toggleVariants } from '@/client/components/ui'
+import { type toggleVariants } from '@/client/components/ui/toggle'
 
 type ListItemAction = 'orderedList' | 'bulletList'
 

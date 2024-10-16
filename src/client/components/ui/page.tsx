@@ -11,7 +11,7 @@ import {
 	BreadcrumbList,
 	BreadcrumbPage,
 	BreadcrumbSeparator
-} from '@/client/components/ui'
+} from '@/client/components/ui/breadcrumb'
 import { cn } from '@/client/lib/utils'
 
 export const PageWrapper = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(

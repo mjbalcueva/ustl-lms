@@ -11,8 +11,8 @@ import { type DeleteChapterSchema, type EditStatusSchema, type EditTypeSchema } 
 
 import { ConfirmModal } from '@/client/components/confirm-modal'
 import { Icons } from '@/client/components/icons'
+import { Button } from '@/client/components/ui/button'
 import {
-	Button,
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
@@ -23,7 +23,7 @@ import {
 	DropdownMenuSubContent,
 	DropdownMenuSubTrigger,
 	DropdownMenuTrigger
-} from '@/client/components/ui'
+} from '@/client/components/ui/dropdown-menu'
 import { capitalize } from '@/client/lib/utils'
 
 type ChapterActionsProps = DeleteChapterSchema & EditStatusSchema & EditTypeSchema

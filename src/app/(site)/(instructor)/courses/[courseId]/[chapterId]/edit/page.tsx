@@ -7,16 +7,10 @@ import { ChapterEditContent } from '@/client/components/course/chapter-edit-cont
 import { ChapterActions } from '@/client/components/course/forms/chapter-actions'
 import { type Icons } from '@/client/components/icons'
 import { NotFound } from '@/client/components/not-found'
-import {
-	Badge,
-	Banner,
-	PageBreadcrumbs,
-	PageDescription,
-	PageHeader,
-	PageTitle,
-	PageWrapper,
-	Separator
-} from '@/client/components/ui'
+import { Badge } from '@/client/components/ui/badge'
+import { Banner } from '@/client/components/ui/banner'
+import { PageBreadcrumbs, PageDescription, PageHeader, PageTitle, PageWrapper } from '@/client/components/ui/page'
+import { Separator } from '@/client/components/ui/separator'
 import { capitalize } from '@/client/lib/utils'
 
 export default async function Page({ params }: { params: { courseId: string; chapterId: string } }) {

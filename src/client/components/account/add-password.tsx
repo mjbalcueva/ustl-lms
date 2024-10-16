@@ -18,17 +18,10 @@ import {
 	ItemTitle,
 	ItemWrapper
 } from '@/client/components/item'
-import {
-	Button,
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-	Loader,
-	PasswordInput
-} from '@/client/components/ui'
+import { Button } from '@/client/components/ui/button'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/client/components/ui/form'
+import { Loader } from '@/client/components/ui/loader'
+import { PasswordInput } from '@/client/components/ui/password-input'
 
 export const AddPasswordForm = () => {
 	const router = useRouter()

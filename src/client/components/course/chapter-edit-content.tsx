@@ -6,7 +6,7 @@ import { AddChapterAttachmentsForm } from '@/client/components/course/forms/add-
 import { EditChapterContentForm } from '@/client/components/course/forms/edit-chapter-content'
 import { EditChapterTitleForm } from '@/client/components/course/forms/edit-chapter-title'
 import { EditChapterVideoForm } from '@/client/components/course/forms/edit-chapter-video'
-import { PageContent, PageSection } from '@/client/components/ui'
+import { PageContent, PageSection } from '@/client/components/ui/page'
 
 type ChapterEditContentProps = {
 	chapter: Chapter & { course: Course } & { attachments: Attachment[] } & { muxData: MuxData | null }

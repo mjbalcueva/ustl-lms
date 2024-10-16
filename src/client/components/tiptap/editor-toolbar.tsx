@@ -6,7 +6,7 @@ import { UpdateTextColor } from '@/client/components/tiptap/update-text-color'
 import { UpdateTextFormating } from '@/client/components/tiptap/update-text-formating'
 import { UpdateTextListings } from '@/client/components/tiptap/update-text-listings'
 import { UpdateTextStyle } from '@/client/components/tiptap/update-text-style'
-import { Separator } from '@/client/components/ui'
+import { Separator } from '@/client/components/ui/separator'
 
 export const EditorToolbar = ({ editor }: { editor: Editor }) => (
 	<div className="flex w-full shrink-0 items-center gap-px space-x-1 overflow-x-auto rounded-xl border border-input p-1 dark:bg-background">

@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import { api } from '@/shared/trpc/react'
 
 import { FormResponse } from '@/client/components/auth/form-response'
-import { Loader } from '@/client/components/ui'
+import { Loader } from '@/client/components/ui/loader'
 
 export const VerifyEmailForm = ({ token }: { token: string }) => {
 	const { mutate, data, error, isPending } = api.auth.verifyEmail.useMutation()

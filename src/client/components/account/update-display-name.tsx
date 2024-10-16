@@ -19,7 +19,10 @@ import {
 	ItemTitle,
 	ItemWrapper
 } from '@/client/components/item'
-import { Button, Form, FormControl, FormField, FormItem, FormMessage, Input, Loader } from '@/client/components/ui'
+import { Button } from '@/client/components/ui/button'
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/client/components/ui/form'
+import { Input } from '@/client/components/ui/input'
+import { Loader } from '@/client/components/ui/loader'
 
 export const UpdateDisplayNameForm = () => {
 	const router = useRouter()

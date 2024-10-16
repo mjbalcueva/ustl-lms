@@ -7,18 +7,11 @@ import { api } from '@/shared/trpc/react'
 import { registerSchema, type RegisterSchema } from '@/shared/validations/auth'
 
 import { FormResponse } from '@/client/components/auth/form-response'
-import {
-	ButtonShining,
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-	Input,
-	Loader,
-	PasswordInput
-} from '@/client/components/ui'
+import { ButtonShining } from '@/client/components/ui/button-shining'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/client/components/ui/form'
+import { Input } from '@/client/components/ui/input'
+import { Loader } from '@/client/components/ui/loader'
+import { PasswordInput } from '@/client/components/ui/password-input'
 
 export const RegisterForm = () => {
 	const form = useForm<RegisterSchema>({

@@ -1,4 +1,4 @@
-import { Button } from '@/client/components/ui'
+import { Button } from '@/client/components/ui/button'
 import { cn } from '@/client/lib/utils'
 
 type ButtonShiningProps = React.ComponentProps<typeof Button> & {

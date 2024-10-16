@@ -20,17 +20,10 @@ import {
 	ItemTitle,
 	ItemWrapper
 } from '@/client/components/item'
-import {
-	Button,
-	Form,
-	FormControl,
-	FormDescription,
-	FormField,
-	FormItem,
-	FormLabel,
-	Loader,
-	Switch
-} from '@/client/components/ui'
+import { Button } from '@/client/components/ui/button'
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/client/components/ui/form'
+import { Loader } from '@/client/components/ui/loader'
+import { Switch } from '@/client/components/ui/switch'
 
 const twoFactorSchema = z.object({
 	twoFactorEnabled: z.boolean()

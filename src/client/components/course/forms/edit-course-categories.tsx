@@ -11,20 +11,10 @@ import { api } from '@/shared/trpc/react'
 import { editCourseCategoriesSchema, type EditCourseCategoriesSchema } from '@/shared/validations/category'
 
 import { CategoriesCombobox } from '@/client/components/course/categories-combobox'
-import {
-	Badge,
-	Button,
-	Card,
-	CardContent,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormMessage
-} from '@/client/components/ui'
+import { Badge } from '@/client/components/ui/badge'
+import { Button } from '@/client/components/ui/button'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/client/components/ui/card'
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/client/components/ui/form'
 
 type EditCourseCategoriesProps = {
 	id: string

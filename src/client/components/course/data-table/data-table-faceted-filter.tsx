@@ -3,21 +3,19 @@ import { TbCheck, TbCirclePlus } from 'react-icons/tb'
 
 import { type Option } from '@/shared/types/data-table'
 
+import { Badge } from '@/client/components/ui/badge'
+import { Button } from '@/client/components/ui/button'
 import {
-	Badge,
-	Button,
 	Command,
 	CommandEmpty,
 	CommandGroup,
 	CommandInput,
 	CommandItem,
 	CommandList,
-	CommandSeparator,
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-	Separator
-} from '@/client/components/ui'
+	CommandSeparator
+} from '@/client/components/ui/command'
+import { Popover, PopoverContent, PopoverTrigger } from '@/client/components/ui/popover'
+import { Separator } from '@/client/components/ui/separator'
 import { cn } from '@/client/lib/utils'
 
 type DataTableFacetedFilterProps<TData, TValue> = {

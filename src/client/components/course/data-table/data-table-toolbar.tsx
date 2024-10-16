@@ -1,14 +1,15 @@
 'use client'
 
 import * as React from 'react'
-import type { Table } from '@tanstack/react-table'
+import { type Table } from '@tanstack/react-table'
 import { TbX } from 'react-icons/tb'
 
 import { type DataTableFilterField } from '@/shared/types/data-table'
 
 import { DataTableFacetedFilter } from '@/client/components/course/data-table/data-table-faceted-filter'
 import { DataTableViewOptions } from '@/client/components/course/data-table/data-table-view-options'
-import { Button, Input } from '@/client/components/ui'
+import { Button } from '@/client/components/ui/button'
+import { Input } from '@/client/components/ui/input'
 import { cn } from '@/client/lib/utils'
 
 type DataTableToolbarProps<TData> = React.HTMLAttributes<HTMLDivElement> & {

@@ -13,18 +13,18 @@ import { EditCourseDescriptionForm } from '@/client/components/course/forms/edit
 import { EditCourseImageForm } from '@/client/components/course/forms/edit-course-image'
 import { EditCourseTitleForm } from '@/client/components/course/forms/edit-course-title'
 import { NotFound } from '@/client/components/not-found'
+import { Badge } from '@/client/components/ui/badge'
+import { Banner } from '@/client/components/ui/banner'
 import {
-	Badge,
-	Banner,
 	PageBreadcrumbs,
 	PageContent,
 	PageDescription,
 	PageHeader,
 	PageSection,
 	PageTitle,
-	PageWrapper,
-	Separator
-} from '@/client/components/ui'
+	PageWrapper
+} from '@/client/components/ui/page'
+import { Separator } from '@/client/components/ui/separator'
 
 export default async function Page({ params }: { params: { courseId: string } }) {
 	const session = await api.session.getSession()

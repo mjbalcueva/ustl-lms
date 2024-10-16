@@ -1,9 +1,9 @@
 import * as React from 'react'
-import type { Editor } from '@tiptap/react'
+import { type Editor } from '@tiptap/react'
 import { TbHighlightOff } from 'react-icons/tb'
 
 import { EditorToolbarButton } from '@/client/components/tiptap/editor-toolbar-button'
-import { Popover, PopoverContent, PopoverTrigger } from '@/client/components/ui'
+import { Popover, PopoverContent, PopoverTrigger } from '@/client/components/ui/popover'
 
 type ClearHighlightColorProps = {
 	editor: Editor

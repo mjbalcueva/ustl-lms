@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 import { type Course } from '@prisma/client'
 
 import { CourseStats } from '@/client/components/course/course-stats'
-import { ScrollArea, ScrollBar } from '@/client/components/ui'
+import { ScrollArea, ScrollBar } from '@/client/components/ui/scroll-area'
 import { useDeviceType } from '@/client/context/device-type-provider'
 
 type CourseStatus = 'PUBLISHED' | 'DRAFT' | 'ARCHIVED'

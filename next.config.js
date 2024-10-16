@@ -8,9 +8,6 @@ await import('./src/env.js')
 const config = {
 	images: {
 		remotePatterns: [{ hostname: 'utfs.io' }]
-	},
-	experimental: {
-		optimizePackageImports: ['@/client/components/ui']
 	}
 }
 

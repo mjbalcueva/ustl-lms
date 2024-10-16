@@ -22,16 +22,8 @@ import { type DataTableFilterField } from '@/shared/types/data-table'
 import { useColumns } from '@/client/components/course/data-table/data-table-column'
 import { DataTablePagination } from '@/client/components/course/data-table/data-table-pagination'
 import { DataTableToolbar } from '@/client/components/course/data-table/data-table-toolbar'
-import {
-	ScrollArea,
-	ScrollBar,
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow
-} from '@/client/components/ui'
+import { ScrollArea, ScrollBar } from '@/client/components/ui/scroll-area'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/client/components/ui/table'
 
 type DataTableProps<TData> = {
 	data: TData[]

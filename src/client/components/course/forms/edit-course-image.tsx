@@ -10,7 +10,8 @@ import { api } from '@/shared/trpc/react'
 import { type EditImageSchema } from '@/shared/validations/course'
 
 import { FileUpload } from '@/client/components/file-upload'
-import { Button, Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/client/components/ui'
+import { Button } from '@/client/components/ui/button'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/client/components/ui/card'
 
 export const EditCourseImageForm = ({ id, imageUrl }: EditImageSchema) => {
 	const router = useRouter()
