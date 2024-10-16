@@ -4,20 +4,21 @@ import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { TbCirclePlus, TbEdit } from 'react-icons/tb'
+import { TbEdit } from 'react-icons/tb'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
-import { editCourseCategorySchema, type EditCourseCategorySchema } from '@/shared/validations/category'
+import { editCourseCategoriesSchema, type EditCourseCategoriesSchema } from '@/shared/validations/category'
 
+import { CategoriesCombobox } from '@/client/components/course/categories-combobox'
 import {
+	Badge,
 	Button,
 	Card,
 	CardContent,
 	CardFooter,
 	CardHeader,
 	CardTitle,
-	Combobox,
 	Form,
 	FormControl,
 	FormField,
@@ -25,32 +26,31 @@ import {
 	FormMessage
 } from '@/client/components/ui'
 
-type EditCourseCategoryProps = EditCourseCategorySchema & {
-	options: {
-		value: string
-		label: string
-	}[]
+type EditCourseCategoriesProps = {
+	id: string
+	categoryIds: string[]
+	options: { value: string; label: string }[]
 }
 
-export const EditCourseCategoriesForm = ({ id, categoryId, options }: EditCourseCategoryProps) => {
+export const EditCourseCategoriesForm = ({ id, categoryIds, options }: EditCourseCategoriesProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
+
 	const toggleEdit = () => {
 		setIsEditing((current) => !current)
 		form.reset()
 	}
 
-	const form = useForm<EditCourseCategorySchema>({
-		resolver: zodResolver(editCourseCategorySchema),
-		defaultValues: { id, categoryId: categoryId ?? '' }
+	const form = useForm<EditCourseCategoriesSchema>({
+		resolver: zodResolver(editCourseCategoriesSchema),
+		defaultValues: { id, categoryIds }
 	})
-	const selectedCategory = options.find((option) => option.value === form.getValues('categoryId'))
 
-	const { mutate, isPending } = api.category.editCategory.useMutation({
+	const { mutate, isPending } = api.category.editCategories.useMutation({
 		onSuccess: async (data) => {
 			toggleEdit()
-			form.reset({ id, categoryId: data.newCategoryId ?? '' })
+			form.reset({ id, categoryIds: data.newCategoryIds })
 			router.refresh()
 			toast.success(data.message)
 		},
@@ -61,17 +61,29 @@ export const EditCourseCategoriesForm = ({ id, categoryId, options }: EditCourse
 		<Card>
 			<CardHeader>
 				<div className="flex flex-col space-y-1.5">
-					<CardTitle>Course Category</CardTitle>
+					<CardTitle>Course Categories</CardTitle>
 				</div>
+
 				<Button onClick={toggleEdit} variant="ghost" size="card">
-					{!isEditing && categoryId && <TbEdit className="mr-2 size-4" />}
-					{!isEditing && !categoryId && <TbCirclePlus className="mr-2 size-4" />}
-					{isEditing ? 'Cancel' : categoryId ? 'Edit' : 'Add'}
+					{!isEditing && <TbEdit className="mr-2 size-4" />}
+					{isEditing ? 'Cancel' : 'Edit'}
 				</Button>
 			</CardHeader>
 
 			{!isEditing && (
-				<CardContent isEmpty={!categoryId}>{categoryId ? selectedCategory?.label : 'No category selected'}</CardContent>
+				<CardContent isEmpty={categoryIds.length === 0}>
+					{categoryIds.length > 0 ? (
+						<div className="flex flex-wrap gap-1">
+							{categoryIds.map((id) => (
+								<Badge key={id} variant="secondary">
+									{options.find((opt) => opt.value === id)?.label}
+								</Badge>
+							))}
+						</div>
+					) : (
+						'No categories selected'
+					)}
+				</CardContent>
 			)}
 
 			{isEditing && (
@@ -80,15 +92,15 @@ export const EditCourseCategoriesForm = ({ id, categoryId, options }: EditCourse
 						<CardContent>
 							<FormField
 								control={form.control}
-								name="categoryId"
+								name="categoryIds"
 								render={({ field }) => (
 									<FormItem>
 										<FormControl>
-											<Combobox
+											<CategoriesCombobox
 												options={options}
-												selected={field.value ?? ''}
+												selected={field.value}
 												onChange={field.onChange}
-												label="Select Category..."
+												label="Select Categories..."
 											/>
 										</FormControl>
 										<FormMessage />
@@ -96,6 +108,7 @@ export const EditCourseCategoriesForm = ({ id, categoryId, options }: EditCourse
 								)}
 							/>
 						</CardContent>
+
 						<CardFooter>
 							<Button
 								type="submit"

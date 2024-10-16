@@ -1,4 +1,4 @@
-import { editCourseCategorySchema } from '@/shared/validations/category'
+import { editCourseCategoriesSchema } from '@/shared/validations/category'
 
 import { createTRPCRouter, instructorProcedure } from '@/server/api/trpc'
 
@@ -10,14 +10,16 @@ export const categoryRouter = createTRPCRouter({
 		return { categories }
 	}),
 
-	editCategory: instructorProcedure.input(editCourseCategorySchema).mutation(async ({ ctx, input }) => {
-		const { id, categoryId } = input
+	editCategories: instructorProcedure.input(editCourseCategoriesSchema).mutation(async ({ ctx, input }) => {
+		const { id, categoryIds } = input
 
-		const { categoryId: newCategoryId } = await ctx.db.course.update({
+		await ctx.db.course.update({
 			where: { id, instructorId: ctx.session.user.id! },
-			data: { categoryId }
+			data: {
+				categories: { set: categoryIds.map((categoryId) => ({ id: categoryId })) }
+			}
 		})
 
-		return { message: 'Course category updated!', newCategoryId }
+		return { message: 'Course categories updated!', newCategoryIds: categoryIds }
 	})
 })

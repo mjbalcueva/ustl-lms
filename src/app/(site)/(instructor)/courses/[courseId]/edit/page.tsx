@@ -40,7 +40,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 		course.title,
 		course.description,
 		course.imageUrl,
-		course.categoryId,
+		course.categories.length > 0,
 		course.chapters.some((chapter) => chapter.status === 'PUBLISHED'),
 		course.attachments.some((attachment) => !attachment.chapterId)
 	]
@@ -85,6 +85,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 					</PageTitle>
 					<PageDescription>Filled {completionText}</PageDescription>
 				</div>
+
 				<CourseActions id={course.id} status={course.status} />
 			</PageHeader>
 
@@ -97,7 +98,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 						<EditCourseImageForm id={course.id} imageUrl={course.imageUrl} />
 						<EditCourseCategoriesForm
 							id={course.id}
-							categoryId={course.categoryId}
+							categoryIds={course.categories.map((category) => category.id)}
 							options={categories.map((category) => ({ value: category.id, label: category.name }))}
 						/>
 					</CollapsibleSection>

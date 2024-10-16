@@ -157,6 +157,7 @@ export const courseRouter = createTRPCRouter({
 					where: { chapterId: null },
 					orderBy: { createdAt: 'desc' }
 				},
+				categories: { orderBy: { name: 'asc' } },
 				chapters: { orderBy: { position: 'asc' } }
 			}
 		})
