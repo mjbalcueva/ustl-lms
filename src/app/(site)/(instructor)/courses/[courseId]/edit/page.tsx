@@ -20,6 +20,7 @@ import {
 	PageContent,
 	PageDescription,
 	PageHeader,
+	PageSection,
 	PageTitle,
 	PageWrapper,
 	Separator
@@ -87,20 +88,22 @@ export default async function Page({ params }: { params: { courseId: string } })
 				<CourseActions id={course.id} status={course.status} />
 			</PageHeader>
 
-			<PageContent className="gap-4 px-2.5 sm:px-4 md:flex md:flex-wrap md:gap-6 md:px-6">
-				<CollapsibleSection title="Customize your course" iconName="Tb/TbNotebook" className="mb-6 flex-1 md:mb-0">
-					<EditCourseCodeForm id={course.id} code={course.code} />
-					<EditCourseTitleForm id={course.id} title={course.title} />
-					<EditCourseDescriptionForm id={course.id} description={course.description} />
-					<EditCourseImageForm id={course.id} imageUrl={course.imageUrl} />
-					<EditCourseCategoriesForm
-						id={course.id}
-						categoryId={course.categoryId}
-						options={categories.map((category) => ({ value: category.id, label: category.name }))}
-					/>
-				</CollapsibleSection>
+			<PageContent className="mb-24 space-y-6 px-2.5 sm:px-4 md:mb-12 md:flex md:flex-wrap md:gap-6 md:space-y-0 md:px-6">
+				<PageSection columnMode>
+					<CollapsibleSection title="Customize your course" iconName="Tb/TbNotebook">
+						<EditCourseCodeForm id={course.id} code={course.code} />
+						<EditCourseTitleForm id={course.id} title={course.title} />
+						<EditCourseDescriptionForm id={course.id} description={course.description} />
+						<EditCourseImageForm id={course.id} imageUrl={course.imageUrl} />
+						<EditCourseCategoriesForm
+							id={course.id}
+							categoryId={course.categoryId}
+							options={categories.map((category) => ({ value: category.id, label: category.name }))}
+						/>
+					</CollapsibleSection>
+				</PageSection>
 
-				<div className="flex flex-1 flex-col gap-4 md:gap-6">
+				<PageSection columnMode>
 					<CollapsibleSection title="Course Outline" iconName="Tb/TbListDetails">
 						<AddCourseChaptersForm courseId={course.id} chapters={course.chapters} />
 					</CollapsibleSection>
@@ -108,7 +111,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 					<CollapsibleSection title="Additional References" iconName="Tb/TbPackage">
 						<AddCourseAttachmentsForm courseId={course.id} attachments={course.attachments} />
 					</CollapsibleSection>
-				</div>
+				</PageSection>
 			</PageContent>
 		</PageWrapper>
 	)
