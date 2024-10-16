@@ -78,15 +78,15 @@ model Course {
   updatedAt   DateTime @updatedAt
 
   instructorId String
-  categoryId   String?
-  attachments  Attachment[]
-  chapters     Chapter[]
-  enrollments  Enrollment[]
 
-  instructor User      @relation(fields: [instructorId], references: [id], onDelete: Cascade)
-  category   Category? @relation(fields: [categoryId], references: [id])
+  categories  Category[]
+  attachments Attachment[]
+  chapters    Chapter[]
+  enrollments Enrollment[]
 
-  @@index([code, categoryId])
+  instructor User @relation(fields: [instructorId], references: [id], onDelete: Cascade)
+
+  @@index([code])
   @@map("course")
 }
 
