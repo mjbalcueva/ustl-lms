@@ -34,8 +34,12 @@ export const ChapterEditContent = ({ chapter }: ChapterEditContentProps) => {
 						</PageSection>
 
 						<PageSection columnMode>
-							<CollapsibleSection title="Lecture video" iconName="Tb/TbVideo">
-								<EditChapterVideoForm id={chapter.id} courseId={chapter.course.id} initialData={chapter} />
+							<CollapsibleSection title="Outline" iconName="Lu/LuFeather">
+								<div>Assessment Builder</div>
+							</CollapsibleSection>
+
+							<CollapsibleSection title="Student Feedback" iconName="Tb/TbMessage">
+								<div>Comments from students</div>
 							</CollapsibleSection>
 						</PageSection>
 					</>
@@ -59,8 +63,12 @@ export const ChapterEditContent = ({ chapter }: ChapterEditContentProps) => {
 						</PageSection>
 
 						<PageSection columnMode>
-							<CollapsibleSection title="Lecture video" iconName="Tb/TbVideo">
-								<EditChapterVideoForm id={chapter.id} courseId={chapter.course.id} initialData={chapter} />
+							<CollapsibleSection title="Student submissions" iconName="Tb/TbSend">
+								<div>Student submissions</div>
+							</CollapsibleSection>
+
+							<CollapsibleSection title="Student Feedback" iconName="Tb/TbMessage">
+								<div>Comments from students</div>
 							</CollapsibleSection>
 						</PageSection>
 					</>
@@ -86,6 +94,10 @@ export const ChapterEditContent = ({ chapter }: ChapterEditContentProps) => {
 						<PageSection columnMode>
 							<CollapsibleSection title="Lecture video" iconName="Tb/TbVideo">
 								<EditChapterVideoForm id={chapter.id} courseId={chapter.course.id} initialData={chapter} />
+							</CollapsibleSection>
+
+							<CollapsibleSection title="Student Feedback" iconName="Tb/TbMessage">
+								<div>Comments from students</div>
 							</CollapsibleSection>
 						</PageSection>
 					</>
