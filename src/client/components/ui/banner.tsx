@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { TbX } from 'react-icons/tb'
 
-import { Icons } from '@/client/components/icons'
+import { Icons } from '@/client/components/ui/icons'
 import { cn } from '@/client/lib/utils'
 
 const bannerVariants = cva(

@@ -7,10 +7,10 @@ import { type ColumnDef } from '@tanstack/react-table'
 import { LuArchive, LuTrash } from 'react-icons/lu'
 import { TbCircle, TbCircleCheck, TbCircleDashed, TbDots, TbEdit } from 'react-icons/tb'
 
-import { ConfirmModal } from '@/client/components/confirm-modal'
 import { DataTableColumnHeader } from '@/client/components/course/data-table/data-table-column-header'
 import { Badge } from '@/client/components/ui/badge'
 import { Button } from '@/client/components/ui/button'
+import { ConfirmModal } from '@/client/components/ui/confirm-modal'
 import {
 	DropdownMenu,
 	DropdownMenuContent,

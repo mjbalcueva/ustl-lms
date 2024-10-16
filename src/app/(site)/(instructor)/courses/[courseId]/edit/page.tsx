@@ -3,7 +3,6 @@ import { redirect } from 'next/navigation'
 import { api } from '@/shared/trpc/server'
 import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
-import { CollapsibleSection } from '@/client/components/collapsible-section'
 import { AddCourseAttachmentsForm } from '@/client/components/course/forms/add-course-attachments'
 import { AddCourseChaptersForm } from '@/client/components/course/forms/add-course-chapters'
 import { CourseActions } from '@/client/components/course/forms/course-actions'
@@ -15,6 +14,7 @@ import { EditCourseTitleForm } from '@/client/components/course/forms/edit-cours
 import { NotFound } from '@/client/components/not-found'
 import { Badge } from '@/client/components/ui/badge'
 import { Banner } from '@/client/components/ui/banner'
+import { CollapsibleSection } from '@/client/components/ui/collapsible-section'
 import {
 	PageBreadcrumbs,
 	PageContent,

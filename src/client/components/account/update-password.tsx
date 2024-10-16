@@ -8,7 +8,9 @@ import { toast } from 'sonner'
 import { api } from '@/shared/trpc/react'
 import { updatePasswordSchema, type UpdatePasswordSchema } from '@/shared/validations/auth'
 
-import { Icons } from '@/client/components/icons'
+import { Button } from '@/client/components/ui/button'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/client/components/ui/form'
+import { Icons } from '@/client/components/ui/icons'
 import {
 	ItemContent,
 	ItemDescription,
@@ -17,9 +19,7 @@ import {
 	ItemHeader,
 	ItemTitle,
 	ItemWrapper
-} from '@/client/components/item'
-import { Button } from '@/client/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/client/components/ui/form'
+} from '@/client/components/ui/item'
 import { Loader } from '@/client/components/ui/loader'
 import { PasswordInput } from '@/client/components/ui/password-input'
 

@@ -1,4 +1,3 @@
-import { Icons } from '@/client/components/icons'
 import { buttonVariants } from '@/client/components/ui/button'
 import {
 	DropdownMenuItem,
@@ -9,6 +8,7 @@ import {
 	DropdownMenuSubContent,
 	DropdownMenuSubTrigger
 } from '@/client/components/ui/dropdown-menu'
+import { Icons } from '@/client/components/ui/icons'
 import { useUserTheme } from '@/client/lib/hooks/use-user-theme'
 import { cn } from '@/client/lib/utils'
 

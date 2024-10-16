@@ -4,8 +4,8 @@ import React from 'react'
 import { useTheme } from 'next-themes'
 import { Toaster as ToasterPrimitive, type ToasterProps } from 'sonner'
 
-import { Icons } from '@/client/components/icons'
 import { buttonVariants } from '@/client/components/ui/button'
+import { Icons } from '@/client/components/ui/icons'
 import { Loader } from '@/client/components/ui/loader'
 import { cn } from '@/client/lib/utils'
 

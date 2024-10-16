@@ -1,11 +1,11 @@
 import { useMemo } from 'react'
 import { type Attachment, type Chapter, type Course, type MuxData } from '@prisma/client'
 
-import { CollapsibleSection } from '@/client/components/collapsible-section'
 import { AddChapterAttachmentsForm } from '@/client/components/course/forms/add-chapter-attachments'
 import { EditChapterContentForm } from '@/client/components/course/forms/edit-chapter-content'
 import { EditChapterTitleForm } from '@/client/components/course/forms/edit-chapter-title'
 import { EditChapterVideoForm } from '@/client/components/course/forms/edit-chapter-video'
+import { CollapsibleSection } from '@/client/components/ui/collapsible-section'
 import { PageContent, PageSection } from '@/client/components/ui/page'
 
 type ChapterEditContentProps = {

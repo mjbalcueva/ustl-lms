@@ -1,5 +1,5 @@
-import { Icons } from '@/client/components/icons'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/client/components/ui/card'
+import { Icons } from '@/client/components/ui/icons'
 import { cn } from '@/client/lib/utils'
 
 type CardStatsMiniProps = {

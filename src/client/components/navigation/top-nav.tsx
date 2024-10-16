@@ -6,9 +6,9 @@ import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-
 import { site } from '@/shared/config/links'
 import { type Link } from '@/shared/types/navigation'
 
-import { Icons } from '@/client/components/icons'
 import { NavButton, NavIcon, NavItemSideIcon, NavLabel, NavLink } from '@/client/components/navigation/nav-item'
 import { UserButton } from '@/client/components/navigation/user-button'
+import { Icons } from '@/client/components/ui/icons'
 import { useNav } from '@/client/context/nav-provider'
 import { useLockScroll } from '@/client/lib/hooks/use-lock-scroll'
 import { cn } from '@/client/lib/utils'

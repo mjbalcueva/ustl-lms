@@ -3,7 +3,6 @@ import { Slot } from '@radix-ui/react-slot'
 
 import { type Breadcrumb as BreadcrumbType } from '@/shared/types/breadcrumbs'
 
-import { Icons } from '@/client/components/icons'
 import {
 	Breadcrumb,
 	BreadcrumbItem,
@@ -12,6 +11,7 @@ import {
 	BreadcrumbPage,
 	BreadcrumbSeparator
 } from '@/client/components/ui/breadcrumb'
+import { Icons } from '@/client/components/ui/icons'
 import { cn } from '@/client/lib/utils'
 
 export const PageWrapper = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(

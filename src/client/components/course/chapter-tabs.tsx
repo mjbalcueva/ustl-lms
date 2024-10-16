@@ -3,11 +3,11 @@
 import * as React from 'react'
 import { type Attachment, type Chapter, type Course, type MuxData } from '@prisma/client'
 
-import { CollapsibleSection } from '@/client/components/collapsible-section'
 import { AddChapterAttachmentsForm } from '@/client/components/course/forms/add-chapter-attachments'
 import { EditChapterContentForm } from '@/client/components/course/forms/edit-chapter-content'
 import { EditChapterTitleForm } from '@/client/components/course/forms/edit-chapter-title'
 import { EditChapterVideoForm } from '@/client/components/course/forms/edit-chapter-video'
+import { CollapsibleSection } from '@/client/components/ui/collapsible-section'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/client/components/ui/tabs'
 
 type ChapterTabsProps = {

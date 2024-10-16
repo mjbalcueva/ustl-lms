@@ -1,4 +1,3 @@
-import { Icons } from '@/client/components/icons'
 import { Button } from '@/client/components/ui/button'
 import {
 	Drawer,
@@ -10,6 +9,7 @@ import {
 	DrawerTitle,
 	DrawerTrigger
 } from '@/client/components/ui/drawer'
+import { Icons } from '@/client/components/ui/icons'
 import { useUserTheme } from '@/client/lib/hooks/use-user-theme'
 import { cn } from '@/client/lib/utils'
 

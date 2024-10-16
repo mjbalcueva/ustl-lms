@@ -6,7 +6,6 @@ import { signOut, useSession } from 'next-auth/react'
 import { LuChevronsUpDown } from 'react-icons/lu'
 import { useMediaQuery } from 'usehooks-ts'
 
-import { Icons } from '@/client/components/icons'
 import { PreferenceDrawer } from '@/client/components/navigation/preference-drawer'
 import { PreferenceDropdown } from '@/client/components/navigation/preference-dropdown'
 import { Avatar, AvatarFallback, AvatarImage } from '@/client/components/ui/avatar'
@@ -18,6 +17,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger
 } from '@/client/components/ui/dropdown-menu'
+import { Icons } from '@/client/components/ui/icons'
 import { useDeviceType } from '@/client/context/device-type-provider'
 import { useNav } from '@/client/context/nav-provider'
 import { cn, getEmail, getInitials } from '@/client/lib/utils'

@@ -9,9 +9,8 @@ import { toast } from 'sonner'
 import { api } from '@/shared/trpc/react'
 import { type DeleteChapterSchema, type EditStatusSchema, type EditTypeSchema } from '@/shared/validations/chapter'
 
-import { ConfirmModal } from '@/client/components/confirm-modal'
-import { Icons } from '@/client/components/icons'
 import { Button } from '@/client/components/ui/button'
+import { ConfirmModal } from '@/client/components/ui/confirm-modal'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -24,6 +23,7 @@ import {
 	DropdownMenuSubTrigger,
 	DropdownMenuTrigger
 } from '@/client/components/ui/dropdown-menu'
+import { Icons } from '@/client/components/ui/icons'
 import { capitalize } from '@/client/lib/utils'
 
 type ChapterActionsProps = DeleteChapterSchema & EditStatusSchema & EditTypeSchema
