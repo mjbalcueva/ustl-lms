@@ -72,7 +72,7 @@ export const AddCategoryForm = ({ ...props }: AddCategoryFormProps) => {
 							)}
 						/>
 
-						<DialogFooter>
+						<DialogFooter className="gap-2">
 							<DialogClose asChild>
 								<Button type="button" variant="outline" onClick={() => form.reset()}>
 									Cancel

@@ -110,7 +110,10 @@ export const TopNav = ({ links, className, ...props }: TopNavProps) => {
 								damping: 20,
 								delay: index * 0.05
 							}}
-							onClick={() => setNavOpen(false)}
+							onClick={() => {
+								setNavOpen(false)
+								setLockScroll(false)
+							}}
 						>
 							{item.icon && <NavIcon icon={item.icon} className="size-5" />}
 							{item.label && <NavLabel label={item.label} />}
