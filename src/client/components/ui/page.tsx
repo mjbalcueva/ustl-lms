@@ -114,11 +114,22 @@ PageContent.displayName = 'PageContent'
 type PageSectionProps = React.HTMLAttributes<HTMLDivElement> & {
 	asChild?: boolean
 	compactMode?: boolean
+	columnMode?: boolean
 }
 export const PageSection = React.forwardRef<HTMLDivElement, PageSectionProps>(
-	({ className, asChild, compactMode, ...props }, ref) => {
+	({ className, asChild, compactMode, columnMode, ...props }, ref) => {
 		const Component = asChild ? Slot : 'section'
-		return <Component ref={ref} className={cn(!compactMode && 'px-2.5 sm:px-4 md:px-6', className)} {...props} />
+		return (
+			<Component
+				ref={ref}
+				className={cn(
+					!compactMode && !columnMode && 'px-2.5 sm:px-4 md:px-6',
+					columnMode && 'flex flex-1 flex-col gap-6',
+					className
+				)}
+				{...props}
+			/>
+		)
 	}
 )
 PageSection.displayName = 'PageSection'
