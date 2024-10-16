@@ -66,8 +66,8 @@ export const Icons = {
 	// status
 	success: TbCircleCheck,
 	info: TbInfoCircle,
-	warning: TbAlertTriangle,
-	error: TbInfoTriangle,
+	warning: TbInfoTriangle,
+	error: TbAlertTriangle,
 
 	// course
 	course: TbNotebook,

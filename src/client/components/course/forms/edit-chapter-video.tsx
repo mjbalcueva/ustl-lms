@@ -38,7 +38,7 @@ export const EditChapterVideoForm = ({ id, courseId, initialData }: EditChapterV
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Topic Video</CardTitle>
+				<CardTitle>Add a video</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="card">
 					{!isEditing && videoUrl && <TbEdit className="mr-2 size-4" />}
 					{!isEditing && !videoUrl && <TbCirclePlus className="mr-2 size-4" />}

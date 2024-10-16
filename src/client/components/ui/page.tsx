@@ -1,7 +1,5 @@
 import * as React from 'react'
 import { Slot } from '@radix-ui/react-slot'
-import { type IconType } from 'react-icons/lib'
-import { LuChevronsUpDown } from 'react-icons/lu'
 
 import { type Breadcrumb as BreadcrumbType } from '@/shared/types/breadcrumbs'
 
@@ -12,9 +10,7 @@ import {
 	BreadcrumbLink,
 	BreadcrumbList,
 	BreadcrumbPage,
-	BreadcrumbSeparator,
-	Button,
-	IconBadge
+	BreadcrumbSeparator
 } from '@/client/components/ui'
 import { cn } from '@/client/lib/utils'
 
@@ -118,28 +114,22 @@ PageContent.displayName = 'PageContent'
 type PageSectionProps = React.HTMLAttributes<HTMLDivElement> & {
 	asChild?: boolean
 	compactMode?: boolean
+	columnMode?: boolean
 }
 export const PageSection = React.forwardRef<HTMLDivElement, PageSectionProps>(
-	({ className, asChild, compactMode, ...props }, ref) => {
+	({ className, asChild, compactMode, columnMode, ...props }, ref) => {
 		const Component = asChild ? Slot : 'section'
-		return <Component ref={ref} className={cn(!compactMode && 'px-2.5 sm:px-4 md:px-6', className)} {...props} />
+		return (
+			<Component
+				ref={ref}
+				className={cn(
+					!compactMode && !columnMode && 'px-2.5 sm:px-4 md:px-6',
+					columnMode && 'flex flex-1 flex-col gap-6',
+					className
+				)}
+				{...props}
+			/>
+		)
 	}
 )
 PageSection.displayName = 'PageSection'
-
-type PageSectionTitleProps = React.HTMLAttributes<HTMLDivElement> & {
-	title: string
-	icon: IconType
-	toggle?: () => void
-}
-export const PageSectionTitle = ({ title, icon, toggle }: PageSectionTitleProps) => {
-	return (
-		<h2 className="mb-2.5 flex items-center gap-x-2 text-xl sm:mb-4 md:mb-5">
-			<IconBadge icon={icon} />
-			{title}
-			<Button size="xs" variant="ghost" className="ml-auto size-7 rounded-lg px-0" onClick={toggle}>
-				<LuChevronsUpDown className="size-4" />
-			</Button>
-		</h2>
-	)
-}

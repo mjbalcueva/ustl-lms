@@ -26,7 +26,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
 				closeButton: true,
 				classNames: {
 					toast: cn(
-						'bg-background ring-1 ring-border dark:ring-inset sm:min-w-[22rem] rounded-xl text-foreground overflow-hidden text-sm backdrop-blur-xl px-4 py-3 font-normal sm:px-5 sm:py-5',
+						'bg-background ring-1 ring-border dark:ring-inset sm:min-w-[22rem] rounded-xl text-foreground overflow-hidden text-sm backdrop-blur-sm px-4 py-3 font-normal sm:px-5 sm:py-4',
 						'[&:has([data-icon])_[data-content]]:ml-5',
 						'[&:has([data-button])_[data-close-button="true"]]:hidden',
 						'[&:not([data-description])_[data-title]]:font-normal',
@@ -38,12 +38,12 @@ const Toaster = ({ ...props }: ToasterProps) => {
 					icon: 'absolute top-1/2 -translate-y-1/2',
 					content: '[&:not(:has(+button))]:pr-10 [&:has(+button)]:pb-11 md:[&:has(+button)]:pb-9',
 					error:
-						'!bg-red-300/60 dark:!bg-red-500/30 !text-red-600 dark:!text-red-500 ring-black/20 dark:ring-white/10 backdrop-blur-xl dark:ring-inset [&>[data-close-button=true]:hover]:bg-white/20 dark:[&>[data-close-button=true]:hover]:bg-white/10 [&>[data-close-button=true]>svg]:text-red-600 dark:[&>[data-close-button=true]>svg]:text-red-500',
-					info: '!bg-blue-300/60 dark:!bg-blue-500/30 !text-blue-600 dark:!text-blue-500 ring-black/20 dark:ring-white/10 backdrop-blur-xl dark:ring-inset [&>[data-close-button=true]:hover]:bg-white/20 dark:[&>[data-close-button=true]:hover]:bg-white/10 [&>[data-close-button=true]>svg]:text-blue-600 dark:[&>[data-close-button=true]>svg]:text-blue-500',
+						'!bg-red-300/80 dark:!bg-red-400/70 !text-red-900 dark:!text-red-950 ring-black/20 dark:ring-white/10 dark:ring-inset [&>[data-close-button=true]:hover]:bg-white/20 dark:[&>[data-close-button=true]:hover]:bg-white/10 [&>[data-close-button=true]>svg]:text-red-900 dark:[&>[data-close-button=true]>svg]:text-red-950',
+					info: '!bg-blue-300/80 dark:!bg-blue-400/70 !text-blue-900 dark:!text-blue-950 ring-black/20 dark:ring-white/10 dark:ring-inset [&>[data-close-button=true]:hover]:bg-white/20 dark:[&>[data-close-button=true]:hover]:bg-white/10 [&>[data-close-button=true]>svg]:text-blue-900 dark:[&>[data-close-button=true]>svg]:text-blue-950',
 					warning:
-						'!bg-yellow-300/60 dark:!bg-yellow-500/30 !text-yellow-600 dark:!text-yellow-500 ring-black/20 dark:ring-white/10 backdrop-blur-xl dark:ring-inset [&>[data-close-button=true]:hover]:bg-white/20 dark:[&>[data-close-button=true]:hover]:bg-white/10 [&>[data-close-button=true]>svg]:text-yellow-600 dark:[&>[data-close-button=true]>svg]:text-yellow-500',
+						'!bg-yellow-200/80 dark:!bg-yellow-300/70 !text-yellow-900 dark:!text-yellow-950 ring-black/20 dark:ring-white/10 dark:ring-inset [&>[data-close-button=true]:hover]:bg-white/20 dark:[&>[data-close-button=true]:hover]:bg-white/10 [&>[data-close-button=true]>svg]:text-yellow-900 dark:[&>[data-close-button=true]>svg]:text-yellow-950',
 					success:
-						'!bg-emerald-300/60 dark:!bg-emerald-500/30 !text-emerald-600 dark:!text-emerald-500 ring-black/20 dark:ring-white/10 backdrop-blur-xl dark:ring-inset [&>[data-close-button=true]:hover]:bg-white/20 dark:[&>[data-close-button=true]:hover]:bg-white/10 [&>[data-close-button=true]>svg]:text-emerald-600 dark:[&>[data-close-button=true]>svg]:text-emerald-500',
+						'!bg-emerald-300/80 dark:!bg-emerald-400/70 !text-emerald-900 dark:!text-emerald-950 ring-black/20 dark:ring-white/10 dark:ring-inset [&>[data-close-button=true]:hover]:bg-white/20 dark:[&>[data-close-button=true]:hover]:bg-white/10 [&>[data-close-button=true]>svg]:text-emerald-900 dark:[&>[data-close-button=true]>svg]:text-emerald-950',
 					cancelButton: buttonVariants({
 						size: 'sm'
 					}),

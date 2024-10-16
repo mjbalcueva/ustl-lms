@@ -1,7 +1,12 @@
 import { z } from 'zod'
 
-export const editCourseCategorySchema = z.object({
-	id: z.string().min(1, 'Course ID is required'),
-	categoryId: z.string().min(1, 'Category ID is required').nullable()
+export const addCategorySchema = z.object({
+	name: z.string().min(1, 'Category name is required')
 })
-export type EditCourseCategorySchema = z.infer<typeof editCourseCategorySchema>
+export type AddCategorySchema = z.infer<typeof addCategorySchema>
+
+export const editCourseCategoriesSchema = z.object({
+	id: z.string().min(1, 'Course ID is required'),
+	categoryIds: z.array(z.string().min(1, 'Category ID is required'))
+})
+export type EditCourseCategoriesSchema = z.infer<typeof editCourseCategoriesSchema>
