@@ -41,6 +41,9 @@ export const ChapterActions = ({ id, courseId, status, type }: ChapterActionsPro
 	const { mutate: editType, isPending: isEditingType } = api.chapter.editType.useMutation({
 		onSuccess: (data) => {
 			toast.success(data.message)
+			toast.info('Refresh the page to see the changes')
+			toast.error('Failed to update chapter type')
+			toast.warning('Refresh the page to see the changes')
 			router.refresh()
 		}
 	})

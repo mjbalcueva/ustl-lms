@@ -23,7 +23,7 @@ export default async function Layout({ children }: Readonly<{ children: React.Re
 				<TRPCReactProvider>
 					<ThemeProvider>
 						{children}
-						<Toaster />
+						<Toaster duration={5000} gap={10} visibleToasts={4} />
 						<TailwindSizeIndicator />
 					</ThemeProvider>
 				</TRPCReactProvider>
