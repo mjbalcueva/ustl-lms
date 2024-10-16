@@ -19,7 +19,7 @@ export const ChapterEditContent = ({ chapter }: ChapterEditContentProps) => {
 				return (
 					<>
 						<PageSection columnMode>
-							<CollapsibleSection title="Details" iconName="Tb/TbWriting">
+							<CollapsibleSection title="Customize your assessment" iconName="Tb/TbWriting">
 								<EditChapterTitleForm id={chapter.id} courseId={chapter.course.id} title={chapter.title} />
 								<EditChapterContentForm id={chapter.id} courseId={chapter.course.id} content={chapter.content} />
 							</CollapsibleSection>
