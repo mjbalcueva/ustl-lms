@@ -1,13 +1,13 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import * as React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { TbCirclePlus } from 'react-icons/tb'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
-import { addCourseSchema, type AddCourseSchema } from '@/shared/validations/course'
+import { addCategorySchema, type AddCategorySchema } from '@/shared/validations/category'
 
 import {
 	Button,
@@ -29,21 +29,20 @@ import {
 	Separator
 } from '@/client/components/ui'
 
-export const AddCourseForm = () => {
-	const router = useRouter()
+type AddCategoryFormProps = React.ComponentPropsWithoutRef<typeof DialogTrigger>
 
-	const form = useForm<AddCourseSchema>({
-		resolver: zodResolver(addCourseSchema),
+export const AddCategoryForm = ({ ...props }: AddCategoryFormProps) => {
+	const router = useRouter()
+	const form = useForm<AddCategorySchema>({
+		resolver: zodResolver(addCategorySchema),
 		defaultValues: {
-			code: '',
-			title: ''
+			name: ''
 		}
 	})
 
-	const { mutate, isPending } = api.course.addCourse.useMutation({
+	const { mutate, isPending } = api.category.addCategory.useMutation({
 		onSuccess: async (data) => {
 			form.reset()
-			router.push(`/courses/${data.newCourseId}/edit`)
 			router.refresh()
 			toast.success(data.message)
 		},
@@ -52,43 +51,26 @@ export const AddCourseForm = () => {
 
 	return (
 		<Dialog>
-			<DialogTrigger asChild>
-				<Button className="h-10 w-32">
-					<TbCirclePlus className="mr-1 size-5 shrink-0" />
-					New Course
-				</Button>
-			</DialogTrigger>
+			<DialogTrigger {...props} />
 
 			<DialogContent>
 				<DialogHeader>
-					<DialogTitle>Create new course</DialogTitle>
-					<DialogDescription>Create a new course to start teaching your students.</DialogDescription>
+					<DialogTitle>Add new category</DialogTitle>
+					<DialogDescription>Add a new category to your course.</DialogDescription>
 				</DialogHeader>
+
 				<Separator />
+
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit((data) => mutate(data))} className="grid gap-4">
 						<FormField
 							control={form.control}
-							name="code"
+							name="name"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel className="text-card-foreground">Course Code</FormLabel>
+									<FormLabel className="text-card-foreground">Category Name</FormLabel>
 									<FormControl>
-										<Input placeholder="Enter a course code" className="!bg-card" {...field} />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-
-						<FormField
-							control={form.control}
-							name="title"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel className="text-card-foreground">Course Name</FormLabel>
-									<FormControl>
-										<Input placeholder="Enter a new name" className="!bg-card" {...field} />
+										<Input placeholder="Enter a category name" className="dark:!bg-card" {...field} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -102,7 +84,7 @@ export const AddCourseForm = () => {
 								</Button>
 							</DialogClose>
 							<Button type="submit" disabled={isPending} variant={isPending ? 'shine' : 'default'}>
-								{isPending ? 'Creating...' : 'Create Course'}
+								{isPending ? 'Creating...' : 'Create Category'}
 							</Button>
 						</DialogFooter>
 					</form>

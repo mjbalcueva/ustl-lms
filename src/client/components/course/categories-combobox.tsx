@@ -4,6 +4,7 @@ import * as React from 'react'
 import { LuCheck, LuChevronsUpDown } from 'react-icons/lu'
 import { TbCirclePlus, TbX } from 'react-icons/tb'
 
+import { AddCategoryForm } from '@/client/components/course/forms/add-category'
 import {
 	Badge,
 	Button,
@@ -49,9 +50,9 @@ export const CategoriesCombobox = ({ label, options, selected, onChange }: Categ
 					variant="outline"
 					role="combobox"
 					aria-expanded={open}
-					className="w-full justify-between bg-card dark:bg-background"
+					className="size-full justify-between bg-card dark:bg-background"
 				>
-					<div className="flex flex-wrap gap-1">
+					<div className="flex flex-wrap items-center gap-1">
 						{selected.length > 0 ? (
 							selected.map((value) => (
 								<Badge key={value} variant="secondary" className="mr-1" onClick={() => handleRemove(value)}>
@@ -86,15 +87,12 @@ export const CategoriesCombobox = ({ label, options, selected, onChange }: Categ
 					<CommandSeparator />
 					<CommandList>
 						<CommandGroup>
-							<CommandItem
-								onSelect={() => {
-									console.log('Add new category')
-									setOpen(false)
-								}}
-							>
-								<TbCirclePlus className="mr-2 size-4" />
-								Add Category
-							</CommandItem>
+							<AddCategoryForm className="w-full">
+								<CommandItem>
+									<TbCirclePlus className="mr-2 size-4" />
+									Add Category
+								</CommandItem>
+							</AddCategoryForm>
 						</CommandGroup>
 					</CommandList>
 				</Command>
