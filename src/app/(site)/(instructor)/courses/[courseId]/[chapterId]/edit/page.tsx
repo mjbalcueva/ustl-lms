@@ -87,10 +87,6 @@ export default async function Page({ params }: { params: { courseId: string; cha
 						<EditChapterContentForm id={chapter.id} courseId={chapter.course.id} content={chapter.content} />
 					</CollapsibleSection>
 
-					<CollapsibleSection title="Lecture video" iconName="Tb/TbVideo">
-						<EditChapterVideoForm id={chapter.id} courseId={chapter.course.id} initialData={chapter} />
-					</CollapsibleSection>
-
 					<CollapsibleSection title="Learning materials" iconName="Tb/TbPaperclip">
 						<AddChapterAttachmentsForm
 							courseId={chapter.course.id}
@@ -100,7 +96,11 @@ export default async function Page({ params }: { params: { courseId: string; cha
 					</CollapsibleSection>
 				</div>
 
-				<div className="flex flex-1 flex-col gap-4 md:gap-6"></div>
+				<div className="flex flex-1 flex-col gap-4 md:gap-6">
+					<CollapsibleSection title="Lecture video" iconName="Tb/TbVideo">
+						<EditChapterVideoForm id={chapter.id} courseId={chapter.course.id} initialData={chapter} />
+					</CollapsibleSection>
+				</div>
 			</PageContent>
 		</PageWrapper>
 	)
