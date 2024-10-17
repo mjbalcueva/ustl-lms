@@ -22,8 +22,7 @@ import {
 	PageDescription,
 	PageHeader,
 	PageSection,
-	PageTitle,
-	PageWrapper
+	PageTitle
 } from '@/client/components/ui/page'
 import { Separator } from '@/client/components/ui/separator'
 
@@ -58,7 +57,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 	]
 
 	return (
-		<PageWrapper>
+		<>
 			<PageHeader className="hidden space-y-0 md:block md:py-3">
 				<PageBreadcrumbs crumbs={crumbs} />
 			</PageHeader>
@@ -115,6 +114,6 @@ export default async function Page({ params }: { params: { courseId: string } })
 					</CollapsibleSection>
 				</PageSection>
 			</PageContent>
-		</PageWrapper>
+		</>
 	)
 }

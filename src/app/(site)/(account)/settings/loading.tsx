@@ -5,14 +5,13 @@ import {
 	PageDescription,
 	PageHeader,
 	PageSection,
-	PageTitle,
-	PageWrapper
+	PageTitle
 } from '@/client/components/ui/page'
 import { Skeleton } from '@/client/components/ui/skeleton'
 
 export default function Loading() {
 	return (
-		<PageWrapper>
+		<>
 			<PageContainer>
 				<PageHeader>
 					<PageTitle>Account Settings</PageTitle>
@@ -66,6 +65,6 @@ export default function Loading() {
 					</PageSection>
 				</PageContent>
 			</PageContainer>
-		</PageWrapper>
+		</>
 	)
 }

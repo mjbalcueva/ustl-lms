@@ -13,8 +13,7 @@ import {
 	PageDescription,
 	PageHeader,
 	PageSection,
-	PageTitle,
-	PageWrapper
+	PageTitle
 } from '@/client/components/ui/page'
 import { Separator } from '@/client/components/ui/separator'
 
@@ -29,7 +28,7 @@ export default async function Page() {
 	const crumbs: Breadcrumb = [{ icon: 'instructor' }, { label: 'Courses', href: '/courses' }, { label: 'Manage' }]
 
 	return (
-		<PageWrapper>
+		<>
 			<PageHeader className="hidden space-y-0 md:flex md:py-3">
 				<PageBreadcrumbs crumbs={crumbs} />
 			</PageHeader>
@@ -57,6 +56,6 @@ export default async function Page() {
 					<DataTable data={courses} />
 				</PageSection>
 			</PageContent>
-		</PageWrapper>
+		</>
 	)
 }

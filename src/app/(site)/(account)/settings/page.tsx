@@ -9,15 +9,14 @@ import {
 	PageDescription,
 	PageHeader,
 	PageSection,
-	PageTitle,
-	PageWrapper
+	PageTitle
 } from '@/client/components/ui/page'
 
 export default async function Page() {
 	const session = await auth()
 
 	return (
-		<PageWrapper>
+		<>
 			<PageContainer>
 				<PageHeader>
 					<PageTitle>Account Settings</PageTitle>
@@ -32,6 +31,6 @@ export default async function Page() {
 					<PageSection>{session?.user.hasPassword ? <UpdatePasswordForm /> : <AddPasswordForm />}</PageSection>
 				</PageContent>
 			</PageContainer>
-		</PageWrapper>
+		</>
 	)
 }

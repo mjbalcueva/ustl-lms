@@ -80,7 +80,7 @@ export const useColumns = (
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align="end" className="w-40">
-						<Link href={`/courses/${row.original.id}/edit`}>
+						<Link href={`/courses/manage/${row.original.id}/edit`}>
 							<DropdownMenuItem>
 								<TbEdit className="mr-2 size-4" />
 								Edit

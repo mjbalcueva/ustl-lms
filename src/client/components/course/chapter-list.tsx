@@ -87,7 +87,7 @@ export const ChapterList = ({ items, onReorder }: ChapterListProps) => {
 												<TooltipTrigger asChild>
 													<Link
 														className="flex h-full items-center justify-center rounded-r-xl pl-1 pr-2 outline-none hover:opacity-75 focus-visible:outline-ring"
-														href={`/courses/${chapter.courseId}/${chapter.id}/edit`}
+														href={`/courses/manage/${chapter.courseId}/${chapter.id}/edit`}
 													>
 														<TbEdit className="size-4" />
 													</Link>
