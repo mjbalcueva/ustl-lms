@@ -5,13 +5,12 @@ import {
 	PageDescription,
 	PageHeader,
 	PageSection,
-	PageTitle,
-	PageWrapper
+	PageTitle
 } from '@/client/components/ui/page'
 
 export default async function Page() {
 	return (
-		<PageWrapper>
+		<>
 			<PageContainer>
 				<PageHeader>
 					<PageTitle>Your Profile</PageTitle>
@@ -24,6 +23,6 @@ export default async function Page() {
 					</PageSection>
 				</PageContent>
 			</PageContainer>
-		</PageWrapper>
+		</>
 	)
 }

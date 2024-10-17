@@ -37,6 +37,11 @@ export function DataTableViewOptions<TData>({ table }: DataTableViewOptionsProps
 					.getAllColumns()
 					.filter((column) => typeof column.accessorFn !== 'undefined' && column.getCanHide())
 					.map((column) => {
+						const labelMap: Record<string, string> = {
+							token: 'Invite Token',
+							createdAt: 'Created on',
+							updatedAt: 'Last Updated'
+						}
 						return (
 							<DropdownMenuCheckboxItem
 								key={column.id}
@@ -44,7 +49,7 @@ export function DataTableViewOptions<TData>({ table }: DataTableViewOptionsProps
 								checked={column.getIsVisible()}
 								onCheckedChange={(value) => column.toggleVisibility(!!value)}
 							>
-								{column.id}
+								{labelMap[column.id] ?? column.id}
 							</DropdownMenuCheckboxItem>
 						)
 					})}

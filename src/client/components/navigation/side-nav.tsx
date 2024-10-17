@@ -28,7 +28,18 @@ type SideNavProps = React.ComponentProps<typeof motion.nav> & {
 export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 	const { isNavOpen, setNavOpen } = useNav()
 	const { setLockScroll } = useLockScroll()
-	const currentPath = usePathname().split('/')[1]
+	const currentPath = usePathname()
+
+	const isActiveLink = (linkHref: string) => {
+		if (linkHref === currentPath) return true
+
+		const linkSegments = linkHref.split('/')
+		const currentSegments = currentPath.split('/')
+
+		return (
+			linkSegments[1] === currentSegments[1] && linkSegments.includes('manage') === currentSegments.includes('manage')
+		)
+	}
 
 	return (
 		<motion.nav
@@ -37,9 +48,7 @@ export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 				isNavOpen ? 'w-[240px]' : 'w-[60px]',
 				className
 			)}
-			animate={{
-				width: isNavOpen ? '240px' : '60px'
-			}}
+			animate={{ width: isNavOpen ? '240px' : '60px' }}
 			{...props}
 		>
 			<NavButton className="gap-2 !px-[0.22rem] py-1 hover:cursor-default hover:border-background hover:!bg-transparent hover:!shadow-none dark:hover:!border-card">
@@ -62,15 +71,12 @@ export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 					<NavLink
 						href={link.href ?? ''}
 						className={cn(
-							currentPath === link.href?.split('/')[1] &&
+							isActiveLink(link.href ?? '') &&
 								'border !border-border bg-card shadow-[0_0_0_-2px_rgba(0,0,0,0.05),0_1px_2px_0_rgba(0,0,0,0.05)] dark:bg-accent/70'
 						)}
 					>
 						<NavIcon icon={link.icon} className="text-foreground/80" />
-						<NavLabel
-							label={link.label}
-							className={cn(currentPath === link.href?.split('/')[1] && 'text-card-foreground')}
-						/>
+						<NavLabel label={link.label} className={cn(isActiveLink(link.href ?? '') && 'text-card-foreground')} />
 						<NavItemSideIcon />
 					</NavLink>
 				</NavTooltip>
@@ -86,15 +92,12 @@ export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 							<NavLink
 								href={link.href ?? ''}
 								className={cn(
-									currentPath === link.href?.split('/')[1] &&
+									isActiveLink(link.href ?? '') &&
 										'border !border-border bg-card shadow-[0_0_0_-2px_rgba(0,0,0,0.05),0_1px_2px_0_rgba(0,0,0,0.05)] dark:bg-accent/70'
 								)}
 							>
 								<NavIcon icon={link.icon} className="text-foreground/80" />
-								<NavLabel
-									label={link.label}
-									className={cn(currentPath === link.href?.split('/')[1] && 'text-card-foreground')}
-								/>
+								<NavLabel label={link.label} className={cn(isActiveLink(link.href ?? '') && 'text-card-foreground')} />
 								<NavItemSideIcon />
 							</NavLink>
 						</NavTooltip>

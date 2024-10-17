@@ -11,6 +11,7 @@ import { EditCourseCodeForm } from '@/client/components/course/forms/edit-course
 import { EditCourseDescriptionForm } from '@/client/components/course/forms/edit-course-description'
 import { EditCourseImageForm } from '@/client/components/course/forms/edit-course-image'
 import { EditCourseTitleForm } from '@/client/components/course/forms/edit-course-title'
+import { EditCourseTokenForm } from '@/client/components/course/forms/edit-course-token'
 import { NotFound } from '@/client/components/not-found'
 import { Badge } from '@/client/components/ui/badge'
 import { Banner } from '@/client/components/ui/banner'
@@ -21,8 +22,7 @@ import {
 	PageDescription,
 	PageHeader,
 	PageSection,
-	PageTitle,
-	PageWrapper
+	PageTitle
 } from '@/client/components/ui/page'
 import { Separator } from '@/client/components/ui/separator'
 
@@ -51,13 +51,14 @@ export default async function Page({ params }: { params: { courseId: string } })
 
 	const crumbs: Breadcrumb = [
 		{ icon: 'instructor' },
-		{ label: 'Courses', href: '/courses/manage' },
-		{ icon: 'course', label: course.title, href: `/courses/${course.id}/edit` },
+		{ label: 'Courses', href: '/courses' },
+		{ label: 'Manage', href: '/courses/manage' },
+		{ icon: 'course', label: course.title, href: `/courses/manage/${course.id}` },
 		{ label: 'Edit' }
 	]
 
 	return (
-		<PageWrapper>
+		<>
 			<PageHeader className="hidden space-y-0 md:block md:py-3">
 				<PageBreadcrumbs crumbs={crumbs} />
 			</PageHeader>
@@ -91,16 +92,16 @@ export default async function Page({ params }: { params: { courseId: string } })
 
 			<PageContent className="mb-24 space-y-6 px-2.5 sm:px-4 md:mb-12 md:flex md:flex-wrap md:gap-6 md:space-y-0 md:px-6">
 				<PageSection columnMode>
+					<CollapsibleSection title="Course Invite" iconName="Tb/TbUserPlus">
+						<EditCourseTokenForm id={course.id} token={course.token} />
+					</CollapsibleSection>
+
 					<CollapsibleSection title="Customize your course" iconName="Tb/TbNotebook">
 						<EditCourseCodeForm id={course.id} code={course.code} />
 						<EditCourseTitleForm id={course.id} title={course.title} />
 						<EditCourseDescriptionForm id={course.id} description={course.description} />
 						<EditCourseImageForm id={course.id} imageUrl={course.imageUrl} />
-						<EditCourseCategoriesForm
-							id={course.id}
-							categoryIds={course.categories.map((category) => category.id)}
-							options={categories.map((category) => ({ value: category.id, label: category.name }))}
-						/>
+						<EditCourseCategoriesForm id={course.id} categories={course.categories} categoriesOptions={categories} />
 					</CollapsibleSection>
 				</PageSection>
 
@@ -114,6 +115,6 @@ export default async function Page({ params }: { params: { courseId: string } })
 					</CollapsibleSection>
 				</PageSection>
 			</PageContent>
-		</PageWrapper>
+		</>
 	)
 }

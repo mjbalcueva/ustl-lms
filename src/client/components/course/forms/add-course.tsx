@@ -38,7 +38,7 @@ export const AddCourseForm = () => {
 	const { mutate, isPending } = api.course.addCourse.useMutation({
 		onSuccess: async (data) => {
 			form.reset()
-			router.push(`/courses/${data.newCourseId}/edit`)
+			router.push(`/courses/manage/${data.newCourseId}`)
 			router.refresh()
 			toast.success(data.message)
 		},
@@ -90,7 +90,7 @@ export const AddCourseForm = () => {
 							)}
 						/>
 
-						<DialogFooter className="gap-2">
+						<DialogFooter className="gap-2 md:gap-0">
 							<DialogClose asChild>
 								<Button type="button" variant="outline" onClick={() => form.reset()}>
 									Cancel

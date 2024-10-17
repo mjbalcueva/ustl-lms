@@ -3,7 +3,6 @@
 import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { type Category } from '@prisma/client'
 import { useForm } from 'react-hook-form'
 import { TbEdit } from 'react-icons/tb'
 import { toast } from 'sonner'
@@ -17,13 +16,13 @@ import { Button } from '@/client/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/client/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/client/components/ui/form'
 
-type EditCourseCategoriesProps = {
+type JoinCourseProps = {
 	id: string
-	categories: Category[]
-	categoriesOptions: Category[]
+	categoryIds: string[]
+	options: { value: string; label: string }[]
 }
 
-export const EditCourseCategoriesForm = ({ id, categories, categoriesOptions }: EditCourseCategoriesProps) => {
+export const JoinCourseForm = ({ id, categoryIds, options }: JoinCourseProps) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -32,8 +31,6 @@ export const EditCourseCategoriesForm = ({ id, categories, categoriesOptions }: 
 		setIsEditing((current) => !current)
 		form.reset()
 	}
-
-	const categoryIds = categories.map((category) => category.id)
 
 	const form = useForm<EditCourseCategoriesSchema>({
 		resolver: zodResolver(editCourseCategoriesSchema),
@@ -54,7 +51,7 @@ export const EditCourseCategoriesForm = ({ id, categories, categoriesOptions }: 
 		<Card>
 			<CardHeader>
 				<div className="flex flex-col space-y-1.5">
-					<CardTitle>Course Tags</CardTitle>
+					<CardTitle>Course Categories</CardTitle>
 				</div>
 
 				<Button onClick={toggleEdit} variant="ghost" size="card">
@@ -69,12 +66,12 @@ export const EditCourseCategoriesForm = ({ id, categories, categoriesOptions }: 
 						<div className="flex flex-wrap gap-1">
 							{categoryIds.map((id) => (
 								<Badge key={id} variant="secondary">
-									{categories.find((cat) => cat.id === id)?.name}
+									{options.find((opt) => opt.value === id)?.label}
 								</Badge>
 							))}
 						</div>
 					) : (
-						'No tags selected'
+						'No categories selected'
 					)}
 				</CardContent>
 			)}
@@ -90,10 +87,10 @@ export const EditCourseCategoriesForm = ({ id, categories, categoriesOptions }: 
 									<FormItem>
 										<FormControl>
 											<CategoriesCombobox
-												options={categoriesOptions.map((category) => ({ value: category.id, label: category.name }))}
+												options={options}
 												selected={field.value}
 												onChange={field.onChange}
-												label="Search tags..."
+												label="Select Categories..."
 											/>
 										</FormControl>
 										<FormMessage />

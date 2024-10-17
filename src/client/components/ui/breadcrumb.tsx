@@ -34,7 +34,15 @@ const BreadcrumbItem = React.forwardRef<HTMLLIElement, React.ComponentPropsWitho
 BreadcrumbItem.displayName = 'BreadcrumbItem'
 
 const BreadcrumbLink = ({ className, ...props }: React.ComponentPropsWithoutRef<typeof Link>) => {
-	return <Link className={cn('transition-colors hover:text-foreground', className)} {...props} />
+	return (
+		<Link
+			className={cn(
+				'rounded-md ring-offset-background transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+				className
+			)}
+			{...props}
+		/>
+	)
 }
 BreadcrumbLink.displayName = 'BreadcrumbLink'
 
@@ -45,7 +53,7 @@ const BreadcrumbPage = React.forwardRef<HTMLSpanElement, React.ComponentPropsWit
 			role="link"
 			aria-disabled="true"
 			aria-current="page"
-			className={cn('font-normal text-foreground/90', className)}
+			className={cn('rounded-md font-normal text-foreground/90', className)}
 			{...props}
 		/>
 	)

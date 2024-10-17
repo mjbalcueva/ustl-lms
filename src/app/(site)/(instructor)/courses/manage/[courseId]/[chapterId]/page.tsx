@@ -9,7 +9,7 @@ import { NotFound } from '@/client/components/not-found'
 import { Badge } from '@/client/components/ui/badge'
 import { Banner } from '@/client/components/ui/banner'
 import { type Icons } from '@/client/components/ui/icons'
-import { PageBreadcrumbs, PageDescription, PageHeader, PageTitle, PageWrapper } from '@/client/components/ui/page'
+import { PageBreadcrumbs, PageDescription, PageHeader, PageTitle } from '@/client/components/ui/page'
 import { Separator } from '@/client/components/ui/separator'
 import { capitalize } from '@/client/lib/utils'
 
@@ -28,18 +28,19 @@ export default async function Page({ params }: { params: { courseId: string; cha
 
 	const crumbs: Breadcrumb = [
 		{ icon: 'instructor' },
-		{ label: 'Courses', href: '/courses/manage' },
-		{ icon: 'course', label: chapter.course.title, href: `/courses/${chapter.course.id}/edit` },
+		{ label: 'Courses', href: '/courses' },
+		{ label: 'Manage', href: '/courses/manage' },
+		{ icon: 'course', label: chapter.course.title, href: `/courses/manage/${chapter.course.id}` },
 		{
 			icon: chapter.type as keyof typeof Icons,
 			label: chapter.title,
-			href: `/courses/${chapter.course.id}/${chapter.id}/edit`
+			href: `/courses/manage/${chapter.course.id}/${chapter.id}`
 		},
 		{ label: 'Edit' }
 	]
 
 	return (
-		<PageWrapper>
+		<>
 			<PageHeader className="hidden space-y-0 md:block md:py-3">
 				<PageBreadcrumbs crumbs={crumbs} />
 			</PageHeader>
@@ -71,6 +72,6 @@ export default async function Page({ params }: { params: { courseId: string; cha
 			</PageHeader>
 
 			<ChapterEditContent chapter={chapter} />
-		</PageWrapper>
+		</>
 	)
 }

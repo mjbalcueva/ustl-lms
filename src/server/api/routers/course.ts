@@ -6,21 +6,25 @@ import {
 	editImageSchema,
 	editStatusSchema,
 	editTitleSchema,
+	editTokenSchema,
 	getCourseSchema
 } from '@/shared/validations/course'
 
 import { createTRPCRouter, instructorProcedure } from '@/server/api/trpc'
+import { generateCourseToken } from '@/server/lib/course'
 import { video } from '@/server/lib/mux'
 import { utapi } from '@/server/lib/utapi'
 
 export const courseRouter = createTRPCRouter({
 	addCourse: instructorProcedure.input(addCourseSchema).mutation(async ({ ctx, input }) => {
 		const { code, title } = input
+		const token = generateCourseToken()
 
 		const { id: newCourseId } = await ctx.db.course.create({
 			data: {
 				code,
 				title,
+				token,
 				instructorId: ctx.session.user.id!
 			}
 		})
@@ -67,6 +71,25 @@ export const courseRouter = createTRPCRouter({
 		await ctx.db.course.delete({ where: { id, instructorId: ctx.session.user.id! } })
 
 		return { message: 'Course deleted!' }
+	}),
+
+	editToken: instructorProcedure.input(editTokenSchema).mutation(async ({ ctx, input }) => {
+		const { id, token } = input
+
+		const existingCourse = await ctx.db.course.findFirst({
+			where: { token, NOT: { id } }
+		})
+
+		if (existingCourse) {
+			throw new Error('Token already exists. Please choose a different token.')
+		}
+
+		const { token: newToken } = await ctx.db.course.update({
+			where: { id, instructorId: ctx.session.user.id! },
+			data: { token }
+		})
+
+		return { message: 'Course token updated!', newToken }
 	}),
 
 	editCode: instructorProcedure.input(editCodeSchema).mutation(async ({ ctx, input }) => {

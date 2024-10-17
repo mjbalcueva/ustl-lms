@@ -20,7 +20,7 @@ export const home: Link[] = [
 			},
 			{
 				label: 'Learning',
-				href: '/learning',
+				href: '/courses',
 				icon: 'learning'
 			},
 			{
