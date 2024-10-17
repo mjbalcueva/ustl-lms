@@ -22,6 +22,12 @@ export function capitalize(str: string): string {
 	return str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : str
 }
 
+export function getBaseUrl() {
+	if (typeof window !== 'undefined') return window.location.origin
+	if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`
+	return `http://localhost:${process.env.PORT ?? 3000}`
+}
+
 /**
  * Extracts the initials from a name.
  * @param name - The name to extract initials from.

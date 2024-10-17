@@ -73,7 +73,7 @@ model Course {
   title       String
   description String?
   imageUrl    String?
-  token       String?
+  token       String
   status      Status   @default(DRAFT)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

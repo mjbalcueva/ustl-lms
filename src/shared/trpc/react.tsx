@@ -12,6 +12,8 @@ import { createQueryClient } from '@/shared/trpc/query-client'
 
 import { type AppRouter } from '@/server/api/root'
 
+import { getBaseUrl } from '@/client/lib/utils'
+
 let clientQueryClientSingleton: QueryClient | undefined = undefined
 const getQueryClient = () => {
 	if (typeof window === 'undefined') {
@@ -69,10 +71,4 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
 			{/* {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} />} */}
 		</QueryClientProvider>
 	)
-}
-
-function getBaseUrl() {
-	if (typeof window !== 'undefined') return window.location.origin
-	if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`
-	return `http://localhost:${process.env.PORT ?? 3000}`
 }

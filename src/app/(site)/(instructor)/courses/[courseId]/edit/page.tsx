@@ -11,6 +11,7 @@ import { EditCourseCodeForm } from '@/client/components/course/forms/edit-course
 import { EditCourseDescriptionForm } from '@/client/components/course/forms/edit-course-description'
 import { EditCourseImageForm } from '@/client/components/course/forms/edit-course-image'
 import { EditCourseTitleForm } from '@/client/components/course/forms/edit-course-title'
+import { EditCourseTokenForm } from '@/client/components/course/forms/edit-course-token'
 import { NotFound } from '@/client/components/not-found'
 import { Badge } from '@/client/components/ui/badge'
 import { Banner } from '@/client/components/ui/banner'
@@ -92,7 +93,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 			<PageContent className="mb-24 space-y-6 px-2.5 sm:px-4 md:mb-12 md:flex md:flex-wrap md:gap-6 md:space-y-0 md:px-6">
 				<PageSection columnMode>
 					<CollapsibleSection title="Course Invite" iconName="Tb/TbUserPlus">
-						Course Invite
+						<EditCourseTokenForm id={course.id} token={course.token} />
 					</CollapsibleSection>
 
 					<CollapsibleSection title="Customize your course" iconName="Tb/TbNotebook">

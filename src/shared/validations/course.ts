@@ -12,6 +12,12 @@ export const deleteCourseSchema = z.object({
 })
 export type DeleteCourseSchema = z.infer<typeof deleteCourseSchema>
 
+export const editTokenSchema = z.object({
+	id: z.string().min(1, 'Course ID is required'),
+	token: z.string().min(1, 'Token is required').max(6, 'Token must be less than 6 characters')
+})
+export type EditTokenSchema = z.infer<typeof editTokenSchema>
+
 export const editCodeSchema = z.object({
 	id: z.string().min(1, 'Course ID is required'),
 	code: z.string().min(1, 'Code is required').max(16, 'Code must be less than 16 characters')

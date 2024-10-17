@@ -6,6 +6,7 @@ import {
 	editImageSchema,
 	editStatusSchema,
 	editTitleSchema,
+	editTokenSchema,
 	getCourseSchema
 } from '@/shared/validations/course'
 
@@ -70,6 +71,17 @@ export const courseRouter = createTRPCRouter({
 		await ctx.db.course.delete({ where: { id, instructorId: ctx.session.user.id! } })
 
 		return { message: 'Course deleted!' }
+	}),
+
+	editToken: instructorProcedure.input(editTokenSchema).mutation(async ({ ctx, input }) => {
+		const { id, token } = input
+
+		const { token: newToken } = await ctx.db.course.update({
+			where: { id, instructorId: ctx.session.user.id! },
+			data: { token }
+		})
+
+		return { message: 'Course token updated!', newToken }
 	}),
 
 	editCode: instructorProcedure.input(editCodeSchema).mutation(async ({ ctx, input }) => {
