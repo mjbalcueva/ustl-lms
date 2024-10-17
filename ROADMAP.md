@@ -1,4 +1,4 @@
-## Roadmap (38/124)
+## Roadmap (49/124)
 
 ### Design (20/20)
 
@@ -52,20 +52,20 @@
   - [x] Toggle 2FA
   - [x] Change password
 
-### Learnings (0/44)
+### Learnings (11/44)
 
 - [ ] Courses
-  - [ ] Management
-    - [ ] Create, edit, archive, delete
-  - [ ] Browsing
-    - [ ] Search (title, instructor, keywords)
-    - [ ] Filter (department, level, date)
-    - [ ] Sort options
+  - [x] Management
+    - [x] Create, edit, archive, delete
+  - [x] Browsing
+    - [x] Search (title, instructor, keywords)
+    - [x] Filter (department, level, date)
+    - [x] Sort options
   - [ ] Interactions
     - [ ] Course Forum
     - [ ] Course Video Calls
   - [ ] Lessons
-    - [ ] Lesson content
+    - [x] Lesson content
     - [ ] Progress tracking
       - [ ] Not started
       - [ ] In progress
@@ -89,10 +89,10 @@
         - [ ] Set time limit for completion
       - [ ] AI-assisted question generation
 - [ ] Instructor Tools
-  - [ ] Content Management
-    - [ ] Create, modify, and delete courses
-    - [ ] Create, modify, and delete lessons
-    - [ ] Attach external resources to lessons
+  - [x] Content Management
+    - [x] Create, modify, and delete courses
+    - [x] Create, modify, and delete lessons
+    - [x] Attach external resources to lessons
   - [ ] Assessment Creation
     - [ ] AI-powered question bank
     - [ ] Automated difficulty rating for questions

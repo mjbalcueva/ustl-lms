@@ -2,6 +2,11 @@
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
+## Preview
+
+![Course Setup](./public/assets/preview/course-setup.png)
+![Chapter Setup](./public/assets/preview/chapter-setup.png)
+
 ## Overview
 
 Scholar redefines the digital learning experience, offering a robust ecosystem for course management, student-teacher collaboration, and interactive learning. Leveraging the power of Next.js for lightning-fast performance, TypeScript for enhanced code reliability, and tRPC for efficient API communication, Scholar delivers a responsive and user-centric platform that adapts to the evolving needs of modern education.
@@ -71,7 +76,6 @@ To learn more about the T3 Stack, check out the following resources:
 
 - [T3 Stack Documentation](https://create.t3.gg/)
 - [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
-
 
 ## License
 
