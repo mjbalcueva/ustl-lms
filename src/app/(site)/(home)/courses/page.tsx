@@ -5,7 +5,7 @@ import { PageBreadcrumbs, PageContent, PageDescription, PageHeader, PageTitle } 
 import { Separator } from '@/client/components/ui/separator'
 
 export default async function Page() {
-	const crumbs: Breadcrumb = [{ icon: 'instructor' }, { label: 'Learning', href: '/learning' }, { label: 'Browse' }]
+	const crumbs: Breadcrumb = [{ icon: 'home' }, { label: 'Learning', href: '/courses' }, { label: 'Browse' }]
 	return (
 		<>
 			<PageHeader className="hidden space-y-0 md:block md:py-3">

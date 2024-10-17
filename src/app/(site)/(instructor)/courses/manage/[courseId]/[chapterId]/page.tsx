@@ -28,12 +28,13 @@ export default async function Page({ params }: { params: { courseId: string; cha
 
 	const crumbs: Breadcrumb = [
 		{ icon: 'instructor' },
-		{ label: 'Courses', href: '/courses/manage' },
-		{ icon: 'course', label: chapter.course.title, href: `/courses/${chapter.course.id}/edit` },
+		{ label: 'Courses', href: '/courses' },
+		{ label: 'Manage', href: '/courses/manage' },
+		{ icon: 'course', label: chapter.course.title, href: `/courses/manage/${chapter.course.id}` },
 		{
 			icon: chapter.type as keyof typeof Icons,
 			label: chapter.title,
-			href: `/courses/${chapter.course.id}/${chapter.id}/edit`
+			href: `/courses/manage/${chapter.course.id}/${chapter.id}`
 		},
 		{ label: 'Edit' }
 	]

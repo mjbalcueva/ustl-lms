@@ -25,7 +25,11 @@ export default async function Page() {
 
 	if (!courses) return null
 
-	const crumbs: Breadcrumb = [{ icon: 'instructor' }, { label: 'Courses', href: '/courses' }, { label: 'Manage' }]
+	const crumbs: Breadcrumb = [
+		{ icon: 'instructor' },
+		{ label: 'Courses', href: '/courses' },
+		{ label: 'Manage', href: '/courses/manage' }
+	]
 
 	return (
 		<>

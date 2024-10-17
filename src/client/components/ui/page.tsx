@@ -55,8 +55,18 @@ export const PageBreadcrumbs = ({ crumbs }: { crumbs: BreadcrumbType }) => {
 					<React.Fragment key={index}>
 						{index > 0 && <BreadcrumbSeparator />}
 						<BreadcrumbItem>
-							{index === crumbs.length - 1 && (
-								<BreadcrumbPage className="flex items-center gap-1.5 rounded-md bg-muted px-1.5 py-0.5 text-muted-foreground hover:cursor-default hover:text-foreground">
+							{index === crumbs.length - 1 && crumb.href && (
+								<BreadcrumbLink
+									href={crumb.href}
+									className="flex items-center gap-1.5 bg-muted px-1.5 py-0.5 text-muted-foreground hover:bg-muted/80 hover:text-muted-foreground"
+								>
+									{crumb.icon && renderIcon(crumb.icon)}
+									{crumb.label}
+								</BreadcrumbLink>
+							)}
+
+							{index === crumbs.length - 1 && !crumb.href && (
+								<BreadcrumbPage className="flex items-center gap-1.5 bg-muted px-1.5 py-0.5 text-muted-foreground hover:cursor-default hover:bg-muted/80">
 									{crumb.icon && renderIcon(crumb.icon)}
 									{crumb.label}
 								</BreadcrumbPage>
