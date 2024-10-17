@@ -93,7 +93,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 			<PageContent className="mb-24 space-y-6 px-2.5 sm:px-4 md:mb-12 md:flex md:flex-wrap md:gap-6 md:space-y-0 md:px-6">
 				<PageSection columnMode>
 					<CollapsibleSection title="Course Invite" iconName="Tb/TbUserPlus">
-						<EditCourseTokenForm id={course.id} token={course.token} />
+						<EditCourseTokenForm id={course.id} token={course.token ?? ''} />
 					</CollapsibleSection>
 
 					<CollapsibleSection title="Customize your course" iconName="Tb/TbNotebook">
