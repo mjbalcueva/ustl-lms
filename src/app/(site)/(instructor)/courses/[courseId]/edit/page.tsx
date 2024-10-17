@@ -100,11 +100,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 						<EditCourseTitleForm id={course.id} title={course.title} />
 						<EditCourseDescriptionForm id={course.id} description={course.description} />
 						<EditCourseImageForm id={course.id} imageUrl={course.imageUrl} />
-						<EditCourseCategoriesForm
-							id={course.id}
-							categoryIds={course.categories.map((category) => category.id)}
-							options={categories.map((category) => ({ value: category.id, label: category.name }))}
-						/>
+						<EditCourseCategoriesForm id={course.id} categories={course.categories} categoriesOptions={categories} />
 					</CollapsibleSection>
 				</PageSection>
 

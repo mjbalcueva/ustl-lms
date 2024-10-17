@@ -52,12 +52,15 @@ export const CategoriesCombobox = ({ label, options, selected, onChange }: Categ
 				>
 					<div className="flex flex-wrap items-center gap-1">
 						{selected.length > 0 ? (
-							selected.map((value) => (
-								<Badge key={value} variant="secondary" className="mr-1" onClick={() => handleRemove(value)}>
-									{options.find((option) => option.value === value)?.label}
-									<TbX className="ml-1 size-3 text-secondary-foreground" />
-								</Badge>
-							))
+							<>
+								{selected.map((value) => (
+									<Badge key={value} variant="secondary" className="mr-1" onClick={() => handleRemove(value)}>
+										{options.find((option) => option.value === value)?.label}
+										<TbX className="ml-1 size-3 text-secondary-foreground" />
+									</Badge>
+								))}
+								<span className="text-muted-foreground">Selected tags...</span>
+							</>
 						) : (
 							<span className="text-muted-foreground">{label}</span>
 						)}
@@ -88,7 +91,7 @@ export const CategoriesCombobox = ({ label, options, selected, onChange }: Categ
 							<AddCategoryForm className="w-full">
 								<CommandItem>
 									<TbCirclePlus className="mr-2 size-4" />
-									Add Category
+									Add Tag
 								</CommandItem>
 							</AddCategoryForm>
 						</CommandGroup>
