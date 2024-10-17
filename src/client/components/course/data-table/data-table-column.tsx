@@ -42,6 +42,10 @@ export const useColumns = (
 			header: ({ column }) => <DataTableColumnHeader column={column} title="Title" className="min-w-40" />
 		},
 		{
+			accessorKey: 'token',
+			header: ({ column }) => <DataTableColumnHeader column={column} title="Invite Token" />
+		},
+		{
 			accessorKey: 'status',
 			header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
 			cell: ({ row }) => {
@@ -58,12 +62,12 @@ export const useColumns = (
 		},
 		{
 			accessorKey: 'createdAt',
-			header: ({ column }) => <DataTableColumnHeader column={column} title="Created" />,
+			header: ({ column }) => <DataTableColumnHeader column={column} title="Created on" />,
 			cell: ({ cell }) => formatDate(cell.getValue() as Date)
 		},
 		{
 			accessorKey: 'updatedAt',
-			header: ({ column }) => <DataTableColumnHeader column={column} title="Updated" />,
+			header: ({ column }) => <DataTableColumnHeader column={column} title="Last updated" />,
 			cell: ({ cell }) => formatDate(cell.getValue() as Date)
 		},
 		{

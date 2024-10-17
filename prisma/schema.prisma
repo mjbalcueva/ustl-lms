@@ -73,6 +73,7 @@ model Course {
   title       String
   description String?
   imageUrl    String?
+  token       String?
   status      Status   @default(DRAFT)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -86,6 +87,7 @@ model Course {
 
   instructor User @relation(fields: [instructorId], references: [id], onDelete: Cascade)
 
+  @@unique([id, token])
   @@index([code])
   @@map("course")
 }

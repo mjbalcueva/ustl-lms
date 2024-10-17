@@ -1,6 +1,6 @@
 import { type Column } from '@tanstack/react-table'
 import { LuArrowDown, LuArrowUp, LuChevronsUpDown } from 'react-icons/lu'
-import { RxEyeNone } from 'react-icons/rx'
+import { RxEyeNone, RxReset } from 'react-icons/rx'
 
 import { Button } from '@/client/components/ui/button'
 import {
@@ -63,6 +63,12 @@ export const DataTableColumnHeader = <TData, TValue>({
 								<LuArrowDown className="mr-2 size-3.5 text-muted-foreground/70" aria-hidden="true" />
 								Desc
 							</DropdownMenuItem>
+							{column.getIsSorted() && (
+								<DropdownMenuItem aria-label="Reset sorting" onClick={() => column.clearSorting()}>
+									<RxReset className="mr-2 size-3.5 text-muted-foreground/70" aria-hidden="true" />
+									Reset
+								</DropdownMenuItem>
+							)}
 						</>
 					)}
 					{column.getCanSort() && column.getCanHide() && <DropdownMenuSeparator />}

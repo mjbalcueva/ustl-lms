@@ -91,6 +91,10 @@ export default async function Page({ params }: { params: { courseId: string } })
 
 			<PageContent className="mb-24 space-y-6 px-2.5 sm:px-4 md:mb-12 md:flex md:flex-wrap md:gap-6 md:space-y-0 md:px-6">
 				<PageSection columnMode>
+					<CollapsibleSection title="Course Invite" iconName="Tb/TbUserPlus">
+						Course Invite
+					</CollapsibleSection>
+
 					<CollapsibleSection title="Customize your course" iconName="Tb/TbNotebook">
 						<EditCourseCodeForm id={course.id} code={course.code} />
 						<EditCourseTitleForm id={course.id} title={course.title} />

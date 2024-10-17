@@ -10,17 +10,20 @@ import {
 } from '@/shared/validations/course'
 
 import { createTRPCRouter, instructorProcedure } from '@/server/api/trpc'
+import { generateCourseToken } from '@/server/lib/course'
 import { video } from '@/server/lib/mux'
 import { utapi } from '@/server/lib/utapi'
 
 export const courseRouter = createTRPCRouter({
 	addCourse: instructorProcedure.input(addCourseSchema).mutation(async ({ ctx, input }) => {
 		const { code, title } = input
+		const token = generateCourseToken()
 
 		const { id: newCourseId } = await ctx.db.course.create({
 			data: {
 				code,
 				title,
+				token,
 				instructorId: ctx.session.user.id!
 			}
 		})
