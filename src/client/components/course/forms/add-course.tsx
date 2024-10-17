@@ -38,7 +38,7 @@ export const AddCourseForm = () => {
 	const { mutate, isPending } = api.course.addCourse.useMutation({
 		onSuccess: async (data) => {
 			form.reset()
-			router.push(`/courses/${data.newCourseId}/edit`)
+			router.push(`/courses/manage/${data.newCourseId}`)
 			router.refresh()
 			toast.success(data.message)
 		},

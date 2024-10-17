@@ -14,7 +14,11 @@ export type DeleteCourseSchema = z.infer<typeof deleteCourseSchema>
 
 export const editTokenSchema = z.object({
 	id: z.string().min(1, 'Course ID is required'),
-	token: z.string().length(6, 'Token must be exactly 6 characters').optional()
+	token: z
+		.string()
+		.length(6, 'Token must be exactly 6 characters')
+		.regex(/^[a-zA-Z0-9]+$/, 'Token must only contain letters and numbers')
+		.or(z.literal(''))
 })
 export type EditTokenSchema = z.infer<typeof editTokenSchema>
 

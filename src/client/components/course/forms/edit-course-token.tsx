@@ -32,9 +32,9 @@ export const EditCourseTokenForm = ({ id, token }: EditTokenSchema) => {
 
 	const form = useForm<EditTokenSchema>({
 		resolver: zodResolver(editTokenSchema),
-		defaultValues: { id, token }
+		defaultValues: { id, token: token ?? '' }
 	})
-	const formToken = form.getValues('token')
+	const formToken = form.watch('token')
 
 	const { mutate, isPending } = api.course.editToken.useMutation({
 		onSuccess: async (data) => {
@@ -59,32 +59,38 @@ export const EditCourseTokenForm = ({ id, token }: EditTokenSchema) => {
 			</CardHeader>
 
 			{!isEditing && (
-				<CardContent className="flex flex-col gap-2">
-					<div className="flex items-center gap-2">
-						<Label htmlFor="token" className="min-w-24 text-end font-normal">
-							Invite Token
-						</Label>
-						<Input id="token" value={formToken} readOnly />
-						<CopyButton
-							onCopy={async () => {
-								await navigator.clipboard.writeText(formToken ?? '')
-								toast.success('Token copied to clipboard!')
-							}}
-						/>
-					</div>
+				<CardContent className="flex flex-col gap-2" isEmpty={!formToken}>
+					{formToken ? (
+						<>
+							<div className="flex items-center gap-2">
+								<Label htmlFor="token" className="min-w-24 text-end font-normal">
+									Invite Token
+								</Label>
+								<Input id="token" value={formToken} readOnly />
+								<CopyButton
+									onCopy={async () => {
+										await navigator.clipboard.writeText(formToken)
+										toast.success('Token copied to clipboard!')
+									}}
+								/>
+							</div>
 
-					<div className="flex items-center gap-2">
-						<Label htmlFor="invite-link" className="min-w-24 text-end font-normal">
-							Invite Link
-						</Label>
-						<Input id="invite-link" value={enrollUrl} readOnly />
-						<CopyButton
-							onCopy={async () => {
-								await navigator.clipboard.writeText(enrollUrl ?? '')
-								toast.success('Invite link copied to clipboard!')
-							}}
-						/>
-					</div>
+							<div className="flex items-center gap-2">
+								<Label htmlFor="invite-link" className="min-w-24 text-end font-normal">
+									Invite Link
+								</Label>
+								<Input id="invite-link" value={enrollUrl} readOnly />
+								<CopyButton
+									onCopy={async () => {
+										await navigator.clipboard.writeText(enrollUrl)
+										toast.success('Invite link copied to clipboard!')
+									}}
+								/>
+							</div>
+						</>
+					) : (
+						'No token set. Click Edit to add one.'
+					)}
 				</CardContent>
 			)}
 
@@ -101,7 +107,12 @@ export const EditCourseTokenForm = ({ id, token }: EditTokenSchema) => {
 											<FormLabel className="min-w-24 text-end font-normal text-card-foreground">Invite Token</FormLabel>
 											<FormControl>
 												<div className="flex w-full items-center gap-2">
-													<Input placeholder="e.g. 'CS101'" disabled={isPending} {...field} />
+													<Input
+														placeholder="e.g. 'CS101' or leave blank to remove"
+														disabled={isPending}
+														{...field}
+														value={field.value}
+													/>
 													<GenerateButton
 														onGenerate={() => {
 															const newToken = generateCourseToken()

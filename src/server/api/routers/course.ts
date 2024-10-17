@@ -76,6 +76,14 @@ export const courseRouter = createTRPCRouter({
 	editToken: instructorProcedure.input(editTokenSchema).mutation(async ({ ctx, input }) => {
 		const { id, token } = input
 
+		const existingCourse = await ctx.db.course.findFirst({
+			where: { token, NOT: { id } }
+		})
+
+		if (existingCourse) {
+			throw new Error('Token already exists. Please choose a different token.')
+		}
+
 		const { token: newToken } = await ctx.db.course.update({
 			where: { id, instructorId: ctx.session.user.id! },
 			data: { token }
