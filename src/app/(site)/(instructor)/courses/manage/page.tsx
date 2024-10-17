@@ -37,7 +37,7 @@ export default async function Page() {
 			<Separator className="hidden md:block" />
 
 			<PageHeader className="flex flex-wrap items-end justify-between gap-4 space-y-0">
-				<div className="space-y-1.5">
+				<div>
 					<PageTitle className="font-bold">Manage Your Courses</PageTitle>
 					<PageDescription>View insights, manage your courses, and more.</PageDescription>
 				</div>
