@@ -88,7 +88,7 @@ model Course {
   instructor User @relation(fields: [instructorId], references: [id], onDelete: Cascade)
 
   @@unique([id, token])
-  @@index([code])
+  @@index([code, token])
   @@map("course")
 }
 
