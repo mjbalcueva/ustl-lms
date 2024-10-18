@@ -47,7 +47,7 @@ export const EditCourseTokenForm = ({ id, token }: EditTokenSchema) => {
 		onError: (error) => toast.error(error.message)
 	})
 
-	const enrollUrl = `${getBaseUrl()}/enroll/${formToken}`
+	const enrollUrl = `${getBaseUrl()}/enrollment/${formToken}`
 
 	return (
 		<Card>
