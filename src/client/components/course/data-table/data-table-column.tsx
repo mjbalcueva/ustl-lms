@@ -4,8 +4,9 @@ import Link from 'next/link'
 import * as React from 'react'
 import { Status, type Course } from '@prisma/client'
 import { type ColumnDef } from '@tanstack/react-table'
-import { LuArchive, LuTrash } from 'react-icons/lu'
+import { LuArchive, LuLink, LuTrash } from 'react-icons/lu'
 import { TbCircle, TbCircleCheck, TbCircleDashed, TbDots, TbEdit } from 'react-icons/tb'
+import { toast } from 'sonner'
 
 import { DataTableColumnHeader } from '@/client/components/course/data-table/data-table-column-header'
 import { Badge } from '@/client/components/ui/badge'
@@ -23,7 +24,7 @@ import {
 	DropdownMenuSubTrigger,
 	DropdownMenuTrigger
 } from '@/client/components/ui/dropdown-menu'
-import { capitalize, formatDate } from '@/client/lib/utils'
+import { capitalize, formatDate, getBaseUrl } from '@/client/lib/utils'
 
 export const useColumns = (
 	editStatus: (id: string, status: Status) => Promise<void>,
@@ -86,6 +87,18 @@ export const useColumns = (
 								Edit
 							</DropdownMenuItem>
 						</Link>
+
+						<DropdownMenuItem
+							onSelect={(e) => {
+								e.preventDefault()
+								const enrollUrl = `${getBaseUrl()}/enrollment?token=${row.original.token}`
+								navigator.clipboard.writeText(enrollUrl)
+								toast.success('Invite link copied to clipboard!')
+							}}
+						>
+							<LuLink className="mr-2 size-4" />
+							Copy Invite Link
+						</DropdownMenuItem>
 
 						<DropdownMenuSub>
 							<DropdownMenuSubTrigger>
