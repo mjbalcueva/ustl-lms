@@ -1,4 +1,4 @@
-import { Metadata } from 'next'
+import { type Metadata } from 'next'
 import { Suspense } from 'react'
 import { TRPCError } from '@trpc/server'
 
