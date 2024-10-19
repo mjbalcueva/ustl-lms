@@ -1,90 +1,93 @@
 'use client'
 
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { parseAsString, useQueryState } from 'nuqs'
-import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
-import { enrollmentSchema, type EnrollmentSchema } from '@/shared/validations/enrollment'
+import { type EnrollmentSchema } from '@/shared/validations/enrollment'
 
+import { Badge } from '@/client/components/ui/badge'
 import { Button } from '@/client/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/client/components/ui/card'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/client/components/ui/form'
-import { Input } from '@/client/components/ui/input'
 
-export const EnrollmentCard = ({ token: enrollmentToken }: EnrollmentSchema) => {
+import { Icons } from '../ui/icons'
+
+export const EnrollmentCard = ({ token }: EnrollmentSchema) => {
 	const router = useRouter()
 
-	const [token, setToken] = useQueryState('token', parseAsString.withDefault(enrollmentToken))
+	const { data: course, isLoading } = api.enrollment.findClass.useQuery({ token })
 
-	const form = useForm<EnrollmentSchema>({
-		resolver: zodResolver(enrollmentSchema),
-		defaultValues: { token }
-	})
+	const handleEnroll = () => {
+		router.push('/course-page')
+	}
 
-	const { mutate, isPending } = api.enrollment.join.useMutation({
-		onSuccess: async (data) => {
-			form.reset({ token })
-			router.refresh()
-			toast.success(data.message)
-		},
-		onError: (error) => toast.error(error.message)
-	})
-
-	useEffect(() => {
-		return form.watch((values) => {
-			void setToken(values.token ?? '')
-			void form.trigger()
-		}).unsubscribe
-	}, [form, setToken])
+	const { code, title, description, categories, imageUrl: image, instructor } = course ?? {}
 
 	return (
-		<Card className="pt-2">
+		<Card className="w-full max-w-md">
 			<CardHeader className="flex-col items-start">
-				<CardTitle className="text-xl">Join a Course</CardTitle>
-				<CardDescription>Enter the 6-character course enrollment code provided by your instructor</CardDescription>
+				<CardTitle className="text-xl">{isLoading ? 'Class Details' : title}</CardTitle>
+				<div className="mt-1 flex flex-wrap gap-2">
+					{categories && categories.length > 0 ? (
+						categories.map((category) => (
+							<Badge key={category.id} variant="secondary">
+								{category.name}
+							</Badge>
+						))
+					) : (
+						<Badge variant="outline">None</Badge>
+					)}
+				</div>
 			</CardHeader>
 
-			<Form {...form}>
-				<form onSubmit={form.handleSubmit((data) => mutate(data))}>
-					<CardContent className="md:pb-6">
-						<FormField
-							control={form.control}
-							name="token"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Token</FormLabel>
-									<FormControl>
-										<Input placeholder="Enter enrollment code" {...field} />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
+			<CardContent className="md:pb-6">
+				{!isLoading && image && (
+					<div className="relative aspect-video">
+						<Image
+							src={image}
+							alt="Course Image"
+							fill
+							className="rounded-xl border border-input object-cover"
+							priority
+							sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
 						/>
-					</CardContent>
+					</div>
+				)}
 
-					<CardContent className="space-y-1 text-muted-foreground md:pb-6">
-						<h4 className="font-medium">How to Join:</h4>
-						<ul className="list-inside list-disc">
-							<li>Enter the provided code and click &quot;Join&quot;</li>
-							<li>After successful enrollment, you will be redirected to the course page</li>
-						</ul>
-					</CardContent>
+				{!image && (
+					<div className="flex h-[11.5rem] items-center justify-center rounded-xl border border-input bg-card dark:bg-background">
+						<Icons.image className="size-10 text-card-foreground dark:text-muted-foreground" />
+					</div>
+				)}
 
-					<CardFooter className="flex justify-end gap-2">
-						<Button variant="outline" onClick={() => router.back()} className="rounded-lg">
-							Cancel
-						</Button>
+				<CardDescription className="mt-2">{description ?? 'No description available'}</CardDescription>
 
-						<Button type="submit" disabled={isPending} variant={isPending ? 'shine' : 'default'} className="rounded-lg">
-							{isPending ? 'Joining...' : 'Join'}
-						</Button>
-					</CardFooter>
-				</form>
-			</Form>
+				<div className="mt-5 space-y-1 text-sm">
+					<div className="flex items-center gap-2">
+						<Icons.course className="size-4 text-muted-foreground" />
+						<span className="font-medium">Course Code:</span>
+						<Badge variant="outline" className="text-muted-foreground">
+							{code ?? 'N/A'}
+						</Badge>
+					</div>
+					<div className="flex items-center gap-2">
+						<Icons.token className="size-4 text-muted-foreground" />
+						<span className="font-medium">Enrollment Token:</span>
+						<code className="rounded bg-muted px-1 py-0.5 font-mono text-muted-foreground">{token}</code>
+					</div>
+					<div className="flex items-center gap-2">
+						<Icons.instructor className="size-4 text-muted-foreground" />
+						<span className="font-medium">Instructor:</span>
+						<span className="text-muted-foreground">{instructor?.profile?.name ?? 'Unknown'}</span>
+					</div>
+				</div>
+			</CardContent>
+
+			<CardFooter>
+				<Button onClick={handleEnroll} variant="default" className="w-full rounded-lg" disabled={isLoading}>
+					Enroll
+				</Button>
+			</CardFooter>
 		</Card>
 	)
 }

@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import * as React from 'react'
-import { TbCirclePlus, TbEdit, TbLibraryPhoto } from 'react-icons/tb'
+import { TbCirclePlus, TbEdit } from 'react-icons/tb'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
@@ -12,6 +12,7 @@ import { type EditImageSchema } from '@/shared/validations/course'
 import { Button } from '@/client/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/client/components/ui/card'
 import { FileUpload } from '@/client/components/ui/file-upload'
+import { Icons } from '@/client/components/ui/icons'
 
 export const EditCourseImageForm = ({ id, imageUrl }: EditImageSchema) => {
 	const router = useRouter()
@@ -56,7 +57,7 @@ export const EditCourseImageForm = ({ id, imageUrl }: EditImageSchema) => {
 						</div>
 					) : (
 						<div className="flex h-[11.5rem] items-center justify-center rounded-xl border border-input bg-card dark:bg-background">
-							<TbLibraryPhoto className="size-10 text-card-foreground dark:text-muted-foreground" />
+							<Icons.image className="size-10 text-card-foreground dark:text-muted-foreground" />
 						</div>
 					))}
 			</CardContent>

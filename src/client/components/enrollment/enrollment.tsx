@@ -21,7 +21,7 @@ export const EnrollmentForm = ({ token }: EnrollmentSchema) => {
 		defaultValues: { token }
 	})
 
-	const { mutate, isPending } = api.enrollment.join.useMutation({
+	const { mutate, isPending } = api.enrollment.enroll.useMutation({
 		onSuccess: async (data) => {
 			form.reset({ token })
 			router.refresh()

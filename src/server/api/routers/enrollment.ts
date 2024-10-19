@@ -5,7 +5,43 @@ import { enrollmentSchema } from '@/shared/validations/enrollment'
 import { createTRPCRouter, protectedProcedure } from '../trpc'
 
 export const enrollmentRouter = createTRPCRouter({
-	join: protectedProcedure.input(enrollmentSchema).mutation(async ({ ctx, input }) => {
+	findClass: protectedProcedure.input(enrollmentSchema).query(async ({ ctx, input }) => {
+		const { token } = input
+
+		if (!ctx.session.user.id) {
+			throw new TRPCError({
+				code: 'UNAUTHORIZED',
+				message: 'You must be logged in to enroll in a course'
+			})
+		}
+
+		const course = await ctx.db.course.findUnique({
+			where: { token },
+			include: {
+				instructor: {
+					select: {
+						profile: {
+							select: {
+								name: true
+							}
+						}
+					}
+				},
+				categories: true
+			}
+		})
+
+		if (!course) {
+			throw new TRPCError({
+				code: 'NOT_FOUND',
+				message: 'Course not found'
+			})
+		}
+
+		return { ...course }
+	}),
+
+	enroll: protectedProcedure.input(enrollmentSchema).mutation(async ({ ctx, input }) => {
 		const { token } = input
 
 		if (!ctx.session.user.id) {
