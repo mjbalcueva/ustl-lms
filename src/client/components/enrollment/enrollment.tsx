@@ -10,7 +10,7 @@ import { enrollmentSchema, type EnrollmentSchema } from '@/shared/validations/en
 
 import { Button } from '@/client/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/client/components/ui/card'
-import { Form, FormField } from '@/client/components/ui/form'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/client/components/ui/form'
 import { Input } from '@/client/components/ui/input'
 
 export const EnrollmentForm = ({ token }: EnrollmentSchema) => {
@@ -32,7 +32,7 @@ export const EnrollmentForm = ({ token }: EnrollmentSchema) => {
 
 	return (
 		<Card className="pt-2">
-			<CardHeader className="flex-col items-start md:pb-6">
+			<CardHeader className="flex-col items-start">
 				<CardTitle className="text-2xl">Join a Course</CardTitle>
 				<CardDescription>Enter the 6-character course enrollment code provided by your instructor</CardDescription>
 			</CardHeader>
@@ -43,7 +43,15 @@ export const EnrollmentForm = ({ token }: EnrollmentSchema) => {
 						<FormField
 							control={form.control}
 							name="token"
-							render={({ field }) => <Input {...field} placeholder="Enter enrollment code" />}
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Token</FormLabel>
+									<FormControl>
+										<Input {...field} placeholder="Enter enrollment code" />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
 						/>
 					</CardContent>
 
