@@ -10,19 +10,17 @@ import {
 
 export default async function Page() {
 	return (
-		<>
-			<PageContainer>
-				<PageHeader>
-					<PageTitle>Your Profile</PageTitle>
-					<PageDescription>Manage your Scholar profile</PageDescription>
-				</PageHeader>
+		<PageContainer>
+			<PageHeader>
+				<PageTitle>Your Profile</PageTitle>
+				<PageDescription>Manage your Scholar profile</PageDescription>
+			</PageHeader>
 
-				<PageContent asChild>
-					<PageSection>
-						<UpdateDisplayNameForm />
-					</PageSection>
-				</PageContent>
-			</PageContainer>
-		</>
+			<PageContent asChild>
+				<PageSection>
+					<UpdateDisplayNameForm />
+				</PageSection>
+			</PageContent>
+		</PageContainer>
 	)
 }

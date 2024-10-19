@@ -8,7 +8,7 @@ import { enrollmentSchema } from '@/shared/validations/enrollment'
 import { EnrollmentDetailsCard } from '@/client/components/enrollment/enrollment-details-card'
 import { EnrollmentErrorCard } from '@/client/components/enrollment/enrollment-error-card'
 import { EnrollmentSkeleton } from '@/client/components/enrollment/enrollment-skeleton'
-import { PageBreadcrumbs, PageContainer, PageHeader, PageTitle } from '@/client/components/ui/page'
+import { PageBreadcrumbs, PageContainer, PageDescription, PageHeader, PageTitle } from '@/client/components/ui/page'
 import { Separator } from '@/client/components/ui/separator'
 
 export default async function Page({ searchParams }: { searchParams: { token: string } }) {
@@ -23,9 +23,10 @@ export default async function Page({ searchParams }: { searchParams: { token: st
 
 			<Separator className="hidden md:block" />
 
-			<PageContainer className="flex flex-col items-center justify-center md:h-[calc(100vh-10rem)]">
-				<PageHeader className="flex-col items-center">
-					<PageTitle>You have been invited!</PageTitle>
+			<PageContainer className="flex flex-col items-center justify-center py-8">
+				<PageHeader className="flex w-full max-w-md flex-col items-center justify-center space-y-0 text-center">
+					<PageTitle className="text-3xl font-bold">You have been invited!</PageTitle>
+					<PageDescription>Review the course details and enroll below</PageDescription>
 				</PageHeader>
 
 				<Suspense fallback={<EnrollmentSkeleton />}>
