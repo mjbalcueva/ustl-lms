@@ -3,14 +3,12 @@ import { Suspense } from 'react'
 import { TRPCError } from '@trpc/server'
 
 import { api } from '@/shared/trpc/server'
-import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 import { enrollmentSchema } from '@/shared/validations/enrollment'
 
 import { EnrollmentDetailsCard } from '@/client/components/enrollment/enrollment-details-card'
 import { EnrollmentErrorCard } from '@/client/components/enrollment/enrollment-error-card'
-import { EnrollmentSkeleton } from '@/client/components/enrollment/enrollment-skeleton'
-import { PageBreadcrumbs, PageContainer, PageDescription, PageHeader, PageTitle } from '@/client/components/ui/page'
-import { Separator } from '@/client/components/ui/separator'
+import { EnrollmentSkeleton } from '@/client/components/skeleton/enrollment-skeleton'
+import { PageContainer, PageDescription, PageHeader, PageTitle } from '@/client/components/ui/page'
 
 export async function generateMetadata({ searchParams }: { searchParams: { token: string } }): Promise<Metadata> {
 	const parsedToken = enrollmentSchema.safeParse({ token: searchParams.token })
