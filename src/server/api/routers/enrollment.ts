@@ -22,7 +22,6 @@ export const enrollmentRouter = createTRPCRouter({
 					select: {
 						profile: {
 							select: {
-								image: true,
 								name: true
 							}
 						}
@@ -85,7 +84,7 @@ export const enrollmentRouter = createTRPCRouter({
 			})
 		}
 
-		const enrollment = await ctx.db.enrollment.create({
+		await ctx.db.enrollment.create({
 			data: {
 				userId: ctx.session.user.id,
 				courseId: course.id
@@ -93,6 +92,6 @@ export const enrollmentRouter = createTRPCRouter({
 			include: { course: true }
 		})
 
-		return { message: 'Enrolled successfully.', enrollment }
+		return { message: 'Enrolled successfully.' }
 	})
 })

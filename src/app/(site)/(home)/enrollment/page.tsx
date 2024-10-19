@@ -25,7 +25,7 @@ export default async function Page({ searchParams }: { searchParams: { token: st
 
 			<PageContainer className="flex flex-col items-center justify-center md:h-[calc(100vh-10rem)]">
 				<PageHeader className="flex-col items-center">
-					<PageTitle>Enroll</PageTitle>
+					<PageTitle>You have been invited!</PageTitle>
 				</PageHeader>
 
 				<Suspense fallback={<EnrollmentSkeleton />}>
@@ -51,13 +51,13 @@ async function EnrollmentContent({ parsedToken }: { parsedToken: ReturnType<type
 		const course = await api.enrollment.findClass({ token: parsedToken.data.token })
 		return (
 			<EnrollmentDetailsCard
+				token={parsedToken.data.token}
+				code={course.code}
 				title={course.title}
 				description={course.description}
 				categories={course.categories}
 				image={course.imageUrl}
-				code={course.code}
-				instructorName={course.instructor?.profile?.name}
-				instructorImage={course.instructor?.profile?.image}
+				instructor={course.instructor?.profile?.name}
 			/>
 		)
 	} catch (error) {

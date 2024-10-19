@@ -1,107 +1,114 @@
 'use client'
 
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { type Category } from '@prisma/client'
+import { toast } from 'sonner'
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/client/components/ui/avatar'
+import { api } from '@/shared/trpc/react'
+
 import { Badge } from '@/client/components/ui/badge'
 import { Button } from '@/client/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/client/components/ui/card'
 import { Icons } from '@/client/components/ui/icons'
 
 type EnrollmentDetailsCardProps = {
+	token: string
+	code: string
 	title: string
 	description: string | null
 	categories: Category[]
 	image: string | null
-	code: string
-	instructorName: string | null | undefined
-	instructorImage: string | null | undefined
+	instructor: string | null | undefined
 }
 
 export const EnrollmentDetailsCard = ({
+	token,
+	code,
 	title,
 	description,
 	categories,
 	image,
-	code,
-	instructorName,
-	instructorImage
+	instructor
 }: EnrollmentDetailsCardProps) => {
-	const handleEnroll = () => {
-		console.log('Enroll')
-	}
+	const router = useRouter()
+
+	const { mutate, isPending } = api.enrollment.enroll.useMutation({
+		onSuccess: (data) => {
+			toast.success(data.message)
+			router.refresh()
+		},
+		onError: (error) => toast.error(error.message)
+	})
 
 	return (
-		<Card className="flex w-full max-w-md flex-col">
-			<CardHeader className="flex items-center justify-normal gap-2">
-				<CardTitle className="text-xl">{title ?? 'Class Details'}</CardTitle>
-				<Badge variant="outline">{code ?? 'N/A'}</Badge>
+		<Card className="flex w-full max-w-md flex-col overflow-hidden">
+			{image ? (
+				<div className="relative aspect-video max-h-[240px] w-full">
+					<Image
+						src={image}
+						alt="Course Image"
+						fill
+						className="object-cover dark:[mask-image:linear-gradient(to_top,transparent,black_20%)]"
+						priority
+						sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+					/>
+				</div>
+			) : (
+				<div className="flex aspect-video w-full items-center justify-center bg-muted">
+					<Icons.image className="size-16 text-muted-foreground" />
+				</div>
+			)}
+
+			<CardHeader className="flex-col items-start p-6">
+				<div className="flex items-center justify-between gap-2">
+					<CardTitle className="text-2xl font-bold leading-tight">{title ?? 'Class Details'}</CardTitle>
+					<Badge variant="outline" className="shrink-0 font-medium">
+						{code ?? 'N/A'}
+					</Badge>
+				</div>
+				{instructor && (
+					<span className="text-sm text-muted-foreground">
+						by <span className="font-medium text-foreground">{instructor}</span>
+					</span>
+				)}
 			</CardHeader>
 
-			<CardContent className="flex-1 space-y-4">
-				{image ? (
-					<div className="relative aspect-video h-40 w-full">
-						<Image
-							src={image}
-							alt="Course Image"
-							fill
-							className="rounded-md object-cover"
-							priority
-							sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-						/>
-					</div>
-				) : (
-					<div className="flex h-40 w-full items-center justify-center rounded-md bg-muted">
-						<Icons.image className="size-10 text-muted-foreground" />
-					</div>
-				)}
-
-				<div className="space-y-0.5">
-					<span className="block font-semibold">Description</span>
-					<CardDescription>{description ?? 'No description available'}</CardDescription>
+			<CardContent className="flex-1 space-y-6 px-6 pb-6">
+				<div className="space-y-1">
+					<h4 className="font-semibold">Description</h4>
+					<CardDescription className="text-sm leading-relaxed">
+						{description ?? 'No description available'}
+					</CardDescription>
 				</div>
 
-				<div className="space-y-0.5">
-					<span className="block font-semibold">Categories</span>
+				<div className="space-y-1">
+					<h4 className="font-semibold">Categories</h4>
 					<div className="flex flex-wrap gap-2">
 						{categories && categories.length > 0 ? (
 							categories.map((category) => (
-								<Badge key={category.id} variant="secondary">
+								<Badge key={category.id} variant="secondary" className="text-xs">
 									{category.name}
 								</Badge>
 							))
 						) : (
-							<Badge variant="outline">No categories</Badge>
+							<Badge variant="outline" className="text-xs">
+								No categories
+							</Badge>
 						)}
-					</div>
-				</div>
-
-				<div className="space-y-1">
-					<span className="block font-semibold">Taught By</span>
-					<div className="flex items-center space-x-2">
-						{instructorImage ? (
-							<Avatar className="size-7">
-								<AvatarImage src={instructorImage} alt={instructorName ?? 'Instructor'} />
-								<AvatarFallback>{instructorName?.[0] ?? 'I'}</AvatarFallback>
-							</Avatar>
-						) : (
-							<div className="flex size-10 items-center justify-center rounded-full bg-muted">
-								<Icons.instructor className="size-6 text-muted-foreground" />
-							</div>
-						)}
-
-						<div className="flex flex-col -space-y-1">
-							<span className="text-sm font-medium">{instructorName ?? 'Unknown Instructor'}</span>
-							<span className="text-xs text-muted-foreground">Instructor</span>
-						</div>
 					</div>
 				</div>
 			</CardContent>
 
 			<CardFooter>
-				<Button onClick={handleEnroll} variant="default" className="w-full">
-					Enroll
+				<Button
+					type="submit"
+					variant={isPending ? 'shine' : 'default'}
+					className="w-full"
+					onClick={() => mutate({ token })}
+					disabled={isPending}
+				>
+					{isPending ? 'Enrolling...' : 'Enroll Now'}
 				</Button>
 			</CardFooter>
 		</Card>
