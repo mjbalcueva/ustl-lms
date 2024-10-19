@@ -1,3 +1,4 @@
+import { Metadata } from 'next'
 import { Suspense } from 'react'
 import { TRPCError } from '@trpc/server'
 
@@ -10,6 +11,30 @@ import { EnrollmentErrorCard } from '@/client/components/enrollment/enrollment-e
 import { EnrollmentSkeleton } from '@/client/components/enrollment/enrollment-skeleton'
 import { PageBreadcrumbs, PageContainer, PageDescription, PageHeader, PageTitle } from '@/client/components/ui/page'
 import { Separator } from '@/client/components/ui/separator'
+
+export async function generateMetadata({ searchParams }: { searchParams: { token: string } }): Promise<Metadata> {
+	const parsedToken = enrollmentSchema.safeParse({ token: searchParams.token })
+
+	if (!parsedToken.success) {
+		return {
+			title: 'Enrollment Error | Course Enrollment',
+			description: 'There was an issue with the enrollment token. Please check your invitation link and try again.'
+		}
+	}
+
+	try {
+		const course = await api.enrollment.findClass({ token: parsedToken.data.token })
+		return {
+			title: `Enroll in ${course.title} | Course Enrollment`,
+			description: `You've been invited to join ${course.title}. ${course.description?.slice(0, 150)}...`
+		}
+	} catch (error) {
+		return {
+			title: 'Enrollment Error | Course Enrollment',
+			description: 'An error occurred while fetching course details. Please try again later.'
+		}
+	}
+}
 
 export default async function Page({ searchParams }: { searchParams: { token: string } }) {
 	const parsedToken = enrollmentSchema.safeParse({ token: searchParams.token })
