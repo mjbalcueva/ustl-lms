@@ -77,7 +77,7 @@ export const EnrollmentDetailsCard = ({
 			<CardContent className="flex-1 space-y-6 px-6 pb-6">
 				<div className="space-y-1">
 					<h4 className="font-semibold">Description</h4>
-					<CardDescription className="text-sm leading-relaxed">
+					<CardDescription className="line-clamp-3 text-sm leading-relaxed">
 						{description ?? 'No description available'}
 					</CardDescription>
 				</div>

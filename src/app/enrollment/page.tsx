@@ -38,27 +38,18 @@ export async function generateMetadata({ searchParams }: { searchParams: { token
 
 export default async function Page({ searchParams }: { searchParams: { token: string } }) {
 	const parsedToken = enrollmentSchema.safeParse({ token: searchParams.token })
-	const crumbs: Breadcrumb = [{ icon: 'home' }, { label: 'Enrollment', href: '/enrollment' }, { label: 'Join' }]
 
 	return (
-		<>
-			<PageHeader className="hidden space-y-0 md:block md:py-3">
-				<PageBreadcrumbs crumbs={crumbs} />
+		<PageContainer className="flex h-full flex-col items-center justify-center">
+			<PageHeader className="flex w-full max-w-md flex-col items-center justify-center space-y-0 text-center">
+				<PageTitle className="text-3xl font-bold">You have been invited!</PageTitle>
+				<PageDescription>Review the course details and enroll below</PageDescription>
 			</PageHeader>
 
-			<Separator className="hidden md:block" />
-
-			<PageContainer className="flex flex-col items-center justify-center py-8">
-				<PageHeader className="flex w-full max-w-md flex-col items-center justify-center space-y-0 text-center">
-					<PageTitle className="text-3xl font-bold">You have been invited!</PageTitle>
-					<PageDescription>Review the course details and enroll below</PageDescription>
-				</PageHeader>
-
-				<Suspense fallback={<EnrollmentSkeleton />}>
-					<EnrollmentContent parsedToken={parsedToken} />
-				</Suspense>
-			</PageContainer>
-		</>
+			<Suspense fallback={<EnrollmentSkeleton />}>
+				<EnrollmentContent parsedToken={parsedToken} />
+			</Suspense>
+		</PageContainer>
 	)
 }
 
