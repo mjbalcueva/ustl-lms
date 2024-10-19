@@ -18,6 +18,8 @@ import {
 import { Separator } from '@/client/components/ui/separator'
 
 export default async function Page() {
+	await new Promise((resolve) => setTimeout(resolve, 5000)) // 5 seconds loading
+
 	const session = await api.session.getSession()
 	if (session?.user?.role !== 'INSTRUCTOR') redirect('/dashboard')
 

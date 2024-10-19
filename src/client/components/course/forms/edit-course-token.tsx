@@ -4,7 +4,8 @@ import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { TbEdit } from 'react-icons/tb'
+import { LuLink } from 'react-icons/lu'
+import { TbCopy, TbEdit } from 'react-icons/tb'
 import { toast } from 'sonner'
 
 import { api } from '@/shared/trpc/react'
@@ -46,7 +47,7 @@ export const EditCourseTokenForm = ({ id, token }: EditTokenSchema) => {
 		onError: (error) => toast.error(error.message)
 	})
 
-	const enrollUrl = `${getBaseUrl()}/enroll/${formToken}`
+	const enrollUrl = `${getBaseUrl()}/enrollment?token=${formToken}`
 
 	return (
 		<Card>
@@ -68,6 +69,7 @@ export const EditCourseTokenForm = ({ id, token }: EditTokenSchema) => {
 								</Label>
 								<Input id="token" value={formToken} readOnly />
 								<CopyButton
+									icon={TbCopy}
 									onCopy={async () => {
 										await navigator.clipboard.writeText(formToken)
 										toast.success('Token copied to clipboard!')
@@ -81,6 +83,7 @@ export const EditCourseTokenForm = ({ id, token }: EditTokenSchema) => {
 								</Label>
 								<Input id="invite-link" value={enrollUrl} readOnly />
 								<CopyButton
+									icon={LuLink}
 									onCopy={async () => {
 										await navigator.clipboard.writeText(enrollUrl)
 										toast.success('Invite link copied to clipboard!')

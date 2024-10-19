@@ -59,7 +59,7 @@ export const CategoriesCombobox = ({ label, options, selected, onChange }: Categ
 										<TbX className="ml-1 size-3 text-secondary-foreground" />
 									</Badge>
 								))}
-								<span className="text-muted-foreground">Selected tags...</span>
+								<span className="text-muted-foreground">Select tags...</span>
 							</>
 						) : (
 							<span className="text-muted-foreground">{label}</span>

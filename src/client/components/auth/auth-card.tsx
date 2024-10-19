@@ -13,7 +13,7 @@ export const AuthCard = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HT
 		<div
 			ref={ref}
 			className={cn(
-				'w-[400px] overflow-auto rounded-lg border-2 border-border bg-card text-card-foreground shadow-md',
+				'w-full max-w-md overflow-auto rounded-lg border-2 border-border bg-card text-card-foreground shadow-md',
 				className
 			)}
 			{...props}

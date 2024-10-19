@@ -8,6 +8,8 @@ import { profileRouter } from '@/server/api/routers/profile'
 import { sessionRouter } from '@/server/api/routers/session'
 import { createCallerFactory, createTRPCRouter } from '@/server/api/trpc'
 
+import { enrollmentRouter } from './routers/enrollment'
+
 /**
  * This is the primary router for your server.
  *
@@ -19,6 +21,7 @@ export const appRouter = createTRPCRouter({
 	category: categoryRouter,
 	chapter: chapterRouter,
 	course: courseRouter,
+	enrollment: enrollmentRouter,
 	instructor: instructorRouter,
 	profile: profileRouter,
 	session: sessionRouter

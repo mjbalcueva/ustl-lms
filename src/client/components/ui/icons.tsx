@@ -14,9 +14,11 @@ import {
 	TbFilter,
 	TbInfoCircle,
 	TbInfoTriangle,
+	TbKey,
 	TbLayoutDashboard,
 	TbLayoutSidebar,
 	TbLayoutSidebarFilled,
+	TbLibraryPhoto,
 	TbLogout,
 	TbMessage,
 	TbMoonStars,
@@ -71,6 +73,8 @@ export const Icons = {
 
 	// course
 	course: TbNotebook,
+	image: TbLibraryPhoto,
+	token: TbKey,
 	totalCourse: TbBook,
 	publishedCourse: TbBook2,
 	draftCourse: TbEdit,

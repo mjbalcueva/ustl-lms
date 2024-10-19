@@ -1,6 +1,6 @@
 import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
-import { Button } from '@/client/components/ui/button'
+import { EnrollToCourseButton } from '@/client/components/enrollment/enroll-to-course-button'
 import { PageBreadcrumbs, PageContent, PageDescription, PageHeader, PageTitle } from '@/client/components/ui/page'
 import { Separator } from '@/client/components/ui/separator'
 
@@ -19,7 +19,7 @@ export default async function Page() {
 					<PageTitle className="font-bold">Browse Courses</PageTitle>
 					<PageDescription>Find a course to learn something new</PageDescription>
 				</div>
-				<Button>Join Course</Button>
+				<EnrollToCourseButton />
 			</PageHeader>
 
 			<PageContent></PageContent>

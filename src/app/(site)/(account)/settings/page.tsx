@@ -16,21 +16,19 @@ export default async function Page() {
 	const session = await auth()
 
 	return (
-		<>
-			<PageContainer>
-				<PageHeader>
-					<PageTitle>Account Settings</PageTitle>
-					<PageDescription>Manage your account security settings</PageDescription>
-				</PageHeader>
+		<PageContainer>
+			<PageHeader>
+				<PageTitle>Account Settings</PageTitle>
+				<PageDescription>Manage your account security settings</PageDescription>
+			</PageHeader>
 
-				<PageContent className="space-y-4">
-					<PageSection>
-						<Toggle2FAForm />
-					</PageSection>
+			<PageContent className="space-y-4">
+				<PageSection>
+					<Toggle2FAForm />
+				</PageSection>
 
-					<PageSection>{session?.user.hasPassword ? <UpdatePasswordForm /> : <AddPasswordForm />}</PageSection>
-				</PageContent>
-			</PageContainer>
-		</>
+				<PageSection>{session?.user.hasPassword ? <UpdatePasswordForm /> : <AddPasswordForm />}</PageSection>
+			</PageContent>
+		</PageContainer>
 	)
 }
