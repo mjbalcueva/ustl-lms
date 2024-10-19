@@ -1,5 +1,23 @@
-import { redirect } from 'next/navigation'
+import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 
-export default function Page() {
-	redirect('/courses')
+import { EnrollmentCard } from '@/client/components/enrollment/enrollment-card'
+import { PageBreadcrumbs, PageContainer, PageHeader } from '@/client/components/ui/page'
+import { Separator } from '@/client/components/ui/separator'
+
+export default function Page({ searchParams }: { searchParams: { token: string } }) {
+	const crumbs: Breadcrumb = [{ icon: 'home' }, { label: 'Enrollment', href: '/enrollment' }, { label: 'Join' }]
+
+	return (
+		<>
+			<PageHeader className="hidden space-y-0 md:block md:py-3">
+				<PageBreadcrumbs crumbs={crumbs} />
+			</PageHeader>
+
+			<Separator className="hidden md:block" />
+
+			<PageContainer className="flex flex-col items-center justify-center md:h-[calc(100vh-10rem)]">
+				<EnrollmentCard token={searchParams.token} />
+			</PageContainer>
+		</>
+	)
 }
