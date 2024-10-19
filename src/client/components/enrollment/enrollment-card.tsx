@@ -26,7 +26,7 @@ export const EnrollmentCard = ({ token }: EnrollmentSchema) => {
 	return (
 		<Card className="w-full max-w-md">
 			<CardHeader className="flex-col items-start">
-				<CardTitle className="text-xl">{isLoading ? 'Class Details' : title}</CardTitle>
+				<CardTitle className="text-xl">{title ?? 'Class Details'}</CardTitle>
 				<div className="mt-1 flex flex-wrap gap-2">
 					{categories && categories.length > 0 ? (
 						categories.map((category) => (

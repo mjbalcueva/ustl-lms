@@ -30,9 +30,9 @@ export default function Page({ searchParams }: { searchParams: { token: string }
 				) : (
 					<Card className="w-full max-w-md">
 						<CardHeader className="flex flex-col items-start py-6">
-							<CardTitle className="text-2xl">Enrollment Link Issue</CardTitle>
+							<CardTitle className="text-2xl">Token Issue</CardTitle>
 							<CardDescription>
-								We couldn&apos;t process your enrollment link. It may be expired or incorrect.
+								We couldn&apos;t process your enrollment token. It may be expired or incorrect.
 							</CardDescription>
 						</CardHeader>
 						<CardContent className="pb-6">
