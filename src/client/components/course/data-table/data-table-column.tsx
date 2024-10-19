@@ -92,7 +92,7 @@ export const useColumns = (
 							onSelect={(e) => {
 								e.preventDefault()
 								const enrollUrl = `${getBaseUrl()}/enrollment?token=${row.original.token}`
-								navigator.clipboard.writeText(enrollUrl)
+								void navigator.clipboard.writeText(enrollUrl)
 								toast.success('Invite link copied to clipboard!')
 							}}
 						>
