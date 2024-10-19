@@ -23,7 +23,7 @@ export async function generateMetadata({ searchParams }: { searchParams: { token
 	}
 
 	try {
-		const course = await api.enrollment.findClass({ token: parsedToken.data.token })
+		const course = await api.enrollment.findCourse({ token: parsedToken.data.token })
 		return {
 			title: `Enroll in ${course.title} | Course Enrollment`,
 			description: `You've been invited to join ${course.title}. ${course.description?.slice(0, 150)}...`
@@ -65,7 +65,7 @@ async function EnrollmentContent({ parsedToken }: { parsedToken: ReturnType<type
 	}
 
 	try {
-		const course = await api.enrollment.findClass({ token: parsedToken.data.token })
+		const course = await api.enrollment.findCourse({ token: parsedToken.data.token })
 		return (
 			<EnrollmentDetailsCard
 				token={parsedToken.data.token}

@@ -5,7 +5,7 @@ import { enrollmentSchema } from '@/shared/validations/enrollment'
 import { createTRPCRouter, protectedProcedure } from '../trpc'
 
 export const enrollmentRouter = createTRPCRouter({
-	findClass: protectedProcedure.input(enrollmentSchema).query(async ({ ctx, input }) => {
+	findCourse: protectedProcedure.input(enrollmentSchema).query(async ({ ctx, input }) => {
 		const { token } = input
 
 		if (!ctx.session.user.id) {
