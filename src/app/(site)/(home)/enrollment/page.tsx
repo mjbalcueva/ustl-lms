@@ -1,19 +1,18 @@
-import Link from 'next/link'
+import { Suspense } from 'react'
+import { TRPCError } from '@trpc/server'
 
+import { api } from '@/shared/trpc/server'
 import { type Breadcrumb } from '@/shared/types/breadcrumbs'
 import { enrollmentSchema } from '@/shared/validations/enrollment'
 
-import { FormResponse } from '@/client/components/auth/form-response'
-import { EnrollmentCard } from '@/client/components/enrollment/enrollment-card'
-import { buttonVariants } from '@/client/components/ui/button'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/client/components/ui/card'
-import { PageBreadcrumbs, PageContainer, PageHeader } from '@/client/components/ui/page'
+import { EnrollmentDetailsCard } from '@/client/components/enrollment/enrollment-details-card'
+import { EnrollmentErrorCard } from '@/client/components/enrollment/enrollment-error-card'
+import { EnrollmentSkeleton } from '@/client/components/enrollment/enrollment-skeleton'
+import { PageBreadcrumbs, PageContainer, PageHeader, PageTitle } from '@/client/components/ui/page'
 import { Separator } from '@/client/components/ui/separator'
-import { cn } from '@/client/lib/utils'
 
-export default function Page({ searchParams }: { searchParams: { token: string } }) {
+export default async function Page({ searchParams }: { searchParams: { token: string } }) {
 	const parsedToken = enrollmentSchema.safeParse({ token: searchParams.token })
-
 	const crumbs: Breadcrumb = [{ icon: 'home' }, { label: 'Enrollment', href: '/enrollment' }, { label: 'Join' }]
 
 	return (
@@ -25,27 +24,52 @@ export default function Page({ searchParams }: { searchParams: { token: string }
 			<Separator className="hidden md:block" />
 
 			<PageContainer className="flex flex-col items-center justify-center md:h-[calc(100vh-10rem)]">
-				{parsedToken.success ? (
-					<EnrollmentCard token={parsedToken.data.token} />
-				) : (
-					<Card className="w-full max-w-md">
-						<CardHeader className="flex flex-col items-start py-6">
-							<CardTitle className="text-2xl">Token Issue</CardTitle>
-							<CardDescription>
-								We couldn&apos;t process your enrollment token. It may be expired or incorrect.
-							</CardDescription>
-						</CardHeader>
-						<CardContent className="pb-6">
-							<FormResponse type="error" message={parsedToken.error?.errors[0]?.message} />
-						</CardContent>
-						<CardFooter>
-							<Link href="/dashboard" className={cn(buttonVariants({ variant: 'link', size: 'link' }))}>
-								Go to dashboard
-							</Link>
-						</CardFooter>
-					</Card>
-				)}
+				<PageHeader className="flex-col items-center">
+					<PageTitle>Enroll</PageTitle>
+				</PageHeader>
+
+				<Suspense fallback={<EnrollmentSkeleton />}>
+					<EnrollmentContent parsedToken={parsedToken} />
+				</Suspense>
 			</PageContainer>
 		</>
 	)
+}
+
+async function EnrollmentContent({ parsedToken }: { parsedToken: ReturnType<typeof enrollmentSchema.safeParse> }) {
+	if (!parsedToken.success) {
+		return (
+			<EnrollmentErrorCard
+				title="Token Issue"
+				description="We couldn't process your enrollment token. It may be expired or incorrect."
+				message={parsedToken.error.errors[0]?.message ?? ''}
+			/>
+		)
+	}
+
+	try {
+		const course = await api.enrollment.findClass({ token: parsedToken.data.token })
+		return (
+			<EnrollmentDetailsCard
+				title={course.title}
+				description={course.description}
+				categories={course.categories}
+				image={course.imageUrl}
+				code={course.code}
+				instructorName={course.instructor?.profile?.name}
+				instructorImage={course.instructor?.profile?.image}
+			/>
+		)
+	} catch (error) {
+		const errorMessage =
+			error instanceof TRPCError ? error.message : 'An unexpected error occurred while fetching the course details.'
+
+		return (
+			<EnrollmentErrorCard
+				title="Server Issue"
+				description="There was an issue processing your enrollment. Please try again later."
+				message={errorMessage}
+			/>
+		)
+	}
 }

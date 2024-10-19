@@ -22,6 +22,7 @@ export const enrollmentRouter = createTRPCRouter({
 					select: {
 						profile: {
 							select: {
+								image: true,
 								name: true
 							}
 						}
