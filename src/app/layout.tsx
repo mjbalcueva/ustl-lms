@@ -1,14 +1,14 @@
-import '@/client/styles/globals.css'
-
 import { type Metadata } from 'next'
 import { GeistSans } from 'geist/font/sans'
 
-import { siteConfig } from '@/shared/config/site'
-import { TRPCReactProvider } from '@/shared/trpc/react'
+import { TRPCReactProvider } from '@/services/trpc/react'
 
-import { Toaster } from '@/client/components/ui/sonner'
-import { TailwindSizeIndicator } from '@/client/components/ui/tailwind-size-indicator'
-import { ThemeProvider } from '@/client/context/theme-provider'
+import { ThemeProvider } from '@/core/components/context/theme-provider'
+import { SizeIndicator } from '@/core/components/size-indicator'
+import { Toaster } from '@/core/components/ui/sonner'
+import { siteConfig } from '@/core/config/site'
+
+import '@/core/styles/globals.css'
 
 export const metadata: Metadata = {
 	title: siteConfig.title,
@@ -24,7 +24,7 @@ export default async function Layout({ children }: Readonly<{ children: React.Re
 					<ThemeProvider>
 						{children}
 						<Toaster duration={5000} gap={10} visibleToasts={4} />
-						<TailwindSizeIndicator />
+						<SizeIndicator />
 					</ThemeProvider>
 				</TRPCReactProvider>
 			</body>

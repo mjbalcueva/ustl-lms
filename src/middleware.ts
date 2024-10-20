@@ -1,41 +1,55 @@
 import NextAuth from 'next-auth'
 
-import authConfig from '@/server/lib/auth.config'
+import { config as authConfig } from '@/services/authjs/config'
 
-import { apiAuthPrefix, apiTRPCPrefix, authRoutes, DEFAULT_LOGIN_REDIRECT, publicRoutes } from '@/routes'
+import { authRoutes } from '@/core/routes/auth'
+import { DEFAULT_REDIRECT } from '@/core/routes/constants'
+import { instructorRoutes } from '@/core/routes/instructor'
+import { publicRoutes } from '@/core/routes/public'
+import { skippedRoutes } from '@/core/routes/skipped'
 
 const { auth } = NextAuth(authConfig)
 
 export default auth((req) => {
-	const { nextUrl } = req
-	const isLoggedIn = !!req.auth
+	const { nextUrl, auth: session } = req
+	const isLoggedIn = !!session
+	const isStudent = session?.user.role === 'STUDENT'
 
-	const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix)
-	const isApiTRPCRoute = nextUrl.pathname.startsWith(apiTRPCPrefix)
-	const isAuthRoute = authRoutes.includes(nextUrl.pathname)
-	const isPublicRoute = publicRoutes.includes(nextUrl.pathname)
+	const { pathname, search } = nextUrl
 
-	// If the route is an API auth or TRPC route, don't redirect
-	if (isApiAuthRoute || isApiTRPCRoute) return
+	// Route type checks
+	const isAuthRoute = authRoutes.includes(pathname)
+	const isInstructorRoute = instructorRoutes.some((route) => pathname.startsWith(route))
+	const isPublicRoute = publicRoutes.includes(pathname)
+	const isSkippedRoute = skippedRoutes.some((route) => pathname.startsWith(route))
 
-	// If the request is an auth route and the user is logged in, redirect to the default login redirect
-	if (isAuthRoute && isLoggedIn) return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl))
+	// Allow access to routes that bypass authentication checks
+	if (isSkippedRoute) return
 
-	// If the request is an auth route, redirect to the login page
+	// Redirect logged-in users away from authentication-related routes (e.g., login, register)
+	if (isAuthRoute && isLoggedIn) {
+		return Response.redirect(new URL(DEFAULT_REDIRECT, nextUrl))
+	}
+
+	// Allow non-logged-in users access to authentication routes
 	if (isAuthRoute) return
 
-	// If the user is logged in or the request is a public route, don't redirect
-	if (isLoggedIn || isPublicRoute) return
+	// Prevent students from accessing instructor-only routes
+	if (isInstructorRoute && isStudent) {
+		return Response.redirect(new URL(DEFAULT_REDIRECT, nextUrl))
+	}
 
-	// If the user is not logged in, redirect to the login page
-	const callbackUrl = nextUrl.pathname + (nextUrl.search || '')
-	const encodedCallbackUrl = encodeURIComponent(callbackUrl)
+	// Allow access to public routes or if the user is logged in
+	if (isPublicRoute || isLoggedIn) return
 
-	// Redirect to the login page with the callback URL
-	return Response.redirect(new URL(`/auth/login?callbackUrl=${encodedCallbackUrl}`, nextUrl))
+	// Redirect unauthenticated users to the login page with a callback URL
+	const callbackUrl = `${pathname}${search || ''}`
+	return Response.redirect(
+		new URL(`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`, nextUrl)
+	)
 })
 
 export const config = {
-	// Don't invoke Middleware on the following paths
+	// Match all paths except static files or Next.js internal routes
 	matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)']
 }
