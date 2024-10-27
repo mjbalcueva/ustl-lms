@@ -1,8 +1,5 @@
-import { auth } from '@/server/lib/auth'
+import { api } from '@/services/trpc/server'
 
-import { AddPasswordForm } from '@/client/components/account/add-password'
-import { Toggle2FAForm } from '@/client/components/account/toggle-2fa'
-import { UpdatePasswordForm } from '@/client/components/account/update-password'
 import {
 	PageContainer,
 	PageContent,
@@ -10,10 +7,14 @@ import {
 	PageHeader,
 	PageSection,
 	PageTitle
-} from '@/client/components/ui/page'
+} from '@/core/components/ui/page'
+
+import { AddPasswordForm } from '@/features/account/components/forms/add-password-form'
+import { EditPasswordForm } from '@/features/account/components/forms/edit-password-form'
+import { EditTwoFactorForm } from '@/features/account/components/forms/edit-two-factor-form'
 
 export default async function Page() {
-	const session = await auth()
+	const session = await api.session.getSession()
 
 	return (
 		<PageContainer>
@@ -24,10 +25,12 @@ export default async function Page() {
 
 			<PageContent className="space-y-4">
 				<PageSection>
-					<Toggle2FAForm />
+					<EditTwoFactorForm />
 				</PageSection>
 
-				<PageSection>{session?.user.hasPassword ? <UpdatePasswordForm /> : <AddPasswordForm />}</PageSection>
+				<PageSection>
+					{session?.user.hasPassword ? <EditPasswordForm /> : <AddPasswordForm />}
+				</PageSection>
 			</PageContent>
 		</PageContainer>
 	)

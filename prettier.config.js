@@ -7,20 +7,22 @@ const config = {
 		'<BUILTIN_MODULES>', // Node.js built-in modules
 		'<THIRD_PARTY_MODULES>', // NPM packages
 		'',
-		'^@/shared/(.*)$',
-		'',
 		'^@/server/(.*)$',
 		'',
-		'^@/client/(.*)$',
+		'^@/services/(.*)$',
+		'',
+		'^@/core/(.*)$',
+		'',
+		'^@/features/(.*)$',
 		'',
 		'^@/(.*)$',
 		'',
-		'^(?!.*[.]css$)[./].*$', // Relative imports
-		'.css$' // CSS imports
+		'^(?!.*[.]css$)[./].*$',
+		'.css$'
 	],
 	importOrderParserPlugins: ['typescript', 'jsx', 'decorators-legacy'],
 	plugins: ['@ianvs/prettier-plugin-sort-imports', 'prettier-plugin-tailwindcss'],
-	printWidth: 120,
+	printWidth: 100,
 	quoteProps: 'consistent',
 	semi: false,
 	singleQuote: true,

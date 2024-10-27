@@ -11,8 +11,9 @@ import { initTRPC, TRPCError } from '@trpc/server'
 import superjson from 'superjson'
 import { ZodError } from 'zod'
 
-import { auth } from '@/server/lib/auth'
-import { db } from '@/server/lib/db'
+import { db } from '@/server/db'
+
+import { auth } from '@/services/authjs/auth'
 
 /**
  * 1. CONTEXT
@@ -136,7 +137,10 @@ export const protectedProcedure = t.procedure.use(timingMiddleware).use(({ ctx, 
  */
 export const instructorProcedure = protectedProcedure.use(({ ctx, next }) => {
 	if (ctx.session.user.role !== 'INSTRUCTOR')
-		throw new TRPCError({ code: 'UNAUTHORIZED', message: 'You are not authorized to access this resource.' })
+		throw new TRPCError({
+			code: 'UNAUTHORIZED',
+			message: 'You are not authorized to access this resource.'
+		})
 
 	return next({
 		ctx: {
