@@ -1,6 +1,6 @@
 import { ChapterType, PrismaClient, Role, Status } from '@prisma/client'
 
-import { generateCourseToken } from '@/server/lib/course'
+import { generateCourseInviteToken } from '@/features/courses/lib/tokens'
 
 const db = new PrismaClient()
 
@@ -50,7 +50,7 @@ async function main() {
 							title: 'World War Z',
 							description: 'A comprehensive exploration of zombie culture and history.',
 							status: Status.PUBLISHED,
-							token: generateCourseToken(),
+							token: generateCourseInviteToken(),
 							categories: {
 								connect: [{ name: 'Zombies' }, { name: 'History' }]
 							},
@@ -83,7 +83,7 @@ async function main() {
 							title: 'Medieval History',
 							description: 'An in-depth look at the Middle Ages and its historical significance.',
 							status: Status.PUBLISHED,
-							token: generateCourseToken(),
+							token: generateCourseInviteToken(),
 							categories: {
 								connect: [{ name: 'History' }]
 							},
@@ -133,7 +133,7 @@ async function main() {
 							title: 'Introduction to AI and Machine Learning',
 							description: 'Learn the basics of artificial intelligence and its applications.',
 							status: Status.PUBLISHED,
-							token: generateCourseToken(),
+							token: generateCourseInviteToken(),
 							categories: {
 								connect: [{ name: 'AI and Machine Learning' }, { name: 'Technology' }]
 							},
@@ -166,7 +166,7 @@ async function main() {
 							title: 'The Future of Technology',
 							description: 'Explore the future trends in technology and its impact on society.',
 							status: Status.PUBLISHED,
-							token: generateCourseToken(),
+							token: generateCourseInviteToken(),
 							categories: {
 								connect: [{ name: 'Technology' }]
 							},

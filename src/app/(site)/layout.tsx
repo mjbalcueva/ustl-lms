@@ -1,14 +1,14 @@
 import { SessionProvider } from 'next-auth/react'
 
-import { auth } from '@/server/lib/auth'
+import { api } from '@/services/trpc/server'
 
-import { MainNav } from '@/client/components/navigation/main-nav'
-import { PageWrapper } from '@/client/components/ui/page'
-import { TooltipProvider } from '@/client/components/ui/tooltip'
-import { DeviceTypeProvider } from '@/client/context/device-type-provider'
+import { DeviceTypeProvider } from '@/core/components/context/device-type-provider'
+import { MainNav } from '@/core/components/nav-bar/main-nav'
+import { PageWrapper } from '@/core/components/ui/page'
+import { TooltipProvider } from '@/core/components/ui/tooltip'
 
 export default async function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
-	const session = await auth()
+	const session = await api.session.getSession()
 
 	return (
 		<SessionProvider session={session}>

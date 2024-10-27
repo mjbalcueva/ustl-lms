@@ -1,14 +1,11 @@
-import { attachmentRouter } from '@/server/api/routers/attachment'
-import { authRouter } from '@/server/api/routers/auth'
-import { categoryRouter } from '@/server/api/routers/category'
-import { chapterRouter } from '@/server/api/routers/chapter'
-import { courseRouter } from '@/server/api/routers/course'
-import { instructorRouter } from '@/server/api/routers/instructor'
-import { profileRouter } from '@/server/api/routers/profile'
-import { sessionRouter } from '@/server/api/routers/session'
+import { sessionRouter } from '@/server/api/session'
 import { createCallerFactory, createTRPCRouter } from '@/server/api/trpc'
 
-import { enrollmentRouter } from './routers/enrollment'
+import { accountRouter } from '@/features/account/server/account-router'
+import { authRouter } from '@/features/auth/server/auth-router'
+import { chapterRouter } from '@/features/chapters/server/chapter-router'
+import { courseRouter } from '@/features/courses/server/course-router'
+import { enrollmentRouter } from '@/features/enrollment/server/enrollment-router'
 
 /**
  * This is the primary router for your server.
@@ -16,15 +13,12 @@ import { enrollmentRouter } from './routers/enrollment'
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-	attachment: attachmentRouter,
 	auth: authRouter,
-	category: categoryRouter,
-	chapter: chapterRouter,
+	session: sessionRouter,
+	account: accountRouter,
 	course: courseRouter,
-	enrollment: enrollmentRouter,
-	instructor: instructorRouter,
-	profile: profileRouter,
-	session: sessionRouter
+	chapter: chapterRouter,
+	enrollment: enrollmentRouter
 })
 
 // export type definition of API

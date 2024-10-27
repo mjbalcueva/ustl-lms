@@ -1,4 +1,3 @@
-import { UpdateDisplayNameForm } from '@/client/components/account/update-display-name'
 import {
 	PageContainer,
 	PageContent,
@@ -6,7 +5,9 @@ import {
 	PageHeader,
 	PageSection,
 	PageTitle
-} from '@/client/components/ui/page'
+} from '@/core/components/ui/page'
+
+import { EditNameForm } from '@/features/account/components/forms/edit-name-form'
 
 export default async function Page() {
 	return (
@@ -18,7 +19,7 @@ export default async function Page() {
 
 			<PageContent asChild>
 				<PageSection>
-					<UpdateDisplayNameForm />
+					<EditNameForm />
 				</PageSection>
 			</PageContent>
 		</PageContainer>

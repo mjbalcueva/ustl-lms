@@ -1,3 +1,4 @@
+import animatePlugin from 'tailwindcss-animate'
 import { fontFamily } from 'tailwindcss/defaultTheme'
 
 import { type Config } from 'tailwindcss'
@@ -36,10 +37,11 @@ const addBackgroundUtilities = ({ matchUtilities, theme }: any) => {
 
 const addVariablesForColors = ({ addBase, theme }: any) => {
 	const allColors = flattenColorPalette(theme('colors'))
-	const newVars = Object.fromEntries(Object.entries(allColors).map(([key, val]) => [`--${key}`, val]))
+	const newVars = Object.fromEntries(
+		Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
+	)
 	addBase({ ':root': newVars })
 }
-/* eslint-enable */
 
 const config = {
 	darkMode: ['class', '[data-theme^="dark-"]'],
@@ -49,9 +51,7 @@ const config = {
 		container: {
 			center: true,
 			padding: '2rem',
-			screens: {
-				'2xl': '1400px'
-			}
+			screens: { '2xl': '1400px' }
 		},
 		extend: {
 			fontFamily: {
@@ -90,6 +90,13 @@ const config = {
 				card: {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
+				},
+				chart: {
+					'1': 'hsl(var(--chart-1))',
+					'2': 'hsl(var(--chart-2))',
+					'3': 'hsl(var(--chart-3))',
+					'4': 'hsl(var(--chart-4))',
+					'5': 'hsl(var(--chart-5))'
 				}
 			},
 			borderRadius: {
@@ -123,7 +130,7 @@ const config = {
 			}
 		}
 	},
-	plugins: [addBackgroundUtilities, addVariablesForColors, require('tailwindcss-animate')]
+	plugins: [addBackgroundUtilities, addVariablesForColors, animatePlugin]
 } satisfies Config
 
 export default config
