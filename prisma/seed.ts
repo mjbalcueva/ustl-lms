@@ -9,7 +9,7 @@ import { generateCourseInviteToken } from '@/features/courses/lib/tokens'
 const prisma = new PrismaClient()
 
 // Configurable Constants
-const NUM_RANGES = {
+const SEED_RANGES = {
 	CATEGORIES: [5, 20],
 	INSTRUCTORS: [3, 10],
 	STUDENTS: [10, 30],
@@ -38,235 +38,199 @@ function getRandomChapterType(): ChapterType {
 	return types[Math.floor(Math.random() * types.length)]!
 }
 
+// Optimize category creation with createMany
 async function createCategories() {
 	const uniqueNames = new Set<string>()
-	const categories = Array.from({ length: getRandomInRange(NUM_RANGES.CATEGORIES) }, () => {
+	const categories = Array.from({ length: getRandomInRange(SEED_RANGES.CATEGORIES) }, () => {
 		let name: string
 		do {
 			name = faker.commerce.department()
 		} while (uniqueNames.has(name))
 		uniqueNames.add(name)
-		return { name }
+		return {
+			id: faker.database.mongodbObjectId(),
+			name
+		}
 	})
 
-	const result = await Promise.all(
-		categories.map(({ name }) =>
-			prisma.category.upsert({
-				where: { name },
-				update: {},
-				create: {
+	return prisma.category.createMany({
+		data: categories,
+		skipDuplicates: true
+	})
+}
+
+// Optimize user creation with batch operations
+async function createUsers() {
+	const createUserBatch = (role: 'INSTRUCTOR' | 'STUDENT', count: number) => {
+		return Promise.all(
+			Array.from({ length: count }, async () => {
+				const firstName = faker.person.firstName()
+				const lastName = faker.person.lastName()
+				const hashedPassword = await hash(DEFAULT_PASSWORD, 10)
+
+				return {
 					id: faker.database.mongodbObjectId(),
-					name
+					email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}${EMAIL_DOMAIN}`,
+					password: hashedPassword,
+					role,
+					emailVerified: new Date(),
+					profile: {
+						create: {
+							name: `${firstName} ${lastName}`,
+							image: faker.image.url(),
+							bio: faker.lorem.sentence()
+						}
+					}
 				}
 			})
 		)
-	)
-	return result
+	}
+
+	const [instructorData, studentData] = await Promise.all([
+		createUserBatch('INSTRUCTOR', getRandomInRange(SEED_RANGES.INSTRUCTORS)),
+		createUserBatch('STUDENT', getRandomInRange(SEED_RANGES.STUDENTS))
+	])
+
+	const [instructors, students] = await Promise.all([
+		prisma.$transaction(instructorData.map((data) => prisma.user.create({ data }))),
+		prisma.$transaction(studentData.map((data) => prisma.user.create({ data })))
+	])
+
+	return { instructors, students }
 }
 
-async function createUser(role: 'INSTRUCTOR' | 'STUDENT') {
-	const firstName = faker.person.firstName()
-	const lastName = faker.person.lastName()
-	const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}${EMAIL_DOMAIN}`
-	const hashedPassword = await hash(DEFAULT_PASSWORD, 10)
+// Optimize course creation with batch operations
+async function createCourses(instructors: User[]) {
+	const categories = await prisma.category.findMany()
 
-	const [user, error] = await catchError(
-		prisma.user.create({
-			data: {
+	const courseData = instructors.flatMap((instructor) => {
+		const numCourses = getRandomInRange(SEED_RANGES.COURSES_PER_INSTRUCTOR)
+		return Array.from({ length: numCourses }, () => {
+			const randomCategories = faker.helpers
+				.arrayElements(categories, getRandomInRange(SEED_RANGES.CATEGORIES_PER_COURSE))
+				.map((cat) => ({ id: cat.id }))
+
+			return {
 				id: faker.database.mongodbObjectId(),
-				email,
-				password: hashedPassword,
-				role,
-				emailVerified: new Date(),
-				profile: {
-					create: {
-						name: `${firstName} ${lastName}`,
-						image: faker.image.url(),
-						bio: faker.lorem.sentence()
-					}
+				code: `${faker.string.alpha({ length: 2 }).toUpperCase()}-${faker.number.int({
+					min: 100,
+					max: 999
+				})}`,
+				title: faker.company.catchPhrase(),
+				description: faker.lorem.sentence(),
+				imageUrl: faker.image.url(),
+				status: getRandomStatus(),
+				token: generateCourseInviteToken(),
+				instructor: { connect: { id: instructor.id } },
+				categories: randomCategories.length ? { connect: randomCategories } : undefined
+			}
+		})
+	})
+
+	return prisma.$transaction(courseData.map((data) => prisma.course.create({ data })))
+}
+
+// Optimize chapter creation
+async function createChapters(courses: Awaited<ReturnType<typeof createCourses>>) {
+	const chapterData = courses.flatMap((course) => {
+		const numChapters = getRandomInRange(SEED_RANGES.CHAPTERS_PER_COURSE)
+		return Array.from({ length: numChapters }, (_, position) => ({
+			id: faker.database.mongodbObjectId(),
+			title: faker.commerce.productName(),
+			content: faker.lorem.paragraph(),
+			position,
+			type: getRandomChapterType(),
+			courseId: course.id
+		}))
+	})
+
+	return prisma.chapter.createMany({ data: chapterData })
+}
+
+// Optimize enrollment creation
+async function createEnrollments(
+	students: User[],
+	courses: Awaited<ReturnType<typeof createCourses>>
+) {
+	const enrollmentData = students.flatMap((student) => {
+		const numEnrollments = getRandomInRange(SEED_RANGES.ENROLLMENTS_PER_STUDENT)
+		const randomCourses = faker.helpers.arrayElements(courses, numEnrollments)
+		return randomCourses.map((course) => ({
+			userId: student.id,
+			courseId: course.id
+		}))
+	})
+
+	const result = await prisma.enrollment.createMany({
+		data: enrollmentData,
+		skipDuplicates: true
+	})
+
+	return { enrollments: enrollmentData, totalEnrollments: result.count }
+}
+
+// Optimize main function with better error handling and transactions
+async function main() {
+	console.log('\n=== 🌱 Database Seed Started ===\n')
+
+	const [result, error] = await catchError(
+		prisma.$transaction(async () => {
+			console.log('Creating categories...')
+			const categories = await createCategories()
+
+			console.log('Creating users...')
+			const { instructors, students } = await createUsers()
+
+			console.log('Creating courses...')
+			const courses = await createCourses(instructors)
+
+			console.log('Creating chapters...')
+			const chapters = await createChapters(courses)
+
+			console.log('Creating enrollments...')
+			const { totalEnrollments } = await createEnrollments(students, courses)
+
+			const stats = {
+				instructors: instructors.length,
+				students: students.length,
+				categories: categories.count,
+				courses: courses.length,
+				chapters: chapters.count,
+				enrollments: totalEnrollments
+			}
+
+			// Calculate some additional insights
+			const avgChaptersPerCourse = (chapters.count / courses.length).toFixed(1)
+			const avgEnrollmentsPerStudent = (totalEnrollments / students.length).toFixed(1)
+
+			return {
+				...stats,
+				insights: {
+					averageChaptersPerCourse: Number(avgChaptersPerCourse),
+					averageEnrollmentsPerStudent: Number(avgEnrollmentsPerStudent),
+					totalContentItems: chapters.count + courses.length
 				}
 			}
 		})
 	)
 
 	if (error) {
-		console.error(`Failed to create ${role}:`, error)
-		throw error
-	}
-
-	return user
-}
-
-async function createUsers() {
-	const instructors = await Promise.all(
-		Array.from({ length: getRandomInRange(NUM_RANGES.INSTRUCTORS) }, () => createUser('INSTRUCTOR'))
-	)
-
-	const students = await Promise.all(
-		Array.from({ length: getRandomInRange(NUM_RANGES.STUDENTS) }, () => createUser('STUDENT'))
-	)
-	return { instructors, students }
-}
-
-async function createCourses(instructors: User[]) {
-	const categories = await prisma.category.findMany()
-	const courses = []
-
-	for (const instructor of instructors) {
-		const numCourses = getRandomInRange(NUM_RANGES.COURSES_PER_INSTRUCTOR)
-
-		for (let i = 0; i < numCourses; i++) {
-			const numCategories = getRandomInRange(NUM_RANGES.CATEGORIES_PER_COURSE)
-			const randomCategories = faker.helpers
-				.arrayElements(categories, numCategories)
-				.map((cat) => cat.id)
-
-			const course = await prisma.course.create({
-				data: {
-					id: faker.database.mongodbObjectId(),
-					code: `${faker.string.alpha({ length: 2 }).toUpperCase()}-${faker.number.int({
-						min: 100,
-						max: 999
-					})}`,
-					title: faker.company.catchPhrase(),
-					description: faker.lorem.sentence(),
-					imageUrl: faker.image.url(),
-					status: getRandomStatus(),
-					token: generateCourseInviteToken(),
-					instructor: { connect: { id: instructor.id } },
-					categories: randomCategories.length
-						? { connect: randomCategories.map((catId) => ({ id: catId })) }
-						: undefined
-				}
-			})
-			courses.push(course)
-		}
-	}
-	return courses
-}
-
-async function createChapters(courses: Awaited<ReturnType<typeof createCourses>>) {
-	const chapters = []
-
-	for (const course of courses) {
-		const numChapters = getRandomInRange(NUM_RANGES.CHAPTERS_PER_COURSE)
-		const courseChapters = await Promise.all(
-			Array.from({ length: numChapters }, (_, position) =>
-				prisma.chapter.create({
-					data: {
-						id: faker.database.mongodbObjectId(),
-						title: faker.commerce.productName(),
-						content: faker.lorem.paragraph(),
-						position,
-						type: getRandomChapterType(),
-						course: { connect: { id: course.id } }
-					}
-				})
-			)
-		)
-
-		chapters.push(...courseChapters)
-	}
-	return chapters
-}
-
-const createEnrollment = async (userId: string, courseId: string) => {
-	// Check if enrollment exists
-	const existingEnrollment = await prisma.enrollment.findUnique({
-		where: {
-			userId_courseId: {
-				userId,
-				courseId
-			}
-		}
-	})
-
-	if (existingEnrollment) {
-		console.log('Enrollment already exists')
-		return existingEnrollment
-	}
-
-	// Create new enrollment if it doesn't exist
-	return prisma.enrollment.create({
-		data: {
-			userId,
-			courseId
-		}
-	})
-}
-
-async function createEnrollments(
-	students: User[],
-	courses: Awaited<ReturnType<typeof createCourses>>
-) {
-	const enrollments = []
-	let totalEnrollments = 0
-
-	for (const student of students) {
-		const numEnrollments = getRandomInRange(NUM_RANGES.ENROLLMENTS_PER_STUDENT)
-		const randomCourses = faker.helpers.arrayElements(courses, numEnrollments)
-
-		for (const course of randomCourses) {
-			const enrollment = await createEnrollment(student.id, course.id)
-			enrollments.push(enrollment)
-			totalEnrollments++
-		}
-	}
-
-	return { enrollments, totalEnrollments }
-}
-
-async function main() {
-	console.log('\n=== 🌱 Database Seed Started ===\n')
-
-	// Create categories
-	console.log('Creating categories...')
-	const [categories, categoriesError] = await catchError(createCategories())
-	if (categoriesError) throw categoriesError
-
-	// Create users
-	console.log('Creating users...')
-	const [users, usersError] = await catchError(createUsers())
-	if (usersError) throw usersError
-
-	// Create courses
-	console.log('Creating courses...')
-	const [courses, coursesError] = await catchError(createCourses(users.instructors))
-	if (coursesError) throw coursesError
-
-	// Create chapters
-	console.log('Creating chapters...')
-	const [chapters, chaptersError] = await catchError(createChapters(courses))
-	if (chaptersError) throw chaptersError
-
-	// Create enrollments
-	console.log('Creating enrollments...')
-	const [enrollmentResult, enrollmentsError] = await catchError(
-		createEnrollments(users.students, courses)
-	)
-	if (enrollmentsError) throw enrollmentsError
-
-	// Log creation summary
-	console.log('\n=== 📊 Creation Summary ===\n')
-	console.log('Categories:', { created: categories.length })
-	console.log('Users:', {
-		instructors: users.instructors.length,
-		students: users.students.length,
-		total: users.instructors.length + users.students.length
-	})
-	console.log('Courses:', { created: courses.length })
-	console.log('Chapters:', { created: chapters.length })
-	console.log('Enrollments:', { created: enrollmentResult.totalEnrollments })
-
-	console.log('\n=== ✨ Database Seed Completed ===\n')
-}
-
-main()
-	.catch((error) => {
-		console.error(error)
+		console.error('Seed failed:', error)
 		process.exit(1)
-	})
-	.finally(() => {
-		void prisma.$disconnect()
-		process.exit(0)
-	})
+	}
+
+	console.log('\n=== 🌱 Database Seed Complete ===')
+	console.log('Statistics:', result)
+	console.log('\n')
+}
+
+// Update the program execution
+const [, mainError] = await catchError(main())
+
+if (mainError) {
+	console.error('Fatal error:', mainError)
+	process.exit(1)
+}
+
+await prisma.$disconnect()
+process.exit(0)
