@@ -134,11 +134,11 @@ async function createCourses(instructors: User[]) {
 async function createChapters(courses: Awaited<ReturnType<typeof createCourses>>) {
 	const chapterData = courses.flatMap((course) => {
 		const numChapters = getRandomInRange(SEED_RANGES.CHAPTERS_PER_COURSE)
-		return Array.from({ length: numChapters }, (_, position) => ({
+		return Array.from({ length: numChapters }, (_, index) => ({
 			id: faker.database.mongodbObjectId(),
 			title: faker.commerce.productName(),
 			content: faker.lorem.paragraph(),
-			position,
+			position: index + 1,
 			type: getRandomChapterType(),
 			courseId: course.id
 		}))
