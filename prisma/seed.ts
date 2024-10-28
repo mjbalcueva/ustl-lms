@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { PrismaClient, type User } from '@prisma/client'
+import { ChapterType, PrismaClient, Status, type User } from '@prisma/client'
 import { hash } from 'bcryptjs'
 
 import { catchError } from '@/core/lib/utils/catch-error'
@@ -9,25 +9,36 @@ import { generateCourseInviteToken } from '@/features/courses/lib/tokens'
 const prisma = new PrismaClient()
 
 // Configurable Constants
-const NUM_INSTRUCTORS = 5
-const NUM_STUDENTS = 15
-const NUM_COURSES = 30
-const NUM_CHAPTERS = 10
+const NUM_RANGES = {
+	CATEGORIES: [5, 20],
+	INSTRUCTORS: [3, 5],
+	STUDENTS: [10, 15],
+	COURSES: [15, 30],
+	CHAPTERS: [5, 10]
+} as const
+
 const EMAIL_DOMAIN = '@ust-legazpi.edu.ph'
 const DEFAULT_PASSWORD = 'password'
-const COURSE_STATUSES = ['PUBLISHED', 'DRAFT', 'ARCHIVED'] as const
-const NUM_CATEGORIES = 20
+
+// Add helper function for random range
+function getRandomInRange([min, max]: readonly [number, number]): number {
+	return faker.number.int({ min, max })
+}
 
 // Utility functions
-function getRandomStatus() {
-	return COURSE_STATUSES[Math.floor(Math.random() * COURSE_STATUSES.length)]
+function getRandomStatus(): Status {
+	const statuses = Object.values(Status)
+	return statuses[Math.floor(Math.random() * statuses.length)]!
+}
+
+function getRandomChapterType(): ChapterType {
+	const types = Object.values(ChapterType)
+	return types[Math.floor(Math.random() * types.length)]!
 }
 
 async function createCategories() {
-	console.log('\nCreating categories...')
-
 	const uniqueNames = new Set<string>()
-	const categories = Array.from({ length: NUM_CATEGORIES }, () => {
+	const categories = Array.from({ length: getRandomInRange(NUM_RANGES.CATEGORIES) }, () => {
 		let name: string
 		do {
 			name = faker.commerce.department()
@@ -48,7 +59,6 @@ async function createCategories() {
 			})
 		)
 	)
-	console.log(`✅ Created/Updated ${result.length} categories`)
 	return result
 }
 
@@ -69,6 +79,7 @@ async function createUser(role: 'INSTRUCTOR' | 'STUDENT') {
 				profile: {
 					create: {
 						name: `${firstName} ${lastName}`,
+						image: faker.image.url(),
 						bio: faker.lorem.sentence()
 					}
 				}
@@ -81,30 +92,25 @@ async function createUser(role: 'INSTRUCTOR' | 'STUDENT') {
 		throw error
 	}
 
-	console.log(`Created user: ${email}`)
 	return user
 }
 
 async function createUsers() {
-	console.log('\nCreating users...')
 	const instructors = await Promise.all(
-		Array.from({ length: NUM_INSTRUCTORS }, () => createUser('INSTRUCTOR'))
+		Array.from({ length: getRandomInRange(NUM_RANGES.INSTRUCTORS) }, () => createUser('INSTRUCTOR'))
 	)
-	console.log(`✅ Created ${instructors.length} instructors`)
 
 	const students = await Promise.all(
-		Array.from({ length: NUM_STUDENTS }, () => createUser('STUDENT'))
+		Array.from({ length: getRandomInRange(NUM_RANGES.STUDENTS) }, () => createUser('STUDENT'))
 	)
-	console.log(`✅ Created ${students.length} students`)
 	return { instructors, students }
 }
 
 async function createCourses(instructors: User[]) {
-	console.log('\nCreating courses...')
 	const categories = await prisma.category.findMany()
 
 	const courses = await Promise.all(
-		Array.from({ length: NUM_COURSES }, async () => {
+		Array.from({ length: getRandomInRange(NUM_RANGES.COURSES) }, async () => {
 			const randomInstructor = instructors[Math.floor(Math.random() * instructors.length)]
 
 			if (!randomInstructor) throw new Error('No instructor found')
@@ -128,30 +134,26 @@ async function createCourses(instructors: User[]) {
 			})
 		})
 	)
-	console.log(`✅ Created ${courses.length} courses`)
 	return courses
 }
 
 async function createChapters(courses: Awaited<ReturnType<typeof createCourses>>) {
-	console.log('\nCreating chapters...')
 	const chapters = await Promise.all(
 		courses.flatMap((course) =>
-			Array.from({ length: NUM_CHAPTERS }, (_, position) =>
+			Array.from({ length: getRandomInRange(NUM_RANGES.CHAPTERS) }, (_, position) =>
 				prisma.chapter.create({
 					data: {
 						id: faker.database.mongodbObjectId(),
 						title: faker.commerce.productName(),
 						content: faker.lorem.paragraph(),
-						videoUrl: faker.internet.url(),
 						position,
-						type: 'LESSON',
+						type: getRandomChapterType(),
 						course: { connect: { id: course.id } }
 					}
 				})
 			)
 		)
 	)
-	console.log(`✅ Created ${chapters.length} chapters`)
 	return chapters
 }
 
@@ -180,41 +182,57 @@ const createEnrollment = async (userId: string, courseId: string) => {
 	})
 }
 
-async function main() {
-	console.log('\n🌱 Starting database seed...')
-
-	const [, categoriesError] = await catchError(createCategories())
-	if (categoriesError) throw categoriesError
-	console.log('Categories created successfully')
-
-	const [users, usersError] = await catchError(createUsers())
-	if (usersError) throw usersError
-	console.log('Users created successfully:', {
-		instructorCount: users.instructors.length,
-		studentCount: users.students.length
-	})
-
-	const [courses, coursesError] = await catchError(createCourses(users.instructors))
-	if (coursesError) throw coursesError
-	console.log('Courses created successfully')
-
-	const [, chaptersError] = await catchError(createChapters(courses))
-	if (chaptersError) throw chaptersError
-	console.log('Chapters created successfully')
-
-	console.log('\nCreating enrollments...')
+async function createEnrollments(
+	students: User[],
+	courses: Awaited<ReturnType<typeof createCourses>>
+) {
 	let totalEnrollments = 0
+	const enrollments = []
 
-	for (const student of users.students) {
+	for (const student of students) {
 		const numEnrollments = faker.number.int({ min: 1, max: 3 })
 		const randomCourses = faker.helpers.arrayElements(courses, numEnrollments)
 
 		for (const course of randomCourses) {
-			await createEnrollment(student.id, course.id)
+			const enrollment = await createEnrollment(student.id, course.id)
+			enrollments.push(enrollment)
 			totalEnrollments++
 		}
 	}
-	console.log(`✅ Created ${totalEnrollments} enrollments`)
+
+	return { enrollments, totalEnrollments }
+}
+
+async function main() {
+	console.log('\n🌱 Starting database seed...')
+
+	console.log('\nCreating categories...')
+	const [categories, categoriesError] = await catchError(createCategories())
+	if (categoriesError) throw categoriesError
+	console.log(`✅ Created/Updated ${categories.length} categories`)
+
+	console.log('\nCreating users...')
+	const [users, usersError] = await catchError(createUsers())
+	if (usersError) throw usersError
+	console.log(`✅ Created ${users.instructors.length} instructors`)
+	console.log(`✅ Created ${users.students.length} students`)
+
+	console.log('\nCreating courses...')
+	const [courses, coursesError] = await catchError(createCourses(users.instructors))
+	if (coursesError) throw coursesError
+	console.log(`✅ Created ${courses.length} courses`)
+
+	console.log('\nCreating chapters...')
+	const [chapters, chaptersError] = await catchError(createChapters(courses))
+	if (chaptersError) throw chaptersError
+	console.log(`✅ Created ${chapters.length} chapters`)
+
+	console.log('\nCreating enrollments...')
+	const [enrollmentResult, enrollmentsError] = await catchError(
+		createEnrollments(users.students, courses)
+	)
+	if (enrollmentsError) throw enrollmentsError
+	console.log(`✅ Created ${enrollmentResult.totalEnrollments} enrollments`)
 
 	console.log('\n✨ Database has been seeded successfully!')
 }
