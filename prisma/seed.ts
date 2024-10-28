@@ -10,9 +10,9 @@ const prisma = new PrismaClient()
 
 // Configurable Constants
 const SEED_RANGES = {
-	CATEGORIES: [5, 20],
 	INSTRUCTORS: [3, 10],
 	STUDENTS: [10, 30],
+	CATEGORIES_PER_INSTRUCTOR: [1, 5],
 	COURSES_PER_INSTRUCTOR: [0, 10],
 	CHAPTERS_PER_COURSE: [0, 10],
 	CATEGORIES_PER_COURSE: [0, 5],
@@ -36,27 +36,6 @@ function getRandomStatus(): Status {
 function getRandomChapterType(): ChapterType {
 	const types = Object.values(ChapterType)
 	return types[Math.floor(Math.random() * types.length)]!
-}
-
-// Optimize category creation with createMany
-async function createCategories() {
-	const uniqueNames = new Set<string>()
-	const categories = Array.from({ length: getRandomInRange(SEED_RANGES.CATEGORIES) }, () => {
-		let name: string
-		do {
-			name = faker.commerce.department()
-		} while (uniqueNames.has(name))
-		uniqueNames.add(name)
-		return {
-			id: faker.database.mongodbObjectId(),
-			name
-		}
-	})
-
-	return prisma.category.createMany({
-		data: categories,
-		skipDuplicates: true
-	})
 }
 
 // Optimize user creation with batch operations
@@ -99,6 +78,31 @@ async function createUsers() {
 	return { instructors, students }
 }
 
+// Optimize category creation with createMany
+async function createCategories(instructors: User[]) {
+	const uniqueNames = new Set<string>()
+	const categories = instructors.flatMap((instructor) => {
+		const categoryCount = getRandomInRange(SEED_RANGES.CATEGORIES_PER_INSTRUCTOR)
+		return Array.from({ length: categoryCount }, () => {
+			let name: string
+			do {
+				name = faker.commerce.department()
+			} while (uniqueNames.has(name))
+			uniqueNames.add(name)
+			return {
+				id: faker.database.mongodbObjectId(),
+				name,
+				instructorId: instructor.id
+			}
+		})
+	})
+
+	return prisma.category.createMany({
+		data: categories,
+		skipDuplicates: true
+	})
+}
+
 // Optimize course creation with batch operations
 async function createCourses(instructors: User[]) {
 	const categories = await prisma.category.findMany()
@@ -138,8 +142,9 @@ async function createChapters(courses: Awaited<ReturnType<typeof createCourses>>
 			id: faker.database.mongodbObjectId(),
 			title: faker.commerce.productName(),
 			content: faker.lorem.paragraph(),
-			position: index + 1, // Changed from position to index + 1
+			position: index + 1,
 			type: getRandomChapterType(),
+			status: getRandomStatus(),
 			courseId: course.id
 		}))
 	})
@@ -175,11 +180,11 @@ async function main() {
 
 	const [result, error] = await catchError(
 		prisma.$transaction(async () => {
-			console.log('Creating categories...')
-			const categories = await createCategories()
-
 			console.log('Creating users...')
 			const { instructors, students } = await createUsers()
+
+			console.log('Creating categories...')
+			const categories = await createCategories(instructors)
 
 			console.log('Creating courses...')
 			const courses = await createCourses(instructors)
@@ -220,7 +225,7 @@ async function main() {
 	}
 
 	console.log('\n=== 🌱 Database Seed Complete ===')
-	console.log('Statistics:', result)
+	console.log('\nStatistics:', result)
 	console.log('\n')
 }
 

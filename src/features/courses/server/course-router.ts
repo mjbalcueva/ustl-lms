@@ -39,7 +39,7 @@ export const courseRouter = createTRPCRouter({
 		const { courseId } = input
 
 		const course = await ctx.db.course.findUnique({
-			where: { id: courseId, instructorId: ctx.session.user.id! },
+			where: { id: courseId, instructorId: ctx.session.user.id },
 			include: {
 				attachments: {
 					where: { chapterId: null },
@@ -79,7 +79,7 @@ export const courseRouter = createTRPCRouter({
 				code,
 				title,
 				token,
-				instructorId: ctx.session.user.id!
+				instructorId: ctx.session.user.id
 			}
 		})
 
@@ -90,7 +90,7 @@ export const courseRouter = createTRPCRouter({
 		const { id } = input
 
 		const course = await ctx.db.course.findUnique({
-			where: { id, instructorId: ctx.session.user.id! },
+			where: { id, instructorId: ctx.session.user.id },
 			include: { chapters: true }
 		})
 
@@ -122,7 +122,7 @@ export const courseRouter = createTRPCRouter({
 		const oldImageKey = course?.imageUrl?.split('/f/')[1]
 		if (oldImageKey) await utapi.deleteFiles(oldImageKey)
 
-		await ctx.db.course.delete({ where: { id, instructorId: ctx.session.user.id! } })
+		await ctx.db.course.delete({ where: { id, instructorId: ctx.session.user.id } })
 
 		return { message: 'Course deleted!' }
 	}),
@@ -139,7 +139,7 @@ export const courseRouter = createTRPCRouter({
 		}
 
 		const { token: newToken } = await ctx.db.course.update({
-			where: { id, instructorId: ctx.session.user.id! },
+			where: { id, instructorId: ctx.session.user.id },
 			data: { token }
 		})
 
@@ -150,7 +150,7 @@ export const courseRouter = createTRPCRouter({
 		const { id, code } = input
 
 		const { code: newCode } = await ctx.db.course.update({
-			where: { id, instructorId: ctx.session.user.id! },
+			where: { id, instructorId: ctx.session.user.id },
 			data: { code }
 		})
 
@@ -161,7 +161,7 @@ export const courseRouter = createTRPCRouter({
 		const { id, title } = input
 
 		const { title: newTitle } = await ctx.db.course.update({
-			where: { id, instructorId: ctx.session.user.id! },
+			where: { id, instructorId: ctx.session.user.id },
 			data: { title }
 		})
 
@@ -174,7 +174,7 @@ export const courseRouter = createTRPCRouter({
 			const { id: courseId, description } = input
 
 			const { description: newDescription } = await ctx.db.course.update({
-				where: { id: courseId, instructorId: ctx.session.user.id! },
+				where: { id: courseId, instructorId: ctx.session.user.id },
 				data: { description }
 			})
 
@@ -185,7 +185,7 @@ export const courseRouter = createTRPCRouter({
 		const { id, imageUrl } = input
 
 		const course = await ctx.db.course.findUnique({
-			where: { id, instructorId: ctx.session.user.id! },
+			where: { id, instructorId: ctx.session.user.id },
 			select: { imageUrl: true }
 		})
 
@@ -193,7 +193,7 @@ export const courseRouter = createTRPCRouter({
 		if (oldImageKey) await utapi.deleteFiles(oldImageKey)
 
 		await ctx.db.course.update({
-			where: { id, instructorId: ctx.session.user.id! },
+			where: { id, instructorId: ctx.session.user.id },
 			data: { imageUrl }
 		})
 
@@ -205,7 +205,7 @@ export const courseRouter = createTRPCRouter({
 
 		const [data, error] = await catchError(
 			ctx.db.course.updateMany({
-				where: { id, instructorId: ctx.session.user.id! },
+				where: { id, instructorId: ctx.session.user.id },
 				data: { status }
 			})
 		)
@@ -229,6 +229,7 @@ export const courseRouter = createTRPCRouter({
 
 	findManyCategories: instructorProcedure.query(async ({ ctx }) => {
 		const categories = await ctx.db.category.findMany({
+			where: { instructorId: ctx.session.user.id },
 			orderBy: { name: 'asc' }
 		})
 		return { categories }
@@ -239,8 +240,22 @@ export const courseRouter = createTRPCRouter({
 		.mutation(async ({ ctx, input }) => {
 			const { name } = input
 
+			const existingCategory = await ctx.db.category.findFirst({
+				where: {
+					name,
+					instructorId: ctx.session.user.id
+				}
+			})
+
+			if (existingCategory) {
+				throw new TRPCClientError('A category with this name already exists')
+			}
+
 			const category = await ctx.db.category.create({
-				data: { name }
+				data: {
+					name,
+					instructorId: ctx.session.user.id
+				}
 			})
 
 			return { message: 'Category added!', newCategoryId: category.id }
@@ -252,7 +267,7 @@ export const courseRouter = createTRPCRouter({
 			const { id, categoryIds } = input
 
 			await ctx.db.course.update({
-				where: { id, instructorId: ctx.session.user.id! },
+				where: { id, instructorId: ctx.session.user.id },
 				data: {
 					categories: {
 						set: categoryIds.map((categoryId) => ({ id: categoryId }))
@@ -269,7 +284,7 @@ export const courseRouter = createTRPCRouter({
 			const { courseId, url, name } = input
 
 			const courseOwner = await ctx.db.course.findUnique({
-				where: { id: courseId, instructorId: ctx.session.user.id! }
+				where: { id: courseId, instructorId: ctx.session.user.id }
 			})
 			if (!courseOwner) throw new Error('Course not found')
 
@@ -286,7 +301,7 @@ export const courseRouter = createTRPCRouter({
 			const { attachmentId } = input
 
 			const attachment = await ctx.db.attachment.delete({
-				where: { id: attachmentId, course: { instructorId: ctx.session.user.id! } }
+				where: { id: attachmentId, course: { instructorId: ctx.session.user.id } }
 			})
 
 			const attachmentKey = attachment?.url.split('/f/')[1]
@@ -299,7 +314,7 @@ export const courseRouter = createTRPCRouter({
 		const { courseId, title, type } = input
 
 		const lastChapter = await ctx.db.chapter.findFirst({
-			where: { courseId, course: { instructorId: ctx.session.user.id! } },
+			where: { courseId, course: { instructorId: ctx.session.user.id } },
 			orderBy: { position: 'desc' }
 		})
 

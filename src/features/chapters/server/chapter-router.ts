@@ -40,7 +40,7 @@ export const chapterRouter = createTRPCRouter({
 
 		// delete the chapter video from mux
 		const chapter = await ctx.db.chapter.findUnique({
-			where: { id, course: { instructorId: ctx.session.user.id! } },
+			where: { id, course: { instructorId: ctx.session.user.id } },
 			select: { videoUrl: true }
 		})
 
@@ -70,7 +70,7 @@ export const chapterRouter = createTRPCRouter({
 
 		// delete the chapter
 		await ctx.db.chapter.delete({
-			where: { id, course: { instructorId: ctx.session.user.id! } }
+			where: { id, course: { instructorId: ctx.session.user.id } }
 		})
 
 		return { message: 'Chapter deleted successfully' }
@@ -80,7 +80,7 @@ export const chapterRouter = createTRPCRouter({
 		const { id, courseId, title } = input
 
 		const { title: newTitle } = await ctx.db.chapter.update({
-			where: { id, courseId, course: { instructorId: ctx.session.user.id! } },
+			where: { id, courseId, course: { instructorId: ctx.session.user.id } },
 			data: { title }
 		})
 
@@ -96,7 +96,7 @@ export const chapterRouter = createTRPCRouter({
 			const { id, courseId, content } = input
 
 			const { content: newContent } = await ctx.db.chapter.update({
-				where: { id, courseId, course: { instructorId: ctx.session.user.id! } },
+				where: { id, courseId, course: { instructorId: ctx.session.user.id } },
 				data: { content }
 			})
 
@@ -110,7 +110,7 @@ export const chapterRouter = createTRPCRouter({
 		const { id, courseId, videoUrl } = input
 
 		const chapter = await ctx.db.chapter.findUnique({
-			where: { id, courseId, course: { instructorId: ctx.session.user.id! } },
+			where: { id, courseId, course: { instructorId: ctx.session.user.id } },
 			select: { videoUrl: true }
 		})
 
@@ -118,7 +118,7 @@ export const chapterRouter = createTRPCRouter({
 		if (oldVideoKey) await utapi.deleteFiles(oldVideoKey)
 
 		const updatedChapter = await ctx.db.chapter.update({
-			where: { id, courseId, course: { instructorId: ctx.session.user.id! } },
+			where: { id, courseId, course: { instructorId: ctx.session.user.id } },
 			data: { videoUrl }
 		})
 
@@ -154,7 +154,7 @@ export const chapterRouter = createTRPCRouter({
 		const { id, courseId, type } = input
 
 		const { type: newType } = await ctx.db.chapter.update({
-			where: { id, courseId, course: { instructorId: ctx.session.user.id! } },
+			where: { id, courseId, course: { instructorId: ctx.session.user.id } },
 			data: { type }
 		})
 
@@ -168,7 +168,7 @@ export const chapterRouter = createTRPCRouter({
 
 			const [data, error] = await catchError(
 				ctx.db.chapter.updateMany({
-					where: { id, courseId, course: { instructorId: ctx.session.user.id! } },
+					where: { id, courseId, course: { instructorId: ctx.session.user.id } },
 					data: { status }
 				})
 			)
@@ -198,7 +198,7 @@ export const chapterRouter = createTRPCRouter({
 			const { courseId, chapterId, url, name } = input
 
 			const chapterOwner = await ctx.db.chapter.findUnique({
-				where: { id: chapterId, course: { instructorId: ctx.session.user.id! } }
+				where: { id: chapterId, course: { instructorId: ctx.session.user.id } }
 			})
 			if (!chapterOwner) throw new Error('Chapter not found')
 
@@ -215,7 +215,7 @@ export const chapterRouter = createTRPCRouter({
 			const { attachmentId } = input
 
 			const attachment = await ctx.db.attachment.delete({
-				where: { id: attachmentId, chapter: { course: { instructorId: ctx.session.user.id! } } }
+				where: { id: attachmentId, chapter: { course: { instructorId: ctx.session.user.id } } }
 			})
 
 			const attachmentKey = attachment?.url.split('/f/')[1]
