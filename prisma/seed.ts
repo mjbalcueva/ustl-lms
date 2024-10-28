@@ -77,7 +77,7 @@ async function createUsers() {
 					profile: {
 						create: {
 							name: `${firstName} ${lastName}`,
-							image: faker.image.url(),
+							imageUrl: faker.image.url(),
 							bio: faker.lorem.sentence()
 						}
 					}
@@ -138,7 +138,7 @@ async function createChapters(courses: Awaited<ReturnType<typeof createCourses>>
 			id: faker.database.mongodbObjectId(),
 			title: faker.commerce.productName(),
 			content: faker.lorem.paragraph(),
-			position: index + 1,
+			position: index + 1, // Changed from position to index + 1
 			type: getRandomChapterType(),
 			courseId: course.id
 		}))

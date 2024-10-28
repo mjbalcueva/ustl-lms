@@ -270,7 +270,7 @@ model Profile {
   id          String    @id @default(cuid())
   userId      String    @unique
   name        String?
-  image       String?
+  imageUrl    String?
   bio         String?
   dateOfBirth DateTime? @map("date_of_birth")
   gender      String?

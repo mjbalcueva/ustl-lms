@@ -43,7 +43,7 @@ export const UserButton: React.FC<React.ComponentProps<typeof DropdownMenu>> = (
 			<DropdownMenuTrigger className="group/user-button flex cursor-pointer items-center gap-3 rounded-md border border-background p-1 outline-none hover:border-border focus-visible:ring-2 focus-visible:ring-ring dark:border-transparent md:min-h-[2.8rem] md:hover:bg-card md:hover:shadow-[0_0_0_-2px_rgba(0,0,0,0.05),0_1px_2px_0_rgba(0,0,0,0.05)] dark:md:hover:border-border dark:md:hover:bg-accent/70">
 				<Avatar className="size-8 border border-border md:ml-[1.5px]">
 					<AvatarImage
-						src={session?.data?.user?.image ?? ''}
+						src={session?.data?.user?.imageUrl ?? ''}
 						alt={initials}
 						className="select-none"
 					/>

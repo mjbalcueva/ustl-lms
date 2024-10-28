@@ -107,7 +107,7 @@ export const CardLogoutButton = React.forwardRef<
 		variant="link"
 		size="link"
 		className={cn(className)}
-		onClick={() => signOut({ callbackUrl: '/auth/login' })}
+		onClick={() => signOut({ callbackUrl: '/login' })}
 		{...props}
 	>
 		Logout

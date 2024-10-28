@@ -12,15 +12,20 @@ import { config } from '@/services/authjs/config'
 declare module 'next-auth' {
 	interface Session extends DefaultSession {
 		user: {
+			id: string
+			name: string
+			email: string
+			imageUrl: string
 			role: Role
 			isTwoFactorEnabled: boolean
 			hasPassword: boolean
-		} & DefaultSession['user']
+		}
 	}
 }
 
 declare module 'next-auth/jwt' {
 	interface JWT extends DefaultJWT {
+		imageUrl: string
 		role: Role
 		isTwoFactorEnabled: boolean
 		hasPassword: boolean
@@ -47,7 +52,7 @@ export const {
 					data: {
 						emailVerified: new Date(),
 						profile: {
-							update: { image: existingUser.profile?.image ?? profile.image }
+							update: { imageUrl: existingUser.profile?.imageUrl ?? profile.image }
 						}
 					}
 				})
@@ -55,8 +60,9 @@ export const {
 	},
 
 	callbacks: {
-		async signIn({ profile, user }) {
-			if (profile?.email?.endsWith('@ust-legazpi.edu.ph')) return false
+		async signIn({ account, profile, user }) {
+			if (account?.provider !== 'credentials' && profile?.email?.endsWith('@ust-legazpi.edu.ph'))
+				return true
 
 			const existingUser = await getUserById(user.id ?? '')
 			if (!existingUser || existingUser instanceof Error) return false
@@ -80,7 +86,7 @@ export const {
 				user: {
 					id: token.sub,
 					name: token.name,
-					image: token.image as string,
+					imageUrl: token.imageUrl,
 					email: token.email,
 					role: token.role,
 					hasPassword: token.hasPassword,
@@ -93,8 +99,8 @@ export const {
 			const existingUser = await getUserByIdWithAccountsAndProfile(token.sub ?? '')
 			if (!existingUser || existingUser instanceof Error) return token
 
-			token.name = existingUser.profile?.name
-			token.image = existingUser.profile?.image
+			token.name = existingUser.profile?.name ?? ''
+			token.imageUrl = existingUser.profile?.imageUrl ?? ''
 			token.role = existingUser.role
 			token.hasPassword = !!existingUser.password
 			token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled

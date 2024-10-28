@@ -10,7 +10,7 @@ export function adapter(db: PrismaClient): Adapter {
 					email: user.email,
 					emailVerified: user.emailVerified,
 					profile: {
-						create: { name: user.name, image: user.image }
+						create: { name: user.name, imageUrl: user.image }
 					}
 				},
 				include: { profile: true }
@@ -21,7 +21,7 @@ export function adapter(db: PrismaClient): Adapter {
 				name: createdUser.profile?.name,
 				email: createdUser.email,
 				emailVerified: createdUser.emailVerified,
-				image: createdUser.profile?.image
+				imageUrl: createdUser.profile?.imageUrl
 			} as AdapterUser
 		},
 
