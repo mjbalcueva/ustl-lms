@@ -50,7 +50,7 @@ export default async function Page() {
 				</PageSection>
 
 				<PageSection className="!mt-3">
-					<CourseInsights />
+					<CourseInsights data={courses} />
 				</PageSection>
 
 				<PageSection>

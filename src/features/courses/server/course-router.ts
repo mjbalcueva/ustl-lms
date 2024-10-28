@@ -55,7 +55,16 @@ export const courseRouter = createTRPCRouter({
 
 	findManyCourses: instructorProcedure.query(async ({ ctx }) => {
 		const courses = await ctx.db.course.findMany({
-			where: { instructorId: ctx.session.user.id }
+			where: { instructorId: ctx.session.user.id },
+			include: {
+				chapters: true,
+				_count: {
+					select: {
+						enrollments: true,
+						chapters: true
+					}
+				}
+			}
 		})
 
 		return courses
