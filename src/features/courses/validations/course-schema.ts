@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const findCourseSchema = z.object({
-	courseId: z.string().cuid('Must be an id!')
+	courseId: z.string().min(1, 'Course ID is required')
 })
 
 export type FindCourseSchema = z.infer<typeof findCourseSchema>

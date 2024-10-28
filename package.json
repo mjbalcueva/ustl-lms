@@ -9,6 +9,7 @@
 		"db:migrate": "prisma migrate deploy",
 		"db:push": "prisma db push",
 		"db:studio": "prisma studio",
+		"db:seed": "bun prisma/seed.ts",
 		"dev": "next dev",
 		"email": "email dev --dir ./src/services/react-email",
 		"postinstall": "prisma generate",
@@ -17,6 +18,7 @@
 	},
 	"dependencies": {
 		"@auth/prisma-adapter": "^1.6.0",
+		"@faker-js/faker": "^9.1.0",
 		"@hello-pangea/dnd": "^17.0.0",
 		"@hookform/resolvers": "^3.9.0",
 		"@mux/mux-node": "^8.8.0",

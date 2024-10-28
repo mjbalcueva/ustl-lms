@@ -1,266 +1,230 @@
-import { ChapterType, PrismaClient, Role, Status } from '@prisma/client'
+import { faker } from '@faker-js/faker'
+import { PrismaClient, type User } from '@prisma/client'
+import { hash } from 'bcryptjs'
+
+import { catchError } from '@/core/lib/utils/catch-error'
 
 import { generateCourseInviteToken } from '@/features/courses/lib/tokens'
 
-const db = new PrismaClient()
+const prisma = new PrismaClient()
 
-async function main() {
-	try {
-		const categoriesToInsert = [
-			{ name: 'History' },
-			{ name: 'Technology' },
-			{ name: 'Science' },
-			{ name: 'Literature' },
-			{ name: 'Mathematics' },
-			{ name: 'Zombies' },
-			{ name: 'AI and Machine Learning' }
-		]
+// Configurable Constants
+const NUM_INSTRUCTORS = 5
+const NUM_STUDENTS = 15
+const NUM_COURSES = 30
+const NUM_CHAPTERS = 10
+const EMAIL_DOMAIN = '@ust-legazpi.edu.ph'
+const DEFAULT_PASSWORD = 'password'
+const COURSE_STATUSES = ['PUBLISHED', 'DRAFT', 'ARCHIVED'] as const
+const NUM_CATEGORIES = 20
 
-		for (const category of categoriesToInsert) {
-			const existingCategory = await db.category.findUnique({
-				where: { name: category.name }
+// Utility functions
+function getRandomStatus() {
+	return COURSE_STATUSES[Math.floor(Math.random() * COURSE_STATUSES.length)]
+}
+
+async function createCategories() {
+	console.log('\nCreating categories...')
+
+	const uniqueNames = new Set<string>()
+	const categories = Array.from({ length: NUM_CATEGORIES }, () => {
+		let name: string
+		do {
+			name = faker.commerce.department()
+		} while (uniqueNames.has(name))
+		uniqueNames.add(name)
+		return { name }
+	})
+
+	const result = await Promise.all(
+		categories.map(({ name }) =>
+			prisma.category.upsert({
+				where: { name },
+				update: {},
+				create: {
+					id: faker.database.mongodbObjectId(),
+					name
+				}
 			})
+		)
+	)
+	console.log(`✅ Created/Updated ${result.length} categories`)
+	return result
+}
 
-			if (!existingCategory) {
-				await db.category.create({
-					data: category
-				})
-			}
-		}
-		console.log('Categories seeded successfully', categoriesToInsert)
+async function createUser(role: 'INSTRUCTOR' | 'STUDENT') {
+	const firstName = faker.person.firstName()
+	const lastName = faker.person.lastName()
+	const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}${EMAIL_DOMAIN}`
+	const hashedPassword = await hash(DEFAULT_PASSWORD, 10)
 
-		const instructorsToInsert = [
-			{
-				email: 'rafael.reyes@ust-legazpi.edu.ph',
-				password: '$2a$10$HI6XsWZoQrtKysyXCxKN9e4l.P4vOAB7p0cS449Igs0rr3K4RMo6u',
-				role: Role.INSTRUCTOR,
+	const [user, error] = await catchError(
+		prisma.user.create({
+			data: {
+				id: faker.database.mongodbObjectId(),
+				email,
+				password: hashedPassword,
+				role,
 				emailVerified: new Date(),
 				profile: {
 					create: {
-						name: 'Rafael Reyes',
-						image:
-							'https://vignette.wikia.nocookie.net/breakingbad/images/8/8c/Gustavo_Fring.jpg/revision/latest?cb=20180218183206&path-prefix=de',
-						bio: 'History and Zombie enthusiast.'
-					}
-				},
-				courses: {
-					create: [
-						{
-							code: 'ZEN-101',
-							title: 'World War Z',
-							description: 'A comprehensive exploration of zombie culture and history.',
-							status: Status.PUBLISHED,
-							token: generateCourseInviteToken(),
-							categories: {
-								connect: [{ name: 'Zombies' }, { name: 'History' }]
-							},
-							chapters: {
-								create: [
-									{
-										title: 'Introduction to Zombie Culture',
-										type: ChapterType.LESSON,
-										content: 'Zombies through the ages.',
-										position: 1,
-										status: Status.PUBLISHED
-									},
-									{
-										title: 'Quiz 1: Zombie Survival Skills',
-										type: ChapterType.ASSESSMENT,
-										position: 2,
-										status: Status.PUBLISHED
-									},
-									{
-										title: 'Zombie Apocalypse Task',
-										type: ChapterType.ASSIGNMENT,
-										position: 3,
-										status: Status.PUBLISHED
-									}
-								]
-							}
-						},
-						{
-							code: 'HIS-102',
-							title: 'Medieval History',
-							description: 'An in-depth look at the Middle Ages and its historical significance.',
-							status: Status.PUBLISHED,
-							token: generateCourseInviteToken(),
-							categories: {
-								connect: [{ name: 'History' }]
-							},
-							chapters: {
-								create: [
-									{
-										title: 'The Feudal System',
-										type: ChapterType.LESSON,
-										content: 'Learn about the feudal system that shaped medieval society.',
-										position: 1,
-										status: Status.PUBLISHED
-									},
-									{
-										title: 'Quiz 1: Feudal Lords',
-										type: ChapterType.ASSESSMENT,
-										position: 2,
-										status: Status.PUBLISHED
-									},
-									{
-										title: 'Essay: Medieval Castles',
-										type: ChapterType.ASSIGNMENT,
-										position: 3,
-										status: Status.PUBLISHED
-									}
-								]
-							}
-						}
-					]
-				}
-			},
-			{
-				email: 'maryanne.dela.cruz@ust-legazpi.edu.ph',
-				password: '$2a$10$HI6XsWZoQrtKysyXCxKN9e4l.P4vOAB7p0cS449Igs0rr3K4RMo6u',
-				role: Role.INSTRUCTOR,
-				emailVerified: new Date(), // Email verified
-				profile: {
-					create: {
-						name: 'Mary Anne Dela Cruz',
-						image: 'https://example.com/profile/maryanne.jpg',
-						bio: 'AI and technology specialist.'
-					}
-				},
-				courses: {
-					create: [
-						{
-							code: 'AI-202',
-							title: 'Introduction to AI and Machine Learning',
-							description: 'Learn the basics of artificial intelligence and its applications.',
-							status: Status.PUBLISHED,
-							token: generateCourseInviteToken(),
-							categories: {
-								connect: [{ name: 'AI and Machine Learning' }, { name: 'Technology' }]
-							},
-							chapters: {
-								create: [
-									{
-										title: 'The Evolution of AI',
-										type: ChapterType.LESSON,
-										content: 'From early algorithms to modern neural networks.',
-										position: 1,
-										status: Status.PUBLISHED
-									},
-									{
-										title: 'Project: Build a Simple Neural Network',
-										type: ChapterType.ASSIGNMENT,
-										position: 2,
-										status: Status.PUBLISHED
-									},
-									{
-										title: 'Quiz 1: Basics of Machine Learning',
-										type: ChapterType.ASSESSMENT,
-										position: 3,
-										status: Status.PUBLISHED
-									}
-								]
-							}
-						},
-						{
-							code: 'TEC-101',
-							title: 'The Future of Technology',
-							description: 'Explore the future trends in technology and its impact on society.',
-							status: Status.PUBLISHED,
-							token: generateCourseInviteToken(),
-							categories: {
-								connect: [{ name: 'Technology' }]
-							},
-							chapters: {
-								create: [
-									{
-										title: 'Emerging Technologies',
-										type: ChapterType.LESSON,
-										content: 'Discover the latest breakthroughs in technology.',
-										position: 1,
-										status: Status.PUBLISHED
-									},
-									{
-										title: 'Project: Predicting Future Tech',
-										type: ChapterType.ASSIGNMENT,
-										position: 2,
-										status: Status.PUBLISHED
-									},
-									{
-										title: 'Quiz 1: Technology Trends',
-										type: ChapterType.ASSESSMENT,
-										position: 3,
-										status: Status.PUBLISHED
-									}
-								]
-							}
-						}
-					]
-				}
-			}
-		]
-
-		for (const instructor of instructorsToInsert) {
-			const existingInstructor = await db.user.findUnique({
-				where: { email: instructor.email }
-			})
-
-			if (!existingInstructor) {
-				await db.user.create({
-					data: instructor
-				})
-			}
-		}
-		console.log('Instructors seeded successfully', instructorsToInsert)
-
-		const studentsToInsert = [
-			{
-				email: 'juan.delacruz@ust-legazpi.edu.ph',
-				password: '$2a$10$HI6XsWZoQrtKysyXCxKN9e4l.P4vOAB7p0cS449Igs0rr3K4RMo6u',
-				role: Role.STUDENT,
-				emailVerified: new Date(), // Email verified
-				profile: {
-					create: {
-						name: 'Juan Dela Cruz',
-						image: 'https://example.com/profile/juan.jpg',
-						bio: 'A passionate student eager to learn about everything.'
-					}
-				}
-			},
-			{
-				email: 'maria.clara@ust-legazpi.edu.ph',
-				password: '$2a$10$HI6XsWZoQrtKysyXCxKN9e4l.P4vOAB7p0cS449Igs0rr3K4RMo6u',
-				role: Role.STUDENT,
-				emailVerified: new Date(), // Email verified
-				profile: {
-					create: {
-						name: 'Maria Clara Santos',
-						image: 'https://example.com/profile/maria.jpg',
-						bio: 'Loves literature and exploring new ideas.'
+						name: `${firstName} ${lastName}`,
+						bio: faker.lorem.sentence()
 					}
 				}
 			}
-		]
+		})
+	)
 
-		for (const student of studentsToInsert) {
-			const existingStudent = await db.user.findUnique({
-				where: { email: student.email }
-			})
-
-			if (!existingStudent) {
-				await db.user.create({
-					data: student
-				})
-			}
-		}
-		console.log('Students seeded successfully', studentsToInsert)
-	} catch (error) {
-		console.error('Error seeding data', error)
-	} finally {
-		await db.$disconnect()
+	if (error) {
+		console.error(`Failed to create ${role}:`, error)
+		throw error
 	}
+
+	console.log(`Created user: ${email}`)
+	return user
 }
 
-main().catch((e) => {
-	console.error(e)
-	process.exit(1)
-})
+async function createUsers() {
+	console.log('\nCreating users...')
+	const instructors = await Promise.all(
+		Array.from({ length: NUM_INSTRUCTORS }, () => createUser('INSTRUCTOR'))
+	)
+	console.log(`✅ Created ${instructors.length} instructors`)
+
+	const students = await Promise.all(
+		Array.from({ length: NUM_STUDENTS }, () => createUser('STUDENT'))
+	)
+	console.log(`✅ Created ${students.length} students`)
+	return { instructors, students }
+}
+
+async function createCourses(instructors: User[]) {
+	console.log('\nCreating courses...')
+	const categories = await prisma.category.findMany()
+
+	const courses = await Promise.all(
+		Array.from({ length: NUM_COURSES }, async () => {
+			const randomInstructor = instructors[Math.floor(Math.random() * instructors.length)]
+
+			if (!randomInstructor) throw new Error('No instructor found')
+
+			const randomCategories = categories
+				.slice(0, faker.number.int({ min: 1, max: 2 }))
+				.map((cat) => cat.id)
+
+			return prisma.course.create({
+				data: {
+					id: faker.database.mongodbObjectId(),
+					code: `${faker.string.alpha({ length: 2 }).toUpperCase()}-${faker.number.int({ min: 100, max: 999 })}`,
+					title: faker.company.catchPhrase(),
+					description: faker.lorem.sentence(),
+					imageUrl: faker.image.url(),
+					status: getRandomStatus(),
+					token: generateCourseInviteToken(),
+					instructor: { connect: { id: randomInstructor.id } },
+					categories: { connect: randomCategories.map((catId) => ({ id: catId })) }
+				}
+			})
+		})
+	)
+	console.log(`✅ Created ${courses.length} courses`)
+	return courses
+}
+
+async function createChapters(courses: Awaited<ReturnType<typeof createCourses>>) {
+	console.log('\nCreating chapters...')
+	const chapters = await Promise.all(
+		courses.flatMap((course) =>
+			Array.from({ length: NUM_CHAPTERS }, (_, position) =>
+				prisma.chapter.create({
+					data: {
+						id: faker.database.mongodbObjectId(),
+						title: faker.commerce.productName(),
+						content: faker.lorem.paragraph(),
+						videoUrl: faker.internet.url(),
+						position,
+						type: 'LESSON',
+						course: { connect: { id: course.id } }
+					}
+				})
+			)
+		)
+	)
+	console.log(`✅ Created ${chapters.length} chapters`)
+	return chapters
+}
+
+const createEnrollment = async (userId: string, courseId: string) => {
+	// Check if enrollment exists
+	const existingEnrollment = await prisma.enrollment.findUnique({
+		where: {
+			userId_courseId: {
+				userId,
+				courseId
+			}
+		}
+	})
+
+	if (existingEnrollment) {
+		console.log('Enrollment already exists')
+		return existingEnrollment
+	}
+
+	// Create new enrollment if it doesn't exist
+	return prisma.enrollment.create({
+		data: {
+			userId,
+			courseId
+		}
+	})
+}
+
+async function main() {
+	console.log('\n🌱 Starting database seed...')
+
+	const [, categoriesError] = await catchError(createCategories())
+	if (categoriesError) throw categoriesError
+	console.log('Categories created successfully')
+
+	const [users, usersError] = await catchError(createUsers())
+	if (usersError) throw usersError
+	console.log('Users created successfully:', {
+		instructorCount: users.instructors.length,
+		studentCount: users.students.length
+	})
+
+	const [courses, coursesError] = await catchError(createCourses(users.instructors))
+	if (coursesError) throw coursesError
+	console.log('Courses created successfully')
+
+	const [, chaptersError] = await catchError(createChapters(courses))
+	if (chaptersError) throw chaptersError
+	console.log('Chapters created successfully')
+
+	console.log('\nCreating enrollments...')
+	let totalEnrollments = 0
+
+	for (const student of users.students) {
+		const numEnrollments = faker.number.int({ min: 1, max: 3 })
+		const randomCourses = faker.helpers.arrayElements(courses, numEnrollments)
+
+		for (const course of randomCourses) {
+			await createEnrollment(student.id, course.id)
+			totalEnrollments++
+		}
+	}
+	console.log(`✅ Created ${totalEnrollments} enrollments`)
+
+	console.log('\n✨ Database has been seeded successfully!')
+}
+
+main()
+	.catch((error) => {
+		console.error(error)
+		process.exit(1)
+	})
+	.finally(() => {
+		void prisma.$disconnect()
+		process.exit(0)
+	})
