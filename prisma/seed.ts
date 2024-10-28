@@ -11,10 +11,12 @@ const prisma = new PrismaClient()
 // Configurable Constants
 const NUM_RANGES = {
 	CATEGORIES: [5, 20],
-	INSTRUCTORS: [3, 5],
-	STUDENTS: [10, 15],
-	COURSES: [15, 30],
-	CHAPTERS: [5, 10]
+	INSTRUCTORS: [3, 10],
+	STUDENTS: [10, 30],
+	COURSES_PER_INSTRUCTOR: [0, 5],
+	CHAPTERS_PER_COURSE: [0, 10],
+	CATEGORIES_PER_COURSE: [0, 3],
+	ENROLLMENTS_PER_STUDENT: [0, 5]
 } as const
 
 const EMAIL_DOMAIN = '@ust-legazpi.edu.ph'
@@ -108,39 +110,48 @@ async function createUsers() {
 
 async function createCourses(instructors: User[]) {
 	const categories = await prisma.category.findMany()
+	const courses = []
 
-	const courses = await Promise.all(
-		Array.from({ length: getRandomInRange(NUM_RANGES.COURSES) }, async () => {
-			const randomInstructor = instructors[Math.floor(Math.random() * instructors.length)]
+	for (const instructor of instructors) {
+		const numCourses = getRandomInRange(NUM_RANGES.COURSES_PER_INSTRUCTOR)
 
-			if (!randomInstructor) throw new Error('No instructor found')
-
-			const randomCategories = categories
-				.slice(0, faker.number.int({ min: 1, max: 2 }))
+		for (let i = 0; i < numCourses; i++) {
+			const numCategories = getRandomInRange(NUM_RANGES.CATEGORIES_PER_COURSE)
+			const randomCategories = faker.helpers
+				.arrayElements(categories, numCategories)
 				.map((cat) => cat.id)
 
-			return prisma.course.create({
+			const course = await prisma.course.create({
 				data: {
 					id: faker.database.mongodbObjectId(),
-					code: `${faker.string.alpha({ length: 2 }).toUpperCase()}-${faker.number.int({ min: 100, max: 999 })}`,
+					code: `${faker.string.alpha({ length: 2 }).toUpperCase()}-${faker.number.int({
+						min: 100,
+						max: 999
+					})}`,
 					title: faker.company.catchPhrase(),
 					description: faker.lorem.sentence(),
 					imageUrl: faker.image.url(),
 					status: getRandomStatus(),
 					token: generateCourseInviteToken(),
-					instructor: { connect: { id: randomInstructor.id } },
-					categories: { connect: randomCategories.map((catId) => ({ id: catId })) }
+					instructor: { connect: { id: instructor.id } },
+					categories: randomCategories.length
+						? { connect: randomCategories.map((catId) => ({ id: catId })) }
+						: undefined
 				}
 			})
-		})
-	)
+			courses.push(course)
+		}
+	}
 	return courses
 }
 
 async function createChapters(courses: Awaited<ReturnType<typeof createCourses>>) {
-	const chapters = await Promise.all(
-		courses.flatMap((course) =>
-			Array.from({ length: getRandomInRange(NUM_RANGES.CHAPTERS) }, (_, position) =>
+	const chapters = []
+
+	for (const course of courses) {
+		const numChapters = getRandomInRange(NUM_RANGES.CHAPTERS_PER_COURSE)
+		const courseChapters = await Promise.all(
+			Array.from({ length: numChapters }, (_, position) =>
 				prisma.chapter.create({
 					data: {
 						id: faker.database.mongodbObjectId(),
@@ -153,7 +164,9 @@ async function createChapters(courses: Awaited<ReturnType<typeof createCourses>>
 				})
 			)
 		)
-	)
+
+		chapters.push(...courseChapters)
+	}
 	return chapters
 }
 
@@ -186,11 +199,11 @@ async function createEnrollments(
 	students: User[],
 	courses: Awaited<ReturnType<typeof createCourses>>
 ) {
-	let totalEnrollments = 0
 	const enrollments = []
+	let totalEnrollments = 0
 
 	for (const student of students) {
-		const numEnrollments = faker.number.int({ min: 1, max: 3 })
+		const numEnrollments = getRandomInRange(NUM_RANGES.ENROLLMENTS_PER_STUDENT)
 		const randomCourses = faker.helpers.arrayElements(courses, numEnrollments)
 
 		for (const course of randomCourses) {
@@ -204,37 +217,48 @@ async function createEnrollments(
 }
 
 async function main() {
-	console.log('\n🌱 Starting database seed...')
+	console.log('\n=== 🌱 Database Seed Started ===\n')
 
-	console.log('\nCreating categories...')
+	// Create categories
+	console.log('Creating categories...')
 	const [categories, categoriesError] = await catchError(createCategories())
 	if (categoriesError) throw categoriesError
-	console.log(`✅ Created/Updated ${categories.length} categories`)
 
-	console.log('\nCreating users...')
+	// Create users
+	console.log('Creating users...')
 	const [users, usersError] = await catchError(createUsers())
 	if (usersError) throw usersError
-	console.log(`✅ Created ${users.instructors.length} instructors`)
-	console.log(`✅ Created ${users.students.length} students`)
 
-	console.log('\nCreating courses...')
+	// Create courses
+	console.log('Creating courses...')
 	const [courses, coursesError] = await catchError(createCourses(users.instructors))
 	if (coursesError) throw coursesError
-	console.log(`✅ Created ${courses.length} courses`)
 
-	console.log('\nCreating chapters...')
+	// Create chapters
+	console.log('Creating chapters...')
 	const [chapters, chaptersError] = await catchError(createChapters(courses))
 	if (chaptersError) throw chaptersError
-	console.log(`✅ Created ${chapters.length} chapters`)
 
-	console.log('\nCreating enrollments...')
+	// Create enrollments
+	console.log('Creating enrollments...')
 	const [enrollmentResult, enrollmentsError] = await catchError(
 		createEnrollments(users.students, courses)
 	)
 	if (enrollmentsError) throw enrollmentsError
-	console.log(`✅ Created ${enrollmentResult.totalEnrollments} enrollments`)
 
-	console.log('\n✨ Database has been seeded successfully!')
+	// Log creation summary
+	console.log('\n=== 📊 Creation Summary ===\n')
+	console.log('Categories:', { created: categories.length })
+	console.log('Users:', {
+		instructors: users.instructors.length,
+		students: users.students.length,
+		total: users.instructors.length + users.students.length
+	})
+	console.log('Courses:', { created: courses.length })
+	console.log('Chapters:', { created: chapters.length })
+	console.log('Enrollments:', { created: enrollmentResult.totalEnrollments })
+
+	console.log('\n=== ✨ Database Seed Completed ===\n')
 }
 
 main()
