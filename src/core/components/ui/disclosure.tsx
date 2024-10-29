@@ -139,19 +139,11 @@ export const DisclosureContent = ({ children, className }: DisclosureContentProp
 	const BASE_VARIANTS: Variants = {
 		expanded: {
 			height: 'auto',
-			opacity: 1,
-			transition: {
-				height: { duration: 0.2 },
-				opacity: { duration: 0.2 }
-			}
+			opacity: 1
 		},
 		collapsed: {
 			height: 0,
-			opacity: 0,
-			transition: {
-				height: { duration: 0.2 },
-				opacity: { duration: 0.2 }
-			}
+			opacity: 0
 		}
 	}
 
@@ -169,7 +161,7 @@ export const DisclosureContent = ({ children, className }: DisclosureContentProp
 					className={cn('overflow-hidden', className)}
 					data-state={open ? 'open' : 'closed'}
 					variants={combinedVariants}
-					initial={open ? 'expanded' : 'collapsed'}
+					initial="collapsed"
 					animate="expanded"
 					exit="collapsed"
 				>
