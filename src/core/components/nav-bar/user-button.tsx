@@ -2,7 +2,8 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { signOut, useSession } from 'next-auth/react'
+import { type Session } from 'next-auth'
+import { signOut } from 'next-auth/react'
 import { useMediaQuery } from 'usehooks-ts'
 
 import { useDeviceType } from '@/core/components/context/device-type-provider'
@@ -23,17 +24,19 @@ import { cn } from '@/core/lib/utils/cn'
 import { getEmail } from '@/core/lib/utils/get-email'
 import { getInitials } from '@/core/lib/utils/get-initials'
 
-export const UserButton: React.FC<React.ComponentProps<typeof DropdownMenu>> = ({ ...props }) => {
-	const session = useSession()
+type UserButtonProps = React.ComponentProps<typeof DropdownMenu> & {
+	session: Session | null
+}
 
+export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }) => {
 	const { isNavOpen } = useNav()
 	const { deviceSize } = useDeviceType()
 
 	const isMobile = deviceSize === 'mobile'
 	const isTiny = useMediaQuery('(max-width: 500px)')
 
-	const name = session?.data?.user?.name ?? ''
-	const email = session?.data?.user?.email ?? ''
+	const name = session?.user?.name ?? ''
+	const email = session?.user?.email ?? ''
 
 	const initials = getInitials(name)
 	const strippedEmail = getEmail(email)
@@ -42,11 +45,7 @@ export const UserButton: React.FC<React.ComponentProps<typeof DropdownMenu>> = (
 		<DropdownMenu modal={false} {...props}>
 			<DropdownMenuTrigger className="group/user-button flex cursor-pointer items-center gap-3 rounded-md border border-background p-1 outline-none hover:border-border focus-visible:ring-2 focus-visible:ring-ring dark:border-transparent md:min-h-[2.8rem] md:hover:bg-card md:hover:shadow-[0_0_0_-2px_rgba(0,0,0,0.05),0_1px_2px_0_rgba(0,0,0,0.05)] dark:md:hover:border-border dark:md:hover:bg-accent/70">
 				<Avatar className="size-8 border border-border md:ml-[1.5px]">
-					<AvatarImage
-						src={session?.data?.user?.imageUrl ?? ''}
-						alt={initials}
-						className="select-none"
-					/>
+					<AvatarImage src={session?.user?.imageUrl ?? ''} alt={initials} className="select-none" />
 					<AvatarFallback className="pointer-events-none select-none bg-muted">
 						{initials}
 					</AvatarFallback>

@@ -2,6 +2,7 @@
 
 import { useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
+import { type Session } from 'next-auth'
 
 import { useNav } from '@/core/components/context/nav-provider'
 import {
@@ -21,9 +22,10 @@ import { type Link } from '@/core/types/links'
 type TopNavProps = React.ComponentProps<typeof motion.div> & {
 	links: Link[]
 	className?: string
+	session: Session | null
 }
 
-export const TopNav = ({ links, className, ...props }: TopNavProps) => {
+export const TopNav = ({ links, className, session, ...props }: TopNavProps) => {
 	const { isNavOpen, setNavOpen } = useNav()
 	const { setLockScroll } = useLockScroll()
 
@@ -54,6 +56,7 @@ export const TopNav = ({ links, className, ...props }: TopNavProps) => {
 					'sticky top-0 z-10 flex h-14 items-center justify-between border-b border-border bg-card/40 px-2 backdrop-blur-xl sm:px-4 md:hidden',
 					className
 				)}
+				aria-hidden
 				{...props}
 			>
 				<NavButton
@@ -76,6 +79,7 @@ export const TopNav = ({ links, className, ...props }: TopNavProps) => {
 						setNavOpen(false)
 						setLockScroll(open)
 					}}
+					session={session}
 				/>
 			</motion.aside>
 

@@ -15,7 +15,10 @@ export default async function Layout({ children }: Readonly<{ children: React.Re
 			<DeviceTypeProvider>
 				<TooltipProvider>
 					<div className="flex min-h-full flex-col text-foreground dark:bg-card md:h-[100vh] md:flex-row md:py-1.5 md:pr-1.5">
-						<MainNav className="font-medium text-card-foreground md:text-foreground/80" />
+						<MainNav
+							className="font-medium text-card-foreground md:text-foreground/80"
+							session={session}
+						/>
 						<PageWrapper>{children}</PageWrapper>
 					</div>
 				</TooltipProvider>

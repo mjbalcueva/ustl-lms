@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation'
 import { motion } from 'framer-motion'
+import { type Session } from 'next-auth'
 
 import { useNav } from '@/core/components/context/nav-provider'
 import {
@@ -23,9 +24,10 @@ import { type Link } from '@/core/types/links'
 
 type SideNavProps = React.ComponentProps<typeof motion.nav> & {
 	links: Link[]
+	session: Session | null
 }
 
-export const SideNav = ({ links, className, ...props }: SideNavProps) => {
+export const SideNav = ({ links, session, className, ...props }: SideNavProps) => {
 	const { isNavOpen, setNavOpen } = useNav()
 	const { setLockScroll } = useLockScroll()
 	const currentPath = usePathname()
@@ -45,11 +47,12 @@ export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 	return (
 		<motion.nav
 			className={cn(
-				'flex h-full flex-shrink-0 flex-col overflow-y-auto overflow-x-hidden rounded-xl px-2 pb-4 pt-0.5',
+				'hidden h-full flex-shrink-0 flex-col overflow-y-auto overflow-x-hidden rounded-xl px-2 pb-4 pt-0.5 md:flex',
 				isNavOpen ? 'w-[240px]' : 'w-[60px]',
 				className
 			)}
 			animate={{ width: isNavOpen ? '240px' : '60px' }}
+			aria-hidden
 			{...props}
 		>
 			<NavButton className="gap-2 !px-[0.22rem] py-1 hover:cursor-default hover:border-background hover:!bg-transparent hover:!shadow-none dark:hover:!border-card">
@@ -126,7 +129,7 @@ export const SideNav = ({ links, className, ...props }: SideNavProps) => {
 
 			<Separator className="mb-4 mt-2" />
 
-			<UserButton />
+			<UserButton session={session} />
 		</motion.nav>
 	)
 }

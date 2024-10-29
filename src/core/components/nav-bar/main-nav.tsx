@@ -2,6 +2,7 @@
 
 import { Inter } from 'next/font/google'
 import { type motion } from 'framer-motion'
+import { type Session } from 'next-auth'
 
 import { useDeviceType } from '@/core/components/context/device-type-provider'
 import { NavProvider } from '@/core/components/context/nav-provider'
@@ -20,6 +21,7 @@ const inter = Inter({
 
 type MainNavProps = React.ComponentProps<typeof motion.div> & {
 	className?: string
+	session: Session | null
 }
 
 export const MainNav = ({ className, ...props }: MainNavProps) => {
