@@ -3,13 +3,7 @@
 import { useRouter } from 'next/navigation'
 
 import { Button } from '@/core/components/ui/button'
-import {
-	PageBreadcrumbs,
-	PageDescription,
-	PageHeader,
-	PageTitle,
-	PageWrapper
-} from '@/core/components/ui/page'
+import { PageBreadcrumbs, PageDescription, PageHeader, PageTitle } from '@/core/components/ui/page'
 import { Separator } from '@/core/components/ui/separator'
 import { Instructor } from '@/core/lib/icons'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
@@ -27,7 +21,7 @@ const NotFound = ({ item = 'page' }: { item?: string }) => {
 	]
 
 	return (
-		<PageWrapper>
+		<>
 			<PageHeader className="hidden space-y-0 md:block md:py-3">
 				<PageBreadcrumbs crumbs={crumbs} />
 			</PageHeader>
@@ -43,7 +37,7 @@ const NotFound = ({ item = 'page' }: { item?: string }) => {
 					Go back.
 				</Button>
 			</PageHeader>
-		</PageWrapper>
+		</>
 	)
 }
 
