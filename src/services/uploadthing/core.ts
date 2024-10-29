@@ -1,11 +1,11 @@
 import { createUploadthing, type FileRouter } from 'uploadthing/next'
 
-import { api } from '@/services/trpc/server'
+import { auth } from '@/services/authjs/auth'
 
 const f = createUploadthing()
 
 const handleAuth = async () => {
-	const session = await api.session.getSession()
+	const session = await auth()
 	if (!session) throw new Error('Unauthorized')
 
 	return { userId: session.user.id }

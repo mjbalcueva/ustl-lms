@@ -1,4 +1,4 @@
-import { api } from '@/services/trpc/server'
+import { auth } from '@/services/authjs/auth'
 
 import {
 	PageContent,
@@ -9,7 +9,7 @@ import {
 } from '@/core/components/ui/page'
 
 export default async function Page() {
-	const session = await api.session.getSession()
+	const session = await auth()
 
 	return (
 		<>

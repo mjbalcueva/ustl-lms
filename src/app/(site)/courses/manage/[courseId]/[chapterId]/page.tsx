@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
 
+import { auth } from '@/services/authjs/auth'
 import { api } from '@/services/trpc/server'
 
 import { NotFound } from '@/core/components/error-pages/not-found'
@@ -9,7 +10,7 @@ export default async function Page({
 }: {
 	params: { courseId: string; chapterId: string }
 }) {
-	const session = await api.session.getSession()
+	const session = await auth()
 	const isInstructor = session?.user.role === 'INSTRUCTOR'
 
 	const { chapter } = await api.chapter.findChapter({

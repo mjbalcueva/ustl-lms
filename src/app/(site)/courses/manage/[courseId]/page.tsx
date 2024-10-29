@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import { TbListDetails, TbNotebook, TbPackage, TbUserPlus } from 'react-icons/tb'
 
+import { auth } from '@/services/authjs/auth'
 import { api } from '@/services/trpc/server'
 
 import { NotFound } from '@/core/components/error-pages/not-found'
@@ -30,7 +31,7 @@ import { EditCourseTitleForm } from '@/features/courses/components/forms/edit-co
 import { EditCourseTokenForm } from '@/features/courses/components/forms/edit-course-token-form'
 
 export default async function Page({ params }: { params: { courseId: string } }) {
-	const session = await api.session.getSession()
+	const session = await auth()
 	if (session?.user?.role !== 'INSTRUCTOR') redirect('/dashboard')
 
 	const { course } = await api.course.findCourse({ courseId: params.courseId })

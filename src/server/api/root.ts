@@ -1,4 +1,3 @@
-import { sessionRouter } from '@/server/api/session'
 import { createCallerFactory, createTRPCRouter } from '@/server/api/trpc'
 
 import { accountRouter } from '@/features/account/server/account-router'
@@ -14,7 +13,6 @@ import { enrollmentRouter } from '@/features/enrollment/server/enrollment-router
  */
 export const appRouter = createTRPCRouter({
 	auth: authRouter,
-	session: sessionRouter,
 	account: accountRouter,
 	course: courseRouter,
 	chapter: chapterRouter,

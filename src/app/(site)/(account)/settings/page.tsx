@@ -1,4 +1,4 @@
-import { api } from '@/services/trpc/server'
+import { auth } from '@/services/authjs/auth'
 
 import {
 	PageContainer,
@@ -14,7 +14,7 @@ import { EditPasswordForm } from '@/features/account/components/forms/edit-passw
 import { EditTwoFactorForm } from '@/features/account/components/forms/edit-two-factor-form'
 
 export default async function Page() {
-	const session = await api.session.getSession()
+	const session = await auth()
 
 	return (
 		<PageContainer>
