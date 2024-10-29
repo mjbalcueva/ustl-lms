@@ -49,6 +49,7 @@ export const DataTableToolbar = <TData,>({
 							table.getColumn(column.value as string) && (
 								<Input
 									key={column.value as string}
+									name="filter titles"
 									placeholder={column.placeholder}
 									value={
 										(table.getColumn(column.value as string)?.getFilterValue() as string) ?? ''

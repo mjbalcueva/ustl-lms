@@ -18,8 +18,6 @@ import { DataTable } from '@/features/courses/components/data-table/data-table'
 import { AddCourseForm } from '@/features/courses/components/forms/add-course-form'
 
 export default async function Page() {
-	await new Promise((resolve) => setTimeout(resolve, 2000))
-
 	const courses = await api.course.findManyCourses()
 
 	const crumbs: Breadcrumb = [

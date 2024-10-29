@@ -38,10 +38,10 @@ export default function Loading() {
 				<PageSection className="px-0 sm:px-0 md:px-0 lg:px-6">
 					<ScrollArea scrollHideDelay={600} type="hover">
 						<div className="mb-4 flex gap-4">
+							<Skeleton className="ml-2.5 h-28 w-full !min-w-52" />
 							<Skeleton className="h-28 w-full !min-w-52" />
 							<Skeleton className="h-28 w-full !min-w-52" />
-							<Skeleton className="h-28 w-full !min-w-52" />
-							<Skeleton className="h-28 w-full !min-w-52" />
+							<Skeleton className="mr-2.5 h-28 w-full !min-w-52" />
 						</div>
 						<ScrollBar orientation="horizontal" className="mx-2 sm:mx-4 md:mx-6 lg:mx-0" />
 					</ScrollArea>

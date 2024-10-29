@@ -34,7 +34,7 @@ export const CourseStats = ({ data }: { data: Course[] }) => {
 			icon: CourseSingle,
 			title: 'Total Courses',
 			count: courseStats.total,
-			className: 'ml-2 sm:ml-4 md:ml-6 lg:ml-0'
+			className: 'ml-2.5 sm:ml-4 md:ml-6 lg:ml-0'
 		},
 		{
 			icon: Publish,
@@ -50,7 +50,7 @@ export const CourseStats = ({ data }: { data: Course[] }) => {
 			icon: Archive,
 			title: 'Archived Courses',
 			count: courseStats.archived,
-			className: 'mr-2 sm:mr-4 md:mr-6 lg:mr-0'
+			className: 'mr-2.5 sm:mr-4 md:mr-6 lg:mr-0'
 		}
 	]
 
