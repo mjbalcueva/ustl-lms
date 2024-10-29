@@ -43,11 +43,11 @@ export const DataTableColumnHeader = <TData, TValue>({
 					>
 						{title}
 						{column.getCanSort() && column.getIsSorted() === 'desc' ? (
-							<ArrowDown className="ml-2 size-4" aria-hidden="true" />
+							<ArrowDown aria-hidden="true" />
 						) : column.getIsSorted() === 'asc' ? (
-							<ArrowUp className="ml-2 size-4" aria-hidden="true" />
+							<ArrowUp aria-hidden="true" />
 						) : (
-							<ChevronsUpDown className="ml-2 size-4 text-muted-foreground/70" aria-hidden="true" />
+							<ChevronsUpDown className="text-muted-foreground/70" aria-hidden="true" />
 						)}
 					</Button>
 				</DropdownMenuTrigger>

@@ -131,7 +131,7 @@ export const DataTable = <TData extends Course>({ data }: DataTableProps<TData>)
 								<TableRow
 									key={row.id}
 									data-state={row.getIsSelected() && 'selected'}
-									className="!bg-card"
+									className="bg-card hover:bg-accent dark:hover:bg-accent/20"
 								>
 									{row.getVisibleCells().map((cell) => (
 										<TableCell key={cell.id} className="py-2.5">
