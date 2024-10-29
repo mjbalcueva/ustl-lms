@@ -1,6 +1,6 @@
 import { TRPCClientError } from '@trpc/client'
 
-import { createTRPCRouter, instructorProcedure } from '@/server/api/trpc'
+import { createTRPCRouter, instructorProcedure, protectedProcedure } from '@/server/api/trpc'
 
 import { muxVideo } from '@/services/mux/video'
 import { utapi } from '@/services/uploadthing/utapi'
@@ -24,7 +24,7 @@ import { editChapterVideoSchema } from '@/features/chapters/validations/chapter-
 export const chapterRouter = createTRPCRouter({
 	// Instructor
 	//
-	findChapter: instructorProcedure.input(findChapterSchema).query(async ({ ctx, input }) => {
+	findChapter: protectedProcedure.input(findChapterSchema).query(async ({ ctx, input }) => {
 		const { id, courseId } = input
 
 		const chapter = await ctx.db.chapter.findUnique({

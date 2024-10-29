@@ -1,46 +1,41 @@
+// Import necessary modules
 import NextAuth from 'next-auth'
 
 import { config as authConfig } from '@/services/authjs/config'
 
 import { authRoutes } from '@/core/routes/auth'
 import { DEFAULT_REDIRECT } from '@/core/routes/constants'
-import { instructorRoutes } from '@/core/routes/instructor'
 import { publicRoutes } from '@/core/routes/public'
 import { skippedRoutes } from '@/core/routes/skipped'
+
+import { instructorRoutes } from './core/routes/instructor'
 
 const { auth } = NextAuth(authConfig)
 
 export default auth((req) => {
 	const { nextUrl, auth: session } = req
 	const isLoggedIn = !!session
-	const isStudent = session?.user.role === 'STUDENT'
-
+	const isInstructor = session?.user.role === 'INSTRUCTOR'
 	const { pathname, search } = nextUrl
 
-	// Route type checks
-	const isAuthRoute = authRoutes.includes(pathname)
-	const isInstructorRoute = instructorRoutes.some((route) => pathname.startsWith(route))
-	const isPublicRoute = publicRoutes.includes(pathname)
-	const isSkippedRoute = skippedRoutes.some((route) => pathname.startsWith(route))
-
 	// Allow access to routes that bypass authentication checks
-	if (isSkippedRoute) return
+	if (skippedRoutes.some((route) => pathname.startsWith(route))) return
 
-	// Redirect logged-in users away from authentication-related routes (e.g., login, register)
-	if (isAuthRoute && isLoggedIn) {
+	// Redirect logged-in users away from authentication routes (e.g., login, register)
+	if (authRoutes.includes(pathname) && isLoggedIn) {
 		return Response.redirect(new URL(DEFAULT_REDIRECT, nextUrl))
 	}
 
 	// Allow non-logged-in users access to authentication routes
-	if (isAuthRoute) return
+	if (authRoutes.includes(pathname)) return
 
 	// Prevent students from accessing instructor-only routes
-	if (isInstructorRoute && isStudent) {
+	if (instructorRoutes.some((route) => pathname.startsWith(route)) && isInstructor) {
 		return Response.redirect(new URL(DEFAULT_REDIRECT, nextUrl))
 	}
 
 	// Allow access to public routes or if the user is logged in
-	if (isPublicRoute || isLoggedIn) return
+	if (publicRoutes.includes(pathname) || isLoggedIn) return
 
 	// Redirect unauthenticated users to the login page with a callback URL
 	const callbackUrl = `${pathname}${search || ''}`

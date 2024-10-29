@@ -30,12 +30,18 @@ export default async function Page({
 }: {
 	params: { courseId: string; chapterId: string }
 }) {
+	const session = await api.session.getSession()
+	const isInstructor = session?.user.role === 'INSTRUCTOR'
+
 	const { chapter } = await api.chapter.findChapter({
 		courseId: params.courseId,
 		id: params.chapterId
 	})
 
 	if (!chapter) return <NotFound item="chapter" />
+	if (!isInstructor) {
+		redirect(`/courses/${params.courseId}/assignment/${params.chapterId}`)
+	}
 	if (chapter.type != 'ASSIGNMENT') {
 		redirect(`/courses/manage/${chapter.course.id}/${chapter.type.toLowerCase()}/${chapter.id}`)
 	}
