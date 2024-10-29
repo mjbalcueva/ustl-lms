@@ -61,8 +61,8 @@ export const AddCategoryForm = ({ ...props }: AddCategoryFormProps) => {
 
 			<DialogContent>
 				<DialogHeader>
-					<DialogTitle>Add new category</DialogTitle>
-					<DialogDescription>Add a new category to your course.</DialogDescription>
+					<DialogTitle>Add new tag</DialogTitle>
+					<DialogDescription>Add a new tag to your course.</DialogDescription>
 				</DialogHeader>
 
 				<Separator />
@@ -74,13 +74,9 @@ export const AddCategoryForm = ({ ...props }: AddCategoryFormProps) => {
 							name="name"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel className="text-card-foreground">Category Name</FormLabel>
+									<FormLabel className="text-card-foreground">Tag Name</FormLabel>
 									<FormControl>
-										<Input
-											placeholder="Enter a category name"
-											className="dark:!bg-card"
-											{...field}
-										/>
+										<Input placeholder="Enter a tag name" className="dark:!bg-card" {...field} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -94,7 +90,7 @@ export const AddCategoryForm = ({ ...props }: AddCategoryFormProps) => {
 								</Button>
 							</DialogClose>
 							<Button type="submit" disabled={isPending} variant={isPending ? 'shine' : 'default'}>
-								{isPending ? 'Creating...' : 'Create Category'}
+								{isPending ? 'Creating...' : 'Create Tag'}
 							</Button>
 						</DialogFooter>
 					</form>
