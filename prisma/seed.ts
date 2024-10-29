@@ -80,21 +80,13 @@ async function createUsers() {
 
 // Optimize category creation with createMany
 async function createCategories(instructors: User[]) {
-	const uniqueNames = new Set<string>()
 	const categories = instructors.flatMap((instructor) => {
 		const categoryCount = getRandomInRange(SEED_RANGES.CATEGORIES_PER_INSTRUCTOR)
-		return Array.from({ length: categoryCount }, () => {
-			let name: string
-			do {
-				name = faker.commerce.department()
-			} while (uniqueNames.has(name))
-			uniqueNames.add(name)
-			return {
-				id: faker.database.mongodbObjectId(),
-				name,
-				instructorId: instructor.id
-			}
-		})
+		return Array.from({ length: categoryCount }, () => ({
+			id: faker.database.mongodbObjectId(),
+			name: faker.commerce.department(),
+			instructorId: instructor.id
+		}))
 	})
 
 	return prisma.category.createMany({
@@ -105,31 +97,35 @@ async function createCategories(instructors: User[]) {
 
 // Optimize course creation with batch operations
 async function createCourses(instructors: User[]) {
-	const categories = await prisma.category.findMany()
+	const courseData = await Promise.all(
+		instructors.map(async (instructor) => {
+			const instructorCategories = await prisma.category.findMany({
+				where: { instructorId: instructor.id }
+			})
 
-	const courseData = instructors.flatMap((instructor) => {
-		const numCourses = getRandomInRange(SEED_RANGES.COURSES_PER_INSTRUCTOR)
-		return Array.from({ length: numCourses }, () => {
-			const randomCategories = faker.helpers
-				.arrayElements(categories, getRandomInRange(SEED_RANGES.CATEGORIES_PER_COURSE))
-				.map((cat) => ({ id: cat.id }))
+			const numCourses = getRandomInRange(SEED_RANGES.COURSES_PER_INSTRUCTOR)
+			return Array.from({ length: numCourses }, () => {
+				const randomCategories = faker.helpers
+					.arrayElements(instructorCategories, getRandomInRange(SEED_RANGES.CATEGORIES_PER_COURSE))
+					.map((cat) => ({ id: cat.id }))
 
-			return {
-				id: faker.database.mongodbObjectId(),
-				code: `${faker.string.alpha({ length: 2 }).toUpperCase()}-${faker.number.int({
-					min: 100,
-					max: 999
-				})}`,
-				title: faker.company.catchPhrase(),
-				description: faker.lorem.sentence(),
-				imageUrl: faker.image.url(),
-				status: getRandomStatus(),
-				token: generateCourseInviteToken(),
-				instructor: { connect: { id: instructor.id } },
-				categories: randomCategories.length ? { connect: randomCategories } : undefined
-			}
+				return {
+					id: faker.database.mongodbObjectId(),
+					code: `${faker.string.alpha({ length: 2 }).toUpperCase()}-${faker.number.int({
+						min: 100,
+						max: 999
+					})}`,
+					title: faker.company.catchPhrase(),
+					description: faker.lorem.sentence(),
+					imageUrl: faker.image.url(),
+					status: getRandomStatus(),
+					token: generateCourseInviteToken(),
+					instructor: { connect: { id: instructor.id } },
+					categories: randomCategories.length ? { connect: randomCategories } : undefined
+				}
+			})
 		})
-	})
+	).then((arrays) => arrays.flat())
 
 	return prisma.$transaction(courseData.map((data) => prisma.course.create({ data })))
 }
