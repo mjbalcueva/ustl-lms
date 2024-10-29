@@ -139,11 +139,19 @@ export const DisclosureContent = ({ children, className }: DisclosureContentProp
 	const BASE_VARIANTS: Variants = {
 		expanded: {
 			height: 'auto',
-			opacity: 1
+			opacity: 1,
+			transition: {
+				height: { duration: 0.2 },
+				opacity: { duration: 0.2 }
+			}
 		},
 		collapsed: {
 			height: 0,
-			opacity: 0
+			opacity: 0,
+			transition: {
+				height: { duration: 0.2 },
+				opacity: { duration: 0.2 }
+			}
 		}
 	}
 
@@ -153,14 +161,15 @@ export const DisclosureContent = ({ children, className }: DisclosureContentProp
 	}
 
 	return (
-		<AnimatePresence initial={false}>
+		<AnimatePresence initial={true}>
 			{open && (
 				<motion.div
+					key={uniqueId}
 					id={uniqueId}
 					className={cn('overflow-hidden', className)}
 					data-state={open ? 'open' : 'closed'}
 					variants={combinedVariants}
-					initial="collapsed"
+					initial={open ? 'expanded' : 'collapsed'}
 					animate="expanded"
 					exit="collapsed"
 				>
