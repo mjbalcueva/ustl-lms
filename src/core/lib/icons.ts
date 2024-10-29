@@ -106,8 +106,8 @@ export const CourseMultiple = LuLibrary
 
 // Chapter Icons
 export const Lesson = TbNotes
-export const Assignment = TbClipboardList
-export const Assessment = TbWriting
+export const Assignment = TbWriting
+export const Assessment = TbClipboardList
 export const BlankType = TbListDetails
 
 // Course and Chapter Icons

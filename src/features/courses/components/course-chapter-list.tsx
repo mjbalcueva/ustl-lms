@@ -37,8 +37,8 @@ export const ChapterList = ({ items, onReorder }: ChapterListProps) => {
 
 	const chapterTypeIcons = {
 		LESSON: { Icon: Lesson, color: 'text-blue-500' },
-		ASSIGNMENT: { Icon: Assignment, color: 'text-orange-500' },
-		ASSESSMENT: { Icon: Assessment, color: 'text-green-500' }
+		ASSIGNMENT: { Icon: Assignment, color: 'text-green-500' },
+		ASSESSMENT: { Icon: Assessment, color: 'text-orange-500' }
 	} as const
 
 	return (
