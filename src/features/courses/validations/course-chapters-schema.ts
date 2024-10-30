@@ -18,4 +18,5 @@ export const editCourseChapterOrderSchema = z.object({
 		})
 	)
 })
+
 export type EditCourseChapterOrderSchema = z.infer<typeof editCourseChapterOrderSchema>

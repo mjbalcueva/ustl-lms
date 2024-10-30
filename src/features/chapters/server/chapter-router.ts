@@ -8,6 +8,10 @@ import { utapi } from '@/services/uploadthing/utapi'
 import { catchError } from '@/core/lib/utils/catch-error'
 
 import {
+	addChapterAssessmentSchema,
+	editChapterAssessmentOrderSchema
+} from '@/features/chapters/validations/chapter-assessments-schema'
+import {
 	addChapterAttachmentSchema,
 	deleteChapterAttachmentSchema
 } from '@/features/chapters/validations/chapter-attachments-schema'
@@ -29,7 +33,12 @@ export const chapterRouter = createTRPCRouter({
 
 		const chapter = await ctx.db.chapter.findUnique({
 			where: { id, courseId },
-			include: { attachments: true, course: true, muxData: true }
+			include: {
+				course: true,
+				attachments: true,
+				muxData: true,
+				assessments: { orderBy: { position: 'asc' } }
+			}
 		})
 
 		return { chapter }
@@ -222,5 +231,41 @@ export const chapterRouter = createTRPCRouter({
 			if (attachmentKey) await utapi.deleteFiles(attachmentKey)
 
 			return { message: 'Chapter attachment deleted!', attachment }
+		}),
+
+	addAssessment: instructorProcedure
+		.input(addChapterAssessmentSchema)
+		.mutation(async ({ ctx, input }) => {
+			const { chapterId, title } = input
+
+			const lastAssessment = await ctx.db.assessment.findFirst({
+				where: { chapterId },
+				orderBy: { position: 'desc' }
+			})
+
+			const newPosition = lastAssessment ? lastAssessment.position + 1 : 1
+
+			await ctx.db.assessment.create({
+				data: { title, chapterId, position: newPosition }
+			})
+
+			return { message: 'Assessment created successfully' }
+		}),
+
+	editAssessmentOrder: instructorProcedure
+		.input(editChapterAssessmentOrderSchema)
+		.mutation(async ({ ctx, input }) => {
+			const { chapterId, assessmentList } = input
+
+			for (const assessment of assessmentList) {
+				const newPosition = assessment.position + 1
+
+				await ctx.db.assessment.update({
+					where: { id: assessment.id, chapterId },
+					data: { position: newPosition }
+				})
+			}
+
+			return { message: 'Assessments reordered successfully' }
 		})
 })

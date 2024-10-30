@@ -23,6 +23,7 @@ import { capitalize } from '@/core/lib/utils/capitalize'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
 import { ChapterActions } from '@/features/chapters/components/chapter-action-button'
+import { AddChapterAssessmentsForm } from '@/features/chapters/components/forms/add-chapter-assessments-form'
 import { AddChapterAttachmentsForm } from '@/features/chapters/components/forms/add-chapter-attachments-form'
 import { EditChapterContentForm } from '@/features/chapters/components/forms/edit-chapter-content-form'
 import { EditChapterTitleForm } from '@/features/chapters/components/forms/edit-chapter-title-form'
@@ -65,7 +66,7 @@ export default async function Page({
 		{
 			icon: Assessment,
 			label: chapter.title,
-			href: `/courses/manage/${chapter.course.id}/${chapter.type}/${chapter.id}`
+			href: `/courses/manage/${chapter.course.id}/assessment/${chapter.id}`
 		},
 		{ label: 'Edit' }
 	]
@@ -132,8 +133,12 @@ export default async function Page({
 				</PageSection>
 
 				<PageSection columnMode>
-					<FoldableBlock title="Outline" icon={LuFeather}>
-						<div>Assessment Builder</div>
+					<FoldableBlock title="Assessment Outline" icon={LuFeather}>
+						<AddChapterAssessmentsForm
+							courseId={chapter.courseId}
+							chapterId={chapter.id}
+							assessments={chapter.assessments}
+						/>
 					</FoldableBlock>
 
 					<FoldableBlock title="Student Feedback" icon={TbMessage}>

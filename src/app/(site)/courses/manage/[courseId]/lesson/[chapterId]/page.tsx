@@ -65,7 +65,7 @@ export default async function Page({
 		{
 			icon: Lesson,
 			label: chapter.title,
-			href: `/courses/manage/${chapter.course.id}/${chapter.type}/${chapter.id}`
+			href: `/courses/manage/${chapter.course.id}/lesson/${chapter.id}`
 		},
 		{ label: 'Edit' }
 	]
