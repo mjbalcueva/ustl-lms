@@ -58,7 +58,10 @@ export const AddChapterAssessmentsForm = ({
 
 	const { mutate: editAssessmentOrder, isPending: isEditingAssessmentOrder } =
 		api.chapter.editAssessmentOrder.useMutation({
-			onSuccess: (data) => toast.success(data.message),
+			onSuccess: (data) => {
+				toast.success(data.message)
+				router.refresh()
+			},
 			onError: (error) => toast.error(error.message)
 		})
 

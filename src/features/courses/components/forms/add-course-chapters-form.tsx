@@ -62,7 +62,10 @@ export const AddCourseChaptersForm = ({ courseId, chapters }: AddCourseChaptersP
 
 	const { mutate: editChapterOrder, isPending: isEditingChapterOrder } =
 		api.course.editChapterOrder.useMutation({
-			onSuccess: (data) => toast.success(data.message),
+			onSuccess: (data) => {
+				toast.success(data.message)
+				router.refresh()
+			},
 			onError: (error) => toast.error(error.message)
 		})
 
