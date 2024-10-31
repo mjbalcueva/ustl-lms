@@ -15,8 +15,7 @@ import { type Breadcrumb } from '@/core/types/breadcrumbs'
 export default function Loading() {
 	const crumbs: Breadcrumb = [
 		{ icon: Instructor },
-		{ label: 'Courses', href: '/courses' },
-		{ label: 'Manage', href: '/courses/manage' }
+		{ label: 'Courses', href: '/instructor/courses' }
 	]
 	return (
 		<>

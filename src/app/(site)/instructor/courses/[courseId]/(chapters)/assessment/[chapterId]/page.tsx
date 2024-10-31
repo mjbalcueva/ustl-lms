@@ -35,6 +35,7 @@ export default async function Page({
 }) {
 	const session = await auth()
 	const isInstructor = session?.user.role === 'INSTRUCTOR'
+	if (!isInstructor) redirect(`/courses/${params.courseId}/lesson/${params.chapterId}`)
 
 	const { chapter } = await api.chapter.findChapter({
 		courseId: params.courseId,
@@ -42,11 +43,8 @@ export default async function Page({
 	})
 
 	if (!chapter) return <NotFound item="chapter" />
-	if (!isInstructor) {
-		redirect(`/courses/${params.courseId}/assessment/${params.chapterId}`)
-	}
 	if (chapter.type != 'ASSESSMENT') {
-		redirect(`/courses/manage/${chapter.course.id}/${chapter.type.toLowerCase()}/${chapter.id}`)
+		redirect(`/instructor/courses/${chapter.course.id}/${chapter.type.toLowerCase()}/${chapter.id}`)
 	}
 
 	const requiredFields = [chapter.title, chapter.content, chapter.videoUrl, chapter.attachments]
@@ -56,19 +54,17 @@ export default async function Page({
 
 	const crumbs: Breadcrumb = [
 		{ icon: Instructor },
-		{ label: 'Courses', href: '/courses' },
-		{ label: 'Manage', href: '/courses/manage' },
+		{ label: 'Courses', href: '/instructor/courses' },
 		{
 			icon: CourseSingle,
 			label: chapter.course.title,
-			href: `/courses/manage/${chapter.course.id}`
+			href: `/instructor/courses/${chapter.course.id}`
 		},
 		{
 			icon: Assessment,
 			label: chapter.title,
-			href: `/courses/manage/${chapter.course.id}/assessment/${chapter.id}`
-		},
-		{ label: 'Edit' }
+			href: `/instructor/courses/${chapter.course.id}/assessment/${chapter.id}`
+		}
 	]
 
 	return (

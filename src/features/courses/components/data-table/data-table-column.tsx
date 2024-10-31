@@ -98,7 +98,7 @@ export const useColumns = (
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align="end" className="w-40">
-						<Link href={`/courses/manage/${row.original.id}`}>
+						<Link href={`/instructor/courses/${row.original.id}`}>
 							<DropdownMenuItem>
 								<Edit className="mr-2 size-4" />
 								Edit

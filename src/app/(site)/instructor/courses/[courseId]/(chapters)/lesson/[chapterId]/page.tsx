@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { TbClipboardList, TbMessage, TbPaperclip, TbSend } from 'react-icons/tb'
+import { TbMessage, TbNotes, TbPaperclip, TbVideo } from 'react-icons/tb'
 
 import { auth } from '@/services/authjs/auth'
 import { api } from '@/services/trpc/server'
@@ -17,7 +17,7 @@ import {
 	PageTitle
 } from '@/core/components/ui/page'
 import { Separator } from '@/core/components/ui/separator'
-import { Assignment, CourseSingle, Instructor } from '@/core/lib/icons'
+import { CourseSingle, Instructor, Lesson } from '@/core/lib/icons'
 import { capitalize } from '@/core/lib/utils/capitalize'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
@@ -25,6 +25,7 @@ import { ChapterActions } from '@/features/chapters/components/chapter-action-bu
 import { AddChapterAttachmentsForm } from '@/features/chapters/components/forms/add-chapter-attachments-form'
 import { EditChapterContentForm } from '@/features/chapters/components/forms/edit-chapter-content-form'
 import { EditChapterTitleForm } from '@/features/chapters/components/forms/edit-chapter-title-form'
+import { EditChapterVideoForm } from '@/features/chapters/components/forms/edit-chapter-video-form'
 
 export default async function Page({
 	params
@@ -33,6 +34,7 @@ export default async function Page({
 }) {
 	const session = await auth()
 	const isInstructor = session?.user.role === 'INSTRUCTOR'
+	if (!isInstructor) redirect(`/courses/${params.courseId}/lesson/${params.chapterId}`)
 
 	const { chapter } = await api.chapter.findChapter({
 		courseId: params.courseId,
@@ -40,11 +42,8 @@ export default async function Page({
 	})
 
 	if (!chapter) return <NotFound item="chapter" />
-	if (!isInstructor) {
-		redirect(`/courses/${params.courseId}/assignment/${params.chapterId}`)
-	}
-	if (chapter.type != 'ASSIGNMENT') {
-		redirect(`/courses/manage/${chapter.course.id}/${chapter.type.toLowerCase()}/${chapter.id}`)
+	if (chapter.type != 'LESSON') {
+		redirect(`/instructor/courses/${chapter.course.id}/${chapter.type.toLowerCase()}/${chapter.id}`)
 	}
 
 	const requiredFields = [chapter.title, chapter.content, chapter.videoUrl, chapter.attachments]
@@ -54,19 +53,17 @@ export default async function Page({
 
 	const crumbs: Breadcrumb = [
 		{ icon: Instructor },
-		{ label: 'Courses', href: '/courses' },
-		{ label: 'Manage', href: '/courses/manage' },
+		{ label: 'Courses', href: '/instructor/courses' },
 		{
 			icon: CourseSingle,
 			label: chapter.course.title,
-			href: `/courses/manage/${chapter.course.id}`
+			href: `/instructor/courses/${chapter.course.id}`
 		},
 		{
-			icon: Assignment,
+			icon: Lesson,
 			label: chapter.title,
-			href: `/courses/manage/${chapter.course.id}/${chapter.type}/${chapter.id}`
-		},
-		{ label: 'Edit' }
+			href: `/instructor/courses/${chapter.course.id}/lesson/${chapter.id}`
+		}
 	]
 
 	return (
@@ -108,7 +105,7 @@ export default async function Page({
 
 			<PageContent className="mb-24 space-y-6 px-2.5 sm:px-4 md:mb-12 md:flex md:flex-wrap md:gap-6 md:space-y-0 md:px-6">
 				<PageSection columnMode>
-					<FoldableBlock title="Customize your assignment" icon={TbClipboardList}>
+					<FoldableBlock title="Customize your lesson" icon={TbNotes}>
 						<EditChapterTitleForm
 							id={chapter.id}
 							courseId={chapter.course.id}
@@ -131,8 +128,12 @@ export default async function Page({
 				</PageSection>
 
 				<PageSection columnMode>
-					<FoldableBlock title="Student submissions" icon={TbSend}>
-						<div>Student submissions</div>
+					<FoldableBlock title="Lecture video" icon={TbVideo}>
+						<EditChapterVideoForm
+							id={chapter.id}
+							courseId={chapter.course.id}
+							initialData={chapter}
+						/>
 					</FoldableBlock>
 
 					<FoldableBlock title="Student Feedback" icon={TbMessage}>

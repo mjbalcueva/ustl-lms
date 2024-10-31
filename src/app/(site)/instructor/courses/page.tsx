@@ -22,8 +22,7 @@ export default async function Page() {
 
 	const crumbs: Breadcrumb = [
 		{ icon: Instructor },
-		{ label: 'Courses', href: '/courses' },
-		{ label: 'Manage', href: '/courses/manage' }
+		{ label: 'Courses', href: '/instructor/courses/' }
 	]
 
 	return (

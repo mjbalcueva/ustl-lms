@@ -64,7 +64,7 @@ export const AssessmentList = ({ courseId, chapterId, items, onReorder }: Assess
 												<TooltipTrigger asChild>
 													<Link
 														className="ml-auto flex h-full items-center justify-center rounded-r-xl pl-1 pr-2 outline-none hover:opacity-75 focus-visible:outline-ring"
-														href={`/courses/manage/${courseId}/asessment/${chapterId}/${assessment.id}`}
+														href={`/instructor/courses/${courseId}/asessment/${chapterId}/${assessment.id}`}
 													>
 														<Edit className="size-4" />
 													</Link>

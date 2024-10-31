@@ -35,7 +35,7 @@ export const CourseActionButton = ({ id, status }: CourseActionsProps) => {
 		{
 			onSuccess: (data) => {
 				toast.success(data.message)
-				router.push(`/courses/manage`)
+				router.push(`/instructor/courses`)
 				router.refresh()
 			}
 		}

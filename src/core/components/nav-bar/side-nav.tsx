@@ -40,7 +40,7 @@ export const SideNav = ({ links, session, className, ...props }: SideNavProps) =
 
 		return (
 			linkSegments[1] === currentSegments[1] &&
-			linkSegments.includes('manage') === currentSegments.includes('manage')
+			(linkSegments[1] === 'instructor' ? linkSegments[2] === currentSegments[2] : true)
 		)
 	}
 
