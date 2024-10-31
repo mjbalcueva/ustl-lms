@@ -31,10 +31,12 @@ import { EditCourseTitleForm } from '@/features/courses/components/forms/edit-co
 import { EditCourseTokenForm } from '@/features/courses/components/forms/edit-course-token-form'
 
 export default async function Page({ params }: { params: { courseId: string } }) {
+	const { courseId } = params
+
 	const session = await auth()
 	if (session?.user?.role !== 'INSTRUCTOR') redirect('/dashboard')
 
-	const { course } = await api.course.findCourse({ courseId: params.courseId })
+	const { course } = await api.course.findCourse({ courseId })
 	const { categories } = await api.course.findManyCategories()
 
 	if (!course) return <NotFound item="course" />
@@ -56,7 +58,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 	const crumbs: Breadcrumb = [
 		{ icon: Instructor },
 		{ label: 'Courses', href: '/instructor/courses' },
-		{ icon: CourseSingle, label: course.title, href: `/instructor/courses/${course.id}` }
+		{ icon: CourseSingle, label: course.title, href: `/instructor/courses/${courseId}` }
 	]
 
 	return (

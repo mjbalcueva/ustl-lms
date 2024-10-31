@@ -17,6 +17,7 @@ export default function Loading() {
 		{ icon: Instructor },
 		{ label: 'Courses', href: '/instructor/courses' }
 	]
+
 	return (
 		<>
 			<PageHeader className="hidden space-y-0 md:flex md:py-3">

@@ -31,18 +31,17 @@ export default async function Page({
 }: {
 	params: { courseId: string; chapterId: string }
 }) {
+	const { courseId, chapterId } = params
+
 	const session = await auth()
 	const isInstructor = session?.user.role === 'INSTRUCTOR'
-	if (!isInstructor) redirect(`/courses/${params.courseId}/lesson/${params.chapterId}`)
+	if (!isInstructor) redirect(`/courses/${courseId}/lesson/${chapterId}`)
 
-	const { chapter } = await api.chapter.findChapter({
-		courseId: params.courseId,
-		id: params.chapterId
-	})
+	const { chapter } = await api.chapter.findChapter({ courseId, id: chapterId })
 
 	if (!chapter) return <NotFound item="chapter" />
 	if (chapter.type != 'ASSIGNMENT') {
-		redirect(`/instructor/courses/${chapter.course.id}/${chapter.type.toLowerCase()}/${chapter.id}`)
+		redirect(`/instructor/courses/${courseId}/${chapter.type.toLowerCase()}/${chapterId}`)
 	}
 
 	const requiredFields = [chapter.title, chapter.content, chapter.videoUrl, chapter.attachments]
@@ -56,12 +55,12 @@ export default async function Page({
 		{
 			icon: CourseSingle,
 			label: chapter.course.title,
-			href: `/instructor/courses/${chapter.course.id}`
+			href: `/instructor/courses/${courseId}`
 		},
 		{
 			icon: Assignment,
 			label: chapter.title,
-			href: `/instructor/courses/${chapter.course.id}/assignment/${chapter.id}`
+			href: `/instructor/courses/${courseId}/assignment/${chapterId}`
 		}
 	]
 
