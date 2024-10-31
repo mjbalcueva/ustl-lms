@@ -32,31 +32,22 @@ export default async function Page({
 	params: { courseId: string; chapterId: string }
 }) {
 	const { courseId, chapterId } = params
-
 	const session = await auth()
-	const isInstructor = session?.user.role === 'INSTRUCTOR'
-	if (!isInstructor) redirect(`/courses/${courseId}/lesson/${chapterId}`)
+	if (session?.user.role !== 'INSTRUCTOR') redirect(`/courses/${courseId}/lesson/${chapterId}`)
 
 	const { chapter } = await api.chapter.findChapter({ courseId, id: chapterId })
-
 	if (!chapter) return <NotFound item="chapter" />
-	if (chapter.type != 'ASSIGNMENT') {
+	if (chapter.type !== 'ASSIGNMENT') {
 		redirect(`/instructor/courses/${courseId}/${chapter.type.toLowerCase()}/${chapterId}`)
 	}
 
 	const requiredFields = [chapter.title, chapter.content, chapter.videoUrl, chapter.attachments]
-	const totalFields = requiredFields.length
-	const completedFields = requiredFields.filter(Boolean).length
-	const completionText = `(${completedFields}/${totalFields})`
+	const completionText = `(${requiredFields.filter(Boolean).length}/${requiredFields.length})`
 
 	const crumbs: Breadcrumb = [
 		{ icon: Instructor },
 		{ label: 'Courses', href: '/instructor/courses' },
-		{
-			icon: CourseSingle,
-			label: chapter.course.title,
-			href: `/instructor/courses/${courseId}`
-		},
+		{ icon: CourseSingle, label: chapter.course.title, href: `/instructor/courses/${courseId}` },
 		{
 			icon: Assignment,
 			label: chapter.title,
