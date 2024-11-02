@@ -36,6 +36,7 @@ export const CategoriesCombobox = ({
 	onChange
 }: CategoriesComboboxProps) => {
 	const [open, setOpen] = React.useState(false)
+	const [value, setValue] = React.useState('')
 
 	const handleSelect = (value: string) => {
 		const updatedSelected = selected.includes(value)
@@ -82,26 +83,28 @@ export const CategoriesCombobox = ({
 			</PopoverTrigger>
 
 			<PopoverContent className="p-0">
-				<Command>
-					<CommandInput placeholder={label ? label : 'Search...'} />
+				<Command shouldFilter={false}>
+					<CommandInput
+						placeholder={`Search ${label.toLowerCase()}...`}
+						value={value}
+						onValueChange={setValue}
+					/>
 					<CommandList>
 						<CommandEmpty>No option found.</CommandEmpty>
 						<CommandGroup>
-							{options.map((option) => (
-								<CommandItem
-									key={option.value}
-									value={option.value}
-									onSelect={() => handleSelect(option.value)}
-								>
-									<Check
-										className={cn(
-											'mr-2 size-4',
-											selected.includes(option.value) ? 'opacity-100' : 'opacity-0'
-										)}
-									/>
-									{option.label}
-								</CommandItem>
-							))}
+							{options
+								.filter((option) => option.label.toLowerCase().includes(value.toLowerCase()))
+								.map((option) => (
+									<CommandItem key={option.value} onSelect={() => handleSelect(option.value)}>
+										<Check
+											className={cn(
+												'mr-2 size-4',
+												selected.includes(option.value) ? 'opacity-100' : 'opacity-0'
+											)}
+										/>
+										{option.label}
+									</CommandItem>
+								))}
 						</CommandGroup>
 					</CommandList>
 					<CommandSeparator />
