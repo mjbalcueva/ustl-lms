@@ -131,10 +131,12 @@ model Chapter {
 }
 
 model Assessment {
-  id          String  @id @default(cuid())
-  title       String
-  instruction String?
-  position    Int
+  id               String  @id @default(cuid())
+  title            String
+  instruction      String?
+  shuffleQuestions Boolean @default(false) @map("shuffle_questions")
+  shuffleOptions   Boolean @default(false) @map("shuffle_options")
+  position         Int
 
   chapterId String
   questions Question[]

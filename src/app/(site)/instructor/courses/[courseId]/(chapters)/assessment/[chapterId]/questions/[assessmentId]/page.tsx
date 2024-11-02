@@ -21,6 +21,7 @@ import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
 import { EditAssessmentInstructionForm } from '@/features/questions/components/forms/edit-assessment-instruction-form'
 import { EditAssessmentTitleForm } from '@/features/questions/components/forms/edit-assessment-title-form'
+import { SectionActionButton } from '@/features/questions/components/section-action-button'
 
 export default async function Page({
 	params
@@ -67,6 +68,12 @@ export default async function Page({
 					<PageTitle>Section Setup</PageTitle>
 					<PageDescription>Configure questions, points and settings</PageDescription>
 				</div>
+				<SectionActionButton
+					chapterId={chapterId}
+					assessmentId={assessmentId}
+					shuffleQuestions={assessment.shuffleQuestions}
+					shuffleOptions={assessment.shuffleOptions}
+				/>
 			</PageHeader>
 
 			<PageContent className="mb-24 space-y-6 px-2.5 sm:px-4 md:mb-12 md:flex md:flex-wrap md:gap-6 md:space-y-0 md:px-6">

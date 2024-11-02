@@ -1,9 +1,12 @@
 import { createTRPCRouter, instructorProcedure } from '@/server/api/trpc'
 
+import { editAssessmentInstructionSchema } from '@/features/questions/validations/assessment-instruction-schema'
 import { findAssessmentSchema } from '@/features/questions/validations/assessment-schema'
+import {
+	editShuffleOptionsSchema,
+	editShuffleQuestionsSchema
+} from '@/features/questions/validations/assessment-settings-schema'
 import { editAssessmentTitleSchema } from '@/features/questions/validations/assessment-title-schema'
-
-import { editAssessmentInstructionSchema } from '../validations/assessment-instruction-schema'
 
 export const questionRouter = createTRPCRouter({
 	// Instructor
@@ -60,5 +63,27 @@ export const questionRouter = createTRPCRouter({
 				message: 'Section instruction updated successfully',
 				newInstruction
 			}
+		}),
+
+	editShuffleQuestions: instructorProcedure
+		.input(editShuffleQuestionsSchema)
+		.mutation(async ({ ctx, input }) => {
+			const { chapterId, assessmentId, shuffleQuestions } = input
+
+			await ctx.db.assessment.update({
+				where: { id: assessmentId, chapterId },
+				data: { shuffleQuestions }
+			})
+		}),
+
+	editShuffleOptions: instructorProcedure
+		.input(editShuffleOptionsSchema)
+		.mutation(async ({ ctx, input }) => {
+			const { chapterId, assessmentId, shuffleOptions } = input
+
+			await ctx.db.assessment.update({
+				where: { id: assessmentId, chapterId },
+				data: { shuffleOptions }
+			})
 		})
 })

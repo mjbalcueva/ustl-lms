@@ -5,6 +5,7 @@ import {
 	LuLibrary,
 	LuLink,
 	LuSearch,
+	LuSettings,
 	LuSettings2,
 	LuTrash2
 } from 'react-icons/lu'
@@ -179,6 +180,7 @@ export const DotsVertical = TbDotsVertical
 export const EyeOpen = RxEyeOpen
 export const EyeClosed = RxEyeClosed
 export const EyeNone = RxEyeNone
+export const Gear = LuSettings
 export const GripVertical = TbGripVertical
 export const Loader = TbLoader
 export const Loader2 = TbLoader2

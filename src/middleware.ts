@@ -5,10 +5,9 @@ import { config as authConfig } from '@/services/authjs/config'
 
 import { authRoutes } from '@/core/routes/auth'
 import { DEFAULT_REDIRECT } from '@/core/routes/constants'
+import { instructorRoutes } from '@/core/routes/instructor'
 import { publicRoutes } from '@/core/routes/public'
 import { skippedRoutes } from '@/core/routes/skipped'
-
-import { instructorRoutes } from './core/routes/instructor'
 
 const { auth } = NextAuth(authConfig)
 
