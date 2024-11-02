@@ -19,6 +19,7 @@ import { Separator } from '@/core/components/ui/separator'
 import { Assessment, CourseSingle, Instructor } from '@/core/lib/icons'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
+import { AddAssessmentQuestionsForm } from '@/features/questions/components/forms/add-assessment-questions-form'
 import { EditAssessmentInstructionForm } from '@/features/questions/components/forms/edit-assessment-instruction-form'
 import { EditAssessmentTitleForm } from '@/features/questions/components/forms/edit-assessment-title-form'
 import { SectionActionButton } from '@/features/questions/components/section-action-button'
@@ -95,7 +96,10 @@ export default async function Page({
 
 				<PageSection columnMode>
 					<FoldableBlock title="Your questions" icon={TbFlagQuestion}>
-						<h4>questions</h4>
+						<AddAssessmentQuestionsForm
+							assessmentId={assessmentId}
+							questions={assessment.questions}
+						/>
 					</FoldableBlock>
 				</PageSection>
 			</PageContent>

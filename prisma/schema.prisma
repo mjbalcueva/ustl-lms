@@ -148,10 +148,10 @@ model Assessment {
 }
 
 enum QuestionType {
-  MULTIPLE_CHOICE
-  MULTIPLE_SELECT
-  TRUE_FALSE
-  ESSAY
+  MULTIPLE_CHOICE @map("multiple_choice")
+  MULTIPLE_SELECT @map("multiple_select")
+  TRUE_OR_FALSE   @map("true_or_false")
+  ESSAY           @map("essay")
 
   @@map("question_type")
 }
@@ -163,6 +163,7 @@ model Question {
   options       Json?
   correctAnswer Json?
   points        Float
+  position      Int
 
   assessmentId String
   answer       Answer?
