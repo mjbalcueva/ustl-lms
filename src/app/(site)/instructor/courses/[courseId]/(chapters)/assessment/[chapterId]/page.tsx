@@ -35,7 +35,7 @@ export default async function Page({
 }) {
 	const { courseId, chapterId } = params
 	const session = await auth()
-	if (session?.user.role !== 'INSTRUCTOR') redirect(`/courses/${courseId}/lesson/${chapterId}`)
+	if (session?.user.role !== 'INSTRUCTOR') redirect(`/courses/${courseId}/assessment/${chapterId}`)
 
 	const { chapter } = await api.chapter.findChapter({ courseId, id: chapterId })
 	if (!chapter) return <NotFound item="chapter" />
