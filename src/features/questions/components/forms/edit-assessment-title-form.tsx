@@ -17,15 +17,19 @@ import {
 } from '@/core/components/compound-card'
 import { Button } from '@/core/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/core/components/ui/form'
-import { Textarea } from '@/core/components/ui/textarea'
-import { Add, Edit } from '@/core/lib/icons'
+import { Input } from '@/core/components/ui/input'
+import { Edit } from '@/core/lib/icons'
 
 import {
-	editCourseDescriptionSchema,
-	type EditCourseDescriptionSchema
-} from '@/features/courses/validations/course-description-schema'
+	editAssessmentTitleSchema,
+	type EditAssessmentTitleSchema
+} from '@/features/questions/validations/assessment-title-schema'
 
-export const EditCourseDescriptionForm = ({ id, description }: EditCourseDescriptionSchema) => {
+export const EditAssessmentTitleForm = ({
+	chapterId,
+	assessmentId,
+	title
+}: EditAssessmentTitleSchema) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -34,16 +38,16 @@ export const EditCourseDescriptionForm = ({ id, description }: EditCourseDescrip
 		form.reset()
 	}
 
-	const form = useForm<EditCourseDescriptionSchema>({
-		resolver: zodResolver(editCourseDescriptionSchema),
-		defaultValues: { id, description }
+	const form = useForm<EditAssessmentTitleSchema>({
+		resolver: zodResolver(editAssessmentTitleSchema),
+		defaultValues: { chapterId, assessmentId, title }
 	})
-	const formDescription = form.getValues('description')
+	const formTitle = form.getValues('title')
 
-	const { mutate, isPending } = api.course.editDescription.useMutation({
-		onSuccess: async (data) => {
+	const { mutate, isPending } = api.question.editAssessmentTitle.useMutation({
+		onSuccess: (data) => {
 			toggleEdit()
-			form.reset({ id, description: data.newDescription ?? '' })
+			form.reset({ chapterId, assessmentId, title: data.newTitle })
 			router.refresh()
 			toast.success(data.message)
 		},
@@ -53,18 +57,14 @@ export const EditCourseDescriptionForm = ({ id, description }: EditCourseDescrip
 	return (
 		<Card showBorderTrail={isEditing}>
 			<CardHeader>
-				<CardTitle>Course Description</CardTitle>
+				<CardTitle>Title</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="sm">
-					{!isEditing && (formDescription ? <Edit /> : <Add />)}
-					{isEditing ? 'Cancel' : formDescription ? 'Edit' : 'Add'}
+					{!isEditing && <Edit />}
+					{isEditing ? 'Cancel' : 'Edit'}
 				</Button>
 			</CardHeader>
 
-			{!isEditing && (
-				<CardContent isEmpty={!formDescription}>
-					{formDescription ? formDescription : 'No description added'}
-				</CardContent>
-			)}
+			{!isEditing && <CardContent>{formTitle}</CardContent>}
 
 			{isEditing && (
 				<Form {...form}>
@@ -72,16 +72,14 @@ export const EditCourseDescriptionForm = ({ id, description }: EditCourseDescrip
 						<CardContent>
 							<FormField
 								control={form.control}
-								name="description"
+								name="title"
 								render={({ field }) => (
 									<FormItem>
 										<FormControl>
-											<Textarea
-												placeholder="e.g. 'CS101'"
+											<Input
+												placeholder="e.g. 'Part 1: True or False'"
 												disabled={isPending}
-												value={field.value ?? ''}
-												onChange={field.onChange}
-												onBlur={field.onBlur}
+												{...field}
 											/>
 										</FormControl>
 										<FormMessage />

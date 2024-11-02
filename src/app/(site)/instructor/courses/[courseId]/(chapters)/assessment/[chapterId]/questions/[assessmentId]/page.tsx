@@ -19,6 +19,9 @@ import { Separator } from '@/core/components/ui/separator'
 import { Assessment, CourseSingle, Instructor } from '@/core/lib/icons'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
+import { EditAssessmentInstructionForm } from '@/features/questions/components/forms/edit-assessment-instruction-form'
+import { EditAssessmentTitleForm } from '@/features/questions/components/forms/edit-assessment-title-form'
+
 export default async function Page({
 	params
 }: {
@@ -69,8 +72,17 @@ export default async function Page({
 			<PageContent className="mb-24 space-y-6 px-2.5 sm:px-4 md:mb-12 md:flex md:flex-wrap md:gap-6 md:space-y-0 md:px-6">
 				<PageSection columnMode>
 					<FoldableBlock title="Customize your section" icon={LuFeather}>
-						<h4>title</h4>
-						<h4>instruction</h4>
+						<EditAssessmentTitleForm
+							chapterId={chapterId}
+							assessmentId={assessmentId}
+							title={assessment.title}
+						/>
+
+						<EditAssessmentInstructionForm
+							chapterId={chapterId}
+							assessmentId={assessmentId}
+							instruction={assessment.instruction}
+						/>
 					</FoldableBlock>
 				</PageSection>
 

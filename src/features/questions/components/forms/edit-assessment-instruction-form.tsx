@@ -21,11 +21,15 @@ import { Textarea } from '@/core/components/ui/textarea'
 import { Add, Edit } from '@/core/lib/icons'
 
 import {
-	editCourseDescriptionSchema,
-	type EditCourseDescriptionSchema
-} from '@/features/courses/validations/course-description-schema'
+	editAssessmentInstructionSchema,
+	type EditAssessmentInstructionSchema
+} from '@/features/questions/validations/assessment-instruction-schema'
 
-export const EditCourseDescriptionForm = ({ id, description }: EditCourseDescriptionSchema) => {
+export const EditAssessmentInstructionForm = ({
+	chapterId,
+	assessmentId,
+	instruction
+}: EditAssessmentInstructionSchema) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -34,16 +38,16 @@ export const EditCourseDescriptionForm = ({ id, description }: EditCourseDescrip
 		form.reset()
 	}
 
-	const form = useForm<EditCourseDescriptionSchema>({
-		resolver: zodResolver(editCourseDescriptionSchema),
-		defaultValues: { id, description }
+	const form = useForm<EditAssessmentInstructionSchema>({
+		resolver: zodResolver(editAssessmentInstructionSchema),
+		defaultValues: { chapterId, assessmentId, instruction }
 	})
-	const formDescription = form.getValues('description')
+	const formDescription = form.getValues('instruction')
 
-	const { mutate, isPending } = api.course.editDescription.useMutation({
+	const { mutate, isPending } = api.question.editAssessmentInstruction.useMutation({
 		onSuccess: async (data) => {
 			toggleEdit()
-			form.reset({ id, description: data.newDescription ?? '' })
+			form.reset({ chapterId, assessmentId, instruction: data.newInstruction ?? '' })
 			router.refresh()
 			toast.success(data.message)
 		},
@@ -53,7 +57,7 @@ export const EditCourseDescriptionForm = ({ id, description }: EditCourseDescrip
 	return (
 		<Card showBorderTrail={isEditing}>
 			<CardHeader>
-				<CardTitle>Course Description</CardTitle>
+				<CardTitle>Instruction</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="sm">
 					{!isEditing && (formDescription ? <Edit /> : <Add />)}
 					{isEditing ? 'Cancel' : formDescription ? 'Edit' : 'Add'}
@@ -62,7 +66,7 @@ export const EditCourseDescriptionForm = ({ id, description }: EditCourseDescrip
 
 			{!isEditing && (
 				<CardContent isEmpty={!formDescription}>
-					{formDescription ? formDescription : 'No description added'}
+					{formDescription ? formDescription : 'No instructions added'}
 				</CardContent>
 			)}
 
@@ -72,12 +76,12 @@ export const EditCourseDescriptionForm = ({ id, description }: EditCourseDescrip
 						<CardContent>
 							<FormField
 								control={form.control}
-								name="description"
+								name="instruction"
 								render={({ field }) => (
 									<FormItem>
 										<FormControl>
 											<Textarea
-												placeholder="e.g. 'CS101'"
+												placeholder="e.g. 'Read each question carefully and choose the correct answer (type 'T' for True or 'F' for False)'"
 												disabled={isPending}
 												value={field.value ?? ''}
 												onChange={field.onChange}
