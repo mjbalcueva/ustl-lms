@@ -70,7 +70,7 @@ export const SectionActionButton = ({
 				<Separator className="mb-4 mt-3" />
 
 				<div className="space-y-3">
-					<div className="flex items-center justify-between rounded-lg border bg-card/50 px-3.5 py-2.5">
+					<div className="flex items-center justify-between rounded-lg border bg-card px-3.5 py-2.5">
 						<div className="space-y-1">
 							<p className="text-sm font-medium">Shuffle Questions</p>
 							<p className="text-sm text-muted-foreground">
@@ -91,7 +91,7 @@ export const SectionActionButton = ({
 						/>
 					</div>
 
-					<div className="flex items-center justify-between rounded-lg border bg-card/50 px-3.5 py-2.5">
+					<div className="flex items-center justify-between rounded-lg border bg-card px-3.5 py-2.5">
 						<div className="space-y-1">
 							<p className="text-sm font-medium">Shuffle Options</p>
 							<p className="text-sm text-muted-foreground">
