@@ -6,7 +6,11 @@ import { catchError } from '@/core/lib/utils/catch-error'
 
 import { generateCourseInviteToken } from '@/features/courses/lib/tokens'
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient({
+	transactionOptions: {
+		timeout: 120000 // 120000ms = 2 minutes
+	}
+})
 
 // Configurable Constants
 const SEED_RANGES = {
