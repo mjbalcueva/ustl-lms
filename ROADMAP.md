@@ -83,7 +83,6 @@
         - [ ] Checkbox
         - [ ] Fill in the blank
         - [ ] Short answer
-        - [ ] Essay
       - [ ] Assessment availability settings:
         - [ ] Set start and end date/time (including expiration)
         - [ ] Set time limit for completion

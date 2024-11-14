@@ -3,10 +3,10 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  // url      = env("DATABASE_URL") // local
-  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // local
+  // url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  // directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
 // -----------------------------------------------------------------------------
@@ -151,19 +151,17 @@ enum QuestionType {
   MULTIPLE_CHOICE @map("multiple_choice")
   MULTIPLE_SELECT @map("multiple_select")
   TRUE_OR_FALSE   @map("true_or_false")
-  ESSAY           @map("essay")
 
   @@map("question_type")
 }
 
 model Question {
-  id            String       @id @default(cuid())
-  type          QuestionType
-  question      String
-  options       Json?
-  correctAnswer Json?
-  points        Float
-  position      Int
+  id       String       @id @default(cuid())
+  type     QuestionType
+  question String
+  options  Json?
+  points   Float
+  position Int
 
   assessmentId String
   answer       Answer?

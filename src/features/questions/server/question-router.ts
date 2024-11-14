@@ -2,8 +2,9 @@ import { createTRPCRouter, instructorProcedure } from '@/server/api/trpc'
 
 import { editAssessmentInstructionSchema } from '@/features/questions/validations/assessment-instruction-schema'
 import {
-	addAssessmentQuestionsSchema,
-	editAssessmentQuestionOrderSchema
+	addAssessmentQuestionSchema,
+	editAssessmentQuestionOrderSchema,
+	editAssessmentQuestionSchema
 } from '@/features/questions/validations/assessment-questions-schema'
 import { findAssessmentSchema } from '@/features/questions/validations/assessment-schema'
 import {
@@ -96,9 +97,9 @@ export const questionRouter = createTRPCRouter({
 		}),
 
 	addQuestions: instructorProcedure
-		.input(addAssessmentQuestionsSchema)
+		.input(addAssessmentQuestionSchema)
 		.mutation(async ({ ctx, input }) => {
-			const { assessmentId, type, question, correctAnswer, points } = input
+			const { assessmentId, type, question, options, points } = input
 
 			const lastQuestion = await ctx.db.question.findFirst({
 				where: { assessmentId },
@@ -112,7 +113,7 @@ export const questionRouter = createTRPCRouter({
 					assessmentId,
 					type,
 					question,
-					correctAnswer,
+					options,
 					points,
 					position: newPosition
 				}
@@ -136,5 +137,29 @@ export const questionRouter = createTRPCRouter({
 			}
 
 			return { message: 'Questions reordered successfully' }
+		}),
+
+	editQuestion: instructorProcedure
+		.input(editAssessmentQuestionSchema)
+		.mutation(async ({ ctx, input }) => {
+			const { assessmentId, question, type, options, points, id } = input
+
+			const updatedQuestion = await ctx.db.question.update({
+				where: {
+					id,
+					assessmentId
+				},
+				data: {
+					question,
+					type,
+					options,
+					points
+				}
+			})
+
+			return {
+				message: 'Question updated successfully',
+				question: updatedQuestion
+			}
 		})
 })

@@ -102,7 +102,12 @@ export const AddCourseForm = () => {
 
 						<DialogFooter className="gap-2 md:gap-0">
 							<DialogClose asChild>
-								<Button type="button" variant="outline" onClick={() => form.reset()}>
+								<Button
+									type="button"
+									variant="outline"
+									onClick={() => form.reset()}
+									className="bg-card dark:bg-background dark:hover:bg-accent"
+								>
 									Cancel
 								</Button>
 							</DialogClose>

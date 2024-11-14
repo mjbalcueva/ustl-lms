@@ -82,6 +82,7 @@ import {
 	TbSunHigh,
 	TbTextColor,
 	TbTools,
+	TbUnderline,
 	TbUser,
 	TbVideoPlus,
 	TbWriting,
@@ -124,6 +125,7 @@ export const Heading3 = TbH3
 export const Paragraph = TbLetterCase
 export const Bold = TbBold
 export const Italic = TbItalic
+export const Underline = TbUnderline
 export const Strikethrough = TbStrikethrough
 export const Code = TbCode
 export const ClearFormatting = TbClearFormatting

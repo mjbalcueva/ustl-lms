@@ -10,11 +10,18 @@ import {
 	Code,
 	DotsHorizontal,
 	Italic,
-	Strikethrough
+	Strikethrough,
+	Underline
 } from '@/core/lib/icons'
 import { type FormatAction } from '@/core/types/tiptap'
 
-type TextStyleAction = 'bold' | 'italic' | 'strikethrough' | 'code' | 'clearFormatting'
+type TextStyleAction =
+	| 'bold'
+	| 'italic'
+	| 'strikethrough'
+	| 'code'
+	| 'clearFormatting'
+	| 'underline'
 
 type TextStyle = FormatAction & {
 	value: TextStyleAction
@@ -40,6 +47,16 @@ const formatActions: TextStyle[] = [
 		canExecute: (editor) =>
 			editor.can().chain().focus().toggleItalic().run() && !editor.isActive('codeBlock'),
 		shortcuts: ['mod', 'I']
+	},
+	{
+		value: 'underline',
+		label: 'Underline',
+		icon: <Underline className="size-5" />,
+		action: (editor) => editor.chain().focus().toggleUnderline().run(),
+		isActive: (editor) => editor.isActive('underline'),
+		canExecute: (editor) =>
+			editor.can().chain().focus().toggleUnderline().run() && !editor.isActive('codeBlock'),
+		shortcuts: ['mod', 'U']
 	},
 	{
 		value: 'strikethrough',
@@ -82,7 +99,7 @@ type UpdateTextFormatingProps = VariantProps<typeof toggleVariants> & {
 export const UpdateTextFormating: React.FC<UpdateTextFormatingProps> = ({
 	editor,
 	activeActions = formatActions.map((action) => action.value),
-	mainActionCount = 2,
+	mainActionCount = 6,
 	size,
 	variant
 }) => {

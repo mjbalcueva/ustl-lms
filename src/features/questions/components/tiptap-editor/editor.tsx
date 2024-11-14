@@ -4,17 +4,21 @@ import { EditorContent, type Content } from '@tiptap/react'
 import { useTiptapEditor, type UseTiptapEditorProps } from '@/core/lib/hooks/use-tiptap'
 import { cn } from '@/core/lib/utils/cn'
 
-import { EditorToolbar } from '@/features/chapters/components/tiptap-editor/editor-toolbar'
+import { EditorToolbar } from '@/features/questions/components/tiptap-editor/editor-toolbar'
 
 export type TiptapEditorProps = Omit<UseTiptapEditorProps, 'onUpdate'> & {
 	value?: Content
 	onUpdate?: (value: Content) => void
 	className?: string
 	editorContentClassName?: string
+	inputClassName?: string
 }
 
 export const TiptapEditor = React.forwardRef<HTMLDivElement, TiptapEditorProps>(
-	({ value, editable, onUpdate, className, editorContentClassName, ...props }, ref) => {
+	(
+		{ value, editable, onUpdate, className, editorContentClassName, inputClassName, ...props },
+		ref
+	) => {
 		const editor = useTiptapEditor({
 			value,
 			editable,
@@ -31,13 +35,14 @@ export const TiptapEditor = React.forwardRef<HTMLDivElement, TiptapEditorProps>(
 
 		return (
 			<div ref={ref} className={cn('space-y-1.5', className)}>
-				<EditorToolbar editor={editor} />
+				<EditorToolbar editor={editor} inputClassName={inputClassName} />
 				<EditorContent
 					editor={editor}
 					className={cn(
 						'minimal-tiptap-editor',
 						'min-h-20 rounded-xl border border-input px-3 py-2 shadow-sm outline-none ring-0 focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background dark:bg-background',
 						'[&_.is-editor-empty]:before:!text-muted-foreground',
+						inputClassName,
 						editorContentClassName
 					)}
 				/>

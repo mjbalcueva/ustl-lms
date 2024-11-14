@@ -1,39 +1,38 @@
 import { QuestionType } from '@prisma/client'
 import { z } from 'zod'
 
-export const addAssessmentQuestionsSchema = z.object({
+// Create shared type-specific schemas
+const multipleChoiceSchema = {
+	options: z.array(z.string()).min(2, 'At least 2 options required'),
+	answer: z.string()
+}
+
+const multipleSelectSchema = {
+	options: z.array(z.string()).min(2, 'At least 2 options required'),
+	answer: z.array(z.string())
+}
+
+const trueOrFalseSchema = {
+	options: z.tuple([z.literal('True'), z.literal('False')]),
+	answer: z.union([z.literal('True'), z.literal('False')])
+}
+
+export const addAssessmentQuestionSchema = z.object({
 	assessmentId: z.string().min(1, 'Assessment ID is required'),
 	type: z.nativeEnum(QuestionType),
 	question: z.string().min(1, 'Question is required'),
 	options: z.preprocess(
 		(val) => (typeof val === 'string' ? JSON.parse(val) : val),
-		z.record(z.string(), z.string().min(1, 'Option text is required')).optional()
-	),
-	correctAnswer: z.preprocess(
-		(val) => (typeof val === 'string' ? JSON.parse(val) : val),
-		z.union([
-			z.object({
-				type: z.literal(QuestionType.MULTIPLE_CHOICE),
-				answer: z.string()
-			}),
-			z.object({
-				type: z.literal(QuestionType.MULTIPLE_SELECT),
-				answer: z.record(z.string(), z.boolean())
-			}),
-			z.object({
-				type: z.literal(QuestionType.TRUE_OR_FALSE),
-				answer: z.boolean()
-			}),
-			z.object({
-				type: z.literal(QuestionType.ESSAY),
-				answer: z.string()
-			})
+		z.discriminatedUnion('type', [
+			z.object({ type: z.literal(QuestionType.MULTIPLE_CHOICE), ...multipleChoiceSchema }),
+			z.object({ type: z.literal(QuestionType.MULTIPLE_SELECT), ...multipleSelectSchema }),
+			z.object({ type: z.literal(QuestionType.TRUE_OR_FALSE), ...trueOrFalseSchema })
 		])
 	),
-	points: z.number().min(1, 'Points must be greater than 0')
+	points: z.number().min(0.5, 'Points must be at least 0.5')
 })
 
-export type AddAssessmentQuestionsSchema = z.infer<typeof addAssessmentQuestionsSchema>
+export type AddAssessmentQuestionSchema = z.infer<typeof addAssessmentQuestionSchema>
 
 export const editAssessmentQuestionOrderSchema = z.object({
 	assessmentId: z.string().min(1, 'Assessment ID is required'),
@@ -46,3 +45,21 @@ export const editAssessmentQuestionOrderSchema = z.object({
 })
 
 export type EditAssessmentQuestionOrderSchema = z.infer<typeof editAssessmentQuestionOrderSchema>
+
+export const editAssessmentQuestionSchema = z.object({
+	id: z.string(),
+	assessmentId: z.string().min(1, 'Assessment ID is required'),
+	type: z.nativeEnum(QuestionType),
+	question: z.string().min(1, 'Question is required'),
+	options: z.preprocess(
+		(val) => (typeof val === 'string' ? JSON.parse(val) : val),
+		z.discriminatedUnion('type', [
+			z.object({ type: z.literal(QuestionType.MULTIPLE_CHOICE), ...multipleChoiceSchema }),
+			z.object({ type: z.literal(QuestionType.MULTIPLE_SELECT), ...multipleSelectSchema }),
+			z.object({ type: z.literal(QuestionType.TRUE_OR_FALSE), ...trueOrFalseSchema })
+		])
+	),
+	points: z.number().min(0.5, 'Points must be at least 0.5')
+})
+
+export type EditAssessmentQuestionSchema = z.infer<typeof editAssessmentQuestionSchema>

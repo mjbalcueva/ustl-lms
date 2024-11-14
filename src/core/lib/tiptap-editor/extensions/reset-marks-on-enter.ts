@@ -9,8 +9,8 @@ export const ResetMarksOnEnter = Extension.create({
 				if (
 					editor.isActive('bold') ||
 					editor.isActive('italic') ||
-					editor.isActive('strike') ||
 					editor.isActive('underline') ||
+					editor.isActive('strike') ||
 					editor.isActive('code')
 				) {
 					editor.commands.splitBlock({ keepMarks: false })

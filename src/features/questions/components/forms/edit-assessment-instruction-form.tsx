@@ -17,13 +17,14 @@ import {
 } from '@/core/components/compound-card'
 import { Button } from '@/core/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/core/components/ui/form'
-import { Textarea } from '@/core/components/ui/textarea'
 import { Add, Edit } from '@/core/lib/icons'
 
 import {
 	editAssessmentInstructionSchema,
 	type EditAssessmentInstructionSchema
 } from '@/features/questions/validations/assessment-instruction-schema'
+
+import { TiptapEditor } from '../tiptap-editor/editor'
 
 export const EditAssessmentInstructionForm = ({
 	chapterId,
@@ -80,12 +81,16 @@ export const EditAssessmentInstructionForm = ({
 								render={({ field }) => (
 									<FormItem>
 										<FormControl>
-											<Textarea
+											<TiptapEditor
 												placeholder="e.g. 'Read each question carefully and choose the correct answer (type 'T' for True or 'F' for False)'"
-												disabled={isPending}
-												value={field.value ?? ''}
-												onChange={field.onChange}
-												onBlur={field.onBlur}
+												throttleDelay={2000}
+												output="html"
+												autofocus={true}
+												immediatelyRender={false}
+												editable={true}
+												injectCSS={true}
+												onUpdate={field.onChange}
+												{...field}
 											/>
 										</FormControl>
 										<FormMessage />

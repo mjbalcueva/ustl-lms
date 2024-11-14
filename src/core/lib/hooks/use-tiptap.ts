@@ -15,6 +15,7 @@ import { Image } from '@/core/lib/tiptap-editor/extensions/image'
 import { Link } from '@/core/lib/tiptap-editor/extensions/link'
 import { ResetMarksOnEnter } from '@/core/lib/tiptap-editor/extensions/reset-marks-on-enter'
 import { Selection } from '@/core/lib/tiptap-editor/extensions/selection'
+import { Underline } from '@/core/lib/tiptap-editor/extensions/underline'
 import { UnsetAllMarks } from '@/core/lib/tiptap-editor/extensions/unset-all-marks'
 import { cn } from '@/core/lib/utils/cn'
 import { getOutput } from '@/core/lib/utils/get-output'
@@ -50,6 +51,7 @@ const createExtensions = (placeholder: string) => [
 	TextStyle,
 	Selection,
 	Typography,
+	Underline,
 	UnsetAllMarks,
 	HorizontalRule,
 	ResetMarksOnEnter,
