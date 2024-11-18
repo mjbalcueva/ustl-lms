@@ -40,7 +40,7 @@ export const AddAssessmentQuestionForm = ({
 
 			<DialogContent>
 				<DialogHeader>
-					<DialogTitle>Questions Details</DialogTitle>
+					<DialogTitle>Add Question</DialogTitle>
 					<DialogDescription>Create questions for your assessment section.</DialogDescription>
 				</DialogHeader>
 

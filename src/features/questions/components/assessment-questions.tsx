@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { QuestionType, type Question } from '@prisma/client'
+import { QuestionType, type Chapter, type Question } from '@prisma/client'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
@@ -16,24 +16,29 @@ import {
 	CardHeader,
 	CardTitle
 } from '@/core/components/compound-card'
-import { Button } from '@/core/components/ui/button'
 import { Loader } from '@/core/components/ui/loader'
-import { Ai } from '@/core/lib/icons'
 
 import { AddAssessmentQuestionForm } from '@/features/questions/components/forms/add-assessment-question-form'
+import { AiAssessmentQuestionForm } from '@/features/questions/components/forms/ai-assessment-question-form'
 import {
 	addAssessmentQuestionSchema,
-	type AddAssessmentQuestionSchema
+	type AddAssessmentQuestionSchema,
+	type AiAssessmentQuestionSchema
 } from '@/features/questions/validations/assessment-questions-schema'
 
 import { QuestionList } from './assessment-question-list'
 
 type AssessmentQuestionsProps = {
 	assessmentId: string
+	chapters: Chapter[]
 	questions: Question[]
 }
 
-export const AssessmentQuestions = ({ assessmentId, questions }: AssessmentQuestionsProps) => {
+export const AssessmentQuestions = ({
+	assessmentId,
+	chapters,
+	questions
+}: AssessmentQuestionsProps) => {
 	const router = useRouter()
 	const hasQuestions = questions.length > 0
 
@@ -77,6 +82,19 @@ export const AssessmentQuestions = ({ assessmentId, questions }: AssessmentQuest
 			onError: (error) => toast.error(error.message)
 		})
 
+	const { mutate: generateQuestions, isPending: isGenerating } =
+		api.question.generateQuestions.useMutation({
+			onSuccess: (data) => {
+				router.refresh()
+				toast.success(data.message)
+			},
+			onError: (error) => toast.error(error.message)
+		})
+
+	const handleGenerateQuestions = (data: AiAssessmentQuestionSchema) => {
+		generateQuestions({ ...data, assessmentId })
+	}
+
 	const onReorder = async (data: { id: string; position: number }[]) => {
 		editQuestionOrder({ assessmentId, questionList: data })
 	}
@@ -93,9 +111,12 @@ export const AssessmentQuestions = ({ assessmentId, questions }: AssessmentQuest
 				<CardTitle>Questions</CardTitle>
 
 				<div className="flex items-center gap-2">
-					<Button variant="ghost" size="sm">
-						<Ai /> Generate with AI
-					</Button>
+					<AiAssessmentQuestionForm
+						assessmentId={assessmentId}
+						chapters={chapters}
+						onGenerate={handleGenerateQuestions}
+						isGenerating={isGenerating}
+					/>
 					<AddAssessmentQuestionForm form={form} addQuestion={addQuestion} isAdding={isAdding} />
 				</div>
 			</CardHeader>

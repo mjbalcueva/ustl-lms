@@ -6,3 +6,9 @@ export const findAssessmentSchema = z.object({
 })
 
 export type FindAssessmentSchema = z.infer<typeof findAssessmentSchema>
+
+export const findOtherChaptersSchema = z.object({
+	courseId: z.string()
+})
+
+export type FindOtherChaptersSchema = z.infer<typeof findOtherChaptersSchema>

@@ -3,11 +3,15 @@ import { createTRPCRouter, instructorProcedure } from '@/server/api/trpc'
 import { editAssessmentInstructionSchema } from '@/features/questions/validations/assessment-instruction-schema'
 import {
 	addAssessmentQuestionSchema,
+	aiAssessmentQuestionSchema,
 	deleteAssessmentQuestionSchema,
 	editAssessmentQuestionOrderSchema,
 	editAssessmentQuestionSchema
 } from '@/features/questions/validations/assessment-questions-schema'
-import { findAssessmentSchema } from '@/features/questions/validations/assessment-schema'
+import {
+	findAssessmentSchema,
+	findOtherChaptersSchema
+} from '@/features/questions/validations/assessment-schema'
 import {
 	editShuffleOptionsSchema,
 	editShuffleQuestionsSchema
@@ -38,6 +42,19 @@ export const questionRouter = createTRPCRouter({
 
 		return { assessment }
 	}),
+
+	findOtherChapters: instructorProcedure
+		.input(findOtherChaptersSchema)
+		.query(async ({ ctx, input }) => {
+			const { courseId } = input
+
+			const chapters = await ctx.db.chapter.findMany({
+				where: { courseId, type: 'LESSON' },
+				orderBy: { position: 'asc' }
+			})
+
+			return { chapters }
+		}),
 
 	editAssessmentTitle: instructorProcedure
 		.input(editAssessmentTitleSchema)
@@ -190,5 +207,14 @@ export const questionRouter = createTRPCRouter({
 			})
 
 			return { message: 'Question deleted successfully' }
+		}),
+
+	generateQuestions: instructorProcedure
+		.input(aiAssessmentQuestionSchema)
+		.mutation(async ({ input }) => {
+			const { assessmentId, chapters, questionType, numberOfQuestions, additionalPrompt } = input
+
+			console.log(assessmentId, chapters, questionType, numberOfQuestions, additionalPrompt)
+			return { message: 'Questions generated successfully' }
 		})
 })

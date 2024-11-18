@@ -1,6 +1,18 @@
 import { QuestionType } from '@prisma/client'
 import { z } from 'zod'
 
+export const aiAssessmentQuestionSchema = z.object({
+	assessmentId: z.string().min(1, 'Assessment ID is required'),
+	chapters: z.array(z.string()).min(1, 'At least one chapter is required'),
+	questionType: z.nativeEnum(QuestionType, {
+		required_error: 'Please select a question type'
+	}),
+	numberOfQuestions: z.number().min(1).max(10),
+	additionalPrompt: z.string().optional()
+})
+
+export type AiAssessmentQuestionSchema = z.infer<typeof aiAssessmentQuestionSchema>
+
 // Create shared type-specific schemas
 const multipleChoiceSchema = {
 	options: z.array(z.string()).min(2, 'At least 2 options required'),

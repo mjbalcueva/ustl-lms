@@ -38,6 +38,8 @@ export default async function Page({
 	const { assessment } = await api.question.findAssessment({ chapterId, assessmentId })
 	if (!assessment) return <NotFound item="assessment" />
 
+	const { chapters } = await api.question.findOtherChapters({ courseId })
+
 	const crumbs: Breadcrumb = [
 		{ icon: Instructor },
 		{ label: 'Courses', href: '/instructor/courses' },
@@ -96,7 +98,11 @@ export default async function Page({
 
 				<PageSection columnMode>
 					<FoldableBlock title="Your questions" icon={TbFlagQuestion}>
-						<AssessmentQuestions assessmentId={assessmentId} questions={assessment.questions} />
+						<AssessmentQuestions
+							assessmentId={assessmentId}
+							chapters={chapters}
+							questions={assessment.questions}
+						/>
 					</FoldableBlock>
 				</PageSection>
 			</PageContent>
