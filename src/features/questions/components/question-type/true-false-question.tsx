@@ -1,4 +1,3 @@
-import { Label } from '@/core/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/core/components/ui/radio-group'
 
 type TrueFalseProps = {
@@ -12,9 +11,9 @@ export const TrueFalseQuestion = ({ answer }: TrueFalseProps) => {
 				{['true', 'false'].map((value) => (
 					<div key={value} className="flex items-center gap-2">
 						<RadioGroupItem value={value} className="hover:cursor-default" />
-						<Label className={`text-sm ${value === String(answer).toLowerCase() && 'font-medium'}`}>
+						<span className={`text-sm ${value === String(answer).toLowerCase() && 'font-medium'}`}>
 							{value.charAt(0).toUpperCase() + value.slice(1)}
-						</Label>
+						</span>
 					</div>
 				))}
 			</RadioGroup>
