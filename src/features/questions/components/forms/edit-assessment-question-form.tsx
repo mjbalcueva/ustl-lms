@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -37,6 +38,8 @@ export const EditAssessmentQuestionForm = ({
 	questionData,
 	assessmentId
 }: EditAssessmentQuestionFormProps) => {
+	const router = useRouter()
+
 	const form = useForm<EditAssessmentQuestionSchema>({
 		resolver: zodResolver(editAssessmentQuestionSchema),
 		defaultValues: {
@@ -49,6 +52,7 @@ export const EditAssessmentQuestionForm = ({
 		onSuccess: () => {
 			toast.success('Question updated successfully')
 			onClose()
+			router.refresh()
 		},
 		onError: (error) => toast.error(error.message)
 	})
