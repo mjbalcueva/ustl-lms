@@ -1,5 +1,3 @@
-import { type DraggableProvidedDragHandleProps } from '@hello-pangea/dnd'
-
 import { Badge } from '@/core/components/ui/badge'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/core/components/ui/tooltip'
 import { Delete, Edit, GripVertical } from '@/core/lib/icons'
@@ -9,7 +7,6 @@ type AssessmentQuestionHeaderProps = {
 	points: number
 	onEdit: () => void
 	onDelete: () => void
-	dragHandleProps: DraggableProvidedDragHandleProps | null
 }
 
 export const AssessmentQuestionHeader = ({
@@ -17,7 +14,7 @@ export const AssessmentQuestionHeader = ({
 	points,
 	onEdit,
 	onDelete,
-	dragHandleProps
+	...dragHandleProps
 }: AssessmentQuestionHeaderProps) => {
 	return (
 		<div className="flex items-center gap-2 px-2.5 pb-2.5 pt-3">

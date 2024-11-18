@@ -63,42 +63,44 @@ export const QuestionList = ({ items, onReorder }: QuestionListProps) => {
 				<Droppable droppableId="assessments">
 					{(provided) => (
 						<ol ref={provided.innerRef} className="space-y-2" {...provided.droppableProps}>
-							{assessments.map((assessment, index) => (
-								<Draggable key={assessment.id} draggableId={assessment.id} index={index}>
-									{(provided) => (
-										<li
-											ref={provided.innerRef}
-											className="rounded-xl border border-input bg-card dark:bg-background"
-											{...provided.draggableProps}
-										>
-											<AssessmentQuestionHeader
-												index={index}
-												points={assessment.points}
-												onEdit={() => setEditingQuestion(assessment)}
-												onDelete={() => {
-													/* TODO: Implement delete */
-												}}
-												dragHandleProps={provided.dragHandleProps}
-											/>
-
-											<div className="space-y-1 pb-4 pl-12 pr-4 text-base">
-												<TiptapEditor
-													content={assessment.question}
-													editable={false}
-													injectCSS={true}
-													immediatelyRender={false}
+							{assessments.map((assessment, index) => {
+								return (
+									<Draggable key={assessment.id} draggableId={assessment.id} index={index}>
+										{(provided) => (
+											<li
+												ref={provided.innerRef}
+												className="rounded-xl border border-input bg-card dark:bg-background"
+												{...provided.draggableProps}
+											>
+												<AssessmentQuestionHeader
+													index={index}
+													points={assessment.points}
+													onEdit={() => setEditingQuestion(assessment)}
+													onDelete={() => {
+														/* TODO: Implement delete */
+													}}
+													{...provided.dragHandleProps}
 												/>
 
-												<div className="flex items-center gap-2 pl-2">
-													<div className="flex-1 border-l-2 border-muted pl-3">
-														{renderQuestionContent(assessment)}
+												<div className="space-y-1 pb-4 pl-12 pr-4 text-base">
+													<TiptapEditor
+														content={assessment.question}
+														editable={false}
+														injectCSS={true}
+														immediatelyRender={false}
+													/>
+
+													<div className="flex items-center gap-2 pl-2">
+														<div className="flex-1 border-l-2 border-muted pl-3">
+															{renderQuestionContent(assessment)}
+														</div>
 													</div>
 												</div>
-											</div>
-										</li>
-									)}
-								</Draggable>
-							))}
+											</li>
+										)}
+									</Draggable>
+								)
+							})}
 							{provided.placeholder}
 						</ol>
 					)}
