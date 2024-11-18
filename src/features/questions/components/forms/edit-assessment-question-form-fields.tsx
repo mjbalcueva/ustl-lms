@@ -127,7 +127,7 @@ export const EditAssessmentQuestionFormFields = ({
 									field.onChange(value)
 									handleTypeChange(value)
 								}}
-								defaultValue={QuestionType.MULTIPLE_CHOICE}
+								defaultValue={field.value}
 							>
 								<FormControl>
 									<SelectTrigger disabled={isSubmitting} className="!bg-card">
@@ -275,6 +275,7 @@ export const EditAssessmentQuestionFormFields = ({
 									variant="outline"
 									size="md"
 									onClick={() => handleAddOption(field)}
+									className="bg-card hover:bg-accent dark:bg-background dark:hover:bg-accent"
 								>
 									Add Option
 								</Button>
