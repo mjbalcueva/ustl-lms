@@ -63,3 +63,9 @@ export const editAssessmentQuestionSchema = z.object({
 })
 
 export type EditAssessmentQuestionSchema = z.infer<typeof editAssessmentQuestionSchema>
+
+export const deleteAssessmentQuestionSchema = z.object({
+	id: z.string().min(1, 'Question ID is required')
+})
+
+export type DeleteAssessmentQuestionSchema = z.infer<typeof deleteAssessmentQuestionSchema>

@@ -3,6 +3,7 @@ import { createTRPCRouter, instructorProcedure } from '@/server/api/trpc'
 import { editAssessmentInstructionSchema } from '@/features/questions/validations/assessment-instruction-schema'
 import {
 	addAssessmentQuestionSchema,
+	deleteAssessmentQuestionSchema,
 	editAssessmentQuestionOrderSchema,
 	editAssessmentQuestionSchema
 } from '@/features/questions/validations/assessment-questions-schema'
@@ -157,5 +158,37 @@ export const questionRouter = createTRPCRouter({
 				message: 'Question updated successfully',
 				question: updatedQuestion
 			}
+		}),
+
+	deleteQuestion: instructorProcedure
+		.input(deleteAssessmentQuestionSchema)
+		.mutation(async ({ ctx, input }) => {
+			const { id } = input
+
+			// Get the question to be deleted to find its position and assessmentId
+			const questionToDelete = await ctx.db.question.findUnique({
+				where: { id },
+				select: { position: true, assessmentId: true }
+			})
+
+			if (!questionToDelete) {
+				throw new Error('Question not found')
+			}
+
+			// Delete the question
+			await ctx.db.question.delete({ where: { id } })
+
+			// Update positions of remaining questions
+			await ctx.db.question.updateMany({
+				where: {
+					assessmentId: questionToDelete.assessmentId,
+					position: { gt: questionToDelete.position }
+				},
+				data: {
+					position: { decrement: 1 }
+				}
+			})
+
+			return { message: 'Question deleted successfully' }
 		})
 })

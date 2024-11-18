@@ -1,8 +1,12 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { DragDropContext, Draggable, Droppable, type DropResult } from '@hello-pangea/dnd'
 import { type Question } from '@prisma/client'
+import { toast } from 'sonner'
+
+import { api } from '@/services/trpc/react'
 
 import { AssessmentQuestionHeader } from '@/features/questions/components/assessment-question-header'
 import { EditAssessmentQuestionForm } from '@/features/questions/components/forms/edit-assessment-question-form'
@@ -18,6 +22,8 @@ type QuestionListProps = {
 }
 
 export const QuestionList = ({ items, onReorder }: QuestionListProps) => {
+	const router = useRouter()
+
 	const [assessments, setAssessments] = React.useState(items)
 	const [editingQuestion, setEditingQuestion] = React.useState<Question | null>(null)
 
@@ -57,6 +63,13 @@ export const QuestionList = ({ items, onReorder }: QuestionListProps) => {
 		}
 	}
 
+	const { mutate: deleteQuestion } = api.question.deleteQuestion.useMutation({
+		onSuccess: (data) => {
+			toast.success(data.message)
+			router.refresh()
+		}
+	})
+
 	return (
 		<>
 			<DragDropContext onDragEnd={handleDragEnd}>
@@ -76,9 +89,7 @@ export const QuestionList = ({ items, onReorder }: QuestionListProps) => {
 													index={index}
 													points={assessment.points}
 													onEdit={() => setEditingQuestion(assessment)}
-													onDelete={() => {
-														/* TODO: Implement delete */
-													}}
+													onDelete={() => deleteQuestion({ id: assessment.id })}
 													{...provided.dragHandleProps}
 												/>
 
