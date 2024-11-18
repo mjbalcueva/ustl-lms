@@ -25,16 +25,12 @@ export const questionRouter = createTRPCRouter({
 				chapter: {
 					include: {
 						course: {
-							select: {
-								title: true
-							}
+							select: { title: true }
 						}
 					}
 				},
 				questions: {
-					orderBy: {
-						id: 'asc'
-					}
+					orderBy: { position: 'asc' }
 				}
 			}
 		})
