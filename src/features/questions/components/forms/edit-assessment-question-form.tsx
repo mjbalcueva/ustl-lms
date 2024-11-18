@@ -18,7 +18,7 @@ import {
 } from '@/core/components/ui/dialog'
 import { Form } from '@/core/components/ui/form'
 
-import { QuestionFormFields } from '@/features/questions/components/forms/question-form-fields'
+import { EditAssessmentQuestionFormFields } from '@/features/questions/components/forms/edit-assessment-question-form-fields'
 import {
 	editAssessmentQuestionSchema,
 	type EditAssessmentQuestionSchema
@@ -66,7 +66,7 @@ export const EditAssessmentQuestionForm = ({
 				</DialogHeader>
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-						<QuestionFormFields form={form} isSubmitting={isEditing} />
+						<EditAssessmentQuestionFormFields form={form} isSubmitting={isEditing} />
 
 						<DialogFooter className="gap-2 md:gap-0">
 							<DialogClose asChild>
