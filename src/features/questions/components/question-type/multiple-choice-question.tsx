@@ -11,19 +11,9 @@ export const MultipleChoiceQuestion = ({ options, answer }: MultipleChoiceProps)
 			{options.map((option, i) => (
 				<div key={i} className="flex items-center gap-2">
 					<RadioGroup value={answer}>
-						<RadioGroupItem
-							value={option}
-							disabled
-							className={option === answer ? 'border-green-500' : ''}
-						/>
+						<RadioGroupItem value={option} className="hover:cursor-default" />
 					</RadioGroup>
-					<span
-						className={`text-sm ${
-							option === answer ? 'font-medium text-green-500' : 'text-muted-foreground'
-						}`}
-					>
-						{option}
-					</span>
+					<span className={`text-sm ${option === answer && 'font-medium'}`}>{option}</span>
 				</div>
 			))}
 		</div>

@@ -12,18 +12,8 @@ export const MultipleSelectQuestion = ({ options, answer }: MultipleSelectProps)
 				const isCorrect = answer.includes(option)
 				return (
 					<div key={i} className="flex items-center gap-2">
-						<Checkbox
-							disabled
-							checked={isCorrect}
-							className={isCorrect ? 'border-green-500' : ''}
-						/>
-						<span
-							className={`text-sm ${
-								isCorrect ? 'font-medium text-green-500' : 'text-muted-foreground'
-							}`}
-						>
-							{option}
-						</span>
+						<Checkbox checked={isCorrect} className="hover:cursor-default" />
+						<span className={`text-sm ${isCorrect && 'font-medium'}`}>{option}</span>
 					</div>
 				)
 			})}
