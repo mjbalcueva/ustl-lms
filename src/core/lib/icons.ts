@@ -78,6 +78,7 @@ import {
 	TbShieldCheckFilled,
 	TbShieldX,
 	TbSmartHome,
+	TbSparkles,
 	TbStrikethrough,
 	TbSunHigh,
 	TbTextColor,
@@ -88,6 +89,9 @@ import {
 	TbWriting,
 	TbX
 } from 'react-icons/tb'
+
+// AI
+export const Ai = TbSparkles
 
 // Status Icons
 export const Publish = TbCircleCheck

@@ -16,7 +16,9 @@ import {
 	CardHeader,
 	CardTitle
 } from '@/core/components/compound-card'
+import { Button } from '@/core/components/ui/button'
 import { Loader } from '@/core/components/ui/loader'
+import { Ai } from '@/core/lib/icons'
 
 import { AddAssessmentQuestionForm } from '@/features/questions/components/forms/add-assessment-question-form'
 import {
@@ -90,7 +92,12 @@ export const AssessmentQuestions = ({ assessmentId, questions }: AssessmentQuest
 			<CardHeader>
 				<CardTitle>Questions</CardTitle>
 
-				<AddAssessmentQuestionForm form={form} addQuestion={addQuestion} isAdding={isAdding} />
+				<div className="flex items-center gap-2">
+					<Button variant="ghost" size="sm">
+						<Ai /> Generate with AI
+					</Button>
+					<AddAssessmentQuestionForm form={form} addQuestion={addQuestion} isAdding={isAdding} />
+				</div>
 			</CardHeader>
 
 			<CardContent isEmpty={!hasQuestions}>
