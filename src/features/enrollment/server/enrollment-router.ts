@@ -21,9 +21,7 @@ export const enrollmentRouter = createTRPCRouter({
 				instructor: {
 					select: {
 						profile: {
-							select: {
-								name: true
-							}
+							select: { name: true }
 						}
 					}
 				},

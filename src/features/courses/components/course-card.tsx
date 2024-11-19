@@ -7,6 +7,7 @@ import { Badge } from '@/core/components/ui/badge'
 import { Button } from '@/core/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader } from '@/core/components/ui/card'
 import { Learning } from '@/core/lib/icons'
+import { cn } from '@/core/lib/utils/cn'
 
 type CourseCardProps = {
 	id: string
@@ -33,7 +34,7 @@ export const CourseCard = ({
 				<Image
 					alt={title}
 					className="h-32 w-full object-cover"
-					src={imageUrl ?? '/placeholder.svg'}
+					src={imageUrl ?? '/assets/placeholder.svg'}
 					height={256}
 					width={256}
 					priority
@@ -45,7 +46,14 @@ export const CourseCard = ({
 			<CardContent className="grid flex-grow gap-3 p-3">
 				<div className="space-y-1">
 					<h3 className="line-clamp-1 text-sm font-semibold">{title}</h3>
-					<p className="line-clamp-3 min-h-12 text-xs text-muted-foreground">{description}</p>
+					<p
+						className={cn(
+							'line-clamp-3 min-h-12 text-xs text-muted-foreground',
+							description ? '' : 'italic'
+						)}
+					>
+						{description ?? 'No description found'}
+					</p>
 				</div>
 
 				<div className="flex items-center gap-1 text-xs text-muted-foreground">
@@ -59,6 +67,11 @@ export const CourseCard = ({
 							{tag}
 						</Badge>
 					))}
+					{!tags.length && (
+						<Badge variant="outline" className="px-1 py-0 text-[10px] text-muted-foreground">
+							None
+						</Badge>
+					)}
 				</div>
 			</CardContent>
 			<CardFooter className="p-3 pt-0">
