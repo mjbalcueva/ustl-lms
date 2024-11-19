@@ -1,22 +1,31 @@
+import { api } from '@/services/trpc/server'
+
 import {
 	PageBreadcrumbs,
 	PageContent,
 	PageDescription,
 	PageHeader,
+	PageSection,
 	PageTitle
 } from '@/core/components/ui/page'
 import { Separator } from '@/core/components/ui/separator'
 import { Home } from '@/core/lib/icons'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
+import { EnrolledCourses } from '@/features/courses/components/enrolled-courses'
 import { EnrollToCourseButton } from '@/features/enrollment/components/enroll-to-course-button'
 
 export default async function Page() {
+	await new Promise((resolve) => setTimeout(resolve, 3000))
+
+	const { courses } = await api.course.findEnrolledCourses()
+
 	const crumbs: Breadcrumb = [
 		{ icon: Home },
 		{ label: 'Learning', href: '/courses' },
 		{ label: 'Browse' }
 	]
+
 	return (
 		<>
 			<PageHeader className="hidden space-y-0 md:block md:py-3">
@@ -33,7 +42,11 @@ export default async function Page() {
 				<EnrollToCourseButton />
 			</PageHeader>
 
-			<PageContent></PageContent>
+			<PageContent>
+				<PageSection className="space-y-4">
+					<EnrolledCourses courses={courses} />
+				</PageSection>
+			</PageContent>
 		</>
 	)
 }

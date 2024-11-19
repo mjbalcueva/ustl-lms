@@ -1,6 +1,6 @@
 import { TRPCClientError } from '@trpc/client'
 
-import { createTRPCRouter, instructorProcedure } from '@/server/api/trpc'
+import { createTRPCRouter, instructorProcedure, protectedProcedure } from '@/server/api/trpc'
 
 import { muxVideo } from '@/services/mux/video'
 import { utapi } from '@/services/uploadthing/utapi'
@@ -342,5 +342,49 @@ export const courseRouter = createTRPCRouter({
 			}
 
 			return { message: 'Chapters reordered successfully' }
+		}),
+
+	// Student
+	//
+	findEnrolledCourses: protectedProcedure.query(async ({ ctx }) => {
+		const courses = await ctx.db.course.findMany({
+			where: {
+				enrollments: {
+					some: {
+						userId: ctx.session.user.id
+					}
+				},
+				status: 'PUBLISHED'
+			},
+			include: {
+				instructor: {
+					select: {
+						profile: {
+							select: {
+								name: true
+							}
+						}
+					}
+				},
+				categories: {
+					select: {
+						name: true
+					}
+				}
+			}
 		})
+
+		return {
+			courses: courses.map((course) => ({
+				id: course.id,
+				title: course.title,
+				description: course.description,
+				imageUrl: course.imageUrl,
+				code: course.code,
+				status: course.status,
+				instructor: course.instructor.profile?.name ?? 'Unknown Instructor',
+				tags: course.categories.map((category) => category.name)
+			}))
+		}
+	})
 })
