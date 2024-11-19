@@ -1,4 +1,5 @@
 import { PageDescription, PageHeader, PageTitle } from '@/core/components/ui/page'
+import ChatList from '@/features/chat/components/chat-list'
 
 export default async function Page() {
 	return (
@@ -7,6 +8,8 @@ export default async function Page() {
 				<PageTitle>Chat</PageTitle>
 				<PageDescription>Chat with your friends</PageDescription>
 			</PageHeader>
+
+			<ChatList/>
 		</>
 	)
 }

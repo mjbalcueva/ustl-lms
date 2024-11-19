@@ -6,6 +6,7 @@ import { chapterRouter } from '@/features/chapters/server/chapter-router'
 import { courseRouter } from '@/features/courses/server/course-router'
 import { enrollmentRouter } from '@/features/enrollment/server/enrollment-router'
 import { questionRouter } from '@/features/questions/server/question-router'
+import { chatRouter } from '@/features/chat/server/chat-server'
 
 /**
  * This is the primary router for your server.
@@ -18,7 +19,8 @@ export const appRouter = createTRPCRouter({
 	course: courseRouter,
 	chapter: chapterRouter,
 	enrollment: enrollmentRouter,
-	question: questionRouter
+	question: questionRouter,
+	chat: chatRouter
 })
 
 // export type definition of API

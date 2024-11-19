@@ -37,7 +37,7 @@ export const courseRouter = createTRPCRouter({
 	//
 	findCourse: instructorProcedure.input(findCourseSchema).query(async ({ ctx, input }) => {
 		const { courseId } = input
-
+			
 		const course = await ctx.db.course.findUnique({
 			where: { id: courseId, instructorId: ctx.session.user.id },
 			include: {
@@ -80,6 +80,14 @@ export const courseRouter = createTRPCRouter({
 				title,
 				token,
 				instructorId: ctx.session.user.id
+			}
+		})
+
+		 // Create the group chat for the new course
+		 await ctx.db.groupChat.create({
+			data: {
+				name: `${title} Group Chat`,  
+				courseId: newCourseId 
 			}
 		})
 

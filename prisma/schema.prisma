@@ -375,7 +375,8 @@ model GroupChat {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  courseId    String       @unique // Ensures one-to-one with Course
+  courseId  String       @unique // Ensures one-to-one with Course
+  name      String       // Name of the group chat
   enrollments Enrollment[] // One-to-many relation back to Enrollment
   messages    Message[] // Add this field for the relation to Message
 
