@@ -4,7 +4,14 @@ import { useRouter } from 'next/navigation'
 
 import { api } from '@/services/trpc/react'
 
+import { ConfirmModal } from '@/core/components/confirm-modal'
 import { Button } from '@/core/components/ui/button'
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger
+} from '@/core/components/ui/dropdown-menu'
 import { Separator } from '@/core/components/ui/separator'
 import {
 	Sheet,
@@ -15,7 +22,7 @@ import {
 	SheetTrigger
 } from '@/core/components/ui/sheet'
 import { Switch } from '@/core/components/ui/switch'
-import { Delete, Gear } from '@/core/lib/icons'
+import { Delete, DotsHorizontal, Gear } from '@/core/lib/icons'
 
 type SectionActionsProps = {
 	courseId: string
@@ -57,82 +64,97 @@ export const SectionActionButton = ({
 		})
 
 	return (
-		<div className="flex items-center gap-2">
-			<Sheet>
-				<SheetTrigger asChild>
-					<Button
-						variant="outline"
-						size="md"
-						className="gap-2 bg-card dark:bg-background dark:hover:bg-accent"
-					>
-						<Gear />
-						Settings
-					</Button>
-				</SheetTrigger>
+		<DropdownMenu>
+			<DropdownMenuTrigger asChild>
+				<Button
+					aria-label="Open menu"
+					variant="ghost"
+					size="md"
+					className="size-9 rounded-md"
+					disabled={isEditingShuffleQuestions || isEditingShuffleOptions || isDeletingAssessment}
+				>
+					<DotsHorizontal aria-hidden="true" />
+				</Button>
+			</DropdownMenuTrigger>
 
-				<SheetContent>
-					<SheetHeader>
-						<SheetTitle>Question Settings</SheetTitle>
-						<SheetDescription>
-							Configure global settings for your assessment questions.
-						</SheetDescription>
-					</SheetHeader>
+			<DropdownMenuContent align="end" className="w-44">
+				<Sheet>
+					<SheetTrigger asChild>
+						<DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+							<Gear className="mr-2 size-4" />
+							Settings
+						</DropdownMenuItem>
+					</SheetTrigger>
 
-					<Separator className="mb-4 mt-3" />
+					<SheetContent>
+						<SheetHeader>
+							<SheetTitle>Question Settings</SheetTitle>
+							<SheetDescription>
+								Configure global settings for your assessment questions.
+							</SheetDescription>
+						</SheetHeader>
 
-					<div className="space-y-3">
-						<div className="flex items-center justify-between rounded-lg border bg-card px-3.5 py-2.5">
-							<div className="space-y-1">
-								<p className="text-sm font-medium">Shuffle Questions</p>
-								<p className="text-sm text-muted-foreground">
-									Randomize the order of questions for each student
-								</p>
+						<Separator className="mb-4 mt-3" />
+
+						<div className="space-y-3">
+							<div className="flex items-center justify-between rounded-lg border bg-card px-3.5 py-2.5">
+								<div className="space-y-1">
+									<p className="text-sm font-medium">Shuffle Questions</p>
+									<p className="text-sm text-muted-foreground">
+										Randomize the order of questions for each student
+									</p>
+								</div>
+
+								<Switch
+									disabled={isEditingShuffleQuestions}
+									checked={shuffleQuestions}
+									onCheckedChange={(checked: boolean) => {
+										editShuffleQuestions({
+											chapterId,
+											assessmentId,
+											shuffleQuestions: checked
+										})
+									}}
+								/>
 							</div>
 
-							<Switch
-								disabled={isEditingShuffleQuestions}
-								checked={shuffleQuestions}
-								onCheckedChange={(checked: boolean) => {
-									editShuffleQuestions({
-										chapterId,
-										assessmentId,
-										shuffleQuestions: checked
-									})
-								}}
-							/>
-						</div>
+							<div className="flex items-center justify-between rounded-lg border bg-card px-3.5 py-2.5">
+								<div className="space-y-1">
+									<p className="text-sm font-medium">Shuffle Options</p>
+									<p className="text-sm text-muted-foreground">
+										Randomize the order of answer options for each question
+									</p>
+								</div>
 
-						<div className="flex items-center justify-between rounded-lg border bg-card px-3.5 py-2.5">
-							<div className="space-y-1">
-								<p className="text-sm font-medium">Shuffle Options</p>
-								<p className="text-sm text-muted-foreground">
-									Randomize the order of answer options for each question
-								</p>
+								<Switch
+									disabled={isEditingShuffleOptions}
+									checked={shuffleOptions}
+									onCheckedChange={(checked: boolean) => {
+										editShuffleOptions({
+											chapterId,
+											assessmentId,
+											shuffleOptions: checked
+										})
+									}}
+								/>
 							</div>
-
-							<Switch
-								disabled={isEditingShuffleOptions}
-								checked={shuffleOptions}
-								onCheckedChange={(checked: boolean) => {
-									editShuffleOptions({
-										chapterId,
-										assessmentId,
-										shuffleOptions: checked
-									})
-								}}
-							/>
 						</div>
-					</div>
-				</SheetContent>
-			</Sheet>
-			<Button
-				variant="outline"
-				size="md"
-				disabled={isDeletingAssessment}
-				onClick={() => deleteAssessment({ assessmentId })}
-			>
-				<Delete />
-			</Button>
-		</div>
+					</SheetContent>
+				</Sheet>
+
+				<ConfirmModal
+					title="Are you sure you want to delete this assessment?"
+					description="This action cannot be undone. This will permanently delete your assessment and remove your data from our servers."
+					onConfirm={() => deleteAssessment({ assessmentId })}
+					actionLabel="Delete"
+					variant="destructive"
+				>
+					<DropdownMenuItem onSelect={(e) => e.preventDefault()} disabled={isDeletingAssessment}>
+						<Delete className="mr-2 size-4 text-destructive" />
+						Delete
+					</DropdownMenuItem>
+				</ConfirmModal>
+			</DropdownMenuContent>
+		</DropdownMenu>
 	)
 }

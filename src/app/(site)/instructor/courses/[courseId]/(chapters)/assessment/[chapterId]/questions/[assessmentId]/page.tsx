@@ -67,7 +67,7 @@ export default async function Page({
 			<Separator className="hidden md:block" />
 
 			<PageHeader className="flex flex-wrap items-center justify-between">
-				<div>
+				<div className="min-h-[46.8px]">
 					<PageTitle>Section Setup</PageTitle>
 					<PageDescription>Configure questions, points and settings</PageDescription>
 				</div>

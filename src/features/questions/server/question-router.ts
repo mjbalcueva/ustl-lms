@@ -120,12 +120,10 @@ export const questionRouter = createTRPCRouter({
 		.mutation(async ({ ctx, input }) => {
 			const { assessmentId } = input
 
-			// Delete all questions associated with the assessment
 			await ctx.db.question.deleteMany({
 				where: { assessmentId }
 			})
 
-			// Delete the assessment
 			await ctx.db.assessment.delete({
 				where: { id: assessmentId }
 			})
