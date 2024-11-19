@@ -12,3 +12,9 @@ export const findOtherChaptersSchema = z.object({
 })
 
 export type FindOtherChaptersSchema = z.infer<typeof findOtherChaptersSchema>
+
+export const deleteAssessmentSchema = z.object({
+	assessmentId: z.string()
+})
+
+export type DeleteAssessmentSchema = z.infer<typeof deleteAssessmentSchema>

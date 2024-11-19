@@ -13,6 +13,7 @@ import {
 	editAssessmentQuestionSchema
 } from '@/features/questions/validations/assessment-questions-schema'
 import {
+	deleteAssessmentSchema,
 	findAssessmentSchema,
 	findOtherChaptersSchema
 } from '@/features/questions/validations/assessment-schema'
@@ -112,6 +113,24 @@ export const questionRouter = createTRPCRouter({
 				where: { id: assessmentId, chapterId },
 				data: { shuffleOptions }
 			})
+		}),
+
+	deleteAssessment: instructorProcedure
+		.input(deleteAssessmentSchema)
+		.mutation(async ({ ctx, input }) => {
+			const { assessmentId } = input
+
+			// Delete all questions associated with the assessment
+			await ctx.db.question.deleteMany({
+				where: { assessmentId }
+			})
+
+			// Delete the assessment
+			await ctx.db.assessment.delete({
+				where: { id: assessmentId }
+			})
+
+			return { message: 'Assessment deleted successfully' }
 		}),
 
 	addQuestions: instructorProcedure

@@ -72,6 +72,7 @@ export default async function Page({
 					<PageDescription>Configure questions, points and settings</PageDescription>
 				</div>
 				<SectionActionButton
+					courseId={courseId}
 					chapterId={chapterId}
 					assessmentId={assessmentId}
 					shuffleQuestions={assessment.shuffleQuestions}
