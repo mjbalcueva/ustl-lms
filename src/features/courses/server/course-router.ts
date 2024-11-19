@@ -350,26 +350,19 @@ export const courseRouter = createTRPCRouter({
 		const courses = await ctx.db.course.findMany({
 			where: {
 				enrollments: {
-					some: {
-						userId: ctx.session.user.id
-					}
-				},
-				status: 'PUBLISHED'
+					some: { userId: ctx.session.user.id }
+				}
 			},
 			include: {
 				instructor: {
 					select: {
 						profile: {
-							select: {
-								name: true
-							}
+							select: { name: true }
 						}
 					}
 				},
 				categories: {
-					select: {
-						name: true
-					}
+					select: { name: true }
 				}
 			}
 		})
