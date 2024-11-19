@@ -56,7 +56,6 @@ export const TopNav = ({ links, className, session, ...props }: TopNavProps) => 
 					'sticky top-0 z-10 flex h-14 items-center justify-between border-b border-border bg-card/40 px-2 backdrop-blur-xl sm:px-4 md:hidden',
 					className
 				)}
-				aria-hidden
 				{...props}
 			>
 				<NavButton

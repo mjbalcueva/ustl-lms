@@ -95,7 +95,7 @@ export const AddAssessmentQuestionFormFields = ({
 				render={({ field }) => (
 					<FormItem>
 						<FormLabel>Question</FormLabel>
-						<FormControl>
+						<FormControl className="text-sm">
 							<TiptapEditor
 								placeholder="e.g. 'Manila is the capital of France?'"
 								throttleDelay={2000}

@@ -52,7 +52,6 @@ export const SideNav = ({ links, session, className, ...props }: SideNavProps) =
 				className
 			)}
 			animate={{ width: isNavOpen ? '240px' : '60px' }}
-			aria-hidden
 			{...props}
 		>
 			<NavButton className="gap-2 !px-[0.22rem] py-1 hover:cursor-default hover:border-background hover:!bg-transparent hover:!shadow-none dark:hover:!border-card">

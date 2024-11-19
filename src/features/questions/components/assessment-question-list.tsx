@@ -93,7 +93,7 @@ export const QuestionList = ({ items, onReorder }: QuestionListProps) => {
 													{...provided.dragHandleProps}
 												/>
 
-												<div className="space-y-1 pb-4 pl-12 pr-4 text-base">
+												<div className="space-y-1 pb-4 pl-12 pr-4">
 													<TiptapEditor
 														content={assessment.question}
 														editable={false}
