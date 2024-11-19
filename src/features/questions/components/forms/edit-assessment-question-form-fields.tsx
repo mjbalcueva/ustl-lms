@@ -23,12 +23,15 @@ import { TiptapEditor } from '@/features/questions/components/tiptap-editor/edit
 import { questionTypeWordMap } from '@/features/questions/lib/question-type-word-map'
 import { type EditAssessmentQuestionSchema } from '@/features/questions/validations/assessment-questions-schema'
 
-type QuestionFormFieldsProps = {
+type EditAssessmentQuestionFormFieldsProps = {
 	form: UseFormReturn<EditAssessmentQuestionSchema>
 	isSubmitting: boolean
 }
 
-export const QuestionFormFields = ({ form, isSubmitting }: QuestionFormFieldsProps) => {
+export const EditAssessmentQuestionFormFields = ({
+	form,
+	isSubmitting
+}: EditAssessmentQuestionFormFieldsProps) => {
 	const handleTypeChange = (value: string) => {
 		if (value === 'TRUE_OR_FALSE') {
 			form.setValue('options', {
@@ -111,54 +114,55 @@ export const QuestionFormFields = ({ form, isSubmitting }: QuestionFormFieldsPro
 				)}
 			/>
 
-			{/* <QuestionTypeSelect form={form} isDisabled={isSubmitting} onTypeChange={handleTypeChange} /> */}
-			<FormField
-				control={form.control}
-				name="type"
-				render={({ field }) => (
-					<FormItem>
-						<FormLabel>Type</FormLabel>
-						<Select
-							name="type"
-							onValueChange={(value) => {
-								field.onChange(value)
-								handleTypeChange(value)
-							}}
-							defaultValue={QuestionType.MULTIPLE_CHOICE}
-						>
-							<FormControl>
-								<SelectTrigger disabled={isSubmitting} className="!bg-card">
-									<SelectValue />
-								</SelectTrigger>
-							</FormControl>
-							<SelectContent>
-								{Object.values(QuestionType).map((type) => {
-									return (
-										<SelectItem key={type} value={type}>
-											{questionTypeWordMap[type]}
-										</SelectItem>
-									)
-								})}
-							</SelectContent>
-						</Select>
-						<FormMessage />
-					</FormItem>
-				)}
-			/>
+			<div className="flex items-center gap-2">
+				<FormField
+					control={form.control}
+					name="type"
+					render={({ field }) => (
+						<FormItem className="flex-1">
+							<FormLabel>Type</FormLabel>
+							<Select
+								name="type"
+								onValueChange={(value) => {
+									field.onChange(value)
+									handleTypeChange(value)
+								}}
+								defaultValue={field.value}
+							>
+								<FormControl>
+									<SelectTrigger disabled={isSubmitting} className="!bg-card">
+										<SelectValue />
+									</SelectTrigger>
+								</FormControl>
+								<SelectContent>
+									{Object.values(QuestionType).map((type) => {
+										return (
+											<SelectItem key={type} value={type}>
+												{questionTypeWordMap[type]}
+											</SelectItem>
+										)
+									})}
+								</SelectContent>
+							</Select>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
 
-			<FormField
-				control={form.control}
-				name="points"
-				render={({ field }) => (
-					<FormItem className="w-1/3">
-						<FormLabel>Points</FormLabel>
-						<FormControl>
-							<InputNumber className="!bg-card" disabled={isSubmitting} {...field} />
-						</FormControl>
-						<FormMessage />
-					</FormItem>
-				)}
-			/>
+				<FormField
+					control={form.control}
+					name="points"
+					render={({ field }) => (
+						<FormItem className="w-1/3">
+							<FormLabel>Points</FormLabel>
+							<FormControl>
+								<InputNumber className="!bg-card" disabled={isSubmitting} {...field} />
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+			</div>
 
 			<FormField
 				control={form.control}
@@ -209,14 +213,6 @@ export const QuestionFormFields = ({ form, isSubmitting }: QuestionFormFieldsPro
 											</Button>
 										</div>
 									))}
-									<Button
-										type="button"
-										variant="outline"
-										size="sm"
-										onClick={() => handleAddOption(field)}
-									>
-										Add Option
-									</Button>
 								</>
 							)}
 
@@ -270,15 +266,19 @@ export const QuestionFormFields = ({ form, isSubmitting }: QuestionFormFieldsPro
 											</Button>
 										</div>
 									))}
-									<Button
-										type="button"
-										variant="outline"
-										size="sm"
-										onClick={() => handleAddOption(field)}
-									>
-										Add Option
-									</Button>
 								</>
+							)}
+
+							{form.watch('type') !== QuestionType.TRUE_OR_FALSE && (
+								<Button
+									type="button"
+									variant="outline"
+									size="md"
+									onClick={() => handleAddOption(field)}
+									className="bg-card hover:bg-accent dark:bg-background dark:hover:bg-accent"
+								>
+									Add Option
+								</Button>
 							)}
 
 							{form.watch('type') === QuestionType.TRUE_OR_FALSE && (

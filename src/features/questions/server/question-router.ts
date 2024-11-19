@@ -1,12 +1,21 @@
+import { openai } from '@ai-sdk/openai'
+import { generateObject } from 'ai'
+
 import { createTRPCRouter, instructorProcedure } from '@/server/api/trpc'
 
+import { aiResponseSchema } from '@/features/questions/validations/ai-generated-questions-schema'
 import { editAssessmentInstructionSchema } from '@/features/questions/validations/assessment-instruction-schema'
 import {
 	addAssessmentQuestionSchema,
+	aiAssessmentQuestionSchema,
+	deleteAssessmentQuestionSchema,
 	editAssessmentQuestionOrderSchema,
 	editAssessmentQuestionSchema
 } from '@/features/questions/validations/assessment-questions-schema'
-import { findAssessmentSchema } from '@/features/questions/validations/assessment-schema'
+import {
+	findAssessmentSchema,
+	findOtherChaptersSchema
+} from '@/features/questions/validations/assessment-schema'
 import {
 	editShuffleOptionsSchema,
 	editShuffleQuestionsSchema
@@ -25,22 +34,31 @@ export const questionRouter = createTRPCRouter({
 				chapter: {
 					include: {
 						course: {
-							select: {
-								title: true
-							}
+							select: { title: true }
 						}
 					}
 				},
 				questions: {
-					orderBy: {
-						id: 'asc'
-					}
+					orderBy: { position: 'asc' }
 				}
 			}
 		})
 
 		return { assessment }
 	}),
+
+	findOtherChapters: instructorProcedure
+		.input(findOtherChaptersSchema)
+		.query(async ({ ctx, input }) => {
+			const { courseId } = input
+
+			const chapters = await ctx.db.chapter.findMany({
+				where: { courseId, type: 'LESSON' },
+				orderBy: { position: 'asc' }
+			})
+
+			return { chapters }
+		}),
 
 	editAssessmentTitle: instructorProcedure
 		.input(editAssessmentTitleSchema)
@@ -160,6 +178,97 @@ export const questionRouter = createTRPCRouter({
 			return {
 				message: 'Question updated successfully',
 				question: updatedQuestion
+			}
+		}),
+
+	deleteQuestion: instructorProcedure
+		.input(deleteAssessmentQuestionSchema)
+		.mutation(async ({ ctx, input }) => {
+			const { id } = input
+
+			// Get the question to be deleted to find its position and assessmentId
+			const questionToDelete = await ctx.db.question.findUnique({
+				where: { id },
+				select: { position: true, assessmentId: true }
+			})
+
+			if (!questionToDelete) {
+				throw new Error('Question not found')
+			}
+
+			// Delete the question
+			await ctx.db.question.delete({ where: { id } })
+
+			// Update positions of remaining questions
+			await ctx.db.question.updateMany({
+				where: {
+					assessmentId: questionToDelete.assessmentId,
+					position: { gt: questionToDelete.position }
+				},
+				data: {
+					position: { decrement: 1 }
+				}
+			})
+
+			return { message: 'Question deleted successfully' }
+		}),
+
+	generateQuestions: instructorProcedure
+		.input(aiAssessmentQuestionSchema)
+		.mutation(async ({ ctx, input }) => {
+			const { assessmentId, chapters, questionType, numberOfQuestions, additionalPrompt } = input
+
+			const response = await generateObject({
+				model: openai('gpt-4o-mini'),
+				schema: aiResponseSchema,
+				messages: [
+					{
+						role: 'system',
+						content: `
+							You are an expert assessment creator. Generate ${numberOfQuestions} ${questionType} questions based on the provided content. For each question, assign points based on difficulty:
+							- Easy questions: 1 point
+							- Medium questions: 2 points
+							- Hard questions: 3 points
+							
+							Aim for a balanced mix of difficulties.
+						`
+					},
+					{
+						role: 'user',
+						content: `
+							Content:
+						  	${chapters.map((c) => `${c.title}\n${c.content}`).join('\n\n')}
+							  ${additionalPrompt ? `Additional instructions: ${additionalPrompt}` : 'None'}
+						`
+					}
+				]
+			})
+
+			// Get current max position
+			const maxPosition = await ctx.db.question.findFirst({
+				where: { assessmentId },
+				orderBy: { position: 'desc' },
+				select: { position: true }
+			})
+
+			// Create questions with incremented positions
+			await ctx.db.question.createMany({
+				data: response.object.questions.map((q, index) => ({
+					assessmentId,
+					question: q.question,
+					type: questionType,
+					options: {
+						type: questionType,
+						options: q.options,
+						answer: q.answer
+					},
+					position: (maxPosition?.position ?? -1) + index + 1,
+					points: q.points
+				}))
+			})
+
+			return {
+				message: 'Questions generated successfully'
 			}
 		})
 })

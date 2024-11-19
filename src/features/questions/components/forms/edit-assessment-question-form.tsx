@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -18,7 +19,7 @@ import {
 } from '@/core/components/ui/dialog'
 import { Form } from '@/core/components/ui/form'
 
-import { QuestionFormFields } from '@/features/questions/components/forms/question-form-fields'
+import { EditAssessmentQuestionFormFields } from '@/features/questions/components/forms/edit-assessment-question-form-fields'
 import {
 	editAssessmentQuestionSchema,
 	type EditAssessmentQuestionSchema
@@ -37,6 +38,8 @@ export const EditAssessmentQuestionForm = ({
 	questionData,
 	assessmentId
 }: EditAssessmentQuestionFormProps) => {
+	const router = useRouter()
+
 	const form = useForm<EditAssessmentQuestionSchema>({
 		resolver: zodResolver(editAssessmentQuestionSchema),
 		defaultValues: {
@@ -49,6 +52,7 @@ export const EditAssessmentQuestionForm = ({
 		onSuccess: () => {
 			toast.success('Question updated successfully')
 			onClose()
+			router.refresh()
 		},
 		onError: (error) => toast.error(error.message)
 	})
@@ -66,11 +70,16 @@ export const EditAssessmentQuestionForm = ({
 				</DialogHeader>
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-						<QuestionFormFields form={form} isSubmitting={isEditing} />
+						<EditAssessmentQuestionFormFields form={form} isSubmitting={isEditing} />
 
 						<DialogFooter className="gap-2 md:gap-0">
 							<DialogClose asChild>
-								<Button type="button" variant="outline">
+								<Button
+									type="button"
+									variant="outline"
+									onClick={() => form.reset()}
+									className="bg-card dark:bg-background dark:hover:bg-accent"
+								>
 									Cancel
 								</Button>
 							</DialogClose>
