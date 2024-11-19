@@ -58,7 +58,7 @@ model Enrollment {
 
   user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   course    Course     @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  groupChat GroupChat? @relation(fields: [groupChatId], references: [id]) // Optional relationship to GroupChat
+  groupChat GroupChat? @relation(fields: [groupChatId], references: [id])
 
   @@unique([userId, courseId])
   @@index([userId, courseId])
@@ -258,7 +258,7 @@ model User {
   isTwoFactorEnabled Boolean   @default(false)
 
   profile               Profile?
-  accounts              Account[]
+  accounts              Account[]  
   verificationTokens    VerificationToken[]
   passwordResetTokens   PasswordResetToken[]
   twoFactorTokens       TwoFactorToken[]
@@ -271,6 +271,9 @@ model User {
   assessmentAnswers     Answer[]
   assignmentSubmissions Submission[]
   messages              Message[]
+
+  // Add a relation to GroupChats for the user
+  groupChats           GroupChat[]  @relation("UserGroupChats")  // Define reverse relation here
 
   @@index([email])
   @@map("user")
@@ -371,15 +374,20 @@ model Message {
 }
 
 model GroupChat {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String      @id @default(cuid())
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 
-  courseId  String       @unique // Ensures one-to-one with Course
-  name      String       // Name of the group chat
+  courseId    String      @unique // Ensures one-to-one with Course
+  name        String      // Name of the group chat
   enrollments Enrollment[] // One-to-many relation back to Enrollment
-  messages    Message[] // Add this field for the relation to Message
+  messages    Message[]   // Add this field for the relation to Message
 
+  // The members array stores userId values for the users in the group chat
+  users       User[]      @relation("UserGroupChats")
+
+  members String[]
+  
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@map("group_chat")
