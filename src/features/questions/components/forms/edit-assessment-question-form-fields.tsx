@@ -95,7 +95,7 @@ export const EditAssessmentQuestionFormFields = ({
 				render={({ field }) => (
 					<FormItem>
 						<FormLabel>Question</FormLabel>
-						<FormControl>
+						<FormControl className="text-sm">
 							<TiptapEditor
 								placeholder="Enter your question"
 								throttleDelay={2000}
