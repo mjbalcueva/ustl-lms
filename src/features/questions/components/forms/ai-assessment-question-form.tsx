@@ -93,10 +93,21 @@ export const AiAssessmentQuestionForm = ({
 										<ChaptersCombobox
 											options={chapters.map((chapter) => ({
 												value: chapter.id,
-												label: chapter.title
+												label: chapter.title,
+												content: chapter.content
 											}))}
-											selected={field.value}
-											onChange={field.onChange}
+											selected={field.value.map((chapter) => chapter.id)}
+											onChange={(selectedIds) => {
+												const selectedChapters = selectedIds.map((id) => {
+													const chapter = chapters.find((c) => c.id === id)!
+													return {
+														id: chapter.id,
+														title: chapter.title,
+														content: chapter.content
+													}
+												})
+												field.onChange(selectedChapters)
+											}}
 											label="Search chapters..."
 										/>
 									</FormControl>

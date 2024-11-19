@@ -1,5 +1,9 @@
+import { openai } from '@ai-sdk/openai'
+import { generateObject } from 'ai'
+
 import { createTRPCRouter, instructorProcedure } from '@/server/api/trpc'
 
+import { aiResponseSchema } from '@/features/questions/validations/ai-generated-questions-schema'
 import { editAssessmentInstructionSchema } from '@/features/questions/validations/assessment-instruction-schema'
 import {
 	addAssessmentQuestionSchema,
@@ -211,10 +215,60 @@ export const questionRouter = createTRPCRouter({
 
 	generateQuestions: instructorProcedure
 		.input(aiAssessmentQuestionSchema)
-		.mutation(async ({ input }) => {
+		.mutation(async ({ ctx, input }) => {
 			const { assessmentId, chapters, questionType, numberOfQuestions, additionalPrompt } = input
 
-			console.log(assessmentId, chapters, questionType, numberOfQuestions, additionalPrompt)
-			return { message: 'Questions generated successfully' }
+			const response = await generateObject({
+				model: openai('gpt-4o-mini'),
+				schema: aiResponseSchema,
+				messages: [
+					{
+						role: 'system',
+						content: `
+							You are an expert assessment creator. Generate ${numberOfQuestions} ${questionType} questions based on the provided content. For each question, assign points based on difficulty:
+							- Easy questions: 1 point
+							- Medium questions: 2 points
+							- Hard questions: 3 points
+							
+							Aim for a balanced mix of difficulties.
+						`
+					},
+					{
+						role: 'user',
+						content: `
+							Content:
+						  	${chapters.map((c) => `${c.title}\n${c.content}`).join('\n\n')}
+							  ${additionalPrompt ? `Additional instructions: ${additionalPrompt}` : 'None'}
+						`
+					}
+				]
+			})
+
+			// Get current max position
+			const maxPosition = await ctx.db.question.findFirst({
+				where: { assessmentId },
+				orderBy: { position: 'desc' },
+				select: { position: true }
+			})
+
+			// Create questions with incremented positions
+			await ctx.db.question.createMany({
+				data: response.object.questions.map((q, index) => ({
+					assessmentId,
+					question: q.question,
+					type: questionType,
+					options: {
+						type: questionType,
+						options: q.options,
+						answer: q.answer
+					},
+					position: (maxPosition?.position ?? -1) + index + 1,
+					points: q.points
+				}))
+			})
+
+			return {
+				message: 'Questions generated successfully'
+			}
 		})
 })

@@ -3,7 +3,15 @@ import { z } from 'zod'
 
 export const aiAssessmentQuestionSchema = z.object({
 	assessmentId: z.string().min(1, 'Assessment ID is required'),
-	chapters: z.array(z.string()).min(1, 'At least one chapter is required'),
+	chapters: z
+		.array(
+			z.object({
+				id: z.string(),
+				title: z.string(),
+				content: z.string()
+			})
+		)
+		.min(1, 'At least one chapter is required'),
 	questionType: z.nativeEnum(QuestionType, {
 		required_error: 'Please select a question type'
 	}),
@@ -79,5 +87,4 @@ export type EditAssessmentQuestionSchema = z.infer<typeof editAssessmentQuestion
 export const deleteAssessmentQuestionSchema = z.object({
 	id: z.string().min(1, 'Question ID is required')
 })
-
 export type DeleteAssessmentQuestionSchema = z.infer<typeof deleteAssessmentQuestionSchema>

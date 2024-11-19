@@ -85,8 +85,8 @@ export const AssessmentQuestions = ({
 	const { mutate: generateQuestions, isPending: isGenerating } =
 		api.question.generateQuestions.useMutation({
 			onSuccess: (data) => {
-				router.refresh()
 				toast.success(data.message)
+				router.refresh()
 			},
 			onError: (error) => toast.error(error.message)
 		})
