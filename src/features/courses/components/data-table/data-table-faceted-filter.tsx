@@ -30,15 +30,21 @@ export const DataTableFacetedFilter = <TData, TValue>({
 }: DataTableFacetedFilterProps<TData, TValue>) => {
 	const selectedValues = new Set(column?.getFilterValue() as string[])
 
+	const handleSelect = (value: string) => {
+		if (selectedValues.has(value)) {
+			selectedValues.delete(value)
+		} else {
+			selectedValues.add(value)
+		}
+		const filterValues = Array.from(selectedValues)
+		column?.setFilterValue(filterValues.length ? filterValues : undefined)
+	}
+
 	return (
 		<Popover>
 			<PopoverTrigger asChild>
-				<Button
-					variant="ghost"
-					size="sm"
-					className="h-9 rounded-xl border-[1.5px] border-dashed border-border"
-				>
-					<CirclePlus />
+				<Button variant="outline" size="default" className="h-9 border-dashed">
+					<CirclePlus className="h-4 w-4" />
 					{title}
 					{selectedValues?.size > 0 && (
 						<>
@@ -69,7 +75,7 @@ export const DataTableFacetedFilter = <TData, TValue>({
 					)}
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent className="w-[12.5rem] rounded-xl p-0" align="start">
+			<PopoverContent className="w-[200px] p-0" align="start">
 				<Command className="rounded-xl">
 					<CommandInput placeholder={title} />
 					<CommandList>
@@ -79,35 +85,18 @@ export const DataTableFacetedFilter = <TData, TValue>({
 								const isSelected = selectedValues.has(option.value)
 
 								return (
-									<CommandItem
-										key={option.value}
-										onSelect={() => {
-											if (isSelected) {
-												selectedValues.delete(option.value)
-											} else {
-												selectedValues.add(option.value)
-											}
-											const filterValues = Array.from(selectedValues)
-											column?.setFilterValue(filterValues.length ? filterValues : undefined)
-										}}
-										className="rounded-lg"
-									>
+									<CommandItem key={option.value} onSelect={() => handleSelect(option.value)}>
 										<div
 											className={cn(
-												'mr-2 flex size-4 items-center justify-center rounded-lg border border-primary',
+												'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
 												isSelected
 													? 'bg-primary text-primary-foreground'
 													: 'opacity-50 [&_svg]:invisible'
 											)}
 										>
-											<Check className="size-4" aria-hidden="true" />
+											<Check className={cn('h-4 w-4')} />
 										</div>
-										{option.icon && (
-											<option.icon
-												className="mr-2 size-4 text-muted-foreground"
-												aria-hidden="true"
-											/>
-										)}
+										{option.icon && <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
 										<span>{option.label}</span>
 										{option.withCount && column?.getFacetedUniqueValues()?.get(option.value) && (
 											<span className="ml-auto flex size-4 items-center justify-center font-mono text-xs">

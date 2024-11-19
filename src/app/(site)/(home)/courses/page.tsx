@@ -16,8 +16,6 @@ import { EnrolledCourses } from '@/features/courses/components/enrolled-courses'
 import { EnrollToCourseButton } from '@/features/enrollment/components/enroll-to-course-button'
 
 export default async function Page() {
-	await new Promise((resolve) => setTimeout(resolve, 3000))
-
 	const { courses } = await api.course.findEnrolledCourses()
 
 	const crumbs: Breadcrumb = [
