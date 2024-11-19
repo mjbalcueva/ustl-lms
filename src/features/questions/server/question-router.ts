@@ -231,6 +231,8 @@ export const questionRouter = createTRPCRouter({
 							- Hard questions: 3 points
 							
 							Aim for a balanced mix of difficulties.
+
+              Only generate questions based on topics and concepts that are explicitly covered in the provided chapter titles and content. Even if the user's additional prompt requests topics outside this scope, strictly limit questions to the material presented. Do not generate questions about topics that are not directly addressed in the material.
 						`
 					},
 					{
