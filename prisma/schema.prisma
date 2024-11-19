@@ -3,10 +3,10 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL") // local
-  // url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  // directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  provider  = "postgresql"
+  // url      = env("DATABASE_URL") // local
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
 // -----------------------------------------------------------------------------
@@ -52,11 +52,13 @@ model Enrollment {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  userId   String
-  courseId String
+  userId      String
+  courseId    String
+  groupChatId String?
 
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course    Course     @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  groupChat GroupChat? @relation(fields: [groupChatId], references: [id]) // Optional relationship to GroupChat
 
   @@unique([userId, courseId])
   @@index([userId, courseId])
@@ -88,6 +90,7 @@ model Course {
   attachments Attachment[]
   chapters    Chapter[]
   enrollments Enrollment[]
+  groupChat   GroupChat?
 
   instructor User @relation(fields: [instructorId], references: [id], onDelete: Cascade)
 
@@ -267,6 +270,7 @@ model User {
   chapterProgress       ChapterProgress[]
   assessmentAnswers     Answer[]
   assignmentSubmissions Submission[]
+  messages              Message[]
 
   @@index([email])
   @@map("user")
@@ -350,4 +354,32 @@ model TwoFactorConfirmation {
 
   @@unique([userId])
   @@map("two_factor_confirmation")
+}
+
+model Message {
+  id          String   @id @default(cuid())
+  content     String // Message text
+  createdAt   DateTime @default(now())
+  senderId    String // The user who sent the message
+  groupChatId String // The group chat where the message was sent
+
+  sender    User      @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  groupChat GroupChat @relation(fields: [groupChatId], references: [id], onDelete: Cascade)
+
+  @@index([groupChatId, senderId])
+  @@map("message")
+}
+
+model GroupChat {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  courseId    String       @unique // Ensures one-to-one with Course
+  enrollments Enrollment[] // One-to-many relation back to Enrollment
+  messages    Message[] // Add this field for the relation to Message
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@map("group_chat")
 }
