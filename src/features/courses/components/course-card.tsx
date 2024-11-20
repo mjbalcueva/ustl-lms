@@ -39,7 +39,7 @@ export const CourseCard = ({
 					width={256}
 					priority
 				/>
-				<Badge className="absolute left-2 top-2 bg-background/80 text-foreground backdrop-blur-sm">
+				<Badge className="absolute left-2 top-1 bg-background/80 text-foreground backdrop-blur-sm">
 					{code}
 				</Badge>
 			</CardHeader>
