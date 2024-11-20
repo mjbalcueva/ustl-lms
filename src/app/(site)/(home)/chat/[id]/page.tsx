@@ -1,93 +1,136 @@
 "use client";
 import { Button } from "@/core/components/ui/button";
 import { Card } from "@/core/components/ui/card";
-import { Input } from "@/core/components/ui/input";
 import { PageContainer, PageContent } from "@/core/components/ui/page";
-import { api } from "@/services/trpc/react";
 import { useParams } from "next/navigation";
-import { useState } from "react";
-import { FcVideoCall } from "react-icons/fc";
+import { useState, useEffect, useRef } from "react";
+import { io, Socket } from "socket.io-client";
+
+// Frontend WebRTC and signaling URL from environment variable
+const SIGNALING_SERVER_URL = process.env.SOCKET_URL || 'http://localhost:5000';  // Default to localhost if the env variable is not set
 
 export default function ChatApp() {
   const router = useParams();
   const chatId = router.id;
-  const [message, setMessage] = useState('');
+  // const [isCallActive, setIsCallActive] = useState(false);  // Tracks if the call is active
+  // const [localStream, setLocalStream] = useState<MediaStream | null>(null);
+  // const [participants, setParticipants] = useState<Map<string, string>>(new Map());  // Map to store userId -> userName or id
+  // const [isInRoom, setIsInRoom] = useState(false);  // Tracks if the user is already in the room
+  // const videoElementRef = useRef<HTMLVideoElement | null>(null);
+  // const socketRef = useRef<Socket | null>(null);
 
-  const { data: chat, isLoading, isError, error } = api.chat.findOne.useQuery({ id: chatId });
+  // // Create socket connection once the component is mounted
+  // useEffect(() => {
+  //   socketRef.current = io(SIGNALING_SERVER_URL);
 
-  if (isLoading) {
-    return <div className="text-center text-xl text-gray-500">Loading...</div>;
-  }
+  //   const socket = socketRef.current;
 
-  if (isError) {
-    return <div className="text-center text-xl text-red-500">Error: {error?.message}</div>;
-  }
+  //   socket.on('connect', () => {
+  //     console.log("Connected to signaling server");
+  //     socket.emit('joinRoom', { roomId: chatId });
+  //   });
 
-  if (!chat) {
-    return <div className="text-center text-xl text-gray-500">Chat not found</div>;
-  }
+  //   // Listen for events that notify participants about call status
+  //   socket.on('call-started', ({roomId, callerId}) => {
+  //     console.log(`Call started by ${callerId}`);
+  //     setIsCallActive(true);
+  //     setParticipants((prev) => new Map(prev).set(callerId, callerId));  // Add caller to participants list (use callerId as both key and value)
+  //   });
+
+  //   socket.on('call-ended', (callerId) => {
+  //     console.log(`Call ended by ${callerId}`);
+  //     setIsCallActive(false);
+  //     const updatedParticipants = new Map(participants);
+  //     updatedParticipants.delete(callerId);  // Remove caller from participants list
+  //     setParticipants(updatedParticipants);
+  //   });
+
+  //   // Listen for users joining the room
+  //   socket.on('user-joined', (userId) => {
+  //     console.log(`User ${userId} joined the room`);
+  //     setParticipants((prev) => new Map(prev).set(userId, userId));
+  //     setIsInRoom(true);  // Mark the user as in the room
+  //   });
+
+  //   // Listen for users leaving the room
+  //   socket.on('user-left', (userId) => {
+  //     console.log(`User ${userId} left the room`);
+  //     setParticipants((prev) => {
+  //       const updatedParticipants = new Map(prev);
+  //       updatedParticipants.delete(userId);
+  //       return updatedParticipants;
+  //     });
+  //     setIsInRoom(false);  // Mark the user as not in the room
+  //   });
+
+  //   // Cleanup on component unmount
+  //   return () => {
+  //     if (socketRef.current) {
+  //       socketRef.current.disconnect();
+  //     }
+  //     if (localStream) {
+  //       localStream.getTracks().forEach(track => track.stop());
+  //     }
+  //   };
+  // }, [chatId]);
+
+  // // Function to handle opening the camera
+  // const startVideoCall = async () => {
+  //   try {
+  //     const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+  //     setLocalStream(stream);
+
+  //     if (videoElementRef.current) {
+  //       videoElementRef.current.srcObject = stream;
+  //     }
+
+  //     console.log("Camera is now active");
+  //   } catch (err) {
+  //     console.error("Error opening camera:", err);
+  //   }
+  // };
+
+  // // Function to emit the 'start-call' event when the button is clicked
+  // const handleCallClick = () => {
+  //   const socket = socketRef.current;
+
+  //   if (!isCallActive) {
+  //     // Start the video call by opening the camera
+  //     startVideoCall();
+  //     setIsCallActive(true);
+  //     console.log("Video call started");
+
+  //     // Emit the start-call event to the signaling server
+  //     if (socket) {
+  //       socket.emit("start-call", { roomId: chatId, callerId: socket.id });
+  //       console.log("Emitted start-call event");
+  //     }
+  //   } else if (isInRoom) {
+  //     // End the call (close the stream)
+  //     if (localStream) {
+  //       localStream.getTracks().forEach(track => track.stop());
+  //     }
+  //     setIsCallActive(false);
+  //     console.log("Call ended");
+
+  //     // Emit the end-call event to notify other participants
+  //     if (socket) {
+  //       socket.emit("end-call", { roomId: chatId, userId: socket.id });
+  //       console.log("Emitted end-call event");
+  //     }
+  //   } else {
+  //     // If not in the room yet, join the call
+  //     setIsInRoom(true);
+  //     socket.emit('user-joined', socket.id);  // Notify other users this user has joined
+  //   }
+  // };
 
   return (
-  <PageContainer>
+    <PageContainer>
       <PageContent>
-      <div className="flex flex-col h-screen ">
-      {/* Chat Header */}
-      <div className="bg-gray-800 text-white p-4 flex justify-between items-center shadow-lg">
-        <div>
-          <h1 className="text-2xl font-bold">{chat.name}</h1>
-          <p className="text-sm mt-1 text-gray-400">{chat.course.title}</p>
-        </div>
-        {/* Video Call Button */}
-        <button
-          className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-700 hover:bg-gray-600 focus:ring-2 focus:ring-blue-500"
-          onClick={() => console.log('Video call started')}
-          aria-label="Start video call"
-        >
-          <FcVideoCall className="w-6 h-6 text-white bg0" />
-        </button>
-      </div>
-
-      {/* Message List */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-900 text-white">
-        {chat.messages.length === 0 ? (
-          <p className="text-center text-gray-400">No messages yet</p>
-        ) : (
-          <ul className="space-y-4">
-            {chat.messages.map((message) => (
-              <li key={message.id} className="flex items-start space-x-3">
-                <Card className="w-3/4 p-4 shadow-md bg-gray-800 text-white">
-                  <p className="font-semibold text-blue-400">{message?.userId}</p>
-                  <p className="text-gray-300">{message.content}</p>
-                  <small className="text-gray-500 text-sm">
-                    {new Date(message.createdAt).toLocaleString()}
-                  </small>
-                </Card>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-
-      {/* Message Input Section */}
-      <div className="bg-gray-800 p-4 shadow-md">
-        <form onSubmit={() => {}} className="flex items-center space-x-4">
-          <Input
-            type="text"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Type your message..."
-            className="flex-1 p-3 rounded-lg border border-gray-700 bg-gray-700 text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
-          />
-          <Button
-            type="submit"
-            className="p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            Send
-          </Button>
-        </form>
-      </div>
-    </div>
-    </PageContent>
-  </PageContainer>
+       
+        <h1>Hello World</h1>
+      </PageContent>
+    </PageContainer>
   );
 }
