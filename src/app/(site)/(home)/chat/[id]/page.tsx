@@ -2,135 +2,141 @@
 import { Button } from "@/core/components/ui/button";
 import { Card } from "@/core/components/ui/card";
 import { PageContainer, PageContent } from "@/core/components/ui/page";
+import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
-import { io, Socket } from "socket.io-client";
+import { io } from "socket.io-client";
+import Peer from 'peerjs';
 
-// Frontend WebRTC and signaling URL from environment variable
-const SIGNALING_SERVER_URL = process.env.SOCKET_URL || 'http://localhost:5000';  // Default to localhost if the env variable is not set
+// Signaling server URL from environment variable
+const SIGNALING_SERVER_URL = process.env.SOCKET_URL || "http://localhost:9000";
+const socket = io(SIGNALING_SERVER_URL);
 
 export default function ChatApp() {
   const router = useParams();
   const chatId = router.id;
-  // const [isCallActive, setIsCallActive] = useState(false);  // Tracks if the call is active
-  // const [localStream, setLocalStream] = useState<MediaStream | null>(null);
-  // const [participants, setParticipants] = useState<Map<string, string>>(new Map());  // Map to store userId -> userName or id
-  // const [isInRoom, setIsInRoom] = useState(false);  // Tracks if the user is already in the room
-  // const videoElementRef = useRef<HTMLVideoElement | null>(null);
-  // const socketRef = useRef<Socket | null>(null);
+  const { data: session } = useSession();
+  
+  const myVideoRef = useRef<HTMLVideoElement>(null);
+  const callingVideoRef = useRef<HTMLVideoElement>(null);
 
-  // // Create socket connection once the component is mounted
-  // useEffect(() => {
-  //   socketRef.current = io(SIGNALING_SERVER_URL);
+  const [peerInstance, setPeerInstance] = useState<Peer | null>(null);
+  const [myUniqueId, setMyUniqueId] = useState<string>("");
+  const [idToCall, setIdToCall] = useState('');
 
-  //   const socket = socketRef.current;
+  const generateRandomString = () => Math.random().toString(36).substring(2);
 
-  //   socket.on('connect', () => {
-  //     console.log("Connected to signaling server");
-  //     socket.emit('joinRoom', { roomId: chatId });
-  //   });
+  const handleCall = () => {
+    console.log('handleCall triggered');
+    
+    if (!idToCall || !peerInstance) {
+      console.error('Error: ID to call is empty or peer instance is not available.');
+      return;
+    }
+    
+    // Get media stream
+    navigator.mediaDevices.getUserMedia({
+      video: true,
+      audio: true,
+    }).then(stream => {
+      console.log('Media stream received');
+      
+      if (peerInstance) {
+        const call = peerInstance.call(idToCall, stream);
+        console.log('Call initiated to', idToCall);
+        
+        if (call) {
+          call.on('stream', userVideoStream => {
+            console.log('Stream received from peer', userVideoStream);
+            if (callingVideoRef.current) {
+              callingVideoRef.current.srcObject = userVideoStream;
+            }
+          });
+        }
+      }
+    }).catch(error => {
+      console.error('Error getting media stream', error);
+    });
+  };
 
-  //   // Listen for events that notify participants about call status
-  //   socket.on('call-started', ({roomId, callerId}) => {
-  //     console.log(`Call started by ${callerId}`);
-  //     setIsCallActive(true);
-  //     setParticipants((prev) => new Map(prev).set(callerId, callerId));  // Add caller to participants list (use callerId as both key and value)
-  //   });
+  // Initialize PeerJS and handle stream
+  useEffect(() => {
+    if(myUniqueId) {
+      const peer = new Peer(myUniqueId, {
+        host: 'localhost',
+        port: 9000,
+        path: '/myapp', // path for the peer server
+      });
 
-  //   socket.on('call-ended', (callerId) => {
-  //     console.log(`Call ended by ${callerId}`);
-  //     setIsCallActive(false);
-  //     const updatedParticipants = new Map(participants);
-  //     updatedParticipants.delete(callerId);  // Remove caller from participants list
-  //     setParticipants(updatedParticipants);
-  //   });
+      setPeerInstance(peer);
 
-  //   // Listen for users joining the room
-  //   socket.on('user-joined', (userId) => {
-  //     console.log(`User ${userId} joined the room`);
-  //     setParticipants((prev) => new Map(prev).set(userId, userId));
-  //     setIsInRoom(true);  // Mark the user as in the room
-  //   });
+      peer.on('open', (id) => {
+        console.log('PeerJS opened with ID:', id);
+        socket.emit('join-room', chatId, id); // Send the user to the room via socket
+      });
 
-  //   // Listen for users leaving the room
-  //   socket.on('user-left', (userId) => {
-  //     console.log(`User ${userId} left the room`);
-  //     setParticipants((prev) => {
-  //       const updatedParticipants = new Map(prev);
-  //       updatedParticipants.delete(userId);
-  //       return updatedParticipants;
-  //     });
-  //     setIsInRoom(false);  // Mark the user as not in the room
-  //   });
+      // Handle incoming call and answer it with the stream
+      peer.on('call', (call) => {
+        navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: true,
+        }).then(stream => {
+          call.answer(stream);
+          call.on('stream', userVideoStream => {
+            if (callingVideoRef.current) {
+              callingVideoRef.current.srcObject = userVideoStream;
+            }
+          });
+        });
 
-  //   // Cleanup on component unmount
-  //   return () => {
-  //     if (socketRef.current) {
-  //       socketRef.current.disconnect();
-  //     }
-  //     if (localStream) {
-  //       localStream.getTracks().forEach(track => track.stop());
-  //     }
-  //   };
-  // }, [chatId]);
+        call.on('error', (err) => {
+          console.error('Error during call', err);
+        });
+      });
 
-  // // Function to handle opening the camera
-  // const startVideoCall = async () => {
-  //   try {
-  //     const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-  //     setLocalStream(stream);
+      // Stream user media
+      navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true,
+      }).then(stream => {
+        if (myVideoRef.current) {
+          myVideoRef.current.srcObject = stream;
+        }
+      });
 
-  //     if (videoElementRef.current) {
-  //       videoElementRef.current.srcObject = stream;
-  //     }
+      return () => {
+        peer.destroy();
+      };
+    }
+  }, [myUniqueId]);
 
-  //     console.log("Camera is now active");
-  //   } catch (err) {
-  //     console.error("Error opening camera:", err);
-  //   }
-  // };
+  useEffect(() => {
+    setMyUniqueId(generateRandomString());
+  }, []);
 
-  // // Function to emit the 'start-call' event when the button is clicked
-  // const handleCallClick = () => {
-  //   const socket = socketRef.current;
+  // Listen for when another user connects to the room
+  useEffect(() => {
+    socket.on('user-connected', (userId) => {
+      console.log("User connected:", userId);
+    });
 
-  //   if (!isCallActive) {
-  //     // Start the video call by opening the camera
-  //     startVideoCall();
-  //     setIsCallActive(true);
-  //     console.log("Video call started");
-
-  //     // Emit the start-call event to the signaling server
-  //     if (socket) {
-  //       socket.emit("start-call", { roomId: chatId, callerId: socket.id });
-  //       console.log("Emitted start-call event");
-  //     }
-  //   } else if (isInRoom) {
-  //     // End the call (close the stream)
-  //     if (localStream) {
-  //       localStream.getTracks().forEach(track => track.stop());
-  //     }
-  //     setIsCallActive(false);
-  //     console.log("Call ended");
-
-  //     // Emit the end-call event to notify other participants
-  //     if (socket) {
-  //       socket.emit("end-call", { roomId: chatId, userId: socket.id });
-  //       console.log("Emitted end-call event");
-  //     }
-  //   } else {
-  //     // If not in the room yet, join the call
-  //     setIsInRoom(true);
-  //     socket.emit('user-joined', socket.id);  // Notify other users this user has joined
-  //   }
-  // };
+    return () => {
+      socket.off('user-connected');
+    };
+  }, []);
 
   return (
-    <PageContainer>
-      <PageContent>
-       
-        <h1>Hello World</h1>
-      </PageContent>
-    </PageContainer>
+    <div className="flex flex-col justify-center items-center p-12">
+      <p>Your ID: {myUniqueId}</p>
+      <video className="w-72" playsInline ref={myVideoRef} autoPlay />
+      <input
+        className="text-black"
+        placeholder="ID to call"
+        value={idToCall}
+        onChange={(e) => setIdToCall(e.target.value)}
+      />
+      <button onClick={handleCall}>Call</button>
+      <video className="w-72" playsInline ref={callingVideoRef} autoPlay />
+    </div>
   );
 }
