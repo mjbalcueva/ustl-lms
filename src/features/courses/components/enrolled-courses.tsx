@@ -107,7 +107,7 @@ export function EnrolledCourses({ courses }: EnrolledCoursesProps) {
 					<CourseCard key={course.id} {...course} />
 				))}
 				{filteredCourses.length === 0 && (
-					<div className="w-full rounded-xl border bg-card p-8 text-center text-muted-foreground">
+					<div className="w-full rounded-xl border-2 border-dashed bg-card p-16 text-center text-muted-foreground">
 						No courses found.
 					</div>
 				)}

@@ -43,7 +43,11 @@ export const DataTableFacetedFilter = <TData, TValue>({
 	return (
 		<Popover>
 			<PopoverTrigger asChild>
-				<Button variant="outline" size="default" className="h-9 border-dashed">
+				<Button
+					variant="outline"
+					size="default"
+					className="h-9 border-dashed bg-card dark:bg-background"
+				>
 					<CirclePlus className="h-4 w-4" />
 					{title}
 					{selectedValues?.size > 0 && (

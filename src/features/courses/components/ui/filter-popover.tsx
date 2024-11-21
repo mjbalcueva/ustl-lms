@@ -51,7 +51,11 @@ export function FilterPopover<TData, TValue>({
 	return (
 		<Popover>
 			<PopoverTrigger asChild>
-				<Button variant="outline" size="default" className="h-10 border-dashed">
+				<Button
+					variant="outline"
+					size="default"
+					className="h-10 border-dashed bg-card dark:bg-background"
+				>
 					<CirclePlus className="h-4 w-4" />
 					{title}
 					{selectedValues?.size > 0 && (
