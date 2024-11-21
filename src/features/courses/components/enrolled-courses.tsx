@@ -7,7 +7,7 @@ import { Input } from '@/core/components/ui/input'
 import { Search } from '@/core/lib/icons'
 
 import { CourseCard } from '@/features/courses/components/course-card'
-import { FilterPopover } from '@/features/courses/components/ui/filter-popover'
+import { FilterPopover, ResetFilters } from '@/features/courses/components/ui/filter-popover'
 
 type Course = {
 	id: string
@@ -107,9 +107,22 @@ export function EnrolledCourses({ courses }: EnrolledCoursesProps) {
 		getFacetedUniqueValues: () => new Map()
 	} as Column<Course, unknown>
 
+	const hasActiveFilters =
+		searchQuery ||
+		selectedTags.length > 0 ||
+		selectedProfessors.length > 0 ||
+		selectedStatuses.length > 0
+
+	const handleResetFilters = () => {
+		setSearchQuery('')
+		setSelectedTags([])
+		setSelectedProfessors([])
+		setSelectedStatuses([])
+	}
+
 	return (
 		<>
-			<div className="flex flex-wrap gap-2">
+			<div className="flex flex-wrap items-center gap-2">
 				<div className="relative max-w-sm flex-grow">
 					<Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 transform text-muted-foreground" />
 					<Input
@@ -123,6 +136,7 @@ export function EnrolledCourses({ courses }: EnrolledCoursesProps) {
 				<FilterPopover column={tagColumn} title="Tags" options={allTags} />
 				<FilterPopover column={professorColumn} title="Professors" options={allProfessors} />
 				<FilterPopover column={statusColumn} title="Status" options={allStatuses} />
+				<ResetFilters hasFilters={hasActiveFilters} onReset={handleResetFilters} />
 			</div>
 
 			<div className="flex flex-wrap gap-4">

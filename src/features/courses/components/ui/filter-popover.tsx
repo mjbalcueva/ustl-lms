@@ -15,7 +15,7 @@ import {
 } from '@/core/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/core/components/ui/popover'
 import { Separator } from '@/core/components/ui/separator'
-import { Check, Filter } from '@/core/lib/icons'
+import { Check, Filter, X } from '@/core/lib/icons'
 import { cn } from '@/core/lib/utils/cn'
 
 type Option = {
@@ -135,5 +135,21 @@ export function FilterPopover<TData, TValue>({
 				</Command>
 			</PopoverContent>
 		</Popover>
+	)
+}
+
+type ResetFiltersProps = {
+	hasFilters: string | boolean
+	onReset: () => void
+}
+
+export const ResetFilters = ({ hasFilters, onReset }: ResetFiltersProps) => {
+	if (!hasFilters) return null
+
+	return (
+		<Button variant="ghost" size="default" onClick={onReset} className="h-10 px-2 lg:px-3">
+			Reset
+			<X className="h-4 w-4" />
+		</Button>
 	)
 }
