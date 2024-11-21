@@ -1,8 +1,9 @@
 'use client'
 
-import { type Chapter } from '@prisma/client'
+import Link from 'next/link'
+import { type Chapter, type ChapterProgress } from '@prisma/client'
 
-import { Button } from '@/core/components/ui/button'
+import { buttonVariants } from '@/core/components/ui/button'
 import { Card, CardTitle } from '@/core/components/ui/card'
 import { capitalize } from '@/core/lib/utils/capitalize'
 import { cn } from '@/core/lib/utils/cn'
@@ -10,7 +11,9 @@ import { cn } from '@/core/lib/utils/cn'
 import { TiptapEditor } from '@/features/courses/components/tiptap-editor/editor'
 
 type SyllabusCardProps = {
-	chapters: Chapter[]
+	chapters: (Chapter & {
+		chapterProgress: ChapterProgress | null
+	})[]
 }
 
 export default function SyllabusCard({ chapters }: SyllabusCardProps) {
@@ -24,6 +27,8 @@ export default function SyllabusCard({ chapters }: SyllabusCardProps) {
 		<div className="w-full space-y-2.5">
 			{chapters.map((chapter) => {
 				const { hoverColor } = chapterTypeIcons[chapter.type as keyof typeof chapterTypeIcons]
+				const isCompleted = chapter.chapterProgress?.isCompleted
+
 				return (
 					<Card key={chapter.id} className="flex gap-4 px-4 pb-3 pt-4">
 						<span className="text-xl text-muted-foreground">{chapter.position}</span>
@@ -31,7 +36,7 @@ export default function SyllabusCard({ chapters }: SyllabusCardProps) {
 						<div className="flex-1">
 							<div className="flex-1 space-y-1">
 								<CardTitle className="text-base font-semibold">{chapter.title}</CardTitle>
-								<div className="line-clamp-2 text-sm leading-tight">
+								<div className="line-clamp-1 text-sm leading-tight lg:line-clamp-2">
 									<TiptapEditor value={chapter.content} />
 								</div>
 							</div>
@@ -41,17 +46,23 @@ export default function SyllabusCard({ chapters }: SyllabusCardProps) {
 									#{capitalize(chapter.type)}
 								</span>
 
-								{/* {chapter.chapterProgress && (
+								{chapter.chapterProgress && (
 									<span className="text-xs text-muted-foreground">
-										{chapter.chapterProgress.isCompleted ? '#Completed' : '#Ongoing'}
+										{isCompleted ? '#Completed' : '#Ongoing'}
 									</span>
-								)} */}
+								)}
 							</div>
 						</div>
 
-						<Button size="sm" className="px-4">
-							View
-						</Button>
+						<Link
+							className={cn(
+								buttonVariants({ size: 'sm', variant: isCompleted ? 'outline' : 'default' }),
+								'px-4'
+							)}
+							href={`/courses/${chapter.courseId}/chapters/${chapter.id}`}
+						>
+							{isCompleted ? 'Review' : 'Start'}
+						</Link>
 					</Card>
 				)
 			})}

@@ -1,10 +1,11 @@
 import Image from 'next/image'
+import Link from 'next/link'
 
 import { api } from '@/services/trpc/server'
 
 import { NotFound } from '@/core/components/error-pages/not-found'
 import { Badge } from '@/core/components/ui/badge'
-import { Button } from '@/core/components/ui/button'
+import { buttonVariants } from '@/core/components/ui/button'
 import {
 	PageBreadcrumbs,
 	PageContent,
@@ -17,6 +18,7 @@ import { Progress } from '@/core/components/ui/progress'
 import { Separator } from '@/core/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/core/components/ui/tabs'
 import { CourseSingle, Home } from '@/core/lib/icons'
+import { cn } from '@/core/lib/utils/cn'
 import { formatDate } from '@/core/lib/utils/format-date'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
@@ -29,7 +31,7 @@ import SyllabusCard from '@/features/courses/components/tabs/syllabus/syllabus-c
 export default async function Page({ params }: { params: { courseId: string } }) {
 	const { courseId } = params
 
-	const { course } = await api.course.findEnrolledCourseDetails({ courseId })
+	const { course, nextChapter } = await api.course.findEnrolledCourseDetails({ courseId })
 
 	if (!course) return <NotFound item="course" />
 	const crumbs: Breadcrumb = [
@@ -65,15 +67,21 @@ export default async function Page({ params }: { params: { courseId: string } })
 						<div className="flex flex-col gap-2">
 							<PageTitle>{course.title}</PageTitle>
 							<div className="flex flex-wrap items-center gap-1">
-								<Badge variant="outline">{course.status}</Badge>
 								{course.categories.map((category) => (
 									<Badge key={category.id} variant="secondary">
 										{category.name}
 									</Badge>
 								))}
+								<Badge variant="outline">{course.status}</Badge>
 							</div>
 						</div>
-						<Button>Start Course</Button>
+
+						<Link
+							href={`/courses/${courseId}/chapters/${nextChapter?.id}`}
+							className={cn(buttonVariants())}
+						>
+							Start Course
+						</Link>
 					</div>
 
 					<PageDescription className="min-h-16 w-full md:line-clamp-3">
@@ -125,7 +133,12 @@ export default async function Page({ params }: { params: { courseId: string } })
 						</TabsList>
 
 						<TabsContent value="syllabus">
-							<SyllabusCard chapters={course.chapters} />
+							<SyllabusCard
+								chapters={course.chapters.map((chapter) => ({
+									...chapter,
+									chapterProgress: chapter.chapterProgress[0] ?? null
+								}))}
+							/>
 						</TabsContent>
 
 						<TabsContent value="ai-chat">
