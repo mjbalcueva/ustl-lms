@@ -46,6 +46,7 @@ import {
 	TbDotsVertical,
 	TbEdit,
 	TbFile,
+	TbFilter,
 	TbGripVertical,
 	TbH1,
 	TbH2,
@@ -186,6 +187,7 @@ export const DotsVertical = TbDotsVertical
 export const EyeOpen = RxEyeOpen
 export const EyeClosed = RxEyeClosed
 export const EyeNone = RxEyeNone
+export const Filter = TbFilter
 export const Gear = LuSettings
 export const GripVertical = TbGripVertical
 export const Loader = TbLoader

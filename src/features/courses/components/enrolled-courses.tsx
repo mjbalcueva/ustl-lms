@@ -28,6 +28,7 @@ export function EnrolledCourses({ courses }: EnrolledCoursesProps) {
 	const [searchQuery, setSearchQuery] = useState('')
 	const [selectedTags, setSelectedTags] = useState<string[]>([])
 	const [selectedProfessors, setSelectedProfessors] = useState<string[]>([])
+	const [selectedStatuses, setSelectedStatuses] = useState<string[]>([])
 
 	const allTags = useMemo(
 		() =>
@@ -47,6 +48,14 @@ export function EnrolledCourses({ courses }: EnrolledCoursesProps) {
 		[courses]
 	)
 
+	const allStatuses = useMemo(
+		() => [
+			{ label: 'Published', value: 'PUBLISHED' },
+			{ label: 'Archived', value: 'ARCHIVED' }
+		],
+		[]
+	)
+
 	const filteredCourses = useMemo(
 		() =>
 			courses.filter((course) => {
@@ -58,9 +67,11 @@ export function EnrolledCourses({ courses }: EnrolledCoursesProps) {
 					selectedTags.length === 0 || selectedTags.some((tag) => course.tags.includes(tag))
 				const matchesProfessors =
 					selectedProfessors.length === 0 || selectedProfessors.includes(course.instructor)
-				return matchesSearch && matchesTags && matchesProfessors
+				const matchesStatus =
+					selectedStatuses.length === 0 || selectedStatuses.includes(course.status)
+				return matchesSearch && matchesTags && matchesProfessors && matchesStatus
 			}),
-		[courses, searchQuery, selectedTags, selectedProfessors]
+		[courses, searchQuery, selectedTags, selectedProfessors, selectedStatuses]
 	)
 
 	const handleTagFilter = (values: string[] | undefined) => {
@@ -69,6 +80,10 @@ export function EnrolledCourses({ courses }: EnrolledCoursesProps) {
 
 	const handleProfessorFilter = (values: string[] | undefined) => {
 		setSelectedProfessors(values ?? [])
+	}
+
+	const handleStatusFilter = (values: string[] | undefined) => {
+		setSelectedStatuses(values ?? [])
 	}
 
 	const tagColumn = {
@@ -82,6 +97,13 @@ export function EnrolledCourses({ courses }: EnrolledCoursesProps) {
 		id: 'instructor',
 		getFilterValue: () => selectedProfessors,
 		setFilterValue: handleProfessorFilter,
+		getFacetedUniqueValues: () => new Map()
+	} as Column<Course, unknown>
+
+	const statusColumn = {
+		id: 'status',
+		getFilterValue: () => selectedStatuses,
+		setFilterValue: handleStatusFilter,
 		getFacetedUniqueValues: () => new Map()
 	} as Column<Course, unknown>
 
@@ -100,6 +122,7 @@ export function EnrolledCourses({ courses }: EnrolledCoursesProps) {
 				</div>
 				<FilterPopover column={tagColumn} title="Tags" options={allTags} />
 				<FilterPopover column={professorColumn} title="Professors" options={allProfessors} />
+				<FilterPopover column={statusColumn} title="Status" options={allStatuses} />
 			</div>
 
 			<div className="flex flex-wrap gap-4">

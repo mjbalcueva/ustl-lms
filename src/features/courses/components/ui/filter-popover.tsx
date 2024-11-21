@@ -15,7 +15,7 @@ import {
 } from '@/core/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/core/components/ui/popover'
 import { Separator } from '@/core/components/ui/separator'
-import { Check, CirclePlus } from '@/core/lib/icons'
+import { Check, Filter } from '@/core/lib/icons'
 import { cn } from '@/core/lib/utils/cn'
 
 type Option = {
@@ -56,7 +56,7 @@ export function FilterPopover<TData, TValue>({
 					size="default"
 					className="h-10 border-dashed bg-card dark:bg-background"
 				>
-					<CirclePlus className="h-4 w-4" />
+					<Filter />
 					{title}
 					{selectedValues?.size > 0 && (
 						<>
