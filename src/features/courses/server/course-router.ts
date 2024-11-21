@@ -379,5 +379,56 @@ export const courseRouter = createTRPCRouter({
 				tags: course.categories.map((category) => category.name)
 			}))
 		}
+	}),
+
+	findPublicCourse: protectedProcedure.input(findCourseSchema).query(async ({ ctx, input }) => {
+		const { courseId } = input
+
+		const course = await ctx.db.course.findFirst({
+			where: {
+				id: courseId,
+				status: { not: 'DRAFT' }
+			},
+			include: {
+				instructor: {
+					include: {
+						profile: {
+							select: {
+								name: true,
+								bio: true,
+								imageUrl: true
+							}
+						}
+					}
+				},
+				chapters: {
+					orderBy: { position: 'asc' },
+					select: {
+						id: true,
+						title: true,
+						content: true,
+						type: true,
+						position: true
+					}
+				},
+				categories: true,
+				enrollments: {
+					where: {
+						userId: ctx.session.user.id
+					}
+				},
+				_count: {
+					select: {
+						enrollments: true
+					}
+				}
+			}
+		})
+
+		if (!course) {
+			throw new TRPCClientError('Course not found')
+		}
+
+		return { course }
 	})
 })
