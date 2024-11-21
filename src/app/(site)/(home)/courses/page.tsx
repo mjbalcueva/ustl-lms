@@ -18,11 +18,7 @@ import { EnrollToCourseButton } from '@/features/enrollment/components/enroll-to
 export default async function Page() {
 	const { courses } = await api.course.findEnrolledCourses()
 
-	const crumbs: Breadcrumb = [
-		{ icon: Home },
-		{ label: 'Learning', href: '/courses' },
-		{ label: 'Browse' }
-	]
+	const crumbs: Breadcrumb = [{ icon: Home }, { label: 'Browse', href: '/courses' }]
 
 	return (
 		<>
