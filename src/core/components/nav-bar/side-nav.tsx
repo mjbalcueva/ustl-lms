@@ -1,5 +1,6 @@
 'use client'
 
+import { Comfortaa } from 'next/font/google'
 import { usePathname } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { type Session } from 'next-auth'
@@ -21,6 +22,11 @@ import { useLockScroll } from '@/core/lib/hooks/use-lock-scroll'
 import { Close, Open } from '@/core/lib/icons'
 import { cn } from '@/core/lib/utils/cn'
 import { type Link } from '@/core/types/links'
+
+const comfortaa = Comfortaa({
+	subsets: ['latin'],
+	display: 'swap'
+})
 
 type SideNavProps = React.ComponentProps<typeof motion.nav> & {
 	links: Link[]
@@ -61,7 +67,10 @@ export const SideNav = ({ links, session, className, ...props }: SideNavProps) =
 				/>
 				<NavLabel
 					label={site.label}
-					className="text-lg font-semibold tracking-wide text-card-foreground"
+					className={cn(
+						'text-xl font-bold tracking-widest text-card-foreground',
+						comfortaa.className
+					)}
 					disableAnimation
 				/>
 			</NavButton>
