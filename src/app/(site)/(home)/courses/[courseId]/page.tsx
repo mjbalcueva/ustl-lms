@@ -16,7 +16,7 @@ import {
 import { Progress } from '@/core/components/ui/progress'
 import { Separator } from '@/core/components/ui/separator'
 import { CourseSingle, Home } from '@/core/lib/icons'
-import { formatCreatedAndEditedDates } from '@/core/lib/utils/format-date'
+import { formatDate } from '@/core/lib/utils/format-date'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
 export default async function Page({ params }: { params: { courseId: string } }) {
@@ -39,29 +39,36 @@ export default async function Page({ params }: { params: { courseId: string } })
 
 			<Separator className="hidden md:block" />
 
-			<PageHeader className="flex flex-col space-y-3 md:flex-row md:gap-4 md:pt-4">
-				<div className="relative hidden aspect-video w-full md:block md:max-w-xs">
-					<Image
-						src={course.imageUrl ?? '/assets/placeholder.svg'}
-						alt={course.title}
-						className="rounded-lg border-2 border-accent object-cover"
-						fill
-						priority
-						sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-					/>
+			<PageHeader className="flex flex-col flex-wrap space-y-3 md:flex-row md:gap-4 md:pt-4">
+				<div className="hidden min-w-56 flex-1 md:block md:max-w-xs">
+					<div className="relative aspect-video">
+						<Image
+							src={course.imageUrl ?? '/assets/placeholder.svg'}
+							alt={course.title}
+							className="rounded-lg border-2 border-accent object-cover"
+							fill
+							priority
+							sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+						/>
+					</div>
 				</div>
 
-				<div className="flex w-full flex-col space-y-2">
-					<PageTitle>{course.title}</PageTitle>
-					<div className="flex flex-wrap items-center gap-2">
-						<Badge variant="outline">{course.status}</Badge>
-						{course.categories.map((category) => (
-							<Badge key={category.id} variant="secondary">
-								{category.name}
-							</Badge>
-						))}
+				<div className="flex min-w-[60vw] flex-1 flex-col space-y-2">
+					<div className="flex items-start justify-between">
+						<div className="flex flex-col gap-2">
+							<PageTitle>{course.title}</PageTitle>
+							<div className="flex flex-wrap items-center gap-1">
+								<Badge variant="outline">{course.status}</Badge>
+								{course.categories.map((category) => (
+									<Badge key={category.id} variant="secondary">
+										{category.name}
+									</Badge>
+								))}
+							</div>
+						</div>
+						<Button>Start Course</Button>
 					</div>
-					<PageDescription className="min-h-16 md:line-clamp-3">
+					<PageDescription className="min-h-16 w-full md:line-clamp-3">
 						{course.description}
 					</PageDescription>
 
@@ -69,9 +76,21 @@ export default async function Page({ params }: { params: { courseId: string } })
 						<Separator />
 					</div>
 
-					<h3 className="text-xs text-muted-foreground">
-						{formatCreatedAndEditedDates(course.createdAt, course.updatedAt)}
-					</h3>
+					<div className="flex items-center gap-2 text-xs text-muted-foreground">
+						<h4>
+							<span className="font-medium">Created:</span>{' '}
+							<span className="underline-offset-2 hover:underline">
+								{formatDate(course.createdAt)}
+							</span>
+						</h4>
+						<Separator orientation="vertical" />
+						<h4>
+							<span className="font-medium">Edited:</span>{' '}
+							<span className="underline-offset-2 hover:underline">
+								{formatDate(course.updatedAt)}
+							</span>
+						</h4>
+					</div>
 
 					<div className="!mt-1 space-y-1">
 						<div className="flex justify-between text-sm">
@@ -81,8 +100,6 @@ export default async function Page({ params }: { params: { courseId: string } })
 						<Progress value={course.progress} className="w-full" />
 					</div>
 				</div>
-
-				<Button>Continue Last</Button>
 			</PageHeader>
 
 			<Separator />
@@ -90,8 +107,6 @@ export default async function Page({ params }: { params: { courseId: string } })
 			<PageContent>
 				<PageSection>Rawr</PageSection>
 			</PageContent>
-
-			<pre>{JSON.stringify(course, null, 2)}</pre>
 		</>
 	)
 }
