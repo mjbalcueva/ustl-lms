@@ -61,6 +61,13 @@ export const enrollmentRouter = createTRPCRouter({
 			})
 		}
 
+		if (course.status !== 'PUBLISHED') {
+			throw new TRPCError({
+				code: 'FORBIDDEN',
+				message: 'You can only enroll in published courses.'
+			})
+		}
+
 		if (course.instructor.id === ctx.session.user.id) {
 			throw new TRPCError({
 				code: 'FORBIDDEN',
