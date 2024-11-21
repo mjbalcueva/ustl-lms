@@ -15,9 +15,16 @@ import {
 } from '@/core/components/ui/page'
 import { Progress } from '@/core/components/ui/progress'
 import { Separator } from '@/core/components/ui/separator'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/core/components/ui/tabs'
 import { CourseSingle, Home } from '@/core/lib/icons'
 import { formatDate } from '@/core/lib/utils/format-date'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
+
+import CourseInstructorCard from '@/features/courses/components/course-instructor-card'
+import AiChatCard from '@/features/courses/components/tabs/ai-chat/ai-chat-card'
+import AttachmentsCard from '@/features/courses/components/tabs/attachments/attachments-card'
+import ForumCard from '@/features/courses/components/tabs/forum/forum-card'
+import SyllabusCard from '@/features/courses/components/tabs/syllabus/syllabus-card'
 
 export default async function Page({ params }: { params: { courseId: string } }) {
 	const { courseId } = params
@@ -40,7 +47,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 			<Separator className="hidden md:block" />
 
 			<PageHeader className="flex flex-col flex-wrap space-y-3 md:flex-row md:gap-4 md:pt-4">
-				<div className="hidden min-w-56 flex-1 md:block md:max-w-xs">
+				<div className="hidden flex-1 md:block md:min-w-[249px] md:max-w-xs">
 					<div className="relative aspect-video">
 						<Image
 							src={course.imageUrl ?? '/assets/placeholder.svg'}
@@ -53,7 +60,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 					</div>
 				</div>
 
-				<div className="flex min-w-[60vw] flex-1 flex-col space-y-2">
+				<div className="flex flex-[2] flex-col space-y-2 md:min-w-[500px]">
 					<div className="flex items-start justify-between">
 						<div className="flex flex-col gap-2">
 							<PageTitle>{course.title}</PageTitle>
@@ -68,6 +75,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 						</div>
 						<Button>Start Course</Button>
 					</div>
+
 					<PageDescription className="min-h-16 w-full md:line-clamp-3">
 						{course.description}
 					</PageDescription>
@@ -83,7 +91,9 @@ export default async function Page({ params }: { params: { courseId: string } })
 								{formatDate(course.createdAt)}
 							</span>
 						</h4>
+
 						<Separator orientation="vertical" />
+
 						<h4>
 							<span className="font-medium">Edited:</span>{' '}
 							<span className="underline-offset-2 hover:underline">
@@ -104,8 +114,37 @@ export default async function Page({ params }: { params: { courseId: string } })
 
 			<Separator />
 
-			<PageContent>
-				<PageSection>Rawr</PageSection>
+			<PageContent className="mb-24 space-y-6 px-2.5 pt-6 sm:px-4 md:mb-12 md:flex md:flex-wrap md:gap-6 md:space-y-0 md:px-6">
+				<PageSection className="flex-[2] md:min-w-[500px]" columnMode>
+					<Tabs defaultValue="syllabus" className="space-y-4">
+						<TabsList>
+							<TabsTrigger value="syllabus">Syllabus</TabsTrigger>
+							<TabsTrigger value="ai-chat">AI Chat</TabsTrigger>
+							<TabsTrigger value="forum">Forum</TabsTrigger>
+							<TabsTrigger value="attachments">Attachments</TabsTrigger>
+						</TabsList>
+
+						<TabsContent value="syllabus">
+							<SyllabusCard />
+						</TabsContent>
+
+						<TabsContent value="ai-chat">
+							<AiChatCard />
+						</TabsContent>
+
+						<TabsContent value="forum">
+							<ForumCard />
+						</TabsContent>
+
+						<TabsContent value="attachments">
+							<AttachmentsCard />
+						</TabsContent>
+					</Tabs>
+				</PageSection>
+
+				<PageSection className="md:min-w-[243px]" columnMode>
+					<CourseInstructorCard />
+				</PageSection>
 			</PageContent>
 		</>
 	)
