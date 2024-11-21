@@ -39,6 +39,7 @@ import {
 	TbCirclePlus,
 	TbClearFormatting,
 	TbClipboardList,
+	TbClock,
 	TbCode,
 	TbCopy,
 	TbDiamond,
@@ -180,6 +181,7 @@ export const ChevronRight = TbChevronRight
 export const ChevronRightPipe = TbChevronRightPipe
 export const ChevronUp = TbChevronUp
 export const ChevronsUpDown = LuChevronsUpDown
+export const Clock = TbClock
 export const Copy = TbCopy
 export const Dot = LuDot
 export const DotsHorizontal = TbDots

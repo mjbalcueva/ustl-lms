@@ -15,6 +15,7 @@ import {
 	CardHeader,
 	CardTitle
 } from '@/core/components/compound-card'
+import { CopyButton } from '@/core/components/copy-button'
 import { Button } from '@/core/components/ui/button'
 import {
 	Form,
@@ -29,7 +30,6 @@ import { Label } from '@/core/components/ui/label'
 import { Copy, Edit, Link } from '@/core/lib/icons'
 import { getBaseUrl } from '@/core/lib/utils/get-base-url'
 
-import { CopyButton } from '@/features/courses/components/ui/copy-button'
 import { GenerateButton } from '@/features/courses/components/ui/generate-button'
 import { generateCourseInviteToken } from '@/features/courses/lib/tokens'
 import {

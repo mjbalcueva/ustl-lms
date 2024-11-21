@@ -437,11 +437,6 @@ export const courseRouter = createTRPCRouter({
 			).length
 			const overallProgress = totalChapters > 0 ? (completedChapters / totalChapters) * 100 : 0
 
-			const nextIncompleteChapter = course.chapters.find(
-				(chapter) =>
-					chapter.chapterProgress.length === 0 || !chapter.chapterProgress[0]?.isCompleted
-			)
-
 			return {
 				course: {
 					...course,
@@ -453,8 +448,7 @@ export const courseRouter = createTRPCRouter({
 							imageUrl: null
 						}
 					}
-				},
-				nextChapter: nextIncompleteChapter ?? null
+				}
 			}
 		})
 })

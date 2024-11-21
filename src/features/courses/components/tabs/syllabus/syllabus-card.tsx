@@ -24,7 +24,7 @@ export default function SyllabusCard({ chapters }: SyllabusCardProps) {
 	} as const
 
 	return (
-		<div className="w-full space-y-2.5">
+		<>
 			{chapters.map((chapter) => {
 				const { hoverColor } = chapterTypeIcons[chapter.type as keyof typeof chapterTypeIcons]
 				const isCompleted = chapter.chapterProgress?.isCompleted
@@ -66,6 +66,6 @@ export default function SyllabusCard({ chapters }: SyllabusCardProps) {
 					</Card>
 				)
 			})}
-		</div>
+		</>
 	)
 }
