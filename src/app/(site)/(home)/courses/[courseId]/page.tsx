@@ -137,7 +137,12 @@ export default async function Page({ params }: { params: { courseId: string } })
 				</PageSection>
 
 				<PageSection className="md:min-w-[293px]" columnMode>
-					<CourseInstructorCard />
+					<CourseInstructorCard
+						name={course.instructor.profile.name ?? ''}
+						bio={course.instructor.profile.bio ?? ''}
+						email={course.instructor.email ?? ''}
+						imageUrl={course.instructor.profile.imageUrl ?? ''}
+					/>
 				</PageSection>
 			</PageContent>
 		</>

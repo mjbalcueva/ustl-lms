@@ -446,7 +446,8 @@ export const courseRouter = createTRPCRouter({
 							name: null,
 							bio: null,
 							imageUrl: null
-						}
+						},
+						email: course.instructor.email
 					}
 				}
 			}

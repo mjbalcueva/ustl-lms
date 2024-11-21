@@ -1,3 +1,5 @@
+import { FaFacebookF, FaLinkedinIn } from 'react-icons/fa'
+import { FcGoogle } from 'react-icons/fc'
 import {
 	LuArchive,
 	LuChevronsUpDown,
@@ -163,6 +165,11 @@ export const Profile = TbUser
 export const Preference = TbPaint
 export const Settings = TbSettings2
 export const Logout = TbLogout
+
+// Social Icons
+export const Google = FcGoogle
+export const Facebook = FaFacebookF
+export const LinkedIn = FaLinkedinIn
 
 // UI Icons
 export const Adjust = LuSettings2
