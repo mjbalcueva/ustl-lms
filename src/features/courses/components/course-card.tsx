@@ -45,10 +45,10 @@ export const CourseCard = ({
 			</CardHeader>
 			<CardContent className="grid flex-grow gap-3 p-3">
 				<div className="space-y-1">
-					<h3 className="line-clamp-1 text-sm font-semibold">{title}</h3>
+					<h3 className="line-clamp-1 text-base font-semibold">{title}</h3>
 					<p
 						className={cn(
-							'line-clamp-3 min-h-12 text-xs text-muted-foreground',
+							'line-clamp-3 min-h-12 text-sm leading-tight text-muted-foreground',
 							description ? '' : 'italic'
 						)}
 					>
@@ -56,26 +56,26 @@ export const CourseCard = ({
 					</p>
 				</div>
 
-				<div className="flex items-center gap-1 text-xs text-muted-foreground">
+				<div className="flex items-center gap-1 text-sm text-muted-foreground">
 					<Learning className="h-3 w-3" />
 					<span className="truncate">{instructor}</span>
 				</div>
 
 				<div className="flex flex-wrap gap-1">
 					{tags.map((tag) => (
-						<Badge key={tag} variant="secondary" className="px-1 py-0 text-[10px]">
+						<Badge key={tag} variant="secondary" className="px-1 py-0 text-xs">
 							{tag}
 						</Badge>
 					))}
 					{!tags.length && (
-						<Badge variant="outline" className="px-1 py-0 text-[10px] text-muted-foreground">
+						<Badge variant="outline" className="px-1 py-0 text-xs text-muted-foreground">
 							None
 						</Badge>
 					)}
 				</div>
 			</CardContent>
 			<CardFooter className="p-3 pt-0">
-				<Button asChild size="sm" className="w-full text-xs">
+				<Button asChild size="sm" className="w-full text-sm">
 					<Link href={`/courses/${id}`}>Continue</Link>
 				</Button>
 			</CardFooter>

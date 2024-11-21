@@ -406,15 +406,9 @@ export const courseRouter = createTRPCRouter({
 					},
 					chapters: {
 						orderBy: { position: 'asc' },
-						select: {
-							id: true,
-							title: true,
-							content: true,
-							type: true,
-							position: true,
+						include: {
 							chapterProgress: {
-								where: { userId },
-								select: { isCompleted: true }
+								where: { userId }
 							}
 						}
 					},
@@ -445,7 +439,14 @@ export const courseRouter = createTRPCRouter({
 			return {
 				course: {
 					...course,
-					progress: overallProgress
+					progress: overallProgress,
+					instructor: {
+						profile: course.instructor.profile ?? {
+							name: null,
+							bio: null,
+							imageUrl: null
+						}
+					}
 				}
 			}
 		})

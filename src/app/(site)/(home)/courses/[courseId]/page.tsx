@@ -125,7 +125,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 						</TabsList>
 
 						<TabsContent value="syllabus">
-							<SyllabusCard />
+							<SyllabusCard chapters={course.chapters} />
 						</TabsContent>
 
 						<TabsContent value="ai-chat">
