@@ -381,54 +381,72 @@ export const courseRouter = createTRPCRouter({
 		}
 	}),
 
-	findPublicCourse: protectedProcedure.input(findCourseSchema).query(async ({ ctx, input }) => {
-		const { courseId } = input
+	findEnrolledCourseDetails: protectedProcedure
+		.input(findCourseSchema)
+		.query(async ({ ctx, input }) => {
+			const { courseId } = input
+			const userId = ctx.session.user.id
 
-		const course = await ctx.db.course.findFirst({
-			where: {
-				id: courseId,
-				status: { not: 'DRAFT' }
-			},
-			include: {
-				instructor: {
-					include: {
-						profile: {
-							select: {
-								name: true,
-								bio: true,
-								imageUrl: true
+			const course = await ctx.db.course.findFirst({
+				where: {
+					id: courseId,
+					status: { not: 'DRAFT' }
+				},
+				include: {
+					instructor: {
+						include: {
+							profile: {
+								select: {
+									name: true,
+									bio: true,
+									imageUrl: true
+								}
 							}
 						}
+					},
+					chapters: {
+						orderBy: { position: 'asc' },
+						select: {
+							id: true,
+							title: true,
+							content: true,
+							type: true,
+							position: true,
+							chapterProgress: {
+								where: { userId },
+								select: { isCompleted: true }
+							}
+						}
+					},
+					categories: true,
+					enrollments: {
+						where: {
+							userId: ctx.session.user.id
+						}
+					},
+					_count: {
+						select: {
+							enrollments: true
+						}
 					}
-				},
-				chapters: {
-					orderBy: { position: 'asc' },
-					select: {
-						id: true,
-						title: true,
-						content: true,
-						type: true,
-						position: true
-					}
-				},
-				categories: true,
-				enrollments: {
-					where: {
-						userId: ctx.session.user.id
-					}
-				},
-				_count: {
-					select: {
-						enrollments: true
-					}
+				}
+			})
+
+			if (!course) {
+				throw new TRPCClientError('Course not found')
+			}
+
+			const totalChapters = course.chapters.length
+			const completedChapters = course.chapters.filter(
+				(chapter) => chapter.chapterProgress.length > 0 && chapter.chapterProgress[0]?.isCompleted
+			).length
+			const overallProgress = totalChapters > 0 ? (completedChapters / totalChapters) * 100 : 0
+
+			return {
+				course: {
+					...course,
+					progress: overallProgress
 				}
 			}
 		})
-
-		if (!course) {
-			throw new TRPCClientError('Course not found')
-		}
-
-		return { course }
-	})
 })

@@ -22,7 +22,7 @@ import { type Breadcrumb } from '@/core/types/breadcrumbs'
 export default async function Page({ params }: { params: { courseId: string } }) {
 	const { courseId } = params
 
-	const { course } = await api.course.findPublicCourse({ courseId })
+	const { course } = await api.course.findEnrolledCourseDetails({ courseId })
 
 	if (!course) return <NotFound item="course" />
 	const crumbs: Breadcrumb = [
@@ -54,13 +54,14 @@ export default async function Page({ params }: { params: { courseId: string } })
 				<div className="flex w-full flex-col space-y-2">
 					<PageTitle>{course.title}</PageTitle>
 					<div className="flex flex-wrap items-center gap-2">
+						<Badge variant="outline">{course.status}</Badge>
 						{course.categories.map((category) => (
 							<Badge key={category.id} variant="secondary">
 								{category.name}
 							</Badge>
 						))}
 					</div>
-					<PageDescription className="line-clamp-3 md:line-clamp-3">
+					<PageDescription className="min-h-16 md:line-clamp-3">
 						{course.description}
 					</PageDescription>
 
@@ -75,14 +76,16 @@ export default async function Page({ params }: { params: { courseId: string } })
 					<div className="!mt-1 space-y-1">
 						<div className="flex justify-between text-sm">
 							<span>Course Progress</span>
-							<span>25%</span>
+							<span>{course.progress}%</span>
 						</div>
-						<Progress value={25} className="w-full" />
+						<Progress value={course.progress} className="w-full" />
 					</div>
 				</div>
 
 				<Button>Continue Last</Button>
 			</PageHeader>
+
+			<Separator />
 
 			<PageContent>
 				<PageSection>Rawr</PageSection>
