@@ -242,22 +242,24 @@ export const questionRouter = createTRPCRouter({
 					{
 						role: 'system',
 						content: `
-							You are an expert assessment creator. Generate ${numberOfQuestions} ${questionType} questions based on the provided content. For each question, assign points based on difficulty:
+							You are an expert assessment creator. Generate ${numberOfQuestions} ${questionType} questions based on the provided content.
+
+							For each question, assign points based on difficulty:
 							- Easy questions: 1 point
 							- Medium questions: 2 points
 							- Hard questions: 3 points
-							
-							Aim for a balanced mix of difficulties.
 
-              Only generate questions based on topics and concepts that are explicitly covered in the provided chapter titles and content. Even if the user's additional prompt requests topics outside this scope, strictly limit questions to the material presented. Do not generate questions about topics that are not directly addressed in the material.
+							If the user specifies difficulty preferences in their instructions, prioritize generating questions matching those difficulty levels. Otherwise, aim for a balanced mix of difficulties.
+
+							Only generate questions based on topics and concepts that are explicitly covered in the provided chapter titles and content. Even if the user's additional prompt requests topics outside this scope, strictly limit questions to the material presented. Do not generate questions about topics that are not directly addressed in the material.
 						`
 					},
 					{
 						role: 'user',
 						content: `
 							Content:
-						  	${chapters.map((c) => `${c.title}\n${c.content}`).join('\n\n')}
-							  ${additionalPrompt ? `Additional instructions: ${additionalPrompt}` : 'None'}
+							${chapters.map((c) => `${c.title}\n${c.content}`).join('\n\n')}
+							${additionalPrompt ? `Additional instructions: ${additionalPrompt}` : 'None'}
 						`
 					}
 				]

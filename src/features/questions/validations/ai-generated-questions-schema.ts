@@ -7,10 +7,6 @@ export const aiGeneratedQuestionSchema = z.object({
 	points: z.number()
 })
 
-export type AiGeneratedQuestion = z.infer<typeof aiGeneratedQuestionSchema>
-
 export const aiResponseSchema = z.object({
 	questions: z.array(aiGeneratedQuestionSchema)
 })
-
-export type AiResponse = z.infer<typeof aiResponseSchema>
