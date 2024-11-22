@@ -236,7 +236,7 @@ export const questionRouter = createTRPCRouter({
 			const { assessmentId, chapters, questionType, numberOfQuestions, additionalPrompt } = input
 
 			const response = await generateObject({
-				model: openai('gpt-4o-mini'),
+				model: openai('ft:gpt-4o-mini-2024-07-18:personal:km2j-gpt:AWOGQrmf'),
 				schema: aiResponseSchema,
 				messages: [
 					{
