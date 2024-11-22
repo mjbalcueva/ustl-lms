@@ -123,7 +123,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 						</TabsContent>
 
 						<TabsContent value="ai-chat" className="rounded-lg">
-							<AiChatCard />
+							<AiChatCard course={course} />
 						</TabsContent>
 
 						<TabsContent value="forum" className="rounded-lg">

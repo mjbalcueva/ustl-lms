@@ -1,4 +1,5 @@
 import { openai } from '@ai-sdk/openai'
+import { type Course } from '@prisma/client'
 import { streamText, type Message } from 'ai'
 import { z } from 'zod'
 
@@ -11,10 +12,13 @@ type ChatPayload = {
 		name: string
 		id: string
 	}
+	course: Course
 }
 
 export async function POST(req: Request) {
-	const { messages, userDetails } = (await req.json()) as ChatPayload
+	const { messages, userDetails, course } = (await req.json()) as ChatPayload
+
+	console.log('\nCourse:', course)
 
 	const result = streamText({
 		model: openai('ft:gpt-4o-mini-2024-07-18:personal:km2j-gpt:AWOGQrmf'),
@@ -44,6 +48,13 @@ export async function POST(req: Request) {
 				execute: async (): Promise<string> => {
 					console.log('\nUser name:', userDetails?.name)
 					return userDetails?.name ?? 'User'
+				}
+			},
+			about_course: {
+				description: 'Get information about the course.',
+				parameters: z.object({}),
+				execute: async (): Promise<string> => {
+					return `Course Details: ${JSON.stringify(course)}`
 				}
 			}
 		}

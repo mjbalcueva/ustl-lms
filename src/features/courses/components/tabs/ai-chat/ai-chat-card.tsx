@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import { type Course } from '@prisma/client'
 import { useChat, type Message } from 'ai/react'
 import { useSession } from 'next-auth/react'
 
@@ -15,7 +16,11 @@ import { AiChatInput } from '@/features/courses/components/tabs/ai-chat/ai-chat-
 import { AiChatMessage } from '@/features/courses/components/tabs/ai-chat/ai-chat-message'
 import { AiChatTyping } from '@/features/courses/components/tabs/ai-chat/ai-chat-typing'
 
-export default function AiChatCard() {
+type AiChatCardProps = {
+	course: Course
+}
+
+export default function AiChatCard({ course }: AiChatCardProps) {
 	const session = useSession()
 	const user = session.data?.user
 
@@ -43,7 +48,8 @@ export default function AiChatCard() {
 			userDetails: {
 				name: user?.name ?? 'Alakazam',
 				id: user?.id ?? ''
-			}
+			},
+			course
 		}
 	})
 
