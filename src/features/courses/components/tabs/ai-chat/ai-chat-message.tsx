@@ -6,9 +6,14 @@ import { cn } from '@/core/lib/utils/cn'
 
 type AiChatMessageProps = {
 	message: Message
+	userData: {
+		id: string
+		imageUrl: string | null
+		name: string | null
+	}
 }
 
-export function AiChatMessage({ message }: AiChatMessageProps) {
+export function AiChatMessage({ message, userData }: AiChatMessageProps) {
 	return (
 		<div className={cn('flex', message.role === 'user' ? 'justify-end' : 'justify-start')}>
 			<div
@@ -17,13 +22,13 @@ export function AiChatMessage({ message }: AiChatMessageProps) {
 					message.role === 'user' ? 'flex-row-reverse' : 'flex-row'
 				)}
 			>
-				<Avatar className="mb-4 size-8">
+				<Avatar className="mb-4 size-9 border">
 					{message.role === 'assistant' ? (
-						<AvatarImage src="/ai-avatar.png" alt="AI" />
+						<AvatarImage src="/assets/ai-avatar.jpg" alt="AI" />
 					) : (
-						<AvatarImage src="/user-avatar.png" alt="User" />
+						<AvatarImage src={userData.imageUrl ?? ''} alt={userData.name ?? ''} />
 					)}
-					<AvatarFallback>{message.role === 'assistant' ? 'AI' : 'U'}</AvatarFallback>
+					<AvatarFallback>{message.role === 'assistant' ? 'AI' : userData.name}</AvatarFallback>
 				</Avatar>
 
 				<div className="group flex flex-col space-y-0.5">
