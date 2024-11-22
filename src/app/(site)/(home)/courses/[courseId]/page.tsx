@@ -19,11 +19,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/core/components/ui/t
 import { CourseSingle, Home } from '@/core/lib/icons'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
+import { CourseAttachmentCard } from '@/features/courses/components/course-attachment-card'
 import CourseChapterCard from '@/features/courses/components/course-chapter-card'
 import { CourseCopyInviteButton } from '@/features/courses/components/course-copy-invite-button'
 import CourseInstructorCard from '@/features/courses/components/course-instructor-card'
 import AiChatCard from '@/features/courses/components/tabs/ai-chat/ai-chat-card'
-import AttachmentsCard from '@/features/courses/components/tabs/attachments/attachments-card'
 import ForumCard from '@/features/courses/components/tabs/forum/forum-card'
 
 export default async function Page({ params }: { params: { courseId: string } }) {
@@ -130,8 +130,16 @@ export default async function Page({ params }: { params: { courseId: string } })
 							<ForumCard />
 						</TabsContent>
 
-						<TabsContent value="attachments" className="rounded-lg">
-							<AttachmentsCard />
+						<TabsContent value="attachments" className="space-y-3 rounded-lg">
+							{course.attachments.map((attachment) => (
+								<CourseAttachmentCard
+									key={attachment.id}
+									id={attachment.id}
+									name={attachment.name}
+									url={attachment.url}
+									createdAt={attachment.createdAt}
+								/>
+							))}
 						</TabsContent>
 					</Tabs>
 				</PageSection>

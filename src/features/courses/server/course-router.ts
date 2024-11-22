@@ -413,6 +413,9 @@ export const courseRouter = createTRPCRouter({
 							}
 						}
 					},
+					attachments: {
+						orderBy: { name: 'asc' }
+					},
 					categories: true,
 					enrollments: {
 						where: {
