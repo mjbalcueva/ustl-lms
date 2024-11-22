@@ -5,9 +5,11 @@ import { useChat, type Message } from 'ai/react'
 import { useSession } from 'next-auth/react'
 
 import { CardFooter, CardHeader, CardTitle } from '@/core/components/compound-card'
+import { Button } from '@/core/components/ui/button'
 import { Card } from '@/core/components/ui/card'
 import { ScrollArea, ScrollBar } from '@/core/components/ui/scroll-area'
 import { Separator } from '@/core/components/ui/separator'
+import { ArrowReset } from '@/core/lib/icons'
 
 import { AiChatInput } from '@/features/courses/components/tabs/ai-chat/ai-chat-input'
 import { AiChatMessage } from '@/features/courses/components/tabs/ai-chat/ai-chat-message'
@@ -32,7 +34,9 @@ export default function AiChatCard() {
 		input,
 		handleInputChange,
 		handleSubmit,
-		isLoading
+		isLoading,
+		reload,
+		setMessages
 	} = useChat({
 		onResponse: (response) => {
 			console.log('Chat response:', response)
@@ -51,10 +55,27 @@ export default function AiChatCard() {
 		messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
 	}, [chatMessages])
 
+	const handleReset = () => {
+		setMessages(initialMessages)
+		void reload()
+	}
+
 	return (
 		<Card className={`flex flex-col ${hasStartedConversation ? 'h-[calc(100vh-8rem)]' : 'h-80'}`}>
-			<CardHeader className="flex-none">
+			<CardHeader className="flex items-center justify-between">
 				<CardTitle className="text-lg font-semibold">Course AI Assistant</CardTitle>
+				{hasStartedConversation && (
+					<Button
+						variant="outline"
+						size="sm"
+						onClick={handleReset}
+						title="Reset conversation"
+						className="text-muted-foreground hover:text-foreground"
+					>
+						<ArrowReset className="size-4" />
+						Reset conversation
+					</Button>
+				)}
 			</CardHeader>
 
 			<Separator className="flex-none" />
