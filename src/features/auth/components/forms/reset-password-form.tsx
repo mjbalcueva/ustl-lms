@@ -34,7 +34,6 @@ export const ResetPasswordForm = ({ token }: { token: string }) => {
 
 	const { mutate, data, error, isPending } = api.auth.resetPassword.useMutation()
 	const onSubmit: SubmitHandler<ResetPasswordSchema> = (data) => {
-		console.log({ clicked: true, data })
 		mutate(data)
 	}
 

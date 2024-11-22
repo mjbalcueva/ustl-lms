@@ -54,7 +54,6 @@ export default function AiChatCard({ course }: AiChatCardProps) {
 	})
 
 	const hasStartedConversation = chatMessages.length > initialMessages.length
-
 	const messagesEndRef = useRef<HTMLDivElement>(null)
 
 	useEffect(() => {
@@ -88,17 +87,19 @@ export default function AiChatCard({ course }: AiChatCardProps) {
 
 			<ScrollArea className="flex-1 overflow-y-auto px-4">
 				<div className="space-y-2 py-4">
-					{chatMessages.map((message) => (
-						<AiChatMessage
-							key={message.id}
-							message={message}
-							userData={{
-								id: user?.id ?? '',
-								imageUrl: user?.imageUrl ?? null,
-								name: user?.name ?? null
-							}}
-						/>
-					))}
+					{chatMessages
+						.filter((message) => !message.toolInvocations)
+						.map((message) => (
+							<AiChatMessage
+								key={message.id}
+								message={message}
+								userData={{
+									id: user?.id ?? '',
+									imageUrl: user?.imageUrl ?? null,
+									name: user?.name ?? null
+								}}
+							/>
+						))}
 					{isLoading && <AiChatTyping />}
 					<div ref={messagesEndRef} />
 				</div>

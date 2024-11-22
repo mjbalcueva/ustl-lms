@@ -236,7 +236,7 @@ export const questionRouter = createTRPCRouter({
 			const { assessmentId, chapters, questionType, numberOfQuestions, additionalPrompt } = input
 
 			const response = await generateObject({
-				model: openai('ft:gpt-4o-mini-2024-07-18:personal:km2j-gpt:AWOGQrmf'),
+				model: openai('ft:gpt-4o-mini-2024-07-18:personal:km2j-gpt:AWVPZPki'),
 				schema: aiResponseSchema,
 				messages: [
 					{
@@ -252,6 +252,9 @@ export const questionRouter = createTRPCRouter({
 							If the user specifies difficulty preferences in their instructions, prioritize generating questions matching those difficulty levels. Otherwise, aim for a balanced mix of difficulties.
 
 							Only generate questions based on topics and concepts that are explicitly covered in the provided chapter titles and content. Even if the user's additional prompt requests topics outside this scope, strictly limit questions to the material presented. Do not generate questions about topics that are not directly addressed in the material.
+
+							[important] Use the following format for true or false questions to underline the important part of the question:
+							<p class="text-node"><u class="underline">important word</u> rest of question</p>
 						`
 					},
 					{
