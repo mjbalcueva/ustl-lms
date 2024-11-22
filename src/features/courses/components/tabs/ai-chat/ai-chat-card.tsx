@@ -38,13 +38,13 @@ export default function AiChatCard() {
 		reload,
 		setMessages
 	} = useChat({
-		onResponse: (response) => {
-			console.log('Chat response:', response)
-		},
-		onFinish: (message) => {
-			console.log('Chat finished:', message)
-		},
-		initialMessages
+		initialMessages,
+		body: {
+			userDetails: {
+				name: user?.name ?? 'Alakazam',
+				id: user?.id ?? ''
+			}
+		}
 	})
 
 	const hasStartedConversation = chatMessages.length > initialMessages.length
@@ -61,7 +61,7 @@ export default function AiChatCard() {
 	}
 
 	return (
-		<Card className={`flex flex-col ${hasStartedConversation ? 'h-[calc(100vh-8rem)]' : 'h-80'}`}>
+		<Card className={`flex flex-col ${hasStartedConversation ? 'h-[calc(100vh-12rem)]' : 'h-80'}`}>
 			<CardHeader className="flex items-center justify-between">
 				<CardTitle className="text-lg font-semibold">Course AI Assistant</CardTitle>
 				{hasStartedConversation && (
