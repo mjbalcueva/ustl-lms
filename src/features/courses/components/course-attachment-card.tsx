@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { toast } from 'sonner'
 
 import { IconBadge } from '@/core/components/icon-badge'
 import { Button } from '@/core/components/ui/button'
@@ -24,7 +25,9 @@ export const CourseAttachmentCard = ({ id, name, url, createdAt }: CourseAttachm
 			setIsDownloading(true)
 			window.open(url, '_blank', 'noopener,noreferrer')
 		} catch (error) {
-			console.error('Error downloading file:', error)
+			toast.error(
+				`Error downloading file: ${error instanceof Error ? error.message : 'Unknown error'}`
+			)
 		} finally {
 			setIsDownloading(false)
 		}
@@ -34,7 +37,7 @@ export const CourseAttachmentCard = ({ id, name, url, createdAt }: CourseAttachm
 		<Card key={id}>
 			<CardHeader className="flex-row items-center gap-4 space-y-0 p-4">
 				<Tooltip>
-					<TooltipTrigger>
+					<TooltipTrigger className="rounded-full ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
 						<IconBadge icon={Attachment} size="lg" />
 					</TooltipTrigger>
 					<TooltipContent>Attachment</TooltipContent>
