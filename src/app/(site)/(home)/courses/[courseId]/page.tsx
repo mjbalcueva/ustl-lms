@@ -96,7 +96,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 			</PageHeader>
 
 			<PageContent className="mb-24 space-y-6 px-2.5 pt-6 sm:px-4 md:mb-12 md:flex md:flex-wrap md:gap-6 md:space-y-0 md:px-6">
-				<PageSection className="flex-[2] md:min-w-[450px]" columnMode>
+				<PageSection className="flex-[2] md:min-w-[500px]" columnMode>
 					<Tabs defaultValue="syllabus" className="space-y-4">
 						<TabsList>
 							<TabsTrigger value="syllabus">Syllabus</TabsTrigger>
@@ -144,7 +144,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 					</Tabs>
 				</PageSection>
 
-				<PageSection className="md:min-w-[293px]" columnMode>
+				<PageSection className="md:min-w-[350px]" columnMode>
 					<CourseInstructorCard
 						name={course.instructor.profile.name ?? ''}
 						bio={course.instructor.profile.bio ?? ''}

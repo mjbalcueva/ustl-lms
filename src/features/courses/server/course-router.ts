@@ -456,4 +456,51 @@ export const courseRouter = createTRPCRouter({
 				}
 			}
 		})
+
+	// handleAiChatMessage: protectedProcedure
+	// 	.input(aiMessageSchema)
+	// 	.mutation(async ({ ctx, input }) => {
+	// 		const { courseId, message } = input
+
+	// 		// Verify user is enrolled in the course
+	// 		const enrollment = await ctx.db.enrollment.findFirst({
+	// 			where: {
+	// 				courseId,
+	// 				userId: ctx.session.user.id
+	// 			}
+	// 		})
+
+	// 		if (!enrollment) {
+	// 			throw new TRPCClientError('You must be enrolled in this course to use the AI chat')
+	// 		}
+
+	// 		// Get course context
+	// 		const course = await ctx.db.course.findUnique({
+	// 			where: { id: courseId },
+	// 			include: {
+	// 				chapters: true,
+	// 				categories: true
+	// 			}
+	// 		})
+
+	// 		if (!course) {
+	// 			throw new TRPCClientError('Course not found')
+	// 		}
+
+	// 		// Generate AI response
+	// 		const response = await km2j.chat({
+	// 			message,
+	// 			context: {
+	// 				courseTitle: course.title,
+	// 				courseDescription: course.description,
+	// 				chapters: course.chapters.map((ch) => ({
+	// 					title: ch.title,
+	// 					description: ch.description
+	// 				})),
+	// 				categories: course.categories.map((cat) => cat.name)
+	// 			}
+	// 		})
+
+	// 		return { response }
+	// 	})
 })

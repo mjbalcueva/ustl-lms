@@ -97,6 +97,12 @@ const config = {
 					'3': 'hsl(var(--chart-3))',
 					'4': 'hsl(var(--chart-4))',
 					'5': 'hsl(var(--chart-5))'
+				},
+				shiki: {
+					'light': 'var(--shiki-light)',
+					'light-bg': 'var(--shiki-light-bg)',
+					'dark': 'var(--shiki-dark)',
+					'dark-bg': 'var(--shiki-dark-bg)'
 				}
 			},
 			borderRadius: {

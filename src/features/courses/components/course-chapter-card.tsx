@@ -41,7 +41,7 @@ export default function CourseChapterCard({
 			<Card key={id}>
 				<CardHeader className="flex-row items-center gap-4 space-y-0 p-4">
 					<Tooltip>
-						<TooltipTrigger>
+						<TooltipTrigger className="rounded-full ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
 							<IconBadge icon={chapterTypeIcons[type].icon} size="lg" />
 						</TooltipTrigger>
 						<TooltipContent>{capitalize(type)}</TooltipContent>

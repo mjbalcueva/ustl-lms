@@ -1,52 +1,66 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef } from 'react'
+import { useChat, type Message } from 'ai/react'
 
-import { CardHeader, CardTitle } from '@/core/components/compound-card'
+import { CardFooter, CardHeader, CardTitle } from '@/core/components/compound-card'
 import { Card } from '@/core/components/ui/card'
+import { ScrollArea, ScrollBar } from '@/core/components/ui/scroll-area'
+import { Separator } from '@/core/components/ui/separator'
 
 import { AiChatInput } from '@/features/courses/components/tabs/ai-chat/ai-chat-input'
-import { AiChatMessages } from '@/features/courses/components/tabs/ai-chat/ai-chat-messages'
-
-type Message = {
-	id: string
-	content: string
-	sender: 'user' | 'ai'
-	timestamp: string
-}
+import { AiChatMessage } from '@/features/courses/components/tabs/ai-chat/ai-chat-message'
 
 export default function AiChatCard() {
-	const [messages, setMessages] = useState<Message[]>([
+	const initialMessages: Message[] = [
 		{
 			id: '1',
-			content: "Hello! I'm your AI learning assistant. How can I help you today?",
-			sender: 'ai',
-			timestamp: new Date().toLocaleString()
+			role: 'assistant',
+			content:
+				"Hi! I'm Daryll, your study buddy and academic genius—minus the coffee breaks! What would you like to learn about?"
 		}
-	])
+	]
 
-	const handleSendMessage = (content: string) => {
-		const newMessage = {
-			id: Date.now().toString(),
-			content,
-			sender: 'user' as const,
-			timestamp: new Date().toLocaleString()
-		}
-		setMessages([...messages, newMessage])
-		// TODO: Implement AI response logic
-	}
+	const {
+		messages: chatMessages,
+		input,
+		handleInputChange,
+		handleSubmit
+	} = useChat({
+		initialMessages
+	})
+
+	const messagesEndRef = useRef<HTMLDivElement>(null)
+
+	useEffect(() => {
+		messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+	}, [chatMessages])
 
 	return (
-		<Card className="flex flex-col">
-			<CardHeader>
-				<CardTitle>AI Learning Assistant</CardTitle>
+		<Card className="flex h-[calc(100vh-8rem)] flex-col">
+			<CardHeader className="flex-none">
+				<CardTitle className="text-lg font-semibold">Course AI Assistant</CardTitle>
 			</CardHeader>
-			<div className="flex-1 overflow-y-auto px-4">
-				<AiChatMessages messages={messages} />
-			</div>
-			<div className="border-t p-4">
-				<AiChatInput onSendMessage={handleSendMessage} />
-			</div>
+
+			<Separator className="flex-none" />
+
+			<ScrollArea className="flex-1 overflow-y-auto px-4">
+				<div className="space-y-2 py-4">
+					{chatMessages.map((message) => (
+						<AiChatMessage key={message.id} message={message} />
+					))}
+					<div ref={messagesEndRef} />
+				</div>
+				<ScrollBar orientation="horizontal" />
+			</ScrollArea>
+
+			<CardFooter className="flex-none pt-4">
+				<AiChatInput
+					input={input}
+					handleInputChange={handleInputChange}
+					handleSubmit={handleSubmit}
+				/>
+			</CardFooter>
 		</Card>
 	)
 }

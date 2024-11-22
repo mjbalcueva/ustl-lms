@@ -1,45 +1,60 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, type FormEvent } from 'react'
 
 import { Button } from '@/core/components/ui/button'
 import { Textarea } from '@/core/components/ui/textarea'
 import { Send } from '@/core/lib/icons'
 
 type AiChatInputProps = {
-	onSendMessage: (message: string) => void
+	input: string
+	handleInputChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
+	handleSubmit: (e: FormEvent<HTMLFormElement>) => void
 }
 
-export function AiChatInput({ onSendMessage }: AiChatInputProps) {
-	const [message, setMessage] = useState('')
+export const AiChatInput = ({ input, handleInputChange, handleSubmit }: AiChatInputProps) => {
+	const textareaRef = useRef<HTMLTextAreaElement>(null)
 
-	const handleSendMessage = () => {
-		if (message.trim()) {
-			onSendMessage(message)
-			setMessage('')
-		}
+	const adjustHeight = () => {
+		const textarea = textareaRef.current
+		if (!textarea) return
+
+		textarea.style.height = 'auto'
+		const newHeight = Math.min(textarea.scrollHeight, 96)
+		textarea.style.height = `${newHeight}px`
 	}
 
-	const handleKeyPress = (e: React.KeyboardEvent) => {
+	useEffect(() => {
+		const textarea = textareaRef.current
+		if (!textarea) return
+
+		textarea.addEventListener('input', adjustHeight)
+		return () => textarea.removeEventListener('input', adjustHeight)
+	}, [])
+
+	const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
 		if (e.key === 'Enter' && !e.shiftKey) {
 			e.preventDefault()
-			handleSendMessage()
+			const form = e.currentTarget.form
+			if (form) handleSubmit(new Event('submit') as unknown as FormEvent<HTMLFormElement>)
 		}
 	}
 
 	return (
-		<div className="flex items-end gap-2">
+		<form onSubmit={handleSubmit} className="flex w-full items-end gap-2.5">
 			<Textarea
-				value={message}
-				onChange={(e) => setMessage(e.target.value)}
-				onKeyDown={handleKeyPress}
-				placeholder="Ask me anything..."
-				className="flex-grow resize-none"
-				rows={2}
+				ref={textareaRef}
+				value={input}
+				onChange={handleInputChange}
+				name="ai-chat-message"
+				placeholder="Type your message..."
+				className="min-h-10 resize-none"
+				rows={1}
+				onKeyDown={handleKeyDown}
 			/>
-			<Button onClick={handleSendMessage} size="icon">
+			<Button type="submit" className="shrink-0" size="icon">
 				<Send />
 			</Button>
-		</div>
+		</form>
 	)
 }
