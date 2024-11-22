@@ -24,22 +24,19 @@ export async function POST(req: Request) {
 		messages,
 		maxSteps: 4,
 		tools: {
-			get_day: {
-				description: 'Get the current day of the week',
+			get_day_and_time: {
+				description: 'Get the current day of the week and time',
 				parameters: z.object({}),
 				execute: async (): Promise<string> => {
 					const day = new Date().toLocaleDateString('en-US', { weekday: 'long' })
-					return `Today is ${day}.`
-				},
-				experimental_toToolResultContent: (result: { content: string }) => {
-					return [
-						{
-							type: 'text',
-							text: result.content
-						}
-					]
+					const time = new Date().toLocaleTimeString('en-US', {
+						hour: 'numeric',
+						minute: 'numeric'
+					})
+					return `Today is ${day}. The time is ${time}.`
 				}
 			},
+
 			get_student_name: {
 				description: "Get the student's name. important for personalizing the conversation.",
 				parameters: z.object({}),
@@ -81,21 +78,29 @@ export async function POST(req: Request) {
 				}
 			},
 			list_chapters: {
-				description: 'Get a list of course chapters and their completion status',
+				description:
+					'Get a detailed list of course chapters including title, description, duration, and completion status',
 				parameters: z.object({}),
 				execute: async (): Promise<string> => {
 					const chapterList = course.chapters.map((chapter, index) => {
 						const isCompleted = chapter.chapterProgress[0]?.isCompleted
-						return `${index + 1}. ${chapter.title} - ${isCompleted ? '✅ Completed' : '⏳ Not completed'}`
+						const completionStatus = isCompleted ? '✅ Completed' : '⏳ Not completed'
+
+						return `
+              ${index + 1}. ${chapter.title}
+              Status: ${completionStatus}
+              Description: ${chapter.content ?? 'No description available'}
+              Position: Chapter ${chapter.position}
+              Video URL: ${chapter.videoUrl ?? 'No video available'}`
 					})
-					return chapterList.join('\n')
+					return chapterList.join('\n\n')
 				}
 			},
 			get_course_resources: {
-				description: 'Get a list of course attachments and resources',
+				description: 'Get a list of course reference materials',
 				parameters: z.object({}),
 				execute: async (): Promise<string> => {
-					if (!course.attachments.length) return 'No attachments available for this course.'
+					if (!course.attachments.length) return 'No reference materials available for this course.'
 					return `Course Resources:\n${course.attachments.map((a) => `- ${a.name}`).join('\n')}`
 				}
 			},

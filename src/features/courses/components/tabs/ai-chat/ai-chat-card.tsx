@@ -88,7 +88,7 @@ export default function AiChatCard({ course }: AiChatCardProps) {
 			<ScrollArea className="flex-1 overflow-y-auto px-4">
 				<div className="space-y-2 py-4">
 					{chatMessages
-						.filter((message) => !message.toolInvocations)
+						// .filter((message) => !message.toolInvocations)
 						.map((message) => (
 							<AiChatMessage
 								key={message.id}

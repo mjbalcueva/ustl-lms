@@ -102,7 +102,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 							<TabsTrigger value="syllabus">Syllabus</TabsTrigger>
 							<TabsTrigger value="ai-chat">AI Chat</TabsTrigger>
 							<TabsTrigger value="forum">Forum</TabsTrigger>
-							<TabsTrigger value="attachments">Attachments</TabsTrigger>
+							<TabsTrigger value="attachments">Resources</TabsTrigger>
 						</TabsList>
 
 						<TabsContent value="syllabus" className="space-y-3 rounded-lg">
