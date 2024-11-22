@@ -2,9 +2,9 @@
 
 import { useState } from 'react'
 import { signIn } from 'next-auth/react'
-import { FcGoogle } from 'react-icons/fc'
 
 import { Loader } from '@/core/components/ui/loader'
+import { Google } from '@/core/lib/icons'
 import { cn } from '@/core/lib/utils/cn'
 import { DEFAULT_REDIRECT } from '@/core/routes/constants'
 
@@ -19,7 +19,7 @@ type OAuthButtonProps = React.ComponentProps<typeof ButtonShining> & {
 }
 
 const providerIcons: Record<Provider, React.ReactNode> = {
-	google: <FcGoogle />
+	google: <Google />
 }
 
 export const OAuthButton = ({

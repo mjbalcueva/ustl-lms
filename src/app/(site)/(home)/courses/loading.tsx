@@ -13,11 +13,8 @@ import { Home } from '@/core/lib/icons'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
 export default function Loading() {
-	const crumbs: Breadcrumb = [
-		{ icon: Home },
-		{ label: 'Learning', href: '/courses' },
-		{ label: 'Browse' }
-	]
+	const crumbs: Breadcrumb = [{ icon: Home }, { label: 'Browse', href: '/courses' }]
+
 	return (
 		<>
 			<PageHeader className="hidden space-y-0 md:block md:py-3">

@@ -1,3 +1,5 @@
+import { FaFacebookF, FaLinkedinIn } from 'react-icons/fa'
+import { FcGoogle } from 'react-icons/fc'
 import {
 	LuArchive,
 	LuChevronsUpDown,
@@ -39,6 +41,7 @@ import {
 	TbCirclePlus,
 	TbClearFormatting,
 	TbClipboardList,
+	TbClock,
 	TbCode,
 	TbCopy,
 	TbDiamond,
@@ -46,6 +49,7 @@ import {
 	TbDotsVertical,
 	TbEdit,
 	TbFile,
+	TbFilter,
 	TbGripVertical,
 	TbH1,
 	TbH2,
@@ -74,6 +78,7 @@ import {
 	TbPresentationAnalytics,
 	TbRefresh,
 	TbSchool,
+	TbSend,
 	TbSettings2,
 	TbShieldCheckFilled,
 	TbShieldX,
@@ -139,6 +144,9 @@ export const ClearHighlight = TbHighlightOff
 export const OrderedList = TbListNumbers
 export const BulletList = TbList
 
+// Chat
+export const Send = TbSend
+
 // Mode Icons
 export const Light = TbSunHigh
 export const Dark = TbMoonStars
@@ -162,6 +170,11 @@ export const Preference = TbPaint
 export const Settings = TbSettings2
 export const Logout = TbLogout
 
+// Social Icons
+export const Google = FcGoogle
+export const Facebook = FaFacebookF
+export const LinkedIn = FaLinkedinIn
+
 // UI Icons
 export const Adjust = LuSettings2
 export const ArrowReset = RxReset
@@ -179,6 +192,7 @@ export const ChevronRight = TbChevronRight
 export const ChevronRightPipe = TbChevronRightPipe
 export const ChevronUp = TbChevronUp
 export const ChevronsUpDown = LuChevronsUpDown
+export const Clock = TbClock
 export const Copy = TbCopy
 export const Dot = LuDot
 export const DotsHorizontal = TbDots
@@ -186,6 +200,7 @@ export const DotsVertical = TbDotsVertical
 export const EyeOpen = RxEyeOpen
 export const EyeClosed = RxEyeClosed
 export const EyeNone = RxEyeNone
+export const Filter = TbFilter
 export const Gear = LuSettings
 export const GripVertical = TbGripVertical
 export const Loader = TbLoader

@@ -224,14 +224,14 @@ model ChapterProgress {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  userId    String
+  studentId String @map("userId")
   chapterId String
 
-  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [studentId], references: [id], onDelete: Cascade)
   chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 
-  @@unique([chapterId, userId])
-  @@index([chapterId, userId])
+  @@unique([chapterId, studentId])
+  @@index([chapterId, studentId])
   @@map("chapter_progress")
 }
 

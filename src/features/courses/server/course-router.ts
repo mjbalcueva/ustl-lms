@@ -56,6 +56,7 @@ export const courseRouter = createTRPCRouter({
 	findManyCourses: instructorProcedure.query(async ({ ctx }) => {
 		const courses = await ctx.db.course.findMany({
 			where: { instructorId: ctx.session.user.id },
+			orderBy: [{ status: 'asc' }, { updatedAt: 'desc' }],
 			include: {
 				chapters: true,
 				_count: {
@@ -379,5 +380,127 @@ export const courseRouter = createTRPCRouter({
 				tags: course.categories.map((category) => category.name)
 			}))
 		}
-	})
+	}),
+
+	findEnrolledCourseDetails: protectedProcedure
+		.input(findCourseSchema)
+		.query(async ({ ctx, input }) => {
+			const { courseId } = input
+			const userId = ctx.session.user.id
+
+			const course = await ctx.db.course.findFirst({
+				where: {
+					id: courseId,
+					status: { not: 'DRAFT' }
+				},
+				include: {
+					instructor: {
+						include: {
+							profile: {
+								select: {
+									name: true,
+									bio: true,
+									imageUrl: true
+								}
+							}
+						}
+					},
+					chapters: {
+						orderBy: { position: 'asc' },
+						include: {
+							chapterProgress: {
+								where: { studentId: userId },
+								take: 1
+							}
+						}
+					},
+					attachments: {
+						orderBy: { name: 'desc' }
+					},
+					categories: true,
+					enrollments: {
+						where: {
+							userId: ctx.session.user.id
+						}
+					},
+					_count: {
+						select: {
+							enrollments: true
+						}
+					}
+				}
+			})
+
+			if (!course) {
+				throw new TRPCClientError('Course not found')
+			}
+
+			const totalChapters = course.chapters.length
+			const completedChapters = course.chapters.filter(
+				(chapter) => chapter.chapterProgress.length > 0 && chapter.chapterProgress[0]?.isCompleted
+			).length
+			const overallProgress = totalChapters > 0 ? (completedChapters / totalChapters) * 100 : 0
+
+			return {
+				course: {
+					...course,
+					progress: overallProgress,
+					instructor: {
+						profile: course.instructor.profile ?? {
+							name: null,
+							bio: null,
+							imageUrl: null
+						},
+						email: course.instructor.email
+					}
+				}
+			}
+		})
+
+	// handleAiChatMessage: protectedProcedure
+	// 	.input(aiMessageSchema)
+	// 	.mutation(async ({ ctx, input }) => {
+	// 		const { courseId, message } = input
+
+	// 		// Verify user is enrolled in the course
+	// 		const enrollment = await ctx.db.enrollment.findFirst({
+	// 			where: {
+	// 				courseId,
+	// 				userId: ctx.session.user.id
+	// 			}
+	// 		})
+
+	// 		if (!enrollment) {
+	// 			throw new TRPCClientError('You must be enrolled in this course to use the AI chat')
+	// 		}
+
+	// 		// Get course context
+	// 		const course = await ctx.db.course.findUnique({
+	// 			where: { id: courseId },
+	// 			include: {
+	// 				chapters: true,
+	// 				categories: true
+	// 			}
+	// 		})
+
+	// 		if (!course) {
+	// 			throw new TRPCClientError('Course not found')
+	// 		}
+
+	// 		// Generate AI response
+	// 		const response = await km2j.chat({
+	// 			message,
+	// 			context: {
+	// 				courseTitle: course.title,
+	// 				courseDescription: course.description,
+	// 				chapters: course.chapters.map((ch) => ({
+	// 					title: ch.title,
+	// 					description: ch.description
+	// 				})),
+	// 				categories: course.categories.map((cat) => cat.name)
+	// 			}
+	// 		})
+
+	// 		return { response }
+	// 	})
 })

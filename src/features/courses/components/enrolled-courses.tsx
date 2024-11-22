@@ -7,7 +7,7 @@ import { Input } from '@/core/components/ui/input'
 import { Search } from '@/core/lib/icons'
 
 import { CourseCard } from '@/features/courses/components/course-card'
-import { FilterPopover } from '@/features/courses/components/ui/filter-popover'
+import { FilterPopover, ResetFilters } from '@/features/courses/components/ui/filter-popover'
 
 type Course = {
 	id: string
@@ -28,6 +28,7 @@ export function EnrolledCourses({ courses }: EnrolledCoursesProps) {
 	const [searchQuery, setSearchQuery] = useState('')
 	const [selectedTags, setSelectedTags] = useState<string[]>([])
 	const [selectedProfessors, setSelectedProfessors] = useState<string[]>([])
+	const [selectedStatuses, setSelectedStatuses] = useState<string[]>([])
 
 	const allTags = useMemo(
 		() =>
@@ -47,6 +48,14 @@ export function EnrolledCourses({ courses }: EnrolledCoursesProps) {
 		[courses]
 	)
 
+	const allStatuses = useMemo(
+		() => [
+			{ label: 'Published', value: 'PUBLISHED' },
+			{ label: 'Archived', value: 'ARCHIVED' }
+		],
+		[]
+	)
+
 	const filteredCourses = useMemo(
 		() =>
 			courses.filter((course) => {
@@ -58,9 +67,11 @@ export function EnrolledCourses({ courses }: EnrolledCoursesProps) {
 					selectedTags.length === 0 || selectedTags.some((tag) => course.tags.includes(tag))
 				const matchesProfessors =
 					selectedProfessors.length === 0 || selectedProfessors.includes(course.instructor)
-				return matchesSearch && matchesTags && matchesProfessors
+				const matchesStatus =
+					selectedStatuses.length === 0 || selectedStatuses.includes(course.status)
+				return matchesSearch && matchesTags && matchesProfessors && matchesStatus
 			}),
-		[courses, searchQuery, selectedTags, selectedProfessors]
+		[courses, searchQuery, selectedTags, selectedProfessors, selectedStatuses]
 	)
 
 	const handleTagFilter = (values: string[] | undefined) => {
@@ -69,6 +80,10 @@ export function EnrolledCourses({ courses }: EnrolledCoursesProps) {
 
 	const handleProfessorFilter = (values: string[] | undefined) => {
 		setSelectedProfessors(values ?? [])
+	}
+
+	const handleStatusFilter = (values: string[] | undefined) => {
+		setSelectedStatuses(values ?? [])
 	}
 
 	const tagColumn = {
@@ -85,9 +100,29 @@ export function EnrolledCourses({ courses }: EnrolledCoursesProps) {
 		getFacetedUniqueValues: () => new Map()
 	} as Column<Course, unknown>
 
+	const statusColumn = {
+		id: 'status',
+		getFilterValue: () => selectedStatuses,
+		setFilterValue: handleStatusFilter,
+		getFacetedUniqueValues: () => new Map()
+	} as Column<Course, unknown>
+
+	const hasActiveFilters =
+		searchQuery ||
+		selectedTags.length > 0 ||
+		selectedProfessors.length > 0 ||
+		selectedStatuses.length > 0
+
+	const handleResetFilters = () => {
+		setSearchQuery('')
+		setSelectedTags([])
+		setSelectedProfessors([])
+		setSelectedStatuses([])
+	}
+
 	return (
 		<>
-			<div className="flex flex-wrap gap-2">
+			<div className="flex flex-wrap items-center gap-2">
 				<div className="relative max-w-sm flex-grow">
 					<Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 transform text-muted-foreground" />
 					<Input
@@ -100,6 +135,8 @@ export function EnrolledCourses({ courses }: EnrolledCoursesProps) {
 				</div>
 				<FilterPopover column={tagColumn} title="Tags" options={allTags} />
 				<FilterPopover column={professorColumn} title="Professors" options={allProfessors} />
+				<FilterPopover column={statusColumn} title="Status" options={allStatuses} />
+				<ResetFilters hasFilters={hasActiveFilters} onReset={handleResetFilters} />
 			</div>
 
 			<div className="flex flex-wrap gap-4">
@@ -107,7 +144,7 @@ export function EnrolledCourses({ courses }: EnrolledCoursesProps) {
 					<CourseCard key={course.id} {...course} />
 				))}
 				{filteredCourses.length === 0 && (
-					<div className="w-full rounded-xl border bg-card p-8 text-center text-muted-foreground">
+					<div className="w-full rounded-xl border-2 border-dashed bg-card p-16 text-center text-muted-foreground">
 						No courses found.
 					</div>
 				)}

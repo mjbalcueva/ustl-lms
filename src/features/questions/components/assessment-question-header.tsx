@@ -43,6 +43,7 @@ export const AssessmentQuestionHeader = ({
 				</TooltipTrigger>
 				<TooltipContent>Edit</TooltipContent>
 			</Tooltip>
+
 			<Tooltip>
 				<TooltipTrigger
 					className="rounded-md p-1.5 outline-none hover:bg-accent focus-visible:outline-ring"

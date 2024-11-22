@@ -11,6 +11,7 @@ const backgroundVariants = cva('rounded-full flex items-center justify-center', 
 			info: 'bg-sky-100 dark:bg-sky-900'
 		},
 		size: {
+			lg: 'p-2',
 			default: 'p-2',
 			sm: 'p-1'
 		}
@@ -29,6 +30,7 @@ const iconVariants = cva('', {
 			info: 'text-sky-700 dark:text-sky-300'
 		},
 		size: {
+			lg: 'size-6',
 			default: 'size-4',
 			sm: 'size-2'
 		}
