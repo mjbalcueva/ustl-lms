@@ -78,6 +78,7 @@ import {
 	TbPresentationAnalytics,
 	TbRefresh,
 	TbSchool,
+	TbSend,
 	TbSettings2,
 	TbShieldCheckFilled,
 	TbShieldX,
@@ -142,6 +143,9 @@ export const TextColor = TbTextColor
 export const ClearHighlight = TbHighlightOff
 export const OrderedList = TbListNumbers
 export const BulletList = TbList
+
+// Chat
+export const Send = TbSend
 
 // Mode Icons
 export const Light = TbSunHigh
