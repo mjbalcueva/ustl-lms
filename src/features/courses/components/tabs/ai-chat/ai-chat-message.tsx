@@ -5,7 +5,15 @@ import { MarkdownRenderer } from '@/core/components/ui/markdown-renderer'
 import { cn } from '@/core/lib/utils/cn'
 
 type AiChatMessageProps = {
-	message: Message
+	message: Message & {
+		toolCalls?: Array<{
+			type: string
+			function: {
+				name: string
+				arguments: string
+			}
+		}>
+	}
 	userData: {
 		id: string
 		imageUrl: string | null
@@ -41,6 +49,19 @@ export function AiChatMessage({ message, userData }: AiChatMessageProps) {
 						)}
 					>
 						<MarkdownRenderer>{message.content}</MarkdownRenderer>
+						{message.toolCalls?.map((toolCall, index) => (
+							<div
+								key={index}
+								className="mt-2 rounded border border-border bg-background/50 p-2 text-sm"
+							>
+								<p className="font-medium text-muted-foreground">
+									Function: {toolCall.function.name}
+								</p>
+								<pre className="mt-1 overflow-x-auto text-xs">
+									<code>{JSON.stringify(JSON.parse(toolCall.function.arguments), null, 2)}</code>
+								</pre>
+							</div>
+						))}
 					</div>
 
 					<div

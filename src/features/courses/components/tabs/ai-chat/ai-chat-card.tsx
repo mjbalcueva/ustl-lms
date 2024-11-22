@@ -66,7 +66,7 @@ export default function AiChatCard({ course }: AiChatCardProps) {
 	}
 
 	return (
-		<Card className={`flex flex-col ${hasStartedConversation ? 'h-[calc(100vh-12rem)]' : 'h-80'}`}>
+		<Card className={`flex flex-col ${hasStartedConversation ? 'h-[calc(100vh-9rem)]' : 'h-80'}`}>
 			<CardHeader className="flex items-center justify-between">
 				<CardTitle className="text-lg font-semibold">Course AI Assistant</CardTitle>
 				{hasStartedConversation && (
