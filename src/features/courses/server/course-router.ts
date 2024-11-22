@@ -56,6 +56,7 @@ export const courseRouter = createTRPCRouter({
 	findManyCourses: instructorProcedure.query(async ({ ctx }) => {
 		const courses = await ctx.db.course.findMany({
 			where: { instructorId: ctx.session.user.id },
+			orderBy: [{ status: 'asc' }, { updatedAt: 'desc' }],
 			include: {
 				chapters: true,
 				_count: {
@@ -414,7 +415,7 @@ export const courseRouter = createTRPCRouter({
 						}
 					},
 					attachments: {
-						orderBy: { name: 'asc' }
+						orderBy: { name: 'desc' }
 					},
 					categories: true,
 					enrollments: {

@@ -1,13 +1,12 @@
 'use client'
 
-import Link from 'next/link'
+import { useState } from 'react'
 
 import { IconBadge } from '@/core/components/icon-badge'
-import { buttonVariants } from '@/core/components/ui/button'
+import { Button } from '@/core/components/ui/button'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/core/components/ui/card'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/core/components/ui/tooltip'
 import { Attachment, Clock } from '@/core/lib/icons'
-import { cn } from '@/core/lib/utils/cn'
 import { formatDate } from '@/core/lib/utils/format-date'
 
 type CourseAttachmentCardProps = {
@@ -18,6 +17,19 @@ type CourseAttachmentCardProps = {
 }
 
 export const CourseAttachmentCard = ({ id, name, url, createdAt }: CourseAttachmentCardProps) => {
+	const [isDownloading, setIsDownloading] = useState(false)
+
+	const handleDownload = async () => {
+		try {
+			setIsDownloading(true)
+			window.open(url, '_blank', 'noopener,noreferrer')
+		} catch (error) {
+			console.error('Error downloading file:', error)
+		} finally {
+			setIsDownloading(false)
+		}
+	}
+
 	return (
 		<Card key={id}>
 			<CardHeader className="flex-row items-center gap-4 space-y-0 p-4">
@@ -37,14 +49,9 @@ export const CourseAttachmentCard = ({ id, name, url, createdAt }: CourseAttachm
 					</CardDescription>
 				</div>
 
-				<Link
-					className={cn(buttonVariants({ size: 'sm' }), 'px-4')}
-					href={url}
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					Download
-				</Link>
+				<Button size="sm" onClick={handleDownload} disabled={isDownloading}>
+					{isDownloading ? 'Downloading...' : 'Download'}
+				</Button>
 			</CardHeader>
 		</Card>
 	)
