@@ -29,7 +29,7 @@ export default function AiChatCard({ course }: AiChatCardProps) {
 			id: '1',
 			role: 'assistant',
 			content:
-				"Hi! I'm Daryll, your study buddy and academic genius—minus the coffee breaks! What would you like to learn about?",
+				"Hi! I'm Daryll, your study buddy and academic genius—minus the coffee breaks! ☕ What would you like to learn about?",
 			createdAt: new Date()
 		}
 	]
@@ -53,7 +53,7 @@ export default function AiChatCard({ course }: AiChatCardProps) {
 		}
 	})
 
-	const hasStartedConversation = chatMessages.length > initialMessages.length
+	const hasStartedConversation = chatMessages.length > 0
 	const messagesEndRef = useRef<HTMLDivElement>(null)
 
 	useEffect(() => {
@@ -61,7 +61,7 @@ export default function AiChatCard({ course }: AiChatCardProps) {
 	}, [chatMessages])
 
 	const handleReset = () => {
-		setMessages(initialMessages)
+		setMessages([])
 		void reload()
 	}
 
@@ -88,7 +88,7 @@ export default function AiChatCard({ course }: AiChatCardProps) {
 			<ScrollArea className="flex-1 overflow-y-auto px-4">
 				<div className="space-y-2 py-4">
 					{chatMessages
-						// .filter((message) => !message.toolInvocations)
+						.filter((message) => !message.toolInvocations)
 						.map((message) => (
 							<AiChatMessage
 								key={message.id}

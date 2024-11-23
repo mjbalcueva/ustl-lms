@@ -4,6 +4,9 @@ import { z } from 'zod'
 
 import { type RouterOutputs } from '@/services/trpc/react'
 
+import { formatDate } from '@/core/lib/utils/format-date'
+import { getBaseUrl } from '@/core/lib/utils/get-base-url'
+
 export const maxDuration = 30
 
 type ChatPayload = {
@@ -20,23 +23,31 @@ export async function POST(req: Request) {
 
 	const result = streamText({
 		model: openai('ft:gpt-4o-mini-2024-07-18:personal:km2j-gpt:AWVPZPki'),
-		system: `You are Daryll. Daryll (Dedicated AI Resource for Your Lifelong Learnings) is an AI assistant based on KM2J-GPT model, created by researchers Mark John Balcueva and Kristine Joy Miras. Daryll combines deep knowledge with a friendly, encouraging personality and promotes academic integrity in a life of truth and love out of gratitude!${userDetails?.name ? ` You are talking to ${userDetails.name}.` : ''}`,
+		system: `
+    You are Daryll. Daryll (Dedicated AI Resource for Your Lifelong Learnings)
+    is an AI assistant based on KM2J-GPT model, created by researchers Mark John
+    Balcueva and Kristine Joy Miras. Daryll combines deep knowledge with a
+    friendly, encouraging personality and promotes academic integrity in a life
+    of truth and love out of gratitude!.
+
+    You love to use markdown formatting to enhance readability.
+    You also love overexplaining data that is in JSON format using title, content, and a list of items.
+    `,
 		messages,
 		maxSteps: 4,
 		tools: {
-			get_day_and_time: {
-				description: 'Get the current day of the week and time',
+			get_current_datetime: {
+				description: 'Gets the current date and time',
 				parameters: z.object({}),
 				execute: async (): Promise<string> => {
-					const day = new Date().toLocaleDateString('en-US', { weekday: 'long' })
+					const date = formatDate(new Date())
 					const time = new Date().toLocaleTimeString('en-US', {
 						hour: 'numeric',
 						minute: 'numeric'
 					})
-					return `Today is ${day}. The time is ${time}.`
+					return `Today is ${date}. The time is ${time}.`
 				}
 			},
-
 			get_student_name: {
 				description: "Get the student's name. important for personalizing the conversation.",
 				parameters: z.object({}),
@@ -44,37 +55,37 @@ export async function POST(req: Request) {
 					return userDetails?.name ?? 'User'
 				}
 			},
-			about_course: {
-				description: 'Get information about the course.',
+			get_course_details: {
+				description:
+					'Get a comprehensive overview of the course including title, description, and key details. This is all about the course. Can be used to help student learn about the course.',
 				parameters: z.object({}),
 				execute: async (): Promise<string> => {
-					return `Course Details: ${JSON.stringify(course)}`
-				}
-			},
-			get_course_basics: {
-				description: 'Get basic course information like title, code, and description',
-				parameters: z.object({}),
-				execute: async (): Promise<string> => {
-					return `
-            Course: ${course.title} (${course.code})
-            Description: ${course.description ?? 'No description available'}`
-				}
-			},
-			get_course_progress: {
-				description: 'Get student progress information for the course',
-				parameters: z.object({}),
-				execute: async (): Promise<string> => {
-					return `Current progress: ${course.progress.toFixed(1)}% complete`
-				}
-			},
-			get_instructor_info: {
-				description: 'Get information about the course instructor',
-				parameters: z.object({}),
-				execute: async (): Promise<string> => {
-					const { profile } = course.instructor
-					return `
-            Instructor: ${profile.name ?? 'Unknown'}
-            ${profile.bio ? `Bio: ${profile.bio}` : ''}`
+					const data = {
+						title: course.title,
+						description: course.description,
+						categories: course.categories.map((c) => c.name),
+						chapters: course.chapters.map((c) => ({
+							type: c.type,
+							title: c.title,
+							linkToChapter: `${getBaseUrl()}/course/${course.id}/${c.type.toLowerCase()}/${c.id}`,
+							content: c.content,
+							studentProgress: c.chapterProgress[0]?.isCompleted
+						})),
+						resources: course.attachments.map((a) => ({
+							name: a.name,
+							url: a.url
+						}))
+					}
+
+					return `${JSON.stringify(data)} \n\n Sample output:
+            # [Course Title]
+            This course is about [course summary (1-2 paragraphs)].
+
+            ### Modules
+            [list of all chapters including the lesson, assessment and assignment. remove things like "lesson 1", "lesson 2", "Quiz 1", "Assignment 1", etc]
+            - **[chapter title]** ([chapter type])
+              - [Detailed explanation of the chapter content]. Include the link to the chapter.
+              - Go to [link to the chapter]`
 				}
 			},
 			list_chapters: {
@@ -101,24 +112,7 @@ export async function POST(req: Request) {
 				parameters: z.object({}),
 				execute: async (): Promise<string> => {
 					if (!course.attachments.length) return 'No reference materials available for this course.'
-					return `Course Resources:\n${course.attachments.map((a) => `- ${a.name}`).join('\n')}`
-				}
-			},
-			get_course_categories: {
-				description: 'Get course categories/tags',
-				parameters: z.object({}),
-				execute: async (): Promise<string> => {
-					const categories = course.categories.map((c) => c.name)
-					return categories.length
-						? `Course Categories: ${categories.join(', ')}`
-						: 'No categories assigned to this course.'
-				}
-			},
-			get_enrollment_stats: {
-				description: 'Get enrollment statistics for the course',
-				parameters: z.object({}),
-				execute: async (): Promise<string> => {
-					return `Total enrollments: ${course._count.enrollments} students`
+					return `Course Resources:\n${course.attachments.map((a) => `- ${a.name} (${a.url})`).join('\n')}`
 				}
 			}
 		}

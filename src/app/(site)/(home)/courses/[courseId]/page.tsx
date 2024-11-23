@@ -30,8 +30,8 @@ export default async function Page({ params }: { params: { courseId: string } })
 	const { courseId } = params
 
 	const { course } = await api.course.findEnrolledCourseDetails({ courseId })
-
 	if (!course) return <NotFound item="course" />
+
 	const crumbs: Breadcrumb = [
 		{ icon: Home },
 		{ label: 'Learning', href: '/courses' },

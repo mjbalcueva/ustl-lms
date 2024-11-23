@@ -79,7 +79,7 @@ const HighlightedPre = React.memo(({ children, language, ...props }: Highlighted
 								return (
 									<span
 										key={tokenIndex}
-										className="text-shiki-light bg-shiki-light-bg dark:text-shiki-dark dark:bg-shiki-dark-bg"
+										className="bg-shiki-light-bg text-shiki-light dark:bg-shiki-dark-bg dark:text-shiki-dark"
 										style={style}
 									>
 										{token.content}
@@ -197,7 +197,7 @@ const Components = {
 	pre: ({ children, ...props }: PreProps) => <pre {...props}>{children}</pre>,
 	ol: withClass('ol', 'list-decimal pl-6 marker:text-sm'),
 	ul: withClass('ul', 'list-disc pl-6 marker:text-sm'),
-	li: withClass('li', 'my-1.5'),
+	li: withClass('li', 'my-1.5 text-sm'),
 	table: withClass(
 		'table',
 		'w-full border-collapse overflow-y-auto rounded-md border border-foreground/20'

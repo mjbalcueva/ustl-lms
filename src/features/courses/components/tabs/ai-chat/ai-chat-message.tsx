@@ -14,8 +14,6 @@ type AiChatMessageProps = {
 }
 
 export function AiChatMessage({ message, userData }: AiChatMessageProps) {
-	console.log(message.toolInvocations)
-
 	return (
 		<div className={cn('flex', message.role === 'user' ? 'justify-end' : 'justify-start')}>
 			<div
@@ -43,16 +41,6 @@ export function AiChatMessage({ message, userData }: AiChatMessageProps) {
 						)}
 					>
 						<MarkdownRenderer>{message.content}</MarkdownRenderer>
-						{message.toolInvocations?.map((toolInvocation, index) => (
-							<div
-								key={index}
-								className="mt-2 rounded border border-border bg-background/50 p-2 text-sm"
-							>
-								<p className="font-medium text-muted-foreground">
-									Function: {toolInvocation.toolName}
-								</p>
-							</div>
-						))}
 					</div>
 
 					<div
