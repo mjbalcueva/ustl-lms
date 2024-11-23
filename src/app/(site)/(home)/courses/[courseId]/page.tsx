@@ -15,16 +15,12 @@ import {
 } from '@/core/components/ui/page'
 import { Progress } from '@/core/components/ui/progress'
 import { Separator } from '@/core/components/ui/separator'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/core/components/ui/tabs'
 import { CourseSingle, Home } from '@/core/lib/icons'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
-import { CourseAttachmentCard } from '@/features/courses/components/course-attachment-card'
-import CourseChapterCard from '@/features/courses/components/course-chapter-card'
 import { CourseCopyInviteButton } from '@/features/courses/components/course-copy-invite-button'
 import CourseInstructorCard from '@/features/courses/components/course-instructor-card'
-import AiChatCard from '@/features/courses/components/tabs/ai-chat/ai-chat-card'
-import ForumCard from '@/features/courses/components/tabs/forum/forum-card'
+import { CourseTabs } from '@/features/courses/components/tabs/course-tabs'
 
 export default async function Page({ params }: { params: { courseId: string } }) {
 	const { courseId } = params
@@ -97,51 +93,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 
 			<PageContent className="mb-24 space-y-6 px-2.5 pt-6 sm:px-4 md:mb-12 md:flex md:flex-wrap md:gap-6 md:space-y-0 md:px-6">
 				<PageSection className="flex-[2] md:min-w-[500px]" columnMode>
-					<Tabs defaultValue="syllabus" className="space-y-4">
-						<TabsList>
-							<TabsTrigger value="syllabus">Syllabus</TabsTrigger>
-							<TabsTrigger value="ai-chat">AI Chat</TabsTrigger>
-							<TabsTrigger value="forum">Forum</TabsTrigger>
-							<TabsTrigger value="attachments">Resources</TabsTrigger>
-						</TabsList>
-
-						<TabsContent value="syllabus" className="space-y-3 rounded-lg">
-							{course.chapters.map((chapter) => {
-								return (
-									<CourseChapterCard
-										key={chapter.id}
-										id={chapter.id}
-										courseId={courseId}
-										title={chapter.title}
-										content={chapter.content ?? ''}
-										type={chapter.type}
-										createdAt={chapter.createdAt}
-										isCompleted={chapter.chapterProgress?.[0]?.isCompleted ?? false}
-									/>
-								)
-							})}
-						</TabsContent>
-
-						<TabsContent value="ai-chat" className="rounded-lg">
-							<AiChatCard course={course} />
-						</TabsContent>
-
-						<TabsContent value="forum" className="rounded-lg">
-							<ForumCard />
-						</TabsContent>
-
-						<TabsContent value="attachments" className="space-y-3 rounded-lg">
-							{course.attachments.map((attachment) => (
-								<CourseAttachmentCard
-									key={attachment.id}
-									id={attachment.id}
-									name={attachment.name}
-									url={attachment.url}
-									createdAt={attachment.createdAt}
-								/>
-							))}
-						</TabsContent>
-					</Tabs>
+					<CourseTabs course={course} />
 				</PageSection>
 
 				<PageSection className="md:min-w-[350px]" columnMode>

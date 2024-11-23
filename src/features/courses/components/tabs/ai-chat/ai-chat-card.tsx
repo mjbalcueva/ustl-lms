@@ -1,9 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { type Course } from '@prisma/client'
-import { useChat, type Message } from 'ai/react'
-import { useSession } from 'next-auth/react'
+import { type Message } from 'ai/react'
 
 import { CardFooter, CardHeader, CardTitle } from '@/core/components/compound-card'
 import { Button } from '@/core/components/ui/button'
@@ -17,41 +15,30 @@ import { AiChatMessage } from '@/features/courses/components/tabs/ai-chat/ai-cha
 import { AiChatTyping } from '@/features/courses/components/tabs/ai-chat/ai-chat-typing'
 
 type AiChatCardProps = {
-	course: Course
+	messages: Message[]
+	input: string
+	handleInputChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
+	handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void
+	isLoading: boolean
+	setMessages: (messages: Message[]) => void
+	initialMessages: Message[]
+	user: {
+		id: string
+		imageUrl: string | null
+		name: string | null
+	}
 }
 
-export default function AiChatCard({ course }: AiChatCardProps) {
-	const session = useSession()
-	const user = session.data?.user
-
-	const initialMessages: Message[] = [
-		{
-			id: '1',
-			role: 'assistant',
-			content:
-				"Hi! I'm Daryll, your study buddy and academic genius—minus the coffee breaks! ☕ What would you like to learn about?",
-			createdAt: new Date()
-		}
-	]
-
-	const {
-		messages: chatMessages,
-		input,
-		handleInputChange,
-		handleSubmit,
-		isLoading,
-		setMessages
-	} = useChat({
-		initialMessages,
-		body: {
-			userDetails: {
-				name: user?.name ?? 'Alakazam',
-				id: user?.id ?? ''
-			},
-			course
-		}
-	})
-
+export const AiChatCard = ({
+	messages: chatMessages,
+	input,
+	handleInputChange,
+	handleSubmit,
+	isLoading,
+	setMessages,
+	initialMessages,
+	user
+}: AiChatCardProps) => {
 	const hasStartedConversation = chatMessages.length > 0
 	const messagesEndRef = useRef<HTMLDivElement>(null)
 
