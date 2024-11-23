@@ -8,7 +8,7 @@ import { Button } from '@/core/components/ui/button'
 import { Card } from '@/core/components/ui/card'
 import { ScrollArea, ScrollBar } from '@/core/components/ui/scroll-area'
 import { Separator } from '@/core/components/ui/separator'
-import { ArrowReset } from '@/core/lib/icons'
+import { CirclePlus } from '@/core/lib/icons'
 
 import { AiChatInput } from '@/features/courses/components/tabs/ai-chat/ai-chat-input'
 import { AiChatMessage } from '@/features/courses/components/tabs/ai-chat/ai-chat-message'
@@ -62,8 +62,8 @@ export const AiChatCard = ({
 						title="Reset conversation"
 						className="text-muted-foreground hover:text-foreground"
 					>
-						<ArrowReset className="size-4" />
-						Reset conversation
+						<CirclePlus className="size-4" />
+						New chat
 					</Button>
 				)}
 			</CardHeader>
@@ -71,20 +71,31 @@ export const AiChatCard = ({
 			<Separator className="flex-none" />
 
 			<ScrollArea className="flex-1 overflow-y-auto px-4">
-				<div className="space-y-2 py-4">
+				<div className="space-y-1 py-4">
 					{chatMessages
 						.filter((message) => !message.toolInvocations)
-						.map((message) => (
-							<AiChatMessage
-								key={message.id}
-								message={message}
-								userData={{
-									id: user?.id ?? '',
-									imageUrl: user?.imageUrl ?? null,
-									name: user?.name ?? null
-								}}
-							/>
-						))}
+						.map((message, index, array) => {
+							const previousMessage = array[index - 1]
+							const nextMessage = array[index + 1]
+							const isFirstInSequence =
+								index === 0 || (previousMessage && previousMessage.role !== message.role)
+							const isLastInSequence =
+								index === array.length - 1 || (nextMessage && nextMessage.role !== message.role)
+
+							return (
+								<AiChatMessage
+									key={message.id}
+									message={message}
+									isLastInSequence={isLastInSequence}
+									isFirstInSequence={isFirstInSequence}
+									userData={{
+										id: user?.id ?? '',
+										imageUrl: user?.imageUrl ?? null,
+										name: user?.name ?? null
+									}}
+								/>
+							)
+						})}
 					{isLoading && <AiChatTyping />}
 					<div ref={messagesEndRef} />
 				</div>
