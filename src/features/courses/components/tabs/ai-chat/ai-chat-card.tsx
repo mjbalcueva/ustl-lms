@@ -40,7 +40,6 @@ export default function AiChatCard({ course }: AiChatCardProps) {
 		handleInputChange,
 		handleSubmit,
 		isLoading,
-		reload,
 		setMessages
 	} = useChat({
 		initialMessages,
@@ -61,8 +60,7 @@ export default function AiChatCard({ course }: AiChatCardProps) {
 	}, [chatMessages])
 
 	const handleReset = () => {
-		setMessages([])
-		void reload()
+		setMessages(initialMessages)
 	}
 
 	return (
