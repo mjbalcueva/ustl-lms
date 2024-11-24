@@ -47,6 +47,7 @@ import {
 	TbDiamond,
 	TbDots,
 	TbDotsVertical,
+	TbDownload,
 	TbEdit,
 	TbFile,
 	TbFilter,
@@ -197,6 +198,7 @@ export const Copy = TbCopy
 export const Dot = LuDot
 export const DotsHorizontal = TbDots
 export const DotsVertical = TbDotsVertical
+export const Download = TbDownload
 export const EyeOpen = RxEyeOpen
 export const EyeClosed = RxEyeClosed
 export const EyeNone = RxEyeNone

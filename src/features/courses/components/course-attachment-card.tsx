@@ -3,11 +3,9 @@
 import { useState } from 'react'
 import { toast } from 'sonner'
 
-import { IconBadge } from '@/core/components/icon-badge'
 import { Button } from '@/core/components/ui/button'
-import { Card, CardDescription, CardHeader, CardTitle } from '@/core/components/ui/card'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/core/components/ui/tooltip'
-import { Attachment, Clock } from '@/core/lib/icons'
+import { Card } from '@/core/components/ui/card'
+import { Attachment, Download } from '@/core/lib/icons'
 import { formatDate } from '@/core/lib/utils/format-date'
 
 type CourseAttachmentCardProps = {
@@ -34,28 +32,25 @@ export const CourseAttachmentCard = ({ id, name, url, createdAt }: CourseAttachm
 	}
 
 	return (
-		<Card key={id}>
-			<CardHeader className="flex-row items-center gap-4 space-y-0 p-4">
-				<Tooltip>
-					<TooltipTrigger className="rounded-full ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-						<IconBadge icon={Attachment} size="lg" />
-					</TooltipTrigger>
-					<TooltipContent>Attachment</TooltipContent>
-				</Tooltip>
+		<Card key={id} className="group relative flex items-center gap-3 overflow-hidden p-3">
+			<div className="flex size-10 shrink-0 items-center justify-center rounded-md border bg-background">
+				<Attachment className="size-5 text-muted-foreground" />
+			</div>
 
-				<div className="flex-1">
-					<CardTitle className="text-base font-semibold">{name}</CardTitle>
-					<CardDescription className="flex items-center gap-2">
-						<span className="flex items-center gap-1">
-							<Clock className="size-4" /> {formatDate(createdAt)}
-						</span>
-					</CardDescription>
-				</div>
+			<div className="flex-1 truncate">
+				<p className="truncate text-sm font-medium leading-none">{name}</p>
+				<p className="text-xs text-muted-foreground">{formatDate(createdAt)}</p>
+			</div>
 
-				<Button size="sm" onClick={handleDownload} disabled={isDownloading}>
-					{isDownloading ? 'Downloading...' : 'Download'}
-				</Button>
-			</CardHeader>
+			<Button
+				variant="ghost"
+				size="icon"
+				className="size-8 shrink-0 rounded-lg text-muted-foreground hover:text-foreground"
+				onClick={handleDownload}
+				disabled={isDownloading}
+			>
+				<Download className="!size-5" />
+			</Button>
 		</Card>
 	)
 }
