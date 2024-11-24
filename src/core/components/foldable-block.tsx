@@ -11,6 +11,8 @@ type FoldableSectionProps = React.ComponentProps<typeof Disclosure> & {
 	title: string
 	icon: IconType
 	duration?: number
+	className?: string
+	contentClassName?: string
 }
 
 export const FoldableBlock = ({
@@ -19,12 +21,19 @@ export const FoldableBlock = ({
 	children,
 	defaultOpen = true,
 	duration,
+	className,
+	contentClassName,
 	...props
 }: FoldableSectionProps) => {
 	return (
 		<Disclosure defaultOpen={defaultOpen} transition={{ duration }} {...props}>
 			<DisclosureTrigger asChild>
-				<h2 className="group flex items-center gap-x-2 text-xl underline-offset-2 hover:cursor-pointer hover:underline md:min-w-[350px]">
+				<h2
+					className={cn(
+						'group flex items-center gap-x-2 text-xl underline-offset-2 hover:cursor-pointer hover:underline md:min-w-[350px]',
+						className
+					)}
+				>
 					<IconBadge icon={icon} />
 					{title}
 					<Tooltip>
@@ -43,7 +52,9 @@ export const FoldableBlock = ({
 					</Tooltip>
 				</h2>
 			</DisclosureTrigger>
-			<DisclosureContent className="space-y-4 [&>*:first-child]:mt-3">{children}</DisclosureContent>
+			<DisclosureContent className={cn('space-y-4 [&>*:first-child]:mt-3', contentClassName)}>
+				{children}
+			</DisclosureContent>
 		</Disclosure>
 	)
 }

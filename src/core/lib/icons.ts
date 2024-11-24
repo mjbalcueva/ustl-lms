@@ -209,6 +209,7 @@ export const Refresh = TbRefresh
 export const Search = LuSearch
 export const ShieldCheckFilled = TbShieldCheckFilled
 export const ShieldX = TbShieldX
+export const User = TbUser
 export const X = TbX
 
 // Variant Icons
