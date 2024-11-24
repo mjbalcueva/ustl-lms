@@ -4,6 +4,7 @@ import { compare, hash } from 'bcryptjs'
 import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc'
 
 import { addPasswordSchema } from '@/features/account/validations/add-password-schema'
+import { editBioSchema } from '@/features/account/validations/edit-bio-schema'
 import { editNameSchema } from '@/features/account/validations/edit-name-schema'
 import { editPasswordSchema } from '@/features/account/validations/edit-password-schema'
 import { editTwoFactorSchema } from '@/features/account/validations/edit-two-factor-schema'
@@ -43,6 +44,17 @@ export const accountRouter = createTRPCRouter({
 		})
 
 		return { message: 'Name updated!' }
+	}),
+
+	editBio: protectedProcedure.input(editBioSchema).mutation(async ({ ctx, input }) => {
+		const { bio } = input
+
+		await ctx.db.user.update({
+			where: { id: ctx.session.user.id },
+			data: { profile: { update: { bio } } }
+		})
+
+		return { message: 'Bio updated!' }
 	}),
 
 	editTwoFactor: protectedProcedure.input(editTwoFactorSchema).mutation(async ({ ctx, input }) => {

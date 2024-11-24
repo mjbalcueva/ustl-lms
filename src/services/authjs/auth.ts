@@ -19,6 +19,7 @@ declare module 'next-auth' {
 			role: Role
 			isTwoFactorEnabled: boolean
 			hasPassword: boolean
+			bio: string | null
 		}
 	}
 }
@@ -29,6 +30,7 @@ declare module 'next-auth/jwt' {
 		role: Role
 		isTwoFactorEnabled: boolean
 		hasPassword: boolean
+		bio: string | null
 	}
 }
 
@@ -90,7 +92,8 @@ export const {
 					email: token.email,
 					role: token.role,
 					hasPassword: token.hasPassword,
-					isTwoFactorEnabled: token.isTwoFactorEnabled
+					isTwoFactorEnabled: token.isTwoFactorEnabled,
+					bio: token.bio
 				}
 			}
 		},
@@ -104,6 +107,7 @@ export const {
 			token.role = existingUser.role
 			token.hasPassword = !!existingUser.password
 			token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled
+			token.bio = existingUser.profile?.bio ?? null
 
 			return token
 		}
