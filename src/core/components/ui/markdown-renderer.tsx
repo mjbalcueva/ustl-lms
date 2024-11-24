@@ -27,10 +27,14 @@ type ShikiToken = {
 	htmlStyle?: string | Record<string, string>
 }
 
-const shikiPromise = import('shiki').then((mod) => ({
-	codeToTokens: mod.codeToTokens,
-	bundledLanguages: mod.bundledLanguages
-}))
+const getShiki = async () => {
+	const shiki = await import('shiki')
+	return {
+		codeToTokens: shiki.codeToTokens,
+		bundledLanguages: shiki.bundledLanguages,
+		getHighlighter: shiki.getHighlighter
+	}
+}
 
 const HighlightedPre = React.memo(({ children, language, ...props }: HighlightedPreProps) => {
 	const [tokens, setTokens] = React.useState<ShikiToken[][]>([])
@@ -38,7 +42,7 @@ const HighlightedPre = React.memo(({ children, language, ...props }: Highlighted
 	React.useEffect(() => {
 		let mounted = true
 
-		void shikiPromise
+		void getShiki()
 			.then(({ codeToTokens, bundledLanguages }) => {
 				if (!mounted) return
 				if (!(language in bundledLanguages)) return
