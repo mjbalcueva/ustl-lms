@@ -21,6 +21,7 @@ import { Check, CheckCircle, CourseSingle, Instructor, Lesson, Video } from '@/c
 import { formatDate } from '@/core/lib/utils/format-date'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
+import { ChapterAttachments } from '@/features/chapters/components/chapter-attachments'
 import { ChapterTabs } from '@/features/chapters/components/tabs/chapter-tabs'
 
 export default async function Page({
@@ -72,21 +73,6 @@ export default async function Page({
 	// if (isLoadingChapter || isLoadingProgress || !chapterData || !courseProgress) {
 	// 	return <div>Loading...</div>
 	// }
-
-	// 				{/* Right Column */}
-	// 				<div className="space-y-4">
-	// 					<ChapterDiscussion
-	// 						aiMessages={chapterData.aiMessages}
-	// 						forumMessages={chapterData.forumMessages}
-	// 						onSendAiMessage={(message) => {
-	// 							// Implement AI message sending
-	// 							console.log('Sending AI message:', message)
-	// 						}}
-	// 						onSendForumMessage={(message) => {
-	// 							// Implement forum message sending
-	// 							console.log('Sending forum message:', message)
-	// 						}}
-	// 					/>
 
 	// 					<ChapterResources
 	// 						resources={chapterData.resources}
@@ -163,6 +149,10 @@ export default async function Page({
 				</PageSection>
 
 				<PageSection className="flex-1 md:min-w-[360px]" columnMode>
+					<ChapterTabs chapter={chapter} />
+
+					<ChapterAttachments attachments={chapter.attachments} />
+
 					<ChapterTabs chapter={chapter} />
 				</PageSection>
 			</PageContent>

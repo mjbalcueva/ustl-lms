@@ -4,6 +4,7 @@ import {
 	LuArchive,
 	LuChevronsUpDown,
 	LuDot,
+	LuFiles,
 	LuLibrary,
 	LuLink,
 	LuSearch,
@@ -49,7 +50,6 @@ import {
 	TbDotsVertical,
 	TbDownload,
 	TbEdit,
-	TbFile,
 	TbFilter,
 	TbGripVertical,
 	TbH1,
@@ -127,7 +127,7 @@ export const BlankType = TbListDetails
 export const Image = TbLibraryPhoto
 export const Video = TbVideoPlus
 export const Token = TbKey
-export const Attachment = TbFile
+export const Attachment = LuFiles
 
 // Tiptap Editor Icons
 export const Heading1 = TbH1

@@ -46,7 +46,7 @@ export const AiChatCard = ({
 	return (
 		<Card className="flex h-[24rem] flex-col lg:h-[30rem]">
 			<CardHeader className="flex items-center justify-between py-2">
-				<CardTitle className="text-lg font-semibold">Chapter AI Assistant</CardTitle>
+				<CardTitle className="text-lg">Chapter AI Assistant</CardTitle>
 				{chatMessages.length > 1 && (
 					<Tooltip>
 						<TooltipTrigger asChild>
@@ -64,7 +64,7 @@ export const AiChatCard = ({
 				)}
 			</CardHeader>
 
-			<Separator className="flex-none" />
+			<Separator />
 
 			<ScrollArea className="flex-1 overflow-y-auto px-4 focus:outline-none">
 				<div className="space-y-1 py-4">

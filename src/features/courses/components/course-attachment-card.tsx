@@ -37,8 +37,8 @@ export const CourseAttachmentCard = ({ id, name, url, createdAt }: CourseAttachm
 				<Attachment className="size-5 text-muted-foreground" />
 			</div>
 
-			<div className="flex-1 truncate">
-				<p className="truncate text-sm font-medium leading-none">{name}</p>
+			<div className="flex-1">
+				<p className="line-clamp-1 text-sm font-medium leading-none">{name}</p>
 				<p className="text-xs text-muted-foreground">{formatDate(createdAt)}</p>
 			</div>
 
