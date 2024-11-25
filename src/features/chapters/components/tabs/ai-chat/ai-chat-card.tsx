@@ -44,9 +44,9 @@ export const AiChatCard = ({
 	}
 
 	return (
-		<Card className="flex h-[24rem] flex-col lg:h-[32rem]">
+		<Card className="flex h-[24rem] flex-col lg:h-[30rem]">
 			<CardHeader className="flex items-center justify-between py-2">
-				<CardTitle className="text-lg font-semibold">Course AI Assistant</CardTitle>
+				<CardTitle className="text-lg font-semibold">Chapter AI Assistant</CardTitle>
 				{chatMessages.length > 1 && (
 					<Tooltip>
 						<TooltipTrigger asChild>
