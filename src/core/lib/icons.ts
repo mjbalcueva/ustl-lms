@@ -76,6 +76,7 @@ import {
 	TbNotebook,
 	TbNotes,
 	TbPaint,
+	TbPlus,
 	TbPresentationAnalytics,
 	TbRefresh,
 	TbSchool,
@@ -186,6 +187,7 @@ export const CaretDown = TbCaretDown
 export const Check = TbCheck
 export const CirclePlus = TbCirclePlus
 export const Circle = TbCircle
+export const CheckCircle = TbCircleCheck
 export const ChevronDown = TbChevronDown
 export const ChevronLeft = TbChevronLeft
 export const ChevronLeftPipe = TbChevronLeftPipe
@@ -207,6 +209,7 @@ export const Gear = LuSettings
 export const GripVertical = TbGripVertical
 export const Loader = TbLoader
 export const Loader2 = TbLoader2
+export const Plus = TbPlus
 export const Refresh = TbRefresh
 export const Search = LuSearch
 export const ShieldCheckFilled = TbShieldCheckFilled

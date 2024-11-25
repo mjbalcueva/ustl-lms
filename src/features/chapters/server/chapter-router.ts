@@ -34,7 +34,19 @@ export const chapterRouter = createTRPCRouter({
 		const chapter = await ctx.db.chapter.findUnique({
 			where: { id, courseId },
 			include: {
-				course: true,
+				course: {
+					include: {
+						chapters: {
+							select: {
+								id: true,
+								title: true,
+								type: true,
+								chapterProgress: true
+							}
+						}
+					}
+				},
+				chapterProgress: true,
 				attachments: true,
 				muxData: true,
 				assessments: { orderBy: { position: 'asc' } }
