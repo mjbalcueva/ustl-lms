@@ -59,7 +59,7 @@ export const ChapterActions = ({ id, courseId, status, type }: ChapterActionsPro
 		api.chapter.deleteChapter.useMutation({
 			onSuccess: (data) => {
 				toast.success(data.message)
-				router.push(`/courses/${courseId}/edit`)
+				router.push(`/instructor/courses/${courseId}`)
 				router.refresh()
 			}
 		})

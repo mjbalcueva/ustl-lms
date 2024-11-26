@@ -18,8 +18,8 @@ export default function Loading() {
 				<PageDescription>Manage your Scholar profile</PageDescription>
 			</PageHeader>
 
-			<PageContent asChild>
-				<PageSection className="space-y-4">
+			<PageContent className="space-y-4">
+				<PageSection>
 					<Card>
 						<CardHeader>
 							<Skeleton className="h-6 w-40" />
@@ -27,6 +27,23 @@ export default function Loading() {
 						</CardHeader>
 						<CardContent>
 							<Skeleton className="h-10 md:w-3/5" />
+						</CardContent>
+						<CardFooter className="space-x-2">
+							<Skeleton className="size-4" />
+							<Skeleton className="size-48" />
+							<Skeleton className="!ml-auto h-8 w-16" />
+						</CardFooter>
+					</Card>
+				</PageSection>
+
+				<PageSection>
+					<Card>
+						<CardHeader>
+							<Skeleton className="h-6 w-20" />
+							<Skeleton className="h-4" />
+						</CardHeader>
+						<CardContent>
+							<Skeleton className="h-24 md:w-3/5" />
 						</CardContent>
 						<CardFooter className="space-x-2">
 							<Skeleton className="size-4" />

@@ -6,12 +6,12 @@ import { EditorContent, type Content } from '@tiptap/react'
 import { useTiptapEditor, type UseTiptapEditorProps } from '@/core/lib/hooks/use-tiptap'
 import { cn } from '@/core/lib/utils/cn'
 
-export type TiptapEditorProps = Omit<UseTiptapEditorProps, 'onUpdate'> & {
+type TiptapContentViewerProps = Omit<UseTiptapEditorProps, 'onUpdate'> & {
 	value?: Content
 	className?: string
 }
 
-export const TiptapEditor = ({ value, className, ...props }: TiptapEditorProps) => {
+export const TiptapContentViewer = ({ value, className, ...props }: TiptapContentViewerProps) => {
 	const editor = useTiptapEditor({
 		value,
 		editable: false,
@@ -28,4 +28,4 @@ export const TiptapEditor = ({ value, className, ...props }: TiptapEditorProps) 
 		/>
 	)
 }
-TiptapEditor.displayName = 'MinimalTiptapEditor'
+TiptapContentViewer.displayName = 'TiptapContentViewer'

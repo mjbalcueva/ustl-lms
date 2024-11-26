@@ -1,13 +1,15 @@
+import { FoldableBlock } from '@/core/components/foldable-block'
 import { Avatar, AvatarFallback, AvatarImage } from '@/core/components/ui/avatar'
 import { Button } from '@/core/components/ui/button'
 import {
 	Card,
 	CardContent,
 	CardDescription,
+	CardFooter,
 	CardHeader,
 	CardTitle
 } from '@/core/components/ui/card'
-import { Facebook, LinkedIn } from '@/core/lib/icons'
+import { Facebook, LinkedIn, User } from '@/core/lib/icons'
 
 type CourseInstructorCardProps = {
 	name: string
@@ -23,38 +25,51 @@ export default function CourseInstructorCard({
 	imageUrl
 }: CourseInstructorCardProps) {
 	return (
-		<Card>
-			<CardHeader className="flex-row items-center gap-4 space-y-0 pb-2">
-				<CardTitle className="text-sm font-semibold">About the instructor</CardTitle>
-			</CardHeader>
-			<CardContent className="flex flex-col items-start gap-3">
-				<div className="flex items-center gap-2">
-					<Avatar className="size-12 rounded-md">
-						<AvatarFallback>{name.slice(0, 2)}</AvatarFallback>
-						<AvatarImage src={imageUrl} />
+		<FoldableBlock
+			title="About the Instructor"
+			icon={User}
+			className="mt-2"
+			contentClassName="[&>*:first-child]:mt-4"
+			defaultOpen
+		>
+			<Card>
+				<CardHeader className="flex-row items-center gap-4 space-y-0 p-4">
+					<Avatar className="size-14 rounded-md border-2 border-border">
+						<AvatarFallback className="rounded-none">{name.slice(0, 2)}</AvatarFallback>
+						<AvatarImage src={imageUrl} alt={name} />
 					</Avatar>
 
 					<div>
-						<CardTitle className="text-base font-semibold">{name}</CardTitle>
+						<CardTitle className="text-base tracking-normal">{name}</CardTitle>
 						<CardDescription className="text-sm">{email}</CardDescription>
 					</div>
-				</div>
+				</CardHeader>
 
-				<div>
-					<CardTitle className="text-sm text-muted-foreground">Bio</CardTitle>
-					<CardDescription className="text-sm text-foreground">{bio}</CardDescription>
-				</div>
+				<CardContent className="space-y-2 pb-4">
+					<h4 className="text-sm font-medium text-muted-foreground">Bio</h4>
+					<CardDescription className="text-sm leading-relaxed text-foreground">
+						{bio}
+					</CardDescription>
+				</CardContent>
 
-				<div className="flex items-center gap-2">
-					<Button variant="secondary" className="size-10 border border-primary">
-						<LinkedIn className="!size-4 shrink-0" />
+				<CardFooter className="flex items-center gap-3 pb-4">
+					<Button
+						variant="outline"
+						size="icon"
+						className="size-9 rounded-md transition-colors hover:bg-primary hover:text-primary-foreground"
+					>
+						<LinkedIn className="size-4" />
 					</Button>
 
-					<Button variant="secondary" className="size-10 border border-primary">
-						<Facebook className="!size-4 shrink-0" />
+					<Button
+						variant="outline"
+						size="icon"
+						className="size-9 rounded-md transition-colors hover:bg-primary hover:text-primary-foreground"
+					>
+						<Facebook className="size-4" />
 					</Button>
-				</div>
-			</CardContent>
-		</Card>
+				</CardFooter>
+			</Card>
+		</FoldableBlock>
 	)
 }

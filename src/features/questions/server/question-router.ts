@@ -3,6 +3,8 @@ import { generateObject } from 'ai'
 
 import { createTRPCRouter, instructorProcedure } from '@/server/api/trpc'
 
+import { env } from '@/core/env/server'
+
 import { aiResponseSchema } from '@/features/questions/validations/ai-generated-questions-schema'
 import { editAssessmentInstructionSchema } from '@/features/questions/validations/assessment-instruction-schema'
 import {
@@ -236,7 +238,7 @@ export const questionRouter = createTRPCRouter({
 			const { assessmentId, chapters, questionType, numberOfQuestions, additionalPrompt } = input
 
 			const response = await generateObject({
-				model: openai('ft:gpt-4o-mini-2024-07-18:personal:km2j-gpt:AWVPZPki'),
+				model: openai(env.MODEL_ID),
 				schema: aiResponseSchema,
 				messages: [
 					{

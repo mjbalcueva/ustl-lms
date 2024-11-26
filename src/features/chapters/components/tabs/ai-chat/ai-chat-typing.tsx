@@ -3,9 +3,9 @@ import { Dot } from '@/core/lib/icons'
 
 export function AiChatTyping() {
 	return (
-		<div className="flex gap-2 pt-3">
+		<div className="flex gap-2 pt-2">
 			<div className="flex flex-col justify-end">
-				<Avatar className="size-9 border">
+				<Avatar className="size-7 border">
 					<AvatarImage src="/assets/ai-avatar.jpg" alt="AI" />
 					<AvatarFallback>AI</AvatarFallback>
 				</Avatar>

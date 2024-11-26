@@ -34,7 +34,7 @@ export function AiChatMessage({
 				)}
 			>
 				{isLastInSequence && (
-					<Avatar className="size-9 border">
+					<Avatar className="size-7 border">
 						{message.role === 'assistant' ? (
 							<AvatarImage src="/assets/ai-avatar.jpg" alt="AI" />
 						) : (
@@ -67,7 +67,11 @@ export function AiChatMessage({
 							<MarkdownRenderer>{message.content}</MarkdownRenderer>
 						</div>
 					</TooltipTrigger>
-					<TooltipContent align="start" className="rounded-2xl bg-popover/75 backdrop-blur-sm">
+					<TooltipContent
+						align="center"
+						side="left"
+						className="rounded-2xl bg-popover/75 backdrop-blur-sm"
+					>
 						{message.createdAt
 							? `${getDayOfWeek(message.createdAt)} ${formatTime(message.createdAt)}`
 							: ''}

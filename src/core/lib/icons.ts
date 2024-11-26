@@ -4,6 +4,7 @@ import {
 	LuArchive,
 	LuChevronsUpDown,
 	LuDot,
+	LuFiles,
 	LuLibrary,
 	LuLink,
 	LuSearch,
@@ -47,8 +48,8 @@ import {
 	TbDiamond,
 	TbDots,
 	TbDotsVertical,
+	TbDownload,
 	TbEdit,
-	TbFile,
 	TbFilter,
 	TbGripVertical,
 	TbH1,
@@ -75,6 +76,7 @@ import {
 	TbNotebook,
 	TbNotes,
 	TbPaint,
+	TbPlus,
 	TbPresentationAnalytics,
 	TbRefresh,
 	TbSchool,
@@ -89,6 +91,7 @@ import {
 	TbTextColor,
 	TbTools,
 	TbUnderline,
+	TbUpload,
 	TbUser,
 	TbVideoPlus,
 	TbWriting,
@@ -125,7 +128,7 @@ export const BlankType = TbListDetails
 export const Image = TbLibraryPhoto
 export const Video = TbVideoPlus
 export const Token = TbKey
-export const Attachment = TbFile
+export const Attachment = LuFiles
 
 // Tiptap Editor Icons
 export const Heading1 = TbH1
@@ -185,6 +188,7 @@ export const CaretDown = TbCaretDown
 export const Check = TbCheck
 export const CirclePlus = TbCirclePlus
 export const Circle = TbCircle
+export const CheckCircle = TbCircleCheck
 export const ChevronDown = TbChevronDown
 export const ChevronLeft = TbChevronLeft
 export const ChevronLeftPipe = TbChevronLeftPipe
@@ -197,6 +201,8 @@ export const Copy = TbCopy
 export const Dot = LuDot
 export const DotsHorizontal = TbDots
 export const DotsVertical = TbDotsVertical
+export const Download = TbDownload
+export const Upload = TbUpload
 export const EyeOpen = RxEyeOpen
 export const EyeClosed = RxEyeClosed
 export const EyeNone = RxEyeNone
@@ -205,10 +211,12 @@ export const Gear = LuSettings
 export const GripVertical = TbGripVertical
 export const Loader = TbLoader
 export const Loader2 = TbLoader2
+export const Plus = TbPlus
 export const Refresh = TbRefresh
 export const Search = LuSearch
 export const ShieldCheckFilled = TbShieldCheckFilled
 export const ShieldX = TbShieldX
+export const User = TbUser
 export const X = TbX
 
 // Variant Icons

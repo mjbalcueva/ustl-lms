@@ -56,7 +56,7 @@ export const AddAssessmentQuestionForm = ({
 									onClick={() => form.reset()}
 									className="bg-card dark:bg-background dark:hover:bg-accent"
 								>
-									Cancel
+									Done
 								</Button>
 							</DialogClose>
 							<Button type="submit" disabled={isAdding} variant={isAdding ? 'shine' : 'default'}>

@@ -8,11 +8,12 @@ import { Button } from '@/core/components/ui/button'
 import { Card } from '@/core/components/ui/card'
 import { ScrollArea, ScrollBar } from '@/core/components/ui/scroll-area'
 import { Separator } from '@/core/components/ui/separator'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/core/components/ui/tooltip'
 import { CirclePlus } from '@/core/lib/icons'
 
-import { AiChatInput } from '@/features/courses/components/tabs/ai-chat/ai-chat-input'
-import { AiChatMessage } from '@/features/courses/components/tabs/ai-chat/ai-chat-message'
-import { AiChatTyping } from '@/features/courses/components/tabs/ai-chat/ai-chat-typing'
+import { AiChatInput } from '@/features/chapters/components/tabs/ai-chat/ai-chat-input'
+import { AiChatMessage } from '@/features/chapters/components/tabs/ai-chat/ai-chat-message'
+import { AiChatTyping } from '@/features/chapters/components/tabs/ai-chat/ai-chat-typing'
 
 type AiChatCardProps = {
 	messages: Message[]
@@ -42,34 +43,42 @@ export const AiChatCard = ({
 	const messagesEndRef = useRef<HTMLDivElement>(null)
 
 	useEffect(() => {
-		messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-	}, [chatMessages])
+		messagesEndRef.current?.scrollIntoView({
+			behavior: 'smooth',
+			block: 'end',
+			inline: 'nearest'
+		})
+	}, [chatMessages, isLoading])
 
 	const handleReset = () => {
 		setMessages(initialMessages)
 	}
 
 	return (
-		<Card className="flex h-[calc(100vh-9rem)] flex-col">
-			<CardHeader className="flex items-center justify-between">
-				<CardTitle className="text-lg font-semibold">Course AI Assistant</CardTitle>
+		<Card className="flex h-[24rem] flex-col lg:h-[30rem]">
+			<CardHeader className="flex items-center justify-between py-2">
+				<CardTitle className="text-lg">Chapter AI Assistant</CardTitle>
 				{chatMessages.length > 1 && (
-					<Button
-						variant="outline"
-						size="sm"
-						onClick={handleReset}
-						className="text-muted-foreground hover:text-foreground"
-					>
-						<CirclePlus className="size-4" />
-						New chat
-					</Button>
+					<Tooltip>
+						<TooltipTrigger asChild>
+							<Button
+								variant="outline"
+								size="icon"
+								onClick={handleReset}
+								className="size-8 rounded-lg text-muted-foreground hover:text-foreground"
+							>
+								<CirclePlus />
+							</Button>
+						</TooltipTrigger>
+						<TooltipContent>New chat</TooltipContent>
+					</Tooltip>
 				)}
 			</CardHeader>
 
-			<Separator className="flex-none" />
+			<Separator />
 
-			<ScrollArea className="flex-1 overflow-y-auto px-4">
-				<div className="space-y-1 py-4">
+			<ScrollArea className="flex-1 overflow-y-auto px-4 focus:outline-none">
+				<div className="space-y-1 py-4" ref={messagesEndRef}>
 					{chatMessages
 						.filter((message) => !message.toolInvocations)
 						.map((message, index, array) => {
@@ -95,12 +104,11 @@ export const AiChatCard = ({
 							)
 						})}
 					{isLoading && <AiChatTyping />}
-					<div ref={messagesEndRef} />
 				</div>
 				<ScrollBar orientation="horizontal" />
 			</ScrollArea>
 
-			<CardFooter className="flex-none pt-4">
+			<CardFooter className="flex-none pt-4 md:px-4">
 				<AiChatInput
 					input={input}
 					handleInputChange={handleInputChange}

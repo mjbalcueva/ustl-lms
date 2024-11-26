@@ -12,3 +12,12 @@ export function formatDate(date: Date | string | number, opts: Intl.DateTimeForm
 		...opts
 	}).format(new Date(date))
 }
+
+/**
+ * Gets the day of the week for a given date.
+ * @param date - The date to get the day of the week for.
+ * @returns The day of the week.
+ */
+export function getDayOfWeek(date: Date | string | number) {
+	return new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(new Date(date))
+}

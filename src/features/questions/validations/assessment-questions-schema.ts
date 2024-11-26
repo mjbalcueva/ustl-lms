@@ -15,7 +15,7 @@ export const aiAssessmentQuestionSchema = z.object({
 	questionType: z.nativeEnum(QuestionType, {
 		required_error: 'Please select a question type'
 	}),
-	numberOfQuestions: z.number().min(1).max(10),
+	numberOfQuestions: z.number().min(1).max(20),
 	additionalPrompt: z.string().optional()
 })
 

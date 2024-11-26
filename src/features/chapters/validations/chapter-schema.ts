@@ -12,3 +12,9 @@ export const deleteChapterSchema = z.object({
 })
 
 export type DeleteChapterSchema = z.infer<typeof deleteChapterSchema>
+
+export const toggleChapterCompletionSchema = z.object({
+	chapterId: z.string().min(1, 'Chapter ID is required')
+})
+
+export type ToggleChapterCompletionSchema = z.infer<typeof toggleChapterCompletionSchema>

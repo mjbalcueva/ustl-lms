@@ -27,10 +27,14 @@ type ShikiToken = {
 	htmlStyle?: string | Record<string, string>
 }
 
-const shikiPromise = import('shiki').then((mod) => ({
-	codeToTokens: mod.codeToTokens,
-	bundledLanguages: mod.bundledLanguages
-}))
+const getShiki = async () => {
+	const shiki = await import('shiki')
+	return {
+		codeToTokens: shiki.codeToTokens,
+		bundledLanguages: shiki.bundledLanguages,
+		getHighlighter: shiki.getHighlighter
+	}
+}
 
 const HighlightedPre = React.memo(({ children, language, ...props }: HighlightedPreProps) => {
 	const [tokens, setTokens] = React.useState<ShikiToken[][]>([])
@@ -38,7 +42,7 @@ const HighlightedPre = React.memo(({ children, language, ...props }: Highlighted
 	React.useEffect(() => {
 		let mounted = true
 
-		void shikiPromise
+		void getShiki()
 			.then(({ codeToTokens, bundledLanguages }) => {
 				if (!mounted) return
 				if (!(language in bundledLanguages)) return
@@ -79,7 +83,7 @@ const HighlightedPre = React.memo(({ children, language, ...props }: Highlighted
 								return (
 									<span
 										key={tokenIndex}
-										className="text-shiki-light bg-shiki-light-bg dark:text-shiki-dark dark:bg-shiki-dark-bg"
+										className="bg-shiki-light-bg text-shiki-light dark:bg-shiki-dark-bg dark:text-shiki-dark"
 										style={style}
 									>
 										{token.content}
@@ -197,7 +201,7 @@ const Components = {
 	pre: ({ children, ...props }: PreProps) => <pre {...props}>{children}</pre>,
 	ol: withClass('ol', 'list-decimal pl-6 marker:text-sm'),
 	ul: withClass('ul', 'list-disc pl-6 marker:text-sm'),
-	li: withClass('li', 'my-1.5'),
+	li: withClass('li', 'my-1.5 text-sm'),
 	table: withClass(
 		'table',
 		'w-full border-collapse overflow-y-auto rounded-md border border-foreground/20'
@@ -208,7 +212,7 @@ const Components = {
 	),
 	td: withClass(
 		'td',
-		'border border-foreground/20 px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right'
+		'border border-foreground/20 px-4 py-2 text-left text-sm [&[align=center]]:text-center [&[align=right]]:text-right'
 	),
 	tr: withClass('tr', 'm-0 border-t p-0 even:bg-muted'),
 	p: withClass('p', 'whitespace-pre-wrap text-sm'),
