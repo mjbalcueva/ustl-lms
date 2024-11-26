@@ -18,7 +18,8 @@ import {
 import { editChapterContentSchema } from '@/features/chapters/validations/chapter-content-schema'
 import {
 	deleteChapterSchema,
-	findChapterSchema
+	findChapterSchema,
+	toggleChapterCompletionSchema
 } from '@/features/chapters/validations/chapter-schema'
 import { editChapterStatusSchema } from '@/features/chapters/validations/chapter-status-schema'
 import { editChapterTitleSchema } from '@/features/chapters/validations/chapter-title-schema'
@@ -26,6 +27,47 @@ import { editChapterTypeSchema } from '@/features/chapters/validations/chapter-t
 import { editChapterVideoSchema } from '@/features/chapters/validations/chapter-video-schema'
 
 export const chapterRouter = createTRPCRouter({
+	// Student
+	toggleChapterCompletion: protectedProcedure
+		.input(toggleChapterCompletionSchema)
+		.mutation(async ({ ctx, input }) => {
+			const { chapterId } = input
+
+			const existingProgress = await ctx.db.chapterProgress.findFirst({
+				where: {
+					user: { id: ctx.session.user.id },
+					chapterId
+				}
+			})
+
+			if (existingProgress) {
+				const updatedProgress = await ctx.db.chapterProgress.update({
+					where: { id: existingProgress.id },
+					data: { isCompleted: !existingProgress.isCompleted }
+				})
+
+				return {
+					message: updatedProgress.isCompleted
+						? 'Chapter marked as completed'
+						: 'Chapter marked as incomplete',
+					isCompleted: updatedProgress.isCompleted
+				}
+			}
+
+			const newProgress = await ctx.db.chapterProgress.create({
+				data: {
+					user: { connect: { id: ctx.session.user.id } },
+					chapter: { connect: { id: chapterId } },
+					isCompleted: true
+				}
+			})
+
+			return {
+				message: 'Chapter marked as completed',
+				isCompleted: newProgress.isCompleted
+			}
+		}),
+
 	// Instructor
 	//
 	findChapter: protectedProcedure.input(findChapterSchema).query(async ({ ctx, input }) => {

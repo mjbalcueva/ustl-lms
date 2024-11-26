@@ -31,7 +31,14 @@ export const ChapterProgress = ({ chapters }: ChapterProgressProps) => {
 				{chapters?.course.chapters.map((chapter) => {
 					const isCompleted = chapter.chapterProgress.some((progress) => progress.isCompleted)
 					const isCurrent = chapter.id === chapters.id
-					const status = isCompleted ? 'completed' : isCurrent ? 'current' : 'not-completed'
+					const status =
+						isCompleted && isCurrent
+							? 'current-completed'
+							: isCompleted
+								? 'completed'
+								: isCurrent
+									? 'current'
+									: 'not-completed'
 
 					const iconMap = {
 						ASSESSMENT: <Assessment className="size-4" />,
@@ -52,18 +59,31 @@ export const ChapterProgress = ({ chapters }: ChapterProgressProps) => {
 								<TooltipTrigger
 									className={cn(
 										'flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
+										status === 'current-completed' && 'bg-primary text-primary-foreground',
 										status === 'completed' && 'bg-secondary text-secondary-foreground',
 										status === 'current' && 'bg-primary text-primary-foreground',
 										status === 'not-completed' && 'bg-muted text-muted-foreground'
 									)}
 								>
-									{status === 'completed' ? <Check className="h-4 w-4" /> : Icon}
+									{status === 'completed' || status === 'current-completed' ? (
+										<Check className="h-4 w-4" />
+									) : (
+										Icon
+									)}
 								</TooltipTrigger>
 								<TooltipContent>{capitalize(chapter.type)}</TooltipContent>
 							</Tooltip>
 
 							<div>
-								<h3 className="line-clamp-1 text-sm font-medium leading-none">{chapter.title}</h3>
+								<h3
+									className={cn(
+										'line-clamp-1 text-sm font-medium leading-none',
+										status === 'current' && 'font-semibold text-primary',
+										status === 'current-completed' && 'font-semibold text-primary'
+									)}
+								>
+									{chapter.title}
+								</h3>
 								<p className="text-xs text-muted-foreground">
 									{formatDate(chapter.createdAt, { month: 'short' })}
 								</p>

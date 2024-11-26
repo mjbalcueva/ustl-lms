@@ -6,7 +6,6 @@ import { api } from '@/services/trpc/server'
 import { NotFound } from '@/core/components/error-pages/not-found'
 import { TiptapContentViewer } from '@/core/components/tiptap-editor/content-viewer'
 import { Banner } from '@/core/components/ui/banner'
-import { Button } from '@/core/components/ui/button'
 import { Card } from '@/core/components/ui/card'
 import {
 	PageBreadcrumbs,
@@ -17,13 +16,14 @@ import {
 	PageTitle
 } from '@/core/components/ui/page'
 import { Separator } from '@/core/components/ui/separator'
-import { Check, CheckCircle, CourseSingle, Instructor, Lesson } from '@/core/lib/icons'
+import { CourseSingle, Instructor, Lesson } from '@/core/lib/icons'
 import { formatDate } from '@/core/lib/utils/format-date'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
 import { ChapterAttachments } from '@/features/chapters/components/chapter-attachments'
 import { ChapterProgress } from '@/features/chapters/components/chapter-progress'
 import { ChapterTabs } from '@/features/chapters/components/tabs/chapter-tabs'
+import { ToggleChapterCompletion } from '@/features/chapters/components/toggle-chapter-completion'
 
 export default async function Page({
 	params: { courseId, chapterId }
@@ -53,47 +53,6 @@ export default async function Page({
 		}
 	]
 
-	// const { data: courseProgress, isLoading: isLoadingProgress } =
-	// 	api.course.getCourseProgress.useQuery({
-	// 		courseId: params.courseId
-	// 	})
-
-	// const { mutate: markAsComplete } = api.chapter.markAsComplete.useMutation({
-	// 	onSuccess: () => {
-	// 		setIsChapterDone(true)
-	// 	}
-	// })
-
-	// const handleMarkAsDone = () => {
-	// 	markAsComplete({
-	// 		chapterId: params.chapterId,
-	// 		courseId: params.courseId
-	// 	})
-	// }
-
-	// if (isLoadingChapter || isLoadingProgress || !chapterData || !courseProgress) {
-	// 	return <div>Loading...</div>
-	// }
-
-	// 					<ChapterResources
-	// 						resources={chapterData.resources}
-	// 						onShare={(resourceId) => {
-	// 							// Implement resource sharing
-	// 							console.log('Sharing resource:', resourceId)
-	// 						}}
-	// 					/>
-
-	// 					<ChapterProgress
-	// 						chapters={courseProgress.chapters}
-	// 						currentChapterId={params.chapterId}
-	// 						completedChapterIds={courseProgress.completedChapterIds}
-	// 					/>
-	// 				</div>
-	// 			</div>
-	// 		</div>
-	// 	</div>
-	// )
-
 	return (
 		<>
 			<PageHeader className="hidden space-y-0 md:block md:py-3">
@@ -116,18 +75,7 @@ export default async function Page({
 							<PageTitle>{chapter.title}</PageTitle>
 							<PageDescription>Last updated: {formatDate(chapter.updatedAt)}</PageDescription>
 						</div>
-						<Button disabled={isCompleted}>
-							{isCompleted && (
-								<>
-									<CheckCircle className="!size-5" /> Completed
-								</>
-							)}
-							{!isCompleted && (
-								<>
-									<Check className="!size-5" /> Mark as Done
-								</>
-							)}
-						</Button>
+						<ToggleChapterCompletion chapterId={chapterId} isCompleted={isCompleted} />
 					</div>
 
 					{chapter.videoUrl && (
