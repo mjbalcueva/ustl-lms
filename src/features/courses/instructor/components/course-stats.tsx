@@ -31,9 +31,9 @@ export const CourseStats = ({
 					</div>
 					<div className="flex flex-col">
 						<CardTitle className="text-3xl">
-							{stats.completionRate.toFixed(1)}
+							{stats.averageStudentsPerCourse.toFixed(1)}
 						</CardTitle>
-						<CardDescription>Average Student Rating</CardDescription>
+						<CardDescription>Avg. Students Per Course</CardDescription>
 					</div>
 					<div className="flex flex-col">
 						<CardTitle className="text-3xl">
