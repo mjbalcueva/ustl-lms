@@ -16,18 +16,18 @@ export const CourseStats = ({
 	return (
 		<Card>
 			<CardHeader className="flex-col items-start">
-				<CardTitle>Insights</CardTitle>
+				<CardTitle>Stats</CardTitle>
 				<CardDescription>Overview of your course portfolio.</CardDescription>
 			</CardHeader>
 			<CardContent>
 				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
 					<div className="flex flex-col">
-						<CardTitle className="text-3xl">{stats.students}</CardTitle>
-						<CardDescription>Total Students</CardDescription>
-					</div>
-					<div className="flex flex-col">
 						<CardTitle className="text-3xl">{stats.chapters}</CardTitle>
 						<CardDescription>Created Chapters</CardDescription>
+					</div>
+					<div className="flex flex-col">
+						<CardTitle className="text-3xl">{stats.students}</CardTitle>
+						<CardDescription>Total Students</CardDescription>
 					</div>
 					<div className="flex flex-col">
 						<CardTitle className="text-3xl">
