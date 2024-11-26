@@ -9,6 +9,7 @@ import { generateCourseInviteToken } from '@/features/courses/shared/lib/generat
 import {
 	addCourseSchema,
 	deleteCourseSchema,
+	editCourseCodeSchema,
 	editCourseTokenSchema,
 	editStatusSchema,
 	findOneCourseSchema
@@ -123,6 +124,20 @@ export const courseRouter = createTRPCRouter({
 	// UPDATE
 	// ---------------------------------------------------------------------------
 	//
+
+	// Edit Course Code
+	editCode: instructorProcedure
+		.input(editCourseCodeSchema)
+		.mutation(async ({ ctx, input }) => {
+			const { courseId, code } = input
+
+			const course = await ctx.db.course.update({
+				where: { courseId },
+				data: { code }
+			})
+
+			return { message: 'Course code updated successfully', course }
+		}),
 
 	// Edit Course Token
 	editCourseToken: instructorProcedure

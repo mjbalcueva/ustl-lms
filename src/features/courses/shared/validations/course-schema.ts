@@ -35,6 +35,16 @@ export type FindOneCourseSchema = z.infer<typeof findOneCourseSchema>
 // -----------------------------------------------------------------------------
 //
 
+// Edit Course Code Schema
+export const editCourseCodeSchema = z.object({
+	courseId: z.string().min(1, 'Course ID is required'),
+	code: z
+		.string()
+		.min(1, 'Code is required')
+		.max(16, 'Code must be less than 16 characters')
+})
+export type EditCourseCodeSchema = z.infer<typeof editCourseCodeSchema>
+
 // Edit Course Token Schema
 export const editCourseTokenSchema = z.object({
 	courseId: z.string().min(1, 'Course ID is required'),

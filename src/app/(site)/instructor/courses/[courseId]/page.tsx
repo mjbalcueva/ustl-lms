@@ -29,7 +29,7 @@ import { CourseActionButton } from '@/features/courses/instructor/components/cou
 // import { AddCourseAttachmentsForm } from '@/features/courses/components/forms/add-course-attachments-form'
 // import { AddCourseChaptersForm } from '@/features/courses/components/forms/add-course-chapters-form'
 // import { EditCourseCategoriesForm } from '@/features/courses/components/forms/edit-course-categories'
-// import { EditCourseCodeForm } from '@/features/courses/components/forms/edit-course-code-form'
+import { EditCourseCodeForm } from '@/features/courses/instructor/components/forms/edit-course-code-form'
 // import { EditCourseDescriptionForm } from '@/features/courses/components/forms/edit-course-description'
 // import { EditCourseImageForm } from '@/features/courses/components/forms/edit-course-image'
 // import { EditCourseTitleForm } from '@/features/courses/components/forms/edit-course-title-form'
@@ -121,7 +121,8 @@ export default async function Page({
 						icon={TbNotebook}
 						duration={0.4}
 					>
-						{/* <EditCourseCodeForm id={course.id} code={course.code} />
+						<EditCourseCodeForm courseId={course.courseId} code={course.code} />
+						{/* 
 						<EditCourseTitleForm id={course.id} title={course.title} />
 						<EditCourseDescriptionForm
 							id={course.id}

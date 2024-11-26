@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { api } from '@/services/trpc/react'
+import { api, type RouterOutputs } from '@/services/trpc/react'
 
 import {
 	Card,
@@ -16,16 +16,28 @@ import {
 	CardTitle
 } from '@/core/components/compound-card'
 import { Button } from '@/core/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@/core/components/ui/form'
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormMessage
+} from '@/core/components/ui/form'
 import { Input } from '@/core/components/ui/input'
 import { Edit } from '@/core/lib/icons'
 
 import {
 	editCourseCodeSchema,
 	type EditCourseCodeSchema
-} from '@/features/courses/validations/course-code-schema'
+} from '@/features/courses/shared/validations/course-schema'
 
-export const EditCourseCodeForm = ({ id, code }: EditCourseCodeSchema) => {
+export const EditCourseCodeForm = ({
+	courseId,
+	code
+}: {
+	courseId: RouterOutputs['instructor']['course']['findOneCourse']['course']['courseId']
+	code: RouterOutputs['instructor']['course']['findOneCourse']['course']['code']
+}) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -36,14 +48,14 @@ export const EditCourseCodeForm = ({ id, code }: EditCourseCodeSchema) => {
 
 	const form = useForm<EditCourseCodeSchema>({
 		resolver: zodResolver(editCourseCodeSchema),
-		defaultValues: { id, code }
+		defaultValues: { courseId, code }
 	})
 	const formCode = form.getValues('code')
 
-	const { mutate, isPending } = api.course.editCode.useMutation({
+	const { mutate, isPending } = api.instructor.course.editCode.useMutation({
 		onSuccess: async (data) => {
 			toggleEdit()
-			form.reset({ id, code: data.newCode })
+			form.reset({ courseId, code: data.course.code })
 			router.refresh()
 			toast.success(data.message)
 		},
@@ -72,7 +84,11 @@ export const EditCourseCodeForm = ({ id, code }: EditCourseCodeSchema) => {
 								render={({ field }) => (
 									<FormItem>
 										<FormControl>
-											<Input placeholder="e.g. 'CS101'" disabled={isPending} {...field} />
+											<Input
+												placeholder="e.g. 'CS101'"
+												disabled={isPending}
+												{...field}
+											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
