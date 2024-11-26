@@ -7,6 +7,10 @@ import { utapi } from '@/services/uploadthing/utapi'
 
 import { generateCourseInviteToken } from '@/features/courses/shared/lib/generate-course-invite-token'
 import {
+	addCourseChapterSchema,
+	editCourseChapterOrderSchema
+} from '@/features/courses/shared/validations/course-chapters-schema'
+import {
 	addCourseSchema,
 	deleteCourseSchema,
 	editCourseCodeSchema,
@@ -43,6 +47,26 @@ export const courseRouter = createTRPCRouter({
 			return { message: 'Course created!', course }
 		}),
 
+	// Add Course Chapter
+	addChapter: instructorProcedure
+		.input(addCourseChapterSchema)
+		.mutation(async ({ ctx, input }) => {
+			const { courseId, title, type } = input
+
+			const lastChapter = await ctx.db.chapter.findFirst({
+				where: { courseId, course: { instructorId: ctx.session.user.id } },
+				orderBy: { position: 'desc' }
+			})
+
+			const newPosition = lastChapter ? lastChapter.position + 1 : 1
+
+			await ctx.db.chapter.create({
+				data: { title, courseId, position: newPosition, type }
+			})
+
+			return { message: 'Chapter created successfully' }
+		}),
+
 	// ---------------------------------------------------------------------------
 	// READ
 	// ---------------------------------------------------------------------------
@@ -60,6 +84,7 @@ export const courseRouter = createTRPCRouter({
 				include: {
 					tags: { orderBy: { name: 'asc' } },
 					attachments: { orderBy: { createdAt: 'desc' } },
+					chapters: true,
 					_count: { select: { tags: true, chapters: true, attachments: true } }
 				}
 			})
@@ -105,21 +130,31 @@ export const courseRouter = createTRPCRouter({
 					courses.length
 				: 0,
 			completionRate: courses
-				.flatMap((c) =>
-					c.chapters.length
-						? c.enrollments.map(
-								(e) =>
-									(c.chapters.filter((ch) =>
-										ch.chapterProgress.some(
-											(p) => p.studentId === e.studentId && p.isCompleted
-										)
-									).length /
-										c.chapters.length) *
-									100
+				.flatMap((course) => {
+					// Skip courses with no chapters
+					if (!course.chapters.length) return []
+
+					// Calculate completion rate for each enrollment
+					return course.enrollments.map((enrollment) => {
+						// Count completed chapters for this student
+						const completedChapters = course.chapters.filter((chapter) =>
+							chapter.chapterProgress.some(
+								(progress) =>
+									progress.studentId === enrollment.studentId &&
+									progress.isCompleted
 							)
-						: []
+						).length
+
+						// Calculate percentage
+						return (completedChapters / course.chapters.length) * 100
+					})
+				})
+				// Calculate average completion rate across all enrollments
+				.reduce(
+					(total, rate, _, allRates) =>
+						allRates.length ? total + rate / allRates.length : 0,
+					0
 				)
-				.reduce((acc, r, _, arr) => (arr.length ? acc + r / arr.length : 0), 0)
 		}
 
 		return { courses, count, stats }
@@ -239,6 +274,24 @@ export const courseRouter = createTRPCRouter({
 				message: statusMessages[status] ?? 'Course status updated successfully',
 				course
 			}
+		}),
+
+	// Edit Course Chapter Order
+	editChapterOrder: instructorProcedure
+		.input(editCourseChapterOrderSchema)
+		.mutation(async ({ ctx, input }) => {
+			const { courseId, chapterList } = input
+
+			for (const chapter of chapterList) {
+				const newPosition = chapter.position + 1
+
+				await ctx.db.chapter.update({
+					where: { chapterId: chapter.id, courseId },
+					data: { position: newPosition }
+				})
+			}
+
+			return { message: 'Course chapter order updated successfully' }
 		}),
 
 	// ---------------------------------------------------------------------------

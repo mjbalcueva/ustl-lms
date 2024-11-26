@@ -27,21 +27,19 @@ import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
 import { CourseActionButton } from '@/features/courses/instructor/components/course-action-button'
 import { AddCourseAttachmentsForm } from '@/features/courses/instructor/components/forms/add-course-attachments-form'
+import { AddCourseChaptersForm } from '@/features/courses/instructor/components/forms/add-course-chapters-form'
 import { EditCourseCodeForm } from '@/features/courses/instructor/components/forms/edit-course-code-form'
 import { EditCourseDescriptionForm } from '@/features/courses/instructor/components/forms/edit-course-description'
 import { EditCourseImageForm } from '@/features/courses/instructor/components/forms/edit-course-image'
-// import { AddCourseChaptersForm } from '@/features/courses/components/forms/add-course-chapters-form'
 import { EditCourseTagsForm } from '@/features/courses/instructor/components/forms/edit-course-tags'
 import { EditCourseTitleForm } from '@/features/courses/instructor/components/forms/edit-course-title-form'
 import { EditCourseTokenForm } from '@/features/courses/instructor/components/forms/edit-course-token-form'
 
 export default async function Page({
-	params
+	params: { courseId }
 }: {
 	params: { courseId: string }
 }) {
-	const { courseId } = params
-
 	const session = await auth()
 	if (session?.user?.role !== 'INSTRUCTOR') redirect('/dashboard')
 
@@ -144,10 +142,10 @@ export default async function Page({
 
 				<PageSection columnMode>
 					<FoldableBlock title="Course Outline" icon={TbListDetails}>
-						{/* <AddCourseChaptersForm
-							courseId={course.id}
+						<AddCourseChaptersForm
+							courseId={course.courseId}
 							chapters={course.chapters}
-						/> */}
+						/>
 					</FoldableBlock>
 
 					<FoldableBlock title="Additional References" icon={TbPackage}>

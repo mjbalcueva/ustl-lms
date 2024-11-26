@@ -2,37 +2,65 @@
 
 import Link from 'next/link'
 import * as React from 'react'
-import { DragDropContext, Draggable, Droppable, type DropResult } from '@hello-pangea/dnd'
+import {
+	DragDropContext,
+	Draggable,
+	Droppable,
+	type DropResult
+} from '@hello-pangea/dnd'
 import { type Chapter } from '@prisma/client'
+
+import { RouterOutputs } from '@/services/trpc/react'
 
 import { Badge } from '@/core/components/ui/badge'
 import { Separator } from '@/core/components/ui/separator'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/core/components/ui/tooltip'
-import { Assessment, Assignment, Edit, GripVertical, Lesson } from '@/core/lib/icons'
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger
+} from '@/core/components/ui/tooltip'
+import {
+	Assessment,
+	Assignment,
+	Edit,
+	GripVertical,
+	Lesson
+} from '@/core/lib/icons'
 import { capitalize } from '@/core/lib/utils/capitalize'
 import { cn } from '@/core/lib/utils/cn'
 
 type ChapterListProps = {
-	items: Chapter[]
+	chapters: Chapter[]
 	onReorder: (updateData: { id: string; position: number }[]) => void
 }
 
-export const ChapterList = ({ items, onReorder }: ChapterListProps) => {
-	const [chapters, setChapters] = React.useState(items)
+export const ChapterList = ({
+	chapters,
+	onReorder
+}: {
+	chapters: RouterOutputs['instructor']['course']['findOneCourse']['course']['chapters']
+	onReorder: (updateData: { id: string; position: number }[]) => void
+}) => {
+	const [chapterList, setChaptersList] = React.useState(chapters)
 
 	React.useEffect(() => {
-		setChapters(items)
-	}, [items])
+		setChaptersList(chapters)
+	}, [chapters])
 
 	const handleDragEnd = ({ destination, source }: DropResult) => {
 		if (!destination || source.index === destination.index) return
 
-		const updatedChapters = Array.from(chapters)
+		const updatedChapters = Array.from(chapterList)
 		const [movedChapter] = updatedChapters.splice(source.index, 1)
 		updatedChapters.splice(destination.index, 0, movedChapter!)
 
-		setChapters(updatedChapters)
-		onReorder(updatedChapters.map((chapter, index) => ({ id: chapter.id, position: index })))
+		setChaptersList(updatedChapters)
+		onReorder(
+			updatedChapters.map((chapter, index) => ({
+				id: chapter.chapterId,
+				position: index
+			}))
+		)
 	}
 
 	const chapterTypeIcons = {
@@ -45,15 +73,23 @@ export const ChapterList = ({ items, onReorder }: ChapterListProps) => {
 		<DragDropContext onDragEnd={handleDragEnd}>
 			<Droppable droppableId="chapters">
 				{(provided) => (
-					<ol ref={provided.innerRef} className="space-y-2" {...provided.droppableProps}>
-						{chapters.map((chapter, index) => {
+					<ol
+						ref={provided.innerRef}
+						className="space-y-2"
+						{...provided.droppableProps}
+					>
+						{chapterList.map((chapter, index) => {
 							const isPublished = chapter.status === 'PUBLISHED'
 							const isArchived = chapter.status === 'ARCHIVED'
 							const { Icon, color } =
 								chapterTypeIcons[chapter.type as keyof typeof chapterTypeIcons]
 
 							return (
-								<Draggable key={chapter.id} draggableId={chapter.id} index={index}>
+								<Draggable
+									key={chapter.chapterId}
+									draggableId={chapter.chapterId}
+									index={index}
+								>
 									{(provided) => (
 										<li
 											ref={provided.innerRef}
@@ -70,25 +106,39 @@ export const ChapterList = ({ items, onReorder }: ChapterListProps) => {
 
 											<Tooltip>
 												<TooltipTrigger className="cursor-default">
-													<Icon className={cn('size-5 dark:text-opacity-75', color)} />
+													<Icon
+														className={cn('size-5 dark:text-opacity-75', color)}
+													/>
 												</TooltipTrigger>
-												<TooltipContent>{capitalize(chapter.type)}</TooltipContent>
+												<TooltipContent>
+													{capitalize(chapter.type)}
+												</TooltipContent>
 											</Tooltip>
 
 											{chapter.title}
 
 											<Badge
-												variant={isPublished ? 'default' : isArchived ? 'outline' : 'secondary'}
+												variant={
+													isPublished
+														? 'default'
+														: isArchived
+															? 'outline'
+															: 'secondary'
+												}
 												className="ml-auto select-none"
 											>
-												{isPublished ? 'Published' : isArchived ? 'Archived' : 'Draft'}
+												{isPublished
+													? 'Published'
+													: isArchived
+														? 'Archived'
+														: 'Draft'}
 											</Badge>
 
 											<Tooltip>
 												<TooltipTrigger asChild>
 													<Link
 														className="flex h-full items-center justify-center rounded-r-xl pl-1 pr-2 outline-none hover:opacity-75 focus-visible:outline-ring"
-														href={`/instructor/courses/${chapter.courseId}/${chapter.type.toLocaleLowerCase()}/${chapter.id}`}
+														href={`/instructor/courses/${chapter.courseId}/${chapter.type.toLocaleLowerCase()}/${chapter.chapterId}`}
 													>
 														<Edit className="size-4" />
 													</Link>

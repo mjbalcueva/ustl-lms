@@ -3,11 +3,11 @@
 import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ChapterType, type Chapter } from '@prisma/client'
+import { ChapterType } from '@prisma/client'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { api } from '@/services/trpc/react'
+import { api, RouterOutputs } from '@/services/trpc/react'
 
 import {
 	Card,
@@ -17,7 +17,13 @@ import {
 	CardTitle
 } from '@/core/components/compound-card'
 import { Button } from '@/core/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@/core/components/ui/form'
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormMessage
+} from '@/core/components/ui/form'
 import { Input } from '@/core/components/ui/input'
 import { Loader } from '@/core/components/ui/loader'
 import {
@@ -30,18 +36,19 @@ import {
 import { Add } from '@/core/lib/icons'
 import { capitalize } from '@/core/lib/utils/capitalize'
 
-import { ChapterList } from '@/features/courses/components/course-chapter-list'
+import { ChapterList } from '@/features/courses/instructor/components/course-chapter-list'
 import {
 	addCourseChapterSchema,
 	type AddCourseChapterSchema
 } from '@/features/courses/validations/course-chapters-schema'
 
-type AddCourseChaptersProps = {
-	courseId: string
-	chapters: Chapter[]
-}
-
-export const AddCourseChaptersForm = ({ courseId, chapters }: AddCourseChaptersProps) => {
+export const AddCourseChaptersForm = ({
+	courseId,
+	chapters
+}: {
+	courseId: RouterOutputs['instructor']['course']['findOneCourse']['course']['courseId']
+	chapters: RouterOutputs['instructor']['course']['findOneCourse']['course']['chapters']
+}) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -61,7 +68,7 @@ export const AddCourseChaptersForm = ({ courseId, chapters }: AddCourseChaptersP
 	const hasChapters = chapters.length > 0
 
 	const { mutate: editChapterOrder, isPending: isEditingChapterOrder } =
-		api.course.editChapterOrder.useMutation({
+		api.instructor.course.editChapterOrder.useMutation({
 			onSuccess: (data) => {
 				toast.success(data.message)
 				router.refresh()
@@ -73,22 +80,26 @@ export const AddCourseChaptersForm = ({ courseId, chapters }: AddCourseChaptersP
 		editChapterOrder({ courseId, chapterList: data })
 	}
 
-	const { mutate: addChapter, isPending: isAdding } = api.course.addChapter.useMutation({
-		onSuccess: async (data) => {
-			toggleEdit()
-			form.reset({
-				courseId,
-				title: '',
-				type: ChapterType.LESSON
-			})
-			router.refresh()
-			toast.success(data.message)
-		},
-		onError: (error) => toast.error(error.message)
-	})
+	const { mutate: addChapter, isPending: isAdding } =
+		api.instructor.course.addChapter.useMutation({
+			onSuccess: async (data) => {
+				toggleEdit()
+				form.reset({
+					courseId,
+					title: '',
+					type: ChapterType.LESSON
+				})
+				router.refresh()
+				toast.success(data.message)
+			},
+			onError: (error) => toast.error(error.message)
+		})
 
 	return (
-		<Card className="relative" showBorderTrail={isEditing || isEditingChapterOrder || isAdding}>
+		<Card
+			className="relative"
+			showBorderTrail={isEditing || isEditingChapterOrder || isAdding}
+		>
 			{isEditingChapterOrder && (
 				<div className="absolute flex h-full w-full items-center justify-center rounded-xl bg-background/40">
 					<Loader variant="bars" size="medium" />
@@ -106,7 +117,7 @@ export const AddCourseChaptersForm = ({ courseId, chapters }: AddCourseChaptersP
 			{!isEditing && (
 				<CardContent isEmpty={!hasChapters}>
 					{!hasChapters && 'No chapters'}
-					<ChapterList items={chapters} onReorder={onReorder} />
+					<ChapterList chapters={chapters} onReorder={onReorder} />
 				</CardContent>
 			)}
 
@@ -120,7 +131,11 @@ export const AddCourseChaptersForm = ({ courseId, chapters }: AddCourseChaptersP
 								render={({ field }) => (
 									<FormItem className="flex-1">
 										<FormControl>
-											<Input placeholder="e.g. 'Week 1'" disabled={isAdding} {...field} />
+											<Input
+												placeholder="e.g. 'Week 1'"
+												disabled={isAdding}
+												{...field}
+											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -138,7 +153,10 @@ export const AddCourseChaptersForm = ({ courseId, chapters }: AddCourseChaptersP
 											defaultValue={ChapterType.LESSON}
 										>
 											<FormControl>
-												<SelectTrigger className="bg-card dark:bg-background" disabled={isAdding}>
+												<SelectTrigger
+													className="bg-card dark:bg-background"
+													disabled={isAdding}
+												>
 													<SelectValue />
 												</SelectTrigger>
 											</FormControl>
