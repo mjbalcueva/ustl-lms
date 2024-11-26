@@ -32,7 +32,7 @@ export const CourseTabs = ({ course }: CourseTabsProps) => {
 	]
 
 	const { messages, handleSubmit, input, handleInputChange, isLoading, setMessages } = useChat({
-		api: '/api/ai/chat/course',
+		api: '/api/chat/course',
 		initialMessages,
 		body: {
 			userDetails: {

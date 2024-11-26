@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import { type Message } from 'ai/react'
 
 import { CardFooter, CardHeader, CardTitle } from '@/core/components/compound-card'
@@ -39,6 +40,16 @@ export const AiChatCard = ({
 	initialMessages,
 	user
 }: AiChatCardProps) => {
+	const messagesEndRef = useRef<HTMLDivElement>(null)
+
+	useEffect(() => {
+		messagesEndRef.current?.scrollIntoView({
+			behavior: 'smooth',
+			block: 'end',
+			inline: 'nearest'
+		})
+	}, [chatMessages, isLoading])
+
 	const handleReset = () => {
 		setMessages(initialMessages)
 	}
@@ -67,7 +78,7 @@ export const AiChatCard = ({
 			<Separator />
 
 			<ScrollArea className="flex-1 overflow-y-auto px-4 focus:outline-none">
-				<div className="space-y-1 py-4">
+				<div className="space-y-1 py-4" ref={messagesEndRef}>
 					{chatMessages
 						.filter((message) => !message.toolInvocations)
 						.map((message, index, array) => {
