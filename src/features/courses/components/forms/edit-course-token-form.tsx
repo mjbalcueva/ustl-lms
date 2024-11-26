@@ -31,7 +31,7 @@ import { Copy, Edit, Link } from '@/core/lib/icons'
 import { getBaseUrl } from '@/core/lib/utils/get-base-url'
 
 import { GenerateButton } from '@/features/courses/components/ui/generate-button'
-import { generateCourseInviteToken } from '@/features/courses/lib/tokens'
+// import { generateCourseInviteToken } from '@/features/courses/lib/tokens'
 import {
 	editCourseTokenSchema,
 	type EditCourseTokenSchema
@@ -79,7 +79,10 @@ export const EditCourseTokenForm = ({ id, token }: EditCourseTokenSchema) => {
 					{formToken ? (
 						<>
 							<div className="flex items-center gap-2">
-								<Label htmlFor="token" className="min-w-24 text-end font-normal">
+								<Label
+									htmlFor="token"
+									className="min-w-24 text-end font-normal"
+								>
 									Invite Token
 								</Label>
 								<Input id="token" value={formToken} readOnly />
@@ -93,7 +96,10 @@ export const EditCourseTokenForm = ({ id, token }: EditCourseTokenSchema) => {
 							</div>
 
 							<div className="flex items-center gap-2">
-								<Label htmlFor="invite-link" className="min-w-24 text-end font-normal">
+								<Label
+									htmlFor="invite-link"
+									className="min-w-24 text-end font-normal"
+								>
 									Invite Link
 								</Label>
 								<Input id="invite-link" value={enrollUrl} readOnly />
@@ -136,7 +142,9 @@ export const EditCourseTokenForm = ({ id, token }: EditCourseTokenSchema) => {
 											<GenerateButton
 												onGenerate={() => {
 													const newToken = generateCourseInviteToken()
-													form.setValue('token', newToken, { shouldDirty: true })
+													form.setValue('token', newToken, {
+														shouldDirty: true
+													})
 												}}
 											/>
 										</div>

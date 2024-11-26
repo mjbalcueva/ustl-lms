@@ -1,11 +1,9 @@
+import { instructorRouter } from '@/server/api/routers/instructor-router'
+import { studentRouter } from '@/server/api/routers/student-router'
 import { createCallerFactory, createTRPCRouter } from '@/server/api/trpc'
 
 import { accountRouter } from '@/features/account/server/account-router'
 import { authRouter } from '@/features/auth/server/auth-router'
-import { chapterRouter } from '@/features/chapters/server/chapter-router'
-import { courseRouter } from '@/features/courses/server/course-router'
-import { enrollmentRouter } from '@/features/enrollment/server/enrollment-router'
-import { questionRouter } from '@/features/questions/server/question-router'
 
 /**
  * This is the primary router for your server.
@@ -15,10 +13,8 @@ import { questionRouter } from '@/features/questions/server/question-router'
 export const appRouter = createTRPCRouter({
 	auth: authRouter,
 	account: accountRouter,
-	course: courseRouter,
-	chapter: chapterRouter,
-	enrollment: enrollmentRouter,
-	question: questionRouter
+	instructor: instructorRouter,
+	student: studentRouter
 })
 
 // export type definition of API

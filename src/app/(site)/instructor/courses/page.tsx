@@ -12,13 +12,12 @@ import { Separator } from '@/core/components/ui/separator'
 import { Instructor } from '@/core/lib/icons'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
-import { CourseInsights } from '@/features/courses/components/course-insights'
-import { CourseStats } from '@/features/courses/components/course-stats'
-import { DataTable } from '@/features/courses/components/data-table/data-table'
-import { AddCourseForm } from '@/features/courses/components/forms/add-course-form'
+import { CourseCount } from '@/features/courses/instructor/components/course-count'
+import { CourseStats } from '@/features/courses/instructor/components/course-stats'
+import { AddCourseForm } from '@/features/courses/instructor/components/forms/add-course-form'
 
 export default async function Page() {
-	const courses = await api.course.findManyCourses()
+	const data = await api.instructor.course.findManyCourses()
 
 	const crumbs: Breadcrumb = [
 		{ icon: Instructor },
@@ -36,23 +35,23 @@ export default async function Page() {
 			<PageHeader className="flex flex-wrap items-end justify-between gap-4 space-y-0">
 				<div>
 					<PageTitle className="font-bold">Manage Your Courses</PageTitle>
-					<PageDescription>View insights, manage your courses, and more.</PageDescription>
+					<PageDescription>
+						View insights, manage your courses, and more.
+					</PageDescription>
 				</div>
 				<AddCourseForm />
 			</PageHeader>
 
 			<PageContent className="space-y-6">
 				<PageSection className="px-0 sm:px-0 md:px-0 lg:px-6">
-					<CourseStats data={courses} />
+					<CourseCount count={data.count} />
 				</PageSection>
 
 				<PageSection className="!mt-3">
-					<CourseInsights data={courses} />
+					<CourseStats stats={data.stats} />
 				</PageSection>
 
-				<PageSection>
-					<DataTable data={courses} />
-				</PageSection>
+				<PageSection>{/* <DataTable data={courses} /> */}</PageSection>
 			</PageContent>
 		</>
 	)
