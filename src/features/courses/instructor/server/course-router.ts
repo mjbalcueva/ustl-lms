@@ -52,7 +52,10 @@ export const courseRouter = createTRPCRouter({
 
 			const course = await ctx.db.course.findUnique({
 				where: { courseId, instructorId },
-				include: { attachments: { orderBy: { createdAt: 'desc' } } }
+				include: {
+					attachments: { orderBy: { createdAt: 'desc' } },
+					_count: { select: { tags: true, chapters: true, attachments: true } }
+				}
 			})
 
 			if (!course) throw new TRPCClientError('Course not found')
