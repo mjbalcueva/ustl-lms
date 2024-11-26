@@ -30,16 +30,21 @@ export const findOneCourseSchema = z.object({
 })
 export type FindOneCourseSchema = z.infer<typeof findOneCourseSchema>
 
-// Filter Courses Schema
-export const filterCoursesSchema = z.object({
-	title: z.string().optional()
-})
-export type FilterCoursesSchema = z.infer<typeof filterCoursesSchema>
-
 // -----------------------------------------------------------------------------
 // UPDATE
 // -----------------------------------------------------------------------------
 //
+
+// Edit Course Token Schema
+export const editCourseTokenSchema = z.object({
+	courseId: z.string().min(1, 'Course ID is required'),
+	token: z
+		.string()
+		.length(6, 'Token must be exactly 6 characters')
+		.regex(/^[a-zA-Z0-9]+$/, 'Token must only contain letters and numbers')
+		.or(z.literal(''))
+})
+export type EditCourseTokenSchema = z.infer<typeof editCourseTokenSchema>
 
 // Edit Status Schema
 export const editStatusSchema = z.object({

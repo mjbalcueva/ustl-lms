@@ -17,9 +17,11 @@ import {
 import { Archive, Delete, DotsHorizontal, Unarchive } from '@/core/lib/icons'
 
 export const CourseActionButton = ({
-	course
+	courseId,
+	status
 }: {
-	course: RouterOutputs['instructor']['course']['findOneCourse']['course']
+	courseId: RouterOutputs['instructor']['course']['findOneCourse']['course']['courseId']
+	status: RouterOutputs['instructor']['course']['findOneCourse']['course']['status']
 }) => {
 	const router = useRouter()
 
@@ -41,12 +43,12 @@ export const CourseActionButton = ({
 		})
 
 	const handleStatusChange = (newStatus: Status) =>
-		editStatus({ courseId: course.courseId, status: newStatus })
+		editStatus({ courseId, status: newStatus })
 
 	const getStatusButtonLabel = () =>
 		isEditingStatus
 			? 'Loading...'
-			: course.status === 'PUBLISHED'
+			: status === 'PUBLISHED'
 				? `Unpublish Course`
 				: `Publish Course`
 
@@ -54,14 +56,10 @@ export const CourseActionButton = ({
 		<div className="flex items-center gap-2">
 			<Button
 				size="md"
-				disabled={
-					isEditingStatus || isDeletingCourse || course.status === 'ARCHIVED'
-				}
+				disabled={isEditingStatus || isDeletingCourse || status === 'ARCHIVED'}
 				variant={isEditingStatus ? 'shine' : 'default'}
 				onClick={() =>
-					handleStatusChange(
-						course.status === 'PUBLISHED' ? 'DRAFT' : 'PUBLISHED'
-					)
+					handleStatusChange(status === 'PUBLISHED' ? 'DRAFT' : 'PUBLISHED')
 				}
 			>
 				{getStatusButtonLabel()}
@@ -83,22 +81,20 @@ export const CourseActionButton = ({
 					<DropdownMenuItem
 						disabled={isEditingStatus}
 						onClick={() =>
-							handleStatusChange(
-								course.status === 'ARCHIVED' ? 'DRAFT' : 'ARCHIVED'
-							)
+							handleStatusChange(status === 'ARCHIVED' ? 'DRAFT' : 'ARCHIVED')
 						}
 					>
-						{course.status === 'ARCHIVED' ? (
+						{status === 'ARCHIVED' ? (
 							<Unarchive className="mr-2 size-4" />
 						) : (
 							<Archive className="mr-2 size-4" />
 						)}
-						{course.status === 'ARCHIVED' ? 'Unarchive' : 'Archive'}
+						{status === 'ARCHIVED' ? 'Unarchive' : 'Archive'}
 					</DropdownMenuItem>
 					<ConfirmModal
 						title="Are you sure you want to delete this course?"
 						description="This action cannot be undone. This will permanently delete your course and remove your data from our servers."
-						onConfirm={() => deleteCourse({ courseId: course.courseId })}
+						onConfirm={() => deleteCourse({ courseId })}
 						actionLabel="Delete"
 						variant="destructive"
 					>

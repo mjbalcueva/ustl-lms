@@ -25,6 +25,7 @@ import { Separator } from '@/core/components/ui/separator'
 import { CourseSingle, Instructor } from '@/core/lib/icons'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
+import { CourseActionButton } from '@/features/courses/instructor/components/course-action-button'
 // import { AddCourseAttachmentsForm } from '@/features/courses/components/forms/add-course-attachments-form'
 // import { AddCourseChaptersForm } from '@/features/courses/components/forms/add-course-chapters-form'
 // import { EditCourseCategoriesForm } from '@/features/courses/components/forms/edit-course-categories'
@@ -32,8 +33,7 @@ import { type Breadcrumb } from '@/core/types/breadcrumbs'
 // import { EditCourseDescriptionForm } from '@/features/courses/components/forms/edit-course-description'
 // import { EditCourseImageForm } from '@/features/courses/components/forms/edit-course-image'
 // import { EditCourseTitleForm } from '@/features/courses/components/forms/edit-course-title-form'
-// import { EditCourseTokenForm } from '@/features/courses/components/forms/edit-course-token-form'
-import { CourseActionButton } from '@/features/courses/instructor/components/course-action-button'
+import { EditCourseTokenForm } from '@/features/courses/instructor/components/forms/edit-course-token-form'
 
 export default async function Page({
 	params
@@ -104,13 +104,16 @@ export default async function Page({
 					<PageDescription>Filled {completionText}</PageDescription>
 				</div>
 
-				<CourseActionButton course={course} />
+				<CourseActionButton courseId={course.courseId} status={course.status} />
 			</PageHeader>
 
 			<PageContent className="mb-24 space-y-6 px-2.5 sm:px-4 md:mb-12 md:flex md:flex-wrap md:gap-6 md:space-y-0 md:px-6">
 				<PageSection columnMode>
 					<FoldableBlock title="Course Invite" icon={TbUserPlus}>
-						{/* <EditCourseTokenForm id={course.id} token={course.token ?? ''} /> */}
+						<EditCourseTokenForm
+							courseId={course.courseId}
+							token={course.token}
+						/>
 					</FoldableBlock>
 
 					<FoldableBlock

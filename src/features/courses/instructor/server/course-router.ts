@@ -9,6 +9,7 @@ import { generateCourseInviteToken } from '@/features/courses/shared/lib/generat
 import {
 	addCourseSchema,
 	deleteCourseSchema,
+	editCourseTokenSchema,
 	editStatusSchema,
 	findOneCourseSchema
 } from '@/features/courses/shared/validations/course-schema'
@@ -122,6 +123,31 @@ export const courseRouter = createTRPCRouter({
 	// UPDATE
 	// ---------------------------------------------------------------------------
 	//
+
+	// Edit Course Token
+	editCourseToken: instructorProcedure
+		.input(editCourseTokenSchema)
+		.mutation(async ({ ctx, input }) => {
+			const { courseId, token } = input
+
+			// Check if token already exists for another course
+			const existingCourse = await ctx.db.course.findFirst({
+				where: { token, NOT: { courseId } }
+			})
+
+			if (existingCourse) {
+				throw new TRPCClientError(
+					'Token already exists. Please choose a different token.'
+				)
+			}
+
+			const course = await ctx.db.course.update({
+				where: { courseId },
+				data: { token }
+			})
+
+			return { message: 'Course token updated successfully', course }
+		}),
 
 	// Edit Course Status
 	editStatus: instructorProcedure

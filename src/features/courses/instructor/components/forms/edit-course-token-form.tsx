@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { api } from '@/services/trpc/react'
+import { api, type RouterOutputs } from '@/services/trpc/react'
 
 import {
 	Card,
@@ -30,14 +30,20 @@ import { Label } from '@/core/components/ui/label'
 import { Copy, Edit, Link } from '@/core/lib/icons'
 import { getBaseUrl } from '@/core/lib/utils/get-base-url'
 
-import { GenerateButton } from '@/features/courses/components/ui/generate-button'
-// import { generateCourseInviteToken } from '@/features/courses/lib/tokens'
+import { GenerateButton } from '@/features/courses/instructor/components/ui/generate-button'
+import { generateCourseInviteToken } from '@/features/courses/shared/lib/generate-course-invite-token'
 import {
 	editCourseTokenSchema,
 	type EditCourseTokenSchema
-} from '@/features/courses/validations/course-token-schema'
+} from '@/features/courses/shared/validations/course-schema'
 
-export const EditCourseTokenForm = ({ id, token }: EditCourseTokenSchema) => {
+export const EditCourseTokenForm = ({
+	courseId,
+	token
+}: {
+	courseId: RouterOutputs['instructor']['course']['findOneCourse']['course']['courseId']
+	token: RouterOutputs['instructor']['course']['findOneCourse']['course']['token']
+}) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -48,19 +54,20 @@ export const EditCourseTokenForm = ({ id, token }: EditCourseTokenSchema) => {
 
 	const form = useForm<EditCourseTokenSchema>({
 		resolver: zodResolver(editCourseTokenSchema),
-		defaultValues: { id, token: token ?? '' }
+		defaultValues: { courseId, token: token ?? '' }
 	})
 	const formToken = form.watch('token')
 
-	const { mutate, isPending } = api.course.editToken.useMutation({
-		onSuccess: async (data) => {
-			toggleEdit()
-			form.reset({ id, token: data.newToken ?? '' })
-			router.refresh()
-			toast.success(data.message)
-		},
-		onError: (error) => toast.error(error.message)
-	})
+	const { mutate, isPending } =
+		api.instructor.course.editCourseToken.useMutation({
+			onSuccess: async (data) => {
+				toggleEdit()
+				form.reset({ courseId, token: data.course.token ?? '' })
+				router.refresh()
+				toast.success(data.message)
+			},
+			onError: (error) => toast.error(error.message)
+		})
 
 	const enrollUrl = `${getBaseUrl()}/enrollment?token=${formToken}`
 
