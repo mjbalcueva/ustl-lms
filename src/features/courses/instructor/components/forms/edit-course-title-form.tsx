@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { api } from '@/services/trpc/react'
+import { api, type RouterOutputs } from '@/services/trpc/react'
 
 import {
 	Card,
@@ -16,16 +16,28 @@ import {
 	CardTitle
 } from '@/core/components/compound-card'
 import { Button } from '@/core/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@/core/components/ui/form'
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormMessage
+} from '@/core/components/ui/form'
 import { Input } from '@/core/components/ui/input'
 import { Edit } from '@/core/lib/icons'
 
 import {
 	editCourseTitleSchema,
 	type EditCourseTitleSchema
-} from '@/features/courses/validations/course-title-schema'
+} from '@/features/courses/shared/validations/course-schema'
 
-export const EditCourseTitleForm = ({ id, title }: EditCourseTitleSchema) => {
+export const EditCourseTitleForm = ({
+	courseId,
+	title
+}: {
+	courseId: RouterOutputs['instructor']['course']['findOneCourse']['course']['courseId']
+	title: RouterOutputs['instructor']['course']['findOneCourse']['course']['title']
+}) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -36,14 +48,14 @@ export const EditCourseTitleForm = ({ id, title }: EditCourseTitleSchema) => {
 
 	const form = useForm<EditCourseTitleSchema>({
 		resolver: zodResolver(editCourseTitleSchema),
-		defaultValues: { id, title }
+		defaultValues: { courseId, title }
 	})
 	const formTitle = form.getValues('title')
 
-	const { mutate, isPending } = api.course.editTitle.useMutation({
+	const { mutate, isPending } = api.instructor.course.editTitle.useMutation({
 		onSuccess: async (data) => {
 			toggleEdit()
-			form.reset({ id, title: data.newTitle })
+			form.reset({ courseId, title: data.course.title })
 			router.refresh()
 			toast.success(data.message)
 		},

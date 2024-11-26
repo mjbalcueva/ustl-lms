@@ -10,6 +10,7 @@ import {
 	addCourseSchema,
 	deleteCourseSchema,
 	editCourseCodeSchema,
+	editCourseTitleSchema,
 	editCourseTokenSchema,
 	editStatusSchema,
 	findOneCourseSchema
@@ -137,6 +138,20 @@ export const courseRouter = createTRPCRouter({
 			})
 
 			return { message: 'Course code updated successfully', course }
+		}),
+
+	// Edit Course Title
+	editTitle: instructorProcedure
+		.input(editCourseTitleSchema)
+		.mutation(async ({ ctx, input }) => {
+			const { courseId, title } = input
+
+			const course = await ctx.db.course.update({
+				where: { courseId },
+				data: { title }
+			})
+
+			return { message: 'Course title updated successfully', course }
 		}),
 
 	// Edit Course Token

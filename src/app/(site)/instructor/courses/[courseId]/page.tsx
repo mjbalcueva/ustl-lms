@@ -32,7 +32,7 @@ import { CourseActionButton } from '@/features/courses/instructor/components/cou
 import { EditCourseCodeForm } from '@/features/courses/instructor/components/forms/edit-course-code-form'
 // import { EditCourseDescriptionForm } from '@/features/courses/components/forms/edit-course-description'
 // import { EditCourseImageForm } from '@/features/courses/components/forms/edit-course-image'
-// import { EditCourseTitleForm } from '@/features/courses/components/forms/edit-course-title-form'
+import { EditCourseTitleForm } from '@/features/courses/instructor/components/forms/edit-course-title-form'
 import { EditCourseTokenForm } from '@/features/courses/instructor/components/forms/edit-course-token-form'
 
 export default async function Page({
@@ -122,8 +122,11 @@ export default async function Page({
 						duration={0.4}
 					>
 						<EditCourseCodeForm courseId={course.courseId} code={course.code} />
+						<EditCourseTitleForm
+							courseId={course.courseId}
+							title={course.title}
+						/>
 						{/* 
-						<EditCourseTitleForm id={course.id} title={course.title} />
 						<EditCourseDescriptionForm
 							id={course.id}
 							description={course.description}
