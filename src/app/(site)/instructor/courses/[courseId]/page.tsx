@@ -26,10 +26,10 @@ import { CourseSingle, Instructor } from '@/core/lib/icons'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
 import { CourseActionButton } from '@/features/courses/instructor/components/course-action-button'
+import { AddCourseAttachmentsForm } from '@/features/courses/instructor/components/forms/add-course-attachments-form'
 import { EditCourseCodeForm } from '@/features/courses/instructor/components/forms/edit-course-code-form'
 import { EditCourseDescriptionForm } from '@/features/courses/instructor/components/forms/edit-course-description'
 import { EditCourseImageForm } from '@/features/courses/instructor/components/forms/edit-course-image'
-// import { AddCourseAttachmentsForm } from '@/features/courses/components/forms/add-course-attachments-form'
 // import { AddCourseChaptersForm } from '@/features/courses/components/forms/add-course-chapters-form'
 import { EditCourseTagsForm } from '@/features/courses/instructor/components/forms/edit-course-tags'
 import { EditCourseTitleForm } from '@/features/courses/instructor/components/forms/edit-course-title-form'
@@ -151,10 +151,10 @@ export default async function Page({
 					</FoldableBlock>
 
 					<FoldableBlock title="Additional References" icon={TbPackage}>
-						{/* <AddCourseAttachmentsForm
-							courseId={course.id}
+						<AddCourseAttachmentsForm
+							courseId={course.courseId}
 							attachments={course.attachments}
-						/> */}
+						/>
 					</FoldableBlock>
 				</PageSection>
 			</PageContent>

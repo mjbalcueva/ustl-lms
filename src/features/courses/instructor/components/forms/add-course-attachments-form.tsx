@@ -2,10 +2,9 @@
 
 import { useRouter } from 'next/navigation'
 import * as React from 'react'
-import { type Attachment } from '@prisma/client'
 import { toast } from 'sonner'
 
-import { api } from '@/services/trpc/react'
+import { api, RouterOutputs } from '@/services/trpc/react'
 
 import {
 	Card,
@@ -18,27 +17,29 @@ import { Button } from '@/core/components/ui/button'
 import { FileUpload } from '@/core/components/ui/file-upload'
 import { Add } from '@/core/lib/icons'
 
-import { AttachmentList } from '@/features/courses/components/course-attachment-list'
+import { AttachmentList } from '@/features/courses/instructor/components/course-attachment-list'
 
-type AddCourseAttachmentProps = {
-	courseId: string
-	attachments: Attachment[]
-}
-
-export const AddCourseAttachmentsForm = ({ courseId, attachments }: AddCourseAttachmentProps) => {
+export const AddCourseAttachmentsForm = ({
+	courseId,
+	attachments
+}: {
+	courseId: RouterOutputs['instructor']['course']['findOneCourse']['course']['courseId']
+	attachments: RouterOutputs['instructor']['course']['findOneCourse']['course']['attachments']
+}) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
 	const toggleEdit = () => setIsEditing((current) => !current)
 
-	const { mutate } = api.course.addAttachment.useMutation({
-		onSuccess: async (data) => {
-			toggleEdit()
-			router.refresh()
-			toast.success(data.message)
-		},
-		onError: (error) => toast.error(error.message)
-	})
+	const { mutate } =
+		api.instructor.courseAttachments.addCourseAttachment.useMutation({
+			onSuccess: async (data) => {
+				toggleEdit()
+				router.refresh()
+				toast.success(data.message)
+			},
+			onError: (error) => toast.error(error.message)
+		})
 
 	const hasAttachments = attachments?.length > 0
 

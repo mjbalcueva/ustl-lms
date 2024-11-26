@@ -5,7 +5,7 @@ import { createTRPCRouter, instructorProcedure } from '@/server/api/trpc'
 import {
 	addCourseTagSchema,
 	editManyCourseTagsSchema
-} from '../../shared/validations/course-tags-schema'
+} from '@/features/courses/shared/validations/course-tags-schema'
 
 export const courseTagsRouter = createTRPCRouter({
 	// ---------------------------------------------------------------------------
