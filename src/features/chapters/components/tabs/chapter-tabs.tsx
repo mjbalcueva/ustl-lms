@@ -23,7 +23,7 @@ export const ChapterTabs = ({ chapter }: ChapterTabsProps) => {
 			id: '1',
 			role: 'assistant',
 			content:
-				"Hi! I'm Daryll, your study buddy and academic genius—minus the coffee breaks! ☕ What would you like to learn about?",
+				"Hi! I'm Daryll, your study buddy and AI assistant! ☕ What would you like to learn about?",
 			createdAt: new Date()
 		}
 	]

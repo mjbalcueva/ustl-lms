@@ -1,79 +1,77 @@
 'use client'
 
 import Link from 'next/link'
+import { type inferProcedureOutput } from '@trpc/server'
 
-import { Card } from '@/core/components/ui/card'
-import { ScrollArea } from '@/core/components/ui/scroll-area'
-import { Check } from '@/core/lib/icons'
+import { type AppRouter } from '@/server/api/root'
 
-import { type ChapterWithDetails } from '../types'
+import { Card, CardHeader, CardTitle } from '@/core/components/ui/card'
+import { ScrollArea, ScrollBar } from '@/core/components/ui/scroll-area'
+import { Separator } from '@/core/components/ui/separator'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/core/components/ui/tooltip'
+import { Assessment, Assignment, Check, Lesson } from '@/core/lib/icons'
+import { capitalize } from '@/core/lib/utils/capitalize'
+import { cn } from '@/core/lib/utils/cn'
+import { formatDate } from '@/core/lib/utils/format-date'
 
-interface ChapterProgressProps {
-	chapters: ChapterWithDetails[]
-	currentChapterId: string
-	completedChapterIds: string[]
+type ChapterProgressProps = {
+	chapters: inferProcedureOutput<AppRouter['chapter']['findChapter']>['chapter']
 }
 
-export const ChapterProgress = ({
-	chapters,
-	currentChapterId,
-	completedChapterIds
-}: ChapterProgressProps) => {
+export const ChapterProgress = ({ chapters }: ChapterProgressProps) => {
 	return (
 		<Card>
-			<div className="border-b p-4">
-				<h2 className="font-semibold">Course Progress</h2>
-			</div>
-			<ScrollArea className="h-[300px]">
-				<div className="divide-y">
-					{chapters.map((chapter) => {
-						const isCompleted = completedChapterIds.includes(chapter.id)
-						const isCurrent = chapter.id === currentChapterId
-						let status: 'completed' | 'current' | 'not-completed' = 'not-completed'
+			<CardHeader className="py-2">
+				<CardTitle className="text-lg">Course Progress</CardTitle>
+			</CardHeader>
 
-						if (isCompleted) {
-							status = 'completed'
-						} else if (isCurrent) {
-							status = 'current'
-						}
+			<Separator />
 
-						return (
-							<div key={chapter.id} className="p-4 hover:bg-muted/50">
-								<Link
-									href={`/courses/${chapter.courseId}/lesson/${chapter.id}`}
-									className="flex items-center gap-4"
-								>
-									<div
-										className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full ${
-											status === 'completed'
-												? 'bg-green-500 text-white'
-												: status === 'current'
-													? 'bg-blue-500 text-white'
-													: 'bg-muted text-muted-foreground'
-										}`}
-									>
-										{status === 'completed' ? (
-											<Check className="h-4 w-4" />
-										) : (
-											<span className="text-sm">{chapter.position}</span>
-										)}
-									</div>
-									<div className="flex-grow">
-										<h3 className="font-medium leading-none">{chapter.title}</h3>
-										<p className="mt-1 line-clamp-1 text-sm text-muted-foreground">
-											{chapter.description}
-										</p>
-									</div>
-									{status === 'current' && (
-										<div className="flex-shrink-0 text-blue-500">
-											<span className="text-xs font-medium">Current</span>
-										</div>
+			<ScrollArea className="h-56 p-2 pr-2.5">
+				{chapters?.course.chapters.map((chapter) => {
+					const isCompleted = chapter.chapterProgress.some((progress) => progress.isCompleted)
+					const isCurrent = chapter.id === chapters.id
+					const status = isCompleted ? 'completed' : isCurrent ? 'current' : 'not-completed'
+
+					const iconMap = {
+						ASSESSMENT: <Assessment className="size-4" />,
+						ASSIGNMENT: <Assignment className="size-4" />,
+						LESSON: <Lesson className="size-4" />
+					}
+
+					const Icon = iconMap[chapter.type]
+
+					return (
+						<Link
+							key={chapter.id}
+							href={`/courses/${chapters.course.id}/lesson/${chapter.id}`}
+							className="flex items-center gap-3 rounded-lg p-4 py-2 hover:bg-muted/50"
+							tabIndex={-1}
+						>
+							<Tooltip>
+								<TooltipTrigger
+									className={cn(
+										'flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
+										status === 'completed' && 'bg-secondary text-secondary-foreground',
+										status === 'current' && 'bg-primary text-primary-foreground',
+										status === 'not-completed' && 'bg-muted text-muted-foreground'
 									)}
-								</Link>
+								>
+									{status === 'completed' ? <Check className="h-4 w-4" /> : Icon}
+								</TooltipTrigger>
+								<TooltipContent>{capitalize(chapter.type)}</TooltipContent>
+							</Tooltip>
+
+							<div>
+								<h3 className="line-clamp-1 text-sm font-medium leading-none">{chapter.title}</h3>
+								<p className="text-xs text-muted-foreground">
+									{formatDate(chapter.createdAt, { month: 'short' })}
+								</p>
 							</div>
-						)
-					})}
-				</div>
+						</Link>
+					)
+				})}
+				<ScrollBar orientation="horizontal" />
 			</ScrollArea>
 		</Card>
 	)

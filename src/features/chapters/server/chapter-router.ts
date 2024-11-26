@@ -41,8 +41,10 @@ export const chapterRouter = createTRPCRouter({
 								id: true,
 								title: true,
 								type: true,
+								createdAt: true,
 								chapterProgress: true
-							}
+							},
+							orderBy: { position: 'asc' }
 						}
 					}
 				},

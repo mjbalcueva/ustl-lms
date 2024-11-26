@@ -43,7 +43,7 @@ export const ChapterAttachments = ({ attachments }: ChapterAttachmentsProps) => 
 					<div
 						key={attachment.id}
 						className={cn(
-							'flex items-center justify-between rounded-lg p-4 py-2 hover:bg-muted/50'
+							'flex cursor-pointer items-center justify-between rounded-lg p-4 py-2 hover:bg-muted/50'
 						)}
 						onClick={() => handleDownload(attachment.url)}
 					>
@@ -63,13 +63,19 @@ export const ChapterAttachments = ({ attachments }: ChapterAttachmentsProps) => 
 						</Tooltip>
 
 						<Tooltip>
-							<TooltipTrigger className="flex size-8 shrink-0 cursor-default items-center justify-center rounded-lg ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring">
+							<TooltipTrigger className="flex size-8 shrink-0 items-center justify-center rounded-lg ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring">
 								<Download className="size-4" />
 							</TooltipTrigger>
 							<TooltipContent>Download</TooltipContent>
 						</Tooltip>
 					</div>
 				))}
+
+				{attachments.length === 0 && (
+					<div className="flex h-16 items-center justify-center">
+						<p className="text-sm text-muted-foreground">No attachments found</p>
+					</div>
+				)}
 			</CardContent>
 		</Card>
 	)

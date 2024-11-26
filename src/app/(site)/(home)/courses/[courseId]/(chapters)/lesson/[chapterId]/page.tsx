@@ -17,11 +17,12 @@ import {
 	PageTitle
 } from '@/core/components/ui/page'
 import { Separator } from '@/core/components/ui/separator'
-import { Check, CheckCircle, CourseSingle, Instructor, Lesson, Video } from '@/core/lib/icons'
+import { Check, CheckCircle, CourseSingle, Instructor, Lesson } from '@/core/lib/icons'
 import { formatDate } from '@/core/lib/utils/format-date'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
 import { ChapterAttachments } from '@/features/chapters/components/chapter-attachments'
+import { ChapterProgress } from '@/features/chapters/components/chapter-progress'
 import { ChapterTabs } from '@/features/chapters/components/tabs/chapter-tabs'
 
 export default async function Page({
@@ -129,7 +130,7 @@ export default async function Page({
 						</Button>
 					</div>
 
-					{chapter.videoUrl ? (
+					{chapter.videoUrl && (
 						<MuxPlayer
 							playbackId={chapter.muxData?.playbackId}
 							accentColor="#737373"
@@ -137,10 +138,6 @@ export default async function Page({
 							className="aspect-video overflow-hidden rounded-xl border border-input bg-card md:max-h-[32rem]"
 							disableTracking
 						/>
-					) : (
-						<div className="flex h-[11.5rem] items-center justify-center rounded-xl border border-input bg-card dark:bg-background">
-							<Video className="size-10 text-card-foreground dark:text-muted-foreground" />
-						</div>
 					)}
 
 					<Card className="text-pretty p-6 text-sm tracking-wide">
@@ -153,7 +150,7 @@ export default async function Page({
 
 					<ChapterAttachments attachments={chapter.attachments} />
 
-					<ChapterTabs chapter={chapter} />
+					<ChapterProgress chapters={chapter} />
 				</PageSection>
 			</PageContent>
 		</>
