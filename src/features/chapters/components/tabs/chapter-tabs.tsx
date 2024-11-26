@@ -29,6 +29,7 @@ export const ChapterTabs = ({ chapter }: ChapterTabsProps) => {
 	]
 
 	const { messages, handleSubmit, input, handleInputChange, isLoading, setMessages } = useChat({
+		api: '/api/chat/chapter',
 		initialMessages,
 		body: {
 			userDetails: {

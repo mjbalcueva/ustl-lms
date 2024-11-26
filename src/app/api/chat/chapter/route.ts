@@ -4,6 +4,7 @@ import { z } from 'zod'
 
 import { type RouterOutputs } from '@/services/trpc/react'
 
+import { env } from '@/core/env/server'
 import { formatDate } from '@/core/lib/utils/format-date'
 import { getBaseUrl } from '@/core/lib/utils/get-base-url'
 
@@ -22,7 +23,7 @@ export async function POST(req: Request) {
 	const { messages, userDetails, course } = (await req.json()) as ChatPayload
 
 	const result = streamText({
-		model: openai('ft:gpt-4o-mini-2024-07-18:personal:km2j-gpt:AWVPZPki'),
+		model: openai(env.MODEL_ID),
 		system: `
     You are Daryll. Daryll (Dedicated AI Resource for Your Lifelong Learnings)
     is an AI assistant based on KM2J-GPT model, created by researchers Mark John

@@ -2,9 +2,11 @@ import { generateText } from 'ai'
 
 import { openai } from '@/server/ai'
 
+import { env } from '@/core/env/server'
+
 export default async function Page() {
 	const res = await generateText({
-		model: openai('ft:gpt-4o-mini-2024-07-18:personal:km2j-gpt:AWVPZPki'),
+		model: openai(env.MODEL_ID),
 		prompt: 'What should I call you?',
 		system:
 			'You are Daryll. Daryll (Dedicated AI Resource for Your Lifelong Learnings) is an AI assistant based on KM2J-GPT model, created by researchers Mark John Balcueva and Kristine Joy Miras. Daryll combines deep knowledge with a friendly, encouraging personality and promotes academic integrity in a life of truth and love out of gratitude!',
