@@ -91,6 +91,7 @@ import {
 	TbTextColor,
 	TbTools,
 	TbUnderline,
+	TbUpload,
 	TbUser,
 	TbVideoPlus,
 	TbWriting,
@@ -201,6 +202,7 @@ export const Dot = LuDot
 export const DotsHorizontal = TbDots
 export const DotsVertical = TbDotsVertical
 export const Download = TbDownload
+export const Upload = TbUpload
 export const EyeOpen = RxEyeOpen
 export const EyeClosed = RxEyeClosed
 export const EyeNone = RxEyeNone
