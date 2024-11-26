@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { api } from '@/services/trpc/react'
+import { api, type RouterOutputs } from '@/services/trpc/react'
 
 import {
 	Card,
@@ -16,16 +16,28 @@ import {
 	CardTitle
 } from '@/core/components/compound-card'
 import { Button } from '@/core/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@/core/components/ui/form'
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormMessage
+} from '@/core/components/ui/form'
 import { Textarea } from '@/core/components/ui/textarea'
 import { Add, Edit } from '@/core/lib/icons'
 
 import {
 	editCourseDescriptionSchema,
 	type EditCourseDescriptionSchema
-} from '@/features/courses/validations/course-description-schema'
+} from '@/features/courses/shared/validations/course-schema'
 
-export const EditCourseDescriptionForm = ({ id, description }: EditCourseDescriptionSchema) => {
+export const EditCourseDescriptionForm = ({
+	courseId,
+	description
+}: {
+	courseId: RouterOutputs['instructor']['course']['findOneCourse']['course']['courseId']
+	description: RouterOutputs['instructor']['course']['findOneCourse']['course']['description']
+}) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -36,19 +48,20 @@ export const EditCourseDescriptionForm = ({ id, description }: EditCourseDescrip
 
 	const form = useForm<EditCourseDescriptionSchema>({
 		resolver: zodResolver(editCourseDescriptionSchema),
-		defaultValues: { id, description }
+		defaultValues: { courseId, description }
 	})
 	const formDescription = form.getValues('description')
 
-	const { mutate, isPending } = api.course.editDescription.useMutation({
-		onSuccess: async (data) => {
-			toggleEdit()
-			form.reset({ id, description: data.newDescription ?? '' })
-			router.refresh()
-			toast.success(data.message)
-		},
-		onError: (error) => toast.error(error.message)
-	})
+	const { mutate, isPending } =
+		api.instructor.course.editDescription.useMutation({
+			onSuccess: async (data) => {
+				toggleEdit()
+				form.reset({ courseId, description: data.course.description ?? '' })
+				router.refresh()
+				toast.success(data.message)
+			},
+			onError: (error) => toast.error(error.message)
+		})
 
 	return (
 		<Card showBorderTrail={isEditing}>
