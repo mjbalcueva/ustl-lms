@@ -90,6 +90,10 @@ export const courseRouter = createTRPCRouter({
 				0
 			),
 			chapters: courses.reduce((acc, c) => acc + (c._count?.chapters ?? 0), 0),
+			averageStudentsPerCourse: courses.length
+				? courses.reduce((acc, c) => acc + (c._count?.enrollments ?? 0), 0) /
+					courses.length
+				: 0,
 			completionRate: courses
 				.flatMap((c) =>
 					c.chapters.length
