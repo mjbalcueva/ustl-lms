@@ -33,7 +33,7 @@ type TagsComboboxProps = {
 	onChange: (value: string[]) => void
 }
 
-export const CategoriesCombobox = ({
+export const TagsCombobox = ({
 	label,
 	options,
 	selected,

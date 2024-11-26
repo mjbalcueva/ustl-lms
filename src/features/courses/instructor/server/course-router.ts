@@ -75,6 +75,7 @@ export const courseRouter = createTRPCRouter({
 
 		const courses = await ctx.db.course.findMany({
 			where: { instructorId },
+			orderBy: [{ status: 'asc' }, { updatedAt: 'desc' }],
 			include: {
 				_count: {
 					select: { enrollments: true, chapters: true }

@@ -26,7 +26,7 @@ import {
 } from '@/core/components/ui/form'
 import { Edit } from '@/core/lib/icons'
 
-import { CategoriesCombobox } from '@/features/courses/instructor/components/ui/tags-combobox'
+import { TagsCombobox } from '@/features/courses/instructor/components/ui/tags-combobox'
 import {
 	editManyCourseTagsSchema,
 	type EditManyCourseTagsSchema
@@ -107,7 +107,7 @@ export const EditCourseTagsForm = ({
 								render={({ field }) => (
 									<FormItem>
 										<FormControl>
-											<CategoriesCombobox
+											<TagsCombobox
 												options={tagsOptions.map((tag) => ({
 													value: tag.tagId,
 													label: tag.name
