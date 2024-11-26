@@ -3,11 +3,10 @@
 import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { type Category } from '@prisma/client'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { api } from '@/services/trpc/react'
+import { api, RouterOutputs } from '@/services/trpc/react'
 
 import {
 	Card,
@@ -18,26 +17,30 @@ import {
 } from '@/core/components/compound-card'
 import { Badge } from '@/core/components/ui/badge'
 import { Button } from '@/core/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@/core/components/ui/form'
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormMessage
+} from '@/core/components/ui/form'
 import { Edit } from '@/core/lib/icons'
 
-import { CategoriesCombobox } from '@/features/courses/components/ui/categories-combobox'
+import { CategoriesCombobox } from '@/features/courses/instructor/components/ui/tags-combobox'
 import {
-	editManyCourseCategoriesSchema,
-	type EditManyCourseCategoriesSchema
-} from '@/features/courses/validations/course-categories-schema'
+	editManyCourseTagsSchema,
+	type EditManyCourseTagsSchema
+} from '@/features/courses/shared/validations/course-tags-schema'
 
-type EditCourseCategoriesProps = {
-	id: string
-	categories: Category[]
-	categoriesOptions: Category[]
-}
-
-export const EditCourseCategoriesForm = ({
-	id,
-	categories,
-	categoriesOptions
-}: EditCourseCategoriesProps) => {
+export const EditCourseTagsForm = ({
+	courseId,
+	tags,
+	tagsOptions
+}: {
+	courseId: RouterOutputs['instructor']['course']['findOneCourse']['course']['courseId']
+	tags: RouterOutputs['instructor']['course']['findOneCourse']['course']['tags']
+	tagsOptions: RouterOutputs['instructor']['courseTags']['findManyCourseTags']['tags']
+}) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -47,22 +50,23 @@ export const EditCourseCategoriesForm = ({
 		form.reset()
 	}
 
-	const categoryIds = categories.map((category) => category.id)
+	const tagIds = tags.map((tag) => tag.tagId)
 
-	const form = useForm<EditManyCourseCategoriesSchema>({
-		resolver: zodResolver(editManyCourseCategoriesSchema),
-		defaultValues: { id, categoryIds }
+	const form = useForm<EditManyCourseTagsSchema>({
+		resolver: zodResolver(editManyCourseTagsSchema),
+		defaultValues: { courseId, tagIds }
 	})
 
-	const { mutate, isPending } = api.course.editCategories.useMutation({
-		onSuccess: async (data) => {
-			toggleEdit()
-			form.reset({ id, categoryIds: data.newCategoryIds })
-			router.refresh()
-			toast.success(data.message)
-		},
-		onError: (error) => toast.error(error.message)
-	})
+	const { mutate, isPending } =
+		api.instructor.courseTags.editManyCourseTags.useMutation({
+			onSuccess: async (data) => {
+				toggleEdit()
+				form.reset({ courseId, tagIds: data.newTagIds })
+				router.refresh()
+				toast.success(data.message)
+			},
+			onError: (error) => toast.error(error.message)
+		})
 
 	return (
 		<Card showBorderTrail={isEditing}>
@@ -78,12 +82,12 @@ export const EditCourseCategoriesForm = ({
 			</CardHeader>
 
 			{!isEditing && (
-				<CardContent isEmpty={categoryIds.length === 0}>
-					{categoryIds.length > 0 ? (
+				<CardContent isEmpty={tagIds.length === 0}>
+					{tagIds.length > 0 ? (
 						<div className="flex flex-wrap gap-1">
-							{categoryIds.map((id) => (
+							{tagIds.map((id) => (
 								<Badge key={id} variant="secondary">
-									{categories.find((cat) => cat.id === id)?.name}
+									{tags.find((tag) => tag.tagId === id)?.name}
 								</Badge>
 							))}
 						</div>
@@ -99,14 +103,14 @@ export const EditCourseCategoriesForm = ({
 						<CardContent>
 							<FormField
 								control={form.control}
-								name="categoryIds"
+								name="tagIds"
 								render={({ field }) => (
 									<FormItem>
 										<FormControl>
 											<CategoriesCombobox
-												options={categoriesOptions.map((category) => ({
-													value: category.id,
-													label: category.name
+												options={tagsOptions.map((tag) => ({
+													value: tag.tagId,
+													label: tag.name
 												}))}
 												selected={field.value}
 												onChange={field.onChange}

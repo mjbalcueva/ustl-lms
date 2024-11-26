@@ -26,12 +26,12 @@ import { CourseSingle, Instructor } from '@/core/lib/icons'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
 import { CourseActionButton } from '@/features/courses/instructor/components/course-action-button'
-// import { AddCourseAttachmentsForm } from '@/features/courses/components/forms/add-course-attachments-form'
-// import { AddCourseChaptersForm } from '@/features/courses/components/forms/add-course-chapters-form'
-// import { EditCourseCategoriesForm } from '@/features/courses/components/forms/edit-course-categories'
 import { EditCourseCodeForm } from '@/features/courses/instructor/components/forms/edit-course-code-form'
 import { EditCourseDescriptionForm } from '@/features/courses/instructor/components/forms/edit-course-description'
 import { EditCourseImageForm } from '@/features/courses/instructor/components/forms/edit-course-image'
+// import { AddCourseAttachmentsForm } from '@/features/courses/components/forms/add-course-attachments-form'
+// import { AddCourseChaptersForm } from '@/features/courses/components/forms/add-course-chapters-form'
+import { EditCourseTagsForm } from '@/features/courses/instructor/components/forms/edit-course-tags'
 import { EditCourseTitleForm } from '@/features/courses/instructor/components/forms/edit-course-title-form'
 import { EditCourseTokenForm } from '@/features/courses/instructor/components/forms/edit-course-token-form'
 
@@ -46,7 +46,7 @@ export default async function Page({
 	if (session?.user?.role !== 'INSTRUCTOR') redirect('/dashboard')
 
 	const { course } = await api.instructor.course.findOneCourse({ courseId })
-	// const { tags } = await api.instructor.courseTags.findManyCourseTags()
+	const { tags } = await api.instructor.courseTags.findManyCourseTags()
 
 	if (!course) return <NotFound item="course" />
 
@@ -134,12 +134,11 @@ export default async function Page({
 							courseId={course.courseId}
 							imageUrl={course.imageUrl}
 						/>
-						{/* 
-						<EditCourseCategoriesForm
-							id={course.id}
-							categories={course.categories}
-							categoriesOptions={categories}
-						/> */}
+						<EditCourseTagsForm
+							courseId={course.courseId}
+							tags={course.tags}
+							tagsOptions={tags}
+						/>
 					</FoldableBlock>
 				</PageSection>
 

@@ -13,13 +13,17 @@ import {
 	CommandList,
 	CommandSeparator
 } from '@/core/components/ui/command'
-import { Popover, PopoverContent, PopoverTrigger } from '@/core/components/ui/popover'
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger
+} from '@/core/components/ui/popover'
 import { Add, Check, ChevronsUpDown, X } from '@/core/lib/icons'
 import { cn } from '@/core/lib/utils/cn'
 
-import { AddCategoryForm } from '@/features/courses/components/forms/add-category-form'
+import { AddTagForm } from '@/features/courses/instructor/components/forms/add-course-tags-form'
 
-type CategoriesComboboxProps = {
+type TagsComboboxProps = {
 	label: string
 	options: {
 		value: string
@@ -34,7 +38,7 @@ export const CategoriesCombobox = ({
 	options,
 	selected,
 	onChange
-}: CategoriesComboboxProps) => {
+}: TagsComboboxProps) => {
 	const [open, setOpen] = React.useState(false)
 	const [value, setValue] = React.useState('')
 
@@ -93,13 +97,20 @@ export const CategoriesCombobox = ({
 						<CommandEmpty>No option found.</CommandEmpty>
 						<CommandGroup>
 							{options
-								.filter((option) => option.label.toLowerCase().includes(value.toLowerCase()))
+								.filter((option) =>
+									option.label.toLowerCase().includes(value.toLowerCase())
+								)
 								.map((option) => (
-									<CommandItem key={option.value} onSelect={() => handleSelect(option.value)}>
+									<CommandItem
+										key={option.value}
+										onSelect={() => handleSelect(option.value)}
+									>
 										<Check
 											className={cn(
 												'mr-2 size-4',
-												selected.includes(option.value) ? 'opacity-100' : 'opacity-0'
+												selected.includes(option.value)
+													? 'opacity-100'
+													: 'opacity-0'
 											)}
 										/>
 										{option.label}
@@ -110,12 +121,12 @@ export const CategoriesCombobox = ({
 					<CommandSeparator />
 					<CommandList>
 						<CommandGroup>
-							<AddCategoryForm className="w-full">
+							<AddTagForm className="w-full">
 								<CommandItem>
 									<Add className="mr-2 size-4" />
 									Add Tag
 								</CommandItem>
-							</AddCategoryForm>
+							</AddTagForm>
 						</CommandGroup>
 					</CommandList>
 				</Command>

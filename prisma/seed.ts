@@ -4,7 +4,7 @@ import { hash } from 'bcryptjs'
 
 import { catchError } from '@/core/lib/utils/catch-error'
 
-import { generateCourseInviteToken } from '@/features/courses/lib/tokens'
+import { generateCourseInviteToken } from '@/features/courses/shared/lib/generate-course-invite-token'
 
 const prisma = new PrismaClient({
 	transactionOptions: {
@@ -89,13 +89,24 @@ async function createUsers() {
 
 // Optimize category creation with createMany
 async function createTags(instructors: User[]) {
+	const tagSet = new Set<string>()
 	const tags = instructors.flatMap((instructor) => {
 		const tagCount = getRandomInRange(SEED_RANGES.COURSE_TAGS_PER_INSTRUCTOR)
-		return Array.from({ length: tagCount }, () => ({
-			tagId: faker.database.mongodbObjectId(),
-			name: faker.commerce.department(),
-			instructorId: instructor.id
-		}))
+		return Array.from({ length: tagCount }, () => {
+			// Keep generating new tag names until we get a unique one
+			let tagName: string
+			do {
+				tagName = faker.commerce.department()
+			} while (tagSet.has(tagName.toLowerCase()))
+
+			tagSet.add(tagName.toLowerCase())
+
+			return {
+				tagId: faker.database.mongodbObjectId(),
+				name: tagName,
+				instructorId: instructor.id
+			}
+		})
 	})
 
 	return prisma.courseTag.createMany({

@@ -31,29 +31,30 @@ import { Input } from '@/core/components/ui/input'
 import { Separator } from '@/core/components/ui/separator'
 
 import {
-	addCourseCategorySchema,
-	type AddCourseCategorySchema
-} from '@/features/courses/validations/course-categories-schema'
+	addCourseTagSchema,
+	type AddCourseTagSchema
+} from '@/features/courses/shared/validations/course-tags-schema'
 
-type AddCategoryFormProps = React.ComponentPropsWithoutRef<typeof DialogTrigger>
+type AddTagFormProps = React.ComponentPropsWithoutRef<typeof DialogTrigger>
 
-export const AddCategoryForm = ({ ...props }: AddCategoryFormProps) => {
+export const AddTagForm = ({ ...props }: AddTagFormProps) => {
 	const router = useRouter()
-	const form = useForm<AddCourseCategorySchema>({
-		resolver: zodResolver(addCourseCategorySchema),
+	const form = useForm<AddCourseTagSchema>({
+		resolver: zodResolver(addCourseTagSchema),
 		defaultValues: {
 			name: ''
 		}
 	})
 
-	const { mutate, isPending } = api.course.addCategory.useMutation({
-		onSuccess: async (data) => {
-			form.reset()
-			router.refresh()
-			toast.success(data.message)
-		},
-		onError: (error) => toast.error(error.message)
-	})
+	const { mutate, isPending } =
+		api.instructor.courseTags.addCourseTag.useMutation({
+			onSuccess: async (data) => {
+				form.reset()
+				router.refresh()
+				toast.success(data.message)
+			},
+			onError: (error) => toast.error(error.message)
+		})
 
 	return (
 		<Dialog>
@@ -68,15 +69,24 @@ export const AddCategoryForm = ({ ...props }: AddCategoryFormProps) => {
 				<Separator />
 
 				<Form {...form}>
-					<form onSubmit={form.handleSubmit((data) => mutate(data))} className="grid gap-4">
+					<form
+						onSubmit={form.handleSubmit((data) => mutate(data))}
+						className="grid gap-4"
+					>
 						<FormField
 							control={form.control}
 							name="name"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel className="text-card-foreground">Tag Name</FormLabel>
+									<FormLabel className="text-card-foreground">
+										Tag Name
+									</FormLabel>
 									<FormControl>
-										<Input placeholder="Enter a tag name" className="dark:!bg-card" {...field} />
+										<Input
+											placeholder="Enter a tag name"
+											className="dark:!bg-card"
+											{...field}
+										/>
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -85,11 +95,19 @@ export const AddCategoryForm = ({ ...props }: AddCategoryFormProps) => {
 
 						<DialogFooter className="gap-2 md:gap-0">
 							<DialogClose asChild>
-								<Button type="button" variant="outline" onClick={() => form.reset()}>
+								<Button
+									type="button"
+									variant="outline"
+									onClick={() => form.reset()}
+								>
 									Cancel
 								</Button>
 							</DialogClose>
-							<Button type="submit" disabled={isPending} variant={isPending ? 'shine' : 'default'}>
+							<Button
+								type="submit"
+								disabled={isPending}
+								variant={isPending ? 'shine' : 'default'}
+							>
 								{isPending ? 'Creating...' : 'Create Tag'}
 							</Button>
 						</DialogFooter>
