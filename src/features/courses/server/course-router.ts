@@ -1,6 +1,10 @@
 import { TRPCClientError } from '@trpc/client'
 
-import { createTRPCRouter, instructorProcedure, protectedProcedure } from '@/server/api/trpc'
+import {
+	createTRPCRouter,
+	instructorProcedure,
+	protectedProcedure
+} from '@/server/api/trpc'
 
 import { muxVideo } from '@/services/mux/video'
 import { utapi } from '@/services/uploadthing/utapi'
@@ -35,23 +39,25 @@ import { editCourseTokenSchema } from '@/features/courses/validations/course-tok
 export const courseRouter = createTRPCRouter({
 	// Instructor
 	//
-	findCourse: instructorProcedure.input(findCourseSchema).query(async ({ ctx, input }) => {
-		const { courseId } = input
+	findCourse: instructorProcedure
+		.input(findCourseSchema)
+		.query(async ({ ctx, input }) => {
+			const { courseId } = input
 
-		const course = await ctx.db.course.findUnique({
-			where: { id: courseId, instructorId: ctx.session.user.id },
-			include: {
-				attachments: {
-					where: { chapterId: null },
-					orderBy: { createdAt: 'desc' }
-				},
-				categories: { orderBy: { name: 'asc' } },
-				chapters: { orderBy: { position: 'asc' } }
-			}
-		})
+			const course = await ctx.db.course.findUnique({
+				where: { id: courseId, instructorId: ctx.session.user.id },
+				include: {
+					attachments: {
+						where: { chapterId: null },
+						orderBy: { createdAt: 'desc' }
+					},
+					categories: { orderBy: { name: 'asc' } },
+					chapters: { orderBy: { position: 'asc' } }
+				}
+			})
 
-		return { course }
-	}),
+			return { course }
+		}),
 
 	findManyCourses: instructorProcedure.query(async ({ ctx }) => {
 		const courses = await ctx.db.course.findMany({
@@ -71,162 +77,101 @@ export const courseRouter = createTRPCRouter({
 		return courses
 	}),
 
-	addCourse: instructorProcedure.input(addCourseSchema).mutation(async ({ ctx, input }) => {
-		const { code, title } = input
-		const token = generateCourseInviteToken()
-
-		const { id: newCourseId } = await ctx.db.course.create({
-			data: {
-				code,
-				title,
-				token,
-				instructorId: ctx.session.user.id
-			}
-		})
-
-		return { message: 'Course created!', newCourseId }
-	}),
-
-	deleteCourse: instructorProcedure.input(deleteCourseSchema).mutation(async ({ ctx, input }) => {
-		const { id } = input
-
-		const course = await ctx.db.course.findUnique({
-			where: { id, instructorId: ctx.session.user.id },
-			include: { chapters: true }
-		})
-
-		for (const chapter of course?.chapters ?? []) {
-			const oldVideoKey = chapter?.videoUrl?.split('/f/')[1]
-			if (oldVideoKey) await utapi.deleteFiles(oldVideoKey)
-
-			const existingMuxData = await ctx.db.muxData.findFirst({
-				where: { chapterId: chapter.id }
-			})
-
-			if (existingMuxData) {
-				await muxVideo.assets.delete(existingMuxData.assetId)
-				await ctx.db.muxData.delete({
-					where: { id: existingMuxData.id }
-				})
-			}
-
-			const attachments = await ctx.db.attachment.findMany({
-				where: { chapterId: chapter.id }
-			})
-
-			for (const attachment of attachments) {
-				const attachmentKey = attachment.url.split('/f/')[1]
-				if (attachmentKey) await utapi.deleteFiles(attachmentKey)
-			}
-		}
-
-		const oldImageKey = course?.imageUrl?.split('/f/')[1]
-		if (oldImageKey) await utapi.deleteFiles(oldImageKey)
-
-		await ctx.db.course.delete({ where: { id, instructorId: ctx.session.user.id } })
-
-		return { message: 'Course deleted!' }
-	}),
-
-	editToken: instructorProcedure.input(editCourseTokenSchema).mutation(async ({ ctx, input }) => {
-		const { id, token } = input
-
-		const existingCourse = await ctx.db.course.findFirst({
-			where: { token, NOT: { id } }
-		})
-
-		if (existingCourse) {
-			throw new Error('Token already exists. Please choose a different token.')
-		}
-
-		const { token: newToken } = await ctx.db.course.update({
-			where: { id, instructorId: ctx.session.user.id },
-			data: { token }
-		})
-
-		return { message: 'Course token updated!', newToken }
-	}),
-
-	editCode: instructorProcedure.input(editCourseCodeSchema).mutation(async ({ ctx, input }) => {
-		const { id, code } = input
-
-		const { code: newCode } = await ctx.db.course.update({
-			where: { id, instructorId: ctx.session.user.id },
-			data: { code }
-		})
-
-		return { message: 'Course code updated!', newCode }
-	}),
-
-	editTitle: instructorProcedure.input(editCourseTitleSchema).mutation(async ({ ctx, input }) => {
-		const { id, title } = input
-
-		const { title: newTitle } = await ctx.db.course.update({
-			where: { id, instructorId: ctx.session.user.id },
-			data: { title }
-		})
-
-		return { message: 'Course title updated!', newTitle }
-	}),
-
-	editDescription: instructorProcedure
-		.input(editCourseDescriptionSchema)
+	addCourse: instructorProcedure
+		.input(addCourseSchema)
 		.mutation(async ({ ctx, input }) => {
-			const { id: courseId, description } = input
+			const { code, title } = input
+			const token = generateCourseInviteToken()
 
-			const { description: newDescription } = await ctx.db.course.update({
-				where: { id: courseId, instructorId: ctx.session.user.id },
-				data: { description }
+			const { id: newCourseId } = await ctx.db.course.create({
+				data: {
+					code,
+					title,
+					token,
+					instructorId: ctx.session.user.id
+				}
 			})
 
-			return { message: 'Course description updated!', newDescription }
+			return { message: 'Course created!', newCourseId }
 		}),
 
-	editImage: instructorProcedure.input(editCourseImageSchema).mutation(async ({ ctx, input }) => {
-		const { id, imageUrl } = input
+	deleteCourse: instructorProcedure
+		.input(deleteCourseSchema)
+		.mutation(async ({ ctx, input }) => {
+			const { id } = input
 
-		const course = await ctx.db.course.findUnique({
-			where: { id, instructorId: ctx.session.user.id },
-			select: { imageUrl: true }
-		})
-
-		const oldImageKey = course?.imageUrl?.split('/f/')[1]
-		if (oldImageKey) await utapi.deleteFiles(oldImageKey)
-
-		await ctx.db.course.update({
-			where: { id, instructorId: ctx.session.user.id },
-			data: { imageUrl }
-		})
-
-		return { message: 'Course image updated!' }
-	}),
-
-	editStatus: instructorProcedure.input(editCourseStatusSchema).mutation(async ({ ctx, input }) => {
-		const { id, status } = input
-
-		const [data, error] = await catchError(
-			ctx.db.course.updateMany({
+			const course = await ctx.db.course.findUnique({
 				where: { id, instructorId: ctx.session.user.id },
-				data: { status }
+				include: { chapters: true }
 			})
-		)
 
-		if (error) {
-			throw error
-		}
+			for (const chapter of course?.chapters ?? []) {
+				const oldVideoKey = chapter?.videoUrl?.split('/f/')[1]
+				if (oldVideoKey) await utapi.deleteFiles(oldVideoKey)
 
-		if (data?.count === 0) {
-			throw new TRPCClientError('Course not found or you are not authorized to update it.')
-		}
+				const existingMuxData = await ctx.db.muxData.findFirst({
+					where: { chapterId: chapter.id }
+				})
 
-		const statusMessages: Record<string, string> = {
-			PUBLISHED: 'Course published successfully',
-			DRAFT: 'Course saved as draft',
-			ARCHIVED: 'Course archived successfully'
-		}
+				if (existingMuxData) {
+					await muxVideo.assets.delete(existingMuxData.assetId)
+					await ctx.db.muxData.delete({
+						where: { id: existingMuxData.id }
+					})
+				}
 
-		return { message: statusMessages[status] ?? 'Course status updated successfully' }
-	}),
+				const attachments = await ctx.db.attachment.findMany({
+					where: { chapterId: chapter.id }
+				})
+
+				for (const attachment of attachments) {
+					const attachmentKey = attachment.url.split('/f/')[1]
+					if (attachmentKey) await utapi.deleteFiles(attachmentKey)
+				}
+			}
+
+			const oldImageKey = course?.imageUrl?.split('/f/')[1]
+			if (oldImageKey) await utapi.deleteFiles(oldImageKey)
+
+			await ctx.db.course.delete({
+				where: { id, instructorId: ctx.session.user.id }
+			})
+
+			return { message: 'Course deleted!' }
+		}),
+
+	editStatus: instructorProcedure
+		.input(editCourseStatusSchema)
+		.mutation(async ({ ctx, input }) => {
+			const { id, status } = input
+
+			const [data, error] = await catchError(
+				ctx.db.course.updateMany({
+					where: { id, instructorId: ctx.session.user.id },
+					data: { status }
+				})
+			)
+
+			if (error) {
+				throw error
+			}
+
+			if (data?.count === 0) {
+				throw new TRPCClientError(
+					'Course not found or you are not authorized to update it.'
+				)
+			}
+
+			const statusMessages: Record<string, string> = {
+				PUBLISHED: 'Course published successfully',
+				DRAFT: 'Course saved as draft',
+				ARCHIVED: 'Course archived successfully'
+			}
+
+			return {
+				message: statusMessages[status] ?? 'Course status updated successfully'
+			}
+		}),
 
 	findManyCategories: instructorProcedure.query(async ({ ctx }) => {
 		const categories = await ctx.db.category.findMany({
@@ -276,7 +221,10 @@ export const courseRouter = createTRPCRouter({
 				}
 			})
 
-			return { message: 'Course categories updated!', newCategoryIds: categoryIds }
+			return {
+				message: 'Course categories updated!',
+				newCategoryIds: categoryIds
+			}
 		}),
 
 	addAttachment: instructorProcedure
@@ -302,7 +250,10 @@ export const courseRouter = createTRPCRouter({
 			const { attachmentId } = input
 
 			const attachment = await ctx.db.attachment.delete({
-				where: { id: attachmentId, course: { instructorId: ctx.session.user.id } }
+				where: {
+					id: attachmentId,
+					course: { instructorId: ctx.session.user.id }
+				}
 			})
 
 			const attachmentKey = attachment?.url.split('/f/')[1]
@@ -311,22 +262,24 @@ export const courseRouter = createTRPCRouter({
 			return { message: 'Course attachment deleted!', attachment }
 		}),
 
-	addChapter: instructorProcedure.input(addCourseChapterSchema).mutation(async ({ ctx, input }) => {
-		const { courseId, title, type } = input
+	addChapter: instructorProcedure
+		.input(addCourseChapterSchema)
+		.mutation(async ({ ctx, input }) => {
+			const { courseId, title, type } = input
 
-		const lastChapter = await ctx.db.chapter.findFirst({
-			where: { courseId, course: { instructorId: ctx.session.user.id } },
-			orderBy: { position: 'desc' }
-		})
+			const lastChapter = await ctx.db.chapter.findFirst({
+				where: { courseId, course: { instructorId: ctx.session.user.id } },
+				orderBy: { position: 'desc' }
+			})
 
-		const newPosition = lastChapter ? lastChapter.position + 1 : 1
+			const newPosition = lastChapter ? lastChapter.position + 1 : 1
 
-		await ctx.db.chapter.create({
-			data: { title, courseId, position: newPosition, type }
-		})
+			await ctx.db.chapter.create({
+				data: { title, courseId, position: newPosition, type }
+			})
 
-		return { message: 'Chapter created successfully' }
-	}),
+			return { message: 'Chapter created successfully' }
+		}),
 
 	editChapterOrder: instructorProcedure
 		.input(editCourseChapterOrderSchema)
@@ -437,9 +390,12 @@ export const courseRouter = createTRPCRouter({
 
 			const totalChapters = course.chapters.length
 			const completedChapters = course.chapters.filter(
-				(chapter) => chapter.chapterProgress.length > 0 && chapter.chapterProgress[0]?.isCompleted
+				(chapter) =>
+					chapter.chapterProgress.length > 0 &&
+					chapter.chapterProgress[0]?.isCompleted
 			).length
-			const overallProgress = totalChapters > 0 ? (completedChapters / totalChapters) * 100 : 0
+			const overallProgress =
+				totalChapters > 0 ? (completedChapters / totalChapters) * 100 : 0
 
 			return {
 				course: {

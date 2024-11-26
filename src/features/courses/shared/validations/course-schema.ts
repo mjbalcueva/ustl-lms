@@ -67,6 +67,13 @@ export type EditCourseDescriptionSchema = z.infer<
 	typeof editCourseDescriptionSchema
 >
 
+// Edit Course Image Schema
+export const editCourseImageSchema = z.object({
+	courseId: z.string().min(1, 'Course ID is required'),
+	imageUrl: z.string().nullable()
+})
+export type EditCourseImageSchema = z.infer<typeof editCourseImageSchema>
+
 // Edit Course Token Schema
 export const editCourseTokenSchema = z.object({
 	courseId: z.string().min(1, 'Course ID is required'),

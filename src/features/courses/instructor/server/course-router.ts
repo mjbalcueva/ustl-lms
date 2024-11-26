@@ -11,6 +11,7 @@ import {
 	deleteCourseSchema,
 	editCourseCodeSchema,
 	editCourseDescriptionSchema,
+	editCourseImageSchema,
 	editCourseTitleSchema,
 	editCourseTokenSchema,
 	editStatusSchema,
@@ -167,6 +168,27 @@ export const courseRouter = createTRPCRouter({
 			})
 
 			return { message: 'Course description updated successfully', course }
+		}),
+
+	// Edit Course Image
+	editImage: instructorProcedure
+		.input(editCourseImageSchema)
+		.mutation(async ({ ctx, input: { courseId, imageUrl } }) => {
+			const oldImageKey = (
+				await ctx.db.course.findUnique({
+					where: { courseId },
+					select: { imageUrl: true }
+				})
+			)?.imageUrl?.split('/f/')[1]
+
+			if (oldImageKey) await utapi.deleteFiles(oldImageKey)
+
+			const course = await ctx.db.course.update({
+				where: { courseId },
+				data: { imageUrl }
+			})
+
+			return { message: 'Course image updated successfully', course }
 		}),
 
 	// Edit Course Token

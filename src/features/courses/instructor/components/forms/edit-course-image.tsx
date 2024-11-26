@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { toast } from 'sonner'
 
-import { api } from '@/services/trpc/react'
+import { api, type RouterOutputs } from '@/services/trpc/react'
 
 import {
 	Card,
@@ -18,15 +18,19 @@ import { Button } from '@/core/components/ui/button'
 import { FileUpload } from '@/core/components/ui/file-upload'
 import { Add, Edit, Image as ImageIcon } from '@/core/lib/icons'
 
-import { type EditCourseImageSchema } from '@/features/courses/validations/course-image-schema'
-
-export const EditCourseImageForm = ({ id, imageUrl }: EditCourseImageSchema) => {
+export const EditCourseImageForm = ({
+	courseId,
+	imageUrl
+}: {
+	courseId: RouterOutputs['instructor']['course']['findOneCourse']['course']['courseId']
+	imageUrl: RouterOutputs['instructor']['course']['findOneCourse']['course']['imageUrl']
+}) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
 	const toggleEdit = () => setIsEditing((current) => !current)
 
-	const { mutate } = api.course.editImage.useMutation({
+	const { mutate } = api.instructor.course.editImage.useMutation({
 		onSuccess: async (data) => {
 			toggleEdit()
 			router.refresh()
@@ -49,7 +53,7 @@ export const EditCourseImageForm = ({ id, imageUrl }: EditCourseImageSchema) => 
 				{isEditing && (
 					<FileUpload
 						endpoint="imageUpload"
-						onChange={(url) => mutate({ id: id, imageUrl: url ?? '' })}
+						onChange={(url) => mutate({ courseId, imageUrl: url ?? '' })}
 					/>
 				)}
 
