@@ -14,6 +14,7 @@ import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
 import { CourseCount } from '@/features/courses/instructor/components/course-count'
 import { CourseStats } from '@/features/courses/instructor/components/course-stats'
+import { DataTable } from '@/features/courses/instructor/components/data-table/data-table'
 import { AddCourseForm } from '@/features/courses/instructor/components/forms/add-course-form'
 
 export default async function Page() {
@@ -51,7 +52,9 @@ export default async function Page() {
 					<CourseStats stats={data.stats} />
 				</PageSection>
 
-				<PageSection>{/* <DataTable data={courses} /> */}</PageSection>
+				<PageSection>
+					<DataTable data={data.courses} />
+				</PageSection>
 			</PageContent>
 		</>
 	)

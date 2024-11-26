@@ -17,7 +17,9 @@ type DataTableViewOptionsProps<TData> = {
 	table: Table<TData>
 }
 
-export function DataTableViewOptions<TData>({ table }: DataTableViewOptionsProps<TData>) {
+export function DataTableViewOptions<TData>({
+	table
+}: DataTableViewOptionsProps<TData>) {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
@@ -35,7 +37,10 @@ export function DataTableViewOptions<TData>({ table }: DataTableViewOptionsProps
 				<DropdownMenuSeparator />
 				{table
 					.getAllColumns()
-					.filter((column) => typeof column.accessorFn !== 'undefined' && column.getCanHide())
+					.filter(
+						(column) =>
+							typeof column.accessorFn !== 'undefined' && column.getCanHide()
+					)
 					.map((column) => {
 						const labelMap: Record<string, string> = {
 							token: 'Invite Token',

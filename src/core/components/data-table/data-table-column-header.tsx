@@ -8,13 +8,20 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger
 } from '@/core/components/ui/dropdown-menu'
-import { ArrowDown, ArrowReset, ArrowUp, ChevronsUpDown, EyeNone } from '@/core/lib/icons'
+import {
+	ArrowDown,
+	ArrowReset,
+	ArrowUp,
+	ChevronsUpDown,
+	EyeNone
+} from '@/core/lib/icons'
 import { cn } from '@/core/lib/utils/cn'
 
-type DataTableColumnHeaderProps<TData, TValue> = React.HTMLAttributes<HTMLDivElement> & {
-	column: Column<TData, TValue>
-	title: string
-}
+type DataTableColumnHeaderProps<TData, TValue> =
+	React.HTMLAttributes<HTMLDivElement> & {
+		column: Column<TData, TValue>
+		title: string
+	}
 
 export const DataTableColumnHeader = <TData, TValue>({
 	column,
@@ -47,7 +54,10 @@ export const DataTableColumnHeader = <TData, TValue>({
 						) : column.getIsSorted() === 'asc' ? (
 							<ArrowUp aria-hidden="true" />
 						) : (
-							<ChevronsUpDown className="text-muted-foreground/70" aria-hidden="true" />
+							<ChevronsUpDown
+								className="text-muted-foreground/70"
+								aria-hidden="true"
+							/>
 						)}
 					</Button>
 				</DropdownMenuTrigger>
@@ -58,18 +68,27 @@ export const DataTableColumnHeader = <TData, TValue>({
 								aria-label="Sort ascending"
 								onClick={() => column.toggleSorting(false)}
 							>
-								<ArrowUp className="mr-2 size-3.5 text-muted-foreground/70" aria-hidden="true" />
+								<ArrowUp
+									className="mr-2 size-3.5 text-muted-foreground/70"
+									aria-hidden="true"
+								/>
 								Asc
 							</DropdownMenuItem>
 							<DropdownMenuItem
 								aria-label="Sort descending"
 								onClick={() => column.toggleSorting(true)}
 							>
-								<ArrowDown className="mr-2 size-3.5 text-muted-foreground/70" aria-hidden="true" />
+								<ArrowDown
+									className="mr-2 size-3.5 text-muted-foreground/70"
+									aria-hidden="true"
+								/>
 								Desc
 							</DropdownMenuItem>
 							{column.getIsSorted() && (
-								<DropdownMenuItem aria-label="Reset sorting" onClick={() => column.clearSorting()}>
+								<DropdownMenuItem
+									aria-label="Reset sorting"
+									onClick={() => column.clearSorting()}
+								>
 									<ArrowReset
 										className="mr-2 size-3.5 text-muted-foreground/70"
 										aria-hidden="true"
@@ -79,13 +98,18 @@ export const DataTableColumnHeader = <TData, TValue>({
 							)}
 						</>
 					)}
-					{column.getCanSort() && column.getCanHide() && <DropdownMenuSeparator />}
+					{column.getCanSort() && column.getCanHide() && (
+						<DropdownMenuSeparator />
+					)}
 					{column.getCanHide() && (
 						<DropdownMenuItem
 							aria-label="Hide column"
 							onClick={() => column.toggleVisibility(false)}
 						>
-							<EyeNone className="mr-2 size-3.5 text-muted-foreground/70" aria-hidden="true" />
+							<EyeNone
+								className="mr-2 size-3.5 text-muted-foreground/70"
+								aria-hidden="true"
+							/>
 							Hide
 						</DropdownMenuItem>
 					)}

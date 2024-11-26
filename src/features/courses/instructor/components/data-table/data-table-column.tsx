@@ -7,6 +7,7 @@ import { type ColumnDef } from '@tanstack/react-table'
 import { toast } from 'sonner'
 
 import { ConfirmModal } from '@/core/components/confirm-modal'
+import { DataTableColumnHeader } from '@/core/components/data-table/data-table-column-header'
 import { Badge } from '@/core/components/ui/badge'
 import { Button } from '@/core/components/ui/button'
 import {
@@ -35,8 +36,6 @@ import { capitalize } from '@/core/lib/utils/capitalize'
 import { formatDate } from '@/core/lib/utils/format-date'
 import { getBaseUrl } from '@/core/lib/utils/get-base-url'
 
-import { DataTableColumnHeader } from '@/features/courses/components/data-table/data-table-column-header'
-
 export const useColumns = (
 	editStatus: (id: string, status: Status) => Promise<void>,
 	deleteCourse: (id: string) => Promise<void>
@@ -44,7 +43,9 @@ export const useColumns = (
 	return [
 		{
 			accessorKey: 'code',
-			header: ({ column }) => <DataTableColumnHeader column={column} title="Code" />,
+			header: ({ column }) => (
+				<DataTableColumnHeader column={column} title="Code" />
+			),
 			cell: ({ row }) => <Badge variant="outline">{row.original.code}</Badge>,
 			enableSorting: false,
 			enableHiding: false
@@ -52,16 +53,24 @@ export const useColumns = (
 		{
 			accessorKey: 'title',
 			header: ({ column }) => (
-				<DataTableColumnHeader column={column} title="Title" className="min-w-40" />
+				<DataTableColumnHeader
+					column={column}
+					title="Title"
+					className="min-w-40"
+				/>
 			)
 		},
 		{
 			accessorKey: 'token',
-			header: ({ column }) => <DataTableColumnHeader column={column} title="Invite Token" />
+			header: ({ column }) => (
+				<DataTableColumnHeader column={column} title="Invite Token" />
+			)
 		},
 		{
 			accessorKey: 'status',
-			header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
+			header: ({ column }) => (
+				<DataTableColumnHeader column={column} title="Status" />
+			),
 			cell: ({ row }) => {
 				switch (row.original.status) {
 					case 'PUBLISHED':
@@ -72,16 +81,21 @@ export const useColumns = (
 						return <Badge variant="secondary">Draft</Badge>
 				}
 			},
-			filterFn: (row, id, value) => Array.isArray(value) && value.includes(row.getValue(id))
+			filterFn: (row, id, value) =>
+				Array.isArray(value) && value.includes(row.getValue(id))
 		},
 		{
 			accessorKey: 'createdAt',
-			header: ({ column }) => <DataTableColumnHeader column={column} title="Created on" />,
+			header: ({ column }) => (
+				<DataTableColumnHeader column={column} title="Created on" />
+			),
 			cell: ({ cell }) => formatDate(cell.getValue() as Date)
 		},
 		{
 			accessorKey: 'updatedAt',
-			header: ({ column }) => <DataTableColumnHeader column={column} title="Last updated" />,
+			header: ({ column }) => (
+				<DataTableColumnHeader column={column} title="Last updated" />
+			),
 			cell: ({ cell }) => formatDate(cell.getValue() as Date)
 		},
 		{
@@ -98,7 +112,7 @@ export const useColumns = (
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align="end" className="w-40">
-						<Link href={`/instructor/courses/${row.original.id}`}>
+						<Link href={`/instructor/courses/${row.original.courseId}`}>
 							<DropdownMenuItem>
 								<Edit className="mr-2 size-4" />
 								Edit
@@ -125,7 +139,9 @@ export const useColumns = (
 							<DropdownMenuSubContent className="w-40" sideOffset={8}>
 								<DropdownMenuRadioGroup
 									value={row.original.status}
-									onValueChange={(value) => editStatus(row.original.id, value as Status)}
+									onValueChange={(value) =>
+										editStatus(row.original.courseId, value as Status)
+									}
 								>
 									{Object.values(Status).map((status) => {
 										const IconMap = {
@@ -150,7 +166,7 @@ export const useColumns = (
 						<ConfirmModal
 							title="Are you sure you want to delete this course?"
 							description="This action cannot be undone. This will permanently delete your course and remove your data from our servers."
-							onConfirm={() => deleteCourse(row.original.id)}
+							onConfirm={() => deleteCourse(row.original.courseId)}
 							actionLabel="Delete"
 							variant="destructive"
 						>

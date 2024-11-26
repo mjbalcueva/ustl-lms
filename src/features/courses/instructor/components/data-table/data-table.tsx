@@ -18,6 +18,8 @@ import { toast } from 'sonner'
 
 import { api } from '@/services/trpc/react'
 
+import { DataTablePagination } from '@/core/components/data-table/data-table-pagination'
+import { DataTableToolbar } from '@/core/components/data-table/data-table-toolbar'
 import { ScrollArea, ScrollBar } from '@/core/components/ui/scroll-area'
 import {
 	Table,
@@ -29,42 +31,47 @@ import {
 } from '@/core/components/ui/table'
 import { type DataTableFilterField } from '@/core/types/data-table'
 
-import { useColumns } from '@/features/courses/components/data-table/data-table-column'
-import { DataTablePagination } from '@/features/courses/components/data-table/data-table-pagination'
-import { DataTableToolbar } from '@/features/courses/components/data-table/data-table-toolbar'
+import { useColumns } from '@/features/courses/instructor/components/data-table/data-table-column'
 
 type DataTableProps<TData> = {
 	data: TData[]
 }
 
-export const DataTable = <TData extends Course>({ data }: DataTableProps<TData>) => {
+export const DataTable = <TData extends Course>({
+	data
+}: DataTableProps<TData>) => {
 	const router = useRouter()
 
-	const { mutateAsync: editStatus } = api.course.editStatus.useMutation({
-		onSuccess: (data) => {
-			toast.success(data.message)
-			router.refresh()
-		}
-	})
+	const { mutateAsync: editStatus } =
+		api.instructor.course.editStatus.useMutation({
+			onSuccess: (data) => {
+				toast.success(data.message)
+				router.refresh()
+			}
+		})
 
-	const { mutateAsync: deleteCourse } = api.course.deleteCourse.useMutation({
-		onSuccess: (data) => {
-			toast.success(data.message)
-			router.refresh()
-		}
-	})
+	const { mutateAsync: deleteCourse } =
+		api.instructor.course.deleteCourse.useMutation({
+			onSuccess: (data) => {
+				toast.success(data.message)
+				router.refresh()
+			}
+		})
 
 	const columns = useColumns(
-		async (id: string, status: Status) => {
-			await editStatus({ id, status })
+		async (courseId: string, status: Status) => {
+			await editStatus({ courseId, status })
 		},
-		async (id: string) => {
-			await deleteCourse({ id })
+		async (courseId: string) => {
+			await deleteCourse({ courseId })
 		}
 	)
 
 	const [sorting, setSorting] = React.useState<SortingState>([])
-	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
+	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+		[]
+	)
+	const [globalFilter, setGlobalFilter] = React.useState('')
 
 	const table = useReactTable({
 		data,
@@ -74,10 +81,25 @@ export const DataTable = <TData extends Course>({ data }: DataTableProps<TData>)
 		getPaginationRowModel: getPaginationRowModel(),
 		getSortedRowModel: getSortedRowModel(),
 		onColumnFiltersChange: setColumnFilters,
+		onGlobalFilterChange: setGlobalFilter,
 		onSortingChange: setSorting,
+		globalFilterFn: ({ original }, _, value: string) => {
+			const searchValue = value.toLowerCase()
+			const searchableFields = {
+				code: original.code,
+				title: original.title,
+				token: original.token,
+				status: original.status.toLowerCase()
+			}
+
+			return Object.values(searchableFields)
+				.filter(Boolean)
+				.some((value) => value?.toString().toLowerCase().includes(searchValue))
+		},
 		state: {
 			columnFilters,
-			sorting
+			sorting,
+			globalFilter
 		},
 		initialState: {
 			columnFilters,
@@ -89,11 +111,6 @@ export const DataTable = <TData extends Course>({ data }: DataTableProps<TData>)
 	})
 
 	const filterFields: DataTableFilterField<TData>[] = [
-		{
-			label: 'Title',
-			value: 'title',
-			placeholder: 'Filter titles...'
-		},
 		{
 			label: 'Status',
 			value: 'status',
@@ -107,7 +124,12 @@ export const DataTable = <TData extends Course>({ data }: DataTableProps<TData>)
 
 	return (
 		<div className="space-y-2.5 pb-24">
-			<DataTableToolbar table={table} filterFields={filterFields} />
+			<DataTableToolbar
+				table={table}
+				filterFields={filterFields}
+				globalFilter={globalFilter}
+				setGlobalFilter={setGlobalFilter}
+			/>
 			<ScrollArea className="rounded-xl border shadow-sm">
 				<Table>
 					<TableHeader>
@@ -118,7 +140,10 @@ export const DataTable = <TData extends Course>({ data }: DataTableProps<TData>)
 										<TableHead key={header.id} className="bg-card">
 											{header.isPlaceholder
 												? null
-												: flexRender(header.column.columnDef.header, header.getContext())}
+												: flexRender(
+														header.column.columnDef.header,
+														header.getContext()
+													)}
 										</TableHead>
 									)
 								})}
@@ -135,14 +160,20 @@ export const DataTable = <TData extends Course>({ data }: DataTableProps<TData>)
 								>
 									{row.getVisibleCells().map((cell) => (
 										<TableCell key={cell.id} className="py-2.5">
-											{flexRender(cell.column.columnDef.cell, cell.getContext())}
+											{flexRender(
+												cell.column.columnDef.cell,
+												cell.getContext()
+											)}
 										</TableCell>
 									))}
 								</TableRow>
 							))
 						) : (
 							<TableRow>
-								<TableCell colSpan={columns.length} className="h-24 !bg-card text-center">
+								<TableCell
+									colSpan={columns.length}
+									className="h-24 !bg-card text-center"
+								>
 									No results.
 								</TableCell>
 							</TableRow>

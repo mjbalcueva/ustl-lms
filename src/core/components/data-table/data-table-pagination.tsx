@@ -8,7 +8,12 @@ import {
 	SelectTrigger,
 	SelectValue
 } from '@/core/components/ui/select'
-import { ChevronLeft, ChevronLeftPipe, ChevronRight, ChevronRightPipe } from '@/core/lib/icons'
+import {
+	ChevronLeft,
+	ChevronLeftPipe,
+	ChevronRight,
+	ChevronRightPipe
+} from '@/core/lib/icons'
 
 type DataTablePaginationProps<TData> = {
 	table: Table<TData>
