@@ -15,6 +15,13 @@ type AiChatInputProps = {
 export const AiChatInput = ({ input, handleInputChange, handleSubmit }: AiChatInputProps) => {
 	const textareaRef = useRef<HTMLTextAreaElement>(null)
 
+	const resetHeight = () => {
+		const textarea = textareaRef.current
+		if (!textarea) return
+		textarea.style.height = 'auto'
+		textarea.style.height = '40px'
+	}
+
 	const adjustHeight = () => {
 		const textarea = textareaRef.current
 		if (!textarea) return
@@ -36,12 +43,21 @@ export const AiChatInput = ({ input, handleInputChange, handleSubmit }: AiChatIn
 		if (e.key === 'Enter' && !e.shiftKey) {
 			e.preventDefault()
 			const form = e.currentTarget.form
-			if (form) handleSubmit(new Event('submit') as unknown as FormEvent<HTMLFormElement>)
+			if (form) {
+				handleSubmit(new Event('submit') as unknown as FormEvent<HTMLFormElement>)
+				resetHeight()
+			}
 		}
 	}
 
 	return (
-		<form onSubmit={handleSubmit} className="flex w-full items-end gap-2.5">
+		<form
+			onSubmit={(e) => {
+				handleSubmit(e)
+				resetHeight()
+			}}
+			className="flex w-full items-end gap-2.5"
+		>
 			<Textarea
 				ref={textareaRef}
 				value={input}

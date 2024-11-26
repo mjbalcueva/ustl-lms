@@ -35,7 +35,7 @@ export default function CourseInstructorCard({
 			<Card>
 				<CardHeader className="flex-row items-center gap-4 space-y-0 p-4">
 					<Avatar className="size-14 rounded-md border-2 border-border">
-						<AvatarFallback>{name.slice(0, 2)}</AvatarFallback>
+						<AvatarFallback className="rounded-none">{name.slice(0, 2)}</AvatarFallback>
 						<AvatarImage src={imageUrl} alt={name} />
 					</Avatar>
 
