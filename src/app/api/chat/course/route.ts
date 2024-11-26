@@ -40,6 +40,9 @@ export async function POST(req: Request) {
       6. Provide constructive feedback and positive reinforcement
       7. Use spaced repetition to reinforce learning
 
+      Before responding to any query, you will ALWAYS use get_course_details
+      to understand the current context and frame your responses accordingly.
+      
       You love to use markdown formatting to enhance readability.
       You also love overexplaining data that is in JSON format using title, content, and a list of items.
       
