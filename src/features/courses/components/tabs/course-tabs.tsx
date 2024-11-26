@@ -36,7 +36,7 @@ export const CourseTabs = ({ course }: CourseTabsProps) => {
 		initialMessages,
 		body: {
 			userDetails: {
-				name: user?.name ?? 'Alakazam',
+				name: user?.name ?? '',
 				id: user?.id ?? ''
 			},
 			course

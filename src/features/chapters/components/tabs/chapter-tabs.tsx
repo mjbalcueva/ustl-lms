@@ -36,7 +36,7 @@ export const ChapterTabs = ({ chapter }: ChapterTabsProps) => {
 				name: user?.name ?? 'Alakazam',
 				id: user?.id ?? ''
 			},
-			course: chapter
+			chapter
 		}
 	})
 
