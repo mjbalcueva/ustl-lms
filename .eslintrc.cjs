@@ -83,7 +83,8 @@ const config = {
 			{
 				type: 'feature',
 				pattern: [
-					'src/features/*/(?<moduleScope>instructor|shared|student)/**/*'
+					'src/features/*/(?<moduleScope>instructor|shared|student)/**/*',
+					'src/features/*/**/*'
 				],
 				mode: 'full',
 				capture: ['featureName', 'moduleScope']
