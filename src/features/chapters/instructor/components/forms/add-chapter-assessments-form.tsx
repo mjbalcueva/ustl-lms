@@ -27,11 +27,11 @@ import { Input } from '@/core/components/ui/input'
 import { Loader } from '@/core/components/ui/loader'
 import { Add } from '@/core/lib/icons'
 
-import { AssessmentList } from '@/features/chapters/instructor/components/chapter-assessment-list'
 import {
-	addChapterAssessmentSchema,
-	type AddChapterAssessmentSchema
-} from '@/features/chapters/validations/chapter-assessments-schema'
+	addAssessmentSchema,
+	type AddAssessmentSchema
+} from '@/features/assessment/shared/validations/assessments-schema'
+import { AssessmentList } from '@/features/chapters/instructor/components/chapter-assessment-list'
 
 export const AddChapterAssessmentsForm = ({
 	courseId,
@@ -50,8 +50,8 @@ export const AddChapterAssessmentsForm = ({
 		form.reset()
 	}
 
-	const form = useForm<AddChapterAssessmentSchema>({
-		resolver: zodResolver(addChapterAssessmentSchema),
+	const form = useForm<AddAssessmentSchema>({
+		resolver: zodResolver(addAssessmentSchema),
 		defaultValues: {
 			chapterId,
 			title: ''

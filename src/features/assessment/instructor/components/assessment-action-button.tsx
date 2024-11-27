@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 
-import { api } from '@/services/trpc/react'
+import { api, type RouterOutputs } from '@/services/trpc/react'
 
 import { ConfirmModal } from '@/core/components/confirm-modal'
 import { Button } from '@/core/components/ui/button'
@@ -24,39 +24,37 @@ import {
 import { Switch } from '@/core/components/ui/switch'
 import { Delete, DotsHorizontal, Gear } from '@/core/lib/icons'
 
-type SectionActionsProps = {
-	courseId: string
-	chapterId: string
-	assessmentId: string
-	shuffleQuestions: boolean
-	shuffleOptions: boolean
-}
-
-export const SectionActionButton = ({
-	courseId,
-	chapterId,
+export const AssessmentActionButton = ({
 	assessmentId,
+	chapterId,
+	courseId,
 	shuffleQuestions,
 	shuffleOptions
-}: SectionActionsProps) => {
+}: {
+	assessmentId: RouterOutputs['instructor']['assessment']['findOneAssessment']['assessment']['assessmentId']
+	chapterId: RouterOutputs['instructor']['assessment']['findOneAssessment']['assessment']['chapter']['chapterId']
+	courseId: RouterOutputs['instructor']['assessment']['findOneAssessment']['assessment']['chapter']['course']['courseId']
+	shuffleQuestions: RouterOutputs['instructor']['assessment']['findOneAssessment']['assessment']['shuffleQuestions']
+	shuffleOptions: RouterOutputs['instructor']['assessment']['findOneAssessment']['assessment']['shuffleOptions']
+}) => {
 	const router = useRouter()
 
 	const { mutate: editShuffleQuestions, isPending: isEditingShuffleQuestions } =
-		api.question.editShuffleQuestions.useMutation({
+		api.instructor.assessment.editShuffleQuestions.useMutation({
 			onSuccess: () => {
 				router.refresh()
 			}
 		})
 
 	const { mutate: editShuffleOptions, isPending: isEditingShuffleOptions } =
-		api.question.editShuffleOptions.useMutation({
+		api.instructor.assessment.editShuffleOptions.useMutation({
 			onSuccess: () => {
 				router.refresh()
 			}
 		})
 
 	const { mutate: deleteAssessment, isPending: isDeletingAssessment } =
-		api.question.deleteAssessment.useMutation({
+		api.instructor.assessment.deleteAssessment.useMutation({
 			onSuccess: () => {
 				router.push(`/instructor/courses/${courseId}/assessment/${chapterId}`)
 				router.refresh()
@@ -71,7 +69,11 @@ export const SectionActionButton = ({
 					variant="ghost"
 					size="md"
 					className="size-9 rounded-md"
-					disabled={isEditingShuffleQuestions || isEditingShuffleOptions || isDeletingAssessment}
+					disabled={
+						isEditingShuffleQuestions ||
+						isEditingShuffleOptions ||
+						isDeletingAssessment
+					}
 				>
 					<DotsHorizontal aria-hidden="true" />
 				</Button>
@@ -110,7 +112,6 @@ export const SectionActionButton = ({
 									checked={shuffleQuestions}
 									onCheckedChange={(checked: boolean) => {
 										editShuffleQuestions({
-											chapterId,
 											assessmentId,
 											shuffleQuestions: checked
 										})
@@ -131,7 +132,6 @@ export const SectionActionButton = ({
 									checked={shuffleOptions}
 									onCheckedChange={(checked: boolean) => {
 										editShuffleOptions({
-											chapterId,
 											assessmentId,
 											shuffleOptions: checked
 										})
@@ -149,7 +149,10 @@ export const SectionActionButton = ({
 					actionLabel="Delete"
 					variant="destructive"
 				>
-					<DropdownMenuItem onSelect={(e) => e.preventDefault()} disabled={isDeletingAssessment}>
+					<DropdownMenuItem
+						onSelect={(e) => e.preventDefault()}
+						disabled={isDeletingAssessment}
+					>
 						<Delete className="mr-2 size-4 text-destructive" />
 						Delete
 					</DropdownMenuItem>

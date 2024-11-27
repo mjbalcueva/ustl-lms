@@ -19,6 +19,8 @@ import { Separator } from '@/core/components/ui/separator'
 import { Assessment, CourseSingle, Instructor } from '@/core/lib/icons'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
+import { AssessmentActionButton } from '@/features/assessment/instructor/components/assessment-action-button'
+
 export default async function Page({
 	params: { courseId, chapterId, assessmentId }
 }: {
@@ -31,8 +33,10 @@ export default async function Page({
 		)
 	}
 
-	// const { assessment } = await api.question.findAssessment({ chapterId, assessmentId })
-	// if (!assessment) return <NotFound item="assessment" />
+	const { assessment } = await api.instructor.assessment.findOneAssessment({
+		assessmentId
+	})
+	if (!assessment) return <NotFound item="assessment" />
 
 	// const { chapters } = await api.question.findOtherChapters({ courseId })
 
@@ -41,16 +45,16 @@ export default async function Page({
 		{ label: 'Courses', href: '/instructor/courses' },
 		{
 			icon: CourseSingle,
-			// label: assessment.chapter.course.title,
+			label: assessment.chapter.course.title,
 			href: `/instructor/courses/${courseId}`
 		},
 		{
 			icon: Assessment,
-			// label: assessment.chapter.title,
+			label: assessment.chapter.title,
 			href: `/instructor/courses/${courseId}/assessment/${chapterId}`
 		},
 		{
-			// label: assessment.title
+			label: assessment.title
 		}
 	]
 
@@ -69,13 +73,13 @@ export default async function Page({
 						Configure questions, points and settings
 					</PageDescription>
 				</div>
-				{/* <SectionActionButton
-					courseId={courseId}
-					chapterId={chapterId}
+				<AssessmentActionButton
 					assessmentId={assessmentId}
+					chapterId={chapterId}
+					courseId={courseId}
 					shuffleQuestions={assessment.shuffleQuestions}
 					shuffleOptions={assessment.shuffleOptions}
-				/> */}
+				/>
 			</PageHeader>
 
 			<PageContent className="mb-24 space-y-6 px-2.5 sm:px-4 md:mb-12 md:flex md:flex-wrap md:gap-6 md:space-y-0 md:px-6">
