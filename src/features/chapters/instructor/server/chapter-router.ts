@@ -7,10 +7,12 @@ import { utapi } from '@/services/uploadthing/utapi'
 
 import {
 	deleteChapterSchema,
+	deleteChapterVideoSchema,
 	editChapterContentSchema,
 	editChapterStatusSchema,
 	editChapterTitleSchema,
 	editChapterTypeSchema,
+	editChapterVideoSchema,
 	findOneChapterSchema
 } from '@/features/chapters/shared/validations/chapter-schema'
 
@@ -19,6 +21,7 @@ export const chapterRouter = createTRPCRouter({
 	// CREATE
 	// ---------------------------------------------------------------------------
 	//
+
 	// ---------------------------------------------------------------------------
 	// READ
 	// ---------------------------------------------------------------------------
@@ -35,6 +38,7 @@ export const chapterRouter = createTRPCRouter({
 				where: { chapterId, course: { instructorId } },
 				include: {
 					course: { select: { title: true } },
+					muxData: true,
 					attachments: { orderBy: { createdAt: 'desc' } }
 				}
 			})
@@ -109,6 +113,55 @@ export const chapterRouter = createTRPCRouter({
 			return { message: 'Chapter status updated successfully', updatedChapter }
 		}),
 
+	// Edit Chapter Video
+	editVideo: instructorProcedure
+		.input(editChapterVideoSchema)
+		.mutation(async ({ ctx, input }) => {
+			const { chapterId, videoUrl } = input
+			const instructorId = ctx.session.user.id
+
+			// Delete old video file if exists
+			const chapter = await ctx.db.chapter.findUnique({
+				where: { chapterId, course: { instructorId } },
+				select: { videoUrl: true }
+			})
+			const oldVideoKey = chapter?.videoUrl?.split('/f/')[1]
+			if (oldVideoKey) await utapi.deleteFiles(oldVideoKey)
+
+			// Delete old Mux asset if exists
+			const existingMuxData = await ctx.db.chapterMuxData.findFirst({
+				where: { chapterId }
+			})
+			if (existingMuxData) {
+				await muxVideo.assets.delete(existingMuxData.assetId)
+				await ctx.db.chapterMuxData.delete({
+					where: { muxId: existingMuxData.muxId }
+				})
+			}
+
+			// Create new Mux asset and update chapter
+			const asset = await muxVideo.assets.create({
+				input: [{ url: videoUrl }],
+				playback_policy: ['public']
+			})
+
+			const [updatedChapter] = await Promise.all([
+				ctx.db.chapter.update({
+					where: { chapterId, course: { instructorId } },
+					data: { videoUrl }
+				}),
+				ctx.db.chapterMuxData.create({
+					data: {
+						chapterId,
+						assetId: asset.id,
+						playbackId: asset.playback_ids?.[0]?.id ?? ''
+					}
+				})
+			])
+
+			return { message: 'Chapter video updated successfully', updatedChapter }
+		}),
+
 	// ---------------------------------------------------------------------------
 	// DELETE
 	// ---------------------------------------------------------------------------
@@ -153,5 +206,33 @@ export const chapterRouter = createTRPCRouter({
 			await ctx.db.chapter.delete({ where: { chapterId } })
 
 			return { message: 'Chapter deleted successfully' }
+		}),
+
+	// Delete Chapter Video
+	deleteVideo: instructorProcedure
+		.input(deleteChapterVideoSchema)
+		.mutation(async ({ ctx, input }) => {
+			const { chapterId } = input
+			const instructorId = ctx.session.user.id
+
+			const chapter = await ctx.db.chapter.findUnique({
+				where: { chapterId, course: { instructorId } },
+				include: { muxData: true }
+			})
+			if (!chapter) throw new TRPCClientError('Chapter not found')
+
+			if (chapter.muxData) {
+				await muxVideo.assets.delete(chapter.muxData.assetId)
+				await ctx.db.chapterMuxData.delete({
+					where: { muxId: chapter.muxData.muxId }
+				})
+			}
+
+			await ctx.db.chapter.update({
+				where: { chapterId },
+				data: { videoUrl: null }
+			})
+
+			return { message: 'Chapter video deleted successfully' }
 		})
 })

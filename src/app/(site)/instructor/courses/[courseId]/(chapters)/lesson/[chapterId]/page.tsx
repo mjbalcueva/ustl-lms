@@ -25,8 +25,7 @@ import { ChapterActions } from '@/features/chapters/instructor/components/chapte
 import { AddChapterAttachmentsForm } from '@/features/chapters/instructor/components/forms/add-chapter-attachments-form'
 import { EditChapterContentForm } from '@/features/chapters/instructor/components/forms/edit-chapter-content-form'
 import { EditChapterTitleForm } from '@/features/chapters/instructor/components/forms/edit-chapter-title-form'
-
-// import { EditChapterVideoForm } from '@/features/chapters/components/forms/edit-chapter-video-form'
+import { EditChapterVideoForm } from '@/features/chapters/instructor/components/forms/edit-chapter-video-form'
 
 export default async function Page({
 	params: { courseId, chapterId }
@@ -130,11 +129,10 @@ export default async function Page({
 
 				<PageSection columnMode>
 					<FoldableBlock title="Lecture video" icon={TbVideo}>
-						{/* <EditChapterVideoForm
-							id={chapter.id}
-							courseId={chapter.course.id}
-							initialData={chapter}
-						/> */}
+						<EditChapterVideoForm
+							chapterId={chapter.chapterId}
+							muxData={chapter.muxData}
+						/>
 					</FoldableBlock>
 
 					<FoldableBlock title="Student Feedback" icon={TbMessage}>

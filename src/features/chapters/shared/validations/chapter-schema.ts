@@ -53,6 +53,13 @@ export const editChapterStatusSchema = z.object({
 })
 export type EditChapterStatusSchema = z.infer<typeof editChapterStatusSchema>
 
+// Edit Chapter Video Schema
+export const editChapterVideoSchema = z.object({
+	chapterId: z.string().min(1, 'Chapter ID is required'),
+	videoUrl: z.string().min(1, 'Video URL is required')
+})
+export type EditChapterVideoSchema = z.infer<typeof editChapterVideoSchema>
+
 /// -----------------------------------------------------------------------------
 // DELETE
 // -----------------------------------------------------------------------------
@@ -63,3 +70,9 @@ export const deleteChapterSchema = z.object({
 	chapterId: z.string().min(1, 'Chapter ID is required')
 })
 export type DeleteChapterSchema = z.infer<typeof deleteChapterSchema>
+
+// Delete Chapter Video Schema
+export const deleteChapterVideoSchema = z.object({
+	chapterId: z.string().min(1, 'Chapter ID is required')
+})
+export type DeleteChapterVideoSchema = z.infer<typeof deleteChapterVideoSchema>
