@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { api } from '@/services/trpc/react'
+import { api, type RouterOutputs } from '@/services/trpc/react'
 
 import {
 	Card,
@@ -15,22 +15,31 @@ import {
 	CardHeader,
 	CardTitle
 } from '@/core/components/compound-card'
+import { ContentViewer } from '@/core/components/tiptap-editor/content-viewer'
 import { Button } from '@/core/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@/core/components/ui/form'
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormMessage
+} from '@/core/components/ui/form'
+import { Separator } from '@/core/components/ui/separator'
 import { Add, Edit } from '@/core/lib/icons'
 
+import { Editor } from '@/features/assessment/instructor/components/editor/editor'
 import {
 	editAssessmentInstructionSchema,
 	type EditAssessmentInstructionSchema
-} from '@/features/questions/validations/assessment-instruction-schema'
-
-import { TiptapEditor } from '../tiptap-editor/editor'
+} from '@/features/assessment/shared/validations/assessments-schema'
 
 export const EditAssessmentInstructionForm = ({
-	chapterId,
 	assessmentId,
 	instruction
-}: EditAssessmentInstructionSchema) => {
+}: {
+	assessmentId: RouterOutputs['instructor']['assessment']['findOneAssessment']['assessment']['assessmentId']
+	instruction: RouterOutputs['instructor']['assessment']['findOneAssessment']['assessment']['instruction']
+}) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -41,19 +50,23 @@ export const EditAssessmentInstructionForm = ({
 
 	const form = useForm<EditAssessmentInstructionSchema>({
 		resolver: zodResolver(editAssessmentInstructionSchema),
-		defaultValues: { chapterId, assessmentId, instruction }
+		defaultValues: { assessmentId, instruction: instruction ?? '' }
 	})
 	const formDescription = form.getValues('instruction')
 
-	const { mutate, isPending } = api.question.editAssessmentInstruction.useMutation({
-		onSuccess: async (data) => {
-			toggleEdit()
-			form.reset({ chapterId, assessmentId, instruction: data.newInstruction ?? '' })
-			router.refresh()
-			toast.success(data.message)
-		},
-		onError: (error) => toast.error(error.message)
-	})
+	const { mutate, isPending } =
+		api.instructor.assessment.editInstruction.useMutation({
+			onSuccess: async (data) => {
+				toggleEdit()
+				form.reset({
+					assessmentId,
+					instruction: data.newInstruction
+				})
+				router.refresh()
+				toast.success(data.message)
+			},
+			onError: (error) => toast.error(error.message)
+		})
 
 	return (
 		<Card showBorderTrail={isEditing}>
@@ -67,7 +80,14 @@ export const EditAssessmentInstructionForm = ({
 
 			{!isEditing && (
 				<CardContent isEmpty={!formDescription}>
-					{formDescription ? formDescription : 'No instructions added'}
+					{formDescription ? (
+						<>
+							<Separator className="mb-4" />
+							<ContentViewer value={formDescription} />
+						</>
+					) : (
+						'No instructions added'
+					)}
 				</CardContent>
 			)}
 
@@ -81,7 +101,7 @@ export const EditAssessmentInstructionForm = ({
 								render={({ field }) => (
 									<FormItem>
 										<FormControl>
-											<TiptapEditor
+											<Editor
 												placeholder="e.g. 'Read each question carefully and choose the correct answer (type 'T' for True or 'F' for False)'"
 												throttleDelay={2000}
 												output="html"

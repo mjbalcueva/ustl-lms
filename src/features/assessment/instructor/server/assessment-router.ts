@@ -5,6 +5,7 @@ import { createTRPCRouter, instructorProcedure } from '@/server/api/trpc'
 import {
 	addAssessmentSchema,
 	deleteAssessmentSchema,
+	editAssessmentInstructionSchema,
 	editAssessmentOrderSchema,
 	editAssessmentTitleSchema,
 	editShuffleOptionsSchema,
@@ -90,6 +91,23 @@ export const assessmentRouter = createTRPCRouter({
 			return {
 				message: 'Assessment title updated successfully',
 				newTitle: title
+			}
+		}),
+
+	// Edit Assessment Instruction
+	editInstruction: instructorProcedure
+		.input(editAssessmentInstructionSchema)
+		.mutation(async ({ ctx, input }) => {
+			const { assessmentId, instruction } = input
+
+			await ctx.db.chapterAssessment.update({
+				where: { assessmentId },
+				data: { instruction }
+			})
+
+			return {
+				message: 'Assessment instruction updated successfully',
+				newInstruction: instruction
 			}
 		}),
 

@@ -2,18 +2,23 @@
 
 import { useRouter } from 'next/navigation'
 import * as React from 'react'
-import { DragDropContext, Draggable, Droppable, type DropResult } from '@hello-pangea/dnd'
+import {
+	DragDropContext,
+	Draggable,
+	Droppable,
+	type DropResult
+} from '@hello-pangea/dnd'
 import { type Question } from '@prisma/client'
 import { toast } from 'sonner'
 
 import { api } from '@/services/trpc/react'
 
+import { Editor } from '@/features/assessment/instructor/components/editor/editor'
 import { AssessmentQuestionHeader } from '@/features/questions/components/assessment-question-header'
 import { EditAssessmentQuestionForm } from '@/features/questions/components/forms/edit-assessment-question-form'
 import { MultipleChoiceQuestion } from '@/features/questions/components/question-type/multiple-choice-question'
 import { MultipleSelectQuestion } from '@/features/questions/components/question-type/multiple-select-question'
 import { TrueFalseQuestion } from '@/features/questions/components/question-type/true-false-question'
-import { TiptapEditor } from '@/features/questions/components/tiptap-editor/editor'
 import { type QuestionOptions } from '@/features/questions/lib/types'
 
 type QuestionListProps = {
@@ -25,7 +30,9 @@ export const QuestionList = ({ items, onReorder }: QuestionListProps) => {
 	const router = useRouter()
 
 	const [assessments, setAssessments] = React.useState(items)
-	const [editingQuestion, setEditingQuestion] = React.useState<Question | null>(null)
+	const [editingQuestion, setEditingQuestion] = React.useState<Question | null>(
+		null
+	)
 
 	React.useEffect(() => {
 		setAssessments(items)
@@ -40,7 +47,10 @@ export const QuestionList = ({ items, onReorder }: QuestionListProps) => {
 
 		setAssessments(updatedAssessments)
 		onReorder(
-			updatedAssessments.map((assessment, index) => ({ id: assessment.id, position: index }))
+			updatedAssessments.map((assessment, index) => ({
+				id: assessment.id,
+				position: index
+			}))
 		)
 	}
 
@@ -50,11 +60,17 @@ export const QuestionList = ({ items, onReorder }: QuestionListProps) => {
 		switch (assessment.type) {
 			case 'MULTIPLE_CHOICE':
 				return (
-					<MultipleChoiceQuestion options={options.options} answer={options.answer as string} />
+					<MultipleChoiceQuestion
+						options={options.options}
+						answer={options.answer as string}
+					/>
 				)
 			case 'MULTIPLE_SELECT':
 				return (
-					<MultipleSelectQuestion options={options.options} answer={options.answer as string[]} />
+					<MultipleSelectQuestion
+						options={options.options}
+						answer={options.answer as string[]}
+					/>
 				)
 			case 'TRUE_OR_FALSE':
 				return <TrueFalseQuestion answer={options.answer as 'True' | 'False'} />
@@ -75,10 +91,18 @@ export const QuestionList = ({ items, onReorder }: QuestionListProps) => {
 			<DragDropContext onDragEnd={handleDragEnd}>
 				<Droppable droppableId="assessments">
 					{(provided) => (
-						<ol ref={provided.innerRef} className="space-y-2" {...provided.droppableProps}>
+						<ol
+							ref={provided.innerRef}
+							className="space-y-2"
+							{...provided.droppableProps}
+						>
 							{assessments.map((assessment, index) => {
 								return (
-									<Draggable key={assessment.id} draggableId={assessment.id} index={index}>
+									<Draggable
+										key={assessment.id}
+										draggableId={assessment.id}
+										index={index}
+									>
 										{(provided) => (
 											<li
 												ref={provided.innerRef}
@@ -94,7 +118,7 @@ export const QuestionList = ({ items, onReorder }: QuestionListProps) => {
 												/>
 
 												<div className="space-y-1 pb-4 pl-12 pr-4">
-													<TiptapEditor
+													<Editor
 														content={assessment.question}
 														editable={false}
 														injectCSS={true}

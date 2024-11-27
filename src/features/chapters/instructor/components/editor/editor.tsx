@@ -9,14 +9,14 @@ import { cn } from '@/core/lib/utils/cn'
 
 import { EditorToolbar } from '@/features/chapters/instructor/components/editor/editor-toolbar'
 
-export type TiptapEditorProps = Omit<UseTiptapEditorProps, 'onUpdate'> & {
+export type EditorProps = Omit<UseTiptapEditorProps, 'onUpdate'> & {
 	value?: Content
 	onUpdate?: (value: Content) => void
 	className?: string
 	editorContentClassName?: string
 }
 
-export const Editor = React.forwardRef<HTMLDivElement, TiptapEditorProps>(
+export const Editor = React.forwardRef<HTMLDivElement, EditorProps>(
 	(
 		{ value, editable, onUpdate, className, editorContentClassName, ...props },
 		ref
@@ -29,14 +29,6 @@ export const Editor = React.forwardRef<HTMLDivElement, TiptapEditorProps>(
 		})
 
 		if (!editor) return 'Loading...'
-
-		if (!editable)
-			return (
-				<EditorContent
-					editor={editor}
-					className={cn('minimal-tiptap-editor', 'cursor-default')}
-				/>
-			)
 
 		return (
 			<div ref={ref} className={cn('space-y-1.5', className)}>
@@ -55,4 +47,4 @@ export const Editor = React.forwardRef<HTMLDivElement, TiptapEditorProps>(
 	}
 )
 
-Editor.displayName = 'MinimalTiptapEditor'
+Editor.displayName = 'ChapterEditor'

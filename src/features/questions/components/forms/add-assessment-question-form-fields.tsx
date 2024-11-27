@@ -5,7 +5,13 @@ import { type UseFormReturn } from 'react-hook-form'
 
 import { Button } from '@/core/components/ui/button'
 import { Checkbox } from '@/core/components/ui/checkbox'
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/core/components/ui/form'
+import {
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage
+} from '@/core/components/ui/form'
 import { Input } from '@/core/components/ui/input'
 import { InputNumber } from '@/core/components/ui/input-number'
 import { Label } from '@/core/components/ui/label'
@@ -19,7 +25,7 @@ import {
 } from '@/core/components/ui/select'
 import { Delete } from '@/core/lib/icons'
 
-import { TiptapEditor } from '@/features/questions/components/tiptap-editor/editor'
+import { Editor } from '@/features/assessment/instructor/components/editor/editor'
 import { questionTypeWordMap } from '@/features/questions/lib/question-type-word-map'
 import { type AddAssessmentQuestionSchema } from '@/features/questions/validations/assessment-questions-schema'
 
@@ -96,7 +102,7 @@ export const AddAssessmentQuestionFormFields = ({
 					<FormItem>
 						<FormLabel>Question</FormLabel>
 						<FormControl className="text-sm">
-							<TiptapEditor
+							<Editor
 								placeholder="e.g. 'Manila is the capital of France?'"
 								throttleDelay={2000}
 								output="html"
@@ -156,7 +162,11 @@ export const AddAssessmentQuestionFormFields = ({
 						<FormItem className="w-1/3">
 							<FormLabel>Points</FormLabel>
 							<FormControl>
-								<InputNumber className="!bg-card" disabled={isSubmitting} {...field} />
+								<InputNumber
+									className="!bg-card"
+									disabled={isSubmitting}
+									{...field}
+								/>
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -173,99 +183,112 @@ export const AddAssessmentQuestionFormFields = ({
 						<div className="space-y-2">
 							{form.watch('type') === QuestionType.MULTIPLE_CHOICE && (
 								<>
-									{field.value?.options?.map((option: string, index: number) => (
-										<div key={index} className="flex items-center gap-2">
-											<RadioGroup
-												value={field.value?.answer?.toString()}
-												onValueChange={(value) => {
-													field.onChange({
-														...field.value,
-														answer: value
-													})
-												}}
-											>
-												<RadioGroupItem value={option} />
-											</RadioGroup>
-											<FormControl>
-												<Input
-													placeholder={`Option ${index + 1}`}
-													disabled={isSubmitting}
-													value={option}
-													onChange={(e) => handleOptionChange(index, e.target.value, field)}
-													className="!bg-card"
-												/>
-											</FormControl>
-											<Button
-												type="button"
-												variant="ghost"
-												className="size-10 px-3"
-												onClick={() => {
-													const newOptions = [...field.value.options]
-													newOptions.splice(index, 1)
-													field.onChange({
-														...field.value,
-														options: newOptions,
-														answer: field.value.answer === option ? '' : field.value.answer
-													})
-												}}
-											>
-												<Delete />
-											</Button>
-										</div>
-									))}
+									{field.value?.options?.map(
+										(option: string, index: number) => (
+											<div key={index} className="flex items-center gap-2">
+												<RadioGroup
+													value={field.value?.answer?.toString()}
+													onValueChange={(value) => {
+														field.onChange({
+															...field.value,
+															answer: value
+														})
+													}}
+												>
+													<RadioGroupItem value={option} />
+												</RadioGroup>
+												<FormControl>
+													<Input
+														placeholder={`Option ${index + 1}`}
+														disabled={isSubmitting}
+														value={option}
+														onChange={(e) =>
+															handleOptionChange(index, e.target.value, field)
+														}
+														className="!bg-card"
+													/>
+												</FormControl>
+												<Button
+													type="button"
+													variant="ghost"
+													className="size-10 px-3"
+													onClick={() => {
+														const newOptions = [...field.value.options]
+														newOptions.splice(index, 1)
+														field.onChange({
+															...field.value,
+															options: newOptions,
+															answer:
+																field.value.answer === option
+																	? ''
+																	: field.value.answer
+														})
+													}}
+												>
+													<Delete />
+												</Button>
+											</div>
+										)
+									)}
 								</>
 							)}
 
 							{form.watch('type') === QuestionType.MULTIPLE_SELECT && (
 								<>
-									{field.value?.options?.map((option: string, index: number) => (
-										<div key={index} className="flex items-center gap-2">
-											<Checkbox
-												checked={
-													Array.isArray(field.value?.answer) &&
-													field.value.answer.includes(option as 'True' | 'False')
-												}
-												onCheckedChange={(checked: boolean) => {
-													const answers = Array.isArray(field.value.answer)
-														? field.value.answer
-														: []
-													field.onChange({
-														...field.value,
-														answer: checked
-															? [...answers, option]
-															: answers.filter((a) => a !== option)
-													})
-												}}
-											/>
-											<FormControl>
-												<Input
-													placeholder={`Option ${index + 1}`}
-													disabled={isSubmitting}
-													value={option}
-													onChange={(e) => handleOptionChange(index, e.target.value, field)}
-													className="!bg-card"
+									{field.value?.options?.map(
+										(option: string, index: number) => (
+											<div key={index} className="flex items-center gap-2">
+												<Checkbox
+													checked={
+														Array.isArray(field.value?.answer) &&
+														field.value.answer.includes(
+															option as 'True' | 'False'
+														)
+													}
+													onCheckedChange={(checked: boolean) => {
+														const answers = Array.isArray(field.value.answer)
+															? field.value.answer
+															: []
+														field.onChange({
+															...field.value,
+															answer: checked
+																? [...answers, option]
+																: answers.filter((a) => a !== option)
+														})
+													}}
 												/>
-											</FormControl>
-											<Button
-												type="button"
-												variant="ghost"
-												className="size-10 px-3"
-												onClick={() => {
-													const newOptions = [...field.value.options]
-													newOptions.splice(index, 1)
-													field.onChange({
-														...field.value,
-														options: newOptions,
-														answer: Array.isArray(field.value.answer)
-															? field.value.answer.filter((a) => a !== option)
-															: field.value.answer
-													})
-												}}
-											>
-												<Delete />
-											</Button>
-										</div>
-									))}
+												<FormControl>
+													<Input
+														placeholder={`Option ${index + 1}`}
+														disabled={isSubmitting}
+														value={option}
+														onChange={(e) =>
+															handleOptionChange(index, e.target.value, field)
+														}
+														className="!bg-card"
+													/>
+												</FormControl>
+												<Button
+													type="button"
+													variant="ghost"
+													className="size-10 px-3"
+													onClick={() => {
+														const newOptions = [...field.value.options]
+														newOptions.splice(index, 1)
+														field.onChange({
+															...field.value,
+															options: newOptions,
+															answer: Array.isArray(field.value.answer)
+																? field.value.answer.filter((a) => a !== option)
+																: field.value.answer
+														})
+													}}
+												>
+													<Delete />
+												</Button>
+											</div>
+										)
+									)}
 								</>
 							)}
 
@@ -283,7 +306,10 @@ export const AddAssessmentQuestionFormFields = ({
 
 							{form.watch('type') === QuestionType.TRUE_OR_FALSE && (
 								<div className="flex flex-col gap-2">
-									<RadioGroup defaultValue="true" className="flex flex-col gap-2">
+									<RadioGroup
+										defaultValue="true"
+										className="flex flex-col gap-2"
+									>
 										<div className="flex items-center space-x-2">
 											<RadioGroupItem value="true" id="true" />
 											<Label htmlFor="true">True</Label>
