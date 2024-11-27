@@ -20,6 +20,7 @@ import { Assessment, CourseSingle, Instructor } from '@/core/lib/icons'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
 import { AssessmentActionButton } from '@/features/assessment/instructor/components/assessment-action-button'
+import { AssessmentQuestions } from '@/features/assessment/instructor/components/assessment-questions'
 import { EditAssessmentInstructionForm } from '@/features/assessment/instructor/components/forms/edit-assessment-instruction-form'
 import { EditAssessmentTitleForm } from '@/features/assessment/instructor/components/forms/edit-assessment-title-form'
 
@@ -40,7 +41,9 @@ export default async function Page({
 	})
 	if (!assessment) return <NotFound item="assessment" />
 
-	// const { chapters } = await api.question.findOtherChapters({ courseId })
+	const { lessons } = await api.instructor.assessment.findManyLessons({
+		chapterId
+	})
 
 	const crumbs: Breadcrumb = [
 		{ icon: Instructor },
@@ -101,11 +104,11 @@ export default async function Page({
 
 				<PageSection columnMode>
 					<FoldableBlock title="Your questions" icon={TbFlagQuestion}>
-						{/* <AssessmentQuestions
+						<AssessmentQuestions
 							assessmentId={assessmentId}
-							chapters={chapters}
+							lessons={lessons}
 							questions={assessment.questions}
-						/> */}
+						/>
 					</FoldableBlock>
 				</PageSection>
 			</PageContent>

@@ -10,6 +10,7 @@ import {
 	editAssessmentTitleSchema,
 	editShuffleOptionsSchema,
 	editShuffleQuestionsSchema,
+	findManyLessonsSchema,
 	findOneAssessmentSchema
 } from '@/features/assessment/shared/validations/assessments-schema'
 
@@ -53,6 +54,7 @@ export const assessmentRouter = createTRPCRouter({
 			const assessment = await ctx.db.chapterAssessment.findUnique({
 				where: { assessmentId },
 				include: {
+					questions: true,
 					chapter: {
 						select: {
 							chapterId: true,
@@ -70,6 +72,20 @@ export const assessmentRouter = createTRPCRouter({
 			}
 
 			return { assessment }
+		}),
+
+	// Find Many Lessons
+	findManyLessons: instructorProcedure
+		.input(findManyLessonsSchema)
+		.query(async ({ ctx, input }) => {
+			const { chapterId } = input
+
+			const lessons = await ctx.db.chapter.findMany({
+				where: { chapterId, type: 'LESSON' },
+				orderBy: { position: 'asc' }
+			})
+
+			return { lessons }
 		}),
 
 	// ---------------------------------------------------------------------------
