@@ -1,10 +1,13 @@
 import * as React from 'react'
 import { EditorContent, type Content } from '@tiptap/react'
 
-import { useTiptapEditor, type UseTiptapEditorProps } from '@/core/lib/hooks/use-tiptap'
+import {
+	useTiptapEditor,
+	type UseTiptapEditorProps
+} from '@/core/lib/hooks/use-tiptap'
 import { cn } from '@/core/lib/utils/cn'
 
-import { EditorToolbar } from '@/features/chapters/components/tiptap-editor/editor-toolbar'
+import { EditorToolbar } from '@/features/chapters/instructor/components/editor/editor-toolbar'
 
 export type TiptapEditorProps = Omit<UseTiptapEditorProps, 'onUpdate'> & {
 	value?: Content
@@ -14,7 +17,10 @@ export type TiptapEditorProps = Omit<UseTiptapEditorProps, 'onUpdate'> & {
 }
 
 export const TiptapEditor = React.forwardRef<HTMLDivElement, TiptapEditorProps>(
-	({ value, editable, onUpdate, className, editorContentClassName, ...props }, ref) => {
+	(
+		{ value, editable, onUpdate, className, editorContentClassName, ...props },
+		ref
+	) => {
 		const editor = useTiptapEditor({
 			value,
 			editable,
@@ -26,7 +32,10 @@ export const TiptapEditor = React.forwardRef<HTMLDivElement, TiptapEditorProps>(
 
 		if (!editable)
 			return (
-				<EditorContent editor={editor} className={cn('minimal-tiptap-editor', 'cursor-default')} />
+				<EditorContent
+					editor={editor}
+					className={cn('minimal-tiptap-editor', 'cursor-default')}
+				/>
 			)
 
 		return (

@@ -26,7 +26,7 @@ import {
 import { Separator } from '@/core/components/ui/separator'
 import { Add, Edit } from '@/core/lib/icons'
 
-import { TiptapEditor } from '@/features/chapters/components/tiptap-editor/editor'
+import { TiptapEditor } from '@/features/chapters/instructor/components/editor/editor'
 import {
 	editChapterContentSchema,
 	type EditChapterContentSchema
