@@ -32,6 +32,13 @@ export const editChapterTitleSchema = z.object({
 })
 export type EditChapterTitleSchema = z.infer<typeof editChapterTitleSchema>
 
+// Edit Chapter Content Schema
+export const editChapterContentSchema = z.object({
+	chapterId: z.string().min(1, 'Chapter ID is required'),
+	content: z.string().min(1, 'Content is required')
+})
+export type EditChapterContentSchema = z.infer<typeof editChapterContentSchema>
+
 // Edit Chapter Type Schema
 export const editChapterTypeSchema = z.object({
 	chapterId: z.string().min(1, 'Chapter ID is required'),

@@ -25,8 +25,8 @@ import { type Breadcrumb } from '@/core/types/breadcrumbs'
 import { ChapterActions } from '@/features/chapters/components/chapter-action-button'
 import { AddChapterAssessmentsForm } from '@/features/chapters/components/forms/add-chapter-assessments-form'
 import { AddChapterAttachmentsForm } from '@/features/chapters/components/forms/add-chapter-attachments-form'
-import { EditChapterContentForm } from '@/features/chapters/components/forms/edit-chapter-content-form'
 import { EditChapterTitleForm } from '@/features/chapters/components/forms/edit-chapter-title-form'
+import { EditChapterContentForm } from '@/features/chapters/instructor/components/forms/edit-chapter-content-form'
 
 export default async function Page({
 	params
@@ -35,21 +35,33 @@ export default async function Page({
 }) {
 	const { courseId, chapterId } = params
 	const session = await auth()
-	if (session?.user.role !== 'INSTRUCTOR') redirect(`/courses/${courseId}/assessment/${chapterId}`)
+	if (session?.user.role !== 'INSTRUCTOR')
+		redirect(`/courses/${courseId}/assessment/${chapterId}`)
 
 	const { chapter } = await api.chapter.findChapter({ courseId, id: chapterId })
 	if (!chapter) return <NotFound item="chapter" />
 	if (chapter.type !== 'ASSESSMENT') {
-		redirect(`/instructor/courses/${courseId}/${chapter.type.toLowerCase()}/${chapterId}`)
+		redirect(
+			`/instructor/courses/${courseId}/${chapter.type.toLowerCase()}/${chapterId}`
+		)
 	}
 
-	const requiredFields = [chapter.title, chapter.content, chapter.videoUrl, chapter.attachments]
+	const requiredFields = [
+		chapter.title,
+		chapter.content,
+		chapter.videoUrl,
+		chapter.attachments
+	]
 	const completionText = `(${requiredFields.filter(Boolean).length}/${requiredFields.length})`
 
 	const crumbs: Breadcrumb = [
 		{ icon: Instructor },
 		{ label: 'Courses', href: '/instructor/courses' },
-		{ icon: CourseSingle, label: chapter.course.title, href: `/instructor/courses/${courseId}` },
+		{
+			icon: CourseSingle,
+			label: chapter.course.title,
+			href: `/instructor/courses/${courseId}`
+		},
 		{
 			icon: Assessment,
 			label: chapter.title,

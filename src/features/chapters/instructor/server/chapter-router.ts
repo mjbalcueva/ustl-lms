@@ -7,6 +7,7 @@ import { utapi } from '@/services/uploadthing/utapi'
 
 import {
 	deleteChapterSchema,
+	editChapterContentSchema,
 	editChapterStatusSchema,
 	editChapterTitleSchema,
 	editChapterTypeSchema,
@@ -61,6 +62,21 @@ export const chapterRouter = createTRPCRouter({
 			})
 
 			return { message: 'Chapter title updated successfully', updatedChapter }
+		}),
+
+	// Edit Chapter Content
+	editContent: instructorProcedure
+		.input(editChapterContentSchema)
+		.mutation(async ({ ctx, input }) => {
+			const { chapterId, content } = input
+			const instructorId = ctx.session.user.id
+
+			const updatedChapter = await ctx.db.chapter.update({
+				where: { chapterId, course: { instructorId } },
+				data: { content }
+			})
+
+			return { message: 'Chapter content updated successfully', updatedChapter }
 		}),
 
 	// Edit Chapter Type

@@ -23,8 +23,8 @@ import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
 import { ChapterActions } from '@/features/chapters/components/chapter-action-button'
 import { AddChapterAttachmentsForm } from '@/features/chapters/components/forms/add-chapter-attachments-form'
-import { EditChapterContentForm } from '@/features/chapters/components/forms/edit-chapter-content-form'
 import { EditChapterTitleForm } from '@/features/chapters/components/forms/edit-chapter-title-form'
+import { EditChapterContentForm } from '@/features/chapters/instructor/components/forms/edit-chapter-content-form'
 
 export default async function Page({
 	params
@@ -33,21 +33,33 @@ export default async function Page({
 }) {
 	const { courseId, chapterId } = params
 	const session = await auth()
-	if (session?.user.role !== 'INSTRUCTOR') redirect(`/courses/${courseId}/assignment/${chapterId}`)
+	if (session?.user.role !== 'INSTRUCTOR')
+		redirect(`/courses/${courseId}/assignment/${chapterId}`)
 
 	const { chapter } = await api.chapter.findChapter({ courseId, id: chapterId })
 	if (!chapter) return <NotFound item="chapter" />
 	if (chapter.type !== 'ASSIGNMENT') {
-		redirect(`/instructor/courses/${courseId}/${chapter.type.toLowerCase()}/${chapterId}`)
+		redirect(
+			`/instructor/courses/${courseId}/${chapter.type.toLowerCase()}/${chapterId}`
+		)
 	}
 
-	const requiredFields = [chapter.title, chapter.content, chapter.videoUrl, chapter.attachments]
+	const requiredFields = [
+		chapter.title,
+		chapter.content,
+		chapter.videoUrl,
+		chapter.attachments
+	]
 	const completionText = `(${requiredFields.filter(Boolean).length}/${requiredFields.length})`
 
 	const crumbs: Breadcrumb = [
 		{ icon: Instructor },
 		{ label: 'Courses', href: '/instructor/courses' },
-		{ icon: CourseSingle, label: chapter.course.title, href: `/instructor/courses/${courseId}` },
+		{
+			icon: CourseSingle,
+			label: chapter.course.title,
+			href: `/instructor/courses/${courseId}`
+		},
 		{
 			icon: Assignment,
 			label: chapter.title,
@@ -94,7 +106,10 @@ export default async function Page({
 
 			<PageContent className="mb-24 space-y-6 px-2.5 sm:px-4 md:mb-12 md:flex md:flex-wrap md:gap-6 md:space-y-0 md:px-6">
 				<PageSection columnMode>
-					<FoldableBlock title="Customize your assignment" icon={TbClipboardList}>
+					<FoldableBlock
+						title="Customize your assignment"
+						icon={TbClipboardList}
+					>
 						<EditChapterTitleForm
 							id={chapter.id}
 							courseId={chapter.course.id}

@@ -23,7 +23,7 @@ import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
 import { ChapterActions } from '@/features/chapters/instructor/components/chapter-action-button'
 // import { AddChapterAttachmentsForm } from '@/features/chapters/components/forms/add-chapter-attachments-form'
-// import { EditChapterContentForm } from '@/features/chapters/components/forms/edit-chapter-content-form'
+import { EditChapterContentForm } from '@/features/chapters/instructor/components/forms/edit-chapter-content-form'
 import { EditChapterTitleForm } from '@/features/chapters/instructor/components/forms/edit-chapter-title-form'
 
 // import { EditChapterVideoForm } from '@/features/chapters/components/forms/edit-chapter-video-form'
@@ -114,12 +114,10 @@ export default async function Page({
 							chapterId={chapter.chapterId}
 							title={chapter.title}
 						/>
-						{/* 
 						<EditChapterContentForm
-							id={chapter.id}
-							courseId={chapter.course.id}
+							chapterId={chapter.chapterId}
 							content={chapter.content}
-						/> */}
+						/>
 					</FoldableBlock>
 
 					<FoldableBlock title="Learning materials" icon={TbPaperclip}>

@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { api } from '@/services/trpc/react'
+import { api, type RouterOutputs } from '@/services/trpc/react'
 
 import {
 	Card,
@@ -16,7 +16,13 @@ import {
 	CardTitle
 } from '@/core/components/compound-card'
 import { Button } from '@/core/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@/core/components/ui/form'
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormMessage
+} from '@/core/components/ui/form'
 import { Separator } from '@/core/components/ui/separator'
 import { Add, Edit } from '@/core/lib/icons'
 
@@ -24,9 +30,15 @@ import { TiptapEditor } from '@/features/chapters/components/tiptap-editor/edito
 import {
 	editChapterContentSchema,
 	type EditChapterContentSchema
-} from '@/features/chapters/validations/chapter-content-schema'
+} from '@/features/chapters/shared/validations/chapter-schema'
 
-export const EditChapterContentForm = ({ id, courseId, content }: EditChapterContentSchema) => {
+export const EditChapterContentForm = ({
+	chapterId,
+	content
+}: {
+	chapterId: RouterOutputs['instructor']['chapter']['findOneChapter']['chapter']['chapterId']
+	content: RouterOutputs['instructor']['chapter']['findOneChapter']['chapter']['content']
+}) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -37,14 +49,17 @@ export const EditChapterContentForm = ({ id, courseId, content }: EditChapterCon
 
 	const form = useForm<EditChapterContentSchema>({
 		resolver: zodResolver(editChapterContentSchema),
-		defaultValues: { id, courseId, content: content ?? '' }
+		defaultValues: { chapterId, content: content ?? '' }
 	})
 	const formContent = form.getValues('content')
 
-	const { mutate, isPending } = api.chapter.editContent.useMutation({
+	const { mutate, isPending } = api.instructor.chapter.editContent.useMutation({
 		onSuccess: async (data) => {
 			toggleEdit()
-			form.reset({ id, courseId, content: data.newContent ?? '' })
+			form.reset({
+				chapterId,
+				content: data.updatedChapter.content ?? ''
+			})
 			router.refresh()
 			toast.success(data.message)
 		},
