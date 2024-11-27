@@ -22,7 +22,7 @@ import { capitalize } from '@/core/lib/utils/capitalize'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
 import { ChapterActions } from '@/features/chapters/instructor/components/chapter-action-button'
-// import { AddChapterAttachmentsForm } from '@/features/chapters/components/forms/add-chapter-attachments-form'
+import { AddChapterAttachmentsForm } from '@/features/chapters/instructor/components/forms/add-chapter-attachments-form'
 import { EditChapterContentForm } from '@/features/chapters/instructor/components/forms/edit-chapter-content-form'
 import { EditChapterTitleForm } from '@/features/chapters/instructor/components/forms/edit-chapter-title-form'
 
@@ -121,11 +121,10 @@ export default async function Page({
 					</FoldableBlock>
 
 					<FoldableBlock title="Learning materials" icon={TbPaperclip}>
-						{/* <AddChapterAttachmentsForm
-							courseId={chapter.course.id}
-							chapterId={chapter.id}
+						<AddChapterAttachmentsForm
+							chapterId={chapter.chapterId}
 							attachments={chapter.attachments}
-						/> */}
+						/>
 					</FoldableBlock>
 				</PageSection>
 

@@ -2,10 +2,9 @@
 
 import { useRouter } from 'next/navigation'
 import * as React from 'react'
-import { type Attachment } from '@prisma/client'
 import { toast } from 'sonner'
 
-import { api } from '@/services/trpc/react'
+import { api, type RouterOutputs } from '@/services/trpc/react'
 
 import {
 	Card,
@@ -18,32 +17,29 @@ import { Button } from '@/core/components/ui/button'
 import { FileUpload } from '@/core/components/ui/file-upload'
 import { Add } from '@/core/lib/icons'
 
-import { AttachmentList } from '@/features/chapters/components/chapter-attachment-list'
-
-type AddChapterAttachmentProps = {
-	courseId: string
-	chapterId: string
-	attachments: Attachment[]
-}
+import { AttachmentList } from '@/features/chapters/instructor/components/chapter-attachment-list'
 
 export const AddChapterAttachmentsForm = ({
-	courseId,
 	chapterId,
 	attachments
-}: AddChapterAttachmentProps) => {
+}: {
+	chapterId: RouterOutputs['instructor']['chapter']['findOneChapter']['chapter']['chapterId']
+	attachments: RouterOutputs['instructor']['chapter']['findOneChapter']['chapter']['attachments']
+}) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
 	const toggleEdit = () => setIsEditing((current) => !current)
 
-	const { mutate } = api.chapter.addChapterAttachment.useMutation({
-		onSuccess: async (data) => {
-			toggleEdit()
-			router.refresh()
-			toast.success(data.message)
-		},
-		onError: (error) => toast.error(error.message)
-	})
+	const { mutate } =
+		api.instructor.chapterAttachments.addChapterAttachment.useMutation({
+			onSuccess: async (data) => {
+				toggleEdit()
+				router.refresh()
+				toast.success(data.message)
+			},
+			onError: (error) => toast.error(error.message)
+		})
 
 	const hasAttachments = attachments?.length > 0
 
@@ -59,13 +55,14 @@ export const AddChapterAttachmentsForm = ({
 
 			<CardContent isEmpty={!hasAttachments}>
 				{!isEditing && !hasAttachments && 'No resource added'}
-				{!isEditing && hasAttachments && <AttachmentList items={attachments} />}
+				{!isEditing && hasAttachments && (
+					<AttachmentList attachments={attachments} />
+				)}
 				{isEditing && (
 					<FileUpload
 						endpoint="attachmentUpload"
 						onChange={(url, name) =>
 							mutate({
-								courseId,
 								chapterId,
 								url: url ?? '',
 								name: name ?? ''

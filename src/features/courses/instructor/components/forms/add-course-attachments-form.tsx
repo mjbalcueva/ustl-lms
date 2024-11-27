@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { toast } from 'sonner'
 
-import { api, RouterOutputs } from '@/services/trpc/react'
+import { api, type RouterOutputs } from '@/services/trpc/react'
 
 import {
 	Card,
@@ -55,7 +55,9 @@ export const AddCourseAttachmentsForm = ({
 
 			<CardContent isEmpty={!hasAttachments}>
 				{!isEditing && !hasAttachments && 'No resource added'}
-				{!isEditing && hasAttachments && <AttachmentList items={attachments} />}
+				{!isEditing && hasAttachments && (
+					<AttachmentList attachments={attachments} />
+				)}
 				{isEditing && (
 					<FileUpload
 						endpoint="attachmentUpload"

@@ -52,9 +52,10 @@ export const courseRouter = createTRPCRouter({
 		.input(addCourseChapterSchema)
 		.mutation(async ({ ctx, input }) => {
 			const { courseId, title, type } = input
+			const instructorId = ctx.session.user.id
 
 			const lastChapter = await ctx.db.chapter.findFirst({
-				where: { courseId, course: { instructorId: ctx.session.user.id } },
+				where: { courseId, course: { instructorId } },
 				orderBy: { position: 'desc' }
 			})
 

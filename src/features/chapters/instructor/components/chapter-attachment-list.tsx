@@ -12,14 +12,14 @@ import { Attachment as AttachmentIcon, Delete, Loader2 } from '@/core/lib/icons'
 export const AttachmentList = ({
 	attachments
 }: {
-	attachments: RouterOutputs['instructor']['course']['findOneCourse']['course']['attachments']
+	attachments: RouterOutputs['instructor']['chapter']['findOneChapter']['chapter']['attachments']
 }) => {
 	const router = useRouter()
 
 	const [deletingId, setDeletingId] = React.useState<string | null>(null)
 
 	const { mutate } =
-		api.instructor.courseAttachments.deleteCourseAttachment.useMutation({
+		api.instructor.chapterAttachments.deleteChapterAttachment.useMutation({
 			onSuccess: async (data) => {
 				setDeletingId(null)
 				router.refresh()
