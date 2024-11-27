@@ -26,7 +26,7 @@ export const editCourseChapterOrderSchema = z.object({
 	courseId: z.string().min(1, 'Course ID is required'),
 	chapterList: z.array(
 		z.object({
-			id: z.string().min(1, 'Chapter ID is required'),
+			chapterId: z.string().min(1, 'Chapter ID is required'),
 			position: z.number()
 		})
 	)

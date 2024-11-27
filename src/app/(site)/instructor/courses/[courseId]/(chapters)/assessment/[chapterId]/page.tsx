@@ -22,23 +22,24 @@ import { Assessment, CourseSingle, Instructor } from '@/core/lib/icons'
 import { capitalize } from '@/core/lib/utils/capitalize'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
-import { ChapterActions } from '@/features/chapters/components/chapter-action-button'
-import { AddChapterAssessmentsForm } from '@/features/chapters/components/forms/add-chapter-assessments-form'
-import { AddChapterAttachmentsForm } from '@/features/chapters/components/forms/add-chapter-attachments-form'
-import { EditChapterTitleForm } from '@/features/chapters/components/forms/edit-chapter-title-form'
+import { ChapterActions } from '@/features/chapters/instructor/components/chapter-action-button'
+import { AddChapterAssessmentsForm } from '@/features/chapters/instructor/components/forms/add-chapter-assessments-form'
+import { AddChapterAttachmentsForm } from '@/features/chapters/instructor/components/forms/add-chapter-attachments-form'
 import { EditChapterContentForm } from '@/features/chapters/instructor/components/forms/edit-chapter-content-form'
+import { EditChapterTitleForm } from '@/features/chapters/instructor/components/forms/edit-chapter-title-form'
 
 export default async function Page({
-	params
+	params: { courseId, chapterId }
 }: {
 	params: { courseId: string; chapterId: string }
 }) {
-	const { courseId, chapterId } = params
 	const session = await auth()
 	if (session?.user.role !== 'INSTRUCTOR')
 		redirect(`/courses/${courseId}/assessment/${chapterId}`)
 
-	const { chapter } = await api.chapter.findChapter({ courseId, id: chapterId })
+	const { chapter } = await api.instructor.chapter.findOneChapter({
+		chapterId
+	})
 	if (!chapter) return <NotFound item="chapter" />
 	if (chapter.type !== 'ASSESSMENT') {
 		redirect(
@@ -99,8 +100,8 @@ export default async function Page({
 					<PageDescription>Filled {completionText}</PageDescription>
 				</div>
 				<ChapterActions
-					id={chapter.id}
-					courseId={chapter.course.id}
+					chapterId={chapter.chapterId}
+					courseId={chapter.courseId}
 					status={chapter.status}
 					type={chapter.type}
 				/>
@@ -110,21 +111,18 @@ export default async function Page({
 				<PageSection columnMode>
 					<FoldableBlock title="Customize your assessment" icon={TbWriting}>
 						<EditChapterTitleForm
-							id={chapter.id}
-							courseId={chapter.course.id}
+							chapterId={chapter.chapterId}
 							title={chapter.title}
 						/>
 						<EditChapterContentForm
-							id={chapter.id}
-							courseId={chapter.course.id}
+							chapterId={chapter.chapterId}
 							content={chapter.content}
 						/>
 					</FoldableBlock>
 
 					<FoldableBlock title="Learning materials" icon={TbPaperclip}>
 						<AddChapterAttachmentsForm
-							courseId={chapter.course.id}
-							chapterId={chapter.id}
+							chapterId={chapter.chapterId}
 							attachments={chapter.attachments}
 						/>
 					</FoldableBlock>
@@ -133,8 +131,8 @@ export default async function Page({
 				<PageSection columnMode>
 					<FoldableBlock title="Assessment Outline" icon={LuFeather}>
 						<AddChapterAssessmentsForm
-							courseId={chapter.courseId}
-							chapterId={chapter.id}
+							courseId={courseId}
+							chapterId={chapter.chapterId}
 							assessments={chapter.assessments}
 						/>
 					</FoldableBlock>

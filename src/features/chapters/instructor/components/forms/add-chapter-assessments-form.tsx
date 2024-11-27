@@ -3,11 +3,10 @@
 import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { type Assessment } from '@prisma/client'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { api } from '@/services/trpc/react'
+import { api, type RouterOutputs } from '@/services/trpc/react'
 
 import {
 	Card,
@@ -17,28 +16,32 @@ import {
 	CardTitle
 } from '@/core/components/compound-card'
 import { Button } from '@/core/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@/core/components/ui/form'
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormMessage
+} from '@/core/components/ui/form'
 import { Input } from '@/core/components/ui/input'
 import { Loader } from '@/core/components/ui/loader'
 import { Add } from '@/core/lib/icons'
 
-import { AssessmentList } from '@/features/chapters/components/chapter-assessment-list'
+import { AssessmentList } from '@/features/chapters/instructor/components/chapter-assessment-list'
 import {
 	addChapterAssessmentSchema,
 	type AddChapterAssessmentSchema
 } from '@/features/chapters/validations/chapter-assessments-schema'
 
-type AddChapterAssessmentsProps = {
-	courseId: string
-	chapterId: string
-	assessments: Assessment[]
-}
-
 export const AddChapterAssessmentsForm = ({
 	courseId,
 	chapterId,
 	assessments
-}: AddChapterAssessmentsProps) => {
+}: {
+	courseId: RouterOutputs['instructor']['course']['findOneCourse']['course']['courseId']
+	chapterId: RouterOutputs['instructor']['chapter']['findOneChapter']['chapter']['chapterId']
+	assessments: RouterOutputs['instructor']['chapter']['findOneChapter']['chapter']['assessments']
+}) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -56,8 +59,22 @@ export const AddChapterAssessmentsForm = ({
 	})
 	const hasAssessments = assessments.length > 0
 
+	const { mutate: addChapter, isPending: isAdding } =
+		api.instructor.chapterAssessment.addAssessment.useMutation({
+			onSuccess: async (data) => {
+				toggleEdit()
+				form.reset({
+					chapterId,
+					title: ''
+				})
+				router.refresh()
+				toast.success(data.message)
+			},
+			onError: (error) => toast.error(error.message)
+		})
+
 	const { mutate: editAssessmentOrder, isPending: isEditingAssessmentOrder } =
-		api.chapter.editAssessmentOrder.useMutation({
+		api.instructor.chapterAssessment.editAssessmentOrder.useMutation({
 			onSuccess: (data) => {
 				toast.success(data.message)
 				router.refresh()
@@ -65,25 +82,17 @@ export const AddChapterAssessmentsForm = ({
 			onError: (error) => toast.error(error.message)
 		})
 
-	const onReorder = async (data: { id: string; position: number }[]) => {
+	const onReorder = async (
+		data: { assessmentId: string; position: number }[]
+	) => {
 		editAssessmentOrder({ chapterId, assessmentList: data })
 	}
 
-	const { mutate: addChapter, isPending: isAdding } = api.chapter.addAssessment.useMutation({
-		onSuccess: async (data) => {
-			toggleEdit()
-			form.reset({
-				chapterId,
-				title: ''
-			})
-			router.refresh()
-			toast.success(data.message)
-		},
-		onError: (error) => toast.error(error.message)
-	})
-
 	return (
-		<Card className="relative" showBorderTrail={isEditing || isEditingAssessmentOrder || isAdding}>
+		<Card
+			className="relative"
+			showBorderTrail={isEditing || isEditingAssessmentOrder || isAdding}
+		>
 			{isEditingAssessmentOrder && (
 				<div className="absolute flex h-full w-full items-center justify-center rounded-xl bg-background/40">
 					<Loader variant="bars" size="medium" />

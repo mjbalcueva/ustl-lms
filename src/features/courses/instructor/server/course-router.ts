@@ -302,7 +302,7 @@ export const courseRouter = createTRPCRouter({
 				const newPosition = chapter.position + 1
 
 				await ctx.db.chapter.update({
-					where: { chapterId: chapter.id, courseId },
+					where: { chapterId: chapter.chapterId, courseId },
 					data: { position: newPosition }
 				})
 			}

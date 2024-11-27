@@ -76,7 +76,7 @@ export const AddCourseChaptersForm = ({
 			onError: (error) => toast.error(error.message)
 		})
 
-	const onReorder = async (data: { id: string; position: number }[]) => {
+	const onReorder = async (data: { chapterId: string; position: number }[]) => {
 		editChapterOrder({ courseId, chapterList: data })
 	}
 

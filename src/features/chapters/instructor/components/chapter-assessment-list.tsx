@@ -2,21 +2,34 @@
 
 import Link from 'next/link'
 import * as React from 'react'
-import { DragDropContext, Draggable, Droppable, type DropResult } from '@hello-pangea/dnd'
-import { type Assessment } from '@prisma/client'
+import {
+	DragDropContext,
+	Draggable,
+	Droppable,
+	type DropResult
+} from '@hello-pangea/dnd'
+
+import { type RouterOutputs } from '@/services/trpc/react'
 
 import { Separator } from '@/core/components/ui/separator'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/core/components/ui/tooltip'
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger
+} from '@/core/components/ui/tooltip'
 import { Edit, GripVertical } from '@/core/lib/icons'
 
-type AssessmentListProps = {
-	courseId: string
-	chapterId: string
-	items: Assessment[]
-	onReorder: (updateData: { id: string; position: number }[]) => void
-}
-
-export const AssessmentList = ({ courseId, chapterId, items, onReorder }: AssessmentListProps) => {
+export const AssessmentList = ({
+	courseId,
+	chapterId,
+	items,
+	onReorder
+}: {
+	courseId: RouterOutputs['instructor']['course']['findOneCourse']['course']['courseId']
+	chapterId: RouterOutputs['instructor']['chapter']['findOneChapter']['chapter']['chapterId']
+	items: RouterOutputs['instructor']['chapter']['findOneChapter']['chapter']['assessments']
+	onReorder: (updateData: { assessmentId: string; position: number }[]) => void
+}) => {
 	const [assessments, setAssessments] = React.useState(items)
 
 	React.useEffect(() => {
@@ -32,7 +45,10 @@ export const AssessmentList = ({ courseId, chapterId, items, onReorder }: Assess
 
 		setAssessments(updatedAssessments)
 		onReorder(
-			updatedAssessments.map((assessment, index) => ({ id: assessment.id, position: index }))
+			updatedAssessments.map((assessment, index) => ({
+				assessmentId: assessment.assessmentId,
+				position: index
+			}))
 		)
 	}
 
@@ -40,10 +56,18 @@ export const AssessmentList = ({ courseId, chapterId, items, onReorder }: Assess
 		<DragDropContext onDragEnd={handleDragEnd}>
 			<Droppable droppableId="assessments">
 				{(provided) => (
-					<ol ref={provided.innerRef} className="space-y-2" {...provided.droppableProps}>
+					<ol
+						ref={provided.innerRef}
+						className="space-y-2"
+						{...provided.droppableProps}
+					>
 						{assessments.map((assessment, index) => {
 							return (
-								<Draggable key={assessment.id} draggableId={assessment.id} index={index}>
+								<Draggable
+									key={assessment.assessmentId}
+									draggableId={assessment.assessmentId}
+									index={index}
+								>
 									{(provided) => (
 										<li
 											ref={provided.innerRef}
@@ -64,7 +88,7 @@ export const AssessmentList = ({ courseId, chapterId, items, onReorder }: Assess
 												<TooltipTrigger asChild>
 													<Link
 														className="ml-auto flex h-full items-center justify-center rounded-r-xl pl-1 pr-2 outline-none hover:opacity-75 focus-visible:outline-ring"
-														href={`/instructor/courses/${courseId}/assessment/${chapterId}/questions/${assessment.id}`}
+														href={`/instructor/courses/${courseId}/assessment/${chapterId}/questions/${assessment.assessmentId}`}
 													>
 														<Edit className="size-4" />
 													</Link>

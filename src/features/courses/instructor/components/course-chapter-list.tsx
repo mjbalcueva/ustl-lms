@@ -8,9 +8,8 @@ import {
 	Droppable,
 	type DropResult
 } from '@hello-pangea/dnd'
-import { type Chapter } from '@prisma/client'
 
-import { RouterOutputs } from '@/services/trpc/react'
+import { type RouterOutputs } from '@/services/trpc/react'
 
 import { Badge } from '@/core/components/ui/badge'
 import { Separator } from '@/core/components/ui/separator'
@@ -29,17 +28,12 @@ import {
 import { capitalize } from '@/core/lib/utils/capitalize'
 import { cn } from '@/core/lib/utils/cn'
 
-type ChapterListProps = {
-	chapters: Chapter[]
-	onReorder: (updateData: { id: string; position: number }[]) => void
-}
-
 export const ChapterList = ({
 	chapters,
 	onReorder
 }: {
 	chapters: RouterOutputs['instructor']['course']['findOneCourse']['course']['chapters']
-	onReorder: (updateData: { id: string; position: number }[]) => void
+	onReorder: (updateData: { chapterId: string; position: number }[]) => void
 }) => {
 	const [chapterList, setChaptersList] = React.useState(chapters)
 
@@ -57,7 +51,7 @@ export const ChapterList = ({
 		setChaptersList(updatedChapters)
 		onReorder(
 			updatedChapters.map((chapter, index) => ({
-				id: chapter.chapterId,
+				chapterId: chapter.chapterId,
 				position: index
 			}))
 		)

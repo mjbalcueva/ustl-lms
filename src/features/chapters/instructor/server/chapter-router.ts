@@ -18,11 +18,6 @@ import {
 
 export const chapterRouter = createTRPCRouter({
 	// ---------------------------------------------------------------------------
-	// CREATE
-	// ---------------------------------------------------------------------------
-	//
-
-	// ---------------------------------------------------------------------------
 	// READ
 	// ---------------------------------------------------------------------------
 	//
@@ -39,7 +34,8 @@ export const chapterRouter = createTRPCRouter({
 				include: {
 					course: { select: { title: true } },
 					muxData: true,
-					attachments: { orderBy: { createdAt: 'desc' } }
+					attachments: { orderBy: { createdAt: 'desc' } },
+					assessments: { orderBy: { position: 'asc' } }
 				}
 			})
 
