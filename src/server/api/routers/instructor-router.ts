@@ -1,5 +1,6 @@
 import { createTRPCRouter } from '@/server/api/trpc'
 
+import { chapterRouter } from '@/features/chapters/instructor/server/chapter-router'
 import { courseAttachmentsRouter } from '@/features/courses/instructor/server/course-attachments-router'
 import { courseRouter } from '@/features/courses/instructor/server/course-router'
 import { courseTagsRouter } from '@/features/courses/instructor/server/course-tags-router'
@@ -7,5 +8,6 @@ import { courseTagsRouter } from '@/features/courses/instructor/server/course-ta
 export const instructorRouter = createTRPCRouter({
 	course: courseRouter,
 	courseTags: courseTagsRouter,
-	courseAttachments: courseAttachmentsRouter
+	courseAttachments: courseAttachmentsRouter,
+	chapter: chapterRouter
 })
