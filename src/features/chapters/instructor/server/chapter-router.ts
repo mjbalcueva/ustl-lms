@@ -8,6 +8,7 @@ import { utapi } from '@/services/uploadthing/utapi'
 import {
 	deleteChapterSchema,
 	editChapterStatusSchema,
+	editChapterTitleSchema,
 	editChapterTypeSchema,
 	findOneChapterSchema
 } from '@/features/chapters/shared/validations/chapter-schema'
@@ -46,6 +47,21 @@ export const chapterRouter = createTRPCRouter({
 	// UPDATE
 	// ---------------------------------------------------------------------------
 	//
+
+	// Edit Chapter Title
+	editTitle: instructorProcedure
+		.input(editChapterTitleSchema)
+		.mutation(async ({ ctx, input }) => {
+			const { chapterId, title } = input
+			const instructorId = ctx.session.user.id
+
+			const updatedChapter = await ctx.db.chapter.update({
+				where: { chapterId, course: { instructorId } },
+				data: { title }
+			})
+
+			return { message: 'Chapter title updated successfully', updatedChapter }
+		}),
 
 	// Edit Chapter Type
 	editType: instructorProcedure

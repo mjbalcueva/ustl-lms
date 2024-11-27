@@ -62,7 +62,7 @@ export const EditCourseTokenForm = ({
 		api.instructor.course.editCourseToken.useMutation({
 			onSuccess: async (data) => {
 				toggleEdit()
-				form.reset({ courseId, token: data.course.token ?? '' })
+				form.reset({ courseId, token: data.updatedCourse.token ?? '' })
 				router.refresh()
 				toast.success(data.message)
 			},

@@ -171,12 +171,15 @@ export const courseRouter = createTRPCRouter({
 		.mutation(async ({ ctx, input }) => {
 			const { courseId, code } = input
 
-			const course = await ctx.db.course.update({
+			const updatedCourse = await ctx.db.course.update({
 				where: { courseId },
 				data: { code }
 			})
 
-			return { message: 'Course code updated successfully', course }
+			return {
+				message: 'Course code updated successfully',
+				updatedCourse
+			}
 		}),
 
 	// Edit Course Title
@@ -185,12 +188,15 @@ export const courseRouter = createTRPCRouter({
 		.mutation(async ({ ctx, input }) => {
 			const { courseId, title } = input
 
-			const course = await ctx.db.course.update({
+			const updatedCourse = await ctx.db.course.update({
 				where: { courseId },
 				data: { title }
 			})
 
-			return { message: 'Course title updated successfully', course }
+			return {
+				message: 'Course title updated successfully',
+				updatedCourse
+			}
 		}),
 
 	// Edit Course Description
@@ -199,12 +205,15 @@ export const courseRouter = createTRPCRouter({
 		.mutation(async ({ ctx, input }) => {
 			const { courseId, description } = input
 
-			const course = await ctx.db.course.update({
+			const updatedCourse = await ctx.db.course.update({
 				where: { courseId },
 				data: { description }
 			})
 
-			return { message: 'Course description updated successfully', course }
+			return {
+				message: 'Course description updated successfully',
+				updatedCourse
+			}
 		}),
 
 	// Edit Course Image
@@ -220,12 +229,15 @@ export const courseRouter = createTRPCRouter({
 
 			if (oldImageKey) await utapi.deleteFiles(oldImageKey)
 
-			const course = await ctx.db.course.update({
+			const updatedCourse = await ctx.db.course.update({
 				where: { courseId },
 				data: { imageUrl }
 			})
 
-			return { message: 'Course image updated successfully', course }
+			return {
+				message: 'Course image updated successfully',
+				updatedCourse
+			}
 		}),
 
 	// Edit Course Token
@@ -245,12 +257,15 @@ export const courseRouter = createTRPCRouter({
 				)
 			}
 
-			const course = await ctx.db.course.update({
+			const updatedCourse = await ctx.db.course.update({
 				where: { courseId },
 				data: { token }
 			})
 
-			return { message: 'Course token updated successfully', course }
+			return {
+				message: 'Course token updated successfully',
+				updatedCourse
+			}
 		}),
 
 	// Edit Course Status
@@ -259,7 +274,7 @@ export const courseRouter = createTRPCRouter({
 		.mutation(async ({ ctx, input }) => {
 			const { courseId, status } = input
 
-			const course = await ctx.db.course.update({
+			const updatedCourse = await ctx.db.course.update({
 				where: { courseId },
 				data: { status }
 			})
@@ -272,7 +287,7 @@ export const courseRouter = createTRPCRouter({
 
 			return {
 				message: statusMessages[status] ?? 'Course status updated successfully',
-				course
+				updatedCourse
 			}
 		}),
 

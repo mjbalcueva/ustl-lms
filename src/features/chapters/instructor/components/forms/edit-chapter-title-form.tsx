@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { api } from '@/services/trpc/react'
+import { api, type RouterOutputs } from '@/services/trpc/react'
 
 import {
 	Card,
@@ -16,16 +16,28 @@ import {
 	CardTitle
 } from '@/core/components/compound-card'
 import { Button } from '@/core/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@/core/components/ui/form'
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormMessage
+} from '@/core/components/ui/form'
 import { Input } from '@/core/components/ui/input'
 import { Edit } from '@/core/lib/icons'
 
 import {
 	editChapterTitleSchema,
 	type EditChapterTitleSchema
-} from '@/features/chapters/validations/chapter-title-schema'
+} from '@/features/chapters/shared/validations/chapter-schema'
 
-export const EditChapterTitleForm = ({ id, courseId, title }: EditChapterTitleSchema) => {
+export const EditChapterTitleForm = ({
+	chapterId,
+	title
+}: {
+	chapterId: RouterOutputs['instructor']['chapter']['findOneChapter']['chapter']['chapterId']
+	title: RouterOutputs['instructor']['chapter']['findOneChapter']['chapter']['title']
+}) => {
 	const router = useRouter()
 
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -36,14 +48,14 @@ export const EditChapterTitleForm = ({ id, courseId, title }: EditChapterTitleSc
 
 	const form = useForm<EditChapterTitleSchema>({
 		resolver: zodResolver(editChapterTitleSchema),
-		defaultValues: { id, courseId, title }
+		defaultValues: { chapterId, title }
 	})
 	const formTitle = form.getValues('title')
 
-	const { mutate, isPending } = api.chapter.editTitle.useMutation({
+	const { mutate, isPending } = api.instructor.chapter.editTitle.useMutation({
 		onSuccess: (data) => {
 			toggleEdit()
-			form.reset({ id, courseId, title: data.newTitle })
+			form.reset({ chapterId, title: data.updatedChapter.title })
 			router.refresh()
 			toast.success(data.message)
 		},
@@ -72,7 +84,11 @@ export const EditChapterTitleForm = ({ id, courseId, title }: EditChapterTitleSc
 								render={({ field }) => (
 									<FormItem>
 										<FormControl>
-											<Input placeholder="e.g. 'Week 1'" disabled={isPending} {...field} />
+											<Input
+												placeholder="e.g. 'Week 1'"
+												disabled={isPending}
+												{...field}
+											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>

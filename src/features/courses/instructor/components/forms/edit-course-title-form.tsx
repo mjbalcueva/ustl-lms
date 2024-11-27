@@ -55,7 +55,7 @@ export const EditCourseTitleForm = ({
 	const { mutate, isPending } = api.instructor.course.editTitle.useMutation({
 		onSuccess: async (data) => {
 			toggleEdit()
-			form.reset({ courseId, title: data.course.title })
+			form.reset({ courseId, title: data.updatedCourse.title })
 			router.refresh()
 			toast.success(data.message)
 		},

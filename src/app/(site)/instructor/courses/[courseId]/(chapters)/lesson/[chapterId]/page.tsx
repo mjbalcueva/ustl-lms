@@ -22,10 +22,10 @@ import { capitalize } from '@/core/lib/utils/capitalize'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
 import { ChapterActions } from '@/features/chapters/instructor/components/chapter-action-button'
-
 // import { AddChapterAttachmentsForm } from '@/features/chapters/components/forms/add-chapter-attachments-form'
 // import { EditChapterContentForm } from '@/features/chapters/components/forms/edit-chapter-content-form'
-// import { EditChapterTitleForm } from '@/features/chapters/components/forms/edit-chapter-title-form'
+import { EditChapterTitleForm } from '@/features/chapters/instructor/components/forms/edit-chapter-title-form'
+
 // import { EditChapterVideoForm } from '@/features/chapters/components/forms/edit-chapter-video-form'
 
 export default async function Page({
@@ -110,11 +110,11 @@ export default async function Page({
 			<PageContent className="mb-24 space-y-6 px-2.5 sm:px-4 md:mb-12 md:flex md:flex-wrap md:gap-6 md:space-y-0 md:px-6">
 				<PageSection columnMode>
 					<FoldableBlock title="Customize your lesson" icon={TbNotes}>
-						{/* <EditChapterTitleForm
-							id={chapter.id}
-							courseId={chapter.course.id}
+						<EditChapterTitleForm
+							chapterId={chapter.chapterId}
 							title={chapter.title}
 						/>
+						{/* 
 						<EditChapterContentForm
 							id={chapter.id}
 							courseId={chapter.course.id}

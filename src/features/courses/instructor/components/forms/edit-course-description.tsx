@@ -56,7 +56,10 @@ export const EditCourseDescriptionForm = ({
 		api.instructor.course.editDescription.useMutation({
 			onSuccess: async (data) => {
 				toggleEdit()
-				form.reset({ courseId, description: data.course.description ?? '' })
+				form.reset({
+					courseId,
+					description: data.updatedCourse.description ?? ''
+				})
 				router.refresh()
 				toast.success(data.message)
 			},
