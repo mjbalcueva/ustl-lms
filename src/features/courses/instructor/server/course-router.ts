@@ -7,10 +7,6 @@ import { utapi } from '@/services/uploadthing/utapi'
 
 import { generateCourseInviteToken } from '@/features/courses/shared/lib/generate-course-invite-token'
 import {
-	addCourseChapterSchema,
-	editCourseChapterOrderSchema
-} from '@/features/courses/shared/validations/course-chapters-schema'
-import {
 	addCourseSchema,
 	deleteCourseSchema,
 	editCourseCodeSchema,
@@ -45,27 +41,6 @@ export const courseRouter = createTRPCRouter({
 			})
 
 			return { message: 'Course created!', course }
-		}),
-
-	// Add Course Chapter
-	addChapter: instructorProcedure
-		.input(addCourseChapterSchema)
-		.mutation(async ({ ctx, input }) => {
-			const { courseId, title, type } = input
-			const instructorId = ctx.session.user.id
-
-			const lastChapter = await ctx.db.chapter.findFirst({
-				where: { courseId, course: { instructorId } },
-				orderBy: { position: 'desc' }
-			})
-
-			const newPosition = lastChapter ? lastChapter.position + 1 : 1
-
-			await ctx.db.chapter.create({
-				data: { title, courseId, position: newPosition, type }
-			})
-
-			return { message: 'Chapter created successfully' }
 		}),
 
 	// ---------------------------------------------------------------------------
@@ -290,24 +265,6 @@ export const courseRouter = createTRPCRouter({
 				message: statusMessages[status] ?? 'Course status updated successfully',
 				updatedCourse
 			}
-		}),
-
-	// Edit Course Chapter Order
-	editChapterOrder: instructorProcedure
-		.input(editCourseChapterOrderSchema)
-		.mutation(async ({ ctx, input }) => {
-			const { courseId, chapterList } = input
-
-			for (const chapter of chapterList) {
-				const newPosition = chapter.position + 1
-
-				await ctx.db.chapter.update({
-					where: { chapterId: chapter.chapterId, courseId },
-					data: { position: newPosition }
-				})
-			}
-
-			return { message: 'Course chapter order updated successfully' }
 		}),
 
 	// ---------------------------------------------------------------------------

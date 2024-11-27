@@ -2,6 +2,22 @@ import { ChapterType, Status } from '@prisma/client'
 import { z } from 'zod'
 
 // -----------------------------------------------------------------------------
+// CREATE
+// -----------------------------------------------------------------------------
+//
+
+// Add Chapter
+export const addChapterSchema = z.object({
+	courseId: z.string().min(1, 'Course ID is required'),
+	title: z
+		.string()
+		.min(1, 'Title is required')
+		.max(128, 'Title must be less than 128 characters'),
+	type: z.nativeEnum(ChapterType)
+})
+export type AddChapterSchema = z.infer<typeof addChapterSchema>
+
+// -----------------------------------------------------------------------------
 // READ
 // -----------------------------------------------------------------------------
 //
@@ -34,6 +50,13 @@ export const editChapterContentSchema = z.object({
 })
 export type EditChapterContentSchema = z.infer<typeof editChapterContentSchema>
 
+// Edit Chapter Video Schema
+export const editChapterVideoSchema = z.object({
+	chapterId: z.string().min(1, 'Chapter ID is required'),
+	videoUrl: z.string().min(1, 'Video URL is required')
+})
+export type EditChapterVideoSchema = z.infer<typeof editChapterVideoSchema>
+
 // Edit Chapter Type Schema
 export const editChapterTypeSchema = z.object({
 	chapterId: z.string().min(1, 'Chapter ID is required'),
@@ -48,12 +71,19 @@ export const editChapterStatusSchema = z.object({
 })
 export type EditChapterStatusSchema = z.infer<typeof editChapterStatusSchema>
 
-// Edit Chapter Video Schema
-export const editChapterVideoSchema = z.object({
-	chapterId: z.string().min(1, 'Chapter ID is required'),
-	videoUrl: z.string().min(1, 'Video URL is required')
+// Edit Chapter Order
+export const editChapterOrderSchema = z.object({
+	courseId: z.string().min(1, 'Course ID is required'),
+	chapterList: z.array(
+		z.object({
+			chapterId: z.string().min(1, 'Chapter ID is required'),
+			position: z.number()
+		})
+	)
 })
-export type EditChapterVideoSchema = z.infer<typeof editChapterVideoSchema>
+export type EditCourseChapterOrderSchema = z.infer<
+	typeof editChapterOrderSchema
+>
 
 /// -----------------------------------------------------------------------------
 // DELETE

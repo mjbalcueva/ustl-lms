@@ -19,42 +19,38 @@ import { Separator } from '@/core/components/ui/separator'
 import { Assessment, CourseSingle, Instructor } from '@/core/lib/icons'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
-import { AssessmentQuestions } from '@/features/questions/components/assessment-questions'
-import { EditAssessmentInstructionForm } from '@/features/questions/components/forms/edit-assessment-instruction-form'
-import { EditAssessmentTitleForm } from '@/features/questions/components/forms/edit-assessment-title-form'
-import { SectionActionButton } from '@/features/questions/components/section-action-button'
-
 export default async function Page({
-	params
+	params: { courseId, chapterId, assessmentId }
 }: {
 	params: { courseId: string; chapterId: string; assessmentId: string }
 }) {
-	const { courseId, chapterId, assessmentId } = params
 	const session = await auth()
 	if (session?.user.role !== 'INSTRUCTOR') {
-		redirect(`/courses/${courseId}/assessment/${chapterId}/quesionts/${assessmentId}`)
+		redirect(
+			`/courses/${courseId}/assessment/${chapterId}/quesionts/${assessmentId}`
+		)
 	}
 
-	const { assessment } = await api.question.findAssessment({ chapterId, assessmentId })
-	if (!assessment) return <NotFound item="assessment" />
+	// const { assessment } = await api.question.findAssessment({ chapterId, assessmentId })
+	// if (!assessment) return <NotFound item="assessment" />
 
-	const { chapters } = await api.question.findOtherChapters({ courseId })
+	// const { chapters } = await api.question.findOtherChapters({ courseId })
 
 	const crumbs: Breadcrumb = [
 		{ icon: Instructor },
 		{ label: 'Courses', href: '/instructor/courses' },
 		{
 			icon: CourseSingle,
-			label: assessment.chapter.course.title,
+			// label: assessment.chapter.course.title,
 			href: `/instructor/courses/${courseId}`
 		},
 		{
 			icon: Assessment,
-			label: assessment.chapter.title,
+			// label: assessment.chapter.title,
 			href: `/instructor/courses/${courseId}/assessment/${chapterId}`
 		},
 		{
-			label: assessment.title
+			// label: assessment.title
 		}
 	]
 
@@ -69,21 +65,23 @@ export default async function Page({
 			<PageHeader className="flex flex-wrap items-center justify-between">
 				<div className="min-h-[46.8px]">
 					<PageTitle>Section Setup</PageTitle>
-					<PageDescription>Configure questions, points and settings</PageDescription>
+					<PageDescription>
+						Configure questions, points and settings
+					</PageDescription>
 				</div>
-				<SectionActionButton
+				{/* <SectionActionButton
 					courseId={courseId}
 					chapterId={chapterId}
 					assessmentId={assessmentId}
 					shuffleQuestions={assessment.shuffleQuestions}
 					shuffleOptions={assessment.shuffleOptions}
-				/>
+				/> */}
 			</PageHeader>
 
 			<PageContent className="mb-24 space-y-6 px-2.5 sm:px-4 md:mb-12 md:flex md:flex-wrap md:gap-6 md:space-y-0 md:px-6">
 				<PageSection columnMode>
 					<FoldableBlock title="Customize your section" icon={LuFeather}>
-						<EditAssessmentTitleForm
+						{/* <EditAssessmentTitleForm
 							chapterId={chapterId}
 							assessmentId={assessmentId}
 							title={assessment.title}
@@ -93,17 +91,17 @@ export default async function Page({
 							chapterId={chapterId}
 							assessmentId={assessmentId}
 							instruction={assessment.instruction}
-						/>
+						/> */}
 					</FoldableBlock>
 				</PageSection>
 
 				<PageSection columnMode>
 					<FoldableBlock title="Your questions" icon={TbFlagQuestion}>
-						<AssessmentQuestions
+						{/* <AssessmentQuestions
 							assessmentId={assessmentId}
 							chapters={chapters}
 							questions={assessment.questions}
-						/>
+						/> */}
 					</FoldableBlock>
 				</PageSection>
 			</PageContent>

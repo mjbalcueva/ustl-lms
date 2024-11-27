@@ -6,9 +6,11 @@ import { muxVideo } from '@/services/mux/video'
 import { utapi } from '@/services/uploadthing/utapi'
 
 import {
+	addChapterSchema,
 	deleteChapterSchema,
 	deleteChapterVideoSchema,
 	editChapterContentSchema,
+	editChapterOrderSchema,
 	editChapterStatusSchema,
 	editChapterTitleSchema,
 	editChapterTypeSchema,
@@ -17,6 +19,32 @@ import {
 } from '@/features/chapters/shared/validations/chapter-schema'
 
 export const chapterRouter = createTRPCRouter({
+	// ---------------------------------------------------------------------------
+	// CREATE
+	// ---------------------------------------------------------------------------
+	//
+
+	// Add Course Chapter
+	addChapter: instructorProcedure
+		.input(addChapterSchema)
+		.mutation(async ({ ctx, input }) => {
+			const { courseId, title, type } = input
+			const instructorId = ctx.session.user.id
+
+			const lastChapter = await ctx.db.chapter.findFirst({
+				where: { courseId, course: { instructorId } },
+				orderBy: { position: 'desc' }
+			})
+
+			const newPosition = lastChapter ? lastChapter.position + 1 : 1
+
+			await ctx.db.chapter.create({
+				data: { title, courseId, position: newPosition, type }
+			})
+
+			return { message: 'Chapter created successfully' }
+		}),
+
 	// ---------------------------------------------------------------------------
 	// READ
 	// ---------------------------------------------------------------------------
@@ -79,36 +107,6 @@ export const chapterRouter = createTRPCRouter({
 			return { message: 'Chapter content updated successfully', updatedChapter }
 		}),
 
-	// Edit Chapter Type
-	editType: instructorProcedure
-		.input(editChapterTypeSchema)
-		.mutation(async ({ ctx, input }) => {
-			const { chapterId, type } = input
-			const instructorId = ctx.session.user.id
-
-			const updatedChapter = await ctx.db.chapter.update({
-				where: { chapterId, course: { instructorId } },
-				data: { type }
-			})
-
-			return { message: 'Chapter type updated successfully', updatedChapter }
-		}),
-
-	// Edit Chapter Status
-	editStatus: instructorProcedure
-		.input(editChapterStatusSchema)
-		.mutation(async ({ ctx, input }) => {
-			const { chapterId, status } = input
-			const instructorId = ctx.session.user.id
-
-			const updatedChapter = await ctx.db.chapter.update({
-				where: { chapterId, course: { instructorId } },
-				data: { status }
-			})
-
-			return { message: 'Chapter status updated successfully', updatedChapter }
-		}),
-
 	// Edit Chapter Video
 	editVideo: instructorProcedure
 		.input(editChapterVideoSchema)
@@ -156,6 +154,54 @@ export const chapterRouter = createTRPCRouter({
 			])
 
 			return { message: 'Chapter video updated successfully', updatedChapter }
+		}),
+
+	// Edit Chapter Type
+	editType: instructorProcedure
+		.input(editChapterTypeSchema)
+		.mutation(async ({ ctx, input }) => {
+			const { chapterId, type } = input
+			const instructorId = ctx.session.user.id
+
+			const updatedChapter = await ctx.db.chapter.update({
+				where: { chapterId, course: { instructorId } },
+				data: { type }
+			})
+
+			return { message: 'Chapter type updated successfully', updatedChapter }
+		}),
+
+	// Edit Chapter Status
+	editStatus: instructorProcedure
+		.input(editChapterStatusSchema)
+		.mutation(async ({ ctx, input }) => {
+			const { chapterId, status } = input
+			const instructorId = ctx.session.user.id
+
+			const updatedChapter = await ctx.db.chapter.update({
+				where: { chapterId, course: { instructorId } },
+				data: { status }
+			})
+
+			return { message: 'Chapter status updated successfully', updatedChapter }
+		}),
+
+	// Edit Chapter Order
+	editOrder: instructorProcedure
+		.input(editChapterOrderSchema)
+		.mutation(async ({ ctx, input }) => {
+			const { courseId, chapterList } = input
+
+			for (const chapter of chapterList) {
+				const newPosition = chapter.position + 1
+
+				await ctx.db.chapter.update({
+					where: { chapterId: chapter.chapterId, courseId },
+					data: { position: newPosition }
+				})
+			}
+
+			return { message: 'Course chapter order updated successfully' }
 		}),
 
 	// ---------------------------------------------------------------------------

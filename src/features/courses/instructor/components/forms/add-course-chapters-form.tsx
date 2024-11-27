@@ -36,11 +36,11 @@ import {
 import { Add } from '@/core/lib/icons'
 import { capitalize } from '@/core/lib/utils/capitalize'
 
-import { ChapterList } from '@/features/courses/instructor/components/course-chapter-list'
 import {
-	addCourseChapterSchema,
-	type AddCourseChapterSchema
-} from '@/features/courses/validations/course-chapters-schema'
+	addChapterSchema,
+	type AddChapterSchema
+} from '@/features/chapters/shared/validations/chapter-schema'
+import { ChapterList } from '@/features/courses/instructor/components/course-chapter-list'
 
 export const AddCourseChaptersForm = ({
 	courseId,
@@ -57,8 +57,8 @@ export const AddCourseChaptersForm = ({
 		form.reset()
 	}
 
-	const form = useForm<AddCourseChapterSchema>({
-		resolver: zodResolver(addCourseChapterSchema),
+	const form = useForm<AddChapterSchema>({
+		resolver: zodResolver(addChapterSchema),
 		defaultValues: {
 			courseId,
 			title: '',
@@ -68,7 +68,7 @@ export const AddCourseChaptersForm = ({
 	const hasChapters = chapters.length > 0
 
 	const { mutate: editChapterOrder, isPending: isEditingChapterOrder } =
-		api.instructor.course.editChapterOrder.useMutation({
+		api.instructor.chapter.editOrder.useMutation({
 			onSuccess: (data) => {
 				toast.success(data.message)
 				router.refresh()
@@ -81,7 +81,7 @@ export const AddCourseChaptersForm = ({
 	}
 
 	const { mutate: addChapter, isPending: isAdding } =
-		api.instructor.course.addChapter.useMutation({
+		api.instructor.chapter.addChapter.useMutation({
 			onSuccess: async (data) => {
 				toggleEdit()
 				form.reset({

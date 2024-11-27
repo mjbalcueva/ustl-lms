@@ -5,25 +5,23 @@ import { z } from 'zod'
 // -----------------------------------------------------------------------------
 //
 
-// Add Chapter Assessment Schema
-export const addChapterAssessmentSchema = z.object({
+// Add Assessment Schema
+export const addAssessmentSchema = z.object({
 	chapterId: z.string().min(1, 'Chapter ID is required'),
 	title: z
 		.string()
 		.min(1, 'Title is required')
 		.max(128, 'Title must be less than 128 characters')
 })
-export type AddChapterAssessmentSchema = z.infer<
-	typeof addChapterAssessmentSchema
->
+export type AddAssessmentSchema = z.infer<typeof addAssessmentSchema>
 
 // -----------------------------------------------------------------------------
 // UPDATE
 // -----------------------------------------------------------------------------
 //
 
-// Edit Chapter Assessment Order Schema
-export const editChapterAssessmentOrderSchema = z.object({
+// Edit Assessment Order Schema
+export const editAssessmentOrderSchema = z.object({
 	chapterId: z.string().min(1, 'Chapter ID is required'),
 	assessmentList: z.array(
 		z.object({
@@ -32,6 +30,6 @@ export const editChapterAssessmentOrderSchema = z.object({
 		})
 	)
 })
-export type EditChapterAssessmentOrderSchema = z.infer<
-	typeof editChapterAssessmentOrderSchema
+export type EditAssessmentOrderSchema = z.infer<
+	typeof editAssessmentOrderSchema
 >

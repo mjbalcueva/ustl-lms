@@ -1,11 +1,11 @@
 import { createTRPCRouter, instructorProcedure } from '@/server/api/trpc'
 
 import {
-	addChapterAssessmentSchema,
-	editChapterAssessmentOrderSchema
-} from '@/features/chapters/shared/validations/chapter-assessments-schema'
+	addAssessmentSchema,
+	editAssessmentOrderSchema
+} from '@/features/assessment/shared/validations/assessments-schema'
 
-export const chapterAssessmentRouter = createTRPCRouter({
+export const assessmentRouter = createTRPCRouter({
 	// ---------------------------------------------------------------------------
 	// CREATE
 	// ---------------------------------------------------------------------------
@@ -13,7 +13,7 @@ export const chapterAssessmentRouter = createTRPCRouter({
 
 	// Add Chapter Assessment
 	addAssessment: instructorProcedure
-		.input(addChapterAssessmentSchema)
+		.input(addAssessmentSchema)
 		.mutation(async ({ ctx, input }) => {
 			const { chapterId, title } = input
 
@@ -38,7 +38,7 @@ export const chapterAssessmentRouter = createTRPCRouter({
 
 	// Edit Chapter Assessment Order
 	editAssessmentOrder: instructorProcedure
-		.input(editChapterAssessmentOrderSchema)
+		.input(editAssessmentOrderSchema)
 		.mutation(async ({ ctx, input }) => {
 			const { chapterId, assessmentList } = input
 

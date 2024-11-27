@@ -60,7 +60,7 @@ export const AddChapterAssessmentsForm = ({
 	const hasAssessments = assessments.length > 0
 
 	const { mutate: addChapter, isPending: isAdding } =
-		api.instructor.chapterAssessment.addAssessment.useMutation({
+		api.instructor.assessment.addAssessment.useMutation({
 			onSuccess: async (data) => {
 				toggleEdit()
 				form.reset({
@@ -74,7 +74,7 @@ export const AddChapterAssessmentsForm = ({
 		})
 
 	const { mutate: editAssessmentOrder, isPending: isEditingAssessmentOrder } =
-		api.instructor.chapterAssessment.editAssessmentOrder.useMutation({
+		api.instructor.assessment.editAssessmentOrder.useMutation({
 			onSuccess: (data) => {
 				toast.success(data.message)
 				router.refresh()
