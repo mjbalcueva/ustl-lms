@@ -16,7 +16,7 @@ export type TiptapEditorProps = Omit<UseTiptapEditorProps, 'onUpdate'> & {
 	editorContentClassName?: string
 }
 
-export const TiptapEditor = React.forwardRef<HTMLDivElement, TiptapEditorProps>(
+export const Editor = React.forwardRef<HTMLDivElement, TiptapEditorProps>(
 	(
 		{ value, editable, onUpdate, className, editorContentClassName, ...props },
 		ref
@@ -55,4 +55,4 @@ export const TiptapEditor = React.forwardRef<HTMLDivElement, TiptapEditorProps>(
 	}
 )
 
-TiptapEditor.displayName = 'MinimalTiptapEditor'
+Editor.displayName = 'MinimalTiptapEditor'

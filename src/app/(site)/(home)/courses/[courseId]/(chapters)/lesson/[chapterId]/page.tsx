@@ -4,7 +4,7 @@ import MuxPlayer from '@mux/mux-player-react'
 import { api } from '@/services/trpc/server'
 
 import { NotFound } from '@/core/components/error-pages/not-found'
-import { TiptapContentViewer } from '@/core/components/tiptap-editor/content-viewer'
+import { ContentViewer } from '@/core/components/tiptap-editor/content-viewer'
 import { Banner } from '@/core/components/ui/banner'
 import { Card } from '@/core/components/ui/card'
 import {
@@ -45,7 +45,11 @@ export default async function Page({
 	const crumbs: Breadcrumb = [
 		{ icon: Instructor },
 		{ label: 'Courses', href: '/courses' },
-		{ icon: CourseSingle, label: chapter.course.code, href: `/courses/${courseId}` },
+		{
+			icon: CourseSingle,
+			label: chapter.course.code,
+			href: `/courses/${courseId}`
+		},
 		{
 			icon: Lesson,
 			label: chapter.title,
@@ -73,9 +77,14 @@ export default async function Page({
 					<div className="flex items-start justify-between pt-4 md:pt-6">
 						<div className="flex flex-col">
 							<PageTitle>{chapter.title}</PageTitle>
-							<PageDescription>Last updated: {formatDate(chapter.updatedAt)}</PageDescription>
+							<PageDescription>
+								Last updated: {formatDate(chapter.updatedAt)}
+							</PageDescription>
 						</div>
-						<ToggleChapterCompletion chapterId={chapterId} isCompleted={isCompleted} />
+						<ToggleChapterCompletion
+							chapterId={chapterId}
+							isCompleted={isCompleted}
+						/>
 					</div>
 
 					{chapter.videoUrl && (
@@ -89,7 +98,7 @@ export default async function Page({
 					)}
 
 					<Card className="text-pretty p-6 text-sm tracking-wide">
-						<TiptapContentViewer value={chapter.content} />
+						<ContentViewer value={chapter.content} />
 					</Card>
 				</PageSection>
 

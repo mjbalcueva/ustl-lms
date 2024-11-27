@@ -15,6 +15,7 @@ import {
 	CardHeader,
 	CardTitle
 } from '@/core/components/compound-card'
+import { ContentViewer } from '@/core/components/tiptap-editor/content-viewer'
 import { Button } from '@/core/components/ui/button'
 import {
 	Form,
@@ -26,7 +27,7 @@ import {
 import { Separator } from '@/core/components/ui/separator'
 import { Add, Edit } from '@/core/lib/icons'
 
-import { TiptapEditor } from '@/features/chapters/instructor/components/editor/editor'
+import { Editor } from '@/features/chapters/instructor/components/editor/editor'
 import {
 	editChapterContentSchema,
 	type EditChapterContentSchema
@@ -81,12 +82,7 @@ export const EditChapterContentForm = ({
 					{formContent ? (
 						<>
 							<Separator className="mb-4" />
-							<TiptapEditor
-								content={formContent}
-								editable={false}
-								injectCSS={true}
-								immediatelyRender={false}
-							/>
+							<ContentViewer value={formContent} />
 						</>
 					) : (
 						'No content added'
@@ -104,7 +100,7 @@ export const EditChapterContentForm = ({
 								render={({ field }) => (
 									<FormItem>
 										<FormControl>
-											<TiptapEditor
+											<Editor
 												placeholder="Add a content"
 												throttleDelay={2000}
 												output="html"
