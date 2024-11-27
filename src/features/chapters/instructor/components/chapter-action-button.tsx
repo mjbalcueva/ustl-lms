@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { ChapterType, type Status } from '@prisma/client'
 import { toast } from 'sonner'
 
-import { api } from '@/services/trpc/react'
+import { api, type RouterOutputs } from '@/services/trpc/react'
 
 import { ConfirmModal } from '@/core/components/confirm-modal'
 import { Button } from '@/core/components/ui/button'
@@ -32,31 +32,37 @@ import {
 } from '@/core/lib/icons'
 import { capitalize } from '@/core/lib/utils/capitalize'
 
-import { type DeleteChapterSchema } from '@/features/chapters/validations/chapter-schema'
-import { type EditChapterStatusSchema } from '@/features/chapters/validations/chapter-status-schema'
-import { type EditChapterTypeSchema } from '@/features/chapters/validations/chapter-type-schema'
-
-type ChapterActionsProps = DeleteChapterSchema & EditChapterStatusSchema & EditChapterTypeSchema
-
-export const ChapterActions = ({ id, courseId, status, type }: ChapterActionsProps) => {
+export const ChapterActions = ({
+	chapterId,
+	courseId,
+	type,
+	status
+}: {
+	chapterId: RouterOutputs['instructor']['chapter']['findOneChapter']['chapter']['chapterId']
+	courseId: RouterOutputs['instructor']['chapter']['findOneChapter']['chapter']['courseId']
+	type: RouterOutputs['instructor']['chapter']['findOneChapter']['chapter']['type']
+	status: RouterOutputs['instructor']['chapter']['findOneChapter']['chapter']['status']
+}) => {
 	const router = useRouter()
 
-	const { mutate: editStatus, isPending: isEditingStatus } = api.chapter.editStatus.useMutation({
-		onSuccess: (data) => {
-			toast.success(data.message)
-			router.refresh()
-		}
-	})
+	const { mutate: editType, isPending: isEditingType } =
+		api.instructor.chapter.editType.useMutation({
+			onSuccess: (data) => {
+				toast.success(data.message)
+				router.refresh()
+			}
+		})
 
-	const { mutate: editType, isPending: isEditingType } = api.chapter.editType.useMutation({
-		onSuccess: (data) => {
-			toast.success(data.message)
-			router.refresh()
-		}
-	})
+	const { mutate: editStatus, isPending: isEditingStatus } =
+		api.instructor.chapter.editStatus.useMutation({
+			onSuccess: (data) => {
+				toast.success(data.message)
+				router.refresh()
+			}
+		})
 
 	const { mutate: deleteChapter, isPending: isDeletingChapter } =
-		api.chapter.deleteChapter.useMutation({
+		api.instructor.chapter.deleteChapter.useMutation({
 			onSuccess: (data) => {
 				toast.success(data.message)
 				router.push(`/instructor/courses/${courseId}`)
@@ -64,7 +70,8 @@ export const ChapterActions = ({ id, courseId, status, type }: ChapterActionsPro
 			}
 		})
 
-	const handleStatusChange = (newStatus: Status) => editStatus({ id, courseId, status: newStatus })
+	const handleStatusChange = (newStatus: Status) =>
+		editStatus({ chapterId, status: newStatus })
 
 	const getStatusButtonLabel = () =>
 		isEditingStatus
@@ -73,7 +80,8 @@ export const ChapterActions = ({ id, courseId, status, type }: ChapterActionsPro
 				? `Unpublish ${capitalize(type)}`
 				: `Publish ${capitalize(type)}`
 
-	const handleTypeChange = (newType: ChapterType) => editType({ id, courseId, type: newType })
+	const handleTypeChange = (newType: ChapterType) =>
+		editType({ chapterId, type: newType })
 
 	const getChapterTypeIcon = (type: ChapterType) => {
 		const iconMap = {
@@ -88,9 +96,20 @@ export const ChapterActions = ({ id, courseId, status, type }: ChapterActionsPro
 		<div className="flex items-center gap-2">
 			<Button
 				size="md"
-				disabled={isEditingStatus || isEditingType || isDeletingChapter || status === 'ARCHIVED'}
-				variant={isEditingStatus || isEditingType || isDeletingChapter ? 'shine' : 'default'}
-				onClick={() => handleStatusChange(status === 'PUBLISHED' ? 'DRAFT' : 'PUBLISHED')}
+				disabled={
+					isEditingStatus ||
+					isEditingType ||
+					isDeletingChapter ||
+					status === 'ARCHIVED'
+				}
+				variant={
+					isEditingStatus || isEditingType || isDeletingChapter
+						? 'shine'
+						: 'default'
+				}
+				onClick={() =>
+					handleStatusChange(status === 'PUBLISHED' ? 'DRAFT' : 'PUBLISHED')
+				}
 			>
 				{getStatusButtonLabel()}
 			</Button>
@@ -124,7 +143,10 @@ export const ChapterActions = ({ id, courseId, status, type }: ChapterActionsPro
 										onConfirm={() => handleTypeChange(chapterType)}
 										actionLabel="Change"
 									>
-										<DropdownMenuRadioItem value={chapterType} onSelect={(e) => e.preventDefault()}>
+										<DropdownMenuRadioItem
+											value={chapterType}
+											onSelect={(e) => e.preventDefault()}
+										>
 											{getChapterTypeIcon(chapterType)}
 											{capitalize(chapterType)}
 										</DropdownMenuRadioItem>
@@ -135,7 +157,9 @@ export const ChapterActions = ({ id, courseId, status, type }: ChapterActionsPro
 					</DropdownMenuSub>
 
 					<DropdownMenuItem
-						onClick={() => handleStatusChange(status === 'ARCHIVED' ? 'DRAFT' : 'ARCHIVED')}
+						onClick={() =>
+							handleStatusChange(status === 'ARCHIVED' ? 'DRAFT' : 'ARCHIVED')
+						}
 					>
 						{status === 'ARCHIVED' ? (
 							<Unarchive className="mr-2 size-4" />
@@ -150,7 +174,7 @@ export const ChapterActions = ({ id, courseId, status, type }: ChapterActionsPro
 					<ConfirmModal
 						title="Are you sure you want to delete this chapter?"
 						description="This action cannot be undone. This will permanently delete your chapter and remove your data from our servers."
-						onConfirm={() => deleteChapter({ id })}
+						onConfirm={() => deleteChapter({ chapterId })}
 						actionLabel="Delete"
 						variant="destructive"
 					>

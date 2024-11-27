@@ -21,34 +21,48 @@ import { CourseSingle, Instructor, Lesson } from '@/core/lib/icons'
 import { capitalize } from '@/core/lib/utils/capitalize'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
-import { ChapterActions } from '@/features/chapters/components/chapter-action-button'
-import { AddChapterAttachmentsForm } from '@/features/chapters/components/forms/add-chapter-attachments-form'
-import { EditChapterContentForm } from '@/features/chapters/components/forms/edit-chapter-content-form'
-import { EditChapterTitleForm } from '@/features/chapters/components/forms/edit-chapter-title-form'
-import { EditChapterVideoForm } from '@/features/chapters/components/forms/edit-chapter-video-form'
+import { ChapterActions } from '@/features/chapters/instructor/components/chapter-action-button'
+
+// import { AddChapterAttachmentsForm } from '@/features/chapters/components/forms/add-chapter-attachments-form'
+// import { EditChapterContentForm } from '@/features/chapters/components/forms/edit-chapter-content-form'
+// import { EditChapterTitleForm } from '@/features/chapters/components/forms/edit-chapter-title-form'
+// import { EditChapterVideoForm } from '@/features/chapters/components/forms/edit-chapter-video-form'
 
 export default async function Page({
-	params
+	params: { courseId, chapterId }
 }: {
 	params: { courseId: string; chapterId: string }
 }) {
-	const { courseId, chapterId } = params
 	const session = await auth()
-	if (session?.user.role !== 'INSTRUCTOR') redirect(`/courses/${courseId}/lesson/${chapterId}`)
+	if (session?.user.role !== 'INSTRUCTOR')
+		redirect(`/courses/${courseId}/lesson/${chapterId}`)
 
-	const { chapter } = await api.chapter.findChapter({ courseId, id: chapterId })
+	const { chapter } = await api.instructor.chapter.findOneChapter({
+		chapterId
+	})
 	if (!chapter) return <NotFound item="chapter" />
 	if (chapter.type !== 'LESSON') {
-		redirect(`/instructor/courses/${courseId}/${chapter.type.toLowerCase()}/${chapterId}`)
+		redirect(
+			`/instructor/courses/${courseId}/${chapter.type.toLowerCase()}/${chapterId}`
+		)
 	}
 
-	const requiredFields = [chapter.title, chapter.content, chapter.videoUrl, chapter.attachments]
+	const requiredFields = [
+		chapter.title,
+		chapter.content,
+		chapter.videoUrl,
+		chapter.attachments
+	]
 	const completionText = `(${requiredFields.filter(Boolean).length}/${requiredFields.length})`
 
 	const crumbs: Breadcrumb = [
 		{ icon: Instructor },
 		{ label: 'Courses', href: '/instructor/courses' },
-		{ icon: CourseSingle, label: chapter.course.title, href: `/instructor/courses/${courseId}` },
+		{
+			icon: CourseSingle,
+			label: chapter.course.title,
+			href: `/instructor/courses/${courseId}`
+		},
 		{
 			icon: Lesson,
 			label: chapter.title,
@@ -86,8 +100,8 @@ export default async function Page({
 					<PageDescription>Filled {completionText}</PageDescription>
 				</div>
 				<ChapterActions
-					id={chapter.id}
-					courseId={chapter.course.id}
+					chapterId={chapter.chapterId}
+					courseId={chapter.courseId}
 					status={chapter.status}
 					type={chapter.type}
 				/>
@@ -96,7 +110,7 @@ export default async function Page({
 			<PageContent className="mb-24 space-y-6 px-2.5 sm:px-4 md:mb-12 md:flex md:flex-wrap md:gap-6 md:space-y-0 md:px-6">
 				<PageSection columnMode>
 					<FoldableBlock title="Customize your lesson" icon={TbNotes}>
-						<EditChapterTitleForm
+						{/* <EditChapterTitleForm
 							id={chapter.id}
 							courseId={chapter.course.id}
 							title={chapter.title}
@@ -105,25 +119,25 @@ export default async function Page({
 							id={chapter.id}
 							courseId={chapter.course.id}
 							content={chapter.content}
-						/>
+						/> */}
 					</FoldableBlock>
 
 					<FoldableBlock title="Learning materials" icon={TbPaperclip}>
-						<AddChapterAttachmentsForm
+						{/* <AddChapterAttachmentsForm
 							courseId={chapter.course.id}
 							chapterId={chapter.id}
 							attachments={chapter.attachments}
-						/>
+						/> */}
 					</FoldableBlock>
 				</PageSection>
 
 				<PageSection columnMode>
 					<FoldableBlock title="Lecture video" icon={TbVideo}>
-						<EditChapterVideoForm
+						{/* <EditChapterVideoForm
 							id={chapter.id}
 							courseId={chapter.course.id}
 							initialData={chapter}
-						/>
+						/> */}
 					</FoldableBlock>
 
 					<FoldableBlock title="Student Feedback" icon={TbMessage}>
