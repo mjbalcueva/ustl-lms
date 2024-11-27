@@ -20,6 +20,7 @@ import { Assessment, CourseSingle, Instructor } from '@/core/lib/icons'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
 import { AssessmentActionButton } from '@/features/assessment/instructor/components/assessment-action-button'
+import { EditAssessmentTitleForm } from '@/features/assessment/instructor/components/forms/edit-assessment-title-form'
 
 export default async function Page({
 	params: { courseId, chapterId, assessmentId }
@@ -85,11 +86,12 @@ export default async function Page({
 			<PageContent className="mb-24 space-y-6 px-2.5 sm:px-4 md:mb-12 md:flex md:flex-wrap md:gap-6 md:space-y-0 md:px-6">
 				<PageSection columnMode>
 					<FoldableBlock title="Customize your section" icon={LuFeather}>
-						{/* <EditAssessmentTitleForm
-							chapterId={chapterId}
+						<EditAssessmentTitleForm
 							assessmentId={assessmentId}
 							title={assessment.title}
 						/>
+
+						{/*
 
 						<EditAssessmentInstructionForm
 							chapterId={chapterId}

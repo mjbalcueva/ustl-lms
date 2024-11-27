@@ -6,6 +6,7 @@ import {
 	addAssessmentSchema,
 	deleteAssessmentSchema,
 	editAssessmentOrderSchema,
+	editAssessmentTitleSchema,
 	editShuffleOptionsSchema,
 	editShuffleQuestionsSchema,
 	findOneAssessmentSchema
@@ -74,6 +75,23 @@ export const assessmentRouter = createTRPCRouter({
 	// UPDATE
 	// ---------------------------------------------------------------------------
 	//
+
+	// Edit Assessment Title
+	editTitle: instructorProcedure
+		.input(editAssessmentTitleSchema)
+		.mutation(async ({ ctx, input }) => {
+			const { assessmentId, title } = input
+
+			await ctx.db.chapterAssessment.update({
+				where: { assessmentId },
+				data: { title }
+			})
+
+			return {
+				message: 'Assessment title updated successfully',
+				newTitle: title
+			}
+		}),
 
 	// Edit Assessment Shuffle Questions
 	editShuffleQuestions: instructorProcedure

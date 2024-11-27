@@ -31,6 +31,18 @@ export type FindOneAssessmentSchema = z.infer<typeof findOneAssessmentSchema>
 // -----------------------------------------------------------------------------
 //
 
+// Edit Assessment Title Schema
+export const editAssessmentTitleSchema = z.object({
+	assessmentId: z.string().min(1, 'Assessment ID is required'),
+	title: z
+		.string()
+		.min(1, 'Title is required')
+		.max(128, 'Title must be less than 128 characters')
+})
+export type EditAssessmentTitleSchema = z.infer<
+	typeof editAssessmentTitleSchema
+>
+
 // Edit Assessment Shuffle Questions Schema
 export const editShuffleQuestionsSchema = z.object({
 	assessmentId: z.string().min(1, 'Assessment ID is required'),
