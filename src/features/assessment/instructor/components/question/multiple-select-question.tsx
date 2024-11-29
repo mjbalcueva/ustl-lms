@@ -1,11 +1,11 @@
 import { Checkbox } from '@/core/components/ui/checkbox'
 
-type MultipleSelectProps = {
-	options: string[]
-	answer: string[]
-}
+import { type MultipleSelectQuestionType } from '@/features/assessment/shared/libs/question-type'
 
-export const MultipleSelectQuestion = ({ options, answer }: MultipleSelectProps) => {
+export const MultipleSelectQuestion = ({
+	options,
+	answer
+}: MultipleSelectQuestionType) => {
 	return (
 		<div className="space-y-2">
 			{options.map((option, i) => {
@@ -13,7 +13,9 @@ export const MultipleSelectQuestion = ({ options, answer }: MultipleSelectProps)
 				return (
 					<div key={i} className="flex items-center gap-2">
 						<Checkbox checked={isCorrect} className="hover:cursor-default" />
-						<span className={`text-sm ${isCorrect && 'font-medium'}`}>{option}</span>
+						<span className={`text-sm ${isCorrect && 'font-medium'}`}>
+							{option}
+						</span>
 					</div>
 				)
 			})}

@@ -8,7 +8,9 @@ import { env } from '@/core/env/server'
 import {
 	addAssessmentQuestionSchema,
 	aiResponseSchema,
+	deleteAssessmentQuestionSchema,
 	editAssessmentQuestionOrderSchema,
+	editAssessmentQuestionSchema,
 	generateAiAssessmentQuestionSchema
 } from '@/features/assessment/shared/validations/assessments-question-schema'
 
@@ -21,49 +23,54 @@ export const assessmentQuestionRouter = createTRPCRouter({
 	// Add Assessment Question
 	addQuestion: instructorProcedure
 		.input(addAssessmentQuestionSchema)
-		.mutation(async ({ ctx, input }) => {
-			const { assessmentId, questionType, question, options, points } = input
+		.mutation(
+			async ({
+				ctx,
+				input: { assessmentId, questionType, question, options, points }
+			}) => {
+				const lastQuestion = await ctx.db.assessmentQuestion.findFirst({
+					where: { assessmentId },
+					orderBy: { position: 'desc' }
+				})
 
-			const lastQuestion = await ctx.db.assessmentQuestion.findFirst({
-				where: { assessmentId },
-				orderBy: { position: 'desc' }
-			})
+				const newPosition = lastQuestion ? lastQuestion.position + 1 : 1
 
-			const newPosition = lastQuestion ? lastQuestion.position + 1 : 1
+				await ctx.db.assessmentQuestion.create({
+					data: {
+						assessmentId,
+						questionType,
+						question,
+						options,
+						points,
+						position: newPosition
+					}
+				})
 
-			await ctx.db.assessmentQuestion.create({
-				data: {
-					assessmentId,
-					questionType,
-					question,
-					options,
-					points,
-					position: newPosition
-				}
-			})
-
-			return { message: 'Question created successfully' }
-		}),
+				return { message: 'Question created successfully' }
+			}
+		),
 
 	// Generate Questions
 	generateAiQuestions: instructorProcedure
 		.input(generateAiAssessmentQuestionSchema)
-		.mutation(async ({ ctx, input }) => {
-			const {
-				assessmentId,
-				chapters,
-				questionType,
-				numberOfQuestions,
-				additionalPrompt
-			} = input
-
-			const response = await generateObject({
-				model: openai(env.MODEL_ID),
-				schema: aiResponseSchema,
-				messages: [
-					{
-						role: 'system',
-						content: `
+		.mutation(
+			async ({
+				ctx,
+				input: {
+					assessmentId,
+					chapters,
+					questionType,
+					numberOfQuestions,
+					additionalPrompt
+				}
+			}) => {
+				const response = await generateObject({
+					model: openai(env.MODEL_ID),
+					schema: aiResponseSchema,
+					messages: [
+						{
+							role: 'system',
+							content: `
 							You are an expert assessment creator. Generate ${numberOfQuestions} ${questionType} questions based on the provided content.
 
 							For each question, assign points based on difficulty:
@@ -78,45 +85,46 @@ export const assessmentQuestionRouter = createTRPCRouter({
 							[important] Use the following format for true or false questions to underline the important part of the question:
 							<p class="text-node"><u class="underline">important word</u> rest of question</p>
 						`
-					},
-					{
-						role: 'user',
-						content: `
+						},
+						{
+							role: 'user',
+							content: `
 							Content:
 							${chapters.map((c) => `${c.title}\n${c.content}`).join('\n\n')}
 							${additionalPrompt ? `Additional instructions: ${additionalPrompt}` : 'None'}
 						`
-					}
-				]
-			})
+						}
+					]
+				})
 
-			// Get current max position
-			const maxPosition = await ctx.db.assessmentQuestion.findFirst({
-				where: { assessmentId },
-				orderBy: { position: 'desc' },
-				select: { position: true }
-			})
+				// Get current max position
+				const maxPosition = await ctx.db.assessmentQuestion.findFirst({
+					where: { assessmentId },
+					orderBy: { position: 'desc' },
+					select: { position: true }
+				})
 
-			// Create questions with incremented positions
-			await ctx.db.assessmentQuestion.createMany({
-				data: response.object.questions.map((q, index) => ({
-					assessmentId,
-					question: q.question,
-					type: questionType,
-					options: {
+				// Create questions with incremented positions
+				await ctx.db.assessmentQuestion.createMany({
+					data: response.object.questions.map((q, index) => ({
+						assessmentId,
+						question: q.question,
 						type: questionType,
-						options: q.options,
-						answer: q.answer
-					},
-					position: (maxPosition?.position ?? -1) + index + 1,
-					points: q.points
-				}))
-			})
+						options: {
+							type: questionType,
+							options: q.options,
+							answer: q.answer
+						},
+						position: (maxPosition?.position ?? -1) + index + 1,
+						points: q.points
+					}))
+				})
 
-			return {
-				message: 'Questions generated successfully'
+				return {
+					message: 'Questions generated successfully'
+				}
 			}
-		}),
+		),
 
 	// ---------------------------------------------------------------------------
 	// READ
@@ -128,26 +136,67 @@ export const assessmentQuestionRouter = createTRPCRouter({
 	// ---------------------------------------------------------------------------
 	//
 
+	// Edit Assessment Question
+	editQuestion: instructorProcedure
+		.input(editAssessmentQuestionSchema)
+		.mutation(
+			async ({
+				ctx,
+				input: { questionId, questionType, question, options, points }
+			}) => {
+				await ctx.db.assessmentQuestion.update({
+					where: { questionId },
+					data: { questionType, question, options, points }
+				})
+
+				return { message: 'Question updated successfully' }
+			}
+		),
+
 	// Edit Assessment Question Order
 	editOrder: instructorProcedure
 		.input(editAssessmentQuestionOrderSchema)
-		.mutation(async ({ ctx, input }) => {
-			const { assessmentId, questionList } = input
-
+		.mutation(async ({ ctx, input: { assessmentId, questionList } }) => {
 			for (const question of questionList) {
 				const newPosition = question.position + 1
 
 				await ctx.db.assessmentQuestion.update({
-					where: { assessmentId, questionId: question.id },
+					where: { assessmentId, questionId: question.questionId },
 					data: { position: newPosition }
 				})
 			}
 
 			return { message: 'Assessment questions reordered successfully' }
-		})
+		}),
 
 	// ---------------------------------------------------------------------------
 	// DELETE
 	// ---------------------------------------------------------------------------
 	//
+
+	// Delete Assessment Question
+	deleteQuestion: instructorProcedure
+		.input(deleteAssessmentQuestionSchema)
+		.mutation(async ({ ctx, input: { questionId } }) => {
+			const question = await ctx.db.assessmentQuestion.findUnique({
+				where: { questionId },
+				select: { position: true, assessmentId: true }
+			})
+
+			if (!question) throw new Error('Question not found')
+
+			await Promise.all([
+				ctx.db.assessmentQuestion.delete({ where: { questionId } }),
+
+				ctx.db.assessmentQuestion.updateMany({
+					where: {
+						assessmentId: question.assessmentId,
+						position: { gt: question.position }
+					},
+					data: { position: { decrement: 1 } }
+				})
+			])
+
+			return { message: 'Question deleted successfully' }
+		})
 })

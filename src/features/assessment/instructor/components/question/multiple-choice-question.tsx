@@ -1,11 +1,11 @@
 import { RadioGroup, RadioGroupItem } from '@/core/components/ui/radio-group'
 
-type MultipleChoiceProps = {
-	options: string[]
-	answer: string
-}
+import { type MultipleChoiceQuestionType } from '@/features/assessment/shared/libs/question-type'
 
-export const MultipleChoiceQuestion = ({ options, answer }: MultipleChoiceProps) => {
+export const MultipleChoiceQuestion = ({
+	options,
+	answer
+}: MultipleChoiceQuestionType) => {
 	return (
 		<div className="space-y-2">
 			{options.map((option, i) => (
@@ -13,7 +13,9 @@ export const MultipleChoiceQuestion = ({ options, answer }: MultipleChoiceProps)
 					<RadioGroup value={answer}>
 						<RadioGroupItem value={option} className="hover:cursor-default" />
 					</RadioGroup>
-					<span className={`text-sm ${option === answer && 'font-medium'}`}>{option}</span>
+					<span className={`text-sm ${option === answer && 'font-medium'}`}>
+						{option}
+					</span>
 				</div>
 			))}
 		</div>

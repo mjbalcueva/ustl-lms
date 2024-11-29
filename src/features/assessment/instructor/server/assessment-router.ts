@@ -23,9 +23,7 @@ export const assessmentRouter = createTRPCRouter({
 	// Add Chapter Assessment
 	addAssessment: instructorProcedure
 		.input(addAssessmentSchema)
-		.mutation(async ({ ctx, input }) => {
-			const { chapterId, title } = input
-
+		.mutation(async ({ ctx, input: { chapterId, title } }) => {
 			const lastAssessment = await ctx.db.chapterAssessment.findFirst({
 				where: { chapterId },
 				orderBy: { position: 'desc' }
@@ -48,13 +46,13 @@ export const assessmentRouter = createTRPCRouter({
 	// Find One Assessment
 	findOneAssessment: instructorProcedure
 		.input(findOneAssessmentSchema)
-		.query(async ({ ctx, input }) => {
-			const { assessmentId } = input
-
+		.query(async ({ ctx, input: { assessmentId } }) => {
 			const assessment = await ctx.db.chapterAssessment.findUnique({
 				where: { assessmentId },
 				include: {
-					questions: true,
+					questions: {
+						orderBy: { position: 'asc' }
+					},
 					chapter: {
 						select: {
 							chapterId: true,
@@ -77,9 +75,7 @@ export const assessmentRouter = createTRPCRouter({
 	// Find Many Lessons
 	findManyLessons: instructorProcedure
 		.input(findManyLessonsSchema)
-		.query(async ({ ctx, input }) => {
-			const { chapterId } = input
-
+		.query(async ({ ctx, input: { chapterId } }) => {
 			const lessons = await ctx.db.chapter.findMany({
 				where: { chapterId, type: 'LESSON' },
 				orderBy: { position: 'asc' }
@@ -96,9 +92,7 @@ export const assessmentRouter = createTRPCRouter({
 	// Edit Assessment Title
 	editTitle: instructorProcedure
 		.input(editAssessmentTitleSchema)
-		.mutation(async ({ ctx, input }) => {
-			const { assessmentId, title } = input
-
+		.mutation(async ({ ctx, input: { assessmentId, title } }) => {
 			await ctx.db.chapterAssessment.update({
 				where: { assessmentId },
 				data: { title }
@@ -113,9 +107,7 @@ export const assessmentRouter = createTRPCRouter({
 	// Edit Assessment Instruction
 	editInstruction: instructorProcedure
 		.input(editAssessmentInstructionSchema)
-		.mutation(async ({ ctx, input }) => {
-			const { assessmentId, instruction } = input
-
+		.mutation(async ({ ctx, input: { assessmentId, instruction } }) => {
 			await ctx.db.chapterAssessment.update({
 				where: { assessmentId },
 				data: { instruction }
@@ -130,9 +122,7 @@ export const assessmentRouter = createTRPCRouter({
 	// Edit Assessment Shuffle Questions
 	editShuffleQuestions: instructorProcedure
 		.input(editShuffleQuestionsSchema)
-		.mutation(async ({ ctx, input }) => {
-			const { assessmentId, shuffleQuestions } = input
-
+		.mutation(async ({ ctx, input: { assessmentId, shuffleQuestions } }) => {
 			await ctx.db.chapterAssessment.update({
 				where: { assessmentId },
 				data: { shuffleQuestions }
@@ -144,9 +134,7 @@ export const assessmentRouter = createTRPCRouter({
 	// Edit Assessment Shuffle Options
 	editShuffleOptions: instructorProcedure
 		.input(editShuffleOptionsSchema)
-		.mutation(async ({ ctx, input }) => {
-			const { assessmentId, shuffleOptions } = input
-
+		.mutation(async ({ ctx, input: { assessmentId, shuffleOptions } }) => {
 			await ctx.db.chapterAssessment.update({
 				where: { assessmentId },
 				data: { shuffleOptions }
@@ -158,9 +146,7 @@ export const assessmentRouter = createTRPCRouter({
 	// Edit Chapter Assessment Order
 	editAssessmentOrder: instructorProcedure
 		.input(editAssessmentOrderSchema)
-		.mutation(async ({ ctx, input }) => {
-			const { chapterId, assessmentList } = input
-
+		.mutation(async ({ ctx, input: { chapterId, assessmentList } }) => {
 			for (const assessment of assessmentList) {
 				const newPosition = assessment.position + 1
 
@@ -181,9 +167,7 @@ export const assessmentRouter = createTRPCRouter({
 	// Delete Assessment
 	deleteAssessment: instructorProcedure
 		.input(deleteAssessmentSchema)
-		.mutation(async ({ ctx, input }) => {
-			const { assessmentId } = input
-
+		.mutation(async ({ ctx, input: { assessmentId } }) => {
 			await ctx.db.chapterAssessment.delete({
 				where: { assessmentId }
 			})

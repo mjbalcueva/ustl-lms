@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { api } from '@/services/trpc/react'
+import { api, type RouterOutputs } from '@/services/trpc/react'
 
 import { Button } from '@/core/components/ui/button'
 import {
@@ -19,43 +19,43 @@ import {
 } from '@/core/components/ui/dialog'
 import { Form } from '@/core/components/ui/form'
 
-import { EditAssessmentQuestionFormFields } from '@/features/questions/components/forms/edit-assessment-question-form-fields'
 import {
 	editAssessmentQuestionSchema,
-	type EditAssessmentQuestionSchema
-} from '@/features/questions/validations/assessment-questions-schema'
-
-type EditAssessmentQuestionFormProps = {
-	isOpen: boolean
-	onClose: () => void
-	questionData: EditAssessmentQuestionSchema
-	assessmentId: string
-}
+	type EditAssessmentQuestionSchema,
+	type QuestionOptions
+} from '@/features/assessment/shared/validations/assessments-question-schema'
 
 export const EditAssessmentQuestionForm = ({
 	isOpen,
 	onClose,
-	questionData,
-	assessmentId
-}: EditAssessmentQuestionFormProps) => {
+	question
+}: {
+	isOpen: boolean
+	onClose: () => void
+	question: RouterOutputs['instructor']['assessment']['findOneAssessment']['assessment']['questions'][number]
+}) => {
 	const router = useRouter()
 
 	const form = useForm<EditAssessmentQuestionSchema>({
 		resolver: zodResolver(editAssessmentQuestionSchema),
 		defaultValues: {
-			...questionData,
-			assessmentId
+			questionId: question.questionId,
+			question: question.question,
+			questionType: question.questionType,
+			options: question.options as QuestionOptions,
+			points: question.points
 		}
 	})
 
-	const { mutate: editQuestion, isPending: isEditing } = api.question.editQuestion.useMutation({
-		onSuccess: () => {
-			toast.success('Question updated successfully')
-			onClose()
-			router.refresh()
-		},
-		onError: (error) => toast.error(error.message)
-	})
+	const { mutate: editQuestion, isPending: isEditing } =
+		api.instructor.assessmentQuestion.editQuestion.useMutation({
+			onSuccess: () => {
+				toast.success('Question updated successfully')
+				onClose()
+				router.refresh()
+			},
+			onError: (error) => toast.error(error.message)
+		})
 
 	const onSubmit = (data: EditAssessmentQuestionSchema) => {
 		editQuestion({ ...data })
@@ -66,11 +66,16 @@ export const EditAssessmentQuestionForm = ({
 			<DialogContent>
 				<DialogHeader>
 					<DialogTitle>Edit Question</DialogTitle>
-					<DialogDescription>Update the question details below.</DialogDescription>
+					<DialogDescription>
+						Update the question details below.
+					</DialogDescription>
 				</DialogHeader>
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-						<EditAssessmentQuestionFormFields form={form} isSubmitting={isEditing} />
+						{/* <EditAssessmentQuestionFormFields
+							form={form}
+							isSubmitting={isEditing}
+						/> */}
 
 						<DialogFooter className="gap-2 md:gap-0">
 							<DialogClose asChild>

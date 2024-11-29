@@ -8,83 +8,64 @@ import {
 	Droppable,
 	type DropResult
 } from '@hello-pangea/dnd'
-import { type Question } from '@prisma/client'
 import { toast } from 'sonner'
 
-import { api } from '@/services/trpc/react'
+import { api, type RouterOutputs } from '@/services/trpc/react'
 
-import { Editor } from '@/features/assessment/instructor/components/editor/editor'
-import { AssessmentQuestionHeader } from '@/features/questions/components/assessment-question-header'
-import { EditAssessmentQuestionForm } from '@/features/questions/components/forms/edit-assessment-question-form'
-import { MultipleChoiceQuestion } from '@/features/questions/components/question-type/multiple-choice-question'
-import { MultipleSelectQuestion } from '@/features/questions/components/question-type/multiple-select-question'
-import { TrueFalseQuestion } from '@/features/questions/components/question-type/true-false-question'
-import { type QuestionOptions } from '@/features/questions/lib/types'
+import { ContentViewer } from '@/core/components/tiptap-editor/content-viewer'
+import { Badge } from '@/core/components/ui/badge'
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger
+} from '@/core/components/ui/tooltip'
+import { Delete, Edit, GripVertical } from '@/core/lib/icons'
 
-type QuestionListProps = {
-	items: Question[]
-	onReorder: (updateData: { id: string; position: number }[]) => void
-}
+import { EditAssessmentQuestionForm } from '@/features/assessment/instructor/components/forms/edit-assessment-question-form'
+import { DisplayQuestion } from '@/features/assessment/instructor/components/question/display-question'
 
-export const QuestionList = ({ items, onReorder }: QuestionListProps) => {
+export const QuestionList = ({
+	questionList,
+	onReorder
+}: {
+	questionList: RouterOutputs['instructor']['assessment']['findOneAssessment']['assessment']['questions']
+	onReorder: (updateData: { questionId: string; position: number }[]) => void
+}) => {
 	const router = useRouter()
 
-	const [assessments, setAssessments] = React.useState(items)
-	const [editingQuestion, setEditingQuestion] = React.useState<Question | null>(
-		null
-	)
+	const [questions, setQuestions] = React.useState(questionList)
+	const [editingQuestion, setEditingQuestion] = React.useState<
+		| RouterOutputs['instructor']['assessment']['findOneAssessment']['assessment']['questions'][number]
+		| null
+	>(null)
 
 	React.useEffect(() => {
-		setAssessments(items)
-	}, [items])
+		setQuestions(questionList)
+	}, [questionList])
 
 	const handleDragEnd = ({ destination, source }: DropResult) => {
 		if (!destination || source.index === destination.index) return
 
-		const updatedAssessments = Array.from(assessments)
-		const [movedAssessment] = updatedAssessments.splice(source.index, 1)
-		updatedAssessments.splice(destination.index, 0, movedAssessment!)
+		const updatedQuestions = Array.from(questions)
+		const [movedQuestion] = updatedQuestions.splice(source.index, 1)
+		updatedQuestions.splice(destination.index, 0, movedQuestion!)
 
-		setAssessments(updatedAssessments)
+		setQuestions(updatedQuestions)
 		onReorder(
-			updatedAssessments.map((assessment, index) => ({
-				id: assessment.id,
+			updatedQuestions.map((question, index) => ({
+				questionId: question.questionId,
 				position: index
 			}))
 		)
 	}
 
-	const renderQuestionContent = (assessment: Question) => {
-		const options = assessment.options as QuestionOptions
-
-		switch (assessment.type) {
-			case 'MULTIPLE_CHOICE':
-				return (
-					<MultipleChoiceQuestion
-						options={options.options}
-						answer={options.answer as string}
-					/>
-				)
-			case 'MULTIPLE_SELECT':
-				return (
-					<MultipleSelectQuestion
-						options={options.options}
-						answer={options.answer as string[]}
-					/>
-				)
-			case 'TRUE_OR_FALSE':
-				return <TrueFalseQuestion answer={options.answer as 'True' | 'False'} />
-			default:
-				return null
-		}
-	}
-
-	const { mutate: deleteQuestion } = api.question.deleteQuestion.useMutation({
-		onSuccess: (data) => {
-			toast.success(data.message)
-			router.refresh()
-		}
-	})
+	const { mutate: deleteQuestion } =
+		api.instructor.assessmentQuestion.deleteQuestion.useMutation({
+			onSuccess: (data) => {
+				toast.success(data.message)
+				router.refresh()
+			}
+		})
 
 	return (
 		<>
@@ -96,11 +77,11 @@ export const QuestionList = ({ items, onReorder }: QuestionListProps) => {
 							className="space-y-2"
 							{...provided.droppableProps}
 						>
-							{assessments.map((assessment, index) => {
+							{questions.map((question, index) => {
 								return (
 									<Draggable
-										key={assessment.id}
-										draggableId={assessment.id}
+										key={question.questionId}
+										draggableId={question.questionId}
 										index={index}
 									>
 										{(provided) => (
@@ -109,27 +90,55 @@ export const QuestionList = ({ items, onReorder }: QuestionListProps) => {
 												className="rounded-xl border border-input bg-card dark:bg-background"
 												{...provided.draggableProps}
 											>
-												<AssessmentQuestionHeader
-													index={index}
-													points={assessment.points}
-													onEdit={() => setEditingQuestion(assessment)}
-													onDelete={() => deleteQuestion({ id: assessment.id })}
-													{...provided.dragHandleProps}
-												/>
+												<div className="flex items-center gap-2 px-2.5 pb-2.5 pt-3">
+													<span
+														className="rounded-md p-1.5 outline-none hover:bg-accent focus-visible:outline-ring"
+														{...provided.dragHandleProps}
+													>
+														<GripVertical className="size-4 shrink-0" />
+													</span>
+
+													<div className="flex flex-1 items-center gap-2">
+														<Badge
+															variant="secondary"
+															className="text-sm font-medium leading-4"
+														>
+															Question #{index + 1}
+														</Badge>
+														<span className="text-sm text-muted-foreground">
+															({question.points}{' '}
+															{question.points === 1 ? 'point' : 'points'})
+														</span>
+													</div>
+
+													<Tooltip>
+														<TooltipTrigger
+															className="rounded-md p-1.5 outline-none hover:bg-accent focus-visible:outline-ring"
+															onClick={() => setEditingQuestion(question)}
+														>
+															<Edit className="size-4" />
+														</TooltipTrigger>
+														<TooltipContent>Edit</TooltipContent>
+													</Tooltip>
+
+													<Tooltip>
+														<TooltipTrigger
+															className="rounded-md p-1.5 outline-none hover:bg-accent focus-visible:outline-ring"
+															onClick={() =>
+																deleteQuestion({
+																	questionId: question.questionId
+																})
+															}
+														>
+															<Delete className="size-4" />
+														</TooltipTrigger>
+														<TooltipContent>Delete</TooltipContent>
+													</Tooltip>
+												</div>
 
 												<div className="space-y-1 pb-4 pl-12 pr-4">
-													<Editor
-														content={assessment.question}
-														editable={false}
-														injectCSS={true}
-														immediatelyRender={false}
-													/>
-
-													<div className="flex items-center gap-2 pl-2">
-														<div className="flex-1 border-l-2 border-muted pl-3">
-															{renderQuestionContent(assessment)}
-														</div>
-													</div>
+													<ContentViewer content={question.question} />
+													<DisplayQuestion question={question} />
 												</div>
 											</li>
 										)}
@@ -146,19 +155,7 @@ export const QuestionList = ({ items, onReorder }: QuestionListProps) => {
 				<EditAssessmentQuestionForm
 					isOpen={!!editingQuestion}
 					onClose={() => setEditingQuestion(null)}
-					questionData={{
-						id: editingQuestion.id,
-						assessmentId: editingQuestion.assessmentId,
-						question: editingQuestion.question,
-						type: editingQuestion.type,
-						options: (editingQuestion.options as QuestionOptions) ?? {
-							type: 'MULTIPLE_CHOICE',
-							options: [],
-							answer: ''
-						},
-						points: editingQuestion.points
-					}}
-					assessmentId={editingQuestion.assessmentId}
+					question={editingQuestion}
 				/>
 			)}
 		</>
