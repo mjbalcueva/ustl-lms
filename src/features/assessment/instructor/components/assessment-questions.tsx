@@ -17,14 +17,15 @@ import { Loader } from '@/core/components/ui/loader'
 
 import { QuestionList } from '@/features/assessment/instructor/components/assessment-question-list'
 import { AddAssessmentQuestionForm } from '@/features/assessment/instructor/components/forms/add-assessment-question-form'
+import { GenerateAssessmentQuestionForm } from '@/features/assessment/instructor/components/forms/generate-assessment-question-form'
 
 export const AssessmentQuestions = ({
 	assessmentId,
-	// lessons,
+	courseId,
 	questions
 }: {
 	assessmentId: RouterOutputs['instructor']['assessment']['findOneAssessment']['assessment']['assessmentId']
-	lessons: RouterOutputs['instructor']['assessment']['findManyLessons']['lessons']
+	courseId: RouterOutputs['instructor']['assessment']['findOneAssessment']['assessment']['chapter']['course']['courseId']
 	questions: RouterOutputs['instructor']['assessment']['findOneAssessment']['assessment']['questions']
 }) => {
 	const router = useRouter()
@@ -38,21 +39,6 @@ export const AssessmentQuestions = ({
 			},
 			onError: (error) => toast.error(error.message)
 		})
-
-	// const { mutate: generateQuestions, isPending: isGenerating } =
-	// 	api.instructor.assessmentQuestion.generateAiQuestions.useMutation({
-	// 		onSuccess: (data) => {
-	// 			toast.success(data.message)
-	// 			router.refresh()
-	// 		},
-	// 		onError: (error) => toast.error(error.message)
-	// 	})
-
-	// const handleGenerateQuestions = (
-	// 	data: GenerateAiAssessmentQuestionSchema
-	// ) => {
-	// 	generateQuestions({ ...data, assessmentId })
-	// }
 
 	const onReorder = async (
 		data: { questionId: string; position: number }[]
@@ -72,13 +58,10 @@ export const AssessmentQuestions = ({
 				<CardTitle>Questions</CardTitle>
 
 				<div className="flex items-center gap-2">
-					{/* <AiAssessmentQuestionForm
+					<GenerateAssessmentQuestionForm
 						assessmentId={assessmentId}
-						chapters={lessons}
-						onGenerate={handleGenerateQuestions}
-						isGenerating={isGenerating}
+						courseId={courseId}
 					/>
-				 */}
 					<AddAssessmentQuestionForm assessmentId={assessmentId} />
 				</div>
 			</CardHeader>

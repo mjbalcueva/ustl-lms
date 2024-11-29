@@ -169,7 +169,9 @@ export const AddAssessmentQuestionForm = ({
 							name="question"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Question</FormLabel>
+									<div className="text-sm font-medium leading-none">
+										Question
+									</div>
 									<FormControl className="text-sm">
 										<Editor
 											placeholder="e.g. 'Manila is the capital of France?'"
@@ -248,7 +250,9 @@ export const AddAssessmentQuestionForm = ({
 							name="options"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Options</FormLabel>
+									<div className="text-sm font-medium leading-none">
+										Options
+									</div>
 									<div className="space-y-2">
 										{form.watch('questionType') ===
 											AssessmentQuestionType.MULTIPLE_CHOICE && (

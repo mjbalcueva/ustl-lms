@@ -1,8 +1,11 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { type Chapter } from '@prisma/client'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+
+import { api, type RouterOutputs } from '@/services/trpc/react'
 
 import { Button } from '@/core/components/ui/button'
 import {
@@ -34,36 +37,46 @@ import {
 import { Textarea } from '@/core/components/ui/textarea'
 import { Ai } from '@/core/lib/icons'
 
-import { ChaptersCombobox } from '@/features/questions/components/ui/chapters-combobox'
-import { questionTypeWordMap } from '@/features/questions/lib/question-type-word-map'
+import { ChaptersCombobox } from '@/features/assessment/instructor/components/ui/chapters-combobox'
+import { questionTypeWordMap } from '@/features/assessment/shared/libs/question-type-word-map'
 import {
-	aiAssessmentQuestionSchema,
-	type AiAssessmentQuestionSchema
-} from '@/features/questions/validations/assessment-questions-schema'
+	generateAssessmentQuestionSchema,
+	type GenerateAssessmentQuestionSchema
+} from '@/features/assessment/shared/validations/assessments-question-schema'
 
-type AiAssessmentQuestionFormProps = {
-	assessmentId: string
-	chapters: Chapter[]
-	onGenerate: (data: AiAssessmentQuestionSchema) => void
-	isGenerating: boolean
-}
-
-export const AiAssessmentQuestionForm = ({
+export const GenerateAssessmentQuestionForm = ({
 	assessmentId,
-	chapters,
-	onGenerate,
-	isGenerating
-}: AiAssessmentQuestionFormProps) => {
-	const form = useForm<AiAssessmentQuestionSchema>({
-		resolver: zodResolver(aiAssessmentQuestionSchema),
+	courseId
+}: {
+	assessmentId: RouterOutputs['instructor']['assessment']['findOneAssessment']['assessment']['assessmentId']
+	courseId: RouterOutputs['instructor']['assessment']['findOneAssessment']['assessment']['chapter']['chapterId']
+}) => {
+	const router = useRouter()
+
+	const form = useForm<GenerateAssessmentQuestionSchema>({
+		resolver: zodResolver(generateAssessmentQuestionSchema),
 		defaultValues: {
 			assessmentId,
 			chapters: [],
 			questionType: undefined,
-			numberOfQuestions: 1,
+			numberOfQuestions: 0,
 			additionalPrompt: ''
 		}
 	})
+
+	const { data, isPending } =
+		api.instructor.assessment.findManyLessons.useQuery({
+			courseId: courseId
+		})
+
+	const { mutate: generateQuestions, isPending: isGenerating } =
+		api.instructor.assessmentQuestion.generateAiQuestions.useMutation({
+			onSuccess: (data) => {
+				toast.success(data.message)
+				router.refresh()
+			},
+			onError: (error) => toast.error(error.message)
+		})
 
 	return (
 		<Dialog>
@@ -82,33 +95,33 @@ export const AiAssessmentQuestionForm = ({
 				</DialogHeader>
 
 				<Form {...form}>
-					<form onSubmit={form.handleSubmit(onGenerate)} className="space-y-4">
+					<form
+						onSubmit={form.handleSubmit((data) => {
+							generateQuestions(data)
+						})}
+						className="space-y-4"
+					>
 						<FormField
 							control={form.control}
 							name="chapters"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel className="text-card-foreground">Select Chapters</FormLabel>
+									<div className="text-sm font-medium leading-none">
+										Select Chapters
+									</div>
 									<FormControl>
 										<ChaptersCombobox
-											options={chapters.map((chapter) => ({
-												value: chapter.id,
-												label: chapter.title,
-												content: chapter.content
-											}))}
-											selected={field.value.map((chapter) => chapter.id)}
-											onChange={(selectedIds) => {
-												const selectedChapters = selectedIds.map((id) => {
-													const chapter = chapters.find((c) => c.id === id)!
-													return {
-														id: chapter.id,
-														title: chapter.title,
-														content: chapter.content
-													}
-												})
-												field.onChange(selectedChapters)
-											}}
 											label="Search chapters..."
+											isLoading={isPending}
+											options={
+												data?.lessons.map((lesson) => ({
+													chapterId: lesson.chapterId,
+													title: lesson.title,
+													content: lesson.content ?? undefined
+												})) ?? []
+											}
+											selected={field.value}
+											onChange={(values) => field.onChange(values)}
 										/>
 									</FormControl>
 									<FormMessage />
@@ -121,7 +134,9 @@ export const AiAssessmentQuestionForm = ({
 							name="questionType"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel className="text-card-foreground">Question Type</FormLabel>
+									<FormLabel className="text-card-foreground">
+										Question Type
+									</FormLabel>
 									<Select onValueChange={field.onChange} value={field.value}>
 										<FormControl>
 											<SelectTrigger className="!bg-card">
@@ -129,11 +144,13 @@ export const AiAssessmentQuestionForm = ({
 											</SelectTrigger>
 										</FormControl>
 										<SelectContent>
-											{Object.entries(questionTypeWordMap).map(([key, value]) => (
-												<SelectItem key={key} value={key}>
-													{value}
-												</SelectItem>
-											))}
+											{Object.entries(questionTypeWordMap).map(
+												([key, value]) => (
+													<SelectItem key={key} value={key}>
+														{value}
+													</SelectItem>
+												)
+											)}
 										</SelectContent>
 									</Select>
 									<FormMessage />
@@ -146,7 +163,9 @@ export const AiAssessmentQuestionForm = ({
 							name="numberOfQuestions"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel className="text-card-foreground">Number of Questions</FormLabel>
+									<FormLabel className="text-card-foreground">
+										Number of Questions
+									</FormLabel>
 									<FormControl>
 										<InputNumber className="!bg-card" {...field} />
 									</FormControl>
@@ -160,7 +179,9 @@ export const AiAssessmentQuestionForm = ({
 							name="additionalPrompt"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel className="text-card-foreground">Additional Prompt</FormLabel>
+									<FormLabel className="text-card-foreground">
+										Additional Prompt
+									</FormLabel>
 									<FormControl>
 										<Textarea
 											placeholder="Enter any additional instructions for the AI..."

@@ -11,7 +11,7 @@ import {
 	deleteAssessmentQuestionSchema,
 	editAssessmentQuestionOrderSchema,
 	editAssessmentQuestionSchema,
-	generateAiAssessmentQuestionSchema
+	generateAssessmentQuestionSchema
 } from '@/features/assessment/shared/validations/assessments-question-schema'
 
 export const assessmentQuestionRouter = createTRPCRouter({
@@ -52,7 +52,7 @@ export const assessmentQuestionRouter = createTRPCRouter({
 
 	// Generate Questions
 	generateAiQuestions: instructorProcedure
-		.input(generateAiAssessmentQuestionSchema)
+		.input(generateAssessmentQuestionSchema)
 		.mutation(
 			async ({
 				ctx,
@@ -82,8 +82,10 @@ export const assessmentQuestionRouter = createTRPCRouter({
 
 							Only generate questions based on topics and concepts that are explicitly covered in the provided chapter titles and content. Even if the user's additional prompt requests topics outside this scope, strictly limit questions to the material presented. Do not generate questions about topics that are not directly addressed in the material.
 
-							[important] Use the following format for true or false questions to underline the important part of the question:
-							<p class="text-node"><u class="underline">important word</u> rest of question</p>
+							[important] For true or false questions, you MUST underline at least one key word or phrase using <u class="underline">. For example:
+							"<u class="underline">All mammals</u> have fur."
+							"The Earth is <u class="underline">the only planet</u> with life."
+							"<u class="underline">Most birds</u> can fly."
 						`
 						},
 						{
@@ -109,19 +111,24 @@ export const assessmentQuestionRouter = createTRPCRouter({
 					data: response.object.questions.map((q, index) => ({
 						assessmentId,
 						question: q.question,
-						type: questionType,
+						questionType,
 						options: {
 							type: questionType,
 							options: q.options,
 							answer: q.answer
 						},
-						position: (maxPosition?.position ?? -1) + index + 1,
+						position: (maxPosition?.position ?? 0) + index + 1,
 						points: q.points
 					}))
 				})
 
 				return {
-					message: 'Questions generated successfully'
+					message: 'Questions generated successfully',
+					assessmentId,
+					chapters,
+					questionType,
+					numberOfQuestions,
+					additionalPrompt
 				}
 			}
 		),

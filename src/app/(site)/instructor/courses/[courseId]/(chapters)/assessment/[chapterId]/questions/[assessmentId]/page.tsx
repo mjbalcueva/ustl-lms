@@ -41,10 +41,6 @@ export default async function Page({
 	})
 	if (!assessment) return <NotFound item="assessment" />
 
-	const { lessons } = await api.instructor.assessment.findManyLessons({
-		chapterId
-	})
-
 	const crumbs: Breadcrumb = [
 		{ icon: Instructor },
 		{ label: 'Courses', href: '/instructor/courses' },
@@ -79,9 +75,9 @@ export default async function Page({
 					</PageDescription>
 				</div>
 				<AssessmentActionButton
-					assessmentId={assessmentId}
-					chapterId={chapterId}
-					courseId={courseId}
+					assessmentId={assessment.assessmentId}
+					chapterId={assessment.chapter.chapterId}
+					courseId={assessment.chapter.course.courseId}
 					shuffleQuestions={assessment.shuffleQuestions}
 					shuffleOptions={assessment.shuffleOptions}
 				/>
@@ -106,7 +102,7 @@ export default async function Page({
 					<FoldableBlock title="Your questions" icon={TbFlagQuestion}>
 						<AssessmentQuestions
 							assessmentId={assessmentId}
-							lessons={lessons}
+							courseId={assessment.chapter.course.courseId}
 							questions={assessment.questions}
 						/>
 					</FoldableBlock>

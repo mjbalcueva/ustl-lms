@@ -19,7 +19,9 @@ export const aiAssessmentQuestionSchema = z.object({
 	additionalPrompt: z.string().optional()
 })
 
-export type AiAssessmentQuestionSchema = z.infer<typeof aiAssessmentQuestionSchema>
+export type AiAssessmentQuestionSchema = z.infer<
+	typeof aiAssessmentQuestionSchema
+>
 
 // Create shared type-specific schemas
 const multipleChoiceSchema = {
@@ -44,15 +46,26 @@ export const addAssessmentQuestionSchema = z.object({
 	options: z.preprocess(
 		(val) => (typeof val === 'string' ? JSON.parse(val) : val),
 		z.discriminatedUnion('type', [
-			z.object({ type: z.literal(QuestionType.MULTIPLE_CHOICE), ...multipleChoiceSchema }),
-			z.object({ type: z.literal(QuestionType.MULTIPLE_SELECT), ...multipleSelectSchema }),
-			z.object({ type: z.literal(QuestionType.TRUE_OR_FALSE), ...trueOrFalseSchema })
+			z.object({
+				type: z.literal(QuestionType.MULTIPLE_CHOICE),
+				...multipleChoiceSchema
+			}),
+			z.object({
+				type: z.literal(QuestionType.MULTIPLE_SELECT),
+				...multipleSelectSchema
+			}),
+			z.object({
+				type: z.literal(QuestionType.TRUE_OR_FALSE),
+				...trueOrFalseSchema
+			})
 		])
 	),
 	points: z.number().min(0.5, 'Points must be at least 0.5')
 })
 
-export type AddAssessmentQuestionSchema = z.infer<typeof addAssessmentQuestionSchema>
+export type AddAssessmentQuestionSchema = z.infer<
+	typeof addAssessmentQuestionSchema
+>
 
 export const editAssessmentQuestionOrderSchema = z.object({
 	assessmentId: z.string().min(1, 'Assessment ID is required'),
@@ -64,7 +77,9 @@ export const editAssessmentQuestionOrderSchema = z.object({
 	)
 })
 
-export type EditAssessmentQuestionOrderSchema = z.infer<typeof editAssessmentQuestionOrderSchema>
+export type EditAssessmentQuestionOrderSchema = z.infer<
+	typeof editAssessmentQuestionOrderSchema
+>
 
 export const editAssessmentQuestionSchema = z.object({
 	id: z.string(),
@@ -74,17 +89,30 @@ export const editAssessmentQuestionSchema = z.object({
 	options: z.preprocess(
 		(val) => (typeof val === 'string' ? JSON.parse(val) : val),
 		z.discriminatedUnion('type', [
-			z.object({ type: z.literal(QuestionType.MULTIPLE_CHOICE), ...multipleChoiceSchema }),
-			z.object({ type: z.literal(QuestionType.MULTIPLE_SELECT), ...multipleSelectSchema }),
-			z.object({ type: z.literal(QuestionType.TRUE_OR_FALSE), ...trueOrFalseSchema })
+			z.object({
+				type: z.literal(QuestionType.MULTIPLE_CHOICE),
+				...multipleChoiceSchema
+			}),
+			z.object({
+				type: z.literal(QuestionType.MULTIPLE_SELECT),
+				...multipleSelectSchema
+			}),
+			z.object({
+				type: z.literal(QuestionType.TRUE_OR_FALSE),
+				...trueOrFalseSchema
+			})
 		])
 	),
 	points: z.number().min(0.5, 'Points must be at least 0.5')
 })
 
-export type EditAssessmentQuestionSchema = z.infer<typeof editAssessmentQuestionSchema>
+export type EditAssessmentQuestionSchema = z.infer<
+	typeof editAssessmentQuestionSchema
+>
 
 export const deleteAssessmentQuestionSchema = z.object({
 	id: z.string().min(1, 'Question ID is required')
 })
-export type DeleteAssessmentQuestionSchema = z.infer<typeof deleteAssessmentQuestionSchema>
+export type DeleteAssessmentQuestionSchema = z.infer<
+	typeof deleteAssessmentQuestionSchema
+>

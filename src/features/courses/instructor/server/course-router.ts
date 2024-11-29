@@ -60,7 +60,7 @@ export const courseRouter = createTRPCRouter({
 				include: {
 					tags: { orderBy: { name: 'asc' } },
 					attachments: { orderBy: { createdAt: 'desc' } },
-					chapters: true,
+					chapters: { orderBy: { position: 'asc' } },
 					_count: { select: { tags: true, chapters: true, attachments: true } }
 				}
 			})

@@ -68,12 +68,12 @@ export type AddAssessmentQuestionSchema = z.infer<
 >
 
 // Generate AI Assessment Question Schema
-export const generateAiAssessmentQuestionSchema = z.object({
+export const generateAssessmentQuestionSchema = z.object({
 	assessmentId: z.string().min(1, 'Assessment ID is required'),
 	chapters: z
 		.array(
 			z.object({
-				id: z.string(),
+				chapterId: z.string(),
 				title: z.string(),
 				content: z.string()
 			})
@@ -85,22 +85,25 @@ export const generateAiAssessmentQuestionSchema = z.object({
 	numberOfQuestions: z.number().min(1).max(20),
 	additionalPrompt: z.string().optional()
 })
-export type GenerateAiAssessmentQuestionSchema = z.infer<
-	typeof generateAiAssessmentQuestionSchema
+export type GenerateAssessmentQuestionSchema = z.infer<
+	typeof generateAssessmentQuestionSchema
 >
 
-// AI Generated Question Schema
-export const aiGeneratedQuestionSchema = z.object({
+// Generated AI Question Schema
+export const generatedAIQuestionSchema = z.object({
 	question: z.string(),
 	options: z.array(z.string()),
 	answer: z.union([z.string(), z.array(z.string())]),
 	points: z.number()
 })
+export type GeneratedQuestionSchema = z.infer<typeof generatedAIQuestionSchema>
 
 // AI Response Schema
 export const aiResponseSchema = z.object({
-	questions: z.array(aiGeneratedQuestionSchema)
+	questions: z.array(generatedAIQuestionSchema)
 })
+export type AiResponseSchema = z.infer<typeof aiResponseSchema>
+
 // ---------------------------------------------------------------------------
 // READ
 // ---------------------------------------------------------------------------

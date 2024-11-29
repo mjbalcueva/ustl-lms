@@ -28,7 +28,7 @@ export type FindOneAssessmentSchema = z.infer<typeof findOneAssessmentSchema>
 
 // Find Many Lessons Schema
 export const findManyLessonsSchema = z.object({
-	chapterId: z.string().min(1, 'Chapter ID is required')
+	courseId: z.string().min(1, 'Course ID is required')
 })
 export type FindManyLessonsSchema = z.infer<typeof findManyLessonsSchema>
 
