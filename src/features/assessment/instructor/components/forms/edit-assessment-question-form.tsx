@@ -40,14 +40,13 @@ import {
 } from '@/core/components/ui/select'
 import { Delete } from '@/core/lib/icons'
 
+import { Editor } from '@/features/assessment/instructor/components/editor/editor'
 import { questionTypeWordMap } from '@/features/assessment/shared/libs/question-type-word-map'
 import {
 	editAssessmentQuestionSchema,
 	type EditAssessmentQuestionSchema,
 	type QuestionOptions
 } from '@/features/assessment/shared/validations/assessments-question-schema'
-
-import { Editor } from '../editor/editor'
 
 export const EditAssessmentQuestionForm = ({
 	isOpen,
