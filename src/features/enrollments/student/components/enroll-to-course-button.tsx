@@ -30,29 +30,30 @@ import { Input } from '@/core/components/ui/input'
 import { Separator } from '@/core/components/ui/separator'
 
 import {
-	enrollmentSchema,
-	type EnrollmentSchema
-} from '@/features/enrollment/validations/enrollment'
+	enrollToCourseSchema,
+	type EnrollToCourseSchema
+} from '@/features/enrollments/shared/validations/course-enrollment-schema'
 
 export const EnrollToCourseButton = () => {
 	const router = useRouter()
 
-	const form = useForm<EnrollmentSchema>({
-		resolver: zodResolver(enrollmentSchema),
+	const form = useForm<EnrollToCourseSchema>({
+		resolver: zodResolver(enrollToCourseSchema),
 		defaultValues: {
 			token: ''
 		}
 	})
 
-	const { mutate, isPending } = api.enrollment.enroll.useMutation({
-		onSuccess: (data) => {
-			toast.success(data.message)
-			router.refresh()
-		},
-		onError: (error) => toast.error(error.message)
-	})
+	const { mutate, isPending } =
+		api.student.courseEnrollment.enrollToCourse.useMutation({
+			onSuccess: (data) => {
+				toast.success(data.message)
+				router.refresh()
+			},
+			onError: (error) => toast.error(error.message)
+		})
 
-	const handleEnroll = (data: EnrollmentSchema) => {
+	const handleEnroll = (data: EnrollToCourseSchema) => {
 		mutate(data)
 	}
 
@@ -69,17 +70,24 @@ export const EnrollToCourseButton = () => {
 			<DialogContent>
 				<DialogHeader>
 					<DialogTitle>Join a Course</DialogTitle>
-					<DialogDescription>Enter the enrollment token to join a course.</DialogDescription>
+					<DialogDescription>
+						Enter the enrollment token to join a course.
+					</DialogDescription>
 				</DialogHeader>
 				<Separator />
 				<Form {...form}>
-					<form onSubmit={form.handleSubmit(handleEnroll)} className="grid gap-4">
+					<form
+						onSubmit={form.handleSubmit(handleEnroll)}
+						className="grid gap-4"
+					>
 						<FormField
 							control={form.control}
 							name="token"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel className="text-card-foreground">Enter Token</FormLabel>
+									<FormLabel className="text-card-foreground">
+										Enter Token
+									</FormLabel>
 									<FormControl>
 										<Input
 											placeholder="Enter enrollment token"
@@ -98,7 +106,11 @@ export const EnrollToCourseButton = () => {
 									Cancel
 								</Button>
 							</DialogClose>
-							<Button type="submit" disabled={isPending} variant={isPending ? 'shine' : 'default'}>
+							<Button
+								type="submit"
+								disabled={isPending}
+								variant={isPending ? 'shine' : 'default'}
+							>
 								{isPending ? 'Processing...' : 'Join Course'}
 							</Button>
 						</DialogFooter>

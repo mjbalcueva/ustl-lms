@@ -18,7 +18,11 @@ type EnrollmentErrorCardProps = {
 	message: string
 }
 
-export const EnrollmentErrorCard = ({ title, description, message }: EnrollmentErrorCardProps) => (
+export const EnrollmentErrorCard = ({
+	title,
+	description,
+	message
+}: EnrollmentErrorCardProps) => (
 	<Card className="w-full max-w-md">
 		<CardHeader className="flex flex-col items-start py-6">
 			<CardTitle className="text-2xl">{title}</CardTitle>
@@ -28,7 +32,10 @@ export const EnrollmentErrorCard = ({ title, description, message }: EnrollmentE
 			<FormResponse type="error" message={message} />
 		</CardContent>
 		<CardFooter>
-			<Link href="/dashboard" className={cn(buttonVariants({ variant: 'link', size: 'link' }))}>
+			<Link
+				href="/dashboard"
+				className={cn(buttonVariants({ variant: 'link', size: 'link' }))}
+			>
 				Go to dashboard
 			</Link>
 		</CardFooter>

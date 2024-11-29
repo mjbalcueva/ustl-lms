@@ -2,10 +2,9 @@
 
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { type Category } from '@prisma/client'
 import { toast } from 'sonner'
 
-import { api } from '@/services/trpc/react'
+import { api, type RouterOutputs } from '@/services/trpc/react'
 
 import { Badge } from '@/core/components/ui/badge'
 import { Button } from '@/core/components/ui/button'
@@ -19,41 +18,28 @@ import {
 } from '@/core/components/ui/card'
 import { Image as ImageIcon } from '@/core/lib/icons'
 
-type EnrollmentDetailsCardProps = {
-	token: string
-	code: string
-	title: string
-	description: string | null
-	categories: Category[]
-	image: string | null
-	instructor: string | null | undefined
-}
-
 export const EnrollmentDetailsCard = ({
-	token,
-	code,
-	title,
-	description,
-	categories,
-	image,
-	instructor
-}: EnrollmentDetailsCardProps) => {
+	course: { code, title, description, tags, imageUrl, instructorName, token }
+}: {
+	course: RouterOutputs['student']['courseEnrollment']['findOneCourse']['course']
+}) => {
 	const router = useRouter()
 
-	const { mutate, isPending } = api.enrollment.enroll.useMutation({
-		onSuccess: (data) => {
-			toast.success(data.message)
-			router.refresh()
-		},
-		onError: (error) => toast.error(error.message)
-	})
+	const { mutate, isPending } =
+		api.student.courseEnrollment.enrollToCourse.useMutation({
+			onSuccess: (data) => {
+				toast.success(data.message)
+				router.refresh()
+			},
+			onError: (error) => toast.error(error.message)
+		})
 
 	return (
 		<Card className="flex w-full max-w-md flex-col overflow-hidden">
-			{image ? (
+			{imageUrl ? (
 				<div className="relative aspect-video max-h-[240px] w-full">
 					<Image
-						src={image}
+						src={imageUrl}
 						alt="Course Image"
 						fill
 						className="object-cover dark:[mask-image:linear-gradient(to_top,transparent,black_20%)]"
@@ -76,9 +62,12 @@ export const EnrollmentDetailsCard = ({
 						{code ?? 'N/A'}
 					</Badge>
 				</div>
-				{instructor && (
+				{instructorName && (
 					<span className="text-sm text-muted-foreground">
-						by <span className="font-medium text-foreground">{instructor}</span>
+						by{' '}
+						<span className="font-medium text-foreground">
+							{instructorName}
+						</span>
 					</span>
 				)}
 			</CardHeader>
@@ -92,17 +81,17 @@ export const EnrollmentDetailsCard = ({
 				</div>
 
 				<div className="space-y-1">
-					<h4 className="font-semibold">Categories</h4>
+					<h4 className="font-semibold">Tags</h4>
 					<div className="flex flex-wrap gap-2">
-						{categories && categories.length > 0 ? (
-							categories.map((category) => (
-								<Badge key={category.id} variant="secondary" className="text-xs">
-									{category.name}
+						{tags && tags.length > 0 ? (
+							tags.map((tag) => (
+								<Badge key={tag.tagId} variant="secondary" className="text-xs">
+									{tag.name}
 								</Badge>
 							))
 						) : (
 							<Badge variant="outline" className="text-xs">
-								No categories
+								No tags
 							</Badge>
 						)}
 					</div>
@@ -114,7 +103,7 @@ export const EnrollmentDetailsCard = ({
 					type="submit"
 					variant={isPending ? 'shine' : 'default'}
 					className="w-full"
-					onClick={() => mutate({ token })}
+					onClick={() => mutate({ token: token ?? '' })}
 					disabled={isPending}
 				>
 					{isPending ? 'Enrolling...' : 'Enroll Now'}
