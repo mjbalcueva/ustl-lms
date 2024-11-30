@@ -3,33 +3,26 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
+import { type RouterOutputs } from '@/services/trpc/react'
+
 import { Badge } from '@/core/components/ui/badge'
 import { Button } from '@/core/components/ui/button'
-import { Card, CardContent, CardFooter, CardHeader } from '@/core/components/ui/card'
+import {
+	Card,
+	CardContent,
+	CardFooter,
+	CardHeader
+} from '@/core/components/ui/card'
 import { Learning } from '@/core/lib/icons'
 import { cn } from '@/core/lib/utils/cn'
 
-type CourseCardProps = {
-	id: string
-	title: string
-	description: string | null
-	imageUrl: string | null
-	code: string
-	instructor: string
-	tags: string[]
-}
-
-export const CourseCard = ({
-	id,
-	title,
-	description,
-	imageUrl,
-	code,
-	instructor,
-	tags
-}: CourseCardProps) => {
+export const EnrolledCourseCard = ({
+	course: { courseId, title, description, imageUrl, code, instructor, tags }
+}: {
+	course: RouterOutputs['student']['course']['findManyEnrolledCourses']['courses'][number]
+}) => {
 	return (
-		<Card className="flex w-full min-w-[260px] max-w-[280px] flex-1 flex-col overflow-hidden">
+		<Card className="flex w-full min-w-[270px] max-w-[285px] flex-1 flex-col overflow-hidden">
 			<CardHeader className="relative p-0">
 				<Image
 					alt={title}
@@ -58,17 +51,26 @@ export const CourseCard = ({
 
 				<div className="flex items-center gap-1 text-sm text-muted-foreground">
 					<Learning className="h-3 w-3" />
-					<span className="truncate">{instructor}</span>
+					<span className="truncate">
+						{instructor.profile?.name ?? 'Unknown Instructor'}
+					</span>
 				</div>
 
 				<div className="flex flex-wrap gap-1">
 					{tags.map((tag) => (
-						<Badge key={tag} variant="secondary" className="px-1 py-0 text-xs">
-							{tag}
+						<Badge
+							key={tag.tagId}
+							variant="secondary"
+							className="px-1 py-0 text-xs"
+						>
+							{tag.name}
 						</Badge>
 					))}
 					{!tags.length && (
-						<Badge variant="outline" className="px-1 py-0 text-xs text-muted-foreground">
+						<Badge
+							variant="outline"
+							className="px-1 py-0 text-xs text-muted-foreground"
+						>
 							None
 						</Badge>
 					)}
@@ -76,7 +78,7 @@ export const CourseCard = ({
 			</CardContent>
 			<CardFooter className="p-3 pt-0">
 				<Button asChild size="sm" className="w-full text-sm">
-					<Link href={`/courses/${id}`}>Continue</Link>
+					<Link href={`/courses/${courseId}`}>Continue</Link>
 				</Button>
 			</CardFooter>
 		</Card>
