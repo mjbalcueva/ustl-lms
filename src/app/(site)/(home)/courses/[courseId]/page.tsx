@@ -18,14 +18,18 @@ import { Separator } from '@/core/components/ui/separator'
 import { CourseSingle, Home } from '@/core/lib/icons'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
-import { CourseCopyInviteButton } from '@/features/courses/components/course-copy-invite-button'
-import CourseInstructorCard from '@/features/courses/components/course-instructor-card'
-import { CourseTabs } from '@/features/courses/components/tabs/course-tabs'
+import { EnrolledCourseInstructorCard } from '@/features/courses/student/components/enrolled-course-instructor-card'
+import { EnrolledCourseTabs } from '@/features/courses/student/components/enrolled-course-tabs'
+import { EnrolledCourseInviteButton } from '@/features/courses/student/components/ui/enrolled-course-invite-button'
 
-export default async function Page({ params }: { params: { courseId: string } }) {
-	const { courseId } = params
-
-	const { course } = await api.course.findEnrolledCourseDetails({ courseId })
+export default async function Page({
+	params: { courseId }
+}: {
+	params: { courseId: string }
+}) {
+	const { course } = await api.student.course.findEnrolledCourse({
+		courseId
+	})
 	if (!course) return <NotFound item="course" />
 
 	const crumbs: Breadcrumb = [
@@ -53,7 +57,7 @@ export default async function Page({ params }: { params: { courseId: string } })
 				<div className="relative hidden aspect-video flex-1 rounded-lg shadow-md md:block md:min-w-[249px] md:max-w-xs">
 					<Image
 						src={course.imageUrl ?? '/assets/placeholder.svg'}
-						alt={course.title}
+						alt={course.title ?? ''}
 						className="rounded-lg border-2 border-accent object-cover"
 						fill
 						priority
@@ -67,14 +71,14 @@ export default async function Page({ params }: { params: { courseId: string } })
 							<PageTitle>{course.title}</PageTitle>
 
 							<div className="flex flex-wrap items-center gap-1">
-								{course.categories.map((category) => (
-									<Badge key={category.id} variant="secondary">
-										{category.name}
+								{course.tags?.map((tag) => (
+									<Badge key={tag.tagId} variant="secondary">
+										{tag.name}
 									</Badge>
 								))}
 							</div>
 						</div>
-						<CourseCopyInviteButton token={course.token ?? ''} />
+						<EnrolledCourseInviteButton token={course.token ?? ''} />
 					</div>
 
 					<PageDescription className="min-h-16 w-full md:line-clamp-3">
@@ -93,16 +97,11 @@ export default async function Page({ params }: { params: { courseId: string } })
 
 			<PageContent className="mb-24 space-y-6 px-2.5 pt-6 sm:px-4 md:mb-12 md:flex md:flex-wrap md:gap-6 md:space-y-0 md:px-6">
 				<PageSection className="flex-[2] md:min-w-[500px]" columnMode>
-					<CourseTabs course={course} />
+					<EnrolledCourseTabs course={course} />
 				</PageSection>
 
 				<PageSection className="md:min-w-[350px]" columnMode>
-					<CourseInstructorCard
-						name={course.instructor.profile.name ?? ''}
-						bio={course.instructor.profile.bio ?? ''}
-						email={course.instructor.email ?? ''}
-						imageUrl={course.instructor.profile.imageUrl ?? ''}
-					/>
+					<EnrolledCourseInstructorCard instructor={course.instructor} />
 				</PageSection>
 			</PageContent>
 		</>

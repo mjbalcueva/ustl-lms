@@ -6,16 +6,20 @@ import { CopyButton } from '@/core/components/copy-button'
 import { Link } from '@/core/lib/icons'
 import { getBaseUrl } from '@/core/lib/utils/get-base-url'
 
-type CourseCopyInviteButtonProps = {
+type EnrolledCourseInviteButtonProps = {
 	token: string
 }
 
-export const CourseCopyInviteButton = ({ token }: CourseCopyInviteButtonProps) => {
+export const EnrolledCourseInviteButton = ({
+	token
+}: EnrolledCourseInviteButtonProps) => {
 	return (
 		<CopyButton
 			icon={Link}
 			onCopy={async () => {
-				await navigator.clipboard.writeText(`${getBaseUrl()}/enrollment?token=${token}`)
+				await navigator.clipboard.writeText(
+					`${getBaseUrl()}/enrollment?token=${token}`
+				)
 				toast.success('Invite link copied to clipboard!')
 			}}
 		/>

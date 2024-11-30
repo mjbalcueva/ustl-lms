@@ -3,16 +3,20 @@
 import { useEffect, useRef } from 'react'
 import { type Message } from 'ai/react'
 
-import { CardFooter, CardHeader, CardTitle } from '@/core/components/compound-card'
+import {
+	CardFooter,
+	CardHeader,
+	CardTitle
+} from '@/core/components/compound-card'
 import { Button } from '@/core/components/ui/button'
 import { Card } from '@/core/components/ui/card'
 import { ScrollArea, ScrollBar } from '@/core/components/ui/scroll-area'
 import { Separator } from '@/core/components/ui/separator'
 import { CirclePlus } from '@/core/lib/icons'
 
-import { AiChatInput } from '@/features/courses/components/tabs/ai-chat/ai-chat-input'
-import { AiChatMessage } from '@/features/courses/components/tabs/ai-chat/ai-chat-message'
-import { AiChatTyping } from '@/features/courses/components/tabs/ai-chat/ai-chat-typing'
+import { AiChatInput } from '@/features/courses/student/components/chatbot/ai-chat-input'
+import { AiChatMessage } from '@/features/courses/student/components/chatbot/ai-chat-message'
+import { AiChatTyping } from '@/features/courses/student/components/chatbot/ai-chat-typing'
 
 type AiChatCardProps = {
 	messages: Message[]
@@ -52,7 +56,9 @@ export const AiChatCard = ({
 	return (
 		<Card className="flex h-[calc(100vh-9rem)] flex-col">
 			<CardHeader className="flex items-center justify-between">
-				<CardTitle className="text-lg font-semibold">Course AI Assistant</CardTitle>
+				<CardTitle className="text-lg font-semibold">
+					Course AI Assistant
+				</CardTitle>
 				{chatMessages.length > 1 && (
 					<Button
 						variant="outline"
@@ -76,9 +82,11 @@ export const AiChatCard = ({
 							const previousMessage = array[index - 1]
 							const nextMessage = array[index + 1]
 							const isFirstInSequence =
-								index === 0 || (previousMessage && previousMessage.role !== message.role)
+								index === 0 ||
+								(previousMessage && previousMessage.role !== message.role)
 							const isLastInSequence =
-								index === array.length - 1 || (nextMessage && nextMessage.role !== message.role)
+								index === array.length - 1 ||
+								(nextMessage && nextMessage.role !== message.role)
 
 							return (
 								<AiChatMessage

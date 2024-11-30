@@ -17,7 +17,16 @@ import { Learning } from '@/core/lib/icons'
 import { cn } from '@/core/lib/utils/cn'
 
 export const EnrolledCourseCard = ({
-	course: { courseId, title, description, imageUrl, code, instructor, tags }
+	course: {
+		courseId,
+		title,
+		description,
+		imageUrl,
+		code,
+		instructor,
+		tags,
+		status
+	}
 }: {
 	course: RouterOutputs['student']['course']['findManyEnrolledCourses']['courses'][number]
 }) => {
@@ -77,8 +86,15 @@ export const EnrolledCourseCard = ({
 				</div>
 			</CardContent>
 			<CardFooter className="p-3 pt-0">
-				<Button asChild size="sm" className="w-full text-sm">
-					<Link href={`/courses/${courseId}`}>Continue</Link>
+				<Button
+					variant={status === 'ARCHIVED' ? 'outline' : 'default'}
+					size="sm"
+					className="w-full text-sm"
+					asChild
+				>
+					<Link href={`/courses/${courseId}`}>
+						{status === 'ARCHIVED' ? 'Archived' : 'Continue'}
+					</Link>
 				</Button>
 			</CardFooter>
 		</Card>

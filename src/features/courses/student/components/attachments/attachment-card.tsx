@@ -8,14 +8,19 @@ import { Card } from '@/core/components/ui/card'
 import { Attachment, Download } from '@/core/lib/icons'
 import { formatDate } from '@/core/lib/utils/format-date'
 
-type CourseAttachmentCardProps = {
+type AttachmentCardProps = {
 	id: string
 	name: string
 	url: string
 	createdAt: Date
 }
 
-export const CourseAttachmentCard = ({ id, name, url, createdAt }: CourseAttachmentCardProps) => {
+export const AttachmentCard = ({
+	id,
+	name,
+	url,
+	createdAt
+}: AttachmentCardProps) => {
 	const [isDownloading, setIsDownloading] = useState(false)
 
 	const handleDownload = async () => {
@@ -32,7 +37,10 @@ export const CourseAttachmentCard = ({ id, name, url, createdAt }: CourseAttachm
 	}
 
 	return (
-		<Card key={id} className="group relative flex items-center gap-3 overflow-hidden p-3">
+		<Card
+			key={id}
+			className="group relative flex items-center gap-3 overflow-hidden p-3"
+		>
 			<div className="flex size-10 shrink-0 items-center justify-center rounded-md border bg-background">
 				<Attachment className="size-5 text-muted-foreground" />
 			</div>

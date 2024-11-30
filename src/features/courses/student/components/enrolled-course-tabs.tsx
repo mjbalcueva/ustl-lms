@@ -7,17 +7,25 @@ import { useSession } from 'next-auth/react'
 
 import { type AppRouter } from '@/server/api/root'
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/core/components/ui/tabs'
+import {
+	Tabs,
+	TabsContent,
+	TabsList,
+	TabsTrigger
+} from '@/core/components/ui/tabs'
 
-import { CourseAttachmentCard } from '@/features/courses/components/course-attachment-card'
-import CourseChapterCard from '@/features/courses/components/course-chapter-card'
-import { AiChatCard } from '@/features/courses/components/tabs/ai-chat/ai-chat-card'
-import ForumCard from '@/features/courses/components/tabs/forum/forum-card'
+import { AttachmentCard } from '@/features/courses/student/components/attachments/attachment-card'
+import { ChapterCard } from '@/features/courses/student/components/chapters/chapter-card'
+import { AiChatCard } from '@/features/courses/student/components/chatbot/ai-chat-card'
+import { ForumCard } from '@/features/courses/student/components/forum/forum-card'
 
-type CourseTabsProps = {
-	course: inferProcedureOutput<AppRouter['course']['findEnrolledCourseDetails']>['course']
-}
-export const CourseTabs = ({ course }: CourseTabsProps) => {
+export const EnrolledCourseTabs = ({
+	course
+}: {
+	course: inferProcedureOutput<
+		AppRouter['student']['course']['findEnrolledCourse']
+	>['course']
+}) => {
 	const session = useSession()
 	const user = session?.data?.user
 
@@ -31,7 +39,14 @@ export const CourseTabs = ({ course }: CourseTabsProps) => {
 		}
 	]
 
-	const { messages, handleSubmit, input, handleInputChange, isLoading, setMessages } = useChat({
+	const {
+		messages,
+		handleSubmit,
+		input,
+		handleInputChange,
+		isLoading,
+		setMessages
+	} = useChat({
 		api: '/api/chat/course',
 		initialMessages,
 		body: {
@@ -53,20 +68,9 @@ export const CourseTabs = ({ course }: CourseTabsProps) => {
 			</TabsList>
 
 			<TabsContent value="syllabus" className="space-y-3 rounded-lg">
-				{course.chapters.map((chapter) => {
-					return (
-						<CourseChapterCard
-							key={chapter.id}
-							id={chapter.id}
-							courseId={course.id}
-							title={chapter.title}
-							content={chapter.content ?? ''}
-							type={chapter.type}
-							createdAt={chapter.createdAt}
-							isCompleted={chapter.chapterProgress?.[0]?.isCompleted ?? false}
-						/>
-					)
-				})}
+				{course.chapters?.map((chapter) => (
+					<ChapterCard key={chapter.chapterId} chapter={chapter} />
+				))}
 			</TabsContent>
 
 			<TabsContent value="ai-chat" className="rounded-lg">
@@ -91,10 +95,10 @@ export const CourseTabs = ({ course }: CourseTabsProps) => {
 			</TabsContent>
 
 			<TabsContent value="attachments" className="space-y-3 rounded-lg">
-				{course.attachments.map((attachment) => (
-					<CourseAttachmentCard
-						key={attachment.id}
-						id={attachment.id}
+				{course.attachments?.map((attachment) => (
+					<AttachmentCard
+						key={attachment.attachmentId}
+						id={attachment.attachmentId}
 						name={attachment.name}
 						url={attachment.url}
 						createdAt={attachment.createdAt}

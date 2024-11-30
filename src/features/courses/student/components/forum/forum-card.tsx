@@ -1,7 +1,7 @@
 import { CardHeader, CardTitle } from '@/core/components/compound-card'
 import { Card } from '@/core/components/ui/card'
 
-export default function ForumCard() {
+export const ForumCard = () => {
 	return (
 		<Card>
 			<CardHeader>

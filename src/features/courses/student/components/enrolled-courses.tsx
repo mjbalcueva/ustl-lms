@@ -8,11 +8,11 @@ import { type RouterOutputs } from '@/services/trpc/react'
 import { Input } from '@/core/components/ui/input'
 import { Search } from '@/core/lib/icons'
 
+import { EnrolledCourseCard } from '@/features/courses/student/components/enrolled-course-card'
 import {
 	FilterPopover,
 	ResetFilters
-} from '@/features/courses/components/ui/filter-popover'
-import { EnrolledCourseCard } from '@/features/courses/student/components/enrolled-course-card'
+} from '@/features/courses/student/components/ui/filter-popover'
 
 type Course =
 	RouterOutputs['student']['course']['findManyEnrolledCourses']['courses'][number]

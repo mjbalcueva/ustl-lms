@@ -30,6 +30,14 @@ export const findOneCourseSchema = z.object({
 })
 export type FindOneCourseSchema = z.infer<typeof findOneCourseSchema>
 
+// Find One Enrolled Course Schema
+export const findOneEnrolledCourseSchema = z.object({
+	courseId: z.string().min(1, 'Course ID is required')
+})
+export type FindOneEnrolledCourseSchema = z.infer<
+	typeof findOneEnrolledCourseSchema
+>
+
 // -----------------------------------------------------------------------------
 // UPDATE
 // -----------------------------------------------------------------------------
