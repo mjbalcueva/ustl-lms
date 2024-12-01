@@ -36,7 +36,8 @@ export const chapterRouter = createTRPCRouter({
 									chapterProgress: {
 										where: { studentId }
 									}
-								}
+								},
+								orderBy: { position: 'asc' }
 							}
 						}
 					},
