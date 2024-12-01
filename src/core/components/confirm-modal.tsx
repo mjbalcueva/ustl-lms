@@ -51,7 +51,11 @@ export const ConfirmModal = ({
 				</AlertDialogHeader>
 				<AlertDialogFooter>
 					<AlertDialogCancel className="rounded-md">Cancel</AlertDialogCancel>
-					<AlertDialogAction className="rounded-md" onClick={handleConfirm} variant={variant}>
+					<AlertDialogAction
+						className="rounded-md"
+						onClick={handleConfirm}
+						variant={variant}
+					>
 						{actionLabel}
 					</AlertDialogAction>
 				</AlertDialogFooter>

@@ -12,7 +12,9 @@ export type ShortcutKeyProps = React.HTMLAttributes<HTMLSpanElement> & {
 export const ShortcutKey = React.forwardRef<HTMLSpanElement, ShortcutKeyProps>(
 	({ className, keys, ...props }, ref) => {
 		const modifiedKeys = React.useMemo(() => getShortcutKeys(keys), [keys])
-		const ariaLabel = modifiedKeys.map((shortcut) => shortcut.readable).join(' + ')
+		const ariaLabel = modifiedKeys
+			.map((shortcut) => shortcut.readable)
+			.join(' + ')
 
 		return (
 			<span

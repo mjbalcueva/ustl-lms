@@ -21,7 +21,10 @@ const config = {
 		'.css$'
 	],
 	importOrderParserPlugins: ['typescript', 'jsx', 'decorators-legacy'],
-	plugins: ['@ianvs/prettier-plugin-sort-imports', 'prettier-plugin-tailwindcss'],
+	plugins: [
+		'@ianvs/prettier-plugin-sort-imports',
+		'prettier-plugin-tailwindcss'
+	],
 	printWidth: 80,
 	quoteProps: 'consistent',
 	semi: false,

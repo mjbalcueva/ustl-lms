@@ -1,7 +1,12 @@
 'use client'
 
 import { useMemo, useRef, useState } from 'react'
-import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
+import {
+	AnimatePresence,
+	motion,
+	useMotionValueEvent,
+	useScroll
+} from 'framer-motion'
 import { type Session } from 'next-auth'
 
 import { useNav } from '@/core/components/context/nav-provider'
@@ -25,7 +30,12 @@ type TopNavProps = React.ComponentProps<typeof motion.div> & {
 	session: Session | null
 }
 
-export const TopNav = ({ links, className, session, ...props }: TopNavProps) => {
+export const TopNav = ({
+	links,
+	className,
+	session,
+	...props
+}: TopNavProps) => {
 	const { isNavOpen, setNavOpen } = useNav()
 	const { setLockScroll } = useLockScroll()
 
@@ -37,7 +47,12 @@ export const TopNav = ({ links, className, session, ...props }: TopNavProps) => 
 
 	useMotionValueEvent(scrollYProgress, 'change', (current) => {
 		const previous = scrollYProgress.getPrevious()!
-		setShowNav(previous === 0 || current === 1 || previous > current || isUserButtonOpen.current)
+		setShowNav(
+			previous === 0 ||
+				current === 1 ||
+				previous > current ||
+				isUserButtonOpen.current
+		)
 	})
 
 	return (
@@ -65,7 +80,11 @@ export const TopNav = ({ links, className, session, ...props }: TopNavProps) => 
 						setLockScroll(!isNavOpen)
 					}}
 				>
-					{isNavOpen ? <Close className="size-6" /> : <Open className="size-6" />}
+					{isNavOpen ? (
+						<Close className="size-6" />
+					) : (
+						<Open className="size-6" />
+					)}
 				</NavButton>
 
 				<NavButton className="m-0 p-1.5">

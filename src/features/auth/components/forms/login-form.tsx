@@ -16,14 +16,21 @@ import {
 } from '@/core/components/ui/form'
 import { FormResponse } from '@/core/components/ui/form-response'
 import { Input } from '@/core/components/ui/input'
-import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/core/components/ui/input-otp'
+import {
+	InputOTP,
+	InputOTPGroup,
+	InputOTPSlot
+} from '@/core/components/ui/input-otp'
 import { Loader } from '@/core/components/ui/loader'
 import { PasswordInput } from '@/core/components/ui/password-input'
 import { cn } from '@/core/lib/utils/cn'
 
 import { ButtonShining } from '@/features/auth/components/ui/button-shining'
 import { login } from '@/features/auth/server/login-action'
-import { loginSchema, type LoginSchema } from '@/features/auth/validations/login-schema'
+import {
+	loginSchema,
+	type LoginSchema
+} from '@/features/auth/validations/login-schema'
 
 export const LoginForm = () => {
 	const [formSuccess, setFormSuccess] = useState<string | null>(null)
@@ -68,26 +75,46 @@ export const LoginForm = () => {
 						name="code"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel className="text-card-foreground">Two Factor Code</FormLabel>
+								<FormLabel className="text-card-foreground">
+									Two Factor Code
+								</FormLabel>
 								<FormControl className="max-w-[348px]">
 									<InputOTP maxLength={6} {...field}>
 										<InputOTPGroup>
-											<InputOTPSlot index={0} className="h-12 !rounded-lg bg-background" />
+											<InputOTPSlot
+												index={0}
+												className="h-12 !rounded-lg bg-background"
+											/>
 										</InputOTPGroup>
 										<InputOTPGroup>
-											<InputOTPSlot index={1} className="h-12 !rounded-lg bg-background" />
+											<InputOTPSlot
+												index={1}
+												className="h-12 !rounded-lg bg-background"
+											/>
 										</InputOTPGroup>
 										<InputOTPGroup>
-											<InputOTPSlot index={2} className="h-12 !rounded-lg bg-background" />
+											<InputOTPSlot
+												index={2}
+												className="h-12 !rounded-lg bg-background"
+											/>
 										</InputOTPGroup>
 										<InputOTPGroup>
-											<InputOTPSlot index={3} className="h-12 !rounded-lg bg-background" />
+											<InputOTPSlot
+												index={3}
+												className="h-12 !rounded-lg bg-background"
+											/>
 										</InputOTPGroup>
 										<InputOTPGroup>
-											<InputOTPSlot index={4} className="h-12 !rounded-lg bg-background" />
+											<InputOTPSlot
+												index={4}
+												className="h-12 !rounded-lg bg-background"
+											/>
 										</InputOTPGroup>
 										<InputOTPGroup>
-											<InputOTPSlot index={5} className="h-12 !rounded-lg bg-background" />
+											<InputOTPSlot
+												index={5}
+												className="h-12 !rounded-lg bg-background"
+											/>
 										</InputOTPGroup>
 									</InputOTP>
 								</FormControl>
@@ -102,7 +129,9 @@ export const LoginForm = () => {
 							name="email"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel className="text-card-foreground">Email Address</FormLabel>
+									<FormLabel className="text-card-foreground">
+										Email Address
+									</FormLabel>
 									<FormControl>
 										<Input
 											placeholder="Enter your email"
@@ -120,7 +149,9 @@ export const LoginForm = () => {
 							name="password"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel className="text-card-foreground">Password</FormLabel>
+									<FormLabel className="text-card-foreground">
+										Password
+									</FormLabel>
 									<FormControl>
 										<PasswordInput
 											placeholder="Password"

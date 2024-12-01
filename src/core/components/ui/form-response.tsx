@@ -21,7 +21,12 @@ type FormResponseProps = React.HTMLAttributes<HTMLDivElement> &
 		message?: string | null
 	}
 
-export function FormResponse({ type, message, className, ...props }: FormResponseProps) {
+export function FormResponse({
+	type,
+	message,
+	className,
+	...props
+}: FormResponseProps) {
 	if (!message) return null
 
 	const formResponseIcon: Record<string, React.ReactNode> = {

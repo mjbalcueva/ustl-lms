@@ -12,9 +12,18 @@ import { signIn } from '@/services/authjs/auth'
 
 import { DEFAULT_REDIRECT } from '@/core/routes/constants'
 
-import { sendTwoFactorTokenEmail, sendVerificationEmail } from '@/features/auth/lib/mail'
-import { generateTwoFactorToken, generateVerificationToken } from '@/features/auth/lib/tokens'
-import { loginSchema, type LoginSchema } from '@/features/auth/validations/login-schema'
+import {
+	sendTwoFactorTokenEmail,
+	sendVerificationEmail
+} from '@/features/auth/lib/mail'
+import {
+	generateTwoFactorToken,
+	generateVerificationToken
+} from '@/features/auth/lib/tokens'
+import {
+	loginSchema,
+	type LoginSchema
+} from '@/features/auth/validations/login-schema'
 
 export const login = async (values: LoginSchema) => {
 	const validatedFields = loginSchema.safeParse(values)
@@ -33,8 +42,13 @@ export const login = async (values: LoginSchema) => {
 	if (!existingUser.password) return { error: 'Sign in with Google instead!' }
 
 	if (!existingUser.emailVerified) {
-		const verificationToken = await generateVerificationToken(existingUser.email)
-		await sendVerificationEmail(verificationToken.email, verificationToken.token)
+		const verificationToken = await generateVerificationToken(
+			existingUser.email
+		)
+		await sendVerificationEmail(
+			verificationToken.email,
+			verificationToken.token
+		)
 
 		return { success: 'Confirmation email sent!' }
 	}
@@ -51,7 +65,11 @@ export const login = async (values: LoginSchema) => {
 		}
 
 		const twoFactorToken = await getTwoFactorTokenByEmail(existingUser.email)
-		if (!twoFactorToken || twoFactorToken instanceof Error || twoFactorToken.token !== code)
+		if (
+			!twoFactorToken ||
+			twoFactorToken instanceof Error ||
+			twoFactorToken.token !== code
+		)
 			return { error: 'Invalid 2FA code!' }
 
 		const hasExpired = new Date(twoFactorToken.expires) < new Date()
@@ -61,7 +79,9 @@ export const login = async (values: LoginSchema) => {
 			where: { id: twoFactorToken.id }
 		})
 
-		const existingConfirmation = await getTwoFactorConfirmationByUserId(existingUser.id)
+		const existingConfirmation = await getTwoFactorConfirmationByUserId(
+			existingUser.id
+		)
 
 		if (!(existingConfirmation instanceof Error) && existingConfirmation) {
 			await db.twoFactorConfirmation.delete({

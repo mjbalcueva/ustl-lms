@@ -20,7 +20,9 @@ type DisclosureContextType = {
 	variants?: { expanded: Variant; collapsed: Variant }
 }
 
-const DisclosureContext = createContext<DisclosureContextType | undefined>(undefined)
+const DisclosureContext = createContext<DisclosureContextType | undefined>(
+	undefined
+)
 
 type DisclosureProviderProps = {
 	children: React.ReactNode
@@ -29,7 +31,12 @@ type DisclosureProviderProps = {
 	variants?: { expanded: Variant; collapsed: Variant }
 }
 
-function DisclosureProvider({ children, open, onOpenChange, variants }: DisclosureProviderProps) {
+function DisclosureProvider({
+	children,
+	open,
+	onOpenChange,
+	variants
+}: DisclosureProviderProps) {
 	const toggle = () => {
 		onOpenChange(!open)
 	}
@@ -88,7 +95,11 @@ export const Disclosure = ({
 
 	return (
 		<MotionConfig transition={transition}>
-			<DisclosureProvider open={open} onOpenChange={handleOpenChange} variants={variants}>
+			<DisclosureProvider
+				open={open}
+				onOpenChange={handleOpenChange}
+				variants={variants}
+			>
 				<div className={className} data-state={open ? 'open' : 'closed'}>
 					{children}
 				</div>
@@ -101,29 +112,30 @@ type DisclosureTriggerProps = React.ComponentPropsWithoutRef<'button'> & {
 	asChild?: boolean
 }
 
-export const DisclosureTrigger = React.forwardRef<HTMLButtonElement, DisclosureTriggerProps>(
-	({ children, className, asChild = false, ...props }, ref) => {
-		const { toggle, open } = useDisclosure()
-		const Comp = asChild ? Slot : 'button'
+export const DisclosureTrigger = React.forwardRef<
+	HTMLButtonElement,
+	DisclosureTriggerProps
+>(({ children, className, asChild = false, ...props }, ref) => {
+	const { toggle, open } = useDisclosure()
+	const Comp = asChild ? Slot : 'button'
 
-		return (
-			<Comp
-				type={asChild ? undefined : 'button'}
-				ref={ref}
-				onClick={(e) => {
-					e.preventDefault()
-					toggle()
-				}}
-				aria-expanded={open}
-				className={cn(className)}
-				data-state={open ? 'open' : 'closed'}
-				{...props}
-			>
-				{children}
-			</Comp>
-		)
-	}
-)
+	return (
+		<Comp
+			type={asChild ? undefined : 'button'}
+			ref={ref}
+			onClick={(e) => {
+				e.preventDefault()
+				toggle()
+			}}
+			aria-expanded={open}
+			className={cn(className)}
+			data-state={open ? 'open' : 'closed'}
+			{...props}
+		>
+			{children}
+		</Comp>
+	)
+})
 
 DisclosureTrigger.displayName = 'DisclosureTrigger'
 
@@ -132,7 +144,10 @@ type DisclosureContentProps = {
 	className?: string
 }
 
-export const DisclosureContent = ({ children, className }: DisclosureContentProps) => {
+export const DisclosureContent = ({
+	children,
+	className
+}: DisclosureContentProps) => {
 	const { open, variants } = useDisclosure()
 	const uniqueId = useId()
 

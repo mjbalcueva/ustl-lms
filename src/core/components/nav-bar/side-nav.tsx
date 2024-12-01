@@ -33,7 +33,12 @@ type SideNavProps = React.ComponentProps<typeof motion.nav> & {
 	session: Session | null
 }
 
-export const SideNav = ({ links, session, className, ...props }: SideNavProps) => {
+export const SideNav = ({
+	links,
+	session,
+	className,
+	...props
+}: SideNavProps) => {
 	const { isNavOpen, setNavOpen } = useNav()
 	const { setLockScroll } = useLockScroll()
 	const currentPath = usePathname()
@@ -46,7 +51,9 @@ export const SideNav = ({ links, session, className, ...props }: SideNavProps) =
 
 		return (
 			linkSegments[1] === currentSegments[1] &&
-			(linkSegments[1] === 'instructor' ? linkSegments[2] === currentSegments[2] : true)
+			(linkSegments[1] === 'instructor'
+				? linkSegments[2] === currentSegments[2]
+				: true)
 		)
 	}
 
@@ -90,7 +97,9 @@ export const SideNav = ({ links, session, className, ...props }: SideNavProps) =
 						<NavIcon icon={link.icon} className="text-foreground/80" />
 						<NavLabel
 							label={link.label}
-							className={cn(isActiveLink(link.href ?? '') && 'text-card-foreground')}
+							className={cn(
+								isActiveLink(link.href ?? '') && 'text-card-foreground'
+							)}
 						/>
 						<NavItemSideIcon />
 					</NavLink>
@@ -113,7 +122,9 @@ export const SideNav = ({ links, session, className, ...props }: SideNavProps) =
 								<NavIcon icon={link.icon} className="text-foreground/80" />
 								<NavLabel
 									label={link.label}
-									className={cn(isActiveLink(link.href ?? '') && 'text-card-foreground')}
+									className={cn(
+										isActiveLink(link.href ?? '') && 'text-card-foreground'
+									)}
 								/>
 								<NavItemSideIcon />
 							</NavLink>
@@ -130,8 +141,14 @@ export const SideNav = ({ links, session, className, ...props }: SideNavProps) =
 						setLockScroll(!isNavOpen)
 					}}
 				>
-					<NavIcon icon={isNavOpen ? Close : Open} className="text-foreground/80" />
-					<NavLabel label={isNavOpen ? 'Collapse Sidebar' : 'Expand Sidebar'} disableAnimation />
+					<NavIcon
+						icon={isNavOpen ? Close : Open}
+						className="text-foreground/80"
+					/>
+					<NavLabel
+						label={isNavOpen ? 'Collapse Sidebar' : 'Expand Sidebar'}
+						disableAnimation
+					/>
 				</NavButton>
 			</NavTooltip>
 

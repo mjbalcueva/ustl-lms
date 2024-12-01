@@ -39,7 +39,10 @@ export const EditorToolbarSection: React.FC<EditorToolbarSectionProps> = ({
 	const { mainActions, dropdownActions } = React.useMemo(() => {
 		const sortedActions = actions
 			.filter((action) => activeActions.includes(action.value))
-			.sort((a, b) => activeActions.indexOf(a.value) - activeActions.indexOf(b.value))
+			.sort(
+				(a, b) =>
+					activeActions.indexOf(a.value) - activeActions.indexOf(b.value)
+			)
 
 		return {
 			mainActions: sortedActions.slice(0, mainActionCount),

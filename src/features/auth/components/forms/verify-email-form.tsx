@@ -16,7 +16,9 @@ export const VerifyEmailForm = ({ token }: { token: string }) => {
 
 	return (
 		<>
-			{isPending && <Loader variant="dots" size="extra-large" className="mx-auto" />}
+			{isPending && (
+				<Loader variant="dots" size="extra-large" className="mx-auto" />
+			)}
 			<FormResponse type="error" message={error?.message} />
 			<FormResponse type="success" message={data?.message} />
 		</>

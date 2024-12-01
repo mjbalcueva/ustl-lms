@@ -18,7 +18,10 @@ type PasswordEmailProps = {
 	resetLink?: string
 }
 
-export const PasswordResetEmail = ({ email, resetLink }: PasswordEmailProps) => {
+export const PasswordResetEmail = ({
+	email,
+	resetLink
+}: PasswordEmailProps) => {
 	return (
 		<Html>
 			<Head />
@@ -26,16 +29,18 @@ export const PasswordResetEmail = ({ email, resetLink }: PasswordEmailProps) => 
 			<Tailwind>
 				<Body className="mx-auto my-auto bg-neutral-100 py-6 font-sans text-black">
 					<Container className="rounded-xl border border-solid border-[#eaeaea] bg-white px-10 pb-10">
-						<Heading className="flex items-center justify-start gap-4">Scholar</Heading>
+						<Heading className="flex items-center justify-start gap-4">
+							Scholar
+						</Heading>
 						<Hr />
 						<Section>
 							<Text>
 								Hi there <strong>{email}</strong>!
 							</Text>
 							<Text>
-								Someone recently requested a <strong>password change</strong> for your for your
-								Scholar account. If this was you, you can set a new password by clicking the button
-								below:
+								Someone recently requested a <strong>password change</strong>{' '}
+								for your for your Scholar account. If this was you, you can set
+								a new password by clicking the button below:
 							</Text>
 							<Button
 								href={resetLink}
@@ -44,14 +49,20 @@ export const PasswordResetEmail = ({ email, resetLink }: PasswordEmailProps) => 
 								Reset Password
 							</Button>
 							<Text>
-								If you do not want to change your password, please ignore this email or contact
-								support at{' '}
-								<Link href="mailto:support@ustl-lms.tech" className="text-blue-600 no-underline">
+								If you do not want to change your password, please ignore this
+								email or contact support at{' '}
+								<Link
+									href="mailto:support@ustl-lms.tech"
+									className="text-blue-600 no-underline"
+								>
 									support@ustl-lms.tech
 								</Link>
 								.
 							</Text>
-							<Text>To keep your account secure, please do not forward this email to anyone.</Text>
+							<Text>
+								To keep your account secure, please do not forward this email to
+								anyone.
+							</Text>
 							<Text>Happy Learning!</Text>
 						</Section>
 					</Container>

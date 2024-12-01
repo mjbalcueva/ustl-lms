@@ -31,7 +31,8 @@ export const ForgotPasswordForm = () => {
 		}
 	})
 
-	const { mutate, data, error, isPending } = api.auth.forgotPassword.useMutation()
+	const { mutate, data, error, isPending } =
+		api.auth.forgotPassword.useMutation()
 	const onSubmit: SubmitHandler<ForgotPasswordSchema> = (data) => mutate(data)
 
 	return (
@@ -42,7 +43,9 @@ export const ForgotPasswordForm = () => {
 					name="email"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel className="text-card-foreground">Find your account</FormLabel>
+							<FormLabel className="text-card-foreground">
+								Find your account
+							</FormLabel>
 							<FormControl>
 								<Input
 									placeholder="Enter your email"

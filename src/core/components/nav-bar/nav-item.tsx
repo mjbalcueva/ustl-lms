@@ -6,7 +6,11 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { type IconBaseProps, type IconType } from 'react-icons'
 
 import { useNav } from '@/core/components/context/nav-provider'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/core/components/ui/tooltip'
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger
+} from '@/core/components/ui/tooltip'
 import { ArrowRight } from '@/core/lib/icons'
 import { cn } from '@/core/lib/utils/cn'
 
@@ -53,7 +57,11 @@ NavButton.displayName = 'NavButton'
 type NavTooltipProps = React.ComponentProps<typeof Tooltip> & {
 	content: React.ReactNode
 }
-export const NavTooltip = ({ children, content, ...props }: NavTooltipProps) => {
+export const NavTooltip = ({
+	children,
+	content,
+	...props
+}: NavTooltipProps) => {
 	const { isNavOpen } = useNav()
 	if (isNavOpen) return <>{children}</>
 	return (
@@ -109,7 +117,11 @@ type NavLabelProps = {
 	className?: string
 	disableAnimation?: boolean
 }
-export const NavLabel = ({ label, className, disableAnimation }: NavLabelProps) => {
+export const NavLabel = ({
+	label,
+	className,
+	disableAnimation
+}: NavLabelProps) => {
 	const { isNavOpen } = useNav()
 	return (
 		<motion.span

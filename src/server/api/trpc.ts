@@ -118,17 +118,19 @@ export const publicProcedure = t.procedure.use(timingMiddleware)
  *
  * @see https://trpc.io/docs/procedures
  */
-export const protectedProcedure = t.procedure.use(timingMiddleware).use(({ ctx, next }) => {
-	if (!ctx.session?.user) {
-		throw new TRPCError({ code: 'UNAUTHORIZED' })
-	}
-	return next({
-		ctx: {
-			// infers the `session` as non-nullable
-			session: { ...ctx.session, user: ctx.session.user }
+export const protectedProcedure = t.procedure
+	.use(timingMiddleware)
+	.use(({ ctx, next }) => {
+		if (!ctx.session?.user) {
+			throw new TRPCError({ code: 'UNAUTHORIZED' })
 		}
+		return next({
+			ctx: {
+				// infers the `session` as non-nullable
+				session: { ...ctx.session, user: ctx.session.user }
+			}
+		})
 	})
-})
 
 /**
  * Instructor (teacher) procedure

@@ -14,7 +14,8 @@ import { Dark, Light, Preference } from '@/core/lib/icons'
 import { cn } from '@/core/lib/utils/cn'
 
 export const PreferenceDrawer = () => {
-	const { theme, handleThemeChange, mode, handleModeChange, themeOptions } = useUserTheme()
+	const { theme, handleThemeChange, mode, handleModeChange, themeOptions } =
+		useUserTheme()
 
 	return (
 		<Drawer>
@@ -26,7 +27,9 @@ export const PreferenceDrawer = () => {
 			<DrawerContent>
 				<DrawerHeader className="text-left">
 					<DrawerTitle>Edit Preferences</DrawerTitle>
-					<DrawerDescription>Choose your preferred mode and theme</DrawerDescription>
+					<DrawerDescription>
+						Choose your preferred mode and theme
+					</DrawerDescription>
 				</DrawerHeader>
 
 				<div className="space-y-2 p-4">
@@ -34,7 +37,10 @@ export const PreferenceDrawer = () => {
 						<h3 className="text-sm font-semibold">Mode</h3>
 						<div className="flex flex-wrap gap-2 pb-1">
 							<Button
-								className={cn('flex-grow bg-card', mode === 'light' && 'border-ring')}
+								className={cn(
+									'flex-grow bg-card',
+									mode === 'light' && 'border-ring'
+								)}
 								variant={'outline'}
 								size={'xs'}
 								onClick={() => handleModeChange('light')}
@@ -43,7 +49,10 @@ export const PreferenceDrawer = () => {
 								<span className="text-xs">Light</span>
 							</Button>
 							<Button
-								className={cn('flex-grow bg-card', mode === 'dark' && 'border-ring')}
+								className={cn(
+									'flex-grow bg-card',
+									mode === 'dark' && 'border-ring'
+								)}
 								variant={'outline'}
 								size={'xs'}
 								onClick={() => handleModeChange('dark')}

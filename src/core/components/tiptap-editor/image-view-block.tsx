@@ -22,7 +22,9 @@ export const ImageViewBlock = ({ editor, node, getPos }: NodeViewProps) => {
 				<figure>
 					<div
 						className="relative w-full"
-						style={{ paddingBottom: `${isNumber(paddingBottom) ? paddingBottom : 0}%` }}
+						style={{
+							paddingBottom: `${isNumber(paddingBottom) ? paddingBottom : 0}%`
+						}}
 					>
 						<div className="absolute h-full w-full">
 							<div

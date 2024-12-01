@@ -63,7 +63,11 @@ export const MainNav = ({ className, ...props }: MainNavProps) => {
 					{...props}
 				/>
 			) : (
-				<SideNav links={navLinks} className={cn(className, inter.className)} {...props} />
+				<SideNav
+					links={navLinks}
+					className={cn(className, inter.className)}
+					{...props}
+				/>
 			)}
 		</NavProvider>
 	)

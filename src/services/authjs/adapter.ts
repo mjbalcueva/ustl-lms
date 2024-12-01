@@ -1,4 +1,8 @@
-import { type Adapter, type AdapterAccount, type AdapterUser } from '@auth/core/adapters'
+import {
+	type Adapter,
+	type AdapterAccount,
+	type AdapterUser
+} from '@auth/core/adapters'
 import { type PrismaClient } from '@prisma/client'
 
 export function adapter(db: PrismaClient): Adapter {

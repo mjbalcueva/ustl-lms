@@ -1,7 +1,11 @@
 import * as React from 'react'
 
 import { ToggleGroup, ToggleGroupItem } from '@/core/components/ui/toggle-group'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/core/components/ui/tooltip'
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger
+} from '@/core/components/ui/tooltip'
 import { useUserTheme } from '@/core/lib/hooks/use-user-theme'
 import { Check } from '@/core/lib/icons'
 
@@ -48,7 +52,10 @@ export const ColorButton: React.FC<ColorButtonProps> = ({
 					}}
 				>
 					{isSelected && (
-						<Check className="absolute inset-0 m-auto size-6" style={{ color: inverse }} />
+						<Check
+							className="absolute inset-0 m-auto size-6"
+							style={{ color: inverse }}
+						/>
 					)}
 				</ToggleGroupItem>
 			</TooltipTrigger>

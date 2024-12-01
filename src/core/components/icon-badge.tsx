@@ -3,24 +3,27 @@ import { type IconType } from 'react-icons'
 
 import { cn } from '@/core/lib/utils/cn'
 
-const backgroundVariants = cva('rounded-full flex items-center justify-center', {
-	variants: {
-		variant: {
-			default: 'bg-secondary',
-			success: 'bg-emerald-100 dark:bg-emerald-900',
-			info: 'bg-sky-100 dark:bg-sky-900'
+const backgroundVariants = cva(
+	'rounded-full flex items-center justify-center',
+	{
+		variants: {
+			variant: {
+				default: 'bg-secondary',
+				success: 'bg-emerald-100 dark:bg-emerald-900',
+				info: 'bg-sky-100 dark:bg-sky-900'
+			},
+			size: {
+				lg: 'p-2',
+				default: 'p-2',
+				sm: 'p-1'
+			}
 		},
-		size: {
-			lg: 'p-2',
-			default: 'p-2',
-			sm: 'p-1'
+		defaultVariants: {
+			variant: 'default',
+			size: 'default'
 		}
-	},
-	defaultVariants: {
-		variant: 'default',
-		size: 'default'
 	}
-})
+)
 
 const iconVariants = cva('', {
 	variants: {
@@ -44,7 +47,8 @@ const iconVariants = cva('', {
 type BackgroundVariantsProps = VariantProps<typeof backgroundVariants>
 type IconVariantsProps = VariantProps<typeof iconVariants>
 
-type IconBadgeProps = BackgroundVariantsProps & IconVariantsProps & { icon: IconType }
+type IconBadgeProps = BackgroundVariantsProps &
+	IconVariantsProps & { icon: IconType }
 
 export const IconBadge = ({ icon: Icon, variant, size }: IconBadgeProps) => {
 	return (

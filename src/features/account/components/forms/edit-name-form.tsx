@@ -9,7 +9,13 @@ import { toast } from 'sonner'
 import { api } from '@/services/trpc/react'
 
 import { Button } from '@/core/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@/core/components/ui/form'
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormMessage
+} from '@/core/components/ui/form'
 import { Input } from '@/core/components/ui/input'
 import { Loader } from '@/core/components/ui/loader'
 import { Info } from '@/core/lib/icons'
@@ -57,7 +63,8 @@ export const EditNameForm = () => {
 			<CardHeader>
 				<CardTitle>Display Name</CardTitle>
 				<CardDescription>
-					Please enter your full name, or a display name you are comfortable with.
+					Please enter your full name, or a display name you are comfortable
+					with.
 				</CardDescription>
 			</CardHeader>
 
@@ -70,7 +77,11 @@ export const EditNameForm = () => {
 							render={({ field }) => (
 								<FormItem>
 									<FormControl>
-										<Input className="sm:w-3/5" placeholder="Enter a new name" {...field} />
+										<Input
+											className="sm:w-3/5"
+											placeholder="Enter a new name"
+											{...field}
+										/>
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -85,7 +96,11 @@ export const EditNameForm = () => {
 								Your display name helps others recognize you
 							</CardFooterDescription>
 						</div>
-						<Button type="submit" size="sm" disabled={!form.formState.isDirty || isPending}>
+						<Button
+							type="submit"
+							size="sm"
+							disabled={!form.formState.isDirty || isPending}
+						>
 							{isPending && <Loader />}
 							{isPending ? 'Saving...' : 'Save'}
 						</Button>

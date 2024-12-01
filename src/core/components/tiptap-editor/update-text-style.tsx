@@ -13,11 +13,20 @@ import {
 	DropdownMenuTrigger
 } from '@/core/components/ui/dropdown-menu'
 import { type toggleVariants } from '@/core/components/ui/toggle'
-import { ChevronDown, Heading1, Heading2, Heading3, Paragraph } from '@/core/lib/icons'
+import {
+	ChevronDown,
+	Heading1,
+	Heading2,
+	Heading3,
+	Paragraph
+} from '@/core/lib/icons'
 import { cn } from '@/core/lib/utils/cn'
 import { type FormatAction } from '@/core/types/tiptap'
 
-type TextStyle = Omit<FormatAction, 'value' | 'icon' | 'action' | 'isActive' | 'canExecute'> & {
+type TextStyle = Omit<
+	FormatAction,
+	'value' | 'icon' | 'action' | 'isActive' | 'canExecute'
+> & {
 	element: keyof JSX.IntrinsicElements
 	level?: Level
 	className?: string
@@ -62,7 +71,10 @@ type UpdateTextStyleProps = VariantProps<typeof toggleVariants> & {
 export const UpdateTextStyle: React.FC<UpdateTextStyleProps> = React.memo(
 	({ editor, activeLevels = [1, 2, 3, 4, 5, 6], size, variant }) => {
 		const filteredActions = useMemo(
-			() => formatActions.filter((action) => !action.level || activeLevels.includes(action.level)),
+			() =>
+				formatActions.filter(
+					(action) => !action.level || activeLevels.includes(action.level)
+				),
 			[activeLevels]
 		)
 
@@ -78,7 +90,14 @@ export const UpdateTextStyle: React.FC<UpdateTextStyleProps> = React.memo(
 		)
 
 		const renderMenuItem = useCallback(
-			({ label, element: Element, level, className, shortcuts, icon: Icon }: TextStyle) => (
+			({
+				label,
+				element: Element,
+				level,
+				className,
+				shortcuts,
+				icon: Icon
+			}: TextStyle) => (
 				<DropdownMenuItem
 					key={label}
 					onClick={() => handleStyleChange(level)}
@@ -121,7 +140,9 @@ export const UpdateTextStyle: React.FC<UpdateTextStyleProps> = React.memo(
 						size={size}
 						variant={variant}
 					>
-						{activeStyle?.icon && <activeStyle.icon className="size-5 shrink-0" />}
+						{activeStyle?.icon && (
+							<activeStyle.icon className="size-5 shrink-0" />
+						)}
 						<ChevronDown className="size-3 shrink-0" />
 					</EditorToolbarButton>
 				</DropdownMenuTrigger>

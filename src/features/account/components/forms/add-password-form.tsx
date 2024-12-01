@@ -58,7 +58,9 @@ export const AddPasswordForm = () => {
 		<Card>
 			<CardHeader>
 				<CardTitle>Add Password</CardTitle>
-				<CardDescription>Set up a password to enhance your account security</CardDescription>
+				<CardDescription>
+					Set up a password to enhance your account security
+				</CardDescription>
 			</CardHeader>
 
 			<Form {...form}>
@@ -69,7 +71,9 @@ export const AddPasswordForm = () => {
 							name="password"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel className="text-card-foreground">New Password</FormLabel>
+									<FormLabel className="text-card-foreground">
+										New Password
+									</FormLabel>
 									<FormControl>
 										<PasswordInput
 											parentClassName="sm:w-3/5"
@@ -88,7 +92,9 @@ export const AddPasswordForm = () => {
 							name="confirmPassword"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel className="text-card-foreground">Confirm New Password</FormLabel>
+									<FormLabel className="text-card-foreground">
+										Confirm New Password
+									</FormLabel>
 									<FormControl>
 										<PasswordInput
 											parentClassName="sm:w-3/5"

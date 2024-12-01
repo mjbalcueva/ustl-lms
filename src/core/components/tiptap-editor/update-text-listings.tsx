@@ -20,7 +20,8 @@ const formatActions: ListItem[] = [
 		icon: <OrderedList className="size-5" />,
 		isActive: (editor) => editor.isActive('orderedList'),
 		action: (editor) => editor.chain().focus().toggleOrderedList().run(),
-		canExecute: (editor) => editor.can().chain().focus().toggleOrderedList().run(),
+		canExecute: (editor) =>
+			editor.can().chain().focus().toggleOrderedList().run(),
 		shortcuts: ['mod', 'shift', '7']
 	},
 	{
@@ -29,7 +30,8 @@ const formatActions: ListItem[] = [
 		icon: <BulletList className="size-5" />,
 		isActive: (editor) => editor.isActive('bulletList'),
 		action: (editor) => editor.chain().focus().toggleBulletList().run(),
-		canExecute: (editor) => editor.can().chain().focus().toggleBulletList().run(),
+		canExecute: (editor) =>
+			editor.can().chain().focus().toggleBulletList().run(),
 		shortcuts: ['mod', 'shift', '8']
 	}
 ]

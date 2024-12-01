@@ -1,6 +1,6 @@
-import { catchError } from '@/core/lib/utils/catch-error'
-
 import { db } from '@/server/db'
+
+import { catchError } from '@/core/lib/utils/catch-error'
 
 export const getVerificationTokenByEmail = async (email: string) => {
 	const [data, error] = await catchError(
