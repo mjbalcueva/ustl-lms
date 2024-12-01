@@ -6,129 +6,16 @@ import type {
 	AssessmentType,
 	AssignmentType,
 	ChapterStats,
-	ChapterTemplate,
-	TopicTemplate
+	ChapterTemplate
 } from '../types'
 import {
 	generateTopicTemplates,
 	getRandomInRange,
-	getRandomStatus,
-	toTitleCase
+	getRandomStatus
 } from '../utils'
-
-// ==================== Chapter Content Generation ====================
-function generateChapterContent(type: ChapterType): string {
-	const sections = []
-
-	switch (type) {
-		case ChapterType.LESSON:
-			sections.push(
-				`<h1 class="heading-node">${faker.company.catchPhrase()}</h1>`,
-				`<p class="text-node">${faker.lorem.paragraphs(2)}</p>`,
-				`<h2 class="heading-node">Key Concepts</h2>`,
-				`<p class="text-node">${faker.lorem.paragraphs(1)}</p>`,
-				`<h2 class="heading-node">Examples</h2>`,
-				`<p class="text-node">${faker.lorem.paragraphs(1)}</p>`,
-				`<h2 class="heading-node">Summary</h2>`,
-				`<p class="text-node">${faker.lorem.paragraph()}</p>`
-			)
-			break
-
-		case ChapterType.ASSESSMENT:
-			sections.push(
-				`<h1 class="heading-node">Assessment Instructions</h1>`,
-				`<p class="text-node">${faker.lorem.paragraph()}</p>`,
-				`<h2 class="heading-node">Questions</h2>`,
-				`<ol class="list-node">`,
-				...Array.from(
-					{ length: 5 },
-					() => `<li><p class="text-node">${faker.lorem.sentence()}?</p></li>`
-				),
-				`</ol>`
-			)
-			break
-
-		case ChapterType.ASSIGNMENT:
-			sections.push(
-				`<h1 class="heading-node">Assignment Overview</h1>`,
-				`<p class="text-node">${faker.lorem.paragraph()}</p>`,
-				`<h2 class="heading-node">Requirements</h2>`,
-				`<ul class="list-node">`,
-				...Array.from(
-					{ length: 3 },
-					() => `<li><p class="text-node">${faker.lorem.sentence()}</p></li>`
-				),
-				`</ul>`,
-				`<h2 class="heading-node">Submission Guidelines</h2>`,
-				`<p class="text-node">${faker.lorem.paragraph()}</p>`
-			)
-			break
-	}
-
-	return sections.join('')
-}
-
-// ==================== Chapter Title Generation ====================
-function generateLessonTitle(topic: TopicTemplate): string {
-	const prefix = faker.helpers.arrayElement([
-		'Introduction to',
-		'Understanding',
-		'Exploring',
-		'Fundamentals of',
-		'Advanced Topics in',
-		'Principles of',
-		'Applications of'
-	])
-
-	const titleFormats = [
-		`${prefix} ${toTitleCase(topic.mainTopic)}`,
-		`${toTitleCase(topic.mainTopic)} ${toTitleCase(topic.subTopic)}`,
-		`${prefix} ${toTitleCase(topic.mainTopic)} ${toTitleCase(topic.subTopic)}`,
-		`${toTitleCase(topic.adjective)} ${toTitleCase(topic.mainTopic)}`
-	]
-
-	return faker.helpers.arrayElement(titleFormats)
-}
-
-function generateAssessmentTitle(
-	topic: TopicTemplate,
-	sequence: number,
-	type: AssessmentType
-): string {
-	const formats = [
-		`${type} ${sequence}: ${toTitleCase(topic.mainTopic)} Fundamentals`,
-		`${type} ${sequence}: ${toTitleCase(topic.mainTopic)} ${toTitleCase(topic.subTopic)}`,
-		`${type} ${sequence}: ${toTitleCase(topic.adjective)} ${toTitleCase(topic.mainTopic)}`,
-		`${toTitleCase(topic.mainTopic)} ${type} ${sequence}`
-	]
-
-	return faker.helpers.arrayElement(formats)
-}
-
-function generateAssignmentTitle(
-	topic: TopicTemplate,
-	sequence: number,
-	type: AssignmentType
-): string {
-	const action = faker.helpers.arrayElement([
-		'Building',
-		'Implementing',
-		'Developing',
-		'Creating',
-		'Designing',
-		'Analyzing',
-		'Optimizing'
-	])
-
-	const formats = [
-		`${type} ${sequence}: ${action} ${toTitleCase(topic.concept)}`,
-		`${type} ${sequence}: ${toTitleCase(topic.mainTopic)} ${action}`,
-		`${type} ${sequence}: ${action} ${toTitleCase(topic.adjective)} ${toTitleCase(topic.concept)}`,
-		`${toTitleCase(topic.mainTopic)} ${type} ${sequence}: ${action} Project`
-	]
-
-	return faker.helpers.arrayElement(formats)
-}
+import { createAssessment } from './assessments'
+import { createAssignment } from './assignments'
+import { createLesson } from './lessons'
 
 // ==================== Chapter Creation and Organization ====================
 function orderChapters(chapters: ChapterTemplate[]): ChapterTemplate[] {
@@ -249,7 +136,7 @@ export async function createChapters(
 
 		const lessons = Array.from({
 			length: getRandomInRange(SEED_RANGES.LESSONS_PER_COURSE)
-		}).map((_, index): ChapterTemplate => {
+		}).map((_, index) => {
 			const topic = topics[index % topics.length] ?? {
 				mainTopic: 'General',
 				subTopic: 'Introduction',
@@ -260,21 +147,12 @@ export async function createChapters(
 			const status = getRandomStatus()
 			updateChapterStats(stats, ChapterType.LESSON)
 
-			return {
-				chapterId: faker.database.mongodbObjectId(),
-				title: generateLessonTitle(topic),
-				content: generateChapterContent(ChapterType.LESSON),
-				position: 0,
-				type: ChapterType.LESSON,
-				status,
-				courseId: course.courseId,
-				topicIndex: index
-			}
+			return createLesson(course.courseId, topic, status, index)
 		})
 
 		const assessments = Array.from({
 			length: getRandomInRange(SEED_RANGES.ASSESSMENTS_PER_COURSE)
-		}).map((_, index): ChapterTemplate => {
+		}).map((_, index) => {
 			const topic = topics[index % topics.length] ?? {
 				mainTopic: 'General',
 				subTopic: 'Introduction',
@@ -290,26 +168,19 @@ export async function createChapters(
 			const status = getRandomStatus()
 			updateChapterStats(stats, ChapterType.ASSESSMENT)
 
-			return {
-				chapterId: faker.database.mongodbObjectId(),
-				title: generateAssessmentTitle(
-					topic,
-					typeCounters.assessment[assessmentType],
-					assessmentType
-				),
-				content: generateChapterContent(ChapterType.ASSESSMENT),
-				position: 0,
-				type: ChapterType.ASSESSMENT,
+			return createAssessment(
+				course.courseId,
+				topic,
 				status,
-				courseId: course.courseId,
-				topicIndex: index,
-				sequenceNumber: index + 1
-			}
+				index,
+				assessmentType,
+				typeCounters.assessment[assessmentType]
+			)
 		})
 
 		const assignments = Array.from({
 			length: getRandomInRange(SEED_RANGES.ASSIGNMENTS_PER_COURSE)
-		}).map((_, index): ChapterTemplate => {
+		}).map((_, index) => {
 			const topic = topics[index % topics.length] ?? {
 				mainTopic: 'General',
 				subTopic: 'Introduction',
@@ -325,21 +196,14 @@ export async function createChapters(
 			const status = getRandomStatus()
 			updateChapterStats(stats, ChapterType.ASSIGNMENT)
 
-			return {
-				chapterId: faker.database.mongodbObjectId(),
-				title: generateAssignmentTitle(
-					topic,
-					typeCounters.assignment[assignmentType],
-					assignmentType
-				),
-				content: generateChapterContent(ChapterType.ASSIGNMENT),
-				position: 0,
-				type: ChapterType.ASSIGNMENT,
+			return createAssignment(
+				course.courseId,
+				topic,
 				status,
-				courseId: course.courseId,
-				topicIndex: index,
-				sequenceNumber: index + 1
-			}
+				index,
+				assignmentType,
+				typeCounters.assignment[assignmentType]
+			)
 		})
 
 		return orderChapters([...lessons, ...assessments, ...assignments])
