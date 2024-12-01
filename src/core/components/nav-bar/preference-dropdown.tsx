@@ -12,8 +12,14 @@ import { useUserTheme } from '@/core/lib/hooks/use-user-theme'
 import { Dark, Light, Preference } from '@/core/lib/icons'
 import { cn } from '@/core/lib/utils/cn'
 
-export const PreferenceDropdown = ({ isMobile }: { isMobile: boolean; isNavOpen: boolean }) => {
-	const { theme, handleThemeChange, mode, handleModeChange, themeOptions } = useUserTheme()
+export const PreferenceDropdown = ({
+	isMobile
+}: {
+	isMobile: boolean
+	isNavOpen: boolean
+}) => {
+	const { theme, handleThemeChange, mode, handleModeChange, themeOptions } =
+		useUserTheme()
 
 	return (
 		<DropdownMenuSub>
@@ -68,7 +74,9 @@ export const PreferenceDropdown = ({ isMobile }: { isMobile: boolean; isNavOpen:
 									theme === `${mode}-${themeOption.name}` && 'border-ring'
 								)}
 							>
-								<div className={`mr-2 size-4 shrink-0 rounded-full border ${themeOption.color}`} />
+								<div
+									className={`mr-2 size-4 shrink-0 rounded-full border ${themeOption.color}`}
+								/>
 								<span className="text-xs">
 									{themeOption.name.charAt(0).toUpperCase()}
 									{themeOption.name.slice(1)}

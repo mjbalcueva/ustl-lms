@@ -11,7 +11,11 @@ type MarkdownRendererProps = {
 }
 export const MarkdownRenderer = ({ children }: MarkdownRendererProps) => {
 	return (
-		<Markdown remarkPlugins={[remarkGfm]} components={Components} className="space-y-3">
+		<Markdown
+			remarkPlugins={[remarkGfm]}
+			components={Components}
+			className="space-y-3"
+		>
 			{children}
 		</Markdown>
 	)
@@ -36,68 +40,73 @@ const getShiki = async () => {
 	}
 }
 
-const HighlightedPre = React.memo(({ children, language, ...props }: HighlightedPreProps) => {
-	const [tokens, setTokens] = React.useState<ShikiToken[][]>([])
+const HighlightedPre = React.memo(
+	({ children, language, ...props }: HighlightedPreProps) => {
+		const [tokens, setTokens] = React.useState<ShikiToken[][]>([])
 
-	React.useEffect(() => {
-		let mounted = true
+		React.useEffect(() => {
+			let mounted = true
 
-		void getShiki()
-			.then(({ codeToTokens, bundledLanguages }) => {
-				if (!mounted) return
-				if (!(language in bundledLanguages)) return
+			void getShiki()
+				.then(({ codeToTokens, bundledLanguages }) => {
+					if (!mounted) return
+					if (!(language in bundledLanguages)) return
 
-				return codeToTokens(children, {
-					lang: language as keyof typeof bundledLanguages,
-					defaultColor: false,
-					themes: {
-						light: 'github-light',
-						dark: 'github-dark'
-					}
-				}).then((result) => {
-					if (mounted) {
-						setTokens(result.tokens)
-					}
+					return codeToTokens(children, {
+						lang: language as keyof typeof bundledLanguages,
+						defaultColor: false,
+						themes: {
+							light: 'github-light',
+							dark: 'github-dark'
+						}
+					}).then((result) => {
+						if (mounted) {
+							setTokens(result.tokens)
+						}
+					})
 				})
-			})
-			.catch(console.error)
+				.catch(console.error)
 
-		return () => {
-			mounted = false
+			return () => {
+				mounted = false
+			}
+		}, [children, language])
+
+		if (!tokens.length) {
+			return <pre {...props}>{children}</pre>
 		}
-	}, [children, language])
 
-	if (!tokens.length) {
-		return <pre {...props}>{children}</pre>
+		return (
+			<pre {...props}>
+				<code>
+					{tokens.map((line, lineIndex) => (
+						<React.Fragment key={lineIndex}>
+							<span>
+								{line.map((token, tokenIndex) => {
+									const style =
+										typeof token.htmlStyle === 'string'
+											? undefined
+											: token.htmlStyle
+
+									return (
+										<span
+											key={tokenIndex}
+											className="bg-shiki-light-bg text-shiki-light dark:bg-shiki-dark-bg dark:text-shiki-dark"
+											style={style}
+										>
+											{token.content}
+										</span>
+									)
+								})}
+							</span>
+							{lineIndex !== tokens.length - 1 && '\n'}
+						</React.Fragment>
+					))}
+				</code>
+			</pre>
+		)
 	}
-
-	return (
-		<pre {...props}>
-			<code>
-				{tokens.map((line, lineIndex) => (
-					<React.Fragment key={lineIndex}>
-						<span>
-							{line.map((token, tokenIndex) => {
-								const style = typeof token.htmlStyle === 'string' ? undefined : token.htmlStyle
-
-								return (
-									<span
-										key={tokenIndex}
-										className="bg-shiki-light-bg text-shiki-light dark:bg-shiki-dark-bg dark:text-shiki-dark"
-										style={style}
-									>
-										{token.content}
-									</span>
-								)
-							})}
-						</span>
-						{lineIndex !== tokens.length - 1 && '\n'}
-					</React.Fragment>
-				))}
-			</code>
-		</pre>
-	)
-})
+)
 HighlightedPre.displayName = 'HighlightedCode'
 
 type CodeBlockProps = React.HTMLAttributes<HTMLPreElement> & {
@@ -105,8 +114,16 @@ type CodeBlockProps = React.HTMLAttributes<HTMLPreElement> & {
 	className?: string
 	language: string
 }
-const CodeBlock = ({ children, className, language, ...restProps }: CodeBlockProps) => {
-	const code = typeof children === 'string' ? children : childrenTakeAllStringContents({ children })
+const CodeBlock = ({
+	children,
+	className,
+	language,
+	...restProps
+}: CodeBlockProps) => {
+	const code =
+		typeof children === 'string'
+			? children
+			: childrenTakeAllStringContents({ children })
 
 	const preClass = cn(
 		'overflow-x-scroll rounded-md border bg-background/50 p-4 font-mono text-sm [scrollbar-width:none]',
@@ -128,7 +145,10 @@ const CodeBlock = ({ children, className, language, ...restProps }: CodeBlockPro
 			</Suspense>
 
 			<div className="invisible absolute right-2 top-2 flex space-x-1 rounded-lg p-1 opacity-0 transition-all duration-200 group-hover/code:visible group-hover/code:opacity-100">
-				<CopyButton onCopy={() => navigator.clipboard.writeText(code)} icon={Copy} />
+				<CopyButton
+					onCopy={() => navigator.clipboard.writeText(code)}
+					icon={Copy}
+				/>
 			</div>
 		</div>
 	)
@@ -151,7 +171,9 @@ const childrenTakeAllStringContents = ({
 
 		if (Array.isArray(childContent)) {
 			return childContent
-				.map((child: React.ReactNode) => childrenTakeAllStringContents({ children: child }))
+				.map((child: React.ReactNode) =>
+					childrenTakeAllStringContents({ children: child })
+				)
 				.join('')
 		} else {
 			return childrenTakeAllStringContents({ children: childContent })
@@ -162,7 +184,10 @@ const childrenTakeAllStringContents = ({
 }
 
 const withClass = (Tag: keyof JSX.IntrinsicElements, classes: string) => {
-	const Component = ({ className, ...props }: JSX.IntrinsicElements[typeof Tag]) => (
+	const Component = ({
+		className,
+		...props
+	}: JSX.IntrinsicElements[typeof Tag]) => (
 		// @ts-expect-error - JSX element type inference limitation
 		<Tag className={cn(classes, className)} {...props} />
 	)
@@ -181,7 +206,11 @@ const Components = {
 	strong: withClass('strong', 'font-black'),
 	a: withClass('a', 'text-primary underline underline-offset-2'),
 	blockquote: withClass('blockquote', 'border-l-2 border-primary pl-4'),
-	code: ({ children, className, ...rest }: React.HTMLAttributes<HTMLElement>) => {
+	code: ({
+		children,
+		className,
+		...rest
+	}: React.HTMLAttributes<HTMLElement>) => {
 		const match = /language-(\w+)/.exec(className ?? '')
 		return match ? (
 			<CodeBlock {...rest} className={className} language={match[1] ?? ''}>

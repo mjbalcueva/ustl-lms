@@ -7,7 +7,9 @@ import { MainNav } from '@/core/components/nav-bar/main-nav'
 import { PageWrapper } from '@/core/components/ui/page'
 import { TooltipProvider } from '@/core/components/ui/tooltip'
 
-export default async function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function Layout({
+	children
+}: Readonly<{ children: React.ReactNode }>) {
 	const session = await auth()
 
 	return (

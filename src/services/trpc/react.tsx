@@ -8,11 +8,11 @@ import { createTRPCReact } from '@trpc/react-query'
 import { type inferRouterInputs, type inferRouterOutputs } from '@trpc/server'
 import SuperJSON from 'superjson'
 
-import { getBaseUrl } from '@/core/lib/utils/get-base-url'
-
 import { type AppRouter } from '@/server/api/root'
 
 import { createQueryClient } from '@/services/trpc/query-client'
+
+import { getBaseUrl } from '@/core/lib/utils/get-base-url'
 
 let clientQueryClientSingleton: QueryClient | undefined = undefined
 const getQueryClient = () => {
@@ -69,7 +69,12 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
 			<api.Provider client={trpcClient} queryClient={queryClient}>
 				{props.children}
 			</api.Provider>
-			{process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} />}
+			{process.env.NODE_ENV === 'development' && (
+				<ReactQueryDevtools
+					initialIsOpen={false}
+					buttonPosition="bottom-left"
+				/>
+			)}
 		</QueryClientProvider>
 	)
 }

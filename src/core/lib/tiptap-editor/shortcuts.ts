@@ -33,7 +33,9 @@ export const getShortcutKey = (key: string): ShortcutKeyResult => {
 	const lowercaseKey = key.toLowerCase()
 
 	if (lowercaseKey in shortcutKeyMap) {
-		return shortcutKeyMap[lowercaseKey]?.[platform] ?? { symbol: key, readable: key }
+		return (
+			shortcutKeyMap[lowercaseKey]?.[platform] ?? { symbol: key, readable: key }
+		)
 	}
 
 	return { symbol: key, readable: key }

@@ -11,7 +11,11 @@ const handleAuth = async () => {
 	return { userId: session.user.id }
 }
 
-const handleUpload = async ({ metadata }: { metadata: { userId: string | undefined } }) => ({
+const handleUpload = async ({
+	metadata
+}: {
+	metadata: { userId: string | undefined }
+}) => ({
 	uploadedBy: metadata.userId
 })
 

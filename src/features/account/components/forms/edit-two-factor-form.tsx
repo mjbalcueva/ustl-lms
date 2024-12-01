@@ -71,7 +71,8 @@ export const EditTwoFactorForm = () => {
 			<CardHeader>
 				<CardTitle>Two-Factor Authentication</CardTitle>
 				<CardDescription>
-					Enabling this feature requires email verification for each login attempt
+					Enabling this feature requires email verification for each login
+					attempt
 				</CardDescription>
 			</CardHeader>
 
@@ -86,7 +87,9 @@ export const EditTwoFactorForm = () => {
 									<FormItem className="flex items-center justify-between space-y-0">
 										<div>
 											<FormLabel>Enable Two-Factor Authentication</FormLabel>
-											<FormDescription>Adds an extra layer of security</FormDescription>
+											<FormDescription>
+												Adds an extra layer of security
+											</FormDescription>
 										</div>
 										<FormControl>
 											<Switch
@@ -115,7 +118,11 @@ export const EditTwoFactorForm = () => {
 								</>
 							)}
 						</CardFooterDescription>
-						<Button className="ml-auto" size="sm" disabled={!form.formState.isDirty || isPending}>
+						<Button
+							className="ml-auto"
+							size="sm"
+							disabled={!form.formState.isDirty || isPending}
+						>
 							{isPending && <Loader />}
 							{isPending ? 'Saving...' : 'Save'}
 						</Button>

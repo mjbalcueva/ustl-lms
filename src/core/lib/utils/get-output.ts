@@ -1,7 +1,7 @@
 import { type Editor } from '@tiptap/core'
 
 // eslint-disable-next-line boundaries/element-types
-import { type TiptapEditorProps } from '@/features/chapters/components/tiptap-editor/editor'
+import { type EditorProps } from '@/features/chapters/instructor/components/editor/editor'
 
 /**
  * Formats the content of a Tiptap editor based on the specified format.
@@ -9,7 +9,7 @@ import { type TiptapEditorProps } from '@/features/chapters/components/tiptap-ed
  * @param format - The format of the output.
  * @returns The formatted content.
  */
-export function getOutput(editor: Editor, format: TiptapEditorProps['output']) {
+export function getOutput(editor: Editor, format: EditorProps['output']) {
 	if (format === 'json') {
 		return editor.getJSON()
 	}

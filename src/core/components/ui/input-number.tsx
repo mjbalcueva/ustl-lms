@@ -7,7 +7,10 @@ import { Input } from '@/core/components/ui/input'
 import { ChevronDown, ChevronUp } from '@/core/lib/icons'
 import { cn } from '@/core/lib/utils/cn'
 
-type InputNumberProps = Omit<React.ComponentProps<typeof Input>, 'onChange' | 'value' | 'type'> & {
+type InputNumberProps = Omit<
+	React.ComponentProps<typeof Input>,
+	'onChange' | 'value' | 'type'
+> & {
 	value?: number
 	onChange?: (value: number | undefined) => void
 	min?: number
@@ -16,9 +19,21 @@ type InputNumberProps = Omit<React.ComponentProps<typeof Input>, 'onChange' | 'v
 }
 
 export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
-	({ className, value, onChange, min = -Infinity, max = Infinity, step = 1, ...props }, ref) => {
+	(
+		{
+			className,
+			value,
+			onChange,
+			min = -Infinity,
+			max = Infinity,
+			step = 1,
+			...props
+		},
+		ref
+	) => {
 		const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-			const newValue = e.target.value === '' ? undefined : Number(e.target.value)
+			const newValue =
+				e.target.value === '' ? undefined : Number(e.target.value)
 			onChange?.(newValue)
 		}
 

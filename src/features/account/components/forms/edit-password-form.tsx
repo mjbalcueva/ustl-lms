@@ -64,7 +64,9 @@ export const EditPasswordForm = () => {
 		<Card>
 			<CardHeader>
 				<CardTitle>Update Password</CardTitle>
-				<CardDescription>Update your password to secure your account</CardDescription>
+				<CardDescription>
+					Update your password to secure your account
+				</CardDescription>
 			</CardHeader>
 
 			<Form {...form}>
@@ -75,7 +77,9 @@ export const EditPasswordForm = () => {
 							name="currentPassword"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel className="text-card-foreground">Current Password</FormLabel>
+									<FormLabel className="text-card-foreground">
+										Current Password
+									</FormLabel>
 									<FormControl>
 										<PasswordInput
 											parentClassName="sm:w-3/5"
@@ -94,7 +98,9 @@ export const EditPasswordForm = () => {
 							name="newPassword"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel className="text-card-foreground">New Password</FormLabel>
+									<FormLabel className="text-card-foreground">
+										New Password
+									</FormLabel>
 									<FormControl>
 										<PasswordInput
 											parentClassName="sm:w-3/5"
@@ -113,7 +119,9 @@ export const EditPasswordForm = () => {
 							name="confirmPassword"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel className="text-card-foreground">Confirm New Password</FormLabel>
+									<FormLabel className="text-card-foreground">
+										Confirm New Password
+									</FormLabel>
 									<FormControl>
 										<PasswordInput
 											parentClassName="sm:w-3/5"
@@ -131,7 +139,9 @@ export const EditPasswordForm = () => {
 					<CardFooter className="justify-end md:justify-between">
 						<div className="hidden items-center gap-2 md:flex">
 							<Info className="size-4 shrink-0 text-muted-foreground" />
-							<CardFooterDescription>Used to log in to your account</CardFooterDescription>
+							<CardFooterDescription>
+								Used to log in to your account
+							</CardFooterDescription>
 						</div>
 						<Button size="sm" disabled={!form.formState.isDirty || isPending}>
 							{isPending && <Loader />}

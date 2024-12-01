@@ -16,9 +16,15 @@ export const metadata: Metadata = {
 	icons: [{ rel: 'icon', url: '/favicon.ico' }]
 }
 
-export default async function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function Layout({
+	children
+}: Readonly<{ children: React.ReactNode }>) {
 	return (
-		<html lang="en" className={`${GeistSans.variable} scroll-smooth`} suppressHydrationWarning>
+		<html
+			lang="en"
+			className={`${GeistSans.variable} scroll-smooth`}
+			suppressHydrationWarning
+		>
 			<body>
 				<TRPCReactProvider>
 					<ThemeProvider>

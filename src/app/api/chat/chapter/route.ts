@@ -15,7 +15,7 @@ type ChatPayload = {
 		name: string
 		id: string
 	}
-	chapter: RouterOutputs['chapter']['findChapter']['chapter']
+	chapter: RouterOutputs['student']['chapter']['findOneChapter']['chapter']
 }
 
 export async function POST(req: Request) {
@@ -51,7 +51,8 @@ export async function POST(req: Request) {
 				}
 			},
 			get_student_name: {
-				description: "Get the student's name. important for personalizing the conversation.",
+				description:
+					"Get the student's name. important for personalizing the conversation.",
 				parameters: z.object({}),
 				execute: async (): Promise<string> => {
 					return userDetails?.name ?? 'User'
@@ -89,13 +90,16 @@ export async function POST(req: Request) {
 				parameters: z.object({}),
 				execute: async (): Promise<string> => {
 					const isCompleted = chapter?.chapterProgress[0]?.isCompleted
-					const completionStatus = isCompleted ? '✅ Completed' : '⏳ Not completed'
+					const completionStatus = isCompleted
+						? '✅ Completed'
+						: '⏳ Not completed'
 
 					return `Chapter Progress:\n${chapter?.title}: ${completionStatus}`
 				}
 			},
 			listResources: {
-				description: 'Get a list of chapter reference/resource/attachment materials',
+				description:
+					'Get a list of chapter reference/resource/attachment materials',
 				parameters: z.object({}),
 				execute: async (): Promise<string> => {
 					if (!chapter?.attachments.length)
@@ -109,7 +113,8 @@ export async function POST(req: Request) {
 					questionCount: z.number().optional().default(3)
 				}),
 				execute: async ({ questionCount }): Promise<string> => {
-					if (!chapter?.content) return 'No content available to generate quiz questions.'
+					if (!chapter?.content)
+						return 'No content available to generate quiz questions.'
 
 					return `
             Based on the chapter "${chapter.title}", here are ${questionCount} practice questions to test your understanding:
@@ -121,7 +126,8 @@ export async function POST(req: Request) {
 				}
 			},
 			summarizeContent: {
-				description: 'Generate a concise summary of the chapter content with key points',
+				description:
+					'Generate a concise summary of the chapter content with key points',
 				parameters: z.object({
 					format: z.enum(['bullet', 'paragraph']).optional().default('bullet')
 				}),
@@ -130,7 +136,9 @@ export async function POST(req: Request) {
 
 					const title = `Summary of "${chapter.title}"\n\n`
 					const content =
-						chapter.content.length > 500 ? chapter.content.slice(0, 500) + '...' : chapter.content
+						chapter.content.length > 500
+							? chapter.content.slice(0, 500) + '...'
+							: chapter.content
 
 					if (format === 'bullet') {
 						return `
@@ -142,12 +150,14 @@ export async function POST(req: Request) {
 				}
 			},
 			explainConcept: {
-				description: 'Provide guidance on understanding a specific concept from the chapter',
+				description:
+					'Provide guidance on understanding a specific concept from the chapter',
 				parameters: z.object({
 					concept: z.string()
 				}),
 				execute: async ({ concept }): Promise<string> => {
-					if (!chapter?.content) return 'No content available to explain concepts.'
+					if (!chapter?.content)
+						return 'No content available to explain concepts.'
 
 					return `
             To understand "${concept}" in the context of this chapter:
@@ -167,9 +177,12 @@ export async function POST(req: Request) {
 					timeAvailable: z.string().optional().default('1 hour')
 				}),
 				execute: async ({ timeAvailable }): Promise<string> => {
-					if (!chapter?.content) return 'No content available to create a study plan.'
+					if (!chapter?.content)
+						return 'No content available to create a study plan.'
 
-					const isLongSession = (timeAvailable as string).toLowerCase().includes('hour')
+					const isLongSession = (timeAvailable as string)
+						.toLowerCase()
+						.includes('hour')
 
 					return `
             Study Plan for "${chapter.title}" (${timeAvailable}):

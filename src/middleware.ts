@@ -29,7 +29,10 @@ export default auth((req) => {
 	if (authRoutes.includes(pathname)) return
 
 	// Prevent students from accessing instructor-only routes
-	if (instructorRoutes.some((route) => pathname.startsWith(route)) && isInstructor) {
+	if (
+		instructorRoutes.some((route) => pathname.startsWith(route)) &&
+		isInstructor
+	) {
 		return Response.redirect(new URL(DEFAULT_REDIRECT, nextUrl))
 	}
 

@@ -14,7 +14,8 @@ export function useLinkFilter(links: NavLinks[], level = 0): NavLinks[] {
 	const userRole = session?.user?.role
 
 	return useMemo(() => {
-		if (level === 0) return links.slice(0, 1).map((link) => ({ ...link, children: undefined }))
+		if (level === 0)
+			return links.slice(0, 1).map((link) => ({ ...link, children: undefined }))
 
 		/**
 		 * @description This function is used to filter the links based on the user's role and the level of the links.
@@ -38,7 +39,11 @@ export function useLinkFilter(links: NavLinks[], level = 0): NavLinks[] {
 				delete filteredLink.children
 
 				if (currentLevel < level && link.children)
-					filteredLink.children = filterLinks(link.children, linkRoles, currentLevel + 1)
+					filteredLink.children = filterLinks(
+						link.children,
+						linkRoles,
+						currentLevel + 1
+					)
 
 				return [filteredLink]
 			})

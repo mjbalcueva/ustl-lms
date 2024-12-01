@@ -52,7 +52,12 @@ const config = {
 					},
 					{
 						from: ['feature'],
-						allow: [['feature', { featureName: '${from.featureName}' }], 'common', 'core']
+						allow: [
+							['feature', { featureName: '${from.featureName}' }],
+							['feature', { moduleScope: 'shared' }],
+							'common',
+							'core'
+						]
 					},
 					{
 						from: ['app'],
@@ -77,9 +82,12 @@ const config = {
 			},
 			{
 				type: 'feature',
-				pattern: ['src/features/*/**/*'],
+				pattern: [
+					'src/features/*/(?<moduleScope>instructor|shared|student)/**/*',
+					'src/features/*/**/*'
+				],
 				mode: 'full',
-				capture: ['featureName']
+				capture: ['featureName', 'moduleScope']
 			},
 			{
 				type: 'app',

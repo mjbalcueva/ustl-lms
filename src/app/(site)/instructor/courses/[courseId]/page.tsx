@@ -1,5 +1,10 @@
 import { redirect } from 'next/navigation'
-import { TbListDetails, TbNotebook, TbPackage, TbUserPlus } from 'react-icons/tb'
+import {
+	TbListDetails,
+	TbNotebook,
+	TbPackage,
+	TbUserPlus
+} from 'react-icons/tb'
 
 import { auth } from '@/services/authjs/auth'
 import { api } from '@/services/trpc/server'
@@ -20,24 +25,26 @@ import { Separator } from '@/core/components/ui/separator'
 import { CourseSingle, Instructor } from '@/core/lib/icons'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
-import { CourseActionButton } from '@/features/courses/components/course-action-button'
-import { AddCourseAttachmentsForm } from '@/features/courses/components/forms/add-course-attachments-form'
-import { AddCourseChaptersForm } from '@/features/courses/components/forms/add-course-chapters-form'
-import { EditCourseCategoriesForm } from '@/features/courses/components/forms/edit-course-categories'
-import { EditCourseCodeForm } from '@/features/courses/components/forms/edit-course-code-form'
-import { EditCourseDescriptionForm } from '@/features/courses/components/forms/edit-course-description'
-import { EditCourseImageForm } from '@/features/courses/components/forms/edit-course-image'
-import { EditCourseTitleForm } from '@/features/courses/components/forms/edit-course-title-form'
-import { EditCourseTokenForm } from '@/features/courses/components/forms/edit-course-token-form'
+import { CourseActionButton } from '@/features/courses/instructor/components/course-action-button'
+import { AddCourseAttachmentsForm } from '@/features/courses/instructor/components/forms/add-course-attachments-form'
+import { AddCourseChaptersForm } from '@/features/courses/instructor/components/forms/add-course-chapters-form'
+import { EditCourseCodeForm } from '@/features/courses/instructor/components/forms/edit-course-code-form'
+import { EditCourseDescriptionForm } from '@/features/courses/instructor/components/forms/edit-course-description'
+import { EditCourseImageForm } from '@/features/courses/instructor/components/forms/edit-course-image'
+import { EditCourseTagsForm } from '@/features/courses/instructor/components/forms/edit-course-tags'
+import { EditCourseTitleForm } from '@/features/courses/instructor/components/forms/edit-course-title-form'
+import { EditCourseTokenForm } from '@/features/courses/instructor/components/forms/edit-course-token-form'
 
-export default async function Page({ params }: { params: { courseId: string } }) {
-	const { courseId } = params
-
+export default async function Page({
+	params: { courseId }
+}: {
+	params: { courseId: string }
+}) {
 	const session = await auth()
 	if (session?.user?.role !== 'INSTRUCTOR') redirect('/dashboard')
 
-	const { course } = await api.course.findCourse({ courseId })
-	const { categories } = await api.course.findManyCategories()
+	const { course } = await api.instructor.course.findOneCourse({ courseId })
+	const { tags } = await api.instructor.courseTags.findManyCourseTags()
 
 	if (!course) return <NotFound item="course" />
 
@@ -46,9 +53,9 @@ export default async function Page({ params }: { params: { courseId: string } })
 		course.title,
 		course.description,
 		course.imageUrl,
-		course.categories.length > 0,
-		course.chapters.some((chapter) => chapter.status === 'PUBLISHED'),
-		course.attachments.some((attachment) => !attachment.chapterId)
+		course._count.tags > 0,
+		course._count.chapters > 0,
+		course._count.attachments > 0
 	]
 
 	const totalFields = requiredFields.length
@@ -58,7 +65,11 @@ export default async function Page({ params }: { params: { courseId: string } })
 	const crumbs: Breadcrumb = [
 		{ icon: Instructor },
 		{ label: 'Courses', href: '/instructor/courses' },
-		{ icon: CourseSingle, label: course.title, href: `/instructor/courses/${courseId}` }
+		{
+			icon: CourseSingle,
+			label: course.title,
+			href: `/instructor/courses/${courseId}`
+		}
 	]
 
 	return (
@@ -91,35 +102,57 @@ export default async function Page({ params }: { params: { courseId: string } })
 					<PageDescription>Filled {completionText}</PageDescription>
 				</div>
 
-				<CourseActionButton id={course.id} status={course.status} />
+				<CourseActionButton courseId={course.courseId} status={course.status} />
 			</PageHeader>
 
 			<PageContent className="mb-24 space-y-6 px-2.5 sm:px-4 md:mb-12 md:flex md:flex-wrap md:gap-6 md:space-y-0 md:px-6">
 				<PageSection columnMode>
 					<FoldableBlock title="Course Invite" icon={TbUserPlus}>
-						<EditCourseTokenForm id={course.id} token={course.token ?? ''} />
+						<EditCourseTokenForm
+							courseId={course.courseId}
+							token={course.token}
+						/>
 					</FoldableBlock>
 
-					<FoldableBlock title="Customize your course" icon={TbNotebook} duration={0.4}>
-						<EditCourseCodeForm id={course.id} code={course.code} />
-						<EditCourseTitleForm id={course.id} title={course.title} />
-						<EditCourseDescriptionForm id={course.id} description={course.description} />
-						<EditCourseImageForm id={course.id} imageUrl={course.imageUrl} />
-						<EditCourseCategoriesForm
-							id={course.id}
-							categories={course.categories}
-							categoriesOptions={categories}
+					<FoldableBlock
+						title="Customize your course"
+						icon={TbNotebook}
+						duration={0.4}
+					>
+						<EditCourseCodeForm courseId={course.courseId} code={course.code} />
+						<EditCourseTitleForm
+							courseId={course.courseId}
+							title={course.title}
+						/>
+						<EditCourseDescriptionForm
+							courseId={course.courseId}
+							description={course.description}
+						/>
+						<EditCourseImageForm
+							courseId={course.courseId}
+							imageUrl={course.imageUrl}
+						/>
+						<EditCourseTagsForm
+							courseId={course.courseId}
+							tags={course.tags}
+							tagsOptions={tags}
 						/>
 					</FoldableBlock>
 				</PageSection>
 
 				<PageSection columnMode>
 					<FoldableBlock title="Course Outline" icon={TbListDetails}>
-						<AddCourseChaptersForm courseId={course.id} chapters={course.chapters} />
+						<AddCourseChaptersForm
+							courseId={course.courseId}
+							chapters={course.chapters}
+						/>
 					</FoldableBlock>
 
 					<FoldableBlock title="Additional References" icon={TbPackage}>
-						<AddCourseAttachmentsForm courseId={course.id} attachments={course.attachments} />
+						<AddCourseAttachmentsForm
+							courseId={course.courseId}
+							attachments={course.attachments}
+						/>
 					</FoldableBlock>
 				</PageSection>
 			</PageContent>

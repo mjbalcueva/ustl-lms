@@ -19,7 +19,10 @@ import { Loader } from '@/core/components/ui/loader'
 import { PasswordInput } from '@/core/components/ui/password-input'
 
 import { ButtonShining } from '@/features/auth/components/ui/button-shining'
-import { registerSchema, type RegisterSchema } from '@/features/auth/validations/register-schema'
+import {
+	registerSchema,
+	type RegisterSchema
+} from '@/features/auth/validations/register-schema'
 
 export const RegisterForm = () => {
 	const form = useForm<RegisterSchema>({
@@ -44,7 +47,11 @@ export const RegisterForm = () => {
 						<FormItem>
 							<FormLabel className="text-card-foreground">Name</FormLabel>
 							<FormControl>
-								<Input placeholder="What should we call you?" autoComplete="name" {...field} />
+								<Input
+									placeholder="What should we call you?"
+									autoComplete="name"
+									{...field}
+								/>
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -56,7 +63,9 @@ export const RegisterForm = () => {
 					name="email"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel className="text-card-foreground">Email Address</FormLabel>
+							<FormLabel className="text-card-foreground">
+								Email Address
+							</FormLabel>
 							<FormControl>
 								<Input
 									placeholder="Enter your email"

@@ -10,7 +10,11 @@ import { useDeviceType } from '@/core/components/context/device-type-provider'
 import { useNav } from '@/core/components/context/nav-provider'
 import { PreferenceDrawer } from '@/core/components/nav-bar/preference-drawer'
 import { PreferenceDropdown } from '@/core/components/nav-bar/preference-dropdown'
-import { Avatar, AvatarFallback, AvatarImage } from '@/core/components/ui/avatar'
+import {
+	Avatar,
+	AvatarFallback,
+	AvatarImage
+} from '@/core/components/ui/avatar'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -28,7 +32,10 @@ type UserButtonProps = React.ComponentProps<typeof DropdownMenu> & {
 	session: Session | null
 }
 
-export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }) => {
+export const UserButton: React.FC<UserButtonProps> = ({
+	session,
+	...props
+}) => {
 	const { isNavOpen } = useNav()
 	const { deviceSize } = useDeviceType()
 
@@ -45,7 +52,11 @@ export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }) => 
 		<DropdownMenu modal={false} {...props}>
 			<DropdownMenuTrigger className="group/user-button flex cursor-pointer items-center gap-3 rounded-md border border-background p-1 outline-none hover:border-border focus-visible:ring-2 focus-visible:ring-ring dark:border-transparent md:min-h-[2.8rem] md:hover:bg-card md:hover:shadow-[0_0_0_-2px_rgba(0,0,0,0.05),0_1px_2px_0_rgba(0,0,0,0.05)] dark:md:hover:border-border dark:md:hover:bg-accent/70">
 				<Avatar className="size-8 border border-border md:ml-[1.5px]">
-					<AvatarImage src={session?.user?.imageUrl ?? ''} alt={initials} className="select-none" />
+					<AvatarImage
+						src={session?.user?.imageUrl ?? ''}
+						alt={initials}
+						className="select-none"
+					/>
 					<AvatarFallback className="pointer-events-none select-none bg-muted">
 						{initials}
 					</AvatarFallback>
@@ -62,7 +73,9 @@ export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }) => 
 						)}
 					>
 						<div className="flex max-w-[9.5rem] flex-col items-start -space-y-0.5">
-							<span className="max-w-full truncate text-sm font-medium">{name}</span>
+							<span className="max-w-full truncate text-sm font-medium">
+								{name}
+							</span>
 							<span className="max-w-full truncate text-xs text-muted-foreground">
 								{strippedEmail}
 							</span>
@@ -82,7 +95,9 @@ export const UserButton: React.FC<UserButtonProps> = ({ session, ...props }) => 
 				{isMobile || !isNavOpen ? (
 					<DropdownMenuLabel>
 						<span className="block">{name}</span>
-						<span className="block font-normal text-muted-foreground">{strippedEmail}</span>
+						<span className="block font-normal text-muted-foreground">
+							{strippedEmail}
+						</span>
 					</DropdownMenuLabel>
 				) : (
 					<DropdownMenuLabel>

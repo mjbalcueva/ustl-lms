@@ -5,7 +5,10 @@ export const env = createEnv({
 	skipValidation: !!process.env.SKIP_ENV_VALIDATION,
 	emptyStringAsUndefined: true,
 	server: {
-		AUTH_SECRET: process.env.NODE_ENV === 'production' ? z.string() : z.string().optional(),
+		AUTH_SECRET:
+			process.env.NODE_ENV === 'production'
+				? z.string()
+				: z.string().optional(),
 		AUTH_URL: z.preprocess(
 			(str) => process.env.VERCEL_URL ?? str,
 			process.env.VERCEL ? z.string() : z.string().url()
@@ -16,7 +19,9 @@ export const env = createEnv({
 		MODEL_ID: z.string(),
 		MUX_TOKEN_ID: z.string(),
 		MUX_TOKEN_SECRET: z.string(),
-		NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
+		NODE_ENV: z
+			.enum(['development', 'test', 'production'])
+			.default('development'),
 		OPENAI_API_KEY: z.string(),
 		POSTGRES_DATABASE: z.string(),
 		POSTGRES_HOST: z.string(),

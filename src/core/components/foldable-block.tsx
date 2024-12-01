@@ -2,8 +2,16 @@ import { type IconType } from 'react-icons'
 
 import { IconBadge } from '@/core/components/icon-badge'
 import { buttonVariants } from '@/core/components/ui/button'
-import { Disclosure, DisclosureContent, DisclosureTrigger } from '@/core/components/ui/disclosure'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/core/components/ui/tooltip'
+import {
+	Disclosure,
+	DisclosureContent,
+	DisclosureTrigger
+} from '@/core/components/ui/disclosure'
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger
+} from '@/core/components/ui/tooltip'
 import { ChevronRight } from '@/core/lib/icons'
 import { cn } from '@/core/lib/utils/cn'
 
@@ -47,12 +55,16 @@ export const FoldableBlock = ({
 						</TooltipTrigger>
 						<TooltipContent>
 							<span className="group-data-[state=open]:hidden">Expand</span>
-							<span className="hidden group-data-[state=open]:block">Collapse</span>
+							<span className="hidden group-data-[state=open]:block">
+								Collapse
+							</span>
 						</TooltipContent>
 					</Tooltip>
 				</h2>
 			</DisclosureTrigger>
-			<DisclosureContent className={cn('space-y-4 [&>*:first-child]:mt-3', contentClassName)}>
+			<DisclosureContent
+				className={cn('space-y-4 [&>*:first-child]:mt-3', contentClassName)}
+			>
 				{children}
 			</DisclosureContent>
 		</Disclosure>

@@ -4,7 +4,11 @@ import { type VariantProps } from 'class-variance-authority'
 
 import { ColorPicker } from '@/core/components/tiptap-editor/color-picker'
 import { EditorToolbarButton } from '@/core/components/tiptap-editor/editor-toolbar-button'
-import { Popover, PopoverContent, PopoverTrigger } from '@/core/components/ui/popover'
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger
+} from '@/core/components/ui/popover'
 import { type toggleVariants } from '@/core/components/ui/toggle'
 import { BackgroundColor, ChevronDown } from '@/core/lib/icons'
 import { usePalettes } from '@/core/lib/tiptap-editor/palette'
@@ -19,7 +23,8 @@ export const UpdateTextHighlight: React.FC<UpdateTextHighlightProps> = ({
 	variant
 }) => {
 	const color =
-		(editor.getAttributes('textStyle')?.color as string | undefined) ?? 'hsl(var(--foreground))'
+		(editor.getAttributes('textStyle')?.color as string | undefined) ??
+		'hsl(var(--foreground))'
 	const [selectedColor, setSelectedColor] = React.useState(color)
 
 	const handleColorChange = React.useCallback(

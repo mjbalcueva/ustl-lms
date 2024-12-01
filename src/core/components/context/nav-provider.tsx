@@ -12,9 +12,16 @@ type NavContextType = {
 const NavContext = React.createContext<NavContextType | undefined>(undefined)
 
 export const NavProvider = ({ children }: { children: React.ReactNode }) => {
-	const [isNavOpen, setNavOpen] = usePersistedState<boolean>('is-nav-open', false)
+	const [isNavOpen, setNavOpen] = usePersistedState<boolean>(
+		'is-nav-open',
+		false
+	)
 
-	return <NavContext.Provider value={{ isNavOpen, setNavOpen }}>{children}</NavContext.Provider>
+	return (
+		<NavContext.Provider value={{ isNavOpen, setNavOpen }}>
+			{children}
+		</NavContext.Provider>
+	)
 }
 
 export const useNav = () => {

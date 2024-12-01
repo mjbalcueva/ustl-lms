@@ -19,12 +19,18 @@ export const metadata: Metadata = {
 		'Create your account to join the Thomasian community. Experience a seamless registration process and unlock exclusive features.'
 }
 
-export default function Page({ searchParams }: { searchParams: { callbackUrl?: string } }) {
+export default function Page({
+	searchParams: { callbackUrl }
+}: {
+	searchParams: { callbackUrl?: string }
+}) {
 	return (
 		<Card>
 			<CardHeader>
 				<CardTitle>Welcome, Thomasian!</CardTitle>
-				<CardDescription>Join our community by creating your account.</CardDescription>
+				<CardDescription>
+					Join our community by creating your account.
+				</CardDescription>
 			</CardHeader>
 			<CardContent>
 				<RegisterForm />
@@ -32,7 +38,7 @@ export default function Page({ searchParams }: { searchParams: { callbackUrl?: s
 				<OAuthButton
 					provider="google"
 					label="Register with Google"
-					callbackUrl={searchParams.callbackUrl}
+					callbackUrl={callbackUrl}
 				/>
 			</CardContent>
 			<CardFooter>

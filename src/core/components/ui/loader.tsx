@@ -220,7 +220,12 @@ const Spin = React.memo((props: any) => <Loader2Icon {...props} />)
 Spin.displayName = 'Spin'
 
 const Hot = React.memo(({ className, ...props }: SVGProps<SVGSVGElement>) => (
-	<svg className={cn('size-4', className)} data-slot="icon" viewBox="0 0 2400 2400" {...props}>
+	<svg
+		className={cn('size-4', className)}
+		data-slot="icon"
+		viewBox="0 0 2400 2400"
+		{...props}
+	>
 		<g strokeWidth="200" strokeLinecap="round" fill="none">
 			<line x1="1200" y1="600" x2="1200" y2="100" />
 			<line opacity="0.5" x1="1200" y1="2300" x2="1200" y2="1800" />
@@ -269,8 +274,15 @@ export type LoaderProps = Omit<
 	}
 
 const Loader = React.forwardRef<SVGSVGElement, LoaderProps>((props, ref) => {
-	const { className, variant = DEFAULT_SPINNER, intent, size, ...spinnerProps } = props
-	const LoaderPrimitive = LOADERS[variant in LOADERS ? variant : DEFAULT_SPINNER]
+	const {
+		className,
+		variant = DEFAULT_SPINNER,
+		intent,
+		size,
+		...spinnerProps
+	} = props
+	const LoaderPrimitive =
+		LOADERS[variant in LOADERS ? variant : DEFAULT_SPINNER]
 
 	return (
 		<LoaderPrimitive

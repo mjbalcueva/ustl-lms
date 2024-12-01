@@ -4,7 +4,10 @@
  * @param opts - The options for formatting the date.
  * @returns The formatted date string.
  */
-export function formatDate(date: Date | string | number, opts: Intl.DateTimeFormatOptions = {}) {
+export function formatDate(
+	date: Date | string | number,
+	opts: Intl.DateTimeFormatOptions = {}
+) {
 	return new Intl.DateTimeFormat('en-US', {
 		month: opts.month ?? 'long',
 		day: opts.day ?? 'numeric',
@@ -19,5 +22,7 @@ export function formatDate(date: Date | string | number, opts: Intl.DateTimeForm
  * @returns The day of the week.
  */
 export function getDayOfWeek(date: Date | string | number) {
-	return new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(new Date(date))
+	return new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(
+		new Date(date)
+	)
 }

@@ -18,7 +18,10 @@ type VerificationEmailProps = {
 	confirmLink?: string
 }
 
-export const VerificationEmail = ({ email, confirmLink }: VerificationEmailProps) => {
+export const VerificationEmail = ({
+	email,
+	confirmLink
+}: VerificationEmailProps) => {
 	return (
 		<Html>
 			<Head />
@@ -26,15 +29,18 @@ export const VerificationEmail = ({ email, confirmLink }: VerificationEmailProps
 			<Tailwind>
 				<Body className="mx-auto my-auto bg-neutral-100 py-6 font-sans text-black">
 					<Container className="rounded-xl border border-solid border-[#eaeaea] bg-white px-10 pb-10">
-						<Heading className="flex items-center justify-start gap-4">Scholar</Heading>
+						<Heading className="flex items-center justify-start gap-4">
+							Scholar
+						</Heading>
 						<Hr />
 						<Section>
 							<Text>
 								Hi there <strong>{email}</strong>!
 							</Text>
 							<Text>
-								Thank you for signing up! We want to make sure it&apos;s really you. Please{' '}
-								<strong>confirm your email</strong> by clicking the button below:
+								Thank you for signing up! We want to make sure it&apos;s really
+								you. Please <strong>confirm your email</strong> by clicking the
+								button below:
 							</Text>
 							<Button
 								href={confirmLink}
@@ -43,14 +49,20 @@ export const VerificationEmail = ({ email, confirmLink }: VerificationEmailProps
 								Confirm Email
 							</Button>
 							<Text>
-								If you did not sign up for this account, please ignore this email or contact support
-								at{' '}
-								<Link href="mailto:support@ustl-lms.tech" className="text-blue-600 no-underline">
+								If you did not sign up for this account, please ignore this
+								email or contact support at{' '}
+								<Link
+									href="mailto:support@ustl-lms.tech"
+									className="text-blue-600 no-underline"
+								>
 									support@ustl-lms.tech
 								</Link>
 								.
 							</Text>
-							<Text>To keep your account secure, please do not forward this email to anyone.</Text>
+							<Text>
+								To keep your account secure, please do not forward this email to
+								anyone.
+							</Text>
 							<Text>Happy Learning!</Text>
 						</Section>
 					</Container>

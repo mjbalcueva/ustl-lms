@@ -9,7 +9,13 @@ import { toast } from 'sonner'
 import { api } from '@/services/trpc/react'
 
 import { Button } from '@/core/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@/core/components/ui/form'
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormMessage
+} from '@/core/components/ui/form'
 import { Loader } from '@/core/components/ui/loader'
 import { Textarea } from '@/core/components/ui/textarea'
 import { Info } from '@/core/lib/icons'
@@ -23,7 +29,10 @@ import {
 	CardHeader,
 	CardTitle
 } from '@/features/account/components/ui/card'
-import { editBioSchema, type EditBioSchema } from '@/features/account/validations/edit-bio-schema'
+import {
+	editBioSchema,
+	type EditBioSchema
+} from '@/features/account/validations/edit-bio-schema'
 
 export const EditBioForm = () => {
 	const router = useRouter()
@@ -87,7 +96,11 @@ export const EditBioForm = () => {
 								Share a bit about yourself with the community
 							</CardFooterDescription>
 						</div>
-						<Button type="submit" size="sm" disabled={!form.formState.isDirty || isPending}>
+						<Button
+							type="submit"
+							size="sm"
+							disabled={!form.formState.isDirty || isPending}
+						>
 							{isPending && <Loader />}
 							{isPending ? 'Saving...' : 'Save'}
 						</Button>

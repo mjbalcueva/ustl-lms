@@ -1,6 +1,6 @@
-import { catchError } from '@/core/lib/utils/catch-error'
-
 import { db } from '@/server/db'
+
+import { catchError } from '@/core/lib/utils/catch-error'
 
 export async function getTwoFactorTokenByToken(token: string) {
 	const [data, error] = await catchError(

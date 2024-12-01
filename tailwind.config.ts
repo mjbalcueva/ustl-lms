@@ -4,7 +4,9 @@ import { fontFamily } from 'tailwindcss/defaultTheme'
 import { type Config } from 'tailwindcss'
 
 /* eslint-disable */
-const { default: flattenColorPalette } = require('tailwindcss/lib/util/flattenColorPalette')
+const {
+	default: flattenColorPalette
+} = require('tailwindcss/lib/util/flattenColorPalette')
 const svgToDataUri = require('mini-svg-data-uri')
 
 const addBackgroundUtilities = ({ matchUtilities, theme }: any) => {

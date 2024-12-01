@@ -10,10 +10,17 @@ type DeviceTypeContextType = {
 	deviceSize: DeviceType
 }
 
-const DeviceTypeContext = React.createContext<DeviceTypeContextType | undefined>(undefined)
+const DeviceTypeContext = React.createContext<
+	DeviceTypeContextType | undefined
+>(undefined)
 
-const DeviceTypeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-	const [deviceSize, setDeviceSize] = usePersistedState<DeviceType>('device-size', '')
+const DeviceTypeProvider: React.FC<{ children: React.ReactNode }> = ({
+	children
+}) => {
+	const [deviceSize, setDeviceSize] = usePersistedState<DeviceType>(
+		'device-size',
+		''
+	)
 
 	const getDeviceSize = (): DeviceType => {
 		if (window.matchMedia('(min-width: 1024px)').matches) return 'desktop'
@@ -33,13 +40,19 @@ const DeviceTypeProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 		return () => window.removeEventListener('resize', handleResize)
 	}, [setDeviceSize])
 
-	return <DeviceTypeContext.Provider value={{ deviceSize }}>{children}</DeviceTypeContext.Provider>
+	return (
+		<DeviceTypeContext.Provider value={{ deviceSize }}>
+			{children}
+		</DeviceTypeContext.Provider>
+	)
 }
 
 const useDeviceType = () => {
 	const context = React.useContext(DeviceTypeContext)
 	if (context === undefined) {
-		throw new Error('useDeviceTypeContext must be used within a DeviceTypeProvider')
+		throw new Error(
+			'useDeviceTypeContext must be used within a DeviceTypeProvider'
+		)
 	}
 	return context
 }

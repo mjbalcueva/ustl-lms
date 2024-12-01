@@ -20,15 +20,23 @@ export const metadata: Metadata = {
 
 type ErrorPageParam = 'Configuration' | 'AccessDenied' | 'Verification'
 
-export default function Page({ searchParams }: { searchParams: { error: ErrorPageParam } }) {
-	const errorMessages: Record<ErrorPageParam, { title: string; description: string }> = {
+export default function Page({
+	searchParams: { error }
+}: {
+	searchParams: { error: ErrorPageParam }
+}) {
+	const errorMessages: Record<
+		ErrorPageParam,
+		{ title: string; description: string }
+	> = {
 		AccessDenied: {
 			title: 'Access Denied!',
 			description: 'Please use your UST Legazpi email address.'
 		},
 		Configuration: {
 			title: 'Configuration Error',
-			description: 'There was an issue with the system configuration. Please contact support.'
+			description:
+				'There was an issue with the system configuration. Please contact support.'
 		},
 		Verification: {
 			title: 'Verification Required',
@@ -36,7 +44,7 @@ export default function Page({ searchParams }: { searchParams: { error: ErrorPag
 		}
 	}
 
-	const { title, description } = errorMessages[searchParams.error] || {
+	const { title, description } = errorMessages[error] || {
 		title: 'Something went wrong!',
 		description: 'Please contact your system administrators for assistance.'
 	}
@@ -48,10 +56,16 @@ export default function Page({ searchParams }: { searchParams: { error: ErrorPag
 				<CardDescription>{description}</CardDescription>
 			</CardHeader>
 			<CardContent className="items-center justify-center">
-				<Image src="/assets/error.svg" alt="Error" width={200} height={200} priority />
+				<Image
+					src="/assets/error.svg"
+					alt="Error"
+					width={200}
+					height={200}
+					priority
+				/>
 			</CardContent>
 			<CardFooter>
-				{searchParams.error === 'AccessDenied' || searchParams.error === 'Configuration' ? (
+				{error === 'AccessDenied' || error === 'Configuration' ? (
 					<CardLogoutButton />
 				) : (
 					<CardLink href="/login" label="Back to login" />

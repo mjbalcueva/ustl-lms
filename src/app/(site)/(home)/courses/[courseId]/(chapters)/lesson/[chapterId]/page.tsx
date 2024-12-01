@@ -4,7 +4,7 @@ import MuxPlayer from '@mux/mux-player-react'
 import { api } from '@/services/trpc/server'
 
 import { NotFound } from '@/core/components/error-pages/not-found'
-import { TiptapContentViewer } from '@/core/components/tiptap-editor/content-viewer'
+import { ContentViewer } from '@/core/components/tiptap-editor/content-viewer'
 import { Banner } from '@/core/components/ui/banner'
 import { Card } from '@/core/components/ui/card'
 import {
@@ -20,10 +20,10 @@ import { CourseSingle, Instructor, Lesson } from '@/core/lib/icons'
 import { formatDate } from '@/core/lib/utils/format-date'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
-import { ChapterAttachments } from '@/features/chapters/components/chapter-attachments'
-import { ChapterProgress } from '@/features/chapters/components/chapter-progress'
-import { ChapterTabs } from '@/features/chapters/components/tabs/chapter-tabs'
-import { ToggleChapterCompletion } from '@/features/chapters/components/toggle-chapter-completion'
+import { ChapterAttachments } from '@/features/chapters/student/components/attachments/chapter-attachments'
+import { ChapterProgress } from '@/features/chapters/student/components/chapter-progress'
+import { ChapterTabs } from '@/features/chapters/student/components/chapter-tabs'
+import { EditChapterCompletion } from '@/features/chapters/student/components/forms/edit-chapter-completion'
 
 export default async function Page({
 	params: { courseId, chapterId }
@@ -33,19 +33,21 @@ export default async function Page({
 		chapterId: string
 	}
 }) {
-	const { chapter } = await api.chapter.findChapter({ courseId, id: chapterId })
+	const { chapter } = await api.student.chapter.findOneChapter({ chapterId })
 
 	if (!chapter) return <NotFound item="chapter" />
 	if (chapter.type !== 'LESSON') {
 		redirect(`/courses/${courseId}/${chapter.type.toLowerCase()}/${chapterId}`)
 	}
 
-	const isCompleted = chapter.chapterProgress?.[0]?.isCompleted
-
 	const crumbs: Breadcrumb = [
 		{ icon: Instructor },
 		{ label: 'Courses', href: '/courses' },
-		{ icon: CourseSingle, label: chapter.course.code, href: `/courses/${courseId}` },
+		{
+			icon: CourseSingle,
+			label: chapter.course.code,
+			href: `/courses/${courseId}`
+		},
 		{
 			icon: Lesson,
 			label: chapter.title,
@@ -73,9 +75,11 @@ export default async function Page({
 					<div className="flex items-start justify-between pt-4 md:pt-6">
 						<div className="flex flex-col">
 							<PageTitle>{chapter.title}</PageTitle>
-							<PageDescription>Last updated: {formatDate(chapter.updatedAt)}</PageDescription>
+							<PageDescription>
+								Last updated: {formatDate(chapter.updatedAt)}
+							</PageDescription>
 						</div>
-						<ToggleChapterCompletion chapterId={chapterId} isCompleted={isCompleted} />
+						<EditChapterCompletion chapter={chapter} />
 					</div>
 
 					{chapter.videoUrl && (
@@ -89,7 +93,7 @@ export default async function Page({
 					)}
 
 					<Card className="text-pretty p-6 text-sm tracking-wide">
-						<TiptapContentViewer value={chapter.content} />
+						<ContentViewer value={chapter.content} />
 					</Card>
 				</PageSection>
 

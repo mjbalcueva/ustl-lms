@@ -1,24 +1,82 @@
+import { type Metadata } from 'next'
 import { Suspense } from 'react'
 import { TRPCError } from '@trpc/server'
 
 import { api } from '@/services/trpc/server'
 
-import { Card, CardContent, CardFooter, CardHeader } from '@/core/components/ui/card'
-import { PageContainer, PageDescription, PageHeader, PageTitle } from '@/core/components/ui/page'
+import {
+	Card,
+	CardContent,
+	CardFooter,
+	CardHeader
+} from '@/core/components/ui/card'
+import {
+	PageContainer,
+	PageDescription,
+	PageHeader,
+	PageTitle
+} from '@/core/components/ui/page'
 import { Skeleton } from '@/core/components/ui/skeleton'
+import { catchError } from '@/core/lib/utils/catch-error'
 
-import { EnrollmentDetailsCard } from '@/features/enrollment/components/enrollment-details-card'
-import { EnrollmentErrorCard } from '@/features/enrollment/components/enrollment-error-card'
-import { enrollmentSchema } from '@/features/enrollment/validations/enrollment'
+import { findOneCourseSchema } from '@/features/enrollments/shared/validations/course-enrollment-schema'
+import { EnrollmentDetailsCard } from '@/features/enrollments/student/components/enrollment-details-card'
+import { EnrollmentErrorCard } from '@/features/enrollments/student/components/enrollment-error-card'
 
-export default async function Page({ searchParams }: { searchParams: { token: string } }) {
-	const parsedToken = enrollmentSchema.safeParse({ token: searchParams.token })
+export async function generateMetadata({
+	searchParams: { token }
+}: {
+	searchParams: { token: string }
+}): Promise<Metadata> {
+	const parsedToken = findOneCourseSchema.safeParse({ token })
+	if (!parsedToken.success) {
+		return {
+			title: 'Course Enrollment | Scholar',
+			description: 'Course enrollment page'
+		}
+	}
+
+	const [data, error] = await catchError(
+		api.student.courseEnrollment.findOneCourse({
+			token: parsedToken.data.token
+		})
+	)
+
+	if (error) {
+		return {
+			title: 'Course Enrollment | Scholar',
+			description: 'Course enrollment page'
+		}
+	}
+
+	return {
+		title: `Enroll in ${data.course.title} | Scholar`,
+		description: data.course.description,
+		openGraph: {
+			title: `Enroll in ${data.course.title} | Scholar`,
+			description: data.course.description ?? '',
+			type: 'website',
+			siteName: 'Scholar'
+		}
+	}
+}
+
+export default async function Page({
+	searchParams: { token }
+}: {
+	searchParams: { token: string }
+}) {
+	const parsedToken = findOneCourseSchema.safeParse({ token })
 
 	return (
 		<PageContainer className="flex h-full flex-col items-center justify-center">
 			<PageHeader className="flex w-full max-w-md flex-col items-center justify-center space-y-0 text-center">
-				<PageTitle className="text-3xl font-bold">You have been invited!</PageTitle>
-				<PageDescription>Review the course details and enroll below</PageDescription>
+				<PageTitle className="text-3xl font-bold">
+					You have been invited!
+				</PageTitle>
+				<PageDescription>
+					Review the course details and enroll below
+				</PageDescription>
 			</PageHeader>
 
 			<Suspense
@@ -59,7 +117,7 @@ export default async function Page({ searchParams }: { searchParams: { token: st
 async function EnrollmentContent({
 	parsedToken
 }: {
-	parsedToken: ReturnType<typeof enrollmentSchema.safeParse>
+	parsedToken: ReturnType<typeof findOneCourseSchema.safeParse>
 }) {
 	if (!parsedToken.success) {
 		return (
@@ -72,18 +130,10 @@ async function EnrollmentContent({
 	}
 
 	try {
-		const course = await api.enrollment.findCourse({ token: parsedToken.data.token })
-		return (
-			<EnrollmentDetailsCard
-				token={parsedToken.data.token}
-				code={course.code}
-				title={course.title}
-				description={course.description}
-				categories={course.categories}
-				image={course.imageUrl}
-				instructor={course.instructor?.profile?.name}
-			/>
-		)
+		const { course } = await api.student.courseEnrollment.findOneCourse({
+			token: parsedToken.data.token
+		})
+		return <EnrollmentDetailsCard course={course} />
 	} catch (error) {
 		const errorMessage =
 			error instanceof TRPCError

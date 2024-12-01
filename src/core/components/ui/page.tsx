@@ -13,36 +13,43 @@ import {
 import { cn } from '@/core/lib/utils/cn'
 import { type Breadcrumb as BreadcrumbType } from '@/core/types/breadcrumbs'
 
-export const PageWrapper = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-	({ className, ...props }, ref) => (
-		<main
-			ref={ref}
-			className={cn(
-				'flex-grow overflow-auto border-border bg-card outline-none dark:bg-background md:rounded-xl md:border md:shadow-sm',
-				className
-			)}
-			{...props}
-		/>
-	)
-)
+export const PageWrapper = React.forwardRef<
+	HTMLDivElement,
+	React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+	<main
+		ref={ref}
+		className={cn(
+			'flex-grow overflow-auto border-border bg-card outline-none dark:bg-background md:rounded-xl md:border md:shadow-sm',
+			className
+		)}
+		{...props}
+	/>
+))
 PageWrapper.displayName = 'PageWrapper'
 
-export const PageContainer = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-	({ className, ...props }, ref) => (
-		<div ref={ref} className={cn('mx-auto w-full max-w-2xl 2xl:max-w-3xl', className)} {...props} />
-	)
-)
+export const PageContainer = React.forwardRef<
+	HTMLDivElement,
+	React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+	<div
+		ref={ref}
+		className={cn('mx-auto w-full max-w-2xl 2xl:max-w-3xl', className)}
+		{...props}
+	/>
+))
 PageContainer.displayName = 'PageContainer'
 
-export const PageHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-	({ className, ...props }, ref) => (
-		<header
-			ref={ref}
-			className={cn('space-y-2 px-2.5 py-4 sm:px-4 md:p-6', className)}
-			{...props}
-		/>
-	)
-)
+export const PageHeader = React.forwardRef<
+	HTMLDivElement,
+	React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+	<header
+		ref={ref}
+		className={cn('space-y-2 px-2.5 py-4 sm:px-4 md:p-6', className)}
+		{...props}
+	/>
+))
 PageHeader.displayName = 'PageHeader'
 
 export const PageBreadcrumbs = ({ crumbs }: { crumbs: BreadcrumbType }) => {
@@ -98,22 +105,27 @@ export const PageBreadcrumbs = ({ crumbs }: { crumbs: BreadcrumbType }) => {
 	)
 }
 
-export const PageTitle = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-	({ className, ...props }, ref) => (
-		<h1
-			ref={ref}
-			className={cn('w-fit text-2xl font-semibold leading-none', className)}
-			{...props}
-		/>
-	)
-)
+export const PageTitle = React.forwardRef<
+	HTMLDivElement,
+	React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+	<h1
+		ref={ref}
+		className={cn('w-fit text-2xl font-semibold leading-none', className)}
+		{...props}
+	/>
+))
 PageTitle.displayName = 'PageTitle'
 
 export const PageDescription = React.forwardRef<
 	HTMLDivElement,
 	React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
-	<p ref={ref} className={cn('w-fit text-sm text-muted-foreground', className)} {...props} />
+	<p
+		ref={ref}
+		className={cn('w-fit text-sm text-muted-foreground', className)}
+		{...props}
+	/>
 ))
 PageDescription.displayName = 'PageDescription'
 
