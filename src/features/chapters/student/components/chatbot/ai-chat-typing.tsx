@@ -1,7 +1,11 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/core/components/ui/avatar'
+import {
+	Avatar,
+	AvatarFallback,
+	AvatarImage
+} from '@/core/components/ui/avatar'
 import { Dot } from '@/core/lib/icons'
 
-export function AiChatTyping() {
+export const AiChatTyping = () => {
 	return (
 		<div className="flex gap-2 pt-2">
 			<div className="flex flex-col justify-end">

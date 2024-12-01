@@ -20,10 +20,10 @@ import { CourseSingle, Instructor, Lesson } from '@/core/lib/icons'
 import { formatDate } from '@/core/lib/utils/format-date'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
-import { ChapterAttachments } from '@/features/chapters/components/chapter-attachments'
-import { ChapterProgress } from '@/features/chapters/components/chapter-progress'
-import { ChapterTabs } from '@/features/chapters/components/tabs/chapter-tabs'
-import { ToggleChapterCompletion } from '@/features/chapters/components/toggle-chapter-completion'
+import { ChapterAttachments } from '@/features/chapters/student/components/attachments/chapter-attachments'
+import { ChapterProgress } from '@/features/chapters/student/components/chapter-progress'
+import { ChapterTabs } from '@/features/chapters/student/components/chapter-tabs'
+import { EditChapterCompletion } from '@/features/chapters/student/components/forms/edit-chapter-completion'
 
 export default async function Page({
 	params: { courseId, chapterId }
@@ -33,14 +33,12 @@ export default async function Page({
 		chapterId: string
 	}
 }) {
-	const { chapter } = await api.chapter.findChapter({ courseId, id: chapterId })
+	const { chapter } = await api.student.chapter.findOneChapter({ chapterId })
 
 	if (!chapter) return <NotFound item="chapter" />
 	if (chapter.type !== 'LESSON') {
 		redirect(`/courses/${courseId}/${chapter.type.toLowerCase()}/${chapterId}`)
 	}
-
-	const isCompleted = chapter.chapterProgress?.[0]?.isCompleted
 
 	const crumbs: Breadcrumb = [
 		{ icon: Instructor },
@@ -81,10 +79,7 @@ export default async function Page({
 								Last updated: {formatDate(chapter.updatedAt)}
 							</PageDescription>
 						</div>
-						<ToggleChapterCompletion
-							chapterId={chapterId}
-							isCompleted={isCompleted}
-						/>
+						<EditChapterCompletion chapter={chapter} />
 					</div>
 
 					{chapter.videoUrl && (

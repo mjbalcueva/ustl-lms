@@ -201,7 +201,7 @@ export const chapterRouter = createTRPCRouter({
 				})
 			}
 
-			return { message: 'Course chapter order updated successfully' }
+			return { message: 'Chapter order updated successfully' }
 		}),
 
 	// ---------------------------------------------------------------------------

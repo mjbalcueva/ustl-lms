@@ -5,9 +5,18 @@ import { toast } from 'sonner'
 
 import { type AppRouter } from '@/server/api/root'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/core/components/ui/card'
+import {
+	Card,
+	CardContent,
+	CardHeader,
+	CardTitle
+} from '@/core/components/ui/card'
 import { Separator } from '@/core/components/ui/separator'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/core/components/ui/tooltip'
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger
+} from '@/core/components/ui/tooltip'
 import { Attachment, Download } from '@/core/lib/icons'
 import { cn } from '@/core/lib/utils/cn'
 import { formatDate } from '@/core/lib/utils/format-date'
@@ -15,11 +24,15 @@ import { removeExtension } from '@/core/lib/utils/remove-extension'
 
 type ChapterAttachmentsProps = {
 	attachments: NonNullable<
-		inferProcedureOutput<AppRouter['chapter']['findChapter']>['chapter']
+		inferProcedureOutput<
+			AppRouter['student']['chapter']['findOneChapter']
+		>['chapter']
 	>['attachments']
 }
 
-export const ChapterAttachments = ({ attachments }: ChapterAttachmentsProps) => {
+export const ChapterAttachments = ({
+	attachments
+}: ChapterAttachmentsProps) => {
 	const handleDownload = async (url: string) => {
 		try {
 			window.open(url, '_blank', 'noopener,noreferrer')
@@ -41,14 +54,17 @@ export const ChapterAttachments = ({ attachments }: ChapterAttachmentsProps) => 
 			<CardContent className="p-2">
 				{attachments.map((attachment) => (
 					<div
-						key={attachment.id}
+						key={attachment.attachmentId}
 						className={cn(
 							'flex cursor-pointer items-center justify-between rounded-lg p-4 py-2 hover:bg-muted/50'
 						)}
 						onClick={() => handleDownload(attachment.url)}
 					>
 						<Tooltip>
-							<TooltipTrigger className="flex flex-1 items-center gap-4" tabIndex={-1}>
+							<TooltipTrigger
+								className="flex flex-1 items-center gap-4"
+								tabIndex={-1}
+							>
 								<Attachment className="h-4 w-4 shrink-0" />
 								<div className="text-start">
 									<p className="line-clamp-1 text-sm font-medium leading-none">
@@ -73,7 +89,9 @@ export const ChapterAttachments = ({ attachments }: ChapterAttachmentsProps) => 
 
 				{attachments.length === 0 && (
 					<div className="flex h-16 items-center justify-center">
-						<p className="text-sm text-muted-foreground">No attachments found</p>
+						<p className="text-sm text-muted-foreground">
+							No attachments found
+						</p>
 					</div>
 				)}
 			</CardContent>

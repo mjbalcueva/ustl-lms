@@ -12,7 +12,11 @@ type AiChatInputProps = {
 	handleSubmit: (e: FormEvent<HTMLFormElement>) => void
 }
 
-export const AiChatInput = ({ input, handleInputChange, handleSubmit }: AiChatInputProps) => {
+export const AiChatInput = ({
+	input,
+	handleInputChange,
+	handleSubmit
+}: AiChatInputProps) => {
 	const textareaRef = useRef<HTMLTextAreaElement>(null)
 
 	const resetHeight = () => {
@@ -44,7 +48,9 @@ export const AiChatInput = ({ input, handleInputChange, handleSubmit }: AiChatIn
 			e.preventDefault()
 			const form = e.currentTarget.form
 			if (form) {
-				handleSubmit(new Event('submit') as unknown as FormEvent<HTMLFormElement>)
+				handleSubmit(
+					new Event('submit') as unknown as FormEvent<HTMLFormElement>
+				)
 				resetHeight()
 			}
 		}

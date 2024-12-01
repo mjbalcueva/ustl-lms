@@ -71,6 +71,14 @@ export const editChapterStatusSchema = z.object({
 })
 export type EditChapterStatusSchema = z.infer<typeof editChapterStatusSchema>
 
+// Edit Chapter Completion Schema
+export const editChapterCompletionSchema = z.object({
+	chapterId: z.string().min(1, 'Chapter ID is required')
+})
+export type EditChapterCompletionSchema = z.infer<
+	typeof editChapterCompletionSchema
+>
+
 // Edit Chapter Order
 export const editChapterOrderSchema = z.object({
 	courseId: z.string().min(1, 'Course ID is required'),

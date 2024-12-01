@@ -12,17 +12,19 @@ export const courseRouter = createTRPCRouter({
 	findEnrolledCourse: protectedProcedure
 		.input(findOneEnrolledCourseSchema)
 		.query(async ({ ctx, input: { courseId } }) => {
+			const studentId = ctx.session.user.id
+
 			const course = await ctx.db.course.findUnique({
 				where: {
 					courseId,
-					enrollments: { some: { studentId: ctx.session.user.id } }
+					enrollments: { some: { studentId } }
 				},
 				include: {
 					tags: { orderBy: { name: 'asc' } },
 					attachments: true,
 					chapters: {
 						include: {
-							chapterProgress: { where: { studentId: ctx.session.user.id } }
+							chapterProgress: { where: { studentId } }
 						}
 					},
 					_count: { select: { chapters: true } },

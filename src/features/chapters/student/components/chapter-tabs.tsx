@@ -7,13 +7,22 @@ import { useSession } from 'next-auth/react'
 
 import { type AppRouter } from '@/server/api/root'
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/core/components/ui/tabs'
+import {
+	Tabs,
+	TabsContent,
+	TabsList,
+	TabsTrigger
+} from '@/core/components/ui/tabs'
 
-import { AiChatCard } from '@/features/chapters/components/tabs/ai-chat/ai-chat-card'
+import { AiChatCard } from '@/features/chapters/student/components/chatbot/ai-chat-card'
+import { ForumCard } from '@/features/chapters/student/components/forum/forum-card'
 
 type ChapterTabsProps = {
-	chapter: inferProcedureOutput<AppRouter['chapter']['findChapter']>['chapter']
+	chapter: inferProcedureOutput<
+		AppRouter['student']['chapter']['findOneChapter']
+	>['chapter']
 }
+
 export const ChapterTabs = ({ chapter }: ChapterTabsProps) => {
 	const session = useSession()
 	const user = session?.data?.user
@@ -28,7 +37,14 @@ export const ChapterTabs = ({ chapter }: ChapterTabsProps) => {
 		}
 	]
 
-	const { messages, handleSubmit, input, handleInputChange, isLoading, setMessages } = useChat({
+	const {
+		messages,
+		handleSubmit,
+		input,
+		handleInputChange,
+		isLoading,
+		setMessages
+	} = useChat({
 		api: '/api/chat/chapter',
 		initialMessages,
 		body: {
@@ -69,8 +85,7 @@ export const ChapterTabs = ({ chapter }: ChapterTabsProps) => {
 			</TabsContent>
 
 			<TabsContent value="forum" className="w-full">
-				{/* <ForumCard /> */}
-				forum
+				<ForumCard />
 			</TabsContent>
 		</Tabs>
 	)
