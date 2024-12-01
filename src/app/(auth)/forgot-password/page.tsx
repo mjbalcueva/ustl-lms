@@ -22,7 +22,9 @@ export default function Page() {
 		<Card>
 			<CardHeader>
 				<CardTitle>Forgot your password?</CardTitle>
-				<CardDescription>Enter your email address to reset your password.</CardDescription>
+				<CardDescription>
+					Enter your email address to reset your password.
+				</CardDescription>
 			</CardHeader>
 			<CardContent>
 				<ForgotPasswordForm />

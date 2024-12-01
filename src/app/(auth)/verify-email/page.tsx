@@ -17,15 +17,21 @@ export const metadata: Metadata = {
 		'Complete your account setup by verifying your email address. This quick step ensures the security of your account and enables full access to our services.'
 }
 
-export default function Page({ searchParams }: { searchParams: { token: string } }) {
+export default function Page({
+	searchParams: { token }
+}: {
+	searchParams: { token: string }
+}) {
 	return (
 		<Card>
 			<CardHeader>
 				<CardTitle>Confirming your verification</CardTitle>
-				<CardDescription>We just want to make sure it&apos;s really you.</CardDescription>
+				<CardDescription>
+					We just want to make sure it&apos;s really you.
+				</CardDescription>
 			</CardHeader>
 			<CardContent>
-				<VerifyEmailForm token={searchParams.token} />
+				<VerifyEmailForm token={token} />
 			</CardContent>
 			<CardFooter>
 				<CardLink href="/login" label="Back to login" />
