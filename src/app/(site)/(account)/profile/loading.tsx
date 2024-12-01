@@ -8,7 +8,12 @@ import {
 } from '@/core/components/ui/page'
 import { Skeleton } from '@/core/components/ui/skeleton'
 
-import { Card, CardContent, CardFooter, CardHeader } from '@/features/account/components/ui/card'
+import {
+	Card,
+	CardContent,
+	CardFooter,
+	CardHeader
+} from '@/features/account/components/ui/card'
 
 export default function Loading() {
 	return (

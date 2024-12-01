@@ -16,7 +16,7 @@ type ChatPayload = {
 		name: string
 		id: string
 	}
-	course: RouterOutputs['course']['findEnrolledCourseDetails']['course']
+	course: RouterOutputs['student']['course']['findEnrolledCourse']['course']
 }
 
 export async function POST(req: Request) {
@@ -63,14 +63,17 @@ export async function POST(req: Request) {
 				}
 			},
 			get_student_profile: {
-				description: 'Get comprehensive student information including name and progress',
+				description:
+					'Get comprehensive student information including name and progress',
 				parameters: z.object({}),
 				execute: async (): Promise<string> => {
-					const completedChapters = course.chapters.filter(
+					const completedChapters = course?.chapters?.filter(
 						(c) => c.chapterProgress[0]?.isCompleted
 					).length
-					const totalChapters = course.chapters.length
-					const progressPercentage = Math.round((completedChapters / totalChapters) * 100)
+					const totalChapters = course?.chapters?.length ?? 0
+					const progressPercentage = Math.round(
+						(completedChapters ?? 0 / totalChapters) * 100
+					)
 
 					return JSON.stringify({
 						name: userDetails?.name ?? 'User',
@@ -78,7 +81,9 @@ export async function POST(req: Request) {
 							completedChapters,
 							totalChapters,
 							progressPercentage,
-							nextChapter: course.chapters.find((c) => !c.chapterProgress[0]?.isCompleted)?.title
+							nextChapter: course?.chapters?.find(
+								(c) => !c.chapterProgress[0]?.isCompleted
+							)?.title
 						}
 					})
 				}
@@ -91,22 +96,27 @@ export async function POST(req: Request) {
 					const data = {
 						title: course.title,
 						description: course.description,
-						categories: course.categories.map((c) => c.name),
+						tags: course.tags?.map((t) => t.name),
 						structure: {
-							totalChapters: course.chapters.length,
-							lessonCount: course.chapters.filter((c) => c.type === 'LESSON').length,
-							assessmentCount: course.chapters.filter((c) => c.type === 'ASSESSMENT').length,
-							assignmentCount: course.chapters.filter((c) => c.type === 'ASSIGNMENT').length
+							totalChapters: course.chapters?.length ?? 0,
+							lessonCount:
+								course.chapters?.filter((c) => c.type === 'LESSON').length ?? 0,
+							assessmentCount:
+								course.chapters?.filter((c) => c.type === 'ASSESSMENT')
+									.length ?? 0,
+							assignmentCount:
+								course.chapters?.filter((c) => c.type === 'ASSIGNMENT')
+									.length ?? 0
 						},
-						chapters: course.chapters.map((c) => ({
+						chapters: course.chapters?.map((c) => ({
 							type: c.type,
 							title: c.title,
-							linkToChapter: `${getBaseUrl()}/course/${course.id}/${c.type.toLowerCase()}/${c.id}`,
+							linkToChapter: `${getBaseUrl()}/course/${course.courseId}/${c.type.toLowerCase()}/${c.chapterId}`,
 							content: c.content,
 							studentProgress: c.chapterProgress[0]?.isCompleted,
 							position: c.position
 						})),
-						resources: course.attachments.map((a) => ({
+						resources: course.attachments?.map((a) => ({
 							name: a.name,
 							url: a.url
 						}))
@@ -141,13 +151,17 @@ export async function POST(req: Request) {
 				execute: async ({ chapterPosition }): Promise<string> => {
 					const chapters = course.chapters
 					const chapter = chapterPosition
-						? chapters.find((c) => c.position === chapterPosition)
-						: chapters[0]
+						? chapters?.find((c) => c.position === chapterPosition)
+						: chapters?.[0]
 
 					if (!chapter) return 'Chapter not found'
 
-					const nextChapter = chapters.find((c) => c.position === chapter.position + 1)
-					const prevChapter = chapters.find((c) => c.position === chapter.position - 1)
+					const nextChapter = chapters?.find(
+						(c) => c.position === chapter.position + 1
+					)
+					const prevChapter = chapters?.find(
+						(c) => c.position === chapter.position - 1
+					)
 
 					return JSON.stringify({
 						current: {
@@ -180,7 +194,7 @@ export async function POST(req: Request) {
 				parameters: z.object({}),
 				execute: async (): Promise<string> => {
 					const chapters = course.chapters
-					const progress = chapters.map((c) => ({
+					const progress = chapters?.map((c) => ({
 						title: c.title,
 						type: c.type,
 						isCompleted: c.chapterProgress[0]?.isCompleted,
@@ -188,26 +202,36 @@ export async function POST(req: Request) {
 					}))
 
 					const completedByType = {
-						lessons: progress.filter((p) => p.type === 'LESSON' && p.isCompleted).length,
-						assessments: progress.filter((p) => p.type === 'ASSESSMENT' && p.isCompleted).length,
-						assignments: progress.filter((p) => p.type === 'ASSIGNMENT' && p.isCompleted).length
+						lessons:
+							progress?.filter((p) => p.type === 'LESSON' && p.isCompleted)
+								.length ?? 0,
+						assessments:
+							progress?.filter((p) => p.type === 'ASSESSMENT' && p.isCompleted)
+								.length ?? 0,
+						assignments:
+							progress?.filter((p) => p.type === 'ASSIGNMENT' && p.isCompleted)
+								.length ?? 0
 					}
 
 					return JSON.stringify({
 						overview: {
 							totalProgress: `${Math.round(
-								(progress.filter((p) => p.isCompleted).length / progress.length) * 100
+								(progress?.filter((p) => p.isCompleted).length ??
+									0 / (progress?.length ?? 0)) * 100
 							)}%`,
 							completedByType
 						},
-						nextSteps: progress
-							.filter((p) => !p.isCompleted)
-							.map((p) => `${p.title} (${p.type})`)
-							.slice(0, 3),
+						nextSteps:
+							progress
+								?.filter((p) => !p.isCompleted)
+								.map((p) => `${p.title} (${p.type})`)
+								.slice(0, 3) ?? [],
 						recentActivity: progress
-							.filter((p) => p.isCompleted && p.completedAt)
+							?.filter((p) => p.isCompleted && p.completedAt)
 							.sort(
-								(a, b) => new Date(b.completedAt!).getTime() - new Date(a.completedAt!).getTime()
+								(a, b) =>
+									new Date(b.completedAt!).getTime() -
+									new Date(a.completedAt!).getTime()
 							)
 							.slice(0, 5)
 					})
@@ -218,14 +242,19 @@ export async function POST(req: Request) {
 					'Get a comprehensive list of course materials, references, and supplementary resources',
 				parameters: z.object({}),
 				execute: async (): Promise<string> => {
-					if (!course.attachments.length) return 'No reference materials available for this course.'
+					if (!course.attachments?.length)
+						return 'No reference materials available for this course.'
 
 					const resourcesByType = course.attachments.reduce(
 						(acc, curr) => {
-							const fileType = curr.name.split('.').pop()?.toUpperCase() ?? 'OTHER'
+							const fileType =
+								curr.name.split('.').pop()?.toUpperCase() ?? 'OTHER'
 							return {
 								...acc,
-								[fileType]: [...(acc[fileType] ?? []), { name: curr.name, url: curr.url }]
+								[fileType]: [
+									...(acc[fileType] ?? []),
+									{ name: curr.name, url: curr.url }
+								]
 							}
 						},
 						{} as Record<string, { name: string; url: string }[]>
@@ -238,19 +267,20 @@ export async function POST(req: Request) {
 				}
 			},
 			suggest_next_steps: {
-				description: 'Provide personalized learning recommendations based on current progress',
+				description:
+					'Provide personalized learning recommendations based on current progress',
 				parameters: z.object({}),
 				execute: async (): Promise<string> => {
 					const uncompletedChapters = course.chapters
-						.filter((c) => !c.chapterProgress[0]?.isCompleted)
+						?.filter((c) => !c.chapterProgress[0]?.isCompleted)
 						.map((c) => ({
 							title: c.title,
 							type: c.type,
 							position: c.position
 						}))
 
-					const nextChapter = uncompletedChapters[0]
-					const upcomingChapters = uncompletedChapters.slice(1, 4)
+					const nextChapter = uncompletedChapters?.[0]
+					const upcomingChapters = uncompletedChapters?.slice(1, 4)
 
 					return JSON.stringify({
 						immediate: nextChapter

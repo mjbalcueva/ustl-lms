@@ -1,4 +1,9 @@
-import { Card, CardContent, CardFooter, CardHeader } from '@/core/components/ui/card'
+import {
+	Card,
+	CardContent,
+	CardFooter,
+	CardHeader
+} from '@/core/components/ui/card'
 import {
 	PageBreadcrumbs,
 	PageContent,
@@ -13,7 +18,10 @@ import { Home } from '@/core/lib/icons'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
 export default function Loading() {
-	const crumbs: Breadcrumb = [{ icon: Home }, { label: 'Browse', href: '/courses' }]
+	const crumbs: Breadcrumb = [
+		{ icon: Home },
+		{ label: 'Browse', href: '/courses' }
+	]
 
 	return (
 		<>
@@ -26,7 +34,9 @@ export default function Loading() {
 			<PageHeader className="flex flex-wrap items-end justify-between gap-4 space-y-0">
 				<div>
 					<PageTitle className="font-bold">Browse Courses</PageTitle>
-					<PageDescription>Find a course to learn something new</PageDescription>
+					<PageDescription>
+						Find a course to learn something new
+					</PageDescription>
 				</div>
 				<Skeleton className="h-10 w-28" />
 			</PageHeader>

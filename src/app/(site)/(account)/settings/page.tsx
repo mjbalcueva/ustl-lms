@@ -29,7 +29,11 @@ export default async function Page() {
 				</PageSection>
 
 				<PageSection>
-					{session?.user.hasPassword ? <EditPasswordForm /> : <AddPasswordForm />}
+					{session?.user.hasPassword ? (
+						<EditPasswordForm />
+					) : (
+						<AddPasswordForm />
+					)}
 				</PageSection>
 			</PageContent>
 		</PageContainer>

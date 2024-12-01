@@ -29,7 +29,9 @@ export default function Loading() {
 			<PageHeader className="flex flex-wrap items-end justify-between gap-4 space-y-0">
 				<div>
 					<PageTitle className="font-bold">Manage Your Courses</PageTitle>
-					<PageDescription>View insights, manage your courses, and more.</PageDescription>
+					<PageDescription>
+						View insights, manage your courses, and more.
+					</PageDescription>
 				</div>
 				<Skeleton className="h-10 w-32" />
 			</PageHeader>
@@ -43,7 +45,10 @@ export default function Loading() {
 							<Skeleton className="h-28 w-full !min-w-52" />
 							<Skeleton className="mr-2.5 h-28 w-full !min-w-52" />
 						</div>
-						<ScrollBar orientation="horizontal" className="mx-2 sm:mx-4 md:mx-6 lg:mx-0" />
+						<ScrollBar
+							orientation="horizontal"
+							className="mx-2 sm:mx-4 md:mx-6 lg:mx-0"
+						/>
 					</ScrollArea>
 				</PageSection>
 
