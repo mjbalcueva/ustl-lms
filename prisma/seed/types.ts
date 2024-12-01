@@ -26,20 +26,8 @@ export type ChapterTemplate = {
 	sequenceNumber?: number
 }
 
-export type AssignmentType =
-	| 'Assignment'
-	| 'Exercise'
-	| 'Lab'
-	| 'Project'
-	| 'Task'
-export type AssessmentType =
-	| 'Assessment'
-	| 'Evaluation'
-	| 'Exam'
-	| 'Exercise'
-	| 'Quiz'
-	| 'Review'
-	| 'Test'
+export type AssignmentType = 'Activity' | 'Project' | 'Task'
+export type AssessmentType = 'Exam' | 'Quiz' | 'Test'
 
 export type UserStats = {
 	instructors: {

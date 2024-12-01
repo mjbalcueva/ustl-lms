@@ -39,8 +39,8 @@ export function generateAssignmentTitle(
 	const formats = [
 		`${type} ${sequence}: ${action} ${toTitleCase(topic.concept)}`,
 		`${type} ${sequence}: ${toTitleCase(topic.mainTopic)} ${action}`,
-		`${type} ${sequence}: ${action} ${toTitleCase(topic.adjective)} ${toTitleCase(topic.concept)}`,
-		`${toTitleCase(topic.mainTopic)} ${type} ${sequence}: ${action} Project`
+		`${type} ${sequence}: ${action} ${toTitleCase(topic.adjective)} ${toTitleCase(topic.concept)}`
+		// `${toTitleCase(topic.mainTopic)} ${type} ${sequence}: ${action} Project`
 	]
 
 	return faker.helpers.arrayElement(formats)

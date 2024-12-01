@@ -117,19 +117,13 @@ export async function createChapters(
 
 		const typeCounters = {
 			assignment: {
-				Assignment: 0,
-				Exercise: 0,
-				Lab: 0,
+				Activity: 0,
 				Project: 0,
 				Task: 0
 			},
 			assessment: {
-				Assessment: 0,
-				Evaluation: 0,
 				Exam: 0,
-				Exercise: 0,
 				Quiz: 0,
-				Review: 0,
 				Test: 0
 			}
 		}

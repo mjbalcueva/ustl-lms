@@ -27,8 +27,8 @@ export function generateAssessmentTitle(
 	const formats = [
 		`${type} ${sequence}: ${toTitleCase(topic.mainTopic)} Fundamentals`,
 		`${type} ${sequence}: ${toTitleCase(topic.mainTopic)} ${toTitleCase(topic.subTopic)}`,
-		`${type} ${sequence}: ${toTitleCase(topic.adjective)} ${toTitleCase(topic.mainTopic)}`,
-		`${toTitleCase(topic.mainTopic)} ${type} ${sequence}`
+		`${type} ${sequence}: ${toTitleCase(topic.adjective)} ${toTitleCase(topic.mainTopic)}`
+		// `${toTitleCase(topic.mainTopic)} ${type} ${sequence}`
 	]
 
 	return faker.helpers.arrayElement(formats)
