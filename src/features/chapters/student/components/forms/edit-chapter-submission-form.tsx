@@ -9,6 +9,7 @@ import { toast } from 'sonner'
 import { api, type RouterOutputs } from '@/services/trpc/react'
 
 import { CardContent, CardFooter } from '@/core/components/compound-card'
+import { ContentViewer } from '@/core/components/tiptap-editor/content-viewer'
 import { Button } from '@/core/components/ui/button'
 import {
 	Form,
@@ -18,12 +19,12 @@ import {
 	FormLabel,
 	FormMessage
 } from '@/core/components/ui/form'
-import { Textarea } from '@/core/components/ui/textarea'
 
 import {
 	editAssignmentSubmissionSchema,
 	type EditAssignmentSubmissionSchema
 } from '@/features/chapters/shared/validations/chapter-assignment-submission-schema'
+import { Editor } from '@/features/chapters/student/components/editor/editor'
 
 export const EditChapterSubmissionForm = ({
 	chapterId,
@@ -62,7 +63,7 @@ export const EditChapterSubmissionForm = ({
 				<CardContent>
 					{!isEditing && !submission?.content && 'No content submitted yet.'}
 					{!isEditing && submission?.content && (
-						<div className="whitespace-pre-wrap">{submission?.content}</div>
+						<ContentViewer value={submission?.content} />
 					)}
 					{isEditing && (
 						<FormField
@@ -72,9 +73,15 @@ export const EditChapterSubmissionForm = ({
 								<FormItem>
 									<FormLabel>Content</FormLabel>
 									<FormControl>
-										<Textarea
+										<Editor
 											placeholder="Enter your assignment content here..."
-											className="min-h-[200px] resize-none"
+											throttleDelay={2000}
+											output="html"
+											autofocus={true}
+											immediatelyRender={false}
+											editable={true}
+											injectCSS={true}
+											onUpdate={field.onChange}
 											{...field}
 										/>
 									</FormControl>
