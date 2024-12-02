@@ -27,18 +27,33 @@ export const AssignmentSubmissionCard = ({
 	>['chapterId']
 }) => {
 	const [isEditing, setIsEditing] = useState<boolean>(false)
-	const resetForm = useCallback(() => void 0, [])
+	const [resetFormFn, setResetFormFn] = useState<() => void>(() => void 0)
+
+	const resetForm = useCallback((fn: () => void) => {
+		setResetFormFn(() => () => fn())
+	}, [])
 
 	const toggleEdit = () => {
-		setIsEditing((current) => !current)
-		resetForm()
+		setIsEditing((prev) => {
+			if (prev) resetFormFn()
+			return !prev
+		})
 	}
 
 	const { data, isPending } = api.student.submission.findOneSubmission.useQuery(
-		{ chapterId }
+		{ chapterId },
+		{
+			refetchOnMount: true,
+			refetchOnWindowFocus: true,
+			staleTime: 1000
+		}
 	)
 
 	const hasData = data?.submission !== null
+
+	const handleSubmitSuccess = () => {
+		setIsEditing(false)
+	}
 
 	return (
 		<Card showBorderTrail={isEditing}>
@@ -75,14 +90,14 @@ export const AssignmentSubmissionCard = ({
 				<AddChapterSubmissionForm
 					chapterId={chapterId}
 					setResetForm={resetForm}
-					onSubmitSuccess={() => setIsEditing(false)}
+					onSubmitSuccess={handleSubmitSuccess}
 				/>
 			)}
 			{isEditing && hasData && (
 				<EditChapterSubmissionForm
 					submission={data!.submission}
 					setResetForm={resetForm}
-					onSubmitSuccess={() => setIsEditing(false)}
+					onSubmitSuccess={handleSubmitSuccess}
 				/>
 			)}
 

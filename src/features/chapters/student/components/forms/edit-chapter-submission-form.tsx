@@ -1,4 +1,6 @@
-import { useRouter } from 'next/navigation'
+'use client'
+
+import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -34,7 +36,7 @@ export const EditChapterSubmissionForm = ({
 	setResetForm: (fn: () => void) => void
 	onSubmitSuccess: () => void
 }) => {
-	const router = useRouter()
+	const utils = api.useUtils()
 
 	const form = useForm<EditSubmissionContentSchema>({
 		resolver: zodResolver(editSubmissionContentSchema),
@@ -44,15 +46,45 @@ export const EditChapterSubmissionForm = ({
 		}
 	})
 
-	setResetForm(() => form.reset)
+	useEffect(() => {
+		setResetForm(form.reset)
+	}, [form.reset, setResetForm])
 
 	const { mutate, isPending } =
 		api.student.submission.editSubmissionContent.useMutation({
 			onSuccess: () => {
 				form.reset()
-				router.refresh()
-				toast.success('Submission added successfully')
+				void utils.student.submission.findOneSubmission.invalidate()
+				toast.success('Submission updated successfully')
 				onSubmitSuccess()
+			},
+			onMutate: async (newData) => {
+				await utils.student.submission.findOneSubmission.cancel()
+				const prevData = utils.student.submission.findOneSubmission.getData()
+
+				utils.student.submission.findOneSubmission.setData(
+					{ chapterId: submission!.chapterId },
+					(old) =>
+						old
+							? {
+									...old,
+									submission: {
+										...old.submission!,
+										content: newData.content
+									}
+								}
+							: old
+				)
+
+				return { prevData }
+			},
+			onError: (_, __, context) => {
+				if (context?.prevData) {
+					utils.student.submission.findOneSubmission.setData(
+						{ chapterId: submission!.chapterId },
+						context.prevData
+					)
+				}
 			}
 		})
 
