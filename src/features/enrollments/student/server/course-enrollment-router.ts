@@ -110,6 +110,7 @@ export const courseEnrollmentRouter = createTRPCRouter({
 
 			return {
 				course: {
+					courseId: course.courseId,
 					code: course.code,
 					title: course.title,
 					description: course.description,

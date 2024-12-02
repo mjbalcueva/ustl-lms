@@ -19,7 +19,16 @@ import {
 import { Image as ImageIcon } from '@/core/lib/icons'
 
 export const EnrollmentDetailsCard = ({
-	course: { code, title, description, tags, imageUrl, instructorName, token }
+	course: {
+		courseId,
+		code,
+		title,
+		description,
+		tags,
+		imageUrl,
+		instructorName,
+		token
+	}
 }: {
 	course: RouterOutputs['student']['courseEnrollment']['findOneCourse']['course']
 }) => {
@@ -30,6 +39,7 @@ export const EnrollmentDetailsCard = ({
 			onSuccess: (data) => {
 				toast.success(data.message)
 				router.refresh()
+				router.push(`/courses/${courseId}`)
 			},
 			onError: (error) => toast.error(error.message)
 		})
