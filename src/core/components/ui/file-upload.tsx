@@ -18,6 +18,9 @@ export const FileUpload = ({ onChange, endpoint }: FileUploadProps) => (
 		onUploadError={(error: Error) => {
 			toast.error(`ERROR! ${error?.message}`)
 		}}
+		onUploadBegin={(name) => {
+			toast.info(`Uploading: ${name}`)
+		}}
 		className="outline-none"
 		appearance={{
 			allowedContent: 'text-muted-foreground',

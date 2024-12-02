@@ -11,9 +11,10 @@ export const chapterSubmissionRouter = createTRPCRouter({
 	// Edit Assignment Submission
 	editAssignmentSubmission: protectedProcedure
 		.input(editAssignmentSubmissionSchema)
-		.mutation(async ({ ctx, input: { chapterId, content } }) => {
+		.mutation(async ({ ctx, input: { chapterId, content, attachments } }) => {
 			const studentId = ctx.session.user.id
 
+			// First upsert the submission
 			const submission = await ctx.db.assignmentSubmission.upsert({
 				where: {
 					studentId_chapterId: {
@@ -28,12 +29,44 @@ export const chapterSubmissionRouter = createTRPCRouter({
 				},
 				update: {
 					content
+				},
+				include: {
+					attachments: true
+				}
+			})
+
+			// Then handle attachments if they exist
+			if (attachments && attachments.length > 0) {
+				// Delete existing attachments
+				await ctx.db.assignmentSubmissionAttachment.deleteMany({
+					where: {
+						submissionId: submission.submissionId
+					}
+				})
+
+				// Create new attachments
+				await ctx.db.assignmentSubmissionAttachment.createMany({
+					data: attachments.map((attachment) => ({
+						submissionId: submission.submissionId,
+						url: attachment.url,
+						name: attachment.name
+					}))
+				})
+			}
+
+			// Fetch the final submission with attachments
+			const updatedSubmission = await ctx.db.assignmentSubmission.findUnique({
+				where: {
+					submissionId: submission.submissionId
+				},
+				include: {
+					attachments: true
 				}
 			})
 
 			return {
-				submission,
-				message: 'Assignment submitted.'
+				submission: updatedSubmission,
+				message: 'Submission updated!'
 			}
 		})
 })
