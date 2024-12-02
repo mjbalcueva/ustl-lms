@@ -33,6 +33,7 @@ import {
 	editAssignmentSubmissionSchema,
 	type EditAssignmentSubmissionSchema
 } from '@/features/chapters/shared/validations/chapter-assignment-submission-schema'
+import { AttachmentList } from '@/features/chapters/student/components/assignment/chapter-attachment-list'
 import { Editor } from '@/features/chapters/student/components/editor/editor'
 
 export const AssignmentSubmissionCard = ({
@@ -98,18 +99,12 @@ export const AssignmentSubmissionCard = ({
 					) : (
 						'No content submitted yet.'
 					)}
-					<div className="mt-2">
-						{(!submission?.attachments ||
-							submission?.attachments.length === 0) &&
-							'No attachments uploaded yet.'}
-						<ul className="list-inside list-disc">
-							{submission?.attachments?.map((file, index) => (
-								<li key={index} className="text-sm text-muted-foreground">
-									{file.name}
-								</li>
-							))}
-						</ul>
-					</div>
+
+					{submission?.attachments ? (
+						<AttachmentList attachments={submission.attachments} />
+					) : (
+						'No attachments uploaded yet.'
+					)}
 				</CardContent>
 			)}
 
