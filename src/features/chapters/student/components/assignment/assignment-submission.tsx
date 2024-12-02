@@ -1,5 +1,6 @@
 'use client'
 
+import { Button } from '@/core/components/ui/button'
 import {
 	Card,
 	CardContent,
@@ -8,24 +9,22 @@ import {
 	CardTitle
 } from '@/core/components/ui/card'
 import { Separator } from '@/core/components/ui/separator'
-import { Upload } from '@/core/lib/icons'
 
 export const AssignmentSubmission = () => {
 	return (
 		<Card>
-			<CardHeader>
-				<CardTitle className="flex items-center gap-2">
-					<Upload className="size-5" />
-					Submit Assignment
-				</CardTitle>
+			<CardHeader className="py-3">
+				<CardTitle className="text-lg">Your Submission</CardTitle>
 			</CardHeader>
 
 			<Separator />
 
 			<CardContent className="space-y-4 pt-6"></CardContent>
 
-			<CardFooter className="text-sm text-muted-foreground">
-				Submit footer
+			<CardFooter>
+				<Button type="submit" size="sm">
+					Save
+				</Button>
 			</CardFooter>
 		</Card>
 	)

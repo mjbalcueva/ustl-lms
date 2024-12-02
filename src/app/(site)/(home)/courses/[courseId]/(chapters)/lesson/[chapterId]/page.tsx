@@ -20,7 +20,7 @@ import { CourseSingle, Instructor, Lesson } from '@/core/lib/icons'
 import { formatDate } from '@/core/lib/utils/format-date'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
-import { ChapterAttachments } from '@/features/chapters/student/components/attachments/chapter-attachments'
+import { AttachmentCard } from '@/features/chapters/student/components/attachments/attachment-card'
 import { ChapterProgress } from '@/features/chapters/student/components/chapter-progress'
 import { ChapterTabs } from '@/features/chapters/student/components/chapter-tabs'
 import { EditChapterCompletion } from '@/features/chapters/student/components/forms/edit-chapter-completion'
@@ -100,7 +100,7 @@ export default async function Page({
 				<PageSection className="flex-1 md:min-w-[360px]" columnMode>
 					<ChapterTabs chapter={chapter} />
 
-					<ChapterAttachments attachments={chapter.attachments} />
+					<AttachmentCard attachments={chapter.attachments} />
 
 					<ChapterProgress chapters={chapter} />
 				</PageSection>
