@@ -1,4 +1,4 @@
-import { createTRPCRouter, instructorProcedure } from '@/server/api/trpc'
+import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc'
 
 import { utapi } from '@/services/uploadthing/utapi'
 
@@ -14,16 +14,25 @@ export const chapterSubmissionAttachmentsRouter = createTRPCRouter({
 	//
 
 	// Add Chapter Submission Attachment
-	addSubmissionAttachment: instructorProcedure
+	addSubmissionAttachment: protectedProcedure
 		.input(addSubmissionAttachmentSchema)
 		.mutation(async ({ ctx, input }) => {
 			const { submissionId, url, name } = input
+			const studentId = ctx.session.user.id
+
+			const submission = await ctx.db.assignmentSubmission.findUnique({
+				where: { submissionId, studentId }
+			})
+
+			if (!submission) {
+				throw new Error('Submission not found or unauthorized')
+			}
 
 			const attachment = await ctx.db.assignmentSubmissionAttachment.create({
 				data: { submissionId, url, name }
 			})
 
-			return { message: 'Chapter attachment created!', attachment }
+			return { message: 'Attachment added!', attachment }
 		}),
 
 	// ---------------------------------------------------------------------------
@@ -31,21 +40,31 @@ export const chapterSubmissionAttachmentsRouter = createTRPCRouter({
 	// ---------------------------------------------------------------------------
 	//
 
-	// Delete Course Attachment
-	deleteSubmissionAttachment: instructorProcedure
+	// Delete Submission Attachment
+	deleteSubmissionAttachment: protectedProcedure
 		.input(deleteSubmissionAttachmentSchema)
 		.mutation(async ({ ctx, input }) => {
 			const { attachmentId } = input
+			const studentId = ctx.session.user.id
 
-			const attachment = await ctx.db.chapterAttachment.delete({
-				where: {
-					attachmentId
+			const attachment = await ctx.db.assignmentSubmissionAttachment.findUnique(
+				{
+					where: { attachmentId },
+					include: { submission: true }
 				}
+			)
+
+			if (!attachment || attachment.submission.studentId !== studentId) {
+				throw new Error('Attachment not found or unauthorized')
+			}
+
+			await ctx.db.assignmentSubmissionAttachment.delete({
+				where: { attachmentId }
 			})
 
 			const attachmentKey = attachment?.url.split('/f/')[1]
 			if (attachmentKey) await utapi.deleteFiles(attachmentKey)
 
-			return { message: 'Chapter attachment deleted!', attachment }
+			return { message: 'Attachment deleted!', attachment }
 		})
 })

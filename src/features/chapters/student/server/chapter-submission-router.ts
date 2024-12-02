@@ -15,14 +15,26 @@ export const chapterSubmissionRouter = createTRPCRouter({
 	// Add Chapter Assignment Submission Content
 	addSubmissionContent: protectedProcedure
 		.input(addSubmissionContentSchema)
-		.mutation(async ({ ctx, input: { chapterId, content } }) => {
+		.mutation(async ({ ctx, input: { chapterId, content, attachments } }) => {
 			const studentId = ctx.session.user.id
 
 			const newContent = await ctx.db.assignmentSubmission.create({
 				data: {
 					content,
 					student: { connect: { id: studentId } },
-					chapter: { connect: { chapterId } }
+					chapter: { connect: { chapterId } },
+					attachments: {
+						createMany: {
+							data:
+								attachments?.map(({ name, url }) => ({
+									name,
+									url
+								})) ?? []
+						}
+					}
+				},
+				include: {
+					attachments: true
 				}
 			})
 
@@ -44,7 +56,8 @@ export const chapterSubmissionRouter = createTRPCRouter({
 			const studentId = ctx.session.user.id
 
 			const submission = await ctx.db.assignmentSubmission.findUnique({
-				where: { studentId_chapterId: { studentId, chapterId } }
+				where: { studentId_chapterId: { studentId, chapterId } },
+				include: { attachments: true }
 			})
 
 			return { submission }
@@ -58,17 +71,41 @@ export const chapterSubmissionRouter = createTRPCRouter({
 	// Edit Chapter Assignment Submission Content
 	editSubmissionContent: protectedProcedure
 		.input(editSubmissionContentSchema)
-		.mutation(async ({ ctx, input: { submissionId, content } }) => {
-			const studentId = ctx.session.user.id
+		.mutation(
+			async ({ ctx, input: { submissionId, content, attachments } }) => {
+				const studentId = ctx.session.user.id
 
-			const updatedContent = await ctx.db.assignmentSubmission.update({
-				where: { submissionId, studentId },
-				data: { content }
-			})
+				// Delete existing attachments if new ones are provided
+				if (attachments) {
+					await ctx.db.assignmentSubmissionAttachment.deleteMany({
+						where: { submissionId }
+					})
+				}
 
-			return {
-				updatedContent,
-				message: 'Submission updated!'
+				const updatedContent = await ctx.db.assignmentSubmission.update({
+					where: { submissionId, studentId },
+					data: {
+						content,
+						...(attachments && {
+							attachments: {
+								createMany: {
+									data: attachments.map(({ name, url }) => ({
+										name,
+										url
+									}))
+								}
+							}
+						})
+					},
+					include: {
+						attachments: true
+					}
+				})
+
+				return {
+					updatedContent,
+					message: 'Submission updated!'
+				}
 			}
-		})
+		)
 })

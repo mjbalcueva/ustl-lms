@@ -5,10 +5,16 @@ import { z } from 'zod'
 // -----------------------------------------------------------------------------
 //
 
+const attachmentSchema = z.object({
+	name: z.string().min(1, 'Attachment name is required'),
+	url: z.string().url('Invalid attachment URL')
+})
+
 // Add Chapter Assignment Submission Content Schema
 export const addSubmissionContentSchema = z.object({
 	chapterId: z.string().min(1, 'Chapter ID is required'),
-	content: z.string()
+	content: z.string().min(1, 'Content is required'),
+	attachments: z.array(attachmentSchema).optional()
 })
 export type AddSubmissionContentSchema = z.infer<
 	typeof addSubmissionContentSchema
@@ -33,7 +39,8 @@ export type FindOneSubmissionSchema = z.infer<typeof findOneSubmissionSchema>
 // Edit Chapter Assignment Submission Content Schema
 export const editSubmissionContentSchema = z.object({
 	submissionId: z.string().min(1, 'Submission ID is required'),
-	content: z.string()
+	content: z.string().min(1, 'Content is required'),
+	attachments: z.array(attachmentSchema).optional()
 })
 export type EditSubmissionContentSchema = z.infer<
 	typeof editSubmissionContentSchema

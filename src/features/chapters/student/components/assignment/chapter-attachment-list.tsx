@@ -1,6 +1,5 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { toast } from 'sonner'
 
@@ -9,23 +8,24 @@ import { api, type RouterOutputs } from '@/services/trpc/react'
 import { Button } from '@/core/components/ui/button'
 import { Attachment as AttachmentIcon, Delete, Loader2 } from '@/core/lib/icons'
 
+type SubmissionAttachment = NonNullable<
+	RouterOutputs['student']['submission']['findOneSubmission']['submission']
+>['attachments'][number]
+
 export const AttachmentList = ({
 	attachments
 }: {
-	attachments: NonNullable<
-		RouterOutputs['student']['chapterSubmission']['editAssignmentSubmission']['submission']
-	>['attachments']
+	attachments: SubmissionAttachment[]
 }) => {
-	const router = useRouter()
-
+	const utils = api.useUtils()
 	const [deletingId, setDeletingId] = React.useState<string | null>(null)
 
 	const { mutate } =
-		api.instructor.chapterAttachments.deleteChapterAttachment.useMutation({
-			onSuccess: async (data) => {
+		api.student.submissionAttachment.deleteSubmissionAttachment.useMutation({
+			onSuccess: () => {
 				setDeletingId(null)
-				router.refresh()
-				toast.success(data.message)
+				void utils.student.submission.findOneSubmission.invalidate()
+				toast.success('Attachment deleted')
 			},
 			onError: (error) => toast.error(error.message)
 		})
@@ -35,28 +35,36 @@ export const AttachmentList = ({
 			{attachments.map((attachment) => (
 				<li
 					key={attachment.attachmentId}
-					className="flex items-center rounded-xl border border-border py-1.5 pl-2.5"
+					className="flex items-center gap-2 rounded-xl border border-border pr-2 hover:bg-muted/50"
 				>
-					<AttachmentIcon className="mr-2 size-4 flex-shrink-0 text-muted-foreground" />
-					{attachment.name}
-					{deletingId === attachment.attachmentId && (
-						<div className="ml-auto mr-2.5 h-7 rounded-md p-2">
+					<a
+						href={attachment.url}
+						target="_blank"
+						rel="noopener noreferrer"
+						className="flex h-full flex-1 items-center gap-1 rounded-lg py-1.5 pl-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+					>
+						<span className="flex-shrink-0 p-2">
+							<AttachmentIcon className="size-4" />
+						</span>
+						<span>{attachment.name}</span>
+					</a>
+
+					<Button
+						variant="ghost"
+						size="xs"
+						className="h-8 rounded-md p-2"
+						onClick={() => {
+							setDeletingId(attachment.attachmentId)
+							mutate({ attachmentId: attachment.attachmentId })
+						}}
+						disabled={deletingId === attachment.attachmentId}
+					>
+						{deletingId === attachment.attachmentId ? (
 							<Loader2 className="size-4 animate-spin" />
-						</div>
-					)}
-					{deletingId !== attachment.attachmentId && (
-						<Button
-							variant="ghost"
-							size="xs"
-							className="ml-auto mr-2.5 rounded-md p-2"
-							onClick={() => {
-								setDeletingId(attachment.attachmentId)
-								mutate({ attachmentId: attachment.attachmentId })
-							}}
-						>
+						) : (
 							<Delete className="size-4" />
-						</Button>
-					)}
+						)}
+					</Button>
 				</li>
 			))}
 		</ol>

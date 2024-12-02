@@ -58,7 +58,13 @@ export const UploadButton = ({
 		content={{
 			button({ ready, isUploading }) {
 				if (isUploading) return 'Uploading...'
-				if (!ready) return 'Getting ready...'
+				if (!ready)
+					return (
+						<>
+							<Upload className="size-4 animate-spin" />
+							Getting ready...
+						</>
+					)
 				return (
 					<>
 						<Upload className="size-4" />

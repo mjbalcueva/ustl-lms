@@ -16,6 +16,7 @@ import { Button } from '@/core/components/ui/button'
 import { Separator } from '@/core/components/ui/separator'
 import { Add, Edit, Info } from '@/core/lib/icons'
 
+import { AttachmentList } from '@/features/chapters/student/components/assignment/chapter-attachment-list'
 import { AddChapterSubmissionForm } from '@/features/chapters/student/components/forms/add-chapter-submission-form'
 import { EditChapterSubmissionForm } from '@/features/chapters/student/components/forms/edit-chapter-submission-form'
 
@@ -33,9 +34,14 @@ export const AssignmentSubmissionCard = ({
 		setResetFormFn(() => () => fn())
 	}, [])
 
+	const utils = api.useUtils()
+
 	const toggleEdit = () => {
 		setIsEditing((prev) => {
-			if (prev) resetFormFn()
+			if (prev) {
+				resetFormFn()
+				void utils.student.submission.findOneSubmission.invalidate()
+			}
 			return !prev
 		})
 	}
@@ -43,9 +49,8 @@ export const AssignmentSubmissionCard = ({
 	const { data, isPending } = api.student.submission.findOneSubmission.useQuery(
 		{ chapterId },
 		{
-			refetchOnMount: true,
-			refetchOnWindowFocus: true,
-			staleTime: 1000
+			refetchOnMount: 'always',
+			refetchOnWindowFocus: false
 		}
 	)
 
@@ -79,10 +84,19 @@ export const AssignmentSubmissionCard = ({
 				<CardContent isEmpty>No submission found.</CardContent>
 			)}
 
-			{!isEditing && !isPending && hasData && (
+			{!isEditing && !isPending && hasData && data?.submission && (
 				<CardContent>
 					<Separator className="mb-4" />
-					<ContentViewer value={data?.submission?.content} />
+					<div className="space-y-6">
+						<ContentViewer value={data.submission.content} />
+
+						{data.submission.attachments.length > 0 && (
+							<div className="space-y-3">
+								<h3 className="text-sm font-medium">Attachments</h3>
+								<AttachmentList attachments={data.submission.attachments} />
+							</div>
+						)}
+					</div>
 				</CardContent>
 			)}
 
@@ -93,9 +107,9 @@ export const AssignmentSubmissionCard = ({
 					onSubmitSuccess={handleSubmitSuccess}
 				/>
 			)}
-			{isEditing && hasData && (
+			{isEditing && hasData && data?.submission && (
 				<EditChapterSubmissionForm
-					submission={data!.submission}
+					submission={data.submission}
 					setResetForm={resetForm}
 					onSubmitSuccess={handleSubmitSuccess}
 				/>
