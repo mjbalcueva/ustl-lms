@@ -19,7 +19,7 @@ import { Assignment, CourseSingle, Instructor } from '@/core/lib/icons'
 import { formatDate } from '@/core/lib/utils/format-date'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
-import { AssignmentSubmission } from '@/features/chapters/student/components/assignment/assignment-submission'
+import { AssignmentSubmissionCard } from '@/features/chapters/student/components/assignment/assignment-submission-card'
 import { AttachmentCard } from '@/features/chapters/student/components/attachments/attachment-card'
 import { ChapterProgress } from '@/features/chapters/student/components/chapter-progress'
 import { ChapterTabs } from '@/features/chapters/student/components/chapter-tabs'
@@ -86,7 +86,7 @@ export default async function Page({
 						<ContentViewer value={chapter.content} />
 					</Card>
 
-					<AssignmentSubmission
+					<AssignmentSubmissionCard
 						chapterId={chapter.chapterId}
 						submission={chapter.submission}
 					/>
