@@ -124,15 +124,15 @@
 }
 
 .minimal-tiptap-editor .ProseMirror h1 {
-	@apply mb-4 mt-[24px] text-[2em] font-semibold leading-[1.25];
+	@apply mb-4 mt-[24px] text-2xl font-semibold leading-[1.25];
 }
 
 .minimal-tiptap-editor .ProseMirror h2 {
-	@apply mb-4 mt-[24px] text-[1.5em] font-semibold leading-[1.25];
+	@apply mb-4 mt-[24px] text-xl font-semibold leading-[1.25];
 }
 
 .minimal-tiptap-editor .ProseMirror h3 {
-	@apply mb-4 mt-[24px] text-[1.25em] font-semibold leading-[1.25];
+	@apply mb-4 mt-[24px] text-lg font-semibold leading-[1.25];
 }
 
 .minimal-tiptap-editor .ProseMirror a.link {

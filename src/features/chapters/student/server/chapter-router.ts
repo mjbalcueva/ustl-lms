@@ -1,3 +1,5 @@
+import { TRPCClientError } from '@trpc/client'
+
 import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc'
 
 import {
@@ -43,11 +45,25 @@ export const chapterRouter = createTRPCRouter({
 					},
 					muxData: true,
 					attachments: true,
-					chapterProgress: { where: { studentId } }
+					chapterProgress: { where: { studentId } },
+					submissions: {
+						where: { studentId },
+						include: { attachments: true }
+					}
 				}
 			})
 
-			return { chapter }
+			if (!chapter) throw new TRPCClientError('Chapter not found')
+
+			const submission = chapter.submissions[0]
+
+			return {
+				chapter: {
+					...chapter,
+					submission: submission ?? null,
+					hasSubmitted: !!submission
+				}
+			}
 		}),
 
 	// ---------------------------------------------------------------------------

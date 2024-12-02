@@ -23,7 +23,7 @@ import { type Breadcrumb } from '@/core/types/breadcrumbs'
 import { AttachmentCard } from '@/features/chapters/student/components/attachments/attachment-card'
 import { ChapterProgress } from '@/features/chapters/student/components/chapter-progress'
 import { ChapterTabs } from '@/features/chapters/student/components/chapter-tabs'
-import { EditChapterCompletion } from '@/features/chapters/student/components/forms/edit-chapter-completion'
+import { EditChapterCompletionForm } from '@/features/chapters/student/components/forms/edit-chapter-completion-form'
 
 export default async function Page({
 	params: { courseId, chapterId }
@@ -79,7 +79,7 @@ export default async function Page({
 								Last updated: {formatDate(chapter.updatedAt)}
 							</PageDescription>
 						</div>
-						<EditChapterCompletion chapter={chapter} />
+						<EditChapterCompletionForm chapter={chapter} />
 					</div>
 
 					{chapter.videoUrl && (
