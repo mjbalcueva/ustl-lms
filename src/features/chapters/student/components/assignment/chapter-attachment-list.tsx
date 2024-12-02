@@ -46,7 +46,7 @@ export const AttachmentList = ({
 						<span className="flex-shrink-0 p-2">
 							<AttachmentIcon className="size-4" />
 						</span>
-						<span>{attachment.name}</span>
+						<span className="line-clamp-1">{attachment.name}</span>
 					</a>
 
 					<Button

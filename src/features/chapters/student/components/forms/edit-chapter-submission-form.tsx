@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { api, type RouterOutputs } from '@/services/trpc/react'
+import { useUploadThing } from '@/services/uploadthing/uploadthing'
 
 import { CardContent, CardFooter } from '@/core/components/compound-card'
 import { Button } from '@/core/components/ui/button'
@@ -18,7 +19,6 @@ import {
 	FormMessage
 } from '@/core/components/ui/form'
 import { Separator } from '@/core/components/ui/separator'
-import { UploadButton } from '@/core/components/ui/upload-button'
 
 import {
 	editSubmissionContentSchema,
@@ -26,6 +26,8 @@ import {
 } from '@/features/chapters/shared/validations/chapter-submission-schema'
 import { AttachmentList } from '@/features/chapters/student/components/assignment/chapter-attachment-list'
 import { Editor } from '@/features/chapters/student/components/editor/editor'
+import { PendingFilesList } from '@/features/chapters/student/components/ui/pending-files-list'
+import { UploadButton } from '@/features/chapters/student/components/ui/upload-button'
 
 type Attachment = { name: string; url: string }
 
@@ -41,10 +43,21 @@ export const EditChapterSubmissionForm = ({
 	onSubmitSuccess: () => void
 }) => {
 	const utils = api.useUtils()
+	const [pendingFiles, setPendingFiles] = useState<File[]>([])
 	const [attachments, setAttachments] = useState<Attachment[]>(
 		submission.attachments.map(({ name, url }) => ({ name, url }))
 	)
 	const [isAttachmentsChanged, setIsAttachmentsChanged] = useState(false)
+	const [isUploading, setIsUploading] = useState(false)
+
+	const { startUpload } = useUploadThing('attachmentUpload', {
+		onClientUploadComplete: () => {
+			setPendingFiles([])
+		},
+		onUploadError: () => {
+			toast.error('Failed to upload files')
+		}
+	})
 
 	const form = useForm<EditSubmissionContentSchema>({
 		resolver: zodResolver(editSubmissionContentSchema),
@@ -61,6 +74,7 @@ export const EditChapterSubmissionForm = ({
 			setAttachments(
 				submission.attachments.map(({ name, url }) => ({ name, url }))
 			)
+			setPendingFiles([])
 			setIsAttachmentsChanged(false)
 		})
 	}, [form, setResetForm, submission.attachments])
@@ -75,6 +89,7 @@ export const EditChapterSubmissionForm = ({
 						url
 					}))
 				)
+				setPendingFiles([])
 				setIsAttachmentsChanged(false)
 				await utils.student.submission.findOneSubmission.invalidate()
 				await utils.student.submission.findOneSubmission.refetch()
@@ -116,23 +131,36 @@ export const EditChapterSubmissionForm = ({
 			}
 		})
 
-	const handleSubmit = form.handleSubmit((data) => {
-		mutate({
-			...data,
-			attachments
-		})
-	})
+	const handleSubmit = form.handleSubmit(async (data) => {
+		try {
+			setIsUploading(true)
+			// Upload files if there are any pending
+			if (pendingFiles.length > 0) {
+				const uploadResponse = await startUpload(pendingFiles)
+				if (!uploadResponse) throw new Error('Upload failed')
 
-	const handleAttachmentChange = (url?: string, name?: string) => {
-		if (url && name) {
-			setAttachments((prev) => {
-				const exists = prev.some((a) => a.url === url && a.name === name)
-				if (exists) return prev
-				return [...prev, { url, name }]
-			})
-			setIsAttachmentsChanged(true)
+				const newAttachments: Attachment[] = uploadResponse.map((file) => ({
+					name: file.name,
+					url: file.url
+				}))
+
+				setAttachments((prev) => [...prev, ...newAttachments])
+				mutate({
+					...data,
+					attachments: [...attachments, ...newAttachments]
+				})
+			} else {
+				mutate({
+					...data,
+					attachments
+				})
+			}
+		} catch (err) {
+			toast.error(err instanceof Error ? err.message : 'Failed to upload files')
+		} finally {
+			setIsUploading(false)
 		}
-	}
+	})
 
 	return (
 		<Form {...form}>
@@ -170,9 +198,13 @@ export const EditChapterSubmissionForm = ({
 							<FormControl>
 								<div className="space-y-4">
 									<UploadButton
-										endpoint="attachmentUpload"
-										onChange={handleAttachmentChange}
+										onChange={(files) => {
+											setPendingFiles(files)
+											setIsAttachmentsChanged(true)
+										}}
+										disabled={isUploading}
 									/>
+									<PendingFilesList files={pendingFiles} />
 									{attachments.length > 0 && (
 										<AttachmentList
 											attachments={attachments.map((a, i) => ({
@@ -196,11 +228,13 @@ export const EditChapterSubmissionForm = ({
 						type="submit"
 						size="sm"
 						disabled={
-							(!form.formState.isDirty && !isAttachmentsChanged) || isPending
+							(!form.formState.isDirty && !isAttachmentsChanged) ||
+							isPending ||
+							isUploading
 						}
-						variant={isPending ? 'shine' : 'default'}
+						variant={isPending || isUploading ? 'shine' : 'default'}
 					>
-						{isPending ? 'Saving...' : 'Save'}
+						{isPending || isUploading ? 'Saving...' : 'Save'}
 					</Button>
 				</CardFooter>
 			</form>

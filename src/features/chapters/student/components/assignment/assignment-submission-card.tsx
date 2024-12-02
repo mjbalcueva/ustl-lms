@@ -31,12 +31,12 @@ export const AssignmentSubmissionCard = ({
 	const [resetFormFn, setResetFormFn] = useState<() => void>(() => void 0)
 
 	const resetForm = useCallback((fn: () => void) => {
-		setResetFormFn(() => () => fn())
+		setResetFormFn(() => fn)
 	}, [])
 
 	const utils = api.useUtils()
 
-	const toggleEdit = () => {
+	const toggleEdit = useCallback(() => {
 		setIsEditing((prev) => {
 			if (prev) {
 				resetFormFn()
@@ -44,21 +44,18 @@ export const AssignmentSubmissionCard = ({
 			}
 			return !prev
 		})
-	}
+	}, [resetFormFn, utils.student.submission.findOneSubmission])
 
 	const { data, isPending } = api.student.submission.findOneSubmission.useQuery(
 		{ chapterId },
-		{
-			refetchOnMount: 'always',
-			refetchOnWindowFocus: false
-		}
+		{ refetchOnMount: 'always' }
 	)
 
 	const hasData = data?.submission !== null
 
-	const handleSubmitSuccess = () => {
+	const handleSubmitSuccess = useCallback(() => {
 		setIsEditing(false)
-	}
+	}, [])
 
 	return (
 		<Card showBorderTrail={isEditing}>
@@ -91,9 +88,15 @@ export const AssignmentSubmissionCard = ({
 						<ContentViewer value={data.submission.content} />
 
 						{data.submission.attachments.length > 0 && (
-							<div className="space-y-3">
-								<h3 className="text-sm font-medium">Attachments</h3>
-								<AttachmentList attachments={data.submission.attachments} />
+							<div className="flex flex-wrap gap-2">
+								{data.submission.attachments.map((attachment) => (
+									<div
+										key={attachment.attachmentId}
+										className="min-w-64 flex-1"
+									>
+										<AttachmentList attachments={[attachment]} />
+									</div>
+								))}
 							</div>
 						)}
 					</div>
