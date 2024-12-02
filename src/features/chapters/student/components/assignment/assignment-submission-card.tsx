@@ -1,10 +1,6 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import * as React from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
+import { useCallback, useState } from 'react'
 
 import { api, type RouterOutputs } from '@/services/trpc/react'
 
@@ -17,146 +13,89 @@ import {
 } from '@/core/components/compound-card'
 import { ContentViewer } from '@/core/components/tiptap-editor/content-viewer'
 import { Button } from '@/core/components/ui/button'
-import {
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage
-} from '@/core/components/ui/form'
 import { Separator } from '@/core/components/ui/separator'
-import { UploadButton } from '@/core/components/ui/upload-button'
-import { Add } from '@/core/lib/icons'
+import { Add, Edit, Info } from '@/core/lib/icons'
 
-import {
-	editAssignmentSubmissionSchema,
-	type EditAssignmentSubmissionSchema
-} from '@/features/chapters/shared/validations/chapter-assignment-submission-schema'
-import { AttachmentList } from '@/features/chapters/student/components/assignment/chapter-attachment-list'
-import { Editor } from '@/features/chapters/student/components/editor/editor'
+import { AddChapterSubmissionForm } from '@/features/chapters/student/components/forms/add-chapter-submission-form'
+import { EditChapterSubmissionForm } from '@/features/chapters/student/components/forms/edit-chapter-submission-form'
 
 export const AssignmentSubmissionCard = ({
-	chapterId,
-	submission
+	chapterId
 }: {
-	chapterId: RouterOutputs['student']['chapter']['findOneChapter']['chapter']['chapterId']
-	submission: RouterOutputs['student']['chapter']['findOneChapter']['chapter']['submission']
+	chapterId: NonNullable<
+		RouterOutputs['student']['chapter']['findOneChapter']['chapter']
+	>['chapterId']
 }) => {
-	const [isEditing, setIsEditing] = React.useState(false)
-	const toggleEdit = () => setIsEditing((current) => !current)
+	const [isEditing, setIsEditing] = useState<boolean>(false)
+	const resetForm = useCallback(() => void 0, [])
 
-	const router = useRouter()
-
-	const form = useForm<EditAssignmentSubmissionSchema>({
-		resolver: zodResolver(editAssignmentSubmissionSchema),
-		defaultValues: {
-			chapterId,
-			content: submission?.content ?? '',
-			attachments: submission?.attachments ?? []
-		}
-	})
-
-	const { mutate, isPending } =
-		api.student.chapterSubmission.editAssignmentSubmission.useMutation({
-			onSuccess: (data) => {
-				toggleEdit()
-				router.refresh()
-				form.reset({
-					chapterId,
-					content: data.submission?.content ?? '',
-					attachments: data.submission?.attachments ?? []
-				})
-				toast.success(data.message)
-			},
-			onError: (error) => toast.error(error.message)
-		})
-
-	const handleFileUpload = (url?: string, name?: string) => {
-		if (url && name) {
-			const currentAttachments = form.getValues('attachments') ?? []
-			form.setValue('attachments', [...currentAttachments, { url, name }])
-		}
+	const toggleEdit = () => {
+		setIsEditing((current) => !current)
+		resetForm()
 	}
+
+	const { data, isPending } = api.student.submission.findOneSubmission.useQuery(
+		{ chapterId }
+	)
+
+	const hasData = data?.submission !== null
 
 	return (
 		<Card showBorderTrail={isEditing}>
 			<CardHeader className="py-3">
 				<CardTitle className="text-lg">Your Submission</CardTitle>
 				<Button onClick={toggleEdit} variant="ghost" size="sm">
-					{!isEditing && <Add />}
-					{isEditing ? 'Cancel' : 'Add'}
+					{!isEditing && !hasData && <Add />}
+					{!isEditing && hasData && <Edit />}
+					{isEditing ? 'Cancel' : hasData ? 'Edit' : 'Add'}
 				</Button>
 			</CardHeader>
 
-			{!isEditing && (
-				<CardContent isEmpty={!submission?.content}>
-					{submission?.content ? (
-						<>
-							<Separator className="mb-4" />
-							<ContentViewer value={submission?.content} />
-						</>
-					) : (
-						'No content submitted yet.'
-					)}
-
-					{submission?.attachments ? (
-						<AttachmentList attachments={submission.attachments} />
-					) : (
-						'No attachments uploaded yet.'
-					)}
+			{!isEditing && isPending && (
+				<CardContent className="space-y-3">
+					<Separator className="mb-4" />
+					<div className="h-4 w-3/4 animate-pulse rounded-md bg-muted" />
+					<div className="h-4 w-1/2 animate-pulse rounded-md bg-muted" />
+					<div className="h-4 w-2/3 animate-pulse rounded-md bg-muted" />
 				</CardContent>
 			)}
 
-			{isEditing && (
-				<Form {...form}>
-					<form onSubmit={form.handleSubmit((values) => mutate(values))}>
-						<CardContent className="space-y-6">
-							{!isEditing &&
-								!submission?.content &&
-								'No content submitted yet.'}
-							{!isEditing && submission?.content && (
-								<ContentViewer value={submission?.content} />
-							)}
-							<FormField
-								control={form.control}
-								name="content"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Assignment Content</FormLabel>
-										<FormControl>
-											<Editor
-												placeholder="Enter your assignment content here..."
-												throttleDelay={2000}
-												output="html"
-												autofocus={true}
-												immediatelyRender={false}
-												editable={true}
-												injectCSS={true}
-												onUpdate={field.onChange}
-												{...field}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-							<UploadButton
-								variant="outline"
-								endpoint="attachmentUpload"
-								onChange={handleFileUpload}
-								className="!text-card-foreground"
-							/>
-						</CardContent>
-
-						<CardFooter>
-							<Button type="submit" disabled={isPending}>
-								Save
-							</Button>
-						</CardFooter>
-					</form>
-				</Form>
+			{!isEditing && !isPending && !hasData && (
+				<CardContent isEmpty>No submission found.</CardContent>
 			)}
+
+			{!isEditing && !isPending && hasData && (
+				<CardContent>
+					<Separator className="mb-4" />
+					<ContentViewer value={data?.submission?.content} />
+				</CardContent>
+			)}
+
+			{isEditing && !hasData && (
+				<AddChapterSubmissionForm
+					chapterId={chapterId}
+					setResetForm={resetForm}
+					onSubmitSuccess={() => setIsEditing(false)}
+				/>
+			)}
+			{isEditing && hasData && (
+				<EditChapterSubmissionForm
+					submission={data!.submission}
+					setResetForm={resetForm}
+					onSubmitSuccess={() => setIsEditing(false)}
+				/>
+			)}
+
+			<CardFooter className="flex items-center gap-2 text-muted-foreground">
+				<Info className="size-4 shrink-0" />
+				<p className="text-sm">
+					Submit your work here. Make sure to{' '}
+					<span className="underline underline-offset-4">
+						follow the instructions
+					</span>{' '}
+					carefully.
+				</p>
+			</CardFooter>
 		</Card>
 	)
 }

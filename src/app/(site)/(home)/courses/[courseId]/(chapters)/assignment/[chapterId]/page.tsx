@@ -86,10 +86,7 @@ export default async function Page({
 						<ContentViewer value={chapter.content} />
 					</Card>
 
-					<AssignmentSubmissionCard
-						chapterId={chapter.chapterId}
-						submission={chapter.submission}
-					/>
+					<AssignmentSubmissionCard chapterId={chapterId} />
 				</PageSection>
 
 				<PageSection className="flex-1 md:min-w-[360px]" columnMode>
