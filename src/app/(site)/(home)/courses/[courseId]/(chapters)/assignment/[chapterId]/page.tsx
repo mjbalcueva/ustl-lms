@@ -19,11 +19,11 @@ import { Assignment, CourseSingle, Instructor } from '@/core/lib/icons'
 import { formatDate } from '@/core/lib/utils/format-date'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
-import { AssignmentSubmission } from '@/features/chapters/student/components/assignment/assignment-submission'
-import { ChapterAttachments } from '@/features/chapters/student/components/attachments/chapter-attachments'
+import { AssignmentSubmissionCard } from '@/features/chapters/student/components/assignment/assignment-submission-card'
+import { AttachmentCard } from '@/features/chapters/student/components/attachments/attachment-card'
 import { ChapterProgress } from '@/features/chapters/student/components/chapter-progress'
 import { ChapterTabs } from '@/features/chapters/student/components/chapter-tabs'
-import { EditChapterCompletion } from '@/features/chapters/student/components/forms/edit-chapter-completion'
+import { EditChapterCompletionForm } from '@/features/chapters/student/components/forms/edit-chapter-completion-form'
 
 export default async function Page({
 	params: { courseId, chapterId }
@@ -65,7 +65,7 @@ export default async function Page({
 
 			{chapter.status !== 'PUBLISHED' && (
 				<Banner
-					label="This chapter is archived. It remains accessible to students who have previously accessed it but is hidden from new participants."
+					label="This content is currently archived but still available for you to access since you were previously enrolled."
 					variant="info"
 				/>
 			)}
@@ -79,20 +79,20 @@ export default async function Page({
 								Last updated: {formatDate(chapter.updatedAt)}
 							</PageDescription>
 						</div>
-						<EditChapterCompletion chapter={chapter} />
+						<EditChapterCompletionForm chapter={chapter} />
 					</div>
 
 					<Card className="text-pretty p-6 text-sm tracking-wide">
 						<ContentViewer value={chapter.content} />
 					</Card>
 
-					<AssignmentSubmission />
+					<AssignmentSubmissionCard chapterId={chapterId} />
 				</PageSection>
 
 				<PageSection className="flex-1 md:min-w-[360px]" columnMode>
 					<ChapterTabs chapter={chapter} />
 
-					<ChapterAttachments attachments={chapter.attachments} />
+					<AttachmentCard attachments={chapter.attachments} />
 
 					<ChapterProgress chapters={chapter} />
 				</PageSection>

@@ -23,9 +23,8 @@ export const courseRouter = createTRPCRouter({
 					tags: { orderBy: { name: 'asc' } },
 					attachments: true,
 					chapters: {
-						include: {
-							chapterProgress: { where: { studentId } }
-						}
+						include: { chapterProgress: { where: { studentId } } },
+						where: { status: 'PUBLISHED' }
 					},
 					_count: { select: { chapters: true } },
 					instructor: {

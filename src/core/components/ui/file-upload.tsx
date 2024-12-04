@@ -1,8 +1,9 @@
-import { UploadDropzone } from '@uploadthing/react'
 import { toast } from 'sonner'
 
 // eslint-disable-next-line boundaries/element-types
 import { type OurFileRouter } from '@/services/uploadthing/core'
+// eslint-disable-next-line boundaries/element-types
+import { UploadDropzone } from '@/services/uploadthing/uploadthing'
 
 type FileUploadProps = {
 	onChange: (url?: string, name?: string) => void
@@ -10,13 +11,16 @@ type FileUploadProps = {
 }
 
 export const FileUpload = ({ onChange, endpoint }: FileUploadProps) => (
-	<UploadDropzone<OurFileRouter, typeof endpoint>
+	<UploadDropzone
 		endpoint={endpoint}
 		onClientUploadComplete={(res) => {
 			onChange(res[0]?.url, res[0]?.name)
 		}}
 		onUploadError={(error: Error) => {
 			toast.error(`ERROR! ${error?.message}`)
+		}}
+		onUploadBegin={(name) => {
+			toast.info(`Uploading: ${name}`)
 		}}
 		className="outline-none"
 		appearance={{

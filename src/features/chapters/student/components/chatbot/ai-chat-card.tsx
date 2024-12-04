@@ -3,13 +3,13 @@
 import { useEffect, useRef } from 'react'
 import { type Message } from 'ai/react'
 
+import { Button } from '@/core/components/ui/button'
 import {
+	Card,
 	CardFooter,
 	CardHeader,
 	CardTitle
-} from '@/core/components/compound-card'
-import { Button } from '@/core/components/ui/button'
-import { Card } from '@/core/components/ui/card'
+} from '@/core/components/ui/card'
 import { ScrollArea, ScrollBar } from '@/core/components/ui/scroll-area'
 import { Separator } from '@/core/components/ui/separator'
 import {
@@ -64,7 +64,7 @@ export const AiChatCard = ({
 
 	return (
 		<Card className="flex h-[24rem] flex-col lg:h-[30rem]">
-			<CardHeader className="flex items-center justify-between py-2">
+			<CardHeader className="flex !max-h-11 flex-row items-center justify-between space-y-0 py-2">
 				<CardTitle className="text-lg">Chapter AI Assistant</CardTitle>
 				{chatMessages.length > 1 && (
 					<Tooltip>

@@ -1,6 +1,19 @@
 /* listings */
 .minimal-tiptap-editor div.tiptap p {
-	@apply text-[var(--mt-font-size-regular)];
+	@apply mb-3 leading-6 text-[var(--mt-font-size-regular)];
+}
+
+.minimal-tiptap-editor .ProseMirror p {
+	@apply mb-4;
+}
+
+.minimal-tiptap-editor .ProseMirror li {
+	@apply mb-[4px] leading-[1.6];
+}
+
+.minimal-tiptap-editor .ProseMirror ul,
+.minimal-tiptap-editor .ProseMirror ol {
+	@apply !ml-[2em] mb-4 space-y-[4px];
 }
 
 .minimal-tiptap-editor .ProseMirror ol {
@@ -111,15 +124,15 @@
 }
 
 .minimal-tiptap-editor .ProseMirror h1 {
-	@apply mb-4 mt-[46px] text-2xl leading-7 tracking-[-0.004375rem];
+	@apply mb-4 mt-[24px] text-2xl font-semibold leading-[1.25];
 }
 
 .minimal-tiptap-editor .ProseMirror h2 {
-	@apply mb-3.5 mt-8 text-xl leading-7 tracking-[0.003125rem];
+	@apply mb-4 mt-[24px] text-xl font-semibold leading-[1.25];
 }
 
 .minimal-tiptap-editor .ProseMirror h3 {
-	@apply mb-3 mt-6 text-lg leading-6 tracking-[0.00625rem];
+	@apply mb-4 mt-[24px] text-lg font-semibold leading-[1.25];
 }
 
 .minimal-tiptap-editor .ProseMirror a.link {
@@ -128,4 +141,20 @@
 
 .minimal-tiptap-editor .ProseMirror a.link:hover {
 	@apply underline;
+}
+
+.minimal-tiptap-editor .ProseMirror blockquote {
+	@apply mx-0 my-[16px] border-l-4 border-[--border] pl-[1em] text-[--muted-foreground];
+}
+
+.minimal-tiptap-editor .ProseMirror pre {
+	@apply mb-4 overflow-auto rounded-md bg-[--muted] p-[16px];
+}
+
+.minimal-tiptap-editor .ProseMirror code {
+	@apply break-words rounded-[6px] bg-[--muted] px-[0.4em] py-[0.2em] text-[85%];
+}
+
+.minimal-tiptap-editor .ProseMirror hr {
+	@apply mx-0 my-[24px] h-[0.25em] border-0 bg-[--border] p-0;
 }

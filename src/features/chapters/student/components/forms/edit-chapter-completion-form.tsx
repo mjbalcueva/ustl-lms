@@ -10,7 +10,7 @@ import { Button } from '@/core/components/ui/button'
 import { Loader } from '@/core/components/ui/loader'
 import { Check, CheckCircle } from '@/core/lib/icons'
 
-export const EditChapterCompletion = ({
+export const EditChapterCompletionForm = ({
 	chapter
 }: {
 	chapter: RouterOutputs['student']['chapter']['findOneChapter']['chapter']

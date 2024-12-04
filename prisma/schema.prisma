@@ -221,7 +221,7 @@ model AssessmentAnswer {
   questionId String @unique @map("question_id")
 
   answer    Json
-  isCorrect Boolean
+  isCorrect Boolean @map("is_correct")
 
   student  User               @relation(fields: [studentId], references: [id], onDelete: Cascade)
   question AssessmentQuestion @relation(fields: [questionId], references: [questionId], onDelete: Cascade)
@@ -232,11 +232,12 @@ model AssessmentAnswer {
 
 model AssignmentSubmission {
   submissionId String @id @default(cuid()) @map("submission_id")
-  studentId    String @map("student_id")
   chapterId    String @map("chapter_id")
+  studentId    String @map("student_id")
 
   content     String?
-  submittedAt DateTime?
+  submittedAt DateTime @default(now()) @map("submitted_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
   grade       Float?
 
   attachments AssignmentSubmissionAttachment[]
@@ -255,8 +256,8 @@ model AssignmentSubmissionAttachment {
 
   name      String
   url       String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   submission AssignmentSubmission @relation(fields: [submissionId], references: [submissionId], onDelete: Cascade)
 

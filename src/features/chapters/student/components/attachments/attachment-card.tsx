@@ -22,7 +22,7 @@ import { cn } from '@/core/lib/utils/cn'
 import { formatDate } from '@/core/lib/utils/format-date'
 import { removeExtension } from '@/core/lib/utils/remove-extension'
 
-type ChapterAttachmentsProps = {
+type AttachmentCardProps = {
 	attachments: NonNullable<
 		inferProcedureOutput<
 			AppRouter['student']['chapter']['findOneChapter']
@@ -30,9 +30,7 @@ type ChapterAttachmentsProps = {
 	>['attachments']
 }
 
-export const ChapterAttachments = ({
-	attachments
-}: ChapterAttachmentsProps) => {
+export const AttachmentCard = ({ attachments }: AttachmentCardProps) => {
 	const handleDownload = async (url: string) => {
 		try {
 			window.open(url, '_blank', 'noopener,noreferrer')
