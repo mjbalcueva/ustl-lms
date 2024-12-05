@@ -28,8 +28,8 @@ export const AssessmentActionButton = ({
 	assessmentId,
 	chapterId,
 	courseId,
-	shuffleQuestions,
-	shuffleOptions
+	shuffleQuestions
+	// shuffleOptions
 }: {
 	assessmentId: RouterOutputs['instructor']['assessment']['findOneAssessment']['assessment']['assessmentId']
 	chapterId: RouterOutputs['instructor']['assessment']['findOneAssessment']['assessment']['chapter']['chapterId']
@@ -46,12 +46,12 @@ export const AssessmentActionButton = ({
 			}
 		})
 
-	const { mutate: editShuffleOptions, isPending: isEditingShuffleOptions } =
-		api.instructor.assessment.editShuffleOptions.useMutation({
-			onSuccess: () => {
-				router.refresh()
-			}
-		})
+	// const { mutate: editShuffleOptions, isPending: isEditingShuffleOptions } =
+	// 	api.instructor.assessment.editShuffleOptions.useMutation({
+	// 		onSuccess: () => {
+	// 			router.refresh()
+	// 		}
+	// 	})
 
 	const { mutate: deleteAssessment, isPending: isDeletingAssessment } =
 		api.instructor.assessment.deleteAssessment.useMutation({
@@ -71,7 +71,7 @@ export const AssessmentActionButton = ({
 					className="size-9 rounded-md"
 					disabled={
 						isEditingShuffleQuestions ||
-						isEditingShuffleOptions ||
+						// isEditingShuffleOptions ||
 						isDeletingAssessment
 					}
 				>
@@ -119,7 +119,7 @@ export const AssessmentActionButton = ({
 								/>
 							</div>
 
-							<div className="flex items-center justify-between rounded-lg border bg-card px-3.5 py-2.5">
+							{/* <div className="flex items-center justify-between rounded-lg border bg-card px-3.5 py-2.5">
 								<div className="space-y-1">
 									<p className="text-sm font-medium">Shuffle Options</p>
 									<p className="text-sm text-muted-foreground">
@@ -137,7 +137,7 @@ export const AssessmentActionButton = ({
 										})
 									}}
 								/>
-							</div>
+							</div> */}
 						</div>
 					</SheetContent>
 				</Sheet>

@@ -1,7 +1,9 @@
 'use client'
 
 import * as React from 'react'
+import { useMemo } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { type Prisma } from '@prisma/client'
 import { useForm } from 'react-hook-form'
 
 import { type RouterOutputs } from '@/services/trpc/react'
@@ -9,6 +11,7 @@ import { type RouterOutputs } from '@/services/trpc/react'
 import { Button } from '@/core/components/ui/button'
 import { Form } from '@/core/components/ui/form'
 
+import { shuffle } from '@/features/assessment/shared/lib/shuffle'
 import {
 	submitAssessmentAnswersSchema,
 	type SubmitAssessmentAnswers
@@ -28,11 +31,41 @@ type AssessmentListProps = {
 export const AssessmentList = ({ assessments }: AssessmentListProps) => {
 	const { handleSubmitAssessment, isSubmitting } = useSubmitAssessment()
 
+	const shuffledAssessments = useMemo(() => {
+		return assessments.map((assessment) => {
+			const questions = assessment.shuffleQuestions
+				? shuffle([...assessment.questions])
+				: assessment.questions
+
+			const questionsWithShuffledOptions = questions.map((question) => {
+				if (
+					!assessment.shuffleOptions ||
+					!question.options ||
+					question.questionType === 'TRUE_OR_FALSE'
+				) {
+					return question
+				}
+
+				return {
+					...question,
+					options: shuffle(
+						question.options as Prisma.JsonArray
+					) as Prisma.JsonValue
+				}
+			})
+
+			return {
+				...assessment,
+				questions: questionsWithShuffledOptions
+			}
+		})
+	}, [assessments])
+
 	const form = useForm<SubmitAssessmentAnswers>({
 		resolver: zodResolver(submitAssessmentAnswersSchema),
 		defaultValues: {
-			assessmentId: assessments[0]?.assessmentId ?? '',
-			answers: assessments.flatMap((assessment) =>
+			assessmentId: shuffledAssessments[0]?.assessmentId ?? '',
+			answers: shuffledAssessments.flatMap((assessment) =>
 				assessment.questions.map((question) => {
 					switch (question.questionType) {
 						case 'MULTIPLE_CHOICE':
@@ -68,11 +101,13 @@ export const AssessmentList = ({ assessments }: AssessmentListProps) => {
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-				{assessments.map((assessment) => (
+				{shuffledAssessments.map((assessment) => (
 					<AssessmentCard key={assessment.assessmentId}>
 						<AssessmentCardHeader
 							title={assessment.title}
 							instruction={assessment.instruction ?? ''}
+							shuffleQuestions={assessment.shuffleQuestions}
+							shuffleOptions={assessment.shuffleOptions}
 						/>
 						<AssessmentCardContent className="space-y-3">
 							{assessment.questions.map((question) => {
