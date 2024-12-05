@@ -82,7 +82,7 @@ export const generateAssessmentQuestionSchema = z.object({
 	questionType: z.nativeEnum(AssessmentQuestionType, {
 		required_error: 'Please select a question type'
 	}),
-	numberOfQuestions: z.number().min(1).max(20),
+	numberOfQuestions: z.number().min(1).max(10),
 	additionalPrompt: z.string().optional()
 })
 export type GenerateAssessmentQuestionSchema = z.infer<

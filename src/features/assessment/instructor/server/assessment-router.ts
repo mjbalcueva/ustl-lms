@@ -77,7 +77,7 @@ export const assessmentRouter = createTRPCRouter({
 		.input(findManyLessonsSchema)
 		.query(async ({ ctx, input: { courseId } }) => {
 			const lessons = await ctx.db.chapter.findMany({
-				where: { courseId, type: 'LESSON' },
+				where: { courseId, type: 'LESSON', status: 'PUBLISHED' },
 				orderBy: { position: 'asc' }
 			})
 
