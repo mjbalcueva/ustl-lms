@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { LuFeather } from 'react-icons/lu'
-import { TbMessage, TbPaperclip, TbWriting } from 'react-icons/tb'
+import { TbPaperclip, TbWriting } from 'react-icons/tb'
 
 import { auth } from '@/services/authjs/auth'
 import { api } from '@/services/trpc/server'
@@ -135,10 +135,6 @@ export default async function Page({
 							chapterId={chapter.chapterId}
 							assessments={chapter.assessments}
 						/>
-					</FoldableBlock>
-
-					<FoldableBlock title="Student Feedback" icon={TbMessage}>
-						<div>Comments from students</div>
 					</FoldableBlock>
 				</PageSection>
 			</PageContent>

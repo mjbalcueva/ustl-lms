@@ -25,11 +25,11 @@ export const home: Link[] = [
 		href: '/dashboard',
 		icon: Dashboard,
 		children: [
-			{
-				label: 'Dashboard',
-				href: '/dashboard',
-				icon: Dashboard
-			},
+			// {
+			// 	label: 'Dashboard',
+			// 	href: '/dashboard',
+			// 	icon: Dashboard
+			// },
 			{
 				label: 'Learning',
 				href: '/courses',

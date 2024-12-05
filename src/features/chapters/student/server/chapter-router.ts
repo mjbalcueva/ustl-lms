@@ -37,12 +37,24 @@ export const chapterRouter = createTRPCRouter({
 										where: { studentId }
 									}
 								},
+								where: { status: 'PUBLISHED' },
 								orderBy: { position: 'asc' }
 							}
 						}
 					},
 					muxData: true,
 					attachments: true,
+					assessments: {
+						include: {
+							questions: {
+								orderBy: { position: 'asc' },
+								include: {
+									answers: { where: { studentId } }
+								}
+							}
+						},
+						orderBy: { position: 'asc' }
+					},
 					chapterProgress: { where: { studentId } }
 				}
 			})

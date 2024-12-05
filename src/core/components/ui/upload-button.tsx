@@ -5,10 +5,9 @@ import { type OurFileRouter } from '@/services/uploadthing/core'
 // eslint-disable-next-line boundaries/element-types
 import { UploadButton as UTUploadButton } from '@/services/uploadthing/uploadthing'
 
+import { buttonVariants } from '@/core/components/ui/button'
 import { Upload } from '@/core/lib/icons'
 import { cn } from '@/core/lib/utils/cn'
-
-import { buttonVariants } from './button'
 
 type FileUploadProps = {
 	onChange: (url?: string, name?: string) => void

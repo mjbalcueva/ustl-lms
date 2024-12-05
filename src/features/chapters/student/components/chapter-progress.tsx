@@ -57,7 +57,7 @@ export const ChapterProgress = ({ chapters }: ChapterProgressProps) => {
 					return (
 						<Link
 							key={chapter.chapterId}
-							href={`/courses/${chapters.course.courseId}/lesson/${chapter.chapterId}`}
+							href={`/courses/${chapters.course.courseId}/${chapter.type.toLowerCase()}/${chapter.chapterId}`}
 							className="flex items-center gap-3 rounded-lg p-4 py-2 hover:bg-muted/50"
 							tabIndex={-1}
 						>

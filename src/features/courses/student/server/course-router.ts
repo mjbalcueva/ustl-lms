@@ -24,7 +24,8 @@ export const courseRouter = createTRPCRouter({
 					attachments: true,
 					chapters: {
 						include: { chapterProgress: { where: { studentId } } },
-						where: { status: 'PUBLISHED' }
+						where: { status: 'PUBLISHED' },
+						orderBy: { position: 'asc' }
 					},
 					_count: { select: { chapters: true } },
 					instructor: {
