@@ -211,83 +211,105 @@ export const assessmentRouter = createTRPCRouter({
 			const { assessmentId, answers } = input
 			const studentId = ctx.session.user.id
 
-			console.log('Student Assessment Submission:', {
-				studentId,
-				assessmentId,
-				answers
+			// Get assessment with questions
+			const assessment = await ctx.db.chapterAssessment.findUnique({
+				where: { assessmentId },
+				include: {
+					questions: true,
+					chapter: true
+				}
+			})
+
+			if (!assessment) {
+				throw new TRPCError({
+					code: 'NOT_FOUND',
+					message: 'Assessment not found'
+				})
+			}
+
+			// Save answers and calculate score
+			let totalPoints = 0
+			let earnedPoints = 0
+
+			const savedAnswers = await Promise.all(
+				answers.map(async (answer) => {
+					const question = assessment.questions.find(
+						(q) => q.questionId === answer.questionId
+					)
+
+					if (!question) {
+						throw new TRPCError({
+							code: 'NOT_FOUND',
+							message: `Question ${answer.questionId} not found`
+						})
+					}
+
+					const options = question.options as {
+						type: string
+						answer: string | string[]
+					}
+
+					// Calculate if answer is correct based on question type
+					const isCorrect =
+						answer.questionType === 'MULTIPLE_SELECT'
+							? answer.answer.every((a) =>
+									(options.answer as string[]).includes(a)
+								) &&
+								(options.answer as string[]).every((a) =>
+									answer.answer.includes(a)
+								)
+							: answer.answer === options.answer
+
+					totalPoints += question.points
+					if (isCorrect) earnedPoints += question.points
+
+					// Save answer to database
+					return ctx.db.assessmentAnswer.upsert({
+						where: {
+							questionId_studentId: {
+								questionId: answer.questionId,
+								studentId
+							}
+						},
+						create: {
+							questionId: answer.questionId,
+							studentId,
+							answer: answer.answer,
+							isCorrect
+						},
+						update: {
+							answer: answer.answer,
+							isCorrect
+						}
+					})
+				})
+			)
+
+			// Mark chapter as completed
+			await ctx.db.chapterProgress.upsert({
+				where: {
+					chapterId_studentId: {
+						chapterId: assessment.chapter.chapterId,
+						studentId
+					}
+				},
+				create: {
+					chapterId: assessment.chapter.chapterId,
+					studentId,
+					isCompleted: true
+				},
+				update: {
+					isCompleted: true
+				}
 			})
 
 			return {
-				success: true,
-				answers,
-				love: { answers: JSON.stringify(answers, null, 2) }
+				answers: savedAnswers,
+				score: {
+					earned: earnedPoints,
+					total: totalPoints,
+					percentage: Math.round((earnedPoints / totalPoints) * 100)
+				}
 			}
-
-			// 	// Get the assessment with questions to validate answers
-			// 	const assessment = await ctx.db.chapterAssessment.findUnique({
-			// 		where: { assessmentId },
-			// 		include: {
-			// 			questions: true
-			// 		}
-			// 	})
-
-			// 	if (!assessment) {
-			// 		throw new TRPCError({
-			// 			code: 'NOT_FOUND',
-			// 			message: 'Assessment not found'
-			// 		})
-			// 	}
-
-			// 	// Validate that all required questions are answered
-			// 	const answeredQuestionIds = new Set(answers.map((a) => a.questionId))
-			// 	const unansweredRequiredQuestions = assessment.questions.filter((q) => {
-			// 		// Multiple select questions can be skipped
-			// 		if (q.type === AssessmentQuestionType.MULTIPLE_SELECT) return false
-			// 		return !answeredQuestionIds.has(q.questionId)
-			// 	})
-
-			// 	if (unansweredRequiredQuestions.length > 0) {
-			// 		throw new TRPCError({
-			// 			code: 'BAD_REQUEST',
-			// 			message: `All questions must be answered except multiple select questions. Missing answers for questions: ${unansweredRequiredQuestions.map((q) => q.questionId).join(', ')}`
-			// 		})
-			// 	}
-
-			// 	// Save answers to database
-			// 	const savedAnswers = await ctx.db.$transaction(
-			// 		answers.map((answer) => {
-			// 			const question = assessment.questions.find(
-			// 				(q) => q.questionId === answer.questionId
-			// 			)
-			// 			if (!question) {
-			// 				throw new TRPCError({
-			// 					code: 'BAD_REQUEST',
-			// 					message: `Question ${answer.questionId} not found in assessment`
-			// 				})
-			// 			}
-
-			// 			// Validate answer matches question type
-			// 			if (question.type !== answer.questionType) {
-			// 				throw new TRPCError({
-			// 					code: 'BAD_REQUEST',
-			// 					message: `Answer type mismatch for question ${answer.questionId}`
-			// 				})
-			// 			}
-
-			// 			// TODO: Add logic to check if answer is correct based on question type
-			// 			return ctx.db.assessmentAnswer.create({
-			// 				data: {
-			// 					studentId,
-			// 					questionId: answer.questionId,
-			// 					answer: Array.isArray(answer.answer)
-			// 						? answer.answer
-			// 						: [answer.answer],
-			// 					isCorrect: false // TODO: Implement correct answer checking
-			// 				}
-			// 			})
-			// 		})
-			// 	)
-
-			// 	return { success: true, answers: savedAnswers }
 		})
 })

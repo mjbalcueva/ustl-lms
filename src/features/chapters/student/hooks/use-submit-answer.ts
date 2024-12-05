@@ -6,8 +6,11 @@ import { type SubmitAssessmentAnswers } from '@/features/assessment/shared/valid
 
 export function useSubmitAssessment() {
 	const submitAssessment = api.student.assessment.submitAnswers.useMutation({
-		onSuccess: () => {
-			toast.success('Assessment submitted successfully')
+		onSuccess: (data) => {
+			const { score } = data
+			toast.success(
+				`Assessment submitted successfully! Score: ${score.earned}/${score.total} (${score.percentage}%)`
+			)
 		},
 		onError: (error) => {
 			toast.error(error.message)
