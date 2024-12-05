@@ -23,6 +23,7 @@ import { AssessmentList } from '@/features/chapters/student/components/assessmen
 import { AssessmentTip } from '@/features/chapters/student/components/assessment/assessment-tip'
 import { AttachmentCard } from '@/features/chapters/student/components/attachments/attachment-card'
 import { ChapterProgress } from '@/features/chapters/student/components/chapter-progress'
+import { EditChapterCompletionForm } from '@/features/chapters/student/components/forms/edit-chapter-completion-form'
 
 export default async function Page({
 	params: { courseId, chapterId }
@@ -75,6 +76,7 @@ export default async function Page({
 								Last updated: {formatDate(chapter.updatedAt)}
 							</PageDescription>
 						</div>
+						<EditChapterCompletionForm chapter={chapter} />
 					</div>
 
 					<Card className="text-pretty p-6 pb-4 text-sm tracking-wide">

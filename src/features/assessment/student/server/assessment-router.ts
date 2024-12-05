@@ -7,6 +7,7 @@ import {
 	editAssessmentAnswerSchema,
 	submitAssessmentSchema
 } from '@/features/assessment/shared/validations/assessment-submission-schema'
+import { submitAssessmentAnswersSchema } from '@/features/assessment/shared/validations/student-answer-schema'
 
 export const assessmentRouter = createTRPCRouter({
 	// ---------------------------------------------------------------------------
@@ -202,5 +203,91 @@ export const assessmentRouter = createTRPCRouter({
 			})
 
 			return { answers }
+		}),
+
+	submitAnswers: protectedProcedure
+		.input(submitAssessmentAnswersSchema)
+		.mutation(async ({ input, ctx }) => {
+			const { assessmentId, answers } = input
+			const studentId = ctx.session.user.id
+
+			console.log('Student Assessment Submission:', {
+				studentId,
+				assessmentId,
+				answers
+			})
+
+			return {
+				success: true,
+				answers,
+				love: { answers: JSON.stringify(answers, null, 2) }
+			}
+
+			// 	// Get the assessment with questions to validate answers
+			// 	const assessment = await ctx.db.chapterAssessment.findUnique({
+			// 		where: { assessmentId },
+			// 		include: {
+			// 			questions: true
+			// 		}
+			// 	})
+
+			// 	if (!assessment) {
+			// 		throw new TRPCError({
+			// 			code: 'NOT_FOUND',
+			// 			message: 'Assessment not found'
+			// 		})
+			// 	}
+
+			// 	// Validate that all required questions are answered
+			// 	const answeredQuestionIds = new Set(answers.map((a) => a.questionId))
+			// 	const unansweredRequiredQuestions = assessment.questions.filter((q) => {
+			// 		// Multiple select questions can be skipped
+			// 		if (q.type === AssessmentQuestionType.MULTIPLE_SELECT) return false
+			// 		return !answeredQuestionIds.has(q.questionId)
+			// 	})
+
+			// 	if (unansweredRequiredQuestions.length > 0) {
+			// 		throw new TRPCError({
+			// 			code: 'BAD_REQUEST',
+			// 			message: `All questions must be answered except multiple select questions. Missing answers for questions: ${unansweredRequiredQuestions.map((q) => q.questionId).join(', ')}`
+			// 		})
+			// 	}
+
+			// 	// Save answers to database
+			// 	const savedAnswers = await ctx.db.$transaction(
+			// 		answers.map((answer) => {
+			// 			const question = assessment.questions.find(
+			// 				(q) => q.questionId === answer.questionId
+			// 			)
+			// 			if (!question) {
+			// 				throw new TRPCError({
+			// 					code: 'BAD_REQUEST',
+			// 					message: `Question ${answer.questionId} not found in assessment`
+			// 				})
+			// 			}
+
+			// 			// Validate answer matches question type
+			// 			if (question.type !== answer.questionType) {
+			// 				throw new TRPCError({
+			// 					code: 'BAD_REQUEST',
+			// 					message: `Answer type mismatch for question ${answer.questionId}`
+			// 				})
+			// 			}
+
+			// 			// TODO: Add logic to check if answer is correct based on question type
+			// 			return ctx.db.assessmentAnswer.create({
+			// 				data: {
+			// 					studentId,
+			// 					questionId: answer.questionId,
+			// 					answer: Array.isArray(answer.answer)
+			// 						? answer.answer
+			// 						: [answer.answer],
+			// 					isCorrect: false // TODO: Implement correct answer checking
+			// 				}
+			// 			})
+			// 		})
+			// 	)
+
+			// 	return { success: true, answers: savedAnswers }
 		})
 })
