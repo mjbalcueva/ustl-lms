@@ -37,6 +37,7 @@ export const chapterRouter = createTRPCRouter({
 										where: { studentId }
 									}
 								},
+								where: { status: 'PUBLISHED' },
 								orderBy: { position: 'asc' }
 							}
 						}
