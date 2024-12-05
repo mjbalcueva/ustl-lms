@@ -19,17 +19,14 @@ import { Assignment, CourseSingle, Instructor } from '@/core/lib/icons'
 import { formatDate } from '@/core/lib/utils/format-date'
 import { type Breadcrumb } from '@/core/types/breadcrumbs'
 
+import { AssessmentForm } from '@/features/assessment/student/components/assessment-form'
 import { AttachmentCard } from '@/features/chapters/student/components/attachments/attachment-card'
 import { ChapterProgress } from '@/features/chapters/student/components/chapter-progress'
-import { EditChapterCompletionForm } from '@/features/chapters/student/components/forms/edit-chapter-completion-form'
 
 export default async function Page({
 	params: { courseId, chapterId }
 }: {
-	params: {
-		courseId: string
-		chapterId: string
-	}
+	params: { courseId: string; chapterId: string }
 }) {
 	const { chapter } = await api.student.chapter.findOneChapter({ chapterId })
 
@@ -77,17 +74,17 @@ export default async function Page({
 								Last updated: {formatDate(chapter.updatedAt)}
 							</PageDescription>
 						</div>
-						<EditChapterCompletionForm chapter={chapter} />
 					</div>
 
 					<Card className="text-pretty p-6 text-sm tracking-wide">
 						<ContentViewer value={chapter.content} />
 					</Card>
+
+					<AssessmentForm assessments={chapter.assessments} />
 				</PageSection>
 
 				<PageSection className="flex-1 md:min-w-[360px]" columnMode>
 					<AttachmentCard attachments={chapter.attachments} />
-
 					<ChapterProgress chapters={chapter} />
 				</PageSection>
 			</PageContent>

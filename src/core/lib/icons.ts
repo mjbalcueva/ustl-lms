@@ -5,6 +5,7 @@ import {
 	LuChevronsUpDown,
 	LuDot,
 	LuFiles,
+	LuFlag,
 	LuLibrary,
 	LuLink,
 	LuSearch,
@@ -206,6 +207,7 @@ export const Upload = TbUpload
 export const EyeOpen = RxEyeOpen
 export const EyeClosed = RxEyeClosed
 export const EyeNone = RxEyeNone
+export const Flag = LuFlag
 export const Filter = TbFilter
 export const Gear = LuSettings
 export const GripVertical = TbGripVertical

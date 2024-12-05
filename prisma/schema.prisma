@@ -207,7 +207,7 @@ model AssessmentQuestion {
   points       Float                  @default(1)
   position     Int                    @default(1)
 
-  answer AssessmentAnswer?
+  answers AssessmentAnswer[]
 
   assessment ChapterAssessment @relation(fields: [assessmentId], references: [assessmentId], onDelete: Cascade)
 
@@ -218,7 +218,7 @@ model AssessmentQuestion {
 model AssessmentAnswer {
   answerId   String @id @default(cuid()) @map("answer_id")
   studentId  String @map("student_id")
-  questionId String @unique @map("question_id")
+  questionId String @map("question_id")
 
   answer    Json
   isCorrect Boolean @map("is_correct")
@@ -226,6 +226,7 @@ model AssessmentAnswer {
   student  User               @relation(fields: [studentId], references: [id], onDelete: Cascade)
   question AssessmentQuestion @relation(fields: [questionId], references: [questionId], onDelete: Cascade)
 
+  @@unique([questionId, studentId])
   @@index([studentId, questionId])
   @@map("student_assessment_answer")
 }
