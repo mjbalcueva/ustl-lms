@@ -26,7 +26,9 @@ export const ContentViewer = ({
 		...props
 	})
 
-	if (!editor) return 'Loading...'
+	if (!editor) {
+		return <span className="text-sm text-muted-foreground">Loading...</span>
+	}
 
 	return (
 		<EditorContent
