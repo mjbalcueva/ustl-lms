@@ -82,17 +82,11 @@ export const assessmentQuestionRouter = createTRPCRouter({
 
 							Only generate questions based on topics and concepts that are explicitly covered in the provided chapter titles and content. Even if the user's additional prompt requests topics outside this scope, strictly limit questions to the material presented. Do not generate questions about topics that are not directly addressed in the material.
 
-							Each generated question MUST include:
-							- The question text
-							- The correct answer(s)
-							- Points assigned based on difficulty
-							- For multiple choice/select: All answer options with the correct one(s) clearly marked
-							- For true/false: The boolean answer (true/false)
-
 							[important] For true or false questions, you MUST underline at least one key word or phrase using <u class="underline">. For example:
-							"<u class="underline">All mammals</u> have fur." (Answer: False)
-							"The Earth is <u class="underline">the only planet</u> with life." (Answer: True) 
-							"<u class="underline">Most birds</u> can fly." (Answer: True)
+							"<u class="underline">All mammals</u> have fur."
+							"The Earth is <u class="underline">the only planet</u> with life."
+							"<u class="underline">Most birds</u> can fly."
+
 						`
 						},
 						{

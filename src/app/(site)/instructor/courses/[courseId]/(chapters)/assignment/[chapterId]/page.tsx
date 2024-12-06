@@ -130,11 +130,19 @@ export default async function Page({
 				</PageSection>
 
 				<PageSection columnMode>
-					<FoldableBlock title="Student submissions" icon={TbSend}>
+					<FoldableBlock
+						title="Student submissions"
+						icon={TbSend}
+						defaultOpen={false}
+					>
 						<div>Student submissions</div>
 					</FoldableBlock>
 
-					<FoldableBlock title="Student Feedback" icon={TbMessage}>
+					<FoldableBlock
+						title="Student Feedback"
+						icon={TbMessage}
+						defaultOpen={false}
+					>
 						<div>Comments from students</div>
 					</FoldableBlock>
 				</PageSection>

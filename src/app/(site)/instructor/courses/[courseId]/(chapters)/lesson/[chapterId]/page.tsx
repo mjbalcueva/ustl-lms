@@ -135,7 +135,11 @@ export default async function Page({
 						/>
 					</FoldableBlock>
 
-					<FoldableBlock title="Student Feedback" icon={TbMessage}>
+					<FoldableBlock
+						title="Student Feedback"
+						icon={TbMessage}
+						defaultOpen={false}
+					>
 						<div>Comments from students</div>
 					</FoldableBlock>
 				</PageSection>
