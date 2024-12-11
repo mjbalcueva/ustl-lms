@@ -77,9 +77,11 @@ export default async function Page({
 						</div>
 					</div>
 
-					<Card className="text-pretty p-6 pb-4 text-sm tracking-wide">
-						<ContentViewer value={chapter.content} />
-					</Card>
+					{chapter.content && (
+						<Card className="text-pretty p-6 pb-4 text-sm tracking-wide">
+							<ContentViewer value={chapter.content} />
+						</Card>
+					)}
 
 					<AssessmentTip />
 

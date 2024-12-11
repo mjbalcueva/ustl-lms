@@ -24,17 +24,24 @@ export async function POST(req: Request) {
 	const result = streamText({
 		model: openai(env.MODEL_ID),
 		system: `
-      You are Daryll. Daryll (Dedicated AI Resource for Your Lifelong Learnings)
-      is an AI assistant based on KM2J-GPT model, created by researchers Mark John
-      Balcueva and Kristine Joy Miras. Daryll combines deep knowledge with a
-      friendly, encouraging personality and promotes academic integrity in a life
-      of truth and love out of gratitude!
+      ${chapter?.type} CONTENT (THIS IS YOUR ONLY KNOWLEDGE FOR EDUCATIONAL CONTENT):
+      ${chapter?.content}
 
-      Before responding to any query, you will ALWAYS use get_chapter_information
-      to understand the current context and frame your responses accordingly.
+      You are an AI tutor named DARYLL (Dedicated AI Resource for Your Lifelong Learnings), an advanced AI assistant based on the KM2J-GPT model created by researchers Mark John Balcueva and Kristine Joy Miras. You combine deep knowledge with a friendly, encouraging personality and promote academic integrity.
+      
+      STRICT RULES:
+      1. You can discuss your identity as Daryll and general AI capabilities
+      2. For educational content, you have NO knowledge outside of the ${chapter?.type} content above
+      3. If asked about educational topics not in the ${chapter?.type} content, simply respond:
+         "I apologize, but I can only discuss topics covered in this ${chapter?.type}. Anything beyond that is outside my knowledge."
+      4. Never make assumptions or add information beyond the ${chapter?.type} content for educational topics
+      5. Always verify educational responses against the ${chapter?.type} content
 
-      You love to use markdown formatting to enhance readability.
-      You also love overexplaining data that is in JSON format using title, content, and a list of items.`,
+      Current ${chapter?.type}: ${chapter?.title} (position ${chapter?.position})
+      Status: ${chapter?.chapterProgress[0]?.isCompleted ? '✅ Completed' : '⏳ Not completed'}
+      ${chapter?.attachments.length ? `Available Resources:\n${chapter.attachments.map((a) => `- ${a.name}`).join('\n')}` : ''}
+
+      Use markdown formatting for better readability.`,
 		messages,
 		maxSteps: 4,
 		tools: {
@@ -60,13 +67,12 @@ export async function POST(req: Request) {
 			},
 			get_chapter_information: {
 				description:
-					'Get detailed information about the chapter including type, title, completion status, and resources.',
+					'Get metadata about the chapter including type, title, completion status, and resources.',
 				parameters: z.object({}),
 				execute: async (): Promise<string> => {
 					const data = {
 						type: chapter?.type,
 						title: chapter?.title,
-						content: chapter?.content,
 						isCompleted: chapter?.chapterProgress[0]?.isCompleted,
 						resources: chapter?.attachments.map((a) => ({
 							name: a.name,
@@ -75,14 +81,11 @@ export async function POST(req: Request) {
 					}
 
 					return `
-            Current Chapter Information:
+            Chapter Information:
             - Type: ${data.type}
             - Title: ${data.title}
             - Completion Status: ${data.isCompleted ? '✅ Completed' : '⏳ Not completed'}
-            ${data.resources?.length ? `\nChapter Resources:\n${data.resources.map((r) => `- ${r.name}`).join('\n')}` : ''}
-
-            Content Summary:
-            ${data.content}`
+            ${data.resources?.length ? `\nChapter Resources:\n${data.resources.map((r) => `- ${r.name}`).join('\n')}` : ''}`
 				}
 			},
 			listProgress: {
@@ -105,24 +108,6 @@ export async function POST(req: Request) {
 					if (!chapter?.attachments.length)
 						return 'No reference materials available for this chapter.'
 					return `Chapter Resources:\n${chapter.attachments.map((a) => `- ${a.name} (${a.url})`).join('\n')}`
-				}
-			},
-			generateQuiz: {
-				description: 'Generate practice questions based on the chapter content',
-				parameters: z.object({
-					questionCount: z.number().optional().default(3)
-				}),
-				execute: async ({ questionCount }): Promise<string> => {
-					if (!chapter?.content)
-						return 'No content available to generate quiz questions.'
-
-					return `
-            Based on the chapter "${chapter.title}", here are ${questionCount} practice questions to test your understanding:
-            1. What are the main concepts covered in this chapter?
-            2. Can you explain how these concepts relate to each other?
-            ${questionCount > 2 ? '3. What are some practical applications of what you learned in this chapter?' : ''}
-
-            Take some time to think about these questions and try to answer them in your own words. This will help reinforce your understanding of the material.`
 				}
 			},
 			summarizeContent: {
