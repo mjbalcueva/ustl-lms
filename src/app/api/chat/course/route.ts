@@ -6,7 +6,6 @@ import { type RouterOutputs } from '@/services/trpc/react'
 
 import { env } from '@/core/env/server'
 import { formatDate } from '@/core/lib/utils/format-date'
-import { getBaseUrl } from '@/core/lib/utils/get-base-url'
 
 export const maxDuration = 30
 
@@ -25,28 +24,46 @@ export async function POST(req: Request) {
 	const result = streamText({
 		model: openai(env.MODEL_ID),
 		system: `
-      You are Daryll. Daryll (Dedicated AI Resource for Your Lifelong Learnings)
-      is an AI assistant based on KM2J-GPT model, created by researchers Mark John
-      Balcueva and Kristine Joy Miras. Daryll combines deep knowledge with a
-      friendly, encouraging personality and promotes academic integrity in a life
-      of truth and love out of gratitude!
+      COURSE CONTENT (THIS IS YOUR PRIMARY KNOWLEDGE SOURCE):
+      Title: ${course.title}
+      Description: ${course.description}
+      Structure: ${course.chapters?.length} chapters (${course.chapters?.filter((c) => c.type === 'LESSON').length} lessons, ${course.chapters?.filter((c) => c.type === 'ASSESSMENT').length} assessments, ${course.chapters?.filter((c) => c.type === 'ASSIGNMENT').length} assignments)
 
-      As an educational AI assistant, you:
-      1. Use the Socratic method to guide students to answers rather than giving them directly
-      2. Provide real-world examples and analogies to explain complex concepts
-      3. Break down complex topics into manageable chunks
-      4. Adapt your teaching style based on student responses
-      5. Encourage critical thinking and deeper understanding
-      6. Provide constructive feedback and positive reinforcement
-      7. Use spaced repetition to reinforce learning
+      STUDENT PROGRESS:
+      ${course.chapters
+				?.map(
+					(chapter) => `
+      ${chapter.type} ${chapter.position}: ${chapter.title}
+      Status: ${chapter.chapterProgress[0]?.isCompleted ? '✅ Completed' : '⏳ Not completed'}
+      ${chapter.type === 'LESSON' ? `Content: ${chapter.content}` : ''}
+      `
+				)
+				.join('\n')}
 
-      Before responding to any query, you will ALWAYS use get_course_details
-      to understand the current context and frame your responses accordingly.
+      You are an AI tutor named DARYLL (Dedicated AI Resource for Your Lifelong Learnings), an advanced AI assistant based on the KM2J-GPT model created by researchers Mark John Balcueva and Kristine Joy Miras. You combine deep knowledge with a friendly, encouraging personality and promote academic integrity.
       
-      You love to use markdown formatting to enhance readability.
-      You also love overexplaining data that is in JSON format using title, content, and a list of items.
-      
-      Always maintain an encouraging and supportive tone while ensuring academic rigor.`,
+      STRICT RULES:
+      1. You can discuss your identity as Daryll and general AI capabilities
+      2. For course-specific content, primarily use the course information, lesson contents, and tools provided
+      3. Use the Socratic method to guide students to answers rather than giving them directly
+      4. Always check course context using get_course_details before responding
+      5. Maintain academic integrity while being supportive and encouraging
+      6. Use markdown formatting for better readability
+      7. Break down complex topics into manageable chunks
+      8. Tailor responses based on student's progress in the course
+
+      Current Course Status:
+      - Student Name: ${userDetails?.name ?? 'User'}
+      - Completed Chapters: ${course.chapters?.filter((c) => c.chapterProgress[0]?.isCompleted).length ?? 0}/${course.chapters?.length ?? 0}
+      - Next Incomplete Chapter: ${course.chapters?.find((c) => !c.chapterProgress[0]?.isCompleted)?.title ?? 'All chapters completed'}
+      ${course.attachments?.length ? `\nAvailable Resources:\n${course.attachments.map((a) => `- ${a.name}`).join('\n')}` : ''}
+
+      Teaching Methods:
+      1. Provide real-world examples and analogies
+      2. Adapt teaching style based on student responses
+      3. Encourage critical thinking
+      4. Use spaced repetition for reinforcement
+      5. Give constructive feedback with positive reinforcement`,
 		messages,
 		maxSteps: 4,
 		tools: {
@@ -60,86 +77,6 @@ export async function POST(req: Request) {
 						minute: 'numeric'
 					})
 					return `Today is ${date}. The time is ${time}.`
-				}
-			},
-			get_student_profile: {
-				description:
-					'Get comprehensive student information including name and progress',
-				parameters: z.object({}),
-				execute: async (): Promise<string> => {
-					const completedChapters = course?.chapters?.filter(
-						(c) => c.chapterProgress[0]?.isCompleted
-					).length
-					const totalChapters = course?.chapters?.length ?? 0
-					const progressPercentage = Math.round(
-						(completedChapters ?? 0 / totalChapters) * 100
-					)
-
-					return JSON.stringify({
-						name: userDetails?.name ?? 'User',
-						progress: {
-							completedChapters,
-							totalChapters,
-							progressPercentage,
-							nextChapter: course?.chapters?.find(
-								(c) => !c.chapterProgress[0]?.isCompleted
-							)?.title
-						}
-					})
-				}
-			},
-			get_course_details: {
-				description:
-					'Get a comprehensive overview of the course including title, description, learning objectives, and key details',
-				parameters: z.object({}),
-				execute: async (): Promise<string> => {
-					const data = {
-						title: course.title,
-						description: course.description,
-						tags: course.tags?.map((t) => t.name),
-						structure: {
-							totalChapters: course.chapters?.length ?? 0,
-							lessonCount:
-								course.chapters?.filter((c) => c.type === 'LESSON').length ?? 0,
-							assessmentCount:
-								course.chapters?.filter((c) => c.type === 'ASSESSMENT')
-									.length ?? 0,
-							assignmentCount:
-								course.chapters?.filter((c) => c.type === 'ASSIGNMENT')
-									.length ?? 0
-						},
-						chapters: course.chapters?.map((c) => ({
-							type: c.type,
-							title: c.title,
-							linkToChapter: `${getBaseUrl()}/course/${course.courseId}/${c.type.toLowerCase()}/${c.chapterId}`,
-							content: c.content,
-							studentProgress: c.chapterProgress[0]?.isCompleted,
-							position: c.position
-						})),
-						resources: course.attachments?.map((a) => ({
-							name: a.name,
-							url: a.url
-						}))
-					}
-
-					return `${JSON.stringify(data)} \n\n Sample output:
-            # [Course Title]
-            This course is about [course summary (1-2 paragraphs)].
-
-            ## Course Structure
-            - Total Chapters: [number]
-            - Lessons: [number]
-            - Assessments: [number]
-            - Assignments: [number]
-
-            ## Learning Path
-            [Organized list of chapters showing clear progression]
-            - **[chapter title]** ([chapter type])
-              - [Detailed explanation with learning objectives]
-              - Access at: [link to chapter]
-
-            ## Additional Resources
-            [List of supplementary materials]`
 				}
 			},
 			get_chapter_details: {
@@ -188,55 +125,6 @@ export async function POST(req: Request) {
 					})
 				}
 			},
-			get_learning_progress: {
-				description:
-					'Get detailed analysis of student learning progress including strengths and areas for improvement',
-				parameters: z.object({}),
-				execute: async (): Promise<string> => {
-					const chapters = course.chapters
-					const progress = chapters?.map((c) => ({
-						title: c.title,
-						type: c.type,
-						isCompleted: c.chapterProgress[0]?.isCompleted,
-						completedAt: c.chapterProgress[0]?.updatedAt
-					}))
-
-					const completedByType = {
-						lessons:
-							progress?.filter((p) => p.type === 'LESSON' && p.isCompleted)
-								.length ?? 0,
-						assessments:
-							progress?.filter((p) => p.type === 'ASSESSMENT' && p.isCompleted)
-								.length ?? 0,
-						assignments:
-							progress?.filter((p) => p.type === 'ASSIGNMENT' && p.isCompleted)
-								.length ?? 0
-					}
-
-					return JSON.stringify({
-						overview: {
-							totalProgress: `${Math.round(
-								(progress?.filter((p) => p.isCompleted).length ??
-									0 / (progress?.length ?? 0)) * 100
-							)}%`,
-							completedByType
-						},
-						nextSteps:
-							progress
-								?.filter((p) => !p.isCompleted)
-								.map((p) => `${p.title} (${p.type})`)
-								.slice(0, 3) ?? [],
-						recentActivity: progress
-							?.filter((p) => p.isCompleted && p.completedAt)
-							.sort(
-								(a, b) =>
-									new Date(b.completedAt!).getTime() -
-									new Date(a.completedAt!).getTime()
-							)
-							.slice(0, 5)
-					})
-				}
-			},
 			get_course_resources: {
 				description:
 					'Get a comprehensive list of course materials, references, and supplementary resources',
@@ -263,35 +151,6 @@ export async function POST(req: Request) {
 					return JSON.stringify({
 						summary: `${course.attachments.length} resources available`,
 						resourcesByType
-					})
-				}
-			},
-			suggest_next_steps: {
-				description:
-					'Provide personalized learning recommendations based on current progress',
-				parameters: z.object({}),
-				execute: async (): Promise<string> => {
-					const uncompletedChapters = course.chapters
-						?.filter((c) => !c.chapterProgress[0]?.isCompleted)
-						.map((c) => ({
-							title: c.title,
-							type: c.type,
-							position: c.position
-						}))
-
-					const nextChapter = uncompletedChapters?.[0]
-					const upcomingChapters = uncompletedChapters?.slice(1, 4)
-
-					return JSON.stringify({
-						immediate: nextChapter
-							? {
-									action: `Complete ${nextChapter.title}`,
-									type: nextChapter.type,
-									position: nextChapter.position
-								}
-							: null,
-						upcoming: upcomingChapters,
-						recommendation: `Focus on completing ${nextChapter?.title} next, followed by the upcoming chapters in sequence for optimal learning progression.`
 					})
 				}
 			}
