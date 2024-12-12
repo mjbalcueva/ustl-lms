@@ -118,13 +118,17 @@ export const DataTable = <
 		{
 			label: 'Changed By',
 			value: 'lastPromotion_promoterName',
-			options: data
-				.filter((user) => user.lastPromotion?.promoterName)
-				.map((user) => ({
-					label: user.lastPromotion?.promoterName ?? '',
-					value: user.lastPromotion?.promoterName ?? '',
-					withCount: true
-				}))
+			options: Array.from(
+				new Set(
+					data
+						.filter((user) => user.lastPromotion?.promoterName)
+						.map((user) => user.lastPromotion?.promoterName ?? '')
+				)
+			).map((promoterName) => ({
+				label: promoterName,
+				value: promoterName,
+				withCount: true
+			}))
 		}
 	]
 
