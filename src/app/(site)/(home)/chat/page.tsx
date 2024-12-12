@@ -1,16 +1,57 @@
 import {
-	PageDescription,
-	PageHeader,
-	PageTitle
-} from '@/core/components/ui/page'
+	Avatar,
+	AvatarFallback,
+	AvatarImage
+} from '@/core/components/ui/avatar'
+import { PageContent, PageTitle } from '@/core/components/ui/page'
+import { Separator } from '@/core/components/ui/separator'
+import { Call, Info, Plus, VideoCall } from '@/core/lib/icons'
+
+import { ActionButton } from '@/features/chat/components/ui/action-button'
 
 export default async function Page() {
 	return (
 		<>
-			<PageHeader>
-				<PageTitle>Chat</PageTitle>
-				<PageDescription>Chat with your friends</PageDescription>
-			</PageHeader>
+			<PageContent className="md:flex md:h-[calc(100vh-13px)]">
+				<div className="w-72">
+					<div className="hidden h-[57px] items-center justify-between border-b px-4 md:flex">
+						<PageTitle className="font-bold">Chats</PageTitle>
+						<ActionButton>
+							<Plus className="!size-5 shrink-0" />
+						</ActionButton>
+					</div>
+				</div>
+
+				<Separator orientation="vertical" className="hidden h-full md:block" />
+				<Separator
+					orientation="vertical"
+					className="h-[1px] w-full md:hidden"
+				/>
+
+				<div className="flex-1">
+					<div className="flex h-[57px] items-center justify-between border-b px-4">
+						<div className="flex items-center gap-3">
+							<Avatar className="size-8">
+								<AvatarImage src="https://github.com/shadcn.png" />
+								<AvatarFallback>CN</AvatarFallback>
+							</Avatar>
+							<PageTitle className="text-lg">Messages</PageTitle>
+						</div>
+
+						<div className="flex items-center gap-1">
+							<ActionButton>
+								<Call className="!size-5 shrink-0" />
+							</ActionButton>
+							<ActionButton>
+								<VideoCall className="!size-5 shrink-0" />
+							</ActionButton>
+							<ActionButton>
+								<Info className="!size-5 shrink-0" />
+							</ActionButton>
+						</div>
+					</div>
+				</div>
+			</PageContent>
 		</>
 	)
 }
