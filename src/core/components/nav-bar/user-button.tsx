@@ -25,7 +25,6 @@ import {
 } from '@/core/components/ui/dropdown-menu'
 import { ChevronsUpDown, Logout, Profile, Settings } from '@/core/lib/icons'
 import { cn } from '@/core/lib/utils/cn'
-import { getEmail } from '@/core/lib/utils/get-email'
 import { getInitials } from '@/core/lib/utils/get-initials'
 
 type UserButtonProps = React.ComponentProps<typeof DropdownMenu> & {
@@ -46,7 +45,7 @@ export const UserButton: React.FC<UserButtonProps> = ({
 	const email = session?.user?.email ?? ''
 
 	const initials = getInitials(name)
-	const strippedEmail = getEmail(email)
+	// const strippedEmail = getEmail(email)
 
 	return (
 		<DropdownMenu modal={false} {...props}>
@@ -77,7 +76,7 @@ export const UserButton: React.FC<UserButtonProps> = ({
 								{name}
 							</span>
 							<span className="max-w-full truncate text-xs text-muted-foreground">
-								{strippedEmail}
+								{email}
 							</span>
 						</div>
 						<ChevronsUpDown className="mr-1.5 hidden size-4 group-hover/user-button:block group-focus/user-button:block" />
@@ -95,8 +94,8 @@ export const UserButton: React.FC<UserButtonProps> = ({
 				{isMobile || !isNavOpen ? (
 					<DropdownMenuLabel>
 						<span className="block">{name}</span>
-						<span className="block font-normal text-muted-foreground">
-							{strippedEmail}
+						<span className="block truncate font-normal text-muted-foreground">
+							{email}
 						</span>
 					</DropdownMenuLabel>
 				) : (

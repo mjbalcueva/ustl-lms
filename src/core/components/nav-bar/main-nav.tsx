@@ -10,7 +10,7 @@ import { SideNav } from '@/core/components/nav-bar/side-nav'
 import { TopNav } from '@/core/components/nav-bar/top-nav'
 import { Separator } from '@/core/components/ui/separator'
 import { Skeleton } from '@/core/components/ui/skeleton'
-import { home, instructor } from '@/core/config/links'
+import { home, instructor, roleManagement } from '@/core/config/links'
 import { useLinkFilter } from '@/core/lib/hooks/use-link-filter'
 import { cn } from '@/core/lib/utils/cn'
 
@@ -26,7 +26,11 @@ type MainNavProps = React.ComponentProps<typeof motion.div> & {
 
 export const MainNav = ({ className, ...props }: MainNavProps) => {
 	const { deviceSize } = useDeviceType()
-	const navLinks = [...useLinkFilter(home, 1), ...useLinkFilter(instructor, 1)]
+	const navLinks = [
+		...useLinkFilter(home, 1),
+		...useLinkFilter(instructor, 1),
+		...useLinkFilter(roleManagement, 1)
+	]
 
 	if (!deviceSize)
 		return (

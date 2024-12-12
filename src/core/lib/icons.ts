@@ -94,6 +94,7 @@ import {
 	TbUnderline,
 	TbUpload,
 	TbUser,
+	TbUsers,
 	TbVideoPlus,
 	TbWriting,
 	TbX
@@ -166,7 +167,6 @@ export const Dashboard = TbLayoutDashboard
 export const Learning = TbSchool
 export const Reports = TbChartHistogram
 export const Chat = TbMessage
-export const Instructor = TbChalkboard
 export const Courses = TbTools
 export const Analytics = TbPresentationAnalytics
 export const Profile = TbUser
@@ -178,6 +178,13 @@ export const Logout = TbLogout
 export const Google = FcGoogle
 export const Facebook = FaFacebookF
 export const LinkedIn = FaLinkedinIn
+
+// User Role Icons
+export const Registrar = TbUser
+export const Dean = TbUser
+export const ProgramChair = TbUser
+export const Instructor = TbChalkboard
+export const Student = TbSchool
 
 // UI Icons
 export const Adjust = LuSettings2
@@ -219,6 +226,7 @@ export const Search = LuSearch
 export const ShieldCheckFilled = TbShieldCheckFilled
 export const ShieldX = TbShieldX
 export const User = TbUser
+export const Users = TbUsers
 export const X = TbX
 
 // Variant Icons

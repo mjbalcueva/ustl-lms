@@ -9,7 +9,8 @@ import {
 	Logo,
 	Profile,
 	Reports,
-	Settings
+	Settings,
+	Users
 } from '@/core/lib/icons'
 import { type Link } from '@/core/types/links'
 
@@ -21,15 +22,10 @@ export const site: Link = {
 
 export const home: Link[] = [
 	{
-		label: 'home',
+		label: 'Home',
 		href: '/dashboard',
 		icon: Dashboard,
 		children: [
-			// {
-			// 	label: 'Dashboard',
-			// 	href: '/dashboard',
-			// 	icon: Dashboard
-			// },
 			{
 				label: 'Learning',
 				href: '/courses',
@@ -64,6 +60,21 @@ export const instructor: Link[] = [
 				label: 'Analytics',
 				href: '/instructor/analytics',
 				icon: Analytics
+			}
+		]
+	}
+]
+
+export const roleManagement: Link[] = [
+	{
+		label: 'Role Management',
+		icon: Users,
+		roles: ['REGISTRAR', 'DEAN', 'PROGRAM_CHAIR', 'INSTRUCTOR'],
+		children: [
+			{
+				label: 'Manage Users',
+				href: '/role-management/',
+				icon: Users
 			}
 		]
 	}

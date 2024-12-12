@@ -84,33 +84,64 @@ export const SideNav = ({
 
 			<Separator className="mb-4 mt-1" />
 
-			<NavTitle title="Home" />
-			{links[0]?.children?.map((link) => (
-				<NavTooltip key={link.href} content={link.label}>
-					<NavLink
-						href={link.href ?? ''}
-						className={cn(
-							isActiveLink(link.href ?? '') &&
-								'border !border-border bg-card shadow-[0_0_0_-2px_rgba(0,0,0,0.05),0_1px_2px_0_rgba(0,0,0,0.05)] dark:bg-accent/70'
-						)}
-					>
-						<NavIcon icon={link.icon} className="text-foreground/80" />
-						<NavLabel
-							label={link.label}
-							className={cn(
-								isActiveLink(link.href ?? '') && 'text-card-foreground'
-							)}
-						/>
-						<NavItemSideIcon />
-					</NavLink>
-				</NavTooltip>
-			))}
+			{links[0] && (
+				<>
+					<NavTitle title={links[0].label} />
+					{links[0]?.children?.map((link) => (
+						<NavTooltip key={link.href} content={link.label}>
+							<NavLink
+								href={link.href ?? ''}
+								className={cn(
+									isActiveLink(link.href ?? '') &&
+										'border !border-border bg-card shadow-[0_0_0_-2px_rgba(0,0,0,0.05),0_1px_2px_0_rgba(0,0,0,0.05)] dark:bg-accent/70'
+								)}
+							>
+								<NavIcon icon={link.icon} className="text-foreground/80" />
+								<NavLabel
+									label={link.label}
+									className={cn(
+										isActiveLink(link.href ?? '') && 'text-card-foreground'
+									)}
+								/>
+								<NavItemSideIcon />
+							</NavLink>
+						</NavTooltip>
+					))}
+				</>
+			)}
 
 			{!!links[1]?.children?.length && (
 				<>
 					<Separator className="mb-4 mt-2" />
-					<NavTitle title="Instructor Resources" />
+					<NavTitle title={links[1].label} />
 					{links[1]?.children?.map((link) => (
+						<NavTooltip key={link.href} content={link.label}>
+							<NavLink
+								href={link.href ?? ''}
+								className={cn(
+									isActiveLink(link.href ?? '') &&
+										'border !border-border bg-card shadow-[0_0_0_-2px_rgba(0,0,0,0.05),0_1px_2px_0_rgba(0,0,0,0.05)] dark:bg-accent/70'
+								)}
+							>
+								<NavIcon icon={link.icon} className="text-foreground/80" />
+								<NavLabel
+									label={link.label}
+									className={cn(
+										isActiveLink(link.href ?? '') && 'text-card-foreground'
+									)}
+								/>
+								<NavItemSideIcon />
+							</NavLink>
+						</NavTooltip>
+					))}
+				</>
+			)}
+
+			{!!links[2]?.children?.length && (
+				<>
+					<Separator className="mb-4 mt-2" />
+					<NavTitle title={links[2].label} />
+					{links[2]?.children?.map((link) => (
 						<NavTooltip key={link.href} content={link.label}>
 							<NavLink
 								href={link.href ?? ''}

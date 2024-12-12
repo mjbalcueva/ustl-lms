@@ -4,6 +4,7 @@ import { createCallerFactory, createTRPCRouter } from '@/server/api/trpc'
 
 import { accountRouter } from '@/features/account/server/account-router'
 import { authRouter } from '@/features/auth/server/auth-router'
+import { roleManagementRouter } from '@/features/role-management/server/role-management-router'
 
 /**
  * This is the primary router for your server.
@@ -14,7 +15,8 @@ export const appRouter = createTRPCRouter({
 	auth: authRouter,
 	account: accountRouter,
 	instructor: instructorRouter,
-	student: studentRouter
+	student: studentRouter,
+	roleManagement: roleManagementRouter
 })
 
 // export type definition of API

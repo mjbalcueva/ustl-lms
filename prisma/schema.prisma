@@ -271,10 +271,32 @@ model AssignmentSubmissionAttachment {
 // -----------------------------------------------------------------------------
 
 enum Role {
+  REGISTRAR
+  DEAN
+  PROGRAM_CHAIR
   INSTRUCTOR
   STUDENT
 
   @@map("role")
+}
+
+model RolePromotion {
+  id String @id @default(cuid())
+
+  promotedUserId String @map("promoted_user_id")
+  promoterUserId String @map("promoter_user_id")
+
+  oldRole Role
+  newRole Role
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  promotedUser User @relation("PromotedUser", fields: [promotedUserId], references: [id], onDelete: Cascade)
+  promoter     User @relation("Promoter", fields: [promoterUserId], references: [id], onDelete: Cascade)
+
+  @@index([promotedUserId])
+  @@index([promoterUserId])
+  @@map("user_role_promotion")
 }
 
 model User {
@@ -298,6 +320,10 @@ model User {
   chapterProgress       ChapterProgress[]
   assessmentAnswers     AssessmentAnswer[]
   assignmentSubmissions AssignmentSubmission[]
+
+  // Role promotion relations
+  promotionsReceived RolePromotion[] @relation("PromotedUser")
+  promotionsGiven    RolePromotion[] @relation("Promoter")
 
   @@index([email])
   @@map("user")

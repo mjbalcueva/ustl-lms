@@ -1,0 +1,132 @@
+'use client'
+
+import * as React from 'react'
+import { Role } from '@prisma/client'
+import { type ColumnDef } from '@tanstack/react-table'
+
+import { type RouterOutputs } from '@/services/trpc/react'
+
+import { DataTableColumnHeader } from '@/core/components/data-table/data-table-column-header'
+import {
+	Avatar,
+	AvatarFallback,
+	AvatarImage
+} from '@/core/components/ui/avatar'
+import { Badge } from '@/core/components/ui/badge'
+import { Button } from '@/core/components/ui/button'
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuRadioGroup,
+	DropdownMenuRadioItem,
+	DropdownMenuSub,
+	DropdownMenuSubContent,
+	DropdownMenuSubTrigger,
+	DropdownMenuTrigger
+} from '@/core/components/ui/dropdown-menu'
+import { DotsHorizontal, User } from '@/core/lib/icons'
+import { capitalize } from '@/core/lib/utils/capitalize'
+
+export const useColumns = (
+	editRole: (userId: string, newRole: Role) => Promise<void>
+): ColumnDef<
+	RouterOutputs['roleManagement']['findManyUsers']['users'][number]
+>[] => {
+	return [
+		{
+			accessorKey: 'name',
+			header: ({ column }) => (
+				<DataTableColumnHeader column={column} title="Name" />
+			),
+			cell: ({ row }) => {
+				return (
+					<div className="flex items-center gap-2">
+						<Avatar className="size-7 border border-border">
+							<AvatarImage src={row.original.imageUrl ?? ''} />
+							<AvatarFallback>{row.original.name?.charAt(0)}</AvatarFallback>
+						</Avatar>
+						<div>{row.original.name}</div>
+					</div>
+				)
+			}
+		},
+		{
+			accessorKey: 'email',
+			header: ({ column }) => (
+				<DataTableColumnHeader column={column} title="Email" />
+			)
+		},
+		{
+			accessorKey: 'role',
+			header: ({ column }) => (
+				<DataTableColumnHeader column={column} title="Role" />
+			),
+			cell: ({ row }) => {
+				switch (row.original.role) {
+					case 'REGISTRAR':
+						return <Badge>Registrar</Badge>
+					case 'DEAN':
+						return <Badge>Dean</Badge>
+					case 'PROGRAM_CHAIR':
+						return <Badge>Program Chair</Badge>
+					case 'INSTRUCTOR':
+						return <Badge variant="secondary">Instructor</Badge>
+					case 'STUDENT':
+						return <Badge variant="outline">Student</Badge>
+					default:
+						return (
+							<Badge variant="outline">{capitalize(row.original.role)}</Badge>
+						)
+				}
+			}
+		},
+		{
+			id: 'actions',
+			cell: ({ row }) => (
+				<DropdownMenu>
+					<DropdownMenuTrigger asChild>
+						<Button
+							aria-label="Open menu"
+							variant="ghost"
+							className="size-8 rounded-lg p-0 data-[state=open]:bg-muted"
+						>
+							<DotsHorizontal className="size-4" aria-hidden="true" />
+						</Button>
+					</DropdownMenuTrigger>
+					<DropdownMenuContent align="end" className="w-40">
+						<DropdownMenuSub>
+							<DropdownMenuSubTrigger>
+								<User className="mr-2 size-4" />
+								Set Role
+							</DropdownMenuSubTrigger>
+							<DropdownMenuSubContent className="w-40" sideOffset={8}>
+								<DropdownMenuRadioGroup
+									value={row.original.role}
+									onValueChange={(value) =>
+										editRole(row.original.id, value as Role)
+									}
+								>
+									{Object.values(Role).map((role) => {
+										const roleMap = {
+											REGISTRAR: { label: 'Registrar' },
+											DEAN: { label: 'Dean' },
+											PROGRAM_CHAIR: { label: 'Program Chair' },
+											INSTRUCTOR: { label: 'Instructor' },
+											STUDENT: { label: 'Student' }
+										}
+										return (
+											<DropdownMenuRadioItem key={role} value={role}>
+												{/* <Icon className="mr-2 size-4 shrink-0" /> */}
+												{roleMap[role].label}
+											</DropdownMenuRadioItem>
+										)
+									})}
+								</DropdownMenuRadioGroup>
+							</DropdownMenuSubContent>
+						</DropdownMenuSub>
+					</DropdownMenuContent>
+				</DropdownMenu>
+			)
+		}
+	]
+}

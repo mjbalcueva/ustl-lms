@@ -138,7 +138,7 @@ export const protectedProcedure = t.procedure
  * This is a protected procedure that ensures the user is an instructor.
  */
 export const instructorProcedure = protectedProcedure.use(({ ctx, next }) => {
-	if (ctx.session.user.role !== 'INSTRUCTOR')
+	if (ctx.session.user.role === 'STUDENT')
 		throw new TRPCError({
 			code: 'UNAUTHORIZED',
 			message: 'You are not authorized to access this resource.'
