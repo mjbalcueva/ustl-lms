@@ -49,7 +49,7 @@ export const instructor: Link[] = [
 	{
 		label: 'Instructor',
 		icon: Instructor,
-		roles: ['INSTRUCTOR'],
+		roles: ['DEAN', 'PROGRAM_CHAIR', 'INSTRUCTOR'],
 		children: [
 			{
 				label: 'Courses',
@@ -69,7 +69,7 @@ export const roleManagement: Link[] = [
 	{
 		label: 'Role Management',
 		icon: Users,
-		roles: ['REGISTRAR', 'DEAN', 'PROGRAM_CHAIR', 'INSTRUCTOR'],
+		roles: ['REGISTRAR', 'DEAN', 'PROGRAM_CHAIR'],
 		children: [
 			{
 				label: 'Manage Users',

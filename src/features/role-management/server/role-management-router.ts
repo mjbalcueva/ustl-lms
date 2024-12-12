@@ -1,12 +1,11 @@
-import { type Role } from '@prisma/client'
-
 import {
 	createTRPCRouter,
 	instructorProcedure,
 	protectedProcedure
 } from '@/server/api/trpc'
 
-import { editUserRoleSchema } from '@/features/role-management/validation/schema'
+import { getRoleVisibility } from '@/features/role-management/lib/get-role-visibility'
+import { editUserRoleSchema } from '@/features/role-management/validation/role-management-schema'
 
 const ROLE_ORDER = {
 	REGISTRAR: 1,
@@ -15,21 +14,6 @@ const ROLE_ORDER = {
 	INSTRUCTOR: 4,
 	STUDENT: 5
 } as const
-
-function getRoleVisibility(role: Role): Role[] {
-	switch (role) {
-		case 'REGISTRAR':
-			return ['DEAN', 'PROGRAM_CHAIR', 'INSTRUCTOR', 'STUDENT']
-		case 'DEAN':
-			return ['PROGRAM_CHAIR', 'INSTRUCTOR', 'STUDENT']
-		case 'PROGRAM_CHAIR':
-			return ['INSTRUCTOR', 'STUDENT']
-		case 'INSTRUCTOR':
-			return ['STUDENT']
-		default:
-			return []
-	}
-}
 
 export const roleManagementRouter = createTRPCRouter({
 	// ---------------------------------------------------------------------------
@@ -48,7 +32,22 @@ export const roleManagementRouter = createTRPCRouter({
 				id: true,
 				email: true,
 				role: true,
-				profile: { select: { name: true, imageUrl: true } }
+				profile: { select: { name: true, imageUrl: true } },
+				promotionsReceived: {
+					select: {
+						promoter: {
+							select: {
+								profile: { select: { name: true } },
+								email: true
+							}
+						},
+						oldRole: true,
+						newRole: true,
+						createdAt: true
+					},
+					orderBy: { createdAt: 'desc' },
+					take: 1
+				}
 			},
 			where: {
 				id: { not: currentUserId },
@@ -63,7 +62,17 @@ export const roleManagementRouter = createTRPCRouter({
 					name: user.profile?.name,
 					email: user.email,
 					role: user.role,
-					imageUrl: user.profile?.imageUrl
+					imageUrl: user.profile?.imageUrl,
+					lastPromotion: user.promotionsReceived[0]
+						? {
+								promoterName:
+									user.promotionsReceived[0].promoter.profile?.name ??
+									user.promotionsReceived[0].promoter.email,
+								oldRole: user.promotionsReceived[0].oldRole,
+								newRole: user.promotionsReceived[0].newRole,
+								date: user.promotionsReceived[0].createdAt
+							}
+						: null
 				}))
 				.sort((a, b) => {
 					// First sort by role order
@@ -88,9 +97,33 @@ export const roleManagementRouter = createTRPCRouter({
 		.input(editUserRoleSchema)
 		.mutation(async ({ ctx, input }) => {
 			const { userId, newRole } = input
+
+			// Get the user's current role before updating
+			const user = await ctx.db.user.findUnique({
+				where: { id: userId },
+				select: { role: true }
+			})
+
+			if (!user) {
+				throw new Error('User not found')
+			}
+
+			const oldRole = user.role
+
+			// Update user's role
 			await ctx.db.user.update({
 				where: { id: userId },
 				data: { role: newRole }
+			})
+
+			// Record the promotion
+			await ctx.db.rolePromotion.create({
+				data: {
+					promotedUserId: userId,
+					promoterUserId: ctx.session.user.id,
+					oldRole,
+					newRole
+				}
 			})
 
 			return { message: 'User role updated successfully' }

@@ -32,7 +32,7 @@ export function DataTableViewOptions<TData>({
 					View
 				</Button>
 			</DropdownMenuTrigger>
-			<DropdownMenuContent align="end" className="w-48">
+			<DropdownMenuContent align="end" className="w-52">
 				<DropdownMenuLabel>Display properties</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				{table
@@ -45,7 +45,10 @@ export function DataTableViewOptions<TData>({
 						const labelMap: Record<string, string> = {
 							token: 'Invite Token',
 							createdAt: 'Created on',
-							updatedAt: 'Last Updated'
+							updatedAt: 'Last Updated',
+							lastPromotion_roles: 'Last Role',
+							lastPromotion_promoterName: 'Last Changed By',
+							lastPromotion_date: 'Last Change On'
 						}
 						return (
 							<DropdownMenuCheckboxItem

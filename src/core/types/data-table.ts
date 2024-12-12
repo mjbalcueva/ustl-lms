@@ -7,7 +7,7 @@ export type Option = {
 
 export type DataTableFilterField<TData> = {
 	label: string
-	value: keyof TData
+	value: string | keyof TData
 	placeholder?: string
 	options?: Option[]
 }

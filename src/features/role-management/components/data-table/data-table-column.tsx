@@ -1,8 +1,9 @@
 'use client'
 
 import * as React from 'react'
-import { Role } from '@prisma/client'
+import { type Role } from '@prisma/client'
 import { type ColumnDef } from '@tanstack/react-table'
+import { useSession } from 'next-auth/react'
 
 import { type RouterOutputs } from '@/services/trpc/react'
 
@@ -12,7 +13,6 @@ import {
 	AvatarFallback,
 	AvatarImage
 } from '@/core/components/ui/avatar'
-import { Badge } from '@/core/components/ui/badge'
 import { Button } from '@/core/components/ui/button'
 import {
 	DropdownMenu,
@@ -25,13 +25,19 @@ import {
 	DropdownMenuTrigger
 } from '@/core/components/ui/dropdown-menu'
 import { DotsHorizontal, User } from '@/core/lib/icons'
-import { capitalize } from '@/core/lib/utils/capitalize'
+import { formatDate } from '@/core/lib/utils/format-date'
+
+import { RoleBadge } from '@/features/role-management/components/role-badge'
+import { getRoleVisibility } from '@/features/role-management/lib/get-role-visibility'
 
 export const useColumns = (
 	editRole: (userId: string, newRole: Role) => Promise<void>
 ): ColumnDef<
 	RouterOutputs['roleManagement']['findManyUsers']['users'][number]
 >[] => {
+	const { data: session } = useSession()
+	const currentUserRole = session?.user?.role
+
 	return [
 		{
 			accessorKey: 'name',
@@ -61,23 +67,58 @@ export const useColumns = (
 			header: ({ column }) => (
 				<DataTableColumnHeader column={column} title="Role" />
 			),
+			cell: ({ row }) => <RoleBadge role={row.original.role} />
+		},
+		{
+			accessorKey: 'lastPromotion.roles',
+			header: ({ column }) => (
+				<DataTableColumnHeader column={column} title="Last Role" />
+			),
 			cell: ({ row }) => {
-				switch (row.original.role) {
-					case 'REGISTRAR':
-						return <Badge>Registrar</Badge>
-					case 'DEAN':
-						return <Badge>Dean</Badge>
-					case 'PROGRAM_CHAIR':
-						return <Badge>Program Chair</Badge>
-					case 'INSTRUCTOR':
-						return <Badge variant="secondary">Instructor</Badge>
-					case 'STUDENT':
-						return <Badge variant="outline">Student</Badge>
-					default:
-						return (
-							<Badge variant="outline">{capitalize(row.original.role)}</Badge>
-						)
+				const lastPromotion = row.original.lastPromotion
+				if (!lastPromotion) {
+					return <span className="text-sm text-muted-foreground">-</span>
 				}
+
+				return (
+					<div className="flex items-center gap-2">
+						<RoleBadge role={lastPromotion.oldRole} />
+						→
+						<RoleBadge role={lastPromotion.newRole} />
+					</div>
+				)
+			}
+		},
+		{
+			accessorKey: 'lastPromotion.promoterName',
+			header: ({ column }) => (
+				<DataTableColumnHeader column={column} title="Last Changed By" />
+			),
+			cell: ({ row }) => {
+				const lastPromotion = row.original.lastPromotion
+				if (!lastPromotion) {
+					return <span className="text-sm text-muted-foreground">-</span>
+				}
+
+				return <span className="font-medium">{lastPromotion.promoterName}</span>
+			}
+		},
+		{
+			accessorKey: 'lastPromotion.date',
+			header: ({ column }) => (
+				<DataTableColumnHeader column={column} title="Last Change On" />
+			),
+			cell: ({ row }) => {
+				const lastPromotion = row.original.lastPromotion
+				if (!lastPromotion) {
+					return <span className="text-sm text-muted-foreground">-</span>
+				}
+
+				return formatDate(new Date(lastPromotion.date), {
+					month: 'short',
+					day: 'numeric',
+					year: 'numeric'
+				})
 			}
 		},
 		{
@@ -106,7 +147,7 @@ export const useColumns = (
 										editRole(row.original.id, value as Role)
 									}
 								>
-									{Object.values(Role).map((role) => {
+									{getRoleVisibility(currentUserRole!).map((role) => {
 										const roleMap = {
 											REGISTRAR: { label: 'Registrar' },
 											DEAN: { label: 'Dean' },
@@ -116,7 +157,6 @@ export const useColumns = (
 										}
 										return (
 											<DropdownMenuRadioItem key={role} value={role}>
-												{/* <Icon className="mr-2 size-4 shrink-0" /> */}
 												{roleMap[role].label}
 											</DropdownMenuRadioItem>
 										)

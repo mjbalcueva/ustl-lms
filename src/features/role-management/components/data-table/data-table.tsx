@@ -96,7 +96,9 @@ export const DataTable = <
 			columnFilters,
 			sorting,
 			columnVisibility: {
-				createdAt: false
+				lastPromotion_promoterName: false,
+				lastPromotion_roles: false,
+				lastPromotion_date: false
 			}
 		}
 	})
@@ -112,6 +114,17 @@ export const DataTable = <
 				{ label: 'Instructor', value: 'INSTRUCTOR', withCount: true },
 				{ label: 'Student', value: 'STUDENT', withCount: true }
 			]
+		},
+		{
+			label: 'Changed By',
+			value: 'lastPromotion_promoterName',
+			options: data
+				.filter((user) => user.lastPromotion?.promoterName)
+				.map((user) => ({
+					label: user.lastPromotion?.promoterName ?? '',
+					value: user.lastPromotion?.promoterName ?? '',
+					withCount: true
+				}))
 		}
 	]
 
