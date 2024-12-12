@@ -358,12 +358,31 @@ model ChatMessage {
 
   deleted Boolean @default(false)
 
+  readBy ChatMessageRead[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([chatRoomId])
   @@index([senderId])
   @@map("chat_message")
+}
+
+model ChatMessageRead {
+  id String @id @default(cuid())
+
+  messageId String
+  message   ChatMessage @relation(fields: [messageId], references: [chatMessageId], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  readAt DateTime @default(now())
+
+  @@unique([messageId, userId])
+  @@index([messageId])
+  @@index([userId])
+  @@map("chat_message_read")
 }
 
 model ChatConversation {
@@ -397,7 +416,8 @@ model ChatDirectMessage {
   chatConversationId String
   chatConversation   ChatConversation @relation(fields: [chatConversationId], references: [chatConversationId], onDelete: Cascade)
 
-  deleted Boolean @default(false)
+  deleted Boolean                 @default(false)
+  readBy  ChatDirectMessageRead[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -405,6 +425,23 @@ model ChatDirectMessage {
   @@index([senderId])
   @@index([chatConversationId])
   @@map("chat_direct_message")
+}
+
+model ChatDirectMessageRead {
+  id String @id @default(cuid())
+
+  messageId String
+  message   ChatDirectMessage @relation(fields: [messageId], references: [chatDirectMessageId], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  readAt DateTime @default(now())
+
+  @@unique([messageId, userId])
+  @@index([messageId])
+  @@index([userId])
+  @@map("chat_direct_message_read")
 }
 
 // -----------------------------------------------------------------------------
@@ -467,11 +504,13 @@ model User {
   promotionsGiven    RolePromotion[] @relation("Promoter")
 
   // Chat relations
-  createdChatRooms          ChatRoom[]          @relation("ChatRoomCreator")
+  createdChatRooms          ChatRoom[]              @relation("ChatRoomCreator")
   chatMemberships           ChatMember[]
   chatDirectMessages        ChatDirectMessage[]
-  chatConversationsStarted  ChatConversation[]  @relation("ChatConversationInitiator")
-  chatConversationsReceived ChatConversation[]  @relation("ChatConversationReceiver")
+  chatConversationsStarted  ChatConversation[]      @relation("ChatConversationInitiator")
+  chatConversationsReceived ChatConversation[]      @relation("ChatConversationReceiver")
+  readMessages              ChatMessageRead[]
+  readDirectMessages        ChatDirectMessageRead[]
 
   @@index([email])
   @@map("user")

@@ -2,7 +2,6 @@
 
 import Link from 'next/link'
 import { formatDistanceToNow } from 'date-fns'
-import { useSession } from 'next-auth/react'
 
 import { type RouterOutputs } from '@/services/trpc/react'
 
@@ -12,95 +11,77 @@ import {
 	AvatarImage
 } from '@/core/components/ui/avatar'
 import { Skeleton } from '@/core/components/ui/skeleton'
+import { cn } from '@/core/lib/utils/cn'
 
 type ChatListProps = {
 	chats: RouterOutputs['chat']['getAllChats']['chats']
 }
 
 export const ChatList = ({ chats }: ChatListProps) => {
-	const { data: session } = useSession()
-
 	return (
-		<div className="space-y-4">
-			{chats.map((data) => {
-				if (data.type === 'direct') {
-					const otherUser =
-						data.conversation.memberOne.id === session?.user.id
-							? data.conversation.memberTwo
-							: data.conversation.memberOne
-
-					return (
-						<Link
-							key={data.id}
-							href={`/chat/conversation/${data.id}`}
-							className="flex items-center gap-4 rounded-lg p-3 hover:bg-accent"
-						>
-							<Avatar className="h-12 w-12">
-								<AvatarImage src={otherUser.profile?.imageUrl ?? ''} />
-								<AvatarFallback>
-									{otherUser.profile?.name?.[0] ?? 'U'}
-								</AvatarFallback>
-							</Avatar>
-							<div className="flex-1 overflow-hidden">
-								<div className="flex items-center justify-between">
-									<h4 className="font-medium">{otherUser.profile?.name}</h4>
-									{data.lastMessage && (
-										<span className="text-xs text-muted-foreground">
-											{formatDistanceToNow(
-												new Date(data.lastMessage.createdAt),
-												{ addSuffix: true }
-											)}
+		<div className="p-2">
+			{chats.map((chat) => (
+				<Link
+					key={chat.id}
+					href={`/chat/${chat.type === 'direct' ? 'conversation' : 'room'}/${chat.id}`}
+					className="flex items-center gap-2 rounded-lg px-2 py-3 hover:bg-accent"
+				>
+					<Avatar className="h-10 w-10">
+						<AvatarImage src={chat.image ?? ''} />
+						<AvatarFallback>{chat.title[0] ?? '?'}</AvatarFallback>
+					</Avatar>
+					<div className="flex-1 overflow-hidden">
+						<div className="flex items-center justify-between">
+							<h4
+								className={cn(
+									'line-clamp-1 text-sm font-medium',
+									!chat.isRead && 'font-bold'
+								)}
+							>
+								{chat.title}
+							</h4>
+						</div>
+						{chat.lastMessage && (
+							<>
+								<div className="flex items-center justify-between gap-1">
+									<p
+										className={cn(
+											'flex-1 truncate text-xs text-muted-foreground',
+											!chat.isRead && 'font-semibold text-foreground'
+										)}
+									>
+										{chat.lastMessageSender}: {chat.lastMessage}
+									</p>
+									{chat.lastActiveAt && (
+										<span className="shrink-0 text-xs text-muted-foreground">
+											•{' '}
+											{formatDistanceToNow(new Date(chat.lastActiveAt), {
+												addSuffix: false
+											})
+												.replace('about ', '')
+												.replace('less than a minute', '1m')
+												.replace('minutes', 'm')
+												.replace('minute', 'm')
+												.replace('hour', 'h')
+												.replace('day', 'd')
+												.replace('month', 'mo')
+												.replace('year', 'y')
+												.replace('week', 'w')
+												.replace(/ /g, '')}
 										</span>
 									)}
 								</div>
-								{data.lastMessage && (
-									<p className="truncate text-sm text-muted-foreground">
-										{data.lastMessage.content}
-									</p>
-								)}
-							</div>
-						</Link>
-					)
-				}
-
-				// Group chat
-				return (
-					<Link
-						key={data.id}
-						href={`/chat/room/${data.id}`}
-						className="flex items-center gap-4 rounded-lg p-3 hover:bg-accent"
-					>
-						<Avatar className="size-10">
-							<AvatarImage src={data.chat.creator.profile?.imageUrl ?? ''} />
-							<AvatarFallback>{data.chat.name?.[0] ?? 'G'}</AvatarFallback>
-						</Avatar>
-						<div className="flex-1 overflow-hidden">
-							<div className="flex items-center justify-between">
-								<h4 className="font-medium">{data.chat.name}</h4>
-								{data.lastMessage && (
-									<span className="text-xs text-muted-foreground">
-										{formatDistanceToNow(new Date(data.lastMessage.createdAt), {
-											addSuffix: true
-										})}
-									</span>
-								)}
-							</div>
-							{data.lastMessage && (
-								<p className="truncate text-sm text-muted-foreground">
-									{data.lastMessage.sender.user.profile?.name}:{' '}
-									{data.lastMessage.content}
-								</p>
-							)}
-						</div>
-					</Link>
-				)
-			})}
+							</>
+						)}
+					</div>
+				</Link>
+			))}
 		</div>
 	)
 }
 
 export const ChatListSkeleton = () => (
-	<div className="space-y-4">
+	<div className="space-y-4 p-4">
 		{Array.from({ length: 4 }).map((_, i) => (
 			<div key={i} className="flex items-center gap-4 rounded-lg p-3">
 				<Skeleton className="h-12 w-12 rounded-full" />

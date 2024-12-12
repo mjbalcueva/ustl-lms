@@ -14,39 +14,72 @@ export async function createChatRooms(courses: Course[], instructors: User[]) {
 
 	// Create course-wide chat rooms
 	for (const course of courses) {
-		const chatRoom = await db.chatRoom.create({
+		// Create forum chat room
+		const forumRoom = await db.chatRoom.create({
 			data: {
-				name: `${course.title} General Discussion`,
-				description: 'General discussion for the course',
+				name: `${course.title} Forum`,
+				description: 'Course discussion forum',
 				type: ChatRoomType.FORUM,
 				courseId: course.courseId,
 				creatorId: course.instructorId,
 				isPinned: true
 			}
 		})
-		chatRooms.push(chatRoom)
+		chatRooms.push(forumRoom)
 
-		// Create chat member for the instructor
-		const chatMember = await db.chatMember.create({
+		// Create group chat room
+		const groupRoom = await db.chatRoom.create({
 			data: {
-				chatRoomId: chatRoom.chatRoomId,
+				name: course.title,
+				description: 'Course group chat',
+				type: ChatRoomType.TEXT,
+				courseId: course.courseId,
+				creatorId: course.instructorId,
+				isPinned: true
+			}
+		})
+		chatRooms.push(groupRoom)
+
+		// Create chat member for the instructor in both rooms
+		const forumMember = await db.chatMember.create({
+			data: {
+				chatRoomId: forumRoom.chatRoomId,
 				userId: course.instructorId,
 				role: 'OWNER'
 			}
 		})
 
-		// Create some initial messages
-		const messages = await db.chatMessage.createMany({
+		const groupMember = await db.chatMember.create({
+			data: {
+				chatRoomId: groupRoom.chatRoomId,
+				userId: course.instructorId,
+				role: 'OWNER'
+			}
+		})
+
+		// Create some initial messages in forum
+		const forumMessages = await db.chatMessage.createMany({
 			data: Array(faker.number.int({ min: 3, max: 8 }))
 				.fill(null)
 				.map(() => ({
 					content: faker.lorem.paragraph(),
-					chatRoomId: chatRoom.chatRoomId,
-					senderId: chatMember.chatMemberId
+					chatRoomId: forumRoom.chatRoomId,
+					senderId: forumMember.chatMemberId
 				}))
 		})
 
-		totalMessages += messages.count
+		// Create some initial messages in group chat
+		const groupMessages = await db.chatMessage.createMany({
+			data: Array(faker.number.int({ min: 3, max: 8 }))
+				.fill(null)
+				.map(() => ({
+					content: faker.lorem.paragraph(),
+					chatRoomId: groupRoom.chatRoomId,
+					senderId: groupMember.chatMemberId
+				}))
+		})
+
+		totalMessages += forumMessages.count + groupMessages.count
 	}
 
 	// Create some private chat rooms
@@ -107,16 +140,28 @@ export async function createChatRooms(courses: Course[], instructors: User[]) {
 export async function createChatConversations(users: User[]) {
 	const conversations = []
 	let totalMessages = 0
+	const existingPairs = new Set<string>()
 
 	// Create some direct message conversations between users
 	for (let i = 0; i < faker.number.int({ min: 10, max: 20 }); i++) {
 		const participants = faker.helpers.arrayElements(users, 2)
 		if (!participants[0] || !participants[1]) continue
 
+		// Create a unique key for this pair (sort IDs to ensure consistency)
+		const [smallerId, largerId] = [
+			participants[0].id,
+			participants[1].id
+		].sort()
+		const pairKey = `${smallerId}-${largerId}`
+
+		// Skip if this pair already has a conversation
+		if (existingPairs.has(pairKey)) continue
+		existingPairs.add(pairKey)
+
 		const conversation = await db.chatConversation.create({
 			data: {
-				memberOneId: participants[0].id,
-				memberTwoId: participants[1].id
+				memberOneId: smallerId!,
+				memberTwoId: largerId!
 			}
 		})
 

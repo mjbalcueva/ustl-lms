@@ -10,7 +10,6 @@ import { Separator } from '@/core/components/ui/separator'
 import { Call, Info, Plus, VideoCall } from '@/core/lib/icons'
 
 import { ChatList } from '@/features/chat/components/chat-list'
-// import { ChatList } from '@/features/chat/components/chat-list'
 import { ActionButton } from '@/features/chat/components/ui/action-button'
 
 export default async function Page() {
@@ -26,14 +25,12 @@ export default async function Page() {
 							<Plus className="!size-5 shrink-0" />
 						</ActionButton>
 					</div>
-					<div>
-						<ChatList chats={chats} />
-					</div>
+					<ChatList chats={chats} />
 				</div>
 
 				<Separator orientation="vertical" className="hidden h-full md:block" />
 				<Separator
-					orientation="vertical"
+					orientation="horizontal"
 					className="h-[1px] w-full md:hidden"
 				/>
 
@@ -60,13 +57,8 @@ export default async function Page() {
 						</div>
 					</div>
 
-					<div className="flex-1">
-						{/* <div className="p-4 text-center text-muted-foreground">
-							Select a chat to start messaging
-						</div> */}
-						<ChatList chats={chats} />
-
-						<pre>{JSON.stringify(chats, null, 2)}</pre>
+					<div className="flex-1 p-4 text-center text-muted-foreground">
+						Select a chat to start messaging
 					</div>
 				</div>
 			</PageContent>
