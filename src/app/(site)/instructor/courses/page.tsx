@@ -1,3 +1,6 @@
+import { redirect } from 'next/navigation'
+
+import { auth } from '@/services/authjs/auth'
 import { api } from '@/services/trpc/server'
 
 import {
@@ -18,6 +21,9 @@ import { DataTable } from '@/features/courses/instructor/components/data-table/d
 import { AddCourseForm } from '@/features/courses/instructor/components/forms/add-course-form'
 
 export default async function Page() {
+	const session = await auth()
+	if (session?.user?.role === 'STUDENT') redirect('/courses')
+
 	const data = await api.instructor.course.findManyCourses()
 
 	const crumbs: Breadcrumb = [

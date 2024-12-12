@@ -34,7 +34,7 @@ export default async function Page({
 	params: { courseId: string; chapterId: string }
 }) {
 	const session = await auth()
-	if (session?.user.role !== 'INSTRUCTOR')
+	if (session?.user.role === 'STUDENT')
 		redirect(`/courses/${courseId}/assessment/${chapterId}`)
 
 	const { chapter } = await api.instructor.chapter.findOneChapter({

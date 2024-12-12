@@ -16,14 +16,14 @@ import { type Link } from '@/core/types/links'
 
 export const site: Link = {
 	label: siteConfig.title,
-	href: '/dashboard',
+	href: '/courses',
 	icon: Logo
 }
 
 export const home: Link[] = [
 	{
 		label: 'Home',
-		href: '/dashboard',
+		href: '/courses',
 		icon: Dashboard,
 		children: [
 			{

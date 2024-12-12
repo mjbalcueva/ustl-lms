@@ -33,10 +33,10 @@ export const EnrollmentErrorCard = ({
 		</CardContent>
 		<CardFooter>
 			<Link
-				href="/dashboard"
+				href="/courses"
 				className={cn(buttonVariants({ variant: 'link', size: 'link' }))}
 			>
-				Go to dashboard
+				Go to courses
 			</Link>
 		</CardFooter>
 	</Card>

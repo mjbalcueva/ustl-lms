@@ -30,7 +30,7 @@ export default async function Page({
 	params: { courseId: string; chapterId: string; assessmentId: string }
 }) {
 	const session = await auth()
-	if (session?.user.role !== 'INSTRUCTOR') {
+	if (session?.user.role === 'STUDENT') {
 		redirect(
 			`/courses/${courseId}/assessment/${chapterId}/quesionts/${assessmentId}`
 		)

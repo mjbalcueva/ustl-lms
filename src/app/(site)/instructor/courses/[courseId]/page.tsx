@@ -41,7 +41,7 @@ export default async function Page({
 	params: { courseId: string }
 }) {
 	const session = await auth()
-	if (session?.user?.role !== 'INSTRUCTOR') redirect('/dashboard')
+	if (session?.user?.role === 'STUDENT') redirect(`/courses/${courseId}`)
 
 	const { course } = await api.instructor.course.findOneCourse({ courseId })
 	const { tags } = await api.instructor.courseTags.findManyCourseTags()
