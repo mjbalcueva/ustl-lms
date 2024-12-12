@@ -39,7 +39,8 @@ model Course {
   enrollments CourseEnrollment[]
   chapters    Chapter[]
 
-  instructor User @relation(fields: [instructorId], references: [id], onDelete: Cascade)
+  instructor User       @relation(fields: [instructorId], references: [id], onDelete: Cascade)
+  chatRooms  ChatRoom[]
 
   @@index([code, token, instructorId])
   @@map("course")
@@ -122,6 +123,8 @@ model Chapter {
   chapterProgress ChapterProgress[]
 
   course Course @relation(fields: [courseId], references: [courseId], onDelete: Cascade)
+
+  chatRooms ChatRoom[]
 
   @@index([courseId, position])
   @@map("chapter")
@@ -267,6 +270,144 @@ model AssignmentSubmissionAttachment {
 }
 
 // -----------------------------------------------------------------------------
+// Chat & Video Models
+// -----------------------------------------------------------------------------
+
+enum ChatRoomType {
+  TEXT
+  AUDIO
+  VIDEO
+  FORUM
+
+  @@map("chat_room_type")
+}
+
+model ChatRoom {
+  chatRoomId  String       @id @default(cuid()) @map("id")
+  name        String
+  description String?
+  type        ChatRoomType @default(TEXT)
+  isPrivate   Boolean      @default(false)
+  isPinned    Boolean      @default(false)
+  isLocked    Boolean      @default(false)
+
+  courseId  String?
+  course    Course?  @relation(fields: [courseId], references: [courseId], onDelete: Cascade)
+  chapterId String?
+  chapter   Chapter? @relation(fields: [chapterId], references: [chapterId], onDelete: Cascade)
+
+  creatorId String
+  creator   User   @relation("ChatRoomCreator", fields: [creatorId], references: [id], onDelete: Cascade)
+
+  messages ChatMessage[]
+  members  ChatMember[]
+
+  parentId String?
+  parent   ChatRoom?  @relation("ThreadReplies", fields: [parentId], references: [chatRoomId], onDelete: Cascade)
+  replies  ChatRoom[] @relation("ThreadReplies")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([courseId])
+  @@index([chapterId])
+  @@index([creatorId])
+  @@index([parentId])
+  @@map("chat_room")
+}
+
+enum ChatRoomMemberRole {
+  OWNER
+  MODERATOR
+  MEMBER
+
+  @@map("chat_room_member_role")
+}
+
+model ChatMember {
+  chatMemberId String             @id @default(cuid()) @map("id")
+  role         ChatRoomMemberRole @default(MEMBER)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  chatRoomId String
+  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [chatRoomId], onDelete: Cascade)
+
+  messages ChatMessage[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, chatRoomId])
+  @@index([userId])
+  @@index([chatRoomId])
+  @@map("chat_member")
+}
+
+model ChatMessage {
+  chatMessageId String  @id @default(cuid()) @map("id")
+  content       String  @db.Text
+  fileUrl       String? @db.Text
+
+  chatRoomId String
+  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [chatRoomId], onDelete: Cascade)
+
+  senderId String
+  sender   ChatMember @relation(fields: [senderId], references: [chatMemberId], onDelete: Cascade)
+
+  deleted Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([chatRoomId])
+  @@index([senderId])
+  @@map("chat_message")
+}
+
+model ChatConversation {
+  chatConversationId String @id @default(cuid()) @map("id")
+
+  memberOneId String
+  memberOne   User   @relation("ChatConversationInitiator", fields: [memberOneId], references: [id], onDelete: Cascade)
+
+  memberTwoId String
+  memberTwo   User   @relation("ChatConversationReceiver", fields: [memberTwoId], references: [id], onDelete: Cascade)
+
+  messages ChatDirectMessage[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([memberOneId, memberTwoId])
+  @@index([memberOneId])
+  @@index([memberTwoId])
+  @@map("chat_conversation")
+}
+
+model ChatDirectMessage {
+  chatDirectMessageId String  @id @default(cuid()) @map("id")
+  content             String  @db.Text
+  fileUrl             String? @db.Text
+
+  senderId String
+  sender   User   @relation(fields: [senderId], references: [id], onDelete: Cascade)
+
+  chatConversationId String
+  chatConversation   ChatConversation @relation(fields: [chatConversationId], references: [chatConversationId], onDelete: Cascade)
+
+  deleted Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([senderId])
+  @@index([chatConversationId])
+  @@map("chat_direct_message")
+}
+
+// -----------------------------------------------------------------------------
 // Auth Models
 // -----------------------------------------------------------------------------
 
@@ -324,6 +465,13 @@ model User {
   // Role promotion relations
   promotionsReceived RolePromotion[] @relation("PromotedUser")
   promotionsGiven    RolePromotion[] @relation("Promoter")
+
+  // Chat relations
+  createdChatRooms          ChatRoom[]          @relation("ChatRoomCreator")
+  chatMemberships           ChatMember[]
+  chatDirectMessages        ChatDirectMessage[]
+  chatConversationsStarted  ChatConversation[]  @relation("ChatConversationInitiator")
+  chatConversationsReceived ChatConversation[]  @relation("ChatConversationReceiver")
 
   @@index([email])
   @@map("user")
