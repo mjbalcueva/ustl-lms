@@ -10,10 +10,11 @@ import { Separator } from '@/core/components/ui/separator'
 import { Call, Info, Plus, VideoCall } from '@/core/lib/icons'
 
 import { ChatList } from '@/features/chat/components/chat-list'
+// import { ChatList } from '@/features/chat/components/chat-list'
 import { ActionButton } from '@/features/chat/components/ui/action-button'
 
 export default async function Page() {
-	const { directConversations, groupChats } = await api.chat.getAllChats()
+	const { chats } = await api.chat.getAllChats()
 
 	return (
 		<>
@@ -26,7 +27,7 @@ export default async function Page() {
 						</ActionButton>
 					</div>
 					<div>
-						<ChatList />
+						<ChatList chats={chats} />
 					</div>
 				</div>
 
@@ -60,8 +61,12 @@ export default async function Page() {
 					</div>
 
 					<div className="flex-1">
-						<pre>{JSON.stringify(directConversations, null, 2)}</pre>
-						<pre>{JSON.stringify(groupChats, null, 2)}</pre>
+						{/* <div className="p-4 text-center text-muted-foreground">
+							Select a chat to start messaging
+						</div> */}
+						<ChatList chats={chats} />
+
+						<pre>{JSON.stringify(chats, null, 2)}</pre>
 					</div>
 				</div>
 			</PageContent>

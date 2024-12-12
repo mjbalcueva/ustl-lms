@@ -2,7 +2,7 @@ import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc'
 
 export const chatRouter = createTRPCRouter({
 	getAllChats: protectedProcedure.query(async ({ ctx }) => {
-		// Fetch direct conversations
+		// Fetch direct conversations with latest message
 		const directConversations = await ctx.db.chatConversation.findMany({
 			where: {
 				OR: [
@@ -27,13 +27,10 @@ export const chatRouter = createTRPCRouter({
 					},
 					take: 1
 				}
-			},
-			orderBy: {
-				updatedAt: 'desc'
 			}
 		})
 
-		// Fetch group chats
+		// Fetch group chats with latest message
 		const groupChats = await ctx.db.chatRoom.findMany({
 			where: {
 				members: {
@@ -66,13 +63,31 @@ export const chatRouter = createTRPCRouter({
 				creator: {
 					include: { profile: true }
 				}
-			},
-			orderBy: { updatedAt: 'desc' }
+			}
 		})
 
-		return {
-			directConversations,
-			groupChats
-		}
+		// Transform and combine both types of chats
+		const directChats = directConversations.map((conv) => ({
+			id: conv.chatConversationId,
+			type: 'direct' as const,
+			updatedAt: conv.messages[0]?.createdAt ?? conv.updatedAt,
+			lastMessage: conv.messages[0],
+			conversation: conv
+		}))
+
+		const groupChatsList = groupChats.map((chat) => ({
+			id: chat.chatRoomId,
+			type: 'group' as const,
+			updatedAt: chat.messages[0]?.createdAt ?? chat.updatedAt,
+			lastMessage: chat.messages[0],
+			chat
+		}))
+
+		// Combine and sort by latest message/update
+		const chats = [...directChats, ...groupChatsList].sort(
+			(a, b) => b.updatedAt.getTime() - a.updatedAt.getTime()
+		)
+
+		return { chats }
 	})
 })
