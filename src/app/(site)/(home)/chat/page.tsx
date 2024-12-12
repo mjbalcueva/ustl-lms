@@ -40,7 +40,7 @@ export default async function Page() {
 
 						<div className="flex items-center gap-1">
 							<ActionButton>
-								<Call className="!size-5 shrink-0" />
+								<Call className="!size-[18px] shrink-0" />
 							</ActionButton>
 							<ActionButton>
 								<VideoCall className="!size-5 shrink-0" />

@@ -1,4 +1,5 @@
 import { createChapters } from './seed/chapters/chapters'
+import { createChatConversations, createChatRooms } from './seed/chats/chats'
 import { db } from './seed/config'
 import { createTags } from './seed/course-tags/tags'
 import { createCourses } from './seed/courses/courses'
@@ -12,6 +13,11 @@ async function main() {
 		// Clean existing data
 		console.log('Cleaning existing data...')
 		await db.$transaction([
+			db.chatMessage.deleteMany(),
+			db.chatMember.deleteMany(),
+			db.chatRoom.deleteMany(),
+			db.chatDirectMessage.deleteMany(),
+			db.chatConversation.deleteMany(),
 			db.courseEnrollment.deleteMany(),
 			db.chapter.deleteMany(),
 			db.course.deleteMany(),
@@ -39,6 +45,18 @@ async function main() {
 			courseStats.items
 		)
 
+		console.log('Creating chat rooms...')
+		const chatRoomStats = await createChatRooms(
+			courseStats.items,
+			userStats.instructors.items
+		)
+
+		console.log('Creating chat conversations...')
+		const chatConversationStats = await createChatConversations([
+			...userStats.instructors.items,
+			...userStats.students.items
+		])
+
 		// Output final statistics
 		const stats = {
 			users: {
@@ -63,6 +81,19 @@ async function main() {
 			enrollments: {
 				total: enrollmentStats.total,
 				averagePerStudent: enrollmentStats.averagePerStudent
+			},
+			chats: {
+				rooms: {
+					total: chatRoomStats.total,
+					messages: chatRoomStats.messages,
+					averageMessagesPerRoom: chatRoomStats.averageMessagesPerRoom
+				},
+				conversations: {
+					total: chatConversationStats.total,
+					messages: chatConversationStats.messages,
+					averageMessagesPerConversation:
+						chatConversationStats.averageMessagesPerConversation
+				}
 			}
 		}
 
