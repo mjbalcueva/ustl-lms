@@ -1,3 +1,5 @@
+import { api } from '@/services/trpc/server'
+
 import {
 	Avatar,
 	AvatarFallback,
@@ -7,9 +9,12 @@ import { PageContent, PageTitle } from '@/core/components/ui/page'
 import { Separator } from '@/core/components/ui/separator'
 import { Call, Info, Plus, VideoCall } from '@/core/lib/icons'
 
+import { ChatList } from '@/features/chat/components/chat-list'
 import { ActionButton } from '@/features/chat/components/ui/action-button'
 
 export default async function Page() {
+	const { directConversations, groupChats } = await api.chat.getAllChats()
+
 	return (
 		<>
 			<PageContent className="md:flex md:h-[calc(100vh-13px)]">
@@ -19,6 +24,9 @@ export default async function Page() {
 						<ActionButton>
 							<Plus className="!size-5 shrink-0" />
 						</ActionButton>
+					</div>
+					<div>
+						<ChatList />
 					</div>
 				</div>
 
@@ -49,6 +57,11 @@ export default async function Page() {
 								<Info className="!size-5 shrink-0" />
 							</ActionButton>
 						</div>
+					</div>
+
+					<div className="flex-1">
+						<pre>{JSON.stringify(directConversations, null, 2)}</pre>
+						<pre>{JSON.stringify(groupChats, null, 2)}</pre>
 					</div>
 				</div>
 			</PageContent>
