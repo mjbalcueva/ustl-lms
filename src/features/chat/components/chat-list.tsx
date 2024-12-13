@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import { formatDistanceToNow } from 'date-fns'
 
 import { type RouterOutputs } from '@/services/trpc/react'
@@ -13,18 +12,29 @@ import {
 import { Skeleton } from '@/core/components/ui/skeleton'
 import { cn } from '@/core/lib/utils/cn'
 
+type Chat = RouterOutputs['chat']['getAllChats']['chats'][number]
+
 type ChatListProps = {
-	chats: RouterOutputs['chat']['getAllChats']['chats']
+	chats: Chat[]
+	onSelectChat: (chat: Chat) => void
+	selectedChatId?: string
 }
 
-export const ChatList = ({ chats }: ChatListProps) => {
+export const ChatList = ({
+	chats,
+	onSelectChat,
+	selectedChatId
+}: ChatListProps) => {
 	return (
 		<div className="p-2">
 			{chats.map((chat) => (
-				<Link
+				<button
 					key={chat.id}
-					href={`/chat/${chat.type === 'direct' ? 'conversation' : 'room'}/${chat.id}`}
-					className="flex items-center gap-2 rounded-lg px-2 py-3 hover:bg-accent"
+					onClick={() => onSelectChat(chat)}
+					className={cn(
+						'flex w-full items-center gap-2 rounded-lg px-2 py-3 text-left hover:bg-accent',
+						selectedChatId === chat.id && 'bg-accent'
+					)}
 				>
 					<Avatar className="h-10 w-10">
 						<AvatarImage src={chat.image ?? ''} />
@@ -74,7 +84,7 @@ export const ChatList = ({ chats }: ChatListProps) => {
 							</>
 						)}
 					</div>
-				</Link>
+				</button>
 			))}
 		</div>
 	)

@@ -1,7 +1,13 @@
 import { ChatRoomType, type Profile, type User } from '@prisma/client'
 import type { Prisma } from '@prisma/client'
+import { TRPCError } from '@trpc/server'
 
 import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc'
+
+import {
+	getConversationMessagesSchema,
+	sendMessageSchema
+} from '@/features/chat/validations/chat-schema'
 
 type UserWithProfile = User & {
 	profile: Profile | null
@@ -53,6 +59,11 @@ type GroupChatWithDetails = Prisma.ChatRoomGetPayload<{
 }>
 
 export const chatRouter = createTRPCRouter({
+	// ---------------------------------------------------------------------------
+	// READ
+	// ---------------------------------------------------------------------------
+	//
+
 	getAllChats: protectedProcedure.query(async ({ ctx }) => {
 		// Fetch direct conversations with latest message
 		const directConversations = await ctx.db.chatConversation.findMany({
@@ -186,5 +197,194 @@ export const chatRouter = createTRPCRouter({
 		)
 
 		return { chats }
-	})
+	}),
+
+	getConversationMessages: protectedProcedure
+		.input(getConversationMessagesSchema)
+		.query(async ({ ctx, input }) => {
+			if (input.type === 'direct') {
+				const conversation = await ctx.db.chatConversation.findUnique({
+					where: {
+						chatConversationId: input.conversationId,
+						OR: [
+							{ memberOneId: ctx.session.user.id },
+							{ memberTwoId: ctx.session.user.id }
+						]
+					},
+					include: {
+						memberOne: { include: { profile: true } },
+						memberTwo: { include: { profile: true } },
+						messages: {
+							orderBy: { createdAt: 'asc' },
+							include: {
+								sender: { include: { profile: true } }
+							}
+						}
+					}
+				})
+
+				if (!conversation) {
+					throw new TRPCError({
+						code: 'NOT_FOUND',
+						message: 'Conversation not found'
+					})
+				}
+
+				const otherUser =
+					conversation.memberOne.id === ctx.session.user.id
+						? conversation.memberTwo
+						: conversation.memberOne
+
+				return {
+					id: conversation.chatConversationId,
+					title: otherUser.profile?.name ?? 'Unknown User',
+					image: otherUser.profile?.imageUrl,
+					messages: conversation.messages.map((message) => ({
+						id: message.chatDirectMessageId,
+						content: message.content,
+						senderId: message.senderId,
+						senderName: message.sender.profile?.name ?? 'Unknown User',
+						senderImage: message.sender.profile?.imageUrl,
+						createdAt: message.createdAt
+					}))
+				}
+			}
+
+			const room = await ctx.db.chatRoom.findUnique({
+				where: {
+					chatRoomId: input.conversationId,
+					OR: [
+						{
+							members: { some: { userId: ctx.session.user.id } }
+						},
+						{
+							course: { instructorId: ctx.session.user.id }
+						}
+					]
+				},
+				include: {
+					course: true,
+					messages: {
+						orderBy: { createdAt: 'asc' },
+						include: {
+							sender: {
+								include: { user: { include: { profile: true } } }
+							}
+						}
+					}
+				}
+			})
+
+			if (!room) {
+				throw new TRPCError({
+					code: 'NOT_FOUND',
+					message: 'Room not found'
+				})
+			}
+
+			return {
+				id: room.chatRoomId,
+				title: room.name,
+				image: room.course?.imageUrl ?? null,
+				messages: room.messages.map((message) => ({
+					id: message.chatMessageId,
+					content: message.content,
+					senderId: message.sender.userId,
+					senderName: message.sender.user.profile?.name ?? 'Unknown User',
+					senderImage: message.sender.user.profile?.imageUrl,
+					createdAt: message.createdAt
+				}))
+			}
+		}),
+
+	sendMessage: protectedProcedure
+		.input(sendMessageSchema)
+		.mutation(async ({ ctx, input }) => {
+			if (input.type === 'direct') {
+				const conversation = await ctx.db.chatConversation.findUnique({
+					where: {
+						chatConversationId: input.conversationId,
+						OR: [
+							{ memberOneId: ctx.session.user.id },
+							{ memberTwoId: ctx.session.user.id }
+						]
+					}
+				})
+
+				if (!conversation) {
+					throw new TRPCError({
+						code: 'NOT_FOUND',
+						message: 'Conversation not found'
+					})
+				}
+
+				await ctx.db.chatDirectMessage.create({
+					data: {
+						content: input.content,
+						senderId: ctx.session.user.id,
+						chatConversationId: input.conversationId
+					}
+				})
+
+				return { success: true }
+			}
+
+			const room = await ctx.db.chatRoom.findUnique({
+				where: {
+					chatRoomId: input.conversationId,
+					OR: [
+						{
+							members: { some: { userId: ctx.session.user.id } }
+						},
+						{
+							course: { instructorId: ctx.session.user.id }
+						}
+					]
+				}
+			})
+
+			if (!room) {
+				throw new TRPCError({
+					code: 'NOT_FOUND',
+					message: 'Room not found'
+				})
+			}
+
+			const sender = await ctx.db.chatMember.findUnique({
+				where: {
+					userId_chatRoomId: {
+						chatRoomId: input.conversationId,
+						userId: ctx.session.user.id
+					}
+				}
+			})
+
+			if (!sender) {
+				await ctx.db.chatMember.create({
+					data: {
+						chatRoomId: input.conversationId,
+						userId: ctx.session.user.id
+					}
+				})
+			}
+
+			await ctx.db.chatMessage.create({
+				data: {
+					content: input.content,
+					senderId:
+						sender?.chatMemberId ??
+						(
+							await ctx.db.chatMember.findFirstOrThrow({
+								where: {
+									chatRoomId: input.conversationId,
+									userId: ctx.session.user.id
+								}
+							})
+						).chatMemberId,
+					chatRoomId: input.conversationId
+				}
+			})
+
+			return { success: true }
+		})
 })
