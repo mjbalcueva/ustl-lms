@@ -55,6 +55,18 @@ export const chatRouter = createTRPCRouter({
 			const lastMessage = conv.messages[0] ?? null
 			const isCurrentUserSender = lastMessage?.senderId === ctx.session.user.id
 
+			// For sent messages, check if the other user has read it
+			// For received messages, check if current user has read it
+			const isRead = isCurrentUserSender
+				? Boolean(
+						lastMessage?.readBy?.find((read) => read.userId === otherUser.id)
+					)
+				: Boolean(
+						lastMessage?.readBy?.find(
+							(read) => read.userId === ctx.session.user.id
+						)
+					)
+
 			return {
 				id: conv.chatConversationId,
 				type: 'direct' as const,
@@ -65,9 +77,7 @@ export const chatRouter = createTRPCRouter({
 					? 'You'
 					: (otherUser.profile?.name ?? 'Unknown User'),
 				lastActiveAt: lastMessage?.createdAt ?? conv.updatedAt,
-				isRead: Boolean(
-					isCurrentUserSender || (lastMessage?.readBy?.length ?? 0) > 0
-				)
+				isRead
 			}
 		})
 
@@ -88,6 +98,7 @@ export const chatRouter = createTRPCRouter({
 			},
 			include: {
 				course: true,
+				members: true,
 				messages: {
 					orderBy: { createdAt: 'desc' },
 					take: 1,
@@ -99,11 +110,7 @@ export const chatRouter = createTRPCRouter({
 								}
 							}
 						},
-						readBy: {
-							where: {
-								userId: ctx.session.user.id
-							}
-						}
+						readBy: true
 					}
 				},
 				creator: {
@@ -120,6 +127,20 @@ export const chatRouter = createTRPCRouter({
 					? lastMessage.sender.userId === ctx.session.user.id
 					: false
 
+			// For sent messages in groups, check if ALL other members have read it
+			// For received messages, check if current user has read it
+			const isRead = isCurrentUserSender
+				? chat.members.every(
+						(member) =>
+							member.userId === ctx.session.user.id ||
+							lastMessage?.readBy?.some((read) => read.userId === member.userId)
+					)
+				: Boolean(
+						lastMessage?.readBy?.find(
+							(read) => read.userId === ctx.session.user.id
+						)
+					)
+
 			return {
 				id: chat.chatRoomId,
 				type: 'group' as const,
@@ -130,9 +151,7 @@ export const chatRouter = createTRPCRouter({
 					? 'You'
 					: (lastMessage?.sender?.user?.profile?.name ?? 'Unknown User'),
 				lastActiveAt: lastMessage?.createdAt ?? chat.updatedAt,
-				isRead: Boolean(
-					isCurrentUserSender || (lastMessage?.readBy?.length ?? 0) > 0
-				)
+				isRead
 			}
 		})
 
@@ -389,6 +408,12 @@ export const chatRouter = createTRPCRouter({
 							{ memberOneId: ctx.session.user.id },
 							{ memberTwoId: ctx.session.user.id }
 						]
+					},
+					include: {
+						messages: {
+							orderBy: { createdAt: 'desc' },
+							take: 1
+						}
 					}
 				})
 
@@ -396,25 +421,26 @@ export const chatRouter = createTRPCRouter({
 					throw new TRPCError({ code: 'NOT_FOUND', message: 'Chat not found' })
 				}
 
-				const unreadMessages = await ctx.db.chatDirectMessage.findMany({
-					where: {
-						chatConversationId: input.chatId,
-						NOT: { senderId: ctx.session.user.id },
-						readBy: { none: { userId: ctx.session.user.id } }
-					},
-					select: { chatDirectMessageId: true }
-				})
+				// Get latest message
+				const latestMessage = chat.messages[0]
+				if (!latestMessage) return { success: true }
 
-				await Promise.all(
-					unreadMessages.map((msg) =>
-						ctx.db.chatDirectMessageRead.create({
-							data: {
-								userId: ctx.session.user.id,
-								messageId: msg.chatDirectMessageId
-							}
-						})
-					)
-				)
+				// Update or create read receipt
+				await ctx.db.chatDirectMessageRead.upsert({
+					where: {
+						messageId_userId: {
+							messageId: latestMessage.chatDirectMessageId,
+							userId: ctx.session.user.id
+						}
+					},
+					create: {
+						messageId: latestMessage.chatDirectMessageId,
+						userId: ctx.session.user.id
+					},
+					update: {
+						readAt: new Date()
+					}
+				})
 			} else {
 				const chat = await ctx.db.chatRoom.findUnique({
 					where: {
@@ -423,6 +449,12 @@ export const chatRouter = createTRPCRouter({
 							{ members: { some: { userId: ctx.session.user.id } } },
 							{ course: { instructorId: ctx.session.user.id } }
 						]
+					},
+					include: {
+						messages: {
+							orderBy: { createdAt: 'desc' },
+							take: 1
+						}
 					}
 				})
 
@@ -430,25 +462,26 @@ export const chatRouter = createTRPCRouter({
 					throw new TRPCError({ code: 'NOT_FOUND', message: 'Chat not found' })
 				}
 
-				const unreadMessages = await ctx.db.chatMessage.findMany({
-					where: {
-						chatRoomId: input.chatId,
-						sender: { userId: { not: ctx.session.user.id } },
-						readBy: { none: { userId: ctx.session.user.id } }
-					},
-					select: { chatMessageId: true }
-				})
+				// Get latest message
+				const latestMessage = chat.messages[0]
+				if (!latestMessage) return { success: true }
 
-				await Promise.all(
-					unreadMessages.map((msg) =>
-						ctx.db.chatMessageRead.create({
-							data: {
-								userId: ctx.session.user.id,
-								messageId: msg.chatMessageId
-							}
-						})
-					)
-				)
+				// Update or create read receipt
+				await ctx.db.chatMessageRead.upsert({
+					where: {
+						messageId_userId: {
+							messageId: latestMessage.chatMessageId,
+							userId: ctx.session.user.id
+						}
+					},
+					create: {
+						messageId: latestMessage.chatMessageId,
+						userId: ctx.session.user.id
+					},
+					update: {
+						readAt: new Date()
+					}
+				})
 			}
 
 			return { success: true }

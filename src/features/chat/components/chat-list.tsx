@@ -108,10 +108,15 @@ export const ChatList = ({
 												.replace('less than a minute', '1m')
 												.replace('minutes', 'm')
 												.replace('minute', 'm')
+												.replace('hours', 'h')
 												.replace('hour', 'h')
+												.replace('days', 'd')
 												.replace('day', 'd')
+												.replace('months', 'mo')
 												.replace('month', 'mo')
+												.replace('years', 'y')
 												.replace('year', 'y')
+												.replace('weeks', 'w')
 												.replace('week', 'w')
 												.replace(/ /g, '')}
 										</span>
