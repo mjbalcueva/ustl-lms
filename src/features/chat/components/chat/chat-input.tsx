@@ -1,84 +1,80 @@
 'use client'
 
-import { useEffect, useRef, type FormEvent } from 'react'
+import * as React from 'react'
 
 import { Button } from '@/core/components/ui/button'
 import { Textarea } from '@/core/components/ui/textarea'
 import { Send } from '@/core/lib/icons'
 
 type ChatInputProps = {
-	input: string
-	handleInputChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
-	handleSubmit: (e: FormEvent<HTMLFormElement>) => void
+	onSend: (content: string) => Promise<void>
+	onTyping?: (isTyping: boolean) => void
+	isLoading?: boolean
 }
 
-export const ChatInput = ({
-	input,
-	handleInputChange,
-	handleSubmit
-}: ChatInputProps) => {
-	const textareaRef = useRef<HTMLTextAreaElement>(null)
+export function ChatInput({ onSend, onTyping, isLoading }: ChatInputProps) {
+	const [content, setContent] = React.useState('')
+	const typingTimeoutRef = React.useRef<NodeJS.Timeout>()
 
-	const resetHeight = () => {
-		const textarea = textareaRef.current
-		if (!textarea) return
-		textarea.style.height = 'auto'
-		textarea.style.height = '40px'
-	}
-
-	const adjustHeight = () => {
-		const textarea = textareaRef.current
-		if (!textarea) return
-
-		textarea.style.height = 'auto'
-		const newHeight = Math.min(textarea.scrollHeight, 96)
-		textarea.style.height = `${newHeight}px`
-	}
-
-	useEffect(() => {
-		const textarea = textareaRef.current
-		if (!textarea) return
-
-		textarea.addEventListener('input', adjustHeight)
-		return () => textarea.removeEventListener('input', adjustHeight)
-	}, [])
-
-	const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+	const handleKeyDown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
 		if (e.key === 'Enter' && !e.shiftKey) {
 			e.preventDefault()
-			const form = e.currentTarget.form
-			if (form) {
-				handleSubmit(
-					new Event('submit') as unknown as FormEvent<HTMLFormElement>
-				)
-				resetHeight()
+			if (content.trim()) {
+				await handleSend()
 			}
 		}
 	}
 
+	const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+		setContent(e.target.value)
+
+		// Handle typing indicator
+		if (onTyping) {
+			onTyping(true)
+			clearTimeout(typingTimeoutRef.current)
+			typingTimeoutRef.current = setTimeout(() => {
+				onTyping(false)
+			}, 2000)
+		}
+	}
+
+	const handleSend = async () => {
+		if (!content.trim() || isLoading) return
+
+		try {
+			await onSend(content.trim())
+			setContent('')
+			onTyping?.(false)
+		} catch (error) {
+			console.error('Failed to send message:', error)
+		}
+	}
+
+	React.useEffect(() => {
+		return () => {
+			clearTimeout(typingTimeoutRef.current)
+		}
+	}, [])
+
 	return (
-		<div className="flex h-[57px] items-center justify-between px-4">
-			<form
-				onSubmit={(e) => {
-					handleSubmit(e)
-					resetHeight()
-				}}
-				className="flex w-full items-end gap-2.5"
-			>
+		<div className="border-t p-4">
+			<div className="flex gap-2">
 				<Textarea
-					ref={textareaRef}
-					value={input}
-					onChange={handleInputChange}
-					name="ai-chat-message"
-					placeholder="Type your message..."
-					className="min-h-10 resize-none"
-					rows={1}
+					value={content}
+					onChange={handleChange}
 					onKeyDown={handleKeyDown}
+					placeholder="Type a message..."
+					rows={1}
+					className="resize-none"
 				/>
-				<Button type="submit" className="shrink-0" size="icon">
-					<Send />
+				<Button
+					onClick={handleSend}
+					disabled={!content.trim() || isLoading}
+					size="icon"
+				>
+					<Send className="h-4 w-4" />
 				</Button>
-			</form>
+			</div>
 		</div>
 	)
 }

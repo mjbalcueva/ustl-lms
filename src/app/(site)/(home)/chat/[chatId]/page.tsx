@@ -1,10 +1,11 @@
 import { Suspense } from 'react'
 
+import { ChatInterface } from '@/features/chat/components/chat-interface'
 import { ChatHeader } from '@/features/chat/components/chat/chat-header'
 
 export default function Page({ params }: { params: { chatId: string } }) {
 	return (
-		<>
+		<div className="flex h-full flex-col">
 			<ChatHeader chatId={params.chatId} />
 
 			<Suspense
@@ -14,8 +15,8 @@ export default function Page({ params }: { params: { chatId: string } }) {
 					</div>
 				}
 			>
-				Chat {params.chatId}
+				<ChatInterface chatId={params.chatId} />
 			</Suspense>
-		</>
+		</div>
 	)
 }
