@@ -28,21 +28,76 @@ export type Message = {
 	isLastReadByUser?: boolean
 }
 
+type RawMessage = {
+	directChatMessageId?: string
+	groupChatMessageId?: string
+	content: string
+	senderId: string
+	createdAt: Date
+	sender: {
+		user?: {
+			id: string
+			profile?: {
+				name: string | null
+				imageUrl: string | null
+			} | null
+		}
+		profile?: {
+			name: string | null
+			imageUrl: string | null
+		} | null
+	}
+}
+
+export function formatMessage(
+	message: RawMessage,
+	type: 'direct' | 'group'
+): Message {
+	return {
+		id:
+			'directChatMessageId' in message
+				? message.directChatMessageId!
+				: message.groupChatMessageId!,
+		content: message.content,
+		senderId:
+			type === 'group'
+				? (message.sender as { user: { id: string } }).user.id
+				: message.senderId,
+		senderName:
+			type === 'group'
+				? ((message.sender as { user: { profile: { name: string | null } } })
+						.user.profile?.name ?? 'Unknown')
+				: ((message.sender as { profile: { name: string | null } }).profile
+						?.name ?? 'Unknown'),
+		senderImage:
+			type === 'group'
+				? ((
+						message.sender as { user: { profile: { imageUrl: string | null } } }
+					).user.profile?.imageUrl ?? null)
+				: ((message.sender as { profile: { imageUrl: string | null } }).profile
+						?.imageUrl ?? null),
+		createdAt: message.createdAt
+	}
+}
+
 type ChatMessageProps = {
-	message: Message
+	message: RawMessage
 	currentUserId: string
+	type: 'direct' | 'group'
 	isLastInSequence?: boolean
 	isFirstInSequence?: boolean
 	showTimestamp?: boolean
 }
 
 export function ChatMessage({
-	message,
+	message: rawMessage,
 	currentUserId,
+	type,
 	isLastInSequence = true,
 	isFirstInSequence = false,
 	showTimestamp = false
 }: ChatMessageProps) {
+	const message = formatMessage(rawMessage, type)
 	const isCurrentUser = message.senderId === currentUserId
 	const isAssistant = message.senderId === 'assistant'
 	const timestamp = message.createdAt

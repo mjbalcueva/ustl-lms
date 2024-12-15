@@ -26,7 +26,7 @@ export const ChatHeader = ({ chatId }: { chatId: string }) => {
 						<ChevronLeft className="!size-5 shrink-0" />
 					</Link>
 				</ActionButton>
-				<Avatar className="size-8 border">
+				<Avatar className="size-10 border">
 					<AvatarImage src={chat?.image ?? ''} />
 					<AvatarFallback>{chat?.name[0]?.toUpperCase() ?? '?'}</AvatarFallback>
 				</Avatar>

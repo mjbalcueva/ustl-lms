@@ -4,7 +4,13 @@ import { useEffect, useRef } from 'react'
 import { differenceInMinutes } from 'date-fns'
 import { useSession } from 'next-auth/react'
 
+import {
+	Avatar,
+	AvatarFallback,
+	AvatarImage
+} from '@/core/components/ui/avatar'
 import { ScrollArea, ScrollBar } from '@/core/components/ui/scroll-area'
+import { Dot } from '@/core/lib/icons'
 
 import { ChatMessage } from '@/features/chat/components/chat/chat-message'
 import { useChatMessages } from '@/features/chat/hooks/use-chat-messages'
@@ -43,6 +49,14 @@ export function ChatMessages({ chatId, type }: ChatMessagesProps) {
 		lastMessageCountRef.current = chatMessages.length
 	}, [chatMessages, session?.user?.id])
 
+	const isTyping = Object.keys(typingUsers).some(
+		(id) => id !== session?.user?.id
+	)
+
+	const firstTypingUser = Object.entries(typingUsers).find(
+		([id]) => id !== session?.user?.id
+	)?.[0]
+
 	if (!chatMessages || !session?.user) {
 		return <div>Loading messages...</div>
 	}
@@ -69,51 +83,78 @@ export function ChatMessages({ chatId, type }: ChatMessagesProps) {
 					const isLastInSequence =
 						!nextMessage || nextMessage.senderId !== message.senderId
 
-					console.log('Raw message:', message)
-					console.log('Session user:', session.user)
-
-					const formattedMessage = {
-						id:
-							'directChatMessageId' in message
-								? message.directChatMessageId
-								: message.groupChatMessageId,
-						content: message.content,
-						senderId:
-							type === 'group'
-								? (message.sender as { user: { id: string } }).user.id
-								: message.senderId,
-						senderName:
-							type === 'group'
-								? ((
-										message.sender as {
-											user: { profile: { name: string | null } }
-										}
-									).user.profile?.name ?? 'Unknown')
-								: ((message.sender as { profile: { name: string | null } })
-										.profile?.name ?? 'Unknown'),
-						senderImage:
-							type === 'group'
-								? ((
-										message.sender as {
-											user: { profile: { imageUrl: string | null } }
-										}
-									).user.profile?.imageUrl ?? null)
-								: ((message.sender as { profile: { imageUrl: string | null } })
-										.profile?.imageUrl ?? null),
-						createdAt: message.createdAt
-					}
-
 					return (
 						<ChatMessage
-							key={formattedMessage.id}
-							message={formattedMessage}
+							key={
+								'directChatMessageId' in message
+									? message.directChatMessageId
+									: message.groupChatMessageId
+							}
+							message={message}
 							currentUserId={session.user.id}
+							type={type}
 							isFirstInSequence={isFirstInSequence}
 							isLastInSequence={isLastInSequence}
 							showTimestamp={showTimestamp}
 						/>
 					)
 				})}
+
+				{isTyping && firstTypingUser && (
+					<div className="group flex justify-start pt-2">
+						<div className="flex max-w-[80%] items-end gap-2">
+							<Avatar className="size-8 border">
+								<AvatarImage
+									src={
+										type === 'group'
+											? ((
+													chatMessages.find(
+														(m) =>
+															(m.sender as { user: { id: string } }).user.id ===
+															firstTypingUser
+													)?.sender as {
+														user: { profile: { imageUrl: string | null } }
+													}
+												)?.user.profile?.imageUrl ?? '')
+											: ((
+													chatMessages.find(
+														(m) => m.senderId === firstTypingUser
+													)?.sender as { profile: { imageUrl: string | null } }
+												)?.profile?.imageUrl ?? '')
+									}
+									alt="Typing user"
+								/>
+								<AvatarFallback>
+									{type === 'group'
+										? ((
+												chatMessages.find(
+													(m) =>
+														(m.sender as { user: { id: string } }).user.id ===
+														firstTypingUser
+												)?.sender as {
+													user: { profile: { name: string | null } }
+												}
+											)?.user.profile?.name?.[0]?.toUpperCase() ?? '?')
+										: ((
+												chatMessages.find((m) => m.senderId === firstTypingUser)
+													?.sender as { profile: { name: string | null } }
+											)?.profile?.name?.[0]?.toUpperCase() ?? '?')}
+								</AvatarFallback>
+							</Avatar>
+
+							<div className="flex flex-col gap-1">
+								<div className="rounded-2xl rounded-bl-md bg-muted px-3 py-2 transition-colors hover:bg-muted/90">
+									<div className="flex -space-x-2.5">
+										<Dot className="h-5 w-5 animate-typing-dot-bounce" />
+										<Dot className="h-5 w-5 animate-typing-dot-bounce [animation-delay:90ms]" />
+										<Dot className="h-5 w-5 animate-typing-dot-bounce [animation-delay:180ms]" />
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				)}
+
 				<div ref={messagesEndRef} />
 			</div>
 			<ScrollBar orientation="horizontal" />
