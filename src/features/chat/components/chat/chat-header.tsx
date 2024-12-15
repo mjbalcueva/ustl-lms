@@ -1,50 +1,36 @@
 'use client'
 
-import { useDeviceType } from '@/core/components/context/device-type-provider'
+import Link from 'next/link'
+
+import { api } from '@/services/trpc/react'
+
 import {
 	Avatar,
 	AvatarFallback,
 	AvatarImage
 } from '@/core/components/ui/avatar'
-import { ArrowLeft, Call, Info, VideoCall } from '@/core/lib/icons'
+import { Call, ChevronLeft, Info, VideoCall } from '@/core/lib/icons'
 
-import { ActionButton } from '../ui/action-button'
+import { ActionButton } from '@/features/chat/components/ui/action-button'
 
-type ChatHeaderProps = {
-	image: string
-	title: string
-	showNav: boolean
-	onBackClick?: () => void
-}
+export const ChatHeader = ({ chatId }: { chatId: string }) => {
+	const { data } = api.chat.findManyConversations.useQuery()
 
-export const ChatHeader = ({
-	image,
-	title,
-	showNav,
-	onBackClick
-}: ChatHeaderProps) => {
-	const { deviceSize } = useDeviceType()
-	const isMobile = deviceSize === 'mobile'
+	const chat = data?.chats.find((chat) => chat.chatId === chatId)
 
 	return (
-		<div
-			className="flex h-[57px] items-center justify-between border-b px-4"
-			style={{
-				transform: !showNav && isMobile ? 'translateY(-100%)' : 'translateY(0)',
-				transition: 'transform 0.3s ease-in-out'
-			}}
-		>
+		<div className="flex h-[57px] items-center justify-between border-b px-2 sm:px-4">
 			<div className="flex items-center gap-3">
-				{isMobile && (
-					<ActionButton className="hover:text-primary" onClick={onBackClick}>
-						<ArrowLeft className="size-5 shrink-0" />
-					</ActionButton>
-				)}
-				<Avatar className="size-8">
-					<AvatarImage src={image} />
-					<AvatarFallback>{title[0]?.toUpperCase() ?? '?'}</AvatarFallback>
+				<ActionButton className="p-0 hover:text-primary md:hidden" asChild>
+					<Link href="/chat">
+						<ChevronLeft className="!size-5 shrink-0" />
+					</Link>
+				</ActionButton>
+				<Avatar className="size-8 border">
+					<AvatarImage src={chat?.image ?? ''} />
+					<AvatarFallback>{chat?.name[0]?.toUpperCase() ?? '?'}</AvatarFallback>
 				</Avatar>
-				<h2 className="text-lg font-semibold">{title}</h2>
+				<h2 className="line-clamp-1 text-lg font-semibold">{chat?.name}</h2>
 			</div>
 
 			<div className="flex items-center gap-1">
