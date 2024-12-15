@@ -5,7 +5,6 @@ import { Separator } from '@/core/components/ui/separator'
 import { Plus, Search } from '@/core/lib/icons'
 
 import { ChatList } from '@/features/chat/components/chat-list'
-import { ChatHeader } from '@/features/chat/components/chat/chat-header'
 import { ActionButton } from '@/features/chat/components/ui/action-button'
 
 export default async function Layout({
@@ -37,10 +36,7 @@ export default async function Layout({
 
 			<Separator orientation="vertical" className="hidden h-full md:block" />
 
-			<div className="flex flex-1 flex-col">
-				<ChatHeader chatId={chatId} />
-				{children}
-			</div>
+			<div className="flex flex-1 flex-col">{children}</div>
 		</PageContent>
 	)
 }
