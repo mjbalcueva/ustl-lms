@@ -8,6 +8,7 @@ import { Plus, Search } from '@/core/lib/icons'
 import { cn } from '@/core/lib/utils/cn'
 
 import { ChatList } from '@/features/chat/components/chat-list'
+import { CreateGroupChatDialog } from '@/features/chat/components/create-group-chat-dialog'
 import { SearchUsersDialog } from '@/features/chat/components/search-users-dialog'
 import { ActionButton } from '@/features/chat/components/ui/action-button'
 
@@ -26,9 +27,11 @@ export default function Page() {
 								<Search className="!size-5 shrink-0" />
 							</ActionButton>
 						</SearchUsersDialog>
-						<ActionButton>
-							<Plus className="!size-5 shrink-0" />
-						</ActionButton>
+						<CreateGroupChatDialog>
+							<ActionButton>
+								<Plus className="!size-5 shrink-0" />
+							</ActionButton>
+						</CreateGroupChatDialog>
 					</div>
 				</div>
 

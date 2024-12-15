@@ -839,5 +839,41 @@ export const chatRouter = createTRPCRouter({
 				name: user.profile?.name ?? null,
 				imageUrl: user.profile?.imageUrl ?? null
 			}))
+		}),
+
+	createGroupChat: protectedProcedure
+		.input(
+			z.object({
+				name: z.string().min(1, 'Group name is required'),
+				memberIds: z.array(z.string()).min(1, 'At least one member is required')
+			})
+		)
+		.mutation(async ({ ctx, input }) => {
+			const currentUserId = ctx.session.user.id
+
+			// Create group chat with current user as admin
+			const chat = await ctx.db.groupChat.create({
+				data: {
+					name: input.name,
+					type: GroupChatType.TEXT,
+					creator: {
+						connect: { id: currentUserId }
+					},
+					members: {
+						create: [
+							{
+								userId: currentUserId,
+								isAdmin: true
+							},
+							...input.memberIds.map((id) => ({
+								userId: id,
+								isAdmin: false
+							}))
+						]
+					}
+				}
+			})
+
+			return { chatId: chat.groupChatId }
 		})
 })
