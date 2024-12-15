@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import { type User } from 'next-auth'
 
 import { ScrollArea, ScrollBar } from '@/core/components/ui/scroll-area'
@@ -20,8 +21,26 @@ export const ChatMessages = ({
 	}[]
 	userData: User
 }) => {
+	const messagesEndRef = useRef<HTMLDivElement>(null)
+	const scrollAreaRef = useRef<HTMLDivElement>(null)
+
+	useEffect(() => {
+		const scrollArea = scrollAreaRef.current
+		if (!scrollArea) return
+
+		const shouldAutoScroll =
+			scrollArea.scrollHeight - scrollArea.scrollTop - scrollArea.clientHeight <
+			100
+
+		if (shouldAutoScroll) {
+			setTimeout(() => {
+				messagesEndRef.current?.scrollIntoView()
+			}, 0)
+		}
+	}, [chatMessages])
+
 	return (
-		<ScrollArea className="flex-1 overflow-y-auto px-4">
+		<ScrollArea className="flex-1 overflow-y-auto px-4" ref={scrollAreaRef}>
 			<div className="space-y-1 py-4">
 				{chatMessages.map((message, index) => {
 					const isFirstInSequence =
@@ -41,6 +60,7 @@ export const ChatMessages = ({
 						/>
 					)
 				})}
+				<div ref={messagesEndRef} />
 			</div>
 			<ScrollBar orientation="horizontal" />
 		</ScrollArea>

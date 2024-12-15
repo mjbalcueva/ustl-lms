@@ -10,15 +10,12 @@ import { ChatHeader } from '@/features/chat/components/chat/chat-header'
 import { ChatInput } from '@/features/chat/components/chat/chat-input'
 import { ChatMessages } from '@/features/chat/components/chat/chat-messages'
 
-type ConversationChatProps = {
+type ChatSectionProps = {
 	chatId: string
 	chatType: 'direct' | 'group'
 }
 
-export const ConversationChat = ({
-	chatId,
-	chatType
-}: ConversationChatProps) => {
+export const ChatSection = ({ chatId, chatType }: ChatSectionProps) => {
 	const { data: session } = useSession()
 	const [input, setInput] = useState('')
 

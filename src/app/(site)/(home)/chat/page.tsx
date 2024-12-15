@@ -9,7 +9,7 @@ import { Separator } from '@/core/components/ui/separator'
 import { Plus } from '@/core/lib/icons'
 
 import { ChatList } from '@/features/chat/components/chat-list'
-import { ConversationChat } from '@/features/chat/components/conversation-chat'
+import { ChatSection } from '@/features/chat/components/chat-section'
 import { ActionButton } from '@/features/chat/components/ui/action-button'
 
 export default function Page() {
@@ -54,7 +54,7 @@ export default function Page() {
 			/>
 
 			<div className="flex-1">
-				<ConversationChat
+				<ChatSection
 					chatId={selectedChat?.id ?? ''}
 					chatType={selectedChat?.type ?? 'direct'}
 				/>

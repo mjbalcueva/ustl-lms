@@ -1,62 +1,13 @@
-import { ChatRoomType, type Profile, type User } from '@prisma/client'
-import type { Prisma } from '@prisma/client'
+import { ChatRoomType } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
 import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc'
 
 import {
 	getConversationMessagesSchema,
+	markChatAsReadSchema,
 	sendMessageSchema
 } from '@/features/chat/validations/chat-schema'
-
-type UserWithProfile = User & {
-	profile: Profile | null
-}
-
-type MessageWithSenderAndReadBy = Prisma.ChatDirectMessageGetPayload<{
-	include: {
-		sender: {
-			include: { profile: true }
-		}
-		readBy: {
-			select: { userId: true }
-		}
-	}
-}>
-
-type ChatMessageWithSender = Prisma.ChatMessageGetPayload<{
-	include: {
-		sender: {
-			include: {
-				user: {
-					include: { profile: true }
-				}
-			}
-		}
-		readBy: true
-	}
-}>
-
-type GroupChatWithDetails = Prisma.ChatRoomGetPayload<{
-	include: {
-		course: true
-		messages: {
-			include: {
-				sender: {
-					include: {
-						user: {
-							include: { profile: true }
-						}
-					}
-				}
-				readBy: true
-			}
-		}
-		creator: {
-			include: { profile: true }
-		}
-	}
-}>
 
 export const chatRouter = createTRPCRouter({
 	// ---------------------------------------------------------------------------
@@ -97,14 +48,11 @@ export const chatRouter = createTRPCRouter({
 
 		// Transform direct chats
 		const directChats = directConversations.map((conv) => {
-			const memberOne = conv.memberOne as UserWithProfile
+			const memberOne = conv.memberOne
 			const otherUser =
-				memberOne.id === ctx.session.user.id
-					? (conv.memberTwo as UserWithProfile)
-					: memberOne
+				memberOne.id === ctx.session.user.id ? conv.memberTwo : memberOne
 
-			const lastMessage =
-				(conv.messages as MessageWithSenderAndReadBy[])[0] ?? null
+			const lastMessage = conv.messages[0] ?? null
 			const isCurrentUserSender = lastMessage?.senderId === ctx.session.user.id
 
 			return {
@@ -165,31 +113,28 @@ export const chatRouter = createTRPCRouter({
 		})
 
 		// Transform group chats
-		const groupChatsList = (groupChats as GroupChatWithDetails[]).map(
-			(chat) => {
-				const lastMessage = (chat.messages[0] as ChatMessageWithSender) ?? null
-				const isCurrentUserSender =
-					lastMessage && lastMessage.sender
-						? lastMessage.sender.userId === ctx.session.user.id
-						: false
+		const groupChatsList = groupChats.map((chat) => {
+			const lastMessage = chat.messages[0] ?? null
+			const isCurrentUserSender =
+				lastMessage && lastMessage.sender
+					? lastMessage.sender.userId === ctx.session.user.id
+					: false
 
-				return {
-					id: chat.chatRoomId,
-					type: 'group' as const,
-					title: chat.name,
-					image:
-						chat.course?.imageUrl ?? chat.creator.profile?.imageUrl ?? null,
-					lastMessage: lastMessage?.content ?? null,
-					lastMessageSender: isCurrentUserSender
-						? 'You'
-						: (lastMessage?.sender?.user?.profile?.name ?? 'Unknown User'),
-					lastActiveAt: lastMessage?.createdAt ?? chat.updatedAt,
-					isRead: Boolean(
-						isCurrentUserSender || (lastMessage?.readBy?.length ?? 0) > 0
-					)
-				}
+			return {
+				id: chat.chatRoomId,
+				type: 'group' as const,
+				title: chat.name,
+				image: chat.course?.imageUrl ?? chat.creator.profile?.imageUrl ?? null,
+				lastMessage: lastMessage?.content ?? null,
+				lastMessageSender: isCurrentUserSender
+					? 'You'
+					: (lastMessage?.sender?.user?.profile?.name ?? 'Unknown User'),
+				lastActiveAt: lastMessage?.createdAt ?? chat.updatedAt,
+				isRead: Boolean(
+					isCurrentUserSender || (lastMessage?.readBy?.length ?? 0) > 0
+				)
 			}
-		)
+		})
 
 		// Combine and sort by latest message/update
 		const chats = [...directChats, ...groupChatsList].sort(
@@ -384,6 +329,84 @@ export const chatRouter = createTRPCRouter({
 					chatRoomId: input.conversationId
 				}
 			})
+
+			return { success: true }
+		}),
+
+	markChatAsRead: protectedProcedure
+		.input(markChatAsReadSchema)
+		.mutation(async ({ ctx, input }) => {
+			const isDirectChat = input.type === 'direct'
+
+			if (isDirectChat) {
+				const chat = await ctx.db.chatConversation.findUnique({
+					where: {
+						chatConversationId: input.chatId,
+						OR: [
+							{ memberOneId: ctx.session.user.id },
+							{ memberTwoId: ctx.session.user.id }
+						]
+					}
+				})
+
+				if (!chat) {
+					throw new TRPCError({ code: 'NOT_FOUND', message: 'Chat not found' })
+				}
+
+				const unreadMessages = await ctx.db.chatDirectMessage.findMany({
+					where: {
+						chatConversationId: input.chatId,
+						NOT: { senderId: ctx.session.user.id },
+						readBy: { none: { userId: ctx.session.user.id } }
+					},
+					select: { chatDirectMessageId: true }
+				})
+
+				await Promise.all(
+					unreadMessages.map((msg) =>
+						ctx.db.chatDirectMessageRead.create({
+							data: {
+								userId: ctx.session.user.id,
+								messageId: msg.chatDirectMessageId
+							}
+						})
+					)
+				)
+			} else {
+				const chat = await ctx.db.chatRoom.findUnique({
+					where: {
+						chatRoomId: input.chatId,
+						OR: [
+							{ members: { some: { userId: ctx.session.user.id } } },
+							{ course: { instructorId: ctx.session.user.id } }
+						]
+					}
+				})
+
+				if (!chat) {
+					throw new TRPCError({ code: 'NOT_FOUND', message: 'Chat not found' })
+				}
+
+				const unreadMessages = await ctx.db.chatMessage.findMany({
+					where: {
+						chatRoomId: input.chatId,
+						sender: { userId: { not: ctx.session.user.id } },
+						readBy: { none: { userId: ctx.session.user.id } }
+					},
+					select: { chatMessageId: true }
+				})
+
+				await Promise.all(
+					unreadMessages.map((msg) =>
+						ctx.db.chatMessageRead.create({
+							data: {
+								userId: ctx.session.user.id,
+								messageId: msg.chatMessageId
+							}
+						})
+					)
+				)
+			}
 
 			return { success: true }
 		})

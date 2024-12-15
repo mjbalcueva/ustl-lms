@@ -1,8 +1,9 @@
 'use client'
 
+import { useCallback } from 'react'
 import { formatDistanceToNow } from 'date-fns'
 
-import { type RouterOutputs } from '@/services/trpc/react'
+import { api, type RouterOutputs } from '@/services/trpc/react'
 
 import {
 	Avatar,
@@ -25,12 +26,47 @@ export const ChatList = ({
 	onSelectChat,
 	selectedChatId
 }: ChatListProps) => {
+	const utils = api.useUtils()
+	const markAsRead = api.chat.markChatAsRead.useMutation({
+		onMutate: async ({ chatId }) => {
+			await utils.chat.getAllChats.cancel()
+			const previousChats = utils.chat.getAllChats.getData()
+			utils.chat.getAllChats.setData(undefined, (old) => {
+				if (!old) return { chats: [] }
+				return {
+					chats: old.chats.map((chat) =>
+						chat.id === chatId ? { ...chat, isRead: true } : chat
+					)
+				}
+			})
+			return { previousChats }
+		},
+		onError: (_err, _newChat, context) => {
+			if (context?.previousChats) {
+				utils.chat.getAllChats.setData(undefined, context.previousChats)
+			}
+		}
+	})
+
+	const handleChatSelect = useCallback(
+		(chat: Chat) => {
+			if (!chat.isRead) {
+				markAsRead.mutate({
+					chatId: chat.id,
+					type: chat.type
+				})
+			}
+			onSelectChat(chat)
+		},
+		[markAsRead, onSelectChat]
+	)
+
 	return (
 		<div className="p-2">
 			{chats.map((chat) => (
 				<button
 					key={chat.id}
-					onClick={() => onSelectChat(chat)}
+					onClick={() => handleChatSelect(chat)}
 					className={cn(
 						'flex w-full items-center gap-2 rounded-lg px-2 py-3 text-left hover:bg-accent',
 						selectedChatId === chat.id && 'bg-accent'

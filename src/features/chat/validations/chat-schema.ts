@@ -26,3 +26,14 @@ export const getConversationMessagesSchema = z.object({
 export type GetConversationMessagesSchema = z.infer<
 	typeof getConversationMessagesSchema
 >
+
+// ---------------------------------------------------------------------------
+// UPDATE
+// ---------------------------------------------------------------------------
+//
+
+// MarkChatAsRead
+export const markChatAsReadSchema = z.object({
+	chatId: z.string(),
+	type: z.enum(['direct', 'group'])
+})
