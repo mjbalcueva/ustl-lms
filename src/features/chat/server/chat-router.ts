@@ -162,7 +162,14 @@ export const chatRouter = createTRPCRouter({
 						messages: {
 							orderBy: { createdAt: 'asc' },
 							include: {
-								sender: { include: { profile: true } }
+								sender: { include: { profile: true } },
+								readBy: {
+									include: {
+										user: {
+											include: { profile: true }
+										}
+									}
+								}
 							}
 						}
 					}
@@ -184,14 +191,32 @@ export const chatRouter = createTRPCRouter({
 					id: conversation.chatConversationId,
 					title: otherUser.profile?.name ?? 'Unknown User',
 					image: otherUser.profile?.imageUrl,
-					messages: conversation.messages.map((message) => ({
-						id: message.chatDirectMessageId,
-						content: message.content,
-						senderId: message.senderId,
-						senderName: message.sender.profile?.name ?? 'Unknown User',
-						senderImage: message.sender.profile?.imageUrl,
-						createdAt: message.createdAt
-					}))
+					messages: conversation.messages.map((message, index, allMessages) => {
+						const readBy = message.readBy.map((read) => ({
+							id: read.userId,
+							name: read.user.profile?.name ?? null,
+							image: read.user.profile?.imageUrl ?? null
+						}))
+
+						// Check if this message is the last read message for any user
+						const isLastReadByUser = readBy.some((reader) => {
+							const nextMessages = allMessages.slice(index + 1)
+							return !nextMessages.some((nextMsg) =>
+								nextMsg.readBy.some((read) => read.userId === reader.id)
+							)
+						})
+
+						return {
+							id: message.chatDirectMessageId,
+							content: message.content,
+							senderId: message.senderId,
+							senderName: message.sender.profile?.name ?? 'Unknown User',
+							senderImage: message.sender.profile?.imageUrl,
+							createdAt: message.createdAt,
+							readBy,
+							isLastReadByUser
+						}
+					})
 				}
 			}
 
