@@ -1,15 +1,13 @@
 'use client'
 
-import * as React from 'react'
+import { useEffect, useRef } from 'react'
+import { differenceInMinutes } from 'date-fns'
 import { useSession } from 'next-auth/react'
 
-import { api } from '@/services/trpc/react'
+import { ScrollArea, ScrollBar } from '@/core/components/ui/scroll-area'
 
-import { Button } from '@/core/components/ui/button'
-
+import { ChatMessage } from '@/features/chat/components/chat/chat-message'
 import { useChatMessages } from '@/features/chat/hooks/use-chat-messages'
-
-import { ChatMessage } from './chat-message'
 
 type ChatMessagesProps = {
 	chatId: string
@@ -18,73 +16,107 @@ type ChatMessagesProps = {
 
 export function ChatMessages({ chatId, type }: ChatMessagesProps) {
 	const { data: session } = useSession()
-	const { messages, typingUsers } = useChatMessages(chatId, type)
-	const messagesEndRef = React.useRef<HTMLDivElement>(null)
-	const scrollRef = React.useRef<HTMLDivElement>(null)
+	const { messages: chatMessages, typingUsers } = useChatMessages(chatId, type)
+	const messagesEndRef = useRef<HTMLDivElement>(null)
+	const scrollAreaRef = useRef<HTMLDivElement>(null)
+	const lastMessageCountRef = useRef(chatMessages?.length ?? 0)
 
-	// Scroll to bottom on new messages
-	React.useEffect(() => {
-		void messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-	}, [messages])
+	useEffect(() => {
+		const scrollArea = scrollAreaRef.current
+		if (!scrollArea || !chatMessages) return
 
-	if (!messages) {
+		const hasNewMessages = chatMessages.length > lastMessageCountRef.current
+		const isNearBottom =
+			scrollArea.scrollHeight - scrollArea.scrollTop - scrollArea.clientHeight <
+			100
+
+		if (
+			hasNewMessages &&
+			(isNearBottom ||
+				chatMessages[chatMessages.length - 1]?.senderId === session?.user?.id)
+		) {
+			setTimeout(() => {
+				messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+			}, 0)
+		}
+
+		lastMessageCountRef.current = chatMessages.length
+	}, [chatMessages, session?.user?.id])
+
+	if (!chatMessages || !session?.user) {
 		return <div>Loading messages...</div>
 	}
 
 	return (
-		<div className="flex flex-1 overflow-y-auto p-4" ref={scrollRef}>
-			<div className="w-full space-y-4">
-				<div>
-					<Button
-						variant="outline"
-						className="w-full"
-						onClick={() => {
-							// Add load more logic here
-						}}
-					>
-						Load more
-					</Button>
-				</div>
+		<ScrollArea
+			className="h-[calc(100vh-114px)] flex-1 px-4 md:h-full"
+			ref={scrollAreaRef}
+		>
+			<div className="space-y-1 pb-4 pt-16 md:pt-0">
+				{[...chatMessages].reverse().map((message, index, arr) => {
+					const prevMessage = index > 0 ? arr[index - 1] : null
+					const nextMessage = index < arr.length - 1 ? arr[index + 1] : null
 
-				{[...messages].reverse().map((msg) => {
-					const message = {
+					const showTimestamp = prevMessage
+						? differenceInMinutes(message.createdAt, prevMessage.createdAt) >=
+							10
+						: true
+
+					const isFirstInSequence =
+						!prevMessage ||
+						prevMessage.senderId !== message.senderId ||
+						showTimestamp
+					const isLastInSequence =
+						!nextMessage || nextMessage.senderId !== message.senderId
+
+					console.log('Raw message:', message)
+					console.log('Session user:', session.user)
+
+					const formattedMessage = {
 						id:
-							'directChatMessageId' in msg
-								? msg.directChatMessageId
-								: msg.groupChatMessageId,
-						content: msg.content,
-						senderId: msg.senderId,
+							'directChatMessageId' in message
+								? message.directChatMessageId
+								: message.groupChatMessageId,
+						content: message.content,
+						senderId:
+							type === 'group'
+								? (message.sender as { user: { id: string } }).user.id
+								: message.senderId,
 						senderName:
-							('profile' in msg.sender
-								? msg.sender.profile?.name
-								: msg.sender.user.profile?.name) ?? null,
+							type === 'group'
+								? ((
+										message.sender as {
+											user: { profile: { name: string | null } }
+										}
+									).user.profile?.name ?? 'Unknown')
+								: ((message.sender as { profile: { name: string | null } })
+										.profile?.name ?? 'Unknown'),
 						senderImage:
-							('profile' in msg.sender
-								? msg.sender.profile?.imageUrl
-								: msg.sender.user.profile?.imageUrl) ?? null,
-						createdAt: msg.createdAt
+							type === 'group'
+								? ((
+										message.sender as {
+											user: { profile: { imageUrl: string | null } }
+										}
+									).user.profile?.imageUrl ?? null)
+								: ((message.sender as { profile: { imageUrl: string | null } })
+										.profile?.imageUrl ?? null),
+						createdAt: message.createdAt
 					}
 
 					return (
 						<ChatMessage
-							key={message.id}
-							message={message}
-							isCurrentUser={message.senderId === session?.user?.id}
+							key={formattedMessage.id}
+							message={formattedMessage}
+							currentUserId={session.user.id}
+							isFirstInSequence={isFirstInSequence}
+							isLastInSequence={isLastInSequence}
+							showTimestamp={showTimestamp}
 						/>
 					)
 				})}
-
-				{Object.keys(typingUsers).length > 0 && (
-					<div className="text-sm italic text-muted-foreground">
-						{Object.keys(typingUsers).length === 1
-							? 'Someone is'
-							: 'People are'}{' '}
-						typing...
-					</div>
-				)}
-
 				<div ref={messagesEndRef} />
 			</div>
-		</div>
+			<ScrollBar orientation="horizontal" />
+		</ScrollArea>
 	)
 }

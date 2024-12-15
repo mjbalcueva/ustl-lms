@@ -5,8 +5,9 @@ import { skipToken } from '@tanstack/react-query'
 
 import { api } from '@/services/trpc/react'
 
-import { ChatInput } from './chat/chat-input'
-import { ChatMessages } from './chat/chat-messages'
+import { ChatHeader } from '@/features/chat/components/chat/chat-header'
+import { ChatInput } from '@/features/chat/components/chat/chat-input'
+import { ChatMessages } from '@/features/chat/components/chat/chat-messages'
 
 type ChatInterfaceProps = {
 	chatId: string
@@ -82,6 +83,7 @@ export function ChatInterface({ chatId }: ChatInterfaceProps) {
 
 	return (
 		<div className="flex h-full flex-col">
+			<ChatHeader chatId={chatId} />
 			<ChatMessages chatId={chatId} type={type} />
 			<ChatInput
 				onSend={handleSendMessage}

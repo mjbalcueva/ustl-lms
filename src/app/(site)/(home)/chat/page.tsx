@@ -32,22 +32,6 @@ export default async function Page() {
 
 			<Separator orientation="vertical" className="hidden h-full md:block" />
 
-			{/* {hasChats ? (
-				<div className="flex min-h-[calc(100vh-57px)] flex-1 items-center justify-center">
-					<p className="text-muted-foreground">Select a chat to continue</p>
-				</div>
-			) : (
-				<div className="flex flex-1 flex-col items-center justify-center gap-4 p-8 text-center">
-					<div className="space-y-1 text-muted-foreground">
-						<h3 className="text-lg font-semibold">No chats found</h3>
-						<p>
-							Start a conversation with others or join a course to connect with
-							other people
-						</p>
-					</div>
-				</div>
-			)} */}
-
 			<div
 				className={cn(
 					'hidden flex-1 items-center justify-center md:flex',
