@@ -253,6 +253,10 @@ export const chatRouter = createTRPCRouter({
 							{ memberOneId: ctx.session.user.id },
 							{ memberTwoId: ctx.session.user.id }
 						]
+					},
+					include: {
+						memberOne: { include: { profile: true } },
+						memberTwo: { include: { profile: true } }
 					}
 				})
 
@@ -268,6 +272,9 @@ export const chatRouter = createTRPCRouter({
 						content: input.content,
 						senderId: ctx.session.user.id,
 						chatConversationId: input.conversationId
+					},
+					include: {
+						sender: { include: { profile: true } }
 					}
 				})
 
@@ -327,6 +334,17 @@ export const chatRouter = createTRPCRouter({
 							})
 						).chatMemberId,
 					chatRoomId: input.conversationId
+				},
+				include: {
+					sender: {
+						include: {
+							user: {
+								include: {
+									profile: true
+								}
+							}
+						}
+					}
 				}
 			})
 

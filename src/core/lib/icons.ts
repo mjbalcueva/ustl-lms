@@ -17,6 +17,7 @@ import {
 } from 'react-icons/lu'
 import {
 	RxArrowDown,
+	RxArrowLeft,
 	RxArrowRight,
 	RxArrowUp,
 	RxEyeClosed,
@@ -197,6 +198,7 @@ export const ArrowReset = RxReset
 export const ArrowDown = RxArrowDown
 export const ArrowRight = RxArrowRight
 export const ArrowUp = RxArrowUp
+export const ArrowLeft = RxArrowLeft
 export const CaretDown = TbCaretDown
 export const Check = TbCheck
 export const CirclePlus = TbCirclePlus

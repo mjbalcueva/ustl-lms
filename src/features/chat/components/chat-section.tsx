@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState, type FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import { type User } from 'next-auth'
 import { useSession } from 'next-auth/react'
 
@@ -13,26 +13,102 @@ import { ChatMessages } from '@/features/chat/components/chat/chat-messages'
 type ChatSectionProps = {
 	chatId: string
 	chatType: 'direct' | 'group'
+	onBackClick?: () => void
+	showNav: boolean
 }
 
-export const ChatSection = ({ chatId, chatType }: ChatSectionProps) => {
+export const ChatSection = ({
+	chatId,
+	chatType,
+	onBackClick,
+	showNav
+}: ChatSectionProps) => {
 	const { data: session } = useSession()
 	const [input, setInput] = useState('')
 
-	const messagesEndRef = useRef<HTMLDivElement>(null)
-
-	const trpc = api.useUtils()
+	const utils = api.useUtils()
 
 	const { data: conversation, isLoading } =
-		api.chat.getConversationMessages.useQuery({
-			conversationId: chatId,
-			type: chatType
-		})
+		api.chat.getConversationMessages.useQuery(
+			{
+				conversationId: chatId,
+				type: chatType
+			},
+			{
+				refetchInterval: 1000 // Poll every second
+			}
+		)
 
 	const { mutate: sendMessage } = api.chat.sendMessage.useMutation({
-		onSuccess: () => {
-			setInput('')
-			void trpc.chat.getConversationMessages.invalidate()
+		onMutate: async (newMessage) => {
+			// Cancel outgoing fetches
+			await utils.chat.getConversationMessages.cancel()
+			await utils.chat.getAllChats.cancel()
+
+			// Get current data
+			const prevMessages = utils.chat.getConversationMessages.getData({
+				conversationId: chatId,
+				type: chatType
+			})
+			const prevChats = utils.chat.getAllChats.getData()
+
+			// Optimistically update messages
+			utils.chat.getConversationMessages.setData(
+				{ conversationId: chatId, type: chatType },
+				(old) => {
+					if (!old) return old
+					return {
+						...old,
+						messages: [
+							...old.messages,
+							{
+								id: `temp-${Date.now()}`,
+								content: newMessage.content,
+								senderId: session?.user?.id ?? '',
+								senderName: session?.user?.name ?? 'You',
+								senderImage: session?.user?.imageUrl ?? null,
+								createdAt: new Date()
+							}
+						]
+					}
+				}
+			)
+
+			// Optimistically update chat list
+			utils.chat.getAllChats.setData(undefined, (old) => {
+				if (!old) return old
+				return {
+					chats: old.chats.map((chat) =>
+						chat.id === chatId
+							? {
+									...chat,
+									lastMessage: newMessage.content,
+									lastMessageSender: 'You',
+									lastActiveAt: new Date()
+								}
+							: chat
+					)
+				}
+			})
+
+			return { prevMessages, prevChats }
+		},
+		onError: (_err, _newMessage, context) => {
+			// Rollback on error
+			if (context?.prevMessages) {
+				utils.chat.getConversationMessages.setData(
+					{ conversationId: chatId, type: chatType },
+					context.prevMessages
+				)
+			}
+			if (context?.prevChats) {
+				utils.chat.getAllChats.setData(undefined, context.prevChats)
+			}
+		},
+		onSettled: () => {
+			// Sync with server
+			void utils.chat.getConversationMessages.invalidate()
+			void utils.chat.getAllChats.invalidate()
 		}
 	})
 
@@ -50,14 +126,8 @@ export const ChatSection = ({ chatId, chatType }: ChatSectionProps) => {
 			type: chatType,
 			content: input.trim()
 		})
+		setInput('')
 	}
-
-	useEffect(() => {
-		messagesEndRef.current?.scrollIntoView({
-			behavior: 'smooth',
-			block: 'end'
-		})
-	}, [conversation?.messages])
 
 	if (isLoading || !conversation) {
 		return (
@@ -68,19 +138,30 @@ export const ChatSection = ({ chatId, chatType }: ChatSectionProps) => {
 	}
 
 	return (
-		<div className="flex h-full flex-col">
-			<ChatHeader image={conversation.image ?? ''} title={conversation.title} />
+		<div className="flex h-[calc(100vh-57px)] flex-col md:h-full">
+			<div className="fixed left-0 right-0 top-[57px] z-[5] border-b bg-background/80 backdrop-blur-sm md:sticky md:top-0">
+				<ChatHeader
+					image={conversation.image ?? ''}
+					title={conversation.title}
+					showNav={showNav}
+					onBackClick={onBackClick}
+				/>
+			</div>
 
-			<ChatMessages
-				chatMessages={conversation.messages}
-				userData={session?.user as User}
-			/>
+			<div className="flex-1 overflow-hidden">
+				<ChatMessages
+					chatMessages={conversation.messages}
+					userData={session?.user as User}
+				/>
+			</div>
 
-			<ChatInput
-				input={input}
-				handleInputChange={handleInputChange}
-				handleSubmit={handleSubmit}
-			/>
+			<div className="fixed bottom-0 left-0 right-0 z-[5] border-t bg-background/80 backdrop-blur-sm md:sticky">
+				<ChatInput
+					input={input}
+					handleInputChange={handleInputChange}
+					handleSubmit={handleSubmit}
+				/>
+			</div>
 		</div>
 	)
 }

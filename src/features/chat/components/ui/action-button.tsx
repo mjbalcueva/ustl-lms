@@ -10,7 +10,7 @@ export const ActionButton = ({
 		<Button
 			variant="ghost"
 			size="icon"
-			className={cn('size-9 rounded-lg hover:text-primary', className)}
+			className={cn('size-9 rounded-lg', className)}
 			{...props}
 		>
 			{children}
