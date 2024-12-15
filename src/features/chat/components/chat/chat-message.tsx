@@ -47,6 +47,16 @@ type RawMessage = {
 			imageUrl: string | null
 		} | null
 	}
+	readBy?: Array<{
+		userId: string
+		user: {
+			profile: {
+				name: string | null
+				imageUrl: string | null
+			} | null
+		} | null
+	}>
+	isLastReadByUser?: boolean
 }
 
 export function formatMessage(
@@ -76,7 +86,14 @@ export function formatMessage(
 					).user.profile?.imageUrl ?? null)
 				: ((message.sender as { profile: { imageUrl: string | null } }).profile
 						?.imageUrl ?? null),
-		createdAt: message.createdAt
+		createdAt: message.createdAt,
+		readBy:
+			message.readBy?.map((read) => ({
+				id: read.userId,
+				name: read.user?.profile?.name ?? null,
+				image: read.user?.profile?.imageUrl ?? null
+			})) ?? [],
+		isLastReadByUser: message.isLastReadByUser ?? false
 	}
 }
 
@@ -184,37 +201,46 @@ export function ChatMessage({
 						{isCurrentUser &&
 							message.isLastReadByUser &&
 							message.readBy &&
-							message.readBy.length > 0 && (
-								<div className="flex justify-end">
-									<div className="flex cursor-pointer -space-x-2">
-										{message.readBy.slice(0, 3).map((reader) => (
-											<Tooltip key={reader.id} delayDuration={200}>
-												<TooltipTrigger asChild>
-													<Avatar className="size-4 border border-background">
-														<AvatarImage
-															src={reader.image ?? ''}
-															alt={`${reader.name}'s avatar`}
-														/>
-														<AvatarFallback className="text-[8px]">
-															{reader.name?.[0]?.toUpperCase() ?? '?'}
-														</AvatarFallback>
-													</Avatar>
-												</TooltipTrigger>
-												<TooltipContent
-													side="top"
-													align="center"
-													className="rounded-xl bg-popover/75 px-3 py-1.5 text-sm backdrop-blur-sm"
-												>
-													Seen by {reader.name} at{' '}
-													{formatTime(message.createdAt)}
-												</TooltipContent>
-											</Tooltip>
-										))}
-										{message.readBy.length > 3 && (
+							message.readBy.filter((reader) => reader.id !== currentUserId)
+								.length > 0 && (
+								<div className="flex justify-end pt-1">
+									<div className="flex items-center gap-1">
+										{message.readBy
+											.filter((reader) => reader.id !== currentUserId)
+											.slice(0, 3)
+											.map((reader) => (
+												<Tooltip key={reader.id} delayDuration={200}>
+													<TooltipTrigger asChild>
+														<Avatar className="size-5 border border-background">
+															<AvatarImage
+																src={reader.image ?? ''}
+																alt={`${reader.name}'s avatar`}
+															/>
+															<AvatarFallback className="text-[10px]">
+																{reader.name?.[0]?.toUpperCase() ?? '?'}
+															</AvatarFallback>
+														</Avatar>
+													</TooltipTrigger>
+													<TooltipContent
+														side="top"
+														align="center"
+														className="rounded-xl bg-popover/75 px-3 py-1.5 text-sm backdrop-blur-sm"
+													>
+														Seen by {reader.name} at{' '}
+														{formatTime(message.createdAt)}
+													</TooltipContent>
+												</Tooltip>
+											))}
+										{message.readBy.filter(
+											(reader) => reader.id !== currentUserId
+										).length > 3 && (
 											<Tooltip delayDuration={200}>
 												<TooltipTrigger asChild>
-													<div className="flex size-4 items-center justify-center rounded-full border border-background bg-muted text-[8px]">
-														+{message.readBy.length - 3}
+													<div className="flex size-5 items-center justify-center rounded-full border border-background bg-muted text-[10px]">
+														+
+														{message.readBy.filter(
+															(reader) => reader.id !== currentUserId
+														).length - 3}
 													</div>
 												</TooltipTrigger>
 												<TooltipContent
@@ -223,9 +249,12 @@ export function ChatMessage({
 													className="rounded-xl bg-popover/75 px-3 py-1.5 text-sm backdrop-blur-sm"
 												>
 													<div className="space-y-1">
-														{message.readBy.slice(3).map((reader) => (
-															<div key={reader.id}>{reader.name}</div>
-														))}
+														{message.readBy
+															.filter((reader) => reader.id !== currentUserId)
+															.slice(3)
+															.map((reader) => (
+																<div key={reader.id}>{reader.name}</div>
+															))}
 													</div>
 												</TooltipContent>
 											</Tooltip>

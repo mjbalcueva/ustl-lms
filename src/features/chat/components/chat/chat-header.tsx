@@ -1,6 +1,8 @@
 'use client'
 
 import Link from 'next/link'
+import { useState } from 'react'
+import { motion, useMotionValueEvent, useScroll } from 'framer-motion'
 
 import { api } from '@/services/trpc/react'
 
@@ -15,11 +17,26 @@ import { ActionButton } from '@/features/chat/components/ui/action-button'
 
 export const ChatHeader = ({ chatId }: { chatId: string }) => {
 	const { data } = api.chat.findManyConversations.useQuery()
+	const { scrollYProgress } = useScroll()
+	const [showNav, setShowNav] = useState(true)
+
+	useMotionValueEvent(scrollYProgress, 'change', (current) => {
+		const previous = scrollYProgress.getPrevious()!
+		setShowNav(previous === 0 || current === 1 || previous > current)
+	})
 
 	const chat = data?.chats.find((chat) => chat.chatId === chatId)
 
 	return (
-		<div className="flex h-[57px] items-center justify-between border-b px-2 sm:px-4">
+		<motion.div
+			className="fixed left-0 right-0 top-14 z-[5] flex h-[57px] items-center justify-between border-b bg-background px-2 sm:px-4 md:relative md:top-0"
+			initial={{
+				y: 0
+			}}
+			animate={{
+				y: showNav ? 0 : -56 // Height of the top nav
+			}}
+		>
 			<div className="flex items-center gap-3">
 				<ActionButton className="p-0 hover:text-primary md:hidden" asChild>
 					<Link href="/chat">
@@ -44,6 +61,6 @@ export const ChatHeader = ({ chatId }: { chatId: string }) => {
 					<Info className="!size-5 shrink-0" />
 				</ActionButton>
 			</div>
-		</div>
+		</motion.div>
 	)
 }

@@ -1,7 +1,9 @@
+'use client'
+
 import Link from 'next/link'
 import { formatDistanceToNow } from 'date-fns'
 
-import { type RouterOutputs } from '@/services/trpc/react'
+import { api, type RouterOutputs } from '@/services/trpc/react'
 
 import {
 	Avatar,
@@ -16,12 +18,25 @@ type ChatListProps = {
 }
 
 export const ChatList = ({ chats, activeChatId }: ChatListProps) => {
+	const utils = api.useUtils()
+	const markAsRead = api.chat.markAsRead.useMutation({
+		onSuccess: () => {
+			// Invalidate the conversations query to update the UI
+			void utils.chat.findManyConversations.invalidate()
+		}
+	})
+
+	const handleChatClick = (chatId: string, type: 'direct' | 'group') => {
+		markAsRead.mutate({ conversationId: chatId, type })
+	}
+
 	return (
 		<div className="space-y-1 p-2">
 			{chats.map((chat) => (
 				<Link
 					key={chat.chatId}
 					href={`/chat/${chat.chatId}`}
+					onClick={() => handleChatClick(chat.chatId, chat.type)}
 					className={cn(
 						'flex w-full items-center gap-2 rounded-lg px-2 py-3 text-left hover:bg-accent focus:outline-none focus:ring-2 focus:ring-primary',
 						activeChatId === chat.chatId && 'bg-accent dark:bg-accent'

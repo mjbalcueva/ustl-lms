@@ -391,37 +391,15 @@ export const chatRouter = createTRPCRouter({
 			const userId = ctx.session.user.id
 
 			if (type === 'direct') {
-				// Add logging
-				console.log('Searching for chat:', {
-					conversationId,
-					userId
-				})
-
-				// Simplify the query first to debug
 				const chat = await ctx.db.directChat.findFirst({
 					where: {
-						directChatId: conversationId
+						directChatId: conversationId,
+						OR: [{ memberOneId: userId }, { memberTwoId: userId }]
 					}
 				})
 
-				console.log('Found chat:', chat)
-
 				if (!chat) {
 					throw new TRPCClientError('Chat not found or access denied')
-				}
-
-				// Verify membership separately for debugging
-				const isMember =
-					chat.memberOneId === userId || chat.memberTwoId === userId
-				console.log('Membership check:', {
-					isMember,
-					memberOneId: chat.memberOneId,
-					memberTwoId: chat.memberTwoId,
-					userId
-				})
-
-				if (!isMember) {
-					throw new TRPCClientError('User is not a member of this chat')
 				}
 
 				const message = await ctx.db.directChatMessage.create({
@@ -434,6 +412,24 @@ export const chatRouter = createTRPCRouter({
 						sender: {
 							include: { profile: true }
 						}
+					}
+				})
+
+				// Create or update read receipt for sender
+				await ctx.db.directChatMessageReadReceipt.upsert({
+					where: {
+						messageId_userId: {
+							messageId: message.directChatMessageId,
+							userId
+						}
+					},
+					create: {
+						userId,
+						messageId: message.directChatMessageId,
+						readAt: new Date()
+					},
+					update: {
+						readAt: new Date()
 					}
 				})
 
@@ -499,6 +495,24 @@ export const chatRouter = createTRPCRouter({
 				}
 			})
 
+			// Create or update read receipt for sender
+			await ctx.db.groupChatMessageReadReceipt.upsert({
+				where: {
+					messageId_userId: {
+						messageId: message.groupChatMessageId,
+						userId
+					}
+				},
+				create: {
+					userId,
+					messageId: message.groupChatMessageId,
+					readAt: new Date()
+				},
+				update: {
+					readAt: new Date()
+				}
+			})
+
 			// Emit the new message event
 			const transformedMessage: ChatMessageEvent = {
 				id: message.groupChatMessageId,
@@ -528,17 +542,57 @@ export const chatRouter = createTRPCRouter({
 				? ctx.db.directChatMessage.findMany({
 						where: { directChatId: input.conversationId },
 						orderBy: { createdAt: 'desc' },
-						include: { sender: { include: { profile: true } } }
+						include: {
+							sender: { include: { profile: true } },
+							readBy: {
+								include: {
+									user: { include: { profile: true } }
+								}
+							}
+						}
 					})
 				: ctx.db.groupChatMessage.findMany({
 						where: { groupChatId: input.conversationId },
 						orderBy: { createdAt: 'desc' },
 						include: {
-							sender: { include: { user: { include: { profile: true } } } }
+							sender: { include: { user: { include: { profile: true } } } },
+							readBy: {
+								include: {
+									user: { include: { profile: true } }
+								}
+							}
 						}
 					}))
 
-			return { messages }
+			// Find the last read message for each user
+			const lastReadMessageIds = new Set<string>()
+			const userReadTimes = new Map<string, Date>()
+
+			for (const message of messages) {
+				for (const receipt of message.readBy) {
+					const prevReadTime = userReadTimes.get(receipt.userId)
+					if (!prevReadTime || receipt.readAt > prevReadTime) {
+						userReadTimes.set(receipt.userId, receipt.readAt)
+						lastReadMessageIds.add(
+							'directChatMessageId' in message
+								? message.directChatMessageId
+								: message.groupChatMessageId
+						)
+					}
+				}
+			}
+
+			// Transform messages with read receipt data
+			const transformedMessages = messages.map((message) => ({
+				...message,
+				isLastReadByUser: lastReadMessageIds.has(
+					'directChatMessageId' in message
+						? message.directChatMessageId
+						: message.groupChatMessageId
+				)
+			}))
+
+			return { messages: transformedMessages }
 		}),
 
 	// Add this new procedure
@@ -590,5 +644,104 @@ export const chatRouter = createTRPCRouter({
 			if (groupChat) return 'group' as const
 
 			return null
+		}),
+
+	// Add procedure to mark messages as read
+	markAsRead: protectedProcedure
+		.input(
+			z.object({
+				conversationId: z.string(),
+				type: z.enum(['direct', 'group'])
+			})
+		)
+		.mutation(async ({ ctx, input }) => {
+			const { conversationId, type } = input
+			const userId = ctx.session.user.id
+
+			if (type === 'direct') {
+				// Check if user already has a read receipt for this conversation
+				const existingReceipt =
+					await ctx.db.directChatMessageReadReceipt.findFirst({
+						where: {
+							user: { id: userId },
+							message: { directChatId: conversationId }
+						},
+						orderBy: { readAt: 'desc' }
+					})
+
+				const latestMessage = await ctx.db.directChatMessage.findFirst({
+					where: { directChatId: conversationId },
+					orderBy: { createdAt: 'desc' }
+				})
+
+				if (!latestMessage) return null
+
+				// Only create/update if it's a new message
+				if (
+					!existingReceipt ||
+					existingReceipt.messageId !== latestMessage.directChatMessageId
+				) {
+					return await ctx.db.directChatMessageReadReceipt.upsert({
+						where: {
+							messageId_userId: {
+								messageId: latestMessage.directChatMessageId,
+								userId
+							}
+						},
+						create: {
+							userId,
+							messageId: latestMessage.directChatMessageId,
+							readAt: new Date()
+						},
+						update: {
+							readAt: new Date()
+						}
+					})
+				}
+
+				return existingReceipt
+			}
+
+			// Check if user already has a read receipt for this conversation
+			const existingReceipt =
+				await ctx.db.groupChatMessageReadReceipt.findFirst({
+					where: {
+						user: { id: userId },
+						message: { groupChatId: conversationId }
+					},
+					orderBy: { readAt: 'desc' }
+				})
+
+			const latestMessage = await ctx.db.groupChatMessage.findFirst({
+				where: { groupChatId: conversationId },
+				orderBy: { createdAt: 'desc' }
+			})
+
+			if (!latestMessage) return null
+
+			// Only create/update if it's a new message
+			if (
+				!existingReceipt ||
+				existingReceipt.messageId !== latestMessage.groupChatMessageId
+			) {
+				return await ctx.db.groupChatMessageReadReceipt.upsert({
+					where: {
+						messageId_userId: {
+							messageId: latestMessage.groupChatMessageId,
+							userId
+						}
+					},
+					create: {
+						userId,
+						messageId: latestMessage.groupChatMessageId,
+						readAt: new Date()
+					},
+					update: {
+						readAt: new Date()
+					}
+				})
+			}
+
+			return existingReceipt
 		})
 })
