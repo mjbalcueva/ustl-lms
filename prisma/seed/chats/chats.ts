@@ -57,6 +57,25 @@ export async function createChatRooms(courses: Course[], instructors: User[]) {
 			}
 		})
 
+		// Get enrolled students for this course
+		const enrollments = await db.courseEnrollment.findMany({
+			where: { courseId: course.courseId },
+			include: { student: true }
+		})
+
+		// Create chat members for enrolled students in group chat
+		const studentMembers = await Promise.all(
+			enrollments.map((enrollment) =>
+				db.chatMember.create({
+					data: {
+						chatRoomId: groupRoom.chatRoomId,
+						userId: enrollment.studentId,
+						role: 'MEMBER'
+					}
+				})
+			)
+		)
+
 		// Create some initial messages in forum
 		const forumMessages = await db.chatMessage.createMany({
 			data: Array(faker.number.int({ min: 3, max: 8 }))
@@ -68,16 +87,38 @@ export async function createChatRooms(courses: Course[], instructors: User[]) {
 				}))
 		})
 
-		// Create some initial messages in group chat
+		// Create messages from students and instructor in group chat
+		const allMembers = [groupMember, ...studentMembers]
 		const groupMessages = await db.chatMessage.createMany({
-			data: Array(faker.number.int({ min: 3, max: 8 }))
+			data: Array(faker.number.int({ min: 10, max: 20 }))
 				.fill(null)
-				.map(() => ({
-					content: faker.lorem.paragraph(),
-					chatRoomId: groupRoom.chatRoomId,
-					senderId: groupMember.chatMemberId
-				}))
+				.map(() => {
+					const sender = faker.helpers.arrayElement(allMembers)
+					return {
+						content: faker.lorem.paragraph(),
+						chatRoomId: groupRoom.chatRoomId,
+						senderId: sender.chatMemberId
+					}
+				})
 		})
+
+		// Create some message reads
+		for (const message of await db.chatMessage.findMany({
+			where: { chatRoomId: groupRoom.chatRoomId }
+		})) {
+			await db.chatMessageRead.createMany({
+				data: allMembers
+					.filter(() => faker.number.int({ min: 1, max: 10 }) > 3) // Random read status
+					.map((member) => ({
+						messageId: message.chatMessageId,
+						userId: member.userId,
+						readAt: faker.date.between({
+							from: message.createdAt,
+							to: new Date()
+						})
+					}))
+			})
+		}
 
 		totalMessages += forumMessages.count + groupMessages.count
 	}
@@ -167,21 +208,45 @@ export async function createChatConversations(users: User[]) {
 
 		conversations.push(conversation)
 
-		// Create some messages in the conversation
-		const messages = await db.chatDirectMessage.createMany({
-			data: Array(faker.number.int({ min: 5, max: 15 }))
+		// Create messages in the conversation
+		const messages = await Promise.all(
+			Array(faker.number.int({ min: 5, max: 15 }))
 				.fill(null)
-				.map(() => ({
-					content: faker.lorem.paragraph(),
-					chatConversationId: conversation.chatConversationId,
-					senderId: faker.helpers.arrayElement([
-						participants[0]!.id,
-						participants[1]!.id
+				.map(async () => {
+					const sender = faker.helpers.arrayElement([
+						participants[0]!,
+						participants[1]!
 					])
-				}))
-		})
+					return db.chatDirectMessage.create({
+						data: {
+							content: faker.lorem.paragraph(),
+							chatConversationId: conversation.chatConversationId,
+							senderId: sender.id
+						}
+					})
+				})
+		)
 
-		totalMessages += messages.count
+		// Create read receipts for messages
+		for (const message of messages) {
+			// The recipient has a chance to read the message
+			const recipient = participants.find((p) => p.id !== message.senderId)!
+			if (faker.number.int({ min: 1, max: 10 }) > 3) {
+				// 70% chance of reading
+				await db.chatDirectMessageRead.create({
+					data: {
+						messageId: message.chatDirectMessageId,
+						userId: recipient.id,
+						readAt: faker.date.between({
+							from: message.createdAt,
+							to: new Date()
+						})
+					}
+				})
+			}
+		}
+
+		totalMessages += messages.length
 	}
 
 	return {
