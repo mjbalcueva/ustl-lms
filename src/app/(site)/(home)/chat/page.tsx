@@ -1,4 +1,6 @@
-import { api } from '@/services/trpc/server'
+'use client'
+
+import { api } from '@/services/trpc/react'
 
 import { PageContent, PageTitle } from '@/core/components/ui/page'
 import { Separator } from '@/core/components/ui/separator'
@@ -6,11 +8,12 @@ import { Plus, Search } from '@/core/lib/icons'
 import { cn } from '@/core/lib/utils/cn'
 
 import { ChatList } from '@/features/chat/components/chat-list'
+import { SearchUsersDialog } from '@/features/chat/components/search-users-dialog'
 import { ActionButton } from '@/features/chat/components/ui/action-button'
 
-export default async function Page() {
-	const { chats } = await api.chat.findManyConversations()
-	const hasChats = chats.length > 0
+export default function Page() {
+	const { data } = api.chat.findManyConversations.useQuery()
+	const hasChats = data?.chats?.length ?? 0 > 0
 
 	return (
 		<PageContent className="h-full md:flex">
@@ -18,16 +21,18 @@ export default async function Page() {
 				<div className="flex h-[57px] items-center justify-between border-b px-4">
 					<PageTitle className="font-bold">Chats</PageTitle>
 					<div className="flex items-center">
-						<ActionButton>
-							<Search className="!size-5 shrink-0" />
-						</ActionButton>
+						<SearchUsersDialog>
+							<ActionButton>
+								<Search className="!size-5 shrink-0" />
+							</ActionButton>
+						</SearchUsersDialog>
 						<ActionButton>
 							<Plus className="!size-5 shrink-0" />
 						</ActionButton>
 					</div>
 				</div>
 
-				<ChatList chats={chats} />
+				<ChatList chats={data?.chats ?? []} />
 			</div>
 
 			<Separator orientation="vertical" className="hidden h-full md:block" />

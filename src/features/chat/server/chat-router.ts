@@ -83,6 +83,47 @@ setInterval(() => {
 
 export const chatRouter = createTRPCRouter({
 	// ---------------------------------------------------------------------------
+	// CREATE
+	// ---------------------------------------------------------------------------
+	//
+
+	createDirectChat: protectedProcedure
+		.input(z.object({ userId: z.string() }))
+		.mutation(async ({ ctx, input }) => {
+			const currentUserId = ctx.session.user.id
+
+			// Check if chat already exists
+			const existingChat = await ctx.db.directChat.findFirst({
+				where: {
+					OR: [
+						{
+							memberOneId: currentUserId,
+							memberTwoId: input.userId
+						},
+						{
+							memberOneId: input.userId,
+							memberTwoId: currentUserId
+						}
+					]
+				}
+			})
+
+			if (existingChat) {
+				return { chatId: existingChat.directChatId }
+			}
+
+			// Create new chat
+			const chat = await ctx.db.directChat.create({
+				data: {
+					memberOneId: currentUserId,
+					memberTwoId: input.userId
+				}
+			})
+
+			return { chatId: chat.directChatId }
+		}),
+
+	// ---------------------------------------------------------------------------
 	// READ
 	// ---------------------------------------------------------------------------
 	//
@@ -743,5 +784,60 @@ export const chatRouter = createTRPCRouter({
 			}
 
 			return existingReceipt
+		}),
+
+	// ---------------------------------------------------------------------------
+	// READ
+	// ---------------------------------------------------------------------------
+	//
+
+	searchUsers: protectedProcedure
+		.input(z.object({ query: z.string() }))
+		.query(async ({ ctx, input }) => {
+			if (!input.query) return []
+
+			const users = await ctx.db.user.findMany({
+				where: {
+					OR: [
+						{
+							profile: {
+								name: {
+									contains: input.query,
+									mode: 'insensitive'
+								}
+							}
+						},
+						{
+							email: {
+								contains: input.query,
+								mode: 'insensitive'
+							}
+						}
+					],
+					AND: {
+						id: {
+							not: ctx.session.user.id // Exclude current user
+						}
+					}
+				},
+				select: {
+					id: true,
+					email: true,
+					profile: {
+						select: {
+							name: true,
+							imageUrl: true
+						}
+					}
+				},
+				take: 5
+			})
+
+			return users.map((user) => ({
+				id: user.id,
+				email: user.email,
+				name: user.profile?.name ?? null,
+				imageUrl: user.profile?.imageUrl ?? null
+			}))
 		})
 })
