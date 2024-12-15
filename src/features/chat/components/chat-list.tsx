@@ -1,9 +1,7 @@
-'use client'
-
-import { useCallback } from 'react'
+import Link from 'next/link'
 import { formatDistanceToNow } from 'date-fns'
 
-import { api, type RouterOutputs } from '@/services/trpc/react'
+import { type RouterOutputs } from '@/services/trpc/react'
 
 import {
 	Avatar,
@@ -13,119 +11,82 @@ import {
 import { Skeleton } from '@/core/components/ui/skeleton'
 import { cn } from '@/core/lib/utils/cn'
 
-type Chat = RouterOutputs['chat']['getAllChats']['chats'][number]
-
 type ChatListProps = {
-	chats: Chat[]
-	onSelectChat: (chat: Chat) => void
-	selectedChatId?: string
+	chats: RouterOutputs['chat']['findManyConversations']['chats']
+	activeChatId?: string
 }
 
-export const ChatList = ({
-	chats,
-	onSelectChat,
-	selectedChatId
-}: ChatListProps) => {
-	const utils = api.useUtils()
-	const markAsRead = api.chat.markChatAsRead.useMutation({
-		onMutate: async ({ chatId }) => {
-			await utils.chat.getAllChats.cancel()
-			const previousChats = utils.chat.getAllChats.getData()
-			utils.chat.getAllChats.setData(undefined, (old) => {
-				if (!old) return { chats: [] }
-				return {
-					chats: old.chats.map((chat) =>
-						chat.id === chatId ? { ...chat, isRead: true } : chat
-					)
-				}
-			})
-			return { previousChats }
-		},
-		onError: (_err, _newChat, context) => {
-			if (context?.previousChats) {
-				utils.chat.getAllChats.setData(undefined, context.previousChats)
-			}
-		}
-	})
-
-	const handleChatSelect = useCallback(
-		(chat: Chat) => {
-			if (!chat.isRead) {
-				markAsRead.mutate({
-					chatId: chat.id,
-					type: chat.type
-				})
-			}
-			onSelectChat(chat)
-		},
-		[markAsRead, onSelectChat]
-	)
-
+export const ChatList = ({ chats, activeChatId }: ChatListProps) => {
 	return (
 		<div className="p-2">
 			{chats.map((chat) => (
-				<button
-					key={chat.id}
-					onClick={() => handleChatSelect(chat)}
+				<Link
+					key={chat.chatId}
+					href={`/chat/${chat.chatId}`}
 					className={cn(
-						'flex w-full items-center gap-2 rounded-lg px-2 py-3 text-left hover:bg-accent',
-						selectedChatId === chat.id && 'bg-accent'
+						'flex w-full items-center gap-2 rounded-lg px-2 py-3 text-left hover:bg-accent focus:outline-none focus:ring-2 focus:ring-primary',
+						activeChatId === chat.chatId && 'bg-accent'
 					)}
 				>
-					<Avatar className="h-10 w-10">
+					<Avatar className="h-10 w-10 border">
 						<AvatarImage src={chat.image ?? ''} />
-						<AvatarFallback>{chat.title[0] ?? '?'}</AvatarFallback>
+						<AvatarFallback>{chat.name[0] ?? '?'}</AvatarFallback>
 					</Avatar>
 					<div className="flex-1 overflow-hidden">
 						<div className="flex items-center justify-between">
 							<h4
 								className={cn(
 									'line-clamp-1 text-sm font-medium',
-									!chat.isRead && 'font-bold'
+									!chat.lastMessage?.isRead && 'font-bold'
 								)}
 							>
-								{chat.title}
+								{chat.name}
 							</h4>
 						</div>
-						{chat.lastMessage && (
-							<>
-								<div className="flex items-center justify-between gap-1">
-									<p
-										className={cn(
-											'flex-1 truncate text-xs text-muted-foreground',
-											!chat.isRead && 'font-semibold text-foreground'
-										)}
-									>
-										{chat.lastMessageSender}: {chat.lastMessage}
-									</p>
-									{chat.lastActiveAt && (
-										<span className="shrink-0 text-xs text-muted-foreground">
-											•{' '}
-											{formatDistanceToNow(new Date(chat.lastActiveAt), {
-												addSuffix: false
-											})
-												.replace('about ', '')
-												.replace('less than a minute', '1m')
-												.replace('minutes', 'm')
-												.replace('minute', 'm')
-												.replace('hours', 'h')
-												.replace('hour', 'h')
-												.replace('days', 'd')
-												.replace('day', 'd')
-												.replace('months', 'mo')
-												.replace('month', 'mo')
-												.replace('years', 'y')
-												.replace('year', 'y')
-												.replace('weeks', 'w')
-												.replace('week', 'w')
-												.replace(/ /g, '')}
-										</span>
-									)}
-								</div>
-							</>
-						)}
+
+						<div className="flex items-center justify-between gap-1">
+							<p
+								className={cn(
+									'flex-1 truncate text-xs text-muted-foreground',
+									!chat.lastMessage?.isRead && 'font-medium text-foreground'
+								)}
+							>
+								{chat.lastMessage ? (
+									<>
+										{chat.lastMessage.sender}: {chat.lastMessage.content}
+									</>
+								) : (
+									<span className="font-normal text-muted-foreground">
+										Start a conversation
+									</span>
+								)}
+							</p>
+							{chat.lastMessage?.createdAt && (
+								<span className="shrink-0 text-xs text-muted-foreground">
+									•{' '}
+									{formatDistanceToNow(new Date(chat.lastMessage.createdAt), {
+										addSuffix: false
+									})
+										.replace('about ', '')
+										.replace('less than a minute', '1m')
+										.replace('minutes', 'm')
+										.replace('minute', 'm')
+										.replace('hours', 'h')
+										.replace('hour', 'h')
+										.replace('days', 'd')
+										.replace('day', 'd')
+										.replace('months', 'mo')
+										.replace('month', 'mo')
+										.replace('years', 'y')
+										.replace('year', 'y')
+										.replace('weeks', 'w')
+										.replace('week', 'w')
+										.replace(/ /g, '')}
+								</span>
+							)}
+						</div>
 					</div>
-				</button>
+				</Link>
 			))}
 		</div>
 	)

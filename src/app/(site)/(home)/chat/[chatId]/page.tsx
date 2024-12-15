@@ -7,7 +7,11 @@ import { Plus, Search } from '@/core/lib/icons'
 import { ChatList } from '@/features/chat/components/chat-list'
 import { ActionButton } from '@/features/chat/components/ui/action-button'
 
-export default async function Page() {
+export default async function Page({
+	params: { chatId }
+}: {
+	params: { chatId: string }
+}) {
 	const { chats } = await api.chat.findManyConversations()
 
 	return (
@@ -25,7 +29,7 @@ export default async function Page() {
 					</div>
 				</div>
 
-				<ChatList chats={chats} />
+				<ChatList chats={chats} activeChatId={chatId} />
 			</div>
 
 			<Separator orientation="vertical" className="hidden h-full md:block" />
