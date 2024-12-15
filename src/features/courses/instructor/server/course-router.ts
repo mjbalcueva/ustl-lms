@@ -36,7 +36,36 @@ export const courseRouter = createTRPCRouter({
 					code,
 					title,
 					token,
-					instructorId: ctx.session.user.id
+					instructorId: ctx.session.user.id,
+					chatRooms: {
+						create: [
+							{
+								name: `${title} Group Chat`,
+								type: 'TEXT',
+								creatorId: ctx.session.user.id,
+								members: {
+									create: {
+										userId: ctx.session.user.id,
+										role: 'OWNER'
+									}
+								}
+							},
+							{
+								name: `${title} Forum`,
+								type: 'FORUM',
+								creatorId: ctx.session.user.id,
+								members: {
+									create: {
+										userId: ctx.session.user.id,
+										role: 'OWNER'
+									}
+								}
+							}
+						]
+					}
+				},
+				include: {
+					chatRooms: true
 				}
 			})
 

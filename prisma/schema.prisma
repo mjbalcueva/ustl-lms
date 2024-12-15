@@ -39,8 +39,8 @@ model Course {
   enrollments CourseEnrollment[]
   chapters    Chapter[]
 
-  instructor User       @relation(fields: [instructorId], references: [id], onDelete: Cascade)
-  chatRooms  ChatRoom[]
+  instructor User        @relation(fields: [instructorId], references: [id], onDelete: Cascade)
+  groupChats GroupChat[]
 
   @@index([code, token, instructorId])
   @@map("course")
@@ -124,7 +124,7 @@ model Chapter {
 
   course Course @relation(fields: [courseId], references: [courseId], onDelete: Cascade)
 
-  chatRooms ChatRoom[]
+  groupChats GroupChat[]
 
   @@index([courseId, position])
   @@map("chapter")
@@ -270,178 +270,172 @@ model AssignmentSubmissionAttachment {
 }
 
 // -----------------------------------------------------------------------------
-// Chat & Video Models
+// Group Chat Models
 // -----------------------------------------------------------------------------
 
-enum ChatRoomType {
+enum GroupChatType {
   TEXT
   AUDIO
   VIDEO
   FORUM
 
-  @@map("chat_room_type")
+  @@map("group_chat_type")
 }
 
-model ChatRoom {
-  chatRoomId  String       @id @default(cuid()) @map("id")
+model GroupChat {
+  groupChatId String  @id @default(cuid()) @map("group_chat_id")
+  creatorId   String  @map("creator_id")
+  parentId    String? @map("parent_id") // Thread replies
+  courseId    String? @map("course_id")
+  chapterId   String? @map("chapter_id")
+
   name        String
   description String?
-  type        ChatRoomType @default(TEXT)
-  isPrivate   Boolean      @default(false)
-  isPinned    Boolean      @default(false)
-  isLocked    Boolean      @default(false)
+  type        GroupChatType @default(TEXT)
+  isPrivate   Boolean       @default(false) @map("is_private")
+  isLocked    Boolean       @default(false) @map("is_locked")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
 
-  courseId  String?
-  course    Course?  @relation(fields: [courseId], references: [courseId], onDelete: Cascade)
-  chapterId String?
-  chapter   Chapter? @relation(fields: [chapterId], references: [chapterId], onDelete: Cascade)
+  members  GroupChatMember[]
+  messages GroupChatMessage[]
 
-  creatorId String
-  creator   User   @relation("ChatRoomCreator", fields: [creatorId], references: [id], onDelete: Cascade)
-
-  messages ChatMessage[]
-  members  ChatMember[]
-
-  parentId String?
-  parent   ChatRoom?  @relation("ThreadReplies", fields: [parentId], references: [chatRoomId], onDelete: Cascade)
-  replies  ChatRoom[] @relation("ThreadReplies")
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  creator User        @relation("GroupChatCreator", fields: [creatorId], references: [id], onDelete: Cascade)
+  parent  GroupChat?  @relation("ThreadReplies", fields: [parentId], references: [groupChatId], onDelete: Cascade)
+  course  Course?     @relation(fields: [courseId], references: [courseId], onDelete: Cascade)
+  chapter Chapter?    @relation(fields: [chapterId], references: [chapterId], onDelete: Cascade)
+  replies GroupChat[] @relation("ThreadReplies")
 
   @@index([courseId])
   @@index([chapterId])
   @@index([creatorId])
   @@index([parentId])
-  @@map("chat_room")
+  @@map("group_chat")
 }
 
-enum ChatRoomMemberRole {
+enum GroupChatMemberRole {
   OWNER
   MODERATOR
   MEMBER
 
-  @@map("chat_room_member_role")
+  @@map("group_chat_member_role")
 }
 
-model ChatMember {
-  chatMemberId String             @id @default(cuid()) @map("id")
-  role         ChatRoomMemberRole @default(MEMBER)
+model GroupChatMember {
+  groupChatMemberId String @id @default(cuid()) @map("group_chat_member_id")
+  userId            String @map("user_id")
+  groupChatId       String @map("group_chat_id")
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      GroupChatMemberRole @default(MEMBER)
+  createdAt DateTime            @default(now()) @map("created_at")
+  updatedAt DateTime            @updatedAt @map("updated_at")
 
-  chatRoomId String
-  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [chatRoomId], onDelete: Cascade)
+  messages GroupChatMessage[]
 
-  messages ChatMessage[]
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  groupChat GroupChat @relation(fields: [groupChatId], references: [groupChatId], onDelete: Cascade)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([userId, chatRoomId])
+  @@unique([userId, groupChatId])
   @@index([userId])
-  @@index([chatRoomId])
-  @@map("chat_member")
+  @@index([groupChatId])
+  @@map("group_chat_member")
 }
 
-model ChatMessage {
-  chatMessageId String  @id @default(cuid()) @map("id")
-  content       String  @db.Text
-  fileUrl       String? @db.Text
+model GroupChatMessage {
+  groupChatMessageId String @id @default(cuid()) @map("group_chat_message_id")
+  groupChatId        String @map("group_chat_id")
+  senderId           String @map("sender_id")
 
-  chatRoomId String
-  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [chatRoomId], onDelete: Cascade)
+  content   String   @db.Text
+  fileUrl   String?  @db.Text
+  deleted   Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  senderId String
-  sender   ChatMember @relation(fields: [senderId], references: [chatMemberId], onDelete: Cascade)
+  readBy GroupChatMessageReadReceipt[]
 
-  deleted Boolean @default(false)
+  groupChat GroupChat       @relation(fields: [groupChatId], references: [groupChatId], onDelete: Cascade)
+  sender    GroupChatMember @relation(fields: [senderId], references: [groupChatMemberId], onDelete: Cascade)
 
-  readBy ChatMessageRead[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([chatRoomId])
+  @@index([groupChatId])
   @@index([senderId])
-  @@map("chat_message")
+  @@map("group_chat_message")
 }
 
-model ChatMessageRead {
-  id String @id @default(cuid())
-
-  messageId String
-  message   ChatMessage @relation(fields: [messageId], references: [chatMessageId], onDelete: Cascade)
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+model GroupChatMessageReadReceipt {
+  groupChatMessageReadReceiptId String @id @default(cuid()) @map("group_chat_message_read_receipt_id")
+  messageId                     String @map("message_id")
+  userId                        String @map("user_id")
 
   readAt DateTime @default(now())
+
+  message GroupChatMessage @relation(fields: [messageId], references: [groupChatMessageId], onDelete: Cascade)
+  user    User             @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([messageId, userId])
   @@index([messageId])
   @@index([userId])
-  @@map("chat_message_read")
+  @@map("group_chat_message_read_receipt")
 }
 
-model ChatConversation {
-  chatConversationId String @id @default(cuid()) @map("id")
+// -----------------------------------------------------------------------------
+// Direct Chat Models
+// -----------------------------------------------------------------------------
 
-  memberOneId String
-  memberOne   User   @relation("ChatConversationInitiator", fields: [memberOneId], references: [id], onDelete: Cascade)
+model DirectChat {
+  directChatId String @id @default(cuid()) @map("direct_chat_id")
+  memberOneId  String @map("member_one_id")
+  memberTwoId  String @map("member_two_id")
 
-  memberTwoId String
-  memberTwo   User   @relation("ChatConversationReceiver", fields: [memberTwoId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  messages ChatDirectMessage[]
+  messages DirectChatMessage[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  memberOne User @relation("DirectChatMemberOne", fields: [memberOneId], references: [id], onDelete: Cascade)
+  memberTwo User @relation("DirectChatMemberTwo", fields: [memberTwoId], references: [id], onDelete: Cascade)
 
   @@unique([memberOneId, memberTwoId])
   @@index([memberOneId])
   @@index([memberTwoId])
-  @@map("chat_conversation")
+  @@map("direct_chat")
 }
 
-model ChatDirectMessage {
-  chatDirectMessageId String  @id @default(cuid()) @map("id")
-  content             String  @db.Text
-  fileUrl             String? @db.Text
+model DirectChatMessage {
+  directChatMessageId String @id @default(cuid()) @map("direct_chat_message_id")
+  directChatId        String @map("direct_chat_id")
+  senderId            String @map("sender_id")
 
-  senderId String
-  sender   User   @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  content   String   @db.Text
+  fileUrl   String?  @db.Text
+  deleted   Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  chatConversationId String
-  chatConversation   ChatConversation @relation(fields: [chatConversationId], references: [chatConversationId], onDelete: Cascade)
+  readBy DirectChatMessageReadReceipt[]
 
-  deleted Boolean                 @default(false)
-  readBy  ChatDirectMessageRead[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  sender     User       @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  directChat DirectChat @relation(fields: [directChatId], references: [directChatId], onDelete: Cascade)
 
   @@index([senderId])
-  @@index([chatConversationId])
-  @@map("chat_direct_message")
+  @@index([directChatId])
+  @@map("direct_chat_message")
 }
 
-model ChatDirectMessageRead {
-  id String @id @default(cuid())
-
-  messageId String
-  message   ChatDirectMessage @relation(fields: [messageId], references: [chatDirectMessageId], onDelete: Cascade)
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+model DirectChatMessageReadReceipt {
+  directChatMessageReadReceiptId String @id @default(cuid()) @map("direct_chat_message_read_receipt_id")
+  messageId                      String @map("message_id")
+  userId                         String @map("user_id")
 
   readAt DateTime @default(now())
+
+  message DirectChatMessage @relation(fields: [messageId], references: [directChatMessageId], onDelete: Cascade)
+  user    User              @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([messageId, userId])
   @@index([messageId])
   @@index([userId])
-  @@map("chat_direct_message_read")
+  @@map("direct_chat_message_read_receipt")
 }
 
 // -----------------------------------------------------------------------------
@@ -504,13 +498,13 @@ model User {
   promotionsGiven    RolePromotion[] @relation("Promoter")
 
   // Chat relations
-  createdChatRooms          ChatRoom[]              @relation("ChatRoomCreator")
-  chatMemberships           ChatMember[]
-  chatDirectMessages        ChatDirectMessage[]
-  chatConversationsStarted  ChatConversation[]      @relation("ChatConversationInitiator")
-  chatConversationsReceived ChatConversation[]      @relation("ChatConversationReceiver")
-  readMessages              ChatMessageRead[]
-  readDirectMessages        ChatDirectMessageRead[]
+  createdGroupChats      GroupChat[]                    @relation("GroupChatCreator")
+  groupChatMemberships   GroupChatMember[]
+  directChatMessages     DirectChatMessage[]
+  directChatStarted      DirectChat[]                   @relation("DirectChatMemberOne")
+  directChatReceived     DirectChat[]                   @relation("DirectChatMemberTwo")
+  groupChatReadMessages  GroupChatMessageReadReceipt[]
+  directChatReadMessages DirectChatMessageReadReceipt[]
 
   @@index([email])
   @@map("user")
