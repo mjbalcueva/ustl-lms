@@ -31,12 +31,42 @@ export const courseRouter = createTRPCRouter({
 			const { code, title } = input
 			const token = generateCourseInviteToken()
 
+			const currentYear = new Date().getFullYear()
+
 			const course = await ctx.db.course.create({
 				data: {
 					code,
 					title,
 					token,
-					instructorId: ctx.session.user.id
+					instructorId: ctx.session.user.id,
+					groupChats: {
+						create: [
+							{
+								name: `${code} ${currentYear} Group Chat`,
+								type: 'TEXT',
+								creatorId: ctx.session.user.id,
+								members: {
+									create: {
+										userId: ctx.session.user.id,
+										role: 'OWNER'
+									}
+								}
+							},
+							{
+								name: `${code} ${currentYear} Forum`,
+								type: 'FORUM',
+								isPrivate: true,
+								isLocked: true,
+								creatorId: ctx.session.user.id,
+								members: {
+									create: {
+										userId: ctx.session.user.id,
+										role: 'OWNER'
+									}
+								}
+							}
+						]
+					}
 				}
 			})
 

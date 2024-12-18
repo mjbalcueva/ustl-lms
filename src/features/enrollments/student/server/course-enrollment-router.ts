@@ -28,7 +28,14 @@ export const courseEnrollmentRouter = createTRPCRouter({
 
 			const course = await ctx.db.course.findUnique({
 				where: { token },
-				include: { instructor: true }
+				include: {
+					instructor: true,
+					groupChats: {
+						where: {
+							OR: [{ type: 'FORUM' }, { type: 'TEXT' }]
+						}
+					}
+				}
 			})
 
 			if (!course) {
@@ -66,12 +73,28 @@ export const courseEnrollmentRouter = createTRPCRouter({
 				})
 			}
 
-			await ctx.db.courseEnrollment.create({
-				data: {
-					studentId: userId,
-					courseId: course.courseId
-				},
-				include: { course: true }
+			// Create enrollment and add to group chats in a transaction
+			await ctx.db.$transaction(async (tx) => {
+				// Create the enrollment
+				await tx.courseEnrollment.create({
+					data: {
+						studentId: userId,
+						courseId: course.courseId
+					}
+				})
+
+				// Add student to all course group chats
+				await Promise.all(
+					course.groupChats.map((chat) =>
+						tx.groupChatMember.create({
+							data: {
+								userId,
+								groupChatId: chat.groupChatId,
+								role: 'MEMBER'
+							}
+						})
+					)
+				)
 			})
 
 			return { message: 'Enrolled successfully.' }

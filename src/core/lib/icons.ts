@@ -1,3 +1,4 @@
+// Add type for icon components
 import { FaFacebookF, FaLinkedinIn } from 'react-icons/fa'
 import { FcGoogle } from 'react-icons/fc'
 import {
@@ -7,10 +8,12 @@ import {
 	LuFiles,
 	LuLibrary,
 	LuLink,
+	LuPhone,
 	LuSearch,
 	LuSettings,
 	LuSettings2,
-	LuTrash2
+	LuTrash2,
+	LuVideo
 } from 'react-icons/lu'
 import {
 	RxArrowDown,
@@ -150,6 +153,8 @@ export const OrderedList = TbListNumbers
 export const BulletList = TbList
 
 // Chat
+export const Call = LuPhone
+export const VideoCall = LuVideo
 export const Send = TbSend
 
 // Mode Icons
