@@ -32,12 +32,8 @@ export function useChatMessages(chatId: string, type: 'direct' | 'group') {
 	api.chat.whoIsTyping.useSubscription(
 		{ chatId },
 		{
-			onData: (data: AsyncIterable<Record<string, { lastTyped: Date }>>) => {
-				void (async () => {
-					for await (const update of data) {
-						setTypingUsers(update)
-					}
-				})()
+			onData(data) {
+				setTypingUsers(data)
 			}
 		}
 	)
