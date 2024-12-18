@@ -32,17 +32,10 @@ export function useChatMessages(chatId: string, type: 'direct' | 'group') {
 	api.chat.whoIsTyping.useSubscription(
 		{ chatId },
 		{
-			onData: (data) => {
+			onData: (asyncData) => {
 				void (async () => {
-					const arr = []
-					for await (const item of data) {
-						arr.push(item)
-					}
-					const typingData = arr.pop() as
-						| Record<string, { lastTyped: Date }>
-						| undefined
-					if (typingData) {
-						setTypingUsers(typingData)
+					for await (const data of asyncData) {
+						setTypingUsers(data)
 					}
 				})()
 			}
