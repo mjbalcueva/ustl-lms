@@ -179,7 +179,7 @@ export function ChatMessage({
 							)}
 						>
 							{!isLastInSequence && !isCurrentUser && (
-								<span className="size-8"></span>
+								<span className="min-w-8"></span>
 							)}
 
 							{isLastInSequence && !isCurrentUser && (
@@ -218,7 +218,7 @@ export function ChatMessage({
 								<TooltipTrigger asChild>
 									<div
 										className={cn(
-											'flex h-[34px] items-center px-3 transition-colors',
+											'flex min-h-[34px] items-center px-3 py-1.5 transition-colors',
 											isCurrentUser
 												? cn(
 														'bg-primary text-primary-foreground hover:bg-primary/90',
