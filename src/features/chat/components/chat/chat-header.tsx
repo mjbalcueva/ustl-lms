@@ -11,7 +11,7 @@ import {
 	AvatarFallback,
 	AvatarImage
 } from '@/core/components/ui/avatar'
-import { Call, ChevronLeft, Info, VideoCall } from '@/core/lib/icons'
+import { Call, ChevronLeft, VideoCall } from '@/core/lib/icons'
 
 import { ActionButton } from '@/features/chat/components/ui/action-button'
 
@@ -29,7 +29,7 @@ export const ChatHeader = ({ chatId }: { chatId: string }) => {
 
 	return (
 		<motion.div
-			className="fixed left-0 right-0 top-14 z-[5] flex h-[57px] items-center justify-between border-b bg-background px-2 sm:px-4 md:relative md:top-0"
+			className="fixed left-0 right-0 top-14 z-[5] flex h-[57px] items-center justify-between border-b bg-card px-2 dark:bg-background sm:px-4 md:relative md:top-0"
 			initial={{
 				y: 0
 			}}
@@ -57,9 +57,9 @@ export const ChatHeader = ({ chatId }: { chatId: string }) => {
 				<ActionButton className="hover:text-primary">
 					<VideoCall className="!size-5 shrink-0" />
 				</ActionButton>
-				<ActionButton className="hover:text-primary">
+				{/* <ActionButton className="hover:text-primary">
 					<Info className="!size-5 shrink-0" />
-				</ActionButton>
+				</ActionButton> */}
 			</div>
 		</motion.div>
 	)

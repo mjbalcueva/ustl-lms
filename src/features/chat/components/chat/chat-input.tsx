@@ -57,7 +57,7 @@ export function ChatInput({ onSend, onTyping, isLoading }: ChatInputProps) {
 	}, [])
 
 	return (
-		<div className="fixed bottom-0 left-0 right-0 z-10 border-t bg-background p-4 md:relative">
+		<div className="fixed bottom-0 left-0 right-0 z-10 border-t bg-card p-4 dark:bg-background md:relative">
 			<div className="flex gap-2">
 				<Textarea
 					value={content}

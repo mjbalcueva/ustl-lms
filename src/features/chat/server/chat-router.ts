@@ -21,12 +21,24 @@ type ChatMessageEvent = {
 	createdAt: Date
 	chatId: string
 	type: 'direct' | 'group'
+	readBy: Array<{
+		id: string
+		name: string | null
+		image: string | null
+	}>
+	isLastReadByUser: boolean
 }
 
 type DirectMessageWithSender = DirectChatMessage & {
 	sender: User & {
 		profile: Profile | null
 	}
+	readBy: Array<{
+		userId: string
+		user: User & {
+			profile: Profile | null
+		}
+	}>
 }
 
 type GroupMessageWithSender = GroupChatMessage & {
@@ -35,6 +47,12 @@ type GroupMessageWithSender = GroupChatMessage & {
 			profile: Profile | null
 		}
 	}
+	readBy: Array<{
+		userId: string
+		user: User & {
+			profile: Profile | null
+		}
+	}>
 }
 
 type Message = DirectMessageWithSender | GroupMessageWithSender
@@ -298,6 +316,11 @@ export const chatRouter = createTRPCRouter({
 					include: {
 						sender: {
 							include: { profile: true }
+						},
+						readBy: {
+							include: {
+								user: { include: { profile: true } }
+							}
 						}
 					}
 				}),
@@ -316,6 +339,11 @@ export const chatRouter = createTRPCRouter({
 									include: { profile: true }
 								}
 							}
+						},
+						readBy: {
+							include: {
+								user: { include: { profile: true } }
+							}
 						}
 					}
 				})
@@ -332,29 +360,39 @@ export const chatRouter = createTRPCRouter({
 				lastMessageTimestamp = message.createdAt
 			}
 
+			function isDirectMessage(
+				message: Message
+			): message is DirectMessageWithSender {
+				return 'directChatMessageId' in message
+			}
+
 			// Yield any messages we missed
 			for (const message of newMessages) {
 				const transformedMessage: ChatMessageEvent = {
-					id:
-						'directChatMessageId' in message
-							? message.directChatMessageId
-							: message.groupChatMessageId,
+					id: isDirectMessage(message)
+						? message.directChatMessageId
+						: message.groupChatMessageId,
 					content: message.content,
 					senderId: message.senderId,
-					senderName:
-						'profile' in message.sender
-							? (message.sender.profile?.name ?? null)
-							: (message.sender.user.profile?.name ?? null),
-					senderImage:
-						'profile' in message.sender
-							? (message.sender.profile?.imageUrl ?? null)
-							: (message.sender.user.profile?.imageUrl ?? null),
+					senderName: isDirectMessage(message)
+						? (message.sender.profile?.name ?? null)
+						: (message.sender.user.profile?.name ?? null),
+					senderImage: isDirectMessage(message)
+						? (message.sender.profile?.imageUrl ?? null)
+						: (message.sender.user.profile?.imageUrl ?? null),
 					createdAt: message.createdAt,
-					chatId:
-						'directChatId' in message
-							? message.directChatId
-							: message.groupChatId,
-					type: 'directChatId' in message ? 'direct' : 'group'
+					chatId: isDirectMessage(message)
+						? message.directChatId
+						: message.groupChatId,
+					type: isDirectMessage(message) ? 'direct' : 'group',
+					readBy: message.readBy.map((receipt) => ({
+						id: receipt.user.id,
+						name: receipt.user.profile?.name ?? null,
+						image: receipt.user.profile?.imageUrl ?? null
+					})),
+					isLastReadByUser: message.readBy.some(
+						(receipt) => receipt.userId === ctx.session.user.id
+					)
 				}
 				yield* maybeYield(transformedMessage)
 			}
@@ -452,43 +490,74 @@ export const chatRouter = createTRPCRouter({
 					include: {
 						sender: {
 							include: { profile: true }
+						},
+						readBy: {
+							include: {
+								user: {
+									include: { profile: true }
+								}
+							}
 						}
 					}
 				})
 
-				// Create or update read receipt for sender
-				await ctx.db.directChatMessageReadReceipt.upsert({
+				// Delete any existing read receipts for this user in this conversation
+				await ctx.db.directChatMessageReadReceipt.deleteMany({
 					where: {
-						messageId_userId: {
-							messageId: message.directChatMessageId,
-							userId
+						userId,
+						message: {
+							directChatId: conversationId
 						}
-					},
-					create: {
+					}
+				})
+
+				// Create a new read receipt for the latest message
+				await ctx.db.directChatMessageReadReceipt.create({
+					data: {
 						userId,
 						messageId: message.directChatMessageId,
 						readAt: new Date()
-					},
-					update: {
-						readAt: new Date()
 					}
 				})
 
-				// Emit the new message event
+				// Fetch the complete message with all read receipts
+				const completeMessage = await ctx.db.directChatMessage.findUnique({
+					where: { directChatMessageId: message.directChatMessageId },
+					include: {
+						sender: {
+							include: { profile: true }
+						},
+						readBy: {
+							include: {
+								user: { include: { profile: true } }
+							}
+						}
+					}
+				})
+
+				if (!completeMessage) throw new Error('Message not found')
+
+				// Emit the new message event for direct chat
 				const transformedMessage: ChatMessageEvent = {
-					id: message.directChatMessageId,
-					content: message.content,
-					senderId: message.senderId,
-					senderName: message.sender.profile?.name ?? null,
-					senderImage: message.sender.profile?.imageUrl ?? null,
-					createdAt: message.createdAt,
-					chatId: message.directChatId,
-					type: 'direct'
+					id: completeMessage.directChatMessageId,
+					content: completeMessage.content,
+					senderId: completeMessage.senderId,
+					senderName: completeMessage.sender.profile?.name ?? null,
+					senderImage: completeMessage.sender.profile?.imageUrl ?? null,
+					createdAt: completeMessage.createdAt,
+					chatId: completeMessage.directChatId,
+					type: 'direct',
+					readBy: completeMessage.readBy.map((receipt) => ({
+						id: receipt.user.id,
+						name: receipt.user.profile?.name ?? null,
+						image: receipt.user.profile?.imageUrl ?? null
+					})),
+					isLastReadByUser: true
 				}
 
 				ee.emit('onMessage', conversationId, transformedMessage)
 
-				return message
+				return completeMessage
 			}
 
 			// Handle group chat messages
@@ -532,43 +601,76 @@ export const chatRouter = createTRPCRouter({
 								include: { profile: true }
 							}
 						}
+					},
+					readBy: {
+						include: {
+							user: {
+								include: { profile: true }
+							}
+						}
 					}
 				}
 			})
 
-			// Create or update read receipt for sender
-			await ctx.db.groupChatMessageReadReceipt.upsert({
+			// Delete any existing read receipts for this user in this conversation
+			await ctx.db.groupChatMessageReadReceipt.deleteMany({
 				where: {
-					messageId_userId: {
-						messageId: message.groupChatMessageId,
-						userId
+					userId,
+					message: {
+						groupChatId: conversationId
 					}
-				},
-				create: {
+				}
+			})
+
+			// Create a new read receipt for the latest message
+			await ctx.db.groupChatMessageReadReceipt.create({
+				data: {
 					userId,
 					messageId: message.groupChatMessageId,
 					readAt: new Date()
-				},
-				update: {
-					readAt: new Date()
 				}
 			})
 
-			// Emit the new message event
+			// Fetch the complete message with all read receipts
+			const completeMessage = await ctx.db.groupChatMessage.findUnique({
+				where: { groupChatMessageId: message.groupChatMessageId },
+				include: {
+					sender: {
+						include: {
+							user: { include: { profile: true } }
+						}
+					},
+					readBy: {
+						include: {
+							user: { include: { profile: true } }
+						}
+					}
+				}
+			})
+
+			if (!completeMessage) throw new Error('Message not found')
+
+			// Emit the new message event for group chat
 			const transformedMessage: ChatMessageEvent = {
-				id: message.groupChatMessageId,
-				content: message.content,
-				senderId: message.sender.userId,
-				senderName: message.sender.user.profile?.name ?? null,
-				senderImage: message.sender.user.profile?.imageUrl ?? null,
-				createdAt: message.createdAt,
-				chatId: message.groupChatId,
-				type: 'group'
+				id: completeMessage.groupChatMessageId,
+				content: completeMessage.content,
+				senderId: member.userId,
+				senderName: completeMessage.sender.user.profile?.name ?? null,
+				senderImage: completeMessage.sender.user.profile?.imageUrl ?? null,
+				createdAt: completeMessage.createdAt,
+				chatId: completeMessage.groupChatId,
+				type: 'group',
+				readBy: completeMessage.readBy.map((receipt) => ({
+					id: receipt.user.id,
+					name: receipt.user.profile?.name ?? null,
+					image: receipt.user.profile?.imageUrl ?? null
+				})),
+				isLastReadByUser: true
 			}
 
 			ee.emit('onMessage', conversationId, transformedMessage)
 
-			return message
+			return completeMessage
 		}),
 
 	getConversationMessages: protectedProcedure
@@ -605,31 +707,11 @@ export const chatRouter = createTRPCRouter({
 						}
 					}))
 
-			// Find the last read message for each user
-			const lastReadMessageIds = new Set<string>()
-			const userReadTimes = new Map<string, Date>()
-
-			for (const message of messages) {
-				for (const receipt of message.readBy) {
-					const prevReadTime = userReadTimes.get(receipt.userId)
-					if (!prevReadTime || receipt.readAt > prevReadTime) {
-						userReadTimes.set(receipt.userId, receipt.readAt)
-						lastReadMessageIds.add(
-							'directChatMessageId' in message
-								? message.directChatMessageId
-								: message.groupChatMessageId
-						)
-					}
-				}
-			}
-
 			// Transform messages with read receipt data
 			const transformedMessages = messages.map((message) => ({
 				...message,
-				isLastReadByUser: lastReadMessageIds.has(
-					'directChatMessageId' in message
-						? message.directChatMessageId
-						: message.groupChatMessageId
+				isLastReadByUser: message.readBy.some(
+					(receipt) => receipt.userId === ctx.session.user.id
 				)
 			}))
 
@@ -700,90 +782,68 @@ export const chatRouter = createTRPCRouter({
 			const userId = ctx.session.user.id
 
 			if (type === 'direct') {
-				// Check if user already has a read receipt for this conversation
-				const existingReceipt =
-					await ctx.db.directChatMessageReadReceipt.findFirst({
-						where: {
-							user: { id: userId },
-							message: { directChatId: conversationId }
-						},
-						orderBy: { readAt: 'desc' }
-					})
-
+				// Get the latest message
 				const latestMessage = await ctx.db.directChatMessage.findFirst({
-					where: { directChatId: conversationId },
+					where: {
+						directChatId: conversationId
+					},
 					orderBy: { createdAt: 'desc' }
 				})
 
 				if (!latestMessage) return null
 
-				// Only create/update if it's a new message
-				if (
-					!existingReceipt ||
-					existingReceipt.messageId !== latestMessage.directChatMessageId
-				) {
-					return await ctx.db.directChatMessageReadReceipt.upsert({
-						where: {
-							messageId_userId: {
-								messageId: latestMessage.directChatMessageId,
-								userId
-							}
-						},
-						create: {
-							userId,
-							messageId: latestMessage.directChatMessageId,
-							readAt: new Date()
-						},
-						update: {
-							readAt: new Date()
-						}
-					})
-				}
-
-				return existingReceipt
-			}
-
-			// Check if user already has a read receipt for this conversation
-			const existingReceipt =
-				await ctx.db.groupChatMessageReadReceipt.findFirst({
+				// Delete any existing read receipts for this user in this conversation
+				await ctx.db.directChatMessageReadReceipt.deleteMany({
 					where: {
-						user: { id: userId },
-						message: { groupChatId: conversationId }
-					},
-					orderBy: { readAt: 'desc' }
+						userId,
+						message: {
+							directChatId: conversationId
+						}
+					}
 				})
 
+				// Create a read receipt only for the latest message
+				await ctx.db.directChatMessageReadReceipt.create({
+					data: {
+						userId,
+						messageId: latestMessage.directChatMessageId,
+						readAt: new Date()
+					}
+				})
+
+				return latestMessage
+			}
+
+			// Handle group chat
 			const latestMessage = await ctx.db.groupChatMessage.findFirst({
-				where: { groupChatId: conversationId },
+				where: {
+					groupChatId: conversationId
+				},
 				orderBy: { createdAt: 'desc' }
 			})
 
 			if (!latestMessage) return null
 
-			// Only create/update if it's a new message
-			if (
-				!existingReceipt ||
-				existingReceipt.messageId !== latestMessage.groupChatMessageId
-			) {
-				return await ctx.db.groupChatMessageReadReceipt.upsert({
-					where: {
-						messageId_userId: {
-							messageId: latestMessage.groupChatMessageId,
-							userId
-						}
-					},
-					create: {
-						userId,
-						messageId: latestMessage.groupChatMessageId,
-						readAt: new Date()
-					},
-					update: {
-						readAt: new Date()
+			// Delete any existing read receipts for this user in this conversation
+			await ctx.db.groupChatMessageReadReceipt.deleteMany({
+				where: {
+					userId,
+					message: {
+						groupChatId: conversationId
 					}
-				})
-			}
+				}
+			})
 
-			return existingReceipt
+			// Create a read receipt only for the latest message
+			await ctx.db.groupChatMessageReadReceipt.create({
+				data: {
+					userId,
+					messageId: latestMessage.groupChatMessageId,
+					readAt: new Date()
+				}
+			})
+
+			return latestMessage
 		}),
 
 	// ---------------------------------------------------------------------------

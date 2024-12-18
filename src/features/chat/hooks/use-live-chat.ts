@@ -46,6 +46,7 @@ type DirectMessage = {
 			} | null
 		} | null
 	}>
+	isLastReadByUser?: boolean
 }
 
 type GroupMessage = {
@@ -77,6 +78,7 @@ type GroupMessage = {
 			} | null
 		} | null
 	}>
+	isLastReadByUser?: boolean
 }
 
 type RawMessage = DirectMessage | GroupMessage
@@ -125,6 +127,7 @@ function transformReadBy(msg: RawMessage): Array<{
 }> {
 	if (!msg.readBy) return []
 
+	// Only include read receipts for the latest message
 	return msg.readBy.map((reader) => ({
 		id: reader.userId,
 		name: reader.user?.profile?.name ?? null,
@@ -145,7 +148,8 @@ export function useLiveChat(chatId: string, type: 'direct' | 'group') {
 		{ conversationId: chatId, type },
 		{
 			refetchOnReconnect: true,
-			refetchOnWindowFocus: true
+			refetchOnWindowFocus: true,
+			refetchInterval: 5000 // Poll every 5 seconds to update read receipts
 		}
 	)
 
@@ -173,7 +177,7 @@ export function useLiveChat(chatId: string, type: 'direct' | 'group') {
 								chatId: rawMsg.groupChatId,
 								type: 'group',
 								readBy: transformReadBy(rawMsg),
-								isLastReadByUser: false
+								isLastReadByUser: rawMsg.isLastReadByUser ?? false
 							} as ChatMessage
 						} else {
 							return {
@@ -186,7 +190,7 @@ export function useLiveChat(chatId: string, type: 'direct' | 'group') {
 								chatId: rawMsg.directChatId,
 								type: 'direct',
 								readBy: transformReadBy(rawMsg),
-								isLastReadByUser: false
+								isLastReadByUser: rawMsg.isLastReadByUser ?? false
 							} as ChatMessage
 						}
 					} catch {
@@ -210,6 +214,15 @@ export function useLiveChat(chatId: string, type: 'direct' | 'group') {
 					const validDate = toValidDate(message.createdAt)
 					if (!validDate) return prev
 
+					// Find any existing read receipts for this message
+					const existingMessage = prev.find((m) => m.id === message.id)
+					const mergedReadBy = existingMessage
+						? [...existingMessage.readBy, ...(message.readBy ?? [])].filter(
+								(reader, index, self) =>
+									index === self.findIndex((r) => r.id === reader.id)
+							)
+						: (message.readBy ?? [])
+
 					const newMessage: ChatMessage = {
 						id: message.id,
 						content: message.content,
@@ -219,11 +232,14 @@ export function useLiveChat(chatId: string, type: 'direct' | 'group') {
 						createdAt: validDate,
 						chatId: message.chatId,
 						type: message.type,
-						readBy: message.readBy ?? [],
+						readBy: mergedReadBy,
 						isLastReadByUser: message.isLastReadByUser ?? false
 					}
 
-					return [...prev, newMessage]
+					// If message exists, update it, otherwise add it
+					return existingMessage
+						? prev.map((m) => (m.id === message.id ? newMessage : m))
+						: [...prev, newMessage]
 				})
 
 				// Also invalidate the query to get any missed messages

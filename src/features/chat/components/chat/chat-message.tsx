@@ -28,6 +28,7 @@ export type Message = {
 		image: string | null
 	}[]
 	isLastReadByUser?: boolean
+	messageIndex?: number
 }
 
 type GroupMessageSender = {
@@ -74,7 +75,8 @@ type RawMessage = {
 
 export function formatMessage(
 	message: RawMessage,
-	type: 'direct' | 'group'
+	type: 'direct' | 'group',
+	messageIndex?: number
 ): Message {
 	if (type === 'group') {
 		const sender = message.sender as GroupMessageSender
@@ -93,7 +95,8 @@ export function formatMessage(
 					name: read.user?.profile?.name ?? null,
 					image: read.user?.profile?.imageUrl ?? null
 				})) ?? [],
-			isLastReadByUser: message.isLastReadByUser ?? false
+			isLastReadByUser: message.isLastReadByUser ?? false,
+			messageIndex
 		}
 	}
 
@@ -114,7 +117,8 @@ export function formatMessage(
 				name: read.user?.profile?.name ?? null,
 				image: read.user?.profile?.imageUrl ?? null
 			})) ?? [],
-		isLastReadByUser: message.isLastReadByUser ?? false
+		isLastReadByUser: message.isLastReadByUser ?? false,
+		messageIndex
 	}
 }
 
@@ -140,6 +144,11 @@ export function ChatMessage({
 		? `${getDayOfWeek(message.createdAt)} ${formatTime(message.createdAt)}`
 		: ''
 
+	// Show read receipts for this message (excluding current user)
+	const readByUsers = (message.readBy ?? []).filter(
+		(reader) => reader.id !== currentUserId
+	)
+
 	return (
 		<>
 			{showTimestamp && (
@@ -156,129 +165,141 @@ export function ChatMessage({
 					isCurrentUser ? 'justify-end' : 'justify-start'
 				)}
 			>
-				<div
-					className={cn(
-						'flex max-w-[80%] items-end gap-2',
-						isCurrentUser ? 'flex-row-reverse' : 'flex-row',
-						!isLastInSequence && !isCurrentUser && 'ml-10'
-					)}
-				>
-					{isLastInSequence && !isCurrentUser && (
-						<Avatar className="size-8 border">
-							{isAssistant ? (
-								<AvatarImage src="/assets/ai-avatar.jpg" alt="AI Assistant" />
-							) : (
-								<AvatarImage
-									src={message.senderImage ?? ''}
-									alt={`${message.senderName}'s avatar`}
-								/>
-							)}
-							<AvatarFallback>
-								{isAssistant
-									? 'AI'
-									: (message.senderName?.[0]?.toUpperCase() ?? '?')}
-							</AvatarFallback>
-						</Avatar>
-					)}
-
-					<div className="flex flex-col gap-1">
-						<Tooltip delayDuration={200}>
-							<TooltipTrigger asChild>
-								<div
-									className={cn(
-										'px-3 py-2 transition-colors',
-										isCurrentUser
-											? cn(
-													'bg-primary text-primary-foreground hover:bg-primary/90',
-													isLastInSequence && 'rounded-2xl rounded-r-md',
-													!isLastInSequence &&
-														'rounded-2xl rounded-br-md rounded-tr-md',
-													isFirstInSequence && 'mt-3 rounded-2xl rounded-br-md'
-												)
-											: cn(
-													'bg-muted hover:bg-muted/90',
-													isLastInSequence && 'rounded-2xl rounded-l-md',
-													!isLastInSequence &&
-														'rounded-2xl rounded-bl-md rounded-tl-md',
-													isFirstInSequence && 'mt-3 rounded-2xl rounded-bl-md'
-												)
-									)}
-									aria-label={`Message from ${message.senderName} at ${timestamp}`}
-								>
-									<MarkdownRenderer>{message.content}</MarkdownRenderer>
-								</div>
-							</TooltipTrigger>
-							<TooltipContent
-								side="top"
-								align={isCurrentUser ? 'end' : 'start'}
-								className="rounded-xl bg-popover/75 px-3 py-1.5 text-sm backdrop-blur-sm"
-							>
-								{timestamp}
-							</TooltipContent>
-						</Tooltip>
-
-						{isCurrentUser && message.readBy && message.readBy.length > 0 && (
-							<div className="flex justify-end pt-1">
-								<div className="flex items-center gap-1">
-									{message.readBy
-										.filter((reader) => reader.id !== currentUserId)
-										.slice(0, 3)
-										.map((reader) => (
-											<Tooltip key={reader.id} delayDuration={200}>
-												<TooltipTrigger asChild>
-													<Avatar className="size-5 border border-background">
-														<AvatarImage
-															src={reader.image ?? ''}
-															alt={`${reader.name}'s avatar`}
-														/>
-														<AvatarFallback className="text-[10px]">
-															{reader.name?.[0]?.toUpperCase() ?? '?'}
-														</AvatarFallback>
-													</Avatar>
-												</TooltipTrigger>
-												<TooltipContent
-													side="top"
-													align="center"
-													className="rounded-xl bg-popover/75 px-3 py-1.5 text-sm backdrop-blur-sm"
-												>
-													Seen by {reader.name} at{' '}
-													{formatTime(message.createdAt)}
-												</TooltipContent>
-											</Tooltip>
-										))}
-
-									{message.readBy.filter(
-										(reader) => reader.id !== currentUserId
-									).length > 3 && (
-										<Tooltip delayDuration={200}>
-											<TooltipTrigger asChild>
-												<div className="flex size-5 items-center justify-center rounded-full border border-background bg-muted text-[10px]">
-													+
-													{message.readBy.filter(
-														(reader) => reader.id !== currentUserId
-													).length - 3}
-												</div>
-											</TooltipTrigger>
-											<TooltipContent
-												side="top"
-												align="center"
-												className="rounded-xl bg-popover/75 px-3 py-1.5 text-sm backdrop-blur-sm"
-											>
-												<div className="space-y-1">
-													{message.readBy
-														.filter((reader) => reader.id !== currentUserId)
-														.slice(3)
-														.map((reader) => (
-															<div key={reader.id}>{reader.name}</div>
-														))}
-												</div>
-											</TooltipContent>
-										</Tooltip>
-									)}
-								</div>
-							</div>
+				<div className="flex w-full flex-col">
+					<div
+						className={cn(
+							'flex',
+							isCurrentUser ? 'justify-end' : 'justify-start'
 						)}
+					>
+						<div
+							className={cn(
+								'flex max-w-[80%] items-end gap-2',
+								isCurrentUser ? 'flex-row-reverse' : 'flex-row'
+							)}
+						>
+							{!isLastInSequence && !isCurrentUser && (
+								<span className="size-8"></span>
+							)}
+
+							{isLastInSequence && !isCurrentUser && (
+								<Tooltip delayDuration={200}>
+									<TooltipTrigger asChild>
+										<Avatar className="size-8 border">
+											{isAssistant ? (
+												<AvatarImage
+													src="/assets/ai-avatar.jpg"
+													alt="AI Assistant"
+												/>
+											) : (
+												<AvatarImage
+													src={message.senderImage ?? ''}
+													alt={`${message.senderName}'s avatar`}
+												/>
+											)}
+											<AvatarFallback>
+												{isAssistant
+													? 'AI'
+													: (message.senderName?.[0]?.toUpperCase() ?? '?')}
+											</AvatarFallback>
+										</Avatar>
+									</TooltipTrigger>
+									<TooltipContent
+										side="top"
+										align={isCurrentUser ? 'end' : 'start'}
+										className="rounded-xl bg-popover/75 px-3 py-1.5 text-sm backdrop-blur-sm"
+									>
+										{message.senderName}
+									</TooltipContent>
+								</Tooltip>
+							)}
+
+							<Tooltip delayDuration={200}>
+								<TooltipTrigger asChild>
+									<div
+										className={cn(
+											'flex h-[34px] items-center px-3 transition-colors',
+											isCurrentUser
+												? cn(
+														'bg-primary text-primary-foreground hover:bg-primary/90',
+														isLastInSequence && 'rounded-2xl rounded-tr-md',
+														!isLastInSequence &&
+															'rounded-2xl rounded-br-md rounded-tr-md',
+														isFirstInSequence &&
+															'mt-3 rounded-2xl rounded-br-md'
+													)
+												: cn(
+														'bg-muted hover:bg-muted/90',
+														isLastInSequence && 'rounded-2xl rounded-tl-md',
+														!isLastInSequence &&
+															'rounded-2xl rounded-bl-md rounded-tl-md',
+														isFirstInSequence &&
+															'mt-3 rounded-2xl rounded-bl-md'
+													)
+										)}
+										aria-label={`Message from ${message.senderName} at ${timestamp}`}
+									>
+										<MarkdownRenderer>{message.content}</MarkdownRenderer>
+									</div>
+								</TooltipTrigger>
+								<TooltipContent
+									side="top"
+									align={isCurrentUser ? 'end' : 'start'}
+									className="rounded-xl bg-popover/75 px-3 py-1.5 text-sm backdrop-blur-sm"
+								>
+									{timestamp}
+								</TooltipContent>
+							</Tooltip>
+						</div>
 					</div>
+
+					{readByUsers.length > 0 && (
+						<div className="mt-1 flex items-center justify-end gap-0.5">
+							{readByUsers.slice(0, 3).map((reader) => (
+								<Tooltip key={reader.id} delayDuration={200}>
+									<TooltipTrigger asChild>
+										<Avatar className="!size-5 border border-background">
+											<AvatarImage
+												src={reader.image ?? ''}
+												alt={`${reader.name}'s avatar`}
+											/>
+											<AvatarFallback className="text-[10px]">
+												{reader.name?.[0]?.toUpperCase() ?? '?'}
+											</AvatarFallback>
+										</Avatar>
+									</TooltipTrigger>
+									<TooltipContent
+										side="top"
+										align="center"
+										className="rounded-xl bg-popover/75 px-3 py-1.5 text-sm backdrop-blur-sm"
+									>
+										Seen by {reader.name} at {formatTime(message.createdAt)}
+									</TooltipContent>
+								</Tooltip>
+							))}
+
+							{readByUsers.length > 3 && (
+								<Tooltip delayDuration={200}>
+									<TooltipTrigger asChild>
+										<div className="flex !size-5 items-center justify-center rounded-full border border-background bg-muted text-[8px]">
+											+{readByUsers.length - 3}
+										</div>
+									</TooltipTrigger>
+									<TooltipContent
+										side="top"
+										align="center"
+										className="rounded-xl bg-popover/75 px-3 py-1.5 text-sm backdrop-blur-sm"
+									>
+										<div className="space-y-1">
+											{readByUsers.slice(3).map((reader) => (
+												<div key={reader.id}>{reader.name}</div>
+											))}
+										</div>
+									</TooltipContent>
+								</Tooltip>
+							)}
+						</div>
+					)}
 				</div>
 			</div>
 		</>
