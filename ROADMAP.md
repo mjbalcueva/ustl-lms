@@ -40,13 +40,13 @@
   - [x] Email verification
   - [x] Two-factor authentication (2FA)
 
-### User Management (4/9)
+### User Management (5/9)
 
 - [ ] Profile
   - [x] Change name
   - [ ] Add pronouns
   - [ ] Change picture
-  - [ ] Add bio
+  - [x] Add bio
   - [ ] Add date of birth
 - [x] Account
   - [x] Toggle 2FA
@@ -63,45 +63,45 @@
     - [x] Sort options
   - [ ] Interactions
     - [ ] Course Forum
-    - [ ] Course Video Calls
+    - [x] Course Video Calls
   - [ ] Lessons
     - [x] Lesson content
-    - [ ] Progress tracking
-      - [ ] Not started
-      - [ ] In progress
-      - [ ] Completed
+    - [x] Progress tracking
+      - [x] Not started
+      - [x] In progress
+      - [x] Completed
     - [ ] Lesson Forums
-    - [ ] AI-assisted chat for lesson topics
+    - [x] AI-assisted chat for lesson topics
   - [ ] Assessments
-    - [ ] Activities
-    - [ ] Exams
-    - [ ] Quizzes
+    - [x] Activities
+    - [x] Exams
+    - [x] Quizzes
     - [ ] Features:
-      - [ ] Multi-part structure
-      - [ ] Question types:
-        - [ ] Multiple choice
-        - [ ] Checkbox
-        - [ ] Fill in the blank
-        - [ ] Short answer
+      - [x] Multi-part structure
+      - [x] Question types:
+        - [x] Multiple choice
+        - [x] Checkbox
+        - [x] Fill in the blank
+        - [x] Short answer
       - [ ] Assessment availability settings:
         - [ ] Set start and end date/time (including expiration)
         - [ ] Set time limit for completion
-      - [ ] AI-assisted question generation
+      - [x] AI-assisted question generation
 - [ ] Instructor Tools
   - [x] Content Management
     - [x] Create, modify, and delete courses
     - [x] Create, modify, and delete lessons
     - [x] Attach external resources to lessons
-  - [ ] Assessment Creation
-    - [ ] AI-powered question bank
-    - [ ] Automated difficulty rating for questions
-    - [ ] Smart question selection based on learning objectives
+  - [x] Assessment Creation
+    - [x] AI-powered question bank
+    - [x] Automated difficulty rating for questions
+    - [x] Smart question selection based on learning objectives
   - [ ] Schedule and conduct video calls
 
 ### Analytics and Progress Tracking (0/11)
 
 - [ ] Student Dashboard
-  - [ ] View course progress and completion rates
+  - [x] View course progress and completion rates
   - [ ] Track assessment scores and overall performance
   - [ ] Display personalized learning recommendations
 - [ ] Instructor Dashboard
@@ -119,7 +119,7 @@
     - [ ] Set group name and description
     - [ ] Add initial members
   - [ ] Management
-    - [ ] Invite users to group
+    - [x] Invite users to group
     - [ ] Remove users from group
     - [ ] Assign/change group admin roles
   - [ ] Deletion
@@ -128,15 +128,15 @@
 - [ ] Communication
   - [ ] Peer-to-peer
     - [ ] Text messages
-      - [ ] Send/receive in real-time
-      - [ ] Edit and delete messages
+      - [x] Send/receive in real-time
+      - [x] Edit and delete messages
     - [ ] Voice/Video calls
-      - [ ] Initiate and receive calls
-      - [ ] Screen sharing
+      - [x] Initiate and receive calls
+      - [x] Screen sharing
   - [ ] Peer-to-group
-    - [ ] Text messages
-      - [ ] Send/receive in real-time
+    - [x] Text messages
+      - [x] Send/receive in real-time
       - [ ] Mention specific users
     - [ ] Voice/Video calls
-      - [ ] Initiate and join group calls
+      - [x] Initiate and join group calls
       - [ ] Participant management (mute, remove)
