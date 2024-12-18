@@ -33,7 +33,18 @@ export function useChatMessages(chatId: string, type: 'direct' | 'group') {
 		{ chatId },
 		{
 			onData: (data) => {
-				setTypingUsers(data)
+				void (async () => {
+					const arr = []
+					for await (const item of data) {
+						arr.push(item)
+					}
+					const typingData = arr.pop() as
+						| Record<string, { lastTyped: Date }>
+						| undefined
+					if (typingData) {
+						setTypingUsers(typingData)
+					}
+				})()
 			}
 		}
 	)

@@ -13,11 +13,11 @@ async function main() {
 		// Clean existing data
 		console.log('Cleaning existing data...')
 		await db.$transaction([
-			db.chatMessage.deleteMany(),
-			db.chatMember.deleteMany(),
-			db.chatRoom.deleteMany(),
-			db.chatDirectMessage.deleteMany(),
-			db.chatConversation.deleteMany(),
+			db.groupChatMessage.deleteMany(),
+			db.groupChatMember.deleteMany(),
+			db.groupChat.deleteMany(),
+			db.directChatMessage.deleteMany(),
+			db.directChat.deleteMany(),
 			db.courseEnrollment.deleteMany(),
 			db.chapter.deleteMany(),
 			db.course.deleteMany(),

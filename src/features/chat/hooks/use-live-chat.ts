@@ -97,7 +97,73 @@ export function useLiveChat(chatId: string, type: 'direct' | 'group') {
 		lastMessageId === false ? skipToken : { chatId, lastMessageId },
 		{
 			onData(event) {
-				addMessages([event.data])
+				void (async () => {
+					for await (const item of event) {
+						const message: ChatMessage = {
+							id:
+								'directChatMessageId' in item
+									? (item as unknown as { directChatMessageId: string })
+											.directChatMessageId
+									: (item as unknown as { groupChatMessageId: string })
+											.groupChatMessageId,
+							content: (item as unknown as { content: string }).content,
+							senderId: (item as unknown as { senderId: string }).senderId,
+							senderName: (() => {
+								const sender = (item as unknown as { sender: unknown }).sender
+								if (
+									typeof sender === 'object' &&
+									sender &&
+									'profile' in sender
+								) {
+									return (
+										(sender as { profile?: { name?: string | null } }).profile
+											?.name ?? null
+									)
+								}
+								if (typeof sender === 'object' && sender && 'user' in sender) {
+									return (
+										(
+											sender as {
+												user?: { profile?: { name?: string | null } }
+											}
+										).user?.profile?.name ?? null
+									)
+								}
+								return null
+							})(),
+							senderImage: (() => {
+								const sender = (item as unknown as { sender: unknown }).sender
+								if (
+									typeof sender === 'object' &&
+									sender &&
+									'profile' in sender
+								) {
+									return (
+										(sender as { profile?: { imageUrl?: string | null } })
+											.profile?.imageUrl ?? null
+									)
+								}
+								if (typeof sender === 'object' && sender && 'user' in sender) {
+									return (
+										(
+											sender as {
+												user?: { profile?: { imageUrl?: string | null } }
+											}
+										).user?.profile?.imageUrl ?? null
+									)
+								}
+								return null
+							})(),
+							createdAt: (item as unknown as { createdAt: Date }).createdAt,
+							chatId:
+								'directChatId' in item
+									? (item as unknown as { directChatId: string }).directChatId
+									: (item as unknown as { groupChatId: string }).groupChatId,
+							type: 'directChatId' in item ? 'direct' : 'group'
+						}
+						addMessages([message])
+					}
+				})()
 			},
 			onError(err) {
 				console.error('Message subscription error:', err)
@@ -115,8 +181,12 @@ export function useLiveChat(chatId: string, type: 'direct' | 'group') {
 	const typingSubscription = api.chat.whoIsTyping.useSubscription(
 		{ chatId },
 		{
-			onData(data: TypingIndicator) {
-				setTypingData(data)
+			onData(data) {
+				void (async () => {
+					for await (const item of data) {
+						setTypingData(item as TypingIndicator)
+					}
+				})()
 			},
 			onError(err) {
 				console.error('Typing subscription error:', err)
@@ -133,13 +203,15 @@ export function useLiveChat(chatId: string, type: 'direct' | 'group') {
 				{
 					id:
 						'directChatMessageId' in newMessage
-							? newMessage.directChatMessageId
-							: newMessage.groupChatMessageId,
-					content: newMessage.content,
-					senderId: newMessage.senderId,
-					senderName: null, // Will be updated by subscription
-					senderImage: null, // Will be updated by subscription
-					createdAt: newMessage.createdAt,
+							? (newMessage as unknown as { directChatMessageId: string })
+									.directChatMessageId
+							: (newMessage as unknown as { groupChatMessageId: string })
+									.groupChatMessageId,
+					content: (newMessage as unknown as { content: string }).content,
+					senderId: (newMessage as unknown as { senderId: string }).senderId,
+					senderName: null,
+					senderImage: null,
+					createdAt: (newMessage as unknown as { createdAt: Date }).createdAt,
 					chatId,
 					type
 				}

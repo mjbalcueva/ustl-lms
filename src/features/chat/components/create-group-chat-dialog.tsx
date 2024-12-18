@@ -39,7 +39,6 @@ import {
 } from '@/core/components/ui/form'
 import { Input } from '@/core/components/ui/input'
 import { Check, X } from '@/core/lib/icons'
-import { cn } from '@/core/lib/utils/cn'
 
 const formSchema = z.object({
 	name: z.string().min(1, 'Group name is required'),
@@ -144,6 +143,47 @@ export function CreateGroupChatDialog({
 												onValueChange={handleSearchChange}
 											/>
 											<CommandList className="max-h-52 overflow-y-auto">
+												{selectedMembers.length > 0 && (
+													<CommandGroup heading="Selected Members">
+														{users
+															?.filter((user) =>
+																selectedMembers.includes(user.id)
+															)
+															.map((user) => (
+																<CommandItem
+																	key={user.id}
+																	onSelect={() => toggleMember(user.id)}
+																	className="gap-2"
+																>
+																	<Avatar className="size-8">
+																		<AvatarImage src={user.imageUrl ?? ''} />
+																		<AvatarFallback>
+																			{user.name?.[0]?.toUpperCase() ?? '?'}
+																		</AvatarFallback>
+																	</Avatar>
+																	<div className="flex-1">
+																		<p className="text-sm font-medium">
+																			{user.name}
+																		</p>
+																		{user.email && (
+																			<p className="text-xs text-muted-foreground">
+																				{user.email}
+																			</p>
+																		)}
+																	</div>
+																	<Button
+																		type="button"
+																		variant="ghost"
+																		size="icon"
+																		className="size-8 text-primary"
+																	>
+																		<Check className="size-4" />
+																	</Button>
+																</CommandItem>
+															))}
+													</CommandGroup>
+												)}
+
 												<CommandEmpty>
 													{isLoading
 														? 'Searching...'
@@ -151,48 +191,47 @@ export function CreateGroupChatDialog({
 															? 'No users found'
 															: 'Start typing to search users'}
 												</CommandEmpty>
-												<CommandGroup>
-													{users?.map((user) => (
-														<CommandItem
-															key={user.id}
-															onSelect={() => toggleMember(user.id)}
-															className="gap-2"
-														>
-															<Avatar className="size-8">
-																<AvatarImage src={user.imageUrl ?? ''} />
-																<AvatarFallback>
-																	{user.name?.[0]?.toUpperCase() ?? '?'}
-																</AvatarFallback>
-															</Avatar>
-															<div className="flex-1">
-																<p className="text-sm font-medium">
-																	{user.name}
-																</p>
-																{user.email && (
-																	<p className="text-xs text-muted-foreground">
-																		{user.email}
-																	</p>
-																)}
-															</div>
-															<Button
-																type="button"
-																variant="ghost"
-																size="icon"
-																className={cn(
-																	'size-8',
-																	selectedMembers.includes(user.id) &&
-																		'text-primary'
-																)}
-															>
-																{selectedMembers.includes(user.id) ? (
-																	<Check className="size-4" />
-																) : (
-																	<X className="size-4" />
-																)}
-															</Button>
-														</CommandItem>
-													))}
-												</CommandGroup>
+
+												{users && users.length > 0 && (
+													<CommandGroup heading="Search Results">
+														{users
+															.filter(
+																(user) => !selectedMembers.includes(user.id)
+															)
+															.map((user) => (
+																<CommandItem
+																	key={user.id}
+																	onSelect={() => toggleMember(user.id)}
+																	className="gap-2"
+																>
+																	<Avatar className="size-8">
+																		<AvatarImage src={user.imageUrl ?? ''} />
+																		<AvatarFallback>
+																			{user.name?.[0]?.toUpperCase() ?? '?'}
+																		</AvatarFallback>
+																	</Avatar>
+																	<div className="flex-1">
+																		<p className="text-sm font-medium">
+																			{user.name}
+																		</p>
+																		{user.email && (
+																			<p className="text-xs text-muted-foreground">
+																				{user.email}
+																			</p>
+																		)}
+																	</div>
+																	<Button
+																		type="button"
+																		variant="ghost"
+																		size="icon"
+																		className="size-8"
+																	>
+																		<X className="size-4" />
+																	</Button>
+																</CommandItem>
+															))}
+													</CommandGroup>
+												)}
 											</CommandList>
 										</Command>
 									</FormControl>
