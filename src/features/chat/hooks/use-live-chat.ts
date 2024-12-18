@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { skipToken } from '@tanstack/react-query'
 
 import { api } from '@/services/trpc/react'
 
@@ -12,161 +11,232 @@ type ChatMessage = {
 	createdAt: Date
 	chatId: string
 	type: 'direct' | 'group'
+	readBy: Array<{
+		id: string
+		name: string | null
+		image: string | null
+	}>
+	isLastReadByUser: boolean
 }
 
 type TypingIndicator = Record<string, { lastTyped: Date }>
+
+type DirectMessage = {
+	directChatMessageId: string
+	directChatId: string
+	senderId: string
+	content: string
+	fileUrl: string | null
+	deleted: boolean
+	createdAt: Date
+	updatedAt: Date
+	sender: {
+		id: string
+		profile?: {
+			name: string | null
+			imageUrl: string | null
+		} | null
+	}
+	readBy?: Array<{
+		userId: string
+		user: {
+			profile: {
+				name: string | null
+				imageUrl: string | null
+			} | null
+		} | null
+	}>
+}
+
+type GroupMessage = {
+	groupChatMessageId: string
+	groupChatId: string
+	senderId: string
+	content: string
+	fileUrl: string | null
+	deleted: boolean
+	createdAt: Date
+	updatedAt: Date
+	sender: {
+		groupChatMemberId: string
+		userId: string
+		user: {
+			id: string
+			profile?: {
+				name: string | null
+				imageUrl: string | null
+			} | null
+		}
+	}
+	readBy?: Array<{
+		userId: string
+		user: {
+			profile: {
+				name: string | null
+				imageUrl: string | null
+			} | null
+		} | null
+	}>
+}
+
+type RawMessage = DirectMessage | GroupMessage
+
+type MessageEvent = {
+	id: string
+	content: string
+	senderId: string
+	senderName: string | null
+	senderImage: string | null
+	createdAt: string | Date
+	chatId: string
+	type: 'direct' | 'group'
+	readBy?: Array<{
+		id: string
+		name: string | null
+		image: string | null
+	}>
+	isLastReadByUser?: boolean
+}
+
+/**
+ * Safely converts a value to a Date object
+ */
+function toValidDate(date: Date | string | number | undefined): Date | null {
+	if (!date) return null
+	if (date instanceof Date) return isNaN(date.getTime()) ? null : date
+	if (typeof date === 'number' && isNaN(date)) return null
+
+	try {
+		const parsed = new Date(date)
+		return isNaN(parsed.getTime()) ? null : parsed
+	} catch {
+		return null
+	}
+}
+
+function isGroupMessage(msg: RawMessage): msg is GroupMessage {
+	return 'groupChatMessageId' in msg
+}
+
+function transformReadBy(msg: RawMessage): Array<{
+	id: string
+	name: string | null
+	image: string | null
+}> {
+	if (!msg.readBy) return []
+
+	return msg.readBy.map((reader) => ({
+		id: reader.userId,
+		name: reader.user?.profile?.name ?? null,
+		image: reader.user?.profile?.imageUrl ?? null
+	}))
+}
 
 /**
  * Hook to handle real-time chat messages and typing indicators
  */
 export function useLiveChat(chatId: string, type: 'direct' | 'group') {
-	// Get initial messages
+	const utils = api.useUtils()
+	const [messages, setMessages] = React.useState<ChatMessage[] | null>(null)
+	const [typingData, setTypingData] = React.useState<TypingIndicator>({})
+
+	// Get messages with automatic updates enabled
 	const { data: initialData } = api.chat.getConversationMessages.useQuery(
 		{ conversationId: chatId, type },
 		{
-			// No need to refetch as we have SSE subscription
-			refetchOnReconnect: false,
-			refetchOnWindowFocus: false,
-			refetchOnMount: false
+			refetchOnReconnect: true,
+			refetchOnWindowFocus: true
 		}
 	)
-
-	// Track messages state
-	const [messages, setMessages] = React.useState<ChatMessage[] | null>(null)
-
-	// Track last message ID for SSE reconnection
-	const [lastMessageId, setLastMessageId] = React.useState<
-		string | null | false
-	>(false)
-
-	// Track typing indicators state
-	const [typingData, setTypingData] = React.useState<TypingIndicator>({})
 
 	// Initialize messages from query data
 	React.useEffect(() => {
 		if (initialData?.messages) {
-			const transformedMessages: ChatMessage[] = initialData.messages.map(
-				(msg) => ({
-					id:
-						'directChatMessageId' in msg
-							? msg.directChatMessageId
-							: msg.groupChatMessageId,
-					content: msg.content,
-					senderId: msg.senderId,
-					senderName:
-						('profile' in msg.sender
-							? msg.sender.profile?.name
-							: msg.sender.user.profile?.name) ?? null,
-					senderImage:
-						('profile' in msg.sender
-							? msg.sender.profile?.imageUrl
-							: msg.sender.user.profile?.imageUrl) ?? null,
-					createdAt: msg.createdAt,
-					chatId: 'directChatId' in msg ? msg.directChatId : msg.groupChatId,
-					type: 'directChatId' in msg ? 'direct' : 'group'
+			const transformedMessages = initialData.messages
+				.filter((msg): msg is NonNullable<typeof msg> => msg !== null)
+				.map((msg) => {
+					try {
+						const rawMsg = msg as RawMessage
+						const validDate = toValidDate(rawMsg.createdAt)
+						if (!validDate) return null
+
+						const isGroupMsg = isGroupMessage(rawMsg)
+
+						if (isGroupMsg) {
+							return {
+								id: rawMsg.groupChatMessageId,
+								content: rawMsg.content,
+								senderId: rawMsg.sender.userId,
+								senderName: rawMsg.sender.user.profile?.name ?? null,
+								senderImage: rawMsg.sender.user.profile?.imageUrl ?? null,
+								createdAt: validDate,
+								chatId: rawMsg.groupChatId,
+								type: 'group',
+								readBy: transformReadBy(rawMsg),
+								isLastReadByUser: false
+							} as ChatMessage
+						} else {
+							return {
+								id: rawMsg.directChatMessageId,
+								content: rawMsg.content,
+								senderId: rawMsg.sender.id,
+								senderName: rawMsg.sender.profile?.name ?? null,
+								senderImage: rawMsg.sender.profile?.imageUrl ?? null,
+								createdAt: validDate,
+								chatId: rawMsg.directChatId,
+								type: 'direct',
+								readBy: transformReadBy(rawMsg),
+								isLastReadByUser: false
+							} as ChatMessage
+						}
+					} catch {
+						return null
+					}
 				})
-			)
+				.filter((msg): msg is ChatMessage => msg !== null)
+
 			setMessages(transformedMessages)
-			setLastMessageId(
-				transformedMessages[transformedMessages.length - 1]?.id ?? null
-			)
 		}
-	}, [initialData?.messages])
-
-	// Function to add and dedupe new messages
-	const addMessages = React.useCallback((incoming?: ChatMessage[]) => {
-		setMessages((current) => {
-			if (!current) return incoming ?? null
-			if (!incoming) return current
-
-			const map: Record<string, ChatMessage> = {}
-			for (const msg of current) {
-				map[msg.id] = msg
-			}
-			for (const msg of incoming) {
-				map[msg.id] = msg
-			}
-			return Object.values(map).sort(
-				(a, b) => a.createdAt.getTime() - b.createdAt.getTime()
-			)
-		})
-	}, [])
+	}, [initialData?.messages, type])
 
 	// Subscribe to new messages
-	const messageSubscription = api.chat.onMessage.useSubscription(
-		lastMessageId === false ? skipToken : { chatId, lastMessageId },
+	api.chat.onMessage.useSubscription(
+		{ chatId, lastMessageId: null },
 		{
-			onData(item) {
-				const message: ChatMessage = {
-					id:
-						'directChatMessageId' in item
-							? (item as unknown as { directChatMessageId: string })
-									.directChatMessageId
-							: (item as unknown as { groupChatMessageId: string })
-									.groupChatMessageId,
-					content: (item as unknown as { content: string }).content,
-					senderId: (item as unknown as { senderId: string }).senderId,
-					senderName: (() => {
-						const sender = (item as unknown as { sender: unknown }).sender
-						if (typeof sender === 'object' && sender && 'profile' in sender) {
-							return (
-								(sender as { profile?: { name?: string | null } }).profile
-									?.name ?? null
-							)
-						}
-						if (typeof sender === 'object' && sender && 'user' in sender) {
-							return (
-								(
-									sender as {
-										user?: { profile?: { name?: string | null } }
-									}
-								).user?.profile?.name ?? null
-							)
-						}
-						return null
-					})(),
-					senderImage: (() => {
-						const sender = (item as unknown as { sender: unknown }).sender
-						if (typeof sender === 'object' && sender && 'profile' in sender) {
-							return (
-								(sender as { profile?: { imageUrl?: string | null } }).profile
-									?.imageUrl ?? null
-							)
-						}
-						if (typeof sender === 'object' && sender && 'user' in sender) {
-							return (
-								(
-									sender as {
-										user?: { profile?: { imageUrl?: string | null } }
-									}
-								).user?.profile?.imageUrl ?? null
-							)
-						}
-						return null
-					})(),
-					createdAt: (item as unknown as { createdAt: Date }).createdAt,
-					chatId:
-						'directChatId' in item
-							? (item as unknown as { directChatId: string }).directChatId
-							: (item as unknown as { groupChatId: string }).groupChatId,
-					type: 'directChatId' in item ? 'direct' : 'group'
-				}
-				addMessages([message])
-			},
-			onError(err) {
-				console.error('Message subscription error:', err)
+			onData: (message: MessageEvent) => {
+				// Update messages immediately
+				setMessages((prev) => {
+					if (!prev) return prev
+					const validDate = toValidDate(message.createdAt)
+					if (!validDate) return prev
 
-				const lastMsgId = messages?.at(-1)?.id
-				if (lastMsgId) {
-					// Resubscribe from last message on error
-					setLastMessageId(lastMsgId)
-				}
+					const newMessage: ChatMessage = {
+						id: message.id,
+						content: message.content,
+						senderId: message.senderId,
+						senderName: message.senderName,
+						senderImage: message.senderImage,
+						createdAt: validDate,
+						chatId: message.chatId,
+						type: message.type,
+						readBy: message.readBy ?? [],
+						isLastReadByUser: message.isLastReadByUser ?? false
+					}
+
+					return [...prev, newMessage]
+				})
+
+				// Also invalidate the query to get any missed messages
+				void utils.chat.getConversationMessages.invalidate({
+					conversationId: chatId,
+					type
+				})
 			}
 		}
 	)
 
 	// Subscribe to typing indicators
-	const typingSubscription = api.chat.whoIsTyping.useSubscription(
+	api.chat.whoIsTyping.useSubscription(
 		{ chatId },
 		{
 			onData(data) {
@@ -182,24 +252,11 @@ export function useLiveChat(chatId: string, type: 'direct' | 'group') {
 
 	// Send message mutation
 	const sendMessage = api.chat.sendMessage.useMutation({
-		onSuccess: (newMessage) => {
-			addMessages([
-				{
-					id:
-						'directChatMessageId' in newMessage
-							? (newMessage as unknown as { directChatMessageId: string })
-									.directChatMessageId
-							: (newMessage as unknown as { groupChatMessageId: string })
-									.groupChatMessageId,
-					content: (newMessage as unknown as { content: string }).content,
-					senderId: (newMessage as unknown as { senderId: string }).senderId,
-					senderName: null,
-					senderImage: null,
-					createdAt: (newMessage as unknown as { createdAt: Date }).createdAt,
-					chatId,
-					type
-				}
-			])
+		onSuccess: () => {
+			void utils.chat.getConversationMessages.invalidate({
+				conversationId: chatId,
+				type
+			})
 		}
 	})
 
@@ -207,9 +264,7 @@ export function useLiveChat(chatId: string, type: 'direct' | 'group') {
 		messages,
 		typingUsers,
 		sendMessage,
-		isTypingMutation: useThrottledIsTypingMutation(chatId),
-		messageSubscription,
-		typingSubscription
+		isTypingMutation: useThrottledIsTypingMutation(chatId)
 	}
 }
 

@@ -13,7 +13,7 @@ import { ScrollArea, ScrollBar } from '@/core/components/ui/scroll-area'
 import { Dot } from '@/core/lib/icons'
 
 import { ChatMessage } from '@/features/chat/components/chat/chat-message'
-import { useChatMessages } from '@/features/chat/hooks/use-chat-messages'
+import { useLiveChat } from '@/features/chat/hooks/use-live-chat'
 
 type ChatMessagesProps = {
 	chatId: string
@@ -22,7 +22,7 @@ type ChatMessagesProps = {
 
 export function ChatMessages({ chatId, type }: ChatMessagesProps) {
 	const { data: session } = useSession()
-	const { messages: chatMessages, typingUsers } = useChatMessages(chatId, type)
+	const { messages: chatMessages, typingUsers } = useLiveChat(chatId, type)
 	const messagesEndRef = useRef<HTMLDivElement>(null)
 	const scrollAreaRef = useRef<HTMLDivElement>(null)
 	const lastMessageCountRef = useRef(chatMessages?.length ?? 0)
@@ -49,25 +49,23 @@ export function ChatMessages({ chatId, type }: ChatMessagesProps) {
 		lastMessageCountRef.current = chatMessages.length
 	}, [chatMessages, session?.user?.id])
 
-	const isTyping = Object.keys(typingUsers).some(
-		(id) => id !== session?.user?.id
-	)
-
-	const firstTypingUser = Object.entries(typingUsers).find(
-		([id]) => id !== session?.user?.id
-	)?.[0]
+	const isTyping = typingUsers.some((id) => id !== session?.user?.id)
+	const firstTypingUser = typingUsers.find((id) => id !== session?.user?.id)
 
 	if (!chatMessages || !session?.user) {
 		return <div>Loading messages...</div>
 	}
+
+	// Create a reversed copy of messages for display
+	const displayMessages = [...chatMessages].reverse()
 
 	return (
 		<ScrollArea
 			className="h-[calc(100vh-114px)] flex-1 px-4 md:h-full"
 			ref={scrollAreaRef}
 		>
-			<div className="space-y-1 pb-4 pt-16 md:pt-0">
-				{[...chatMessages].reverse().map((message, index, arr) => {
+			<div className="space-y-1 pb-32 pt-16 md:pt-0">
+				{displayMessages.map((message, index, arr) => {
 					const prevMessage = index > 0 ? arr[index - 1] : null
 					const nextMessage = index < arr.length - 1 ? arr[index + 1] : null
 
@@ -80,16 +78,13 @@ export function ChatMessages({ chatId, type }: ChatMessagesProps) {
 						!prevMessage ||
 						prevMessage.senderId !== message.senderId ||
 						showTimestamp
+
 					const isLastInSequence =
 						!nextMessage || nextMessage.senderId !== message.senderId
 
 					return (
 						<ChatMessage
-							key={
-								'directChatMessageId' in message
-									? message.directChatMessageId
-									: message.groupChatMessageId
-							}
+							key={message.id}
 							message={message}
 							currentUserId={session.user.id}
 							type={type}
@@ -106,39 +101,15 @@ export function ChatMessages({ chatId, type }: ChatMessagesProps) {
 							<Avatar className="size-8 border">
 								<AvatarImage
 									src={
-										type === 'group'
-											? ((
-													chatMessages.find(
-														(m) =>
-															(m.sender as { user: { id: string } }).user.id ===
-															firstTypingUser
-													)?.sender as {
-														user: { profile: { imageUrl: string | null } }
-													}
-												)?.user.profile?.imageUrl ?? '')
-											: ((
-													chatMessages.find(
-														(m) => m.senderId === firstTypingUser
-													)?.sender as { profile: { imageUrl: string | null } }
-												)?.profile?.imageUrl ?? '')
+										chatMessages?.find((m) => m.senderId === firstTypingUser)
+											?.senderImage ?? ''
 									}
 									alt="Typing user"
 								/>
 								<AvatarFallback>
-									{type === 'group'
-										? ((
-												chatMessages.find(
-													(m) =>
-														(m.sender as { user: { id: string } }).user.id ===
-														firstTypingUser
-												)?.sender as {
-													user: { profile: { name: string | null } }
-												}
-											)?.user.profile?.name?.[0]?.toUpperCase() ?? '?')
-										: ((
-												chatMessages.find((m) => m.senderId === firstTypingUser)
-													?.sender as { profile: { name: string | null } }
-											)?.profile?.name?.[0]?.toUpperCase() ?? '?')}
+									{chatMessages
+										?.find((m) => m.senderId === firstTypingUser)
+										?.senderName?.[0]?.toUpperCase() ?? '?'}
 								</AvatarFallback>
 							</Avatar>
 

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { QueryClientProvider, type QueryClient } from '@tanstack/react-query'
-// import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import {
 	loggerLink,
 	splitLink,
@@ -81,12 +81,12 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
 			<api.Provider client={trpcClient} queryClient={queryClient}>
 				{props.children}
 			</api.Provider>
-			{/* {process.env.NODE_ENV === 'development' && (
+			{process.env.NODE_ENV === 'development' && (
 				<ReactQueryDevtools
 					initialIsOpen={false}
 					buttonPosition="bottom-right"
 				/>
-			)} */}
+			)}
 		</QueryClientProvider>
 	)
 }

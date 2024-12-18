@@ -17,9 +17,11 @@ export type Message = {
 	id: string
 	content: string
 	senderId: string
-	senderName: string
-	senderImage: string | null | undefined
+	senderName: string | null
+	senderImage: string | null
 	createdAt: Date
+	chatId: string
+	type: 'direct' | 'group'
 	readBy?: {
 		id: string
 		name: string | null
@@ -28,25 +30,34 @@ export type Message = {
 	isLastReadByUser?: boolean
 }
 
+type GroupMessageSender = {
+	groupChatMemberId: string
+	userId: string
+	groupChatId: string
+	role: string
+	user: {
+		id: string
+		profile?: {
+			name: string | null
+			imageUrl: string | null
+		} | null
+	}
+}
+
+type DirectMessageSender = {
+	profile?: {
+		name: string | null
+		imageUrl: string | null
+	} | null
+}
+
 type RawMessage = {
 	directChatMessageId?: string
 	groupChatMessageId?: string
 	content: string
 	senderId: string
 	createdAt: Date
-	sender: {
-		user?: {
-			id: string
-			profile?: {
-				name: string | null
-				imageUrl: string | null
-			} | null
-		}
-		profile?: {
-			name: string | null
-			imageUrl: string | null
-		} | null
-	}
+	sender: GroupMessageSender | DirectMessageSender
 	readBy?: Array<{
 		userId: string
 		user: {
@@ -57,36 +68,46 @@ type RawMessage = {
 		} | null
 	}>
 	isLastReadByUser?: boolean
+	groupChatId?: string
+	directChatId?: string
 }
 
 export function formatMessage(
 	message: RawMessage,
 	type: 'direct' | 'group'
 ): Message {
+	if (type === 'group') {
+		const sender = message.sender as GroupMessageSender
+		return {
+			id: message.groupChatMessageId ?? 'unknown',
+			content: message.content,
+			senderId: sender.userId,
+			senderName: sender.user.profile?.name ?? 'Unknown',
+			senderImage: sender.user.profile?.imageUrl ?? null,
+			createdAt: message.createdAt,
+			chatId: message.groupChatId ?? 'unknown',
+			type: 'group',
+			readBy:
+				message.readBy?.map((read) => ({
+					id: read.userId,
+					name: read.user?.profile?.name ?? null,
+					image: read.user?.profile?.imageUrl ?? null
+				})) ?? [],
+			isLastReadByUser: message.isLastReadByUser ?? false
+		}
+	}
+
+	// Direct message format
+	const sender = message.sender as DirectMessageSender
 	return {
-		id:
-			'directChatMessageId' in message
-				? message.directChatMessageId!
-				: message.groupChatMessageId!,
+		id: message.directChatMessageId ?? 'unknown',
 		content: message.content,
-		senderId:
-			type === 'group'
-				? (message.sender as { user: { id: string } }).user.id
-				: message.senderId,
-		senderName:
-			type === 'group'
-				? ((message.sender as { user: { profile: { name: string | null } } })
-						.user.profile?.name ?? 'Unknown')
-				: ((message.sender as { profile: { name: string | null } }).profile
-						?.name ?? 'Unknown'),
-		senderImage:
-			type === 'group'
-				? ((
-						message.sender as { user: { profile: { imageUrl: string | null } } }
-					).user.profile?.imageUrl ?? null)
-				: ((message.sender as { profile: { imageUrl: string | null } }).profile
-						?.imageUrl ?? null),
+		senderId: message.senderId,
+		senderName: sender.profile?.name ?? 'Unknown',
+		senderImage: sender.profile?.imageUrl ?? null,
 		createdAt: message.createdAt,
+		chatId: message.directChatId ?? 'unknown',
+		type: type,
 		readBy:
 			message.readBy?.map((read) => ({
 				id: read.userId,
@@ -98,7 +119,7 @@ export function formatMessage(
 }
 
 type ChatMessageProps = {
-	message: RawMessage
+	message: Message
 	currentUserId: string
 	type: 'direct' | 'group'
 	isLastInSequence?: boolean
@@ -107,14 +128,12 @@ type ChatMessageProps = {
 }
 
 export function ChatMessage({
-	message: rawMessage,
+	message,
 	currentUserId,
-	type,
 	isLastInSequence = true,
 	isFirstInSequence = false,
 	showTimestamp = false
 }: ChatMessageProps) {
-	const message = formatMessage(rawMessage, type)
 	const isCurrentUser = message.senderId === currentUserId
 	const isAssistant = message.senderId === 'assistant'
 	const timestamp = message.createdAt
@@ -198,70 +217,67 @@ export function ChatMessage({
 							</TooltipContent>
 						</Tooltip>
 
-						{isCurrentUser &&
-							message.isLastReadByUser &&
-							message.readBy &&
-							message.readBy.filter((reader) => reader.id !== currentUserId)
-								.length > 0 && (
-								<div className="flex justify-end pt-1">
-									<div className="flex items-center gap-1">
-										{message.readBy
-											.filter((reader) => reader.id !== currentUserId)
-											.slice(0, 3)
-											.map((reader) => (
-												<Tooltip key={reader.id} delayDuration={200}>
-													<TooltipTrigger asChild>
-														<Avatar className="size-5 border border-background">
-															<AvatarImage
-																src={reader.image ?? ''}
-																alt={`${reader.name}'s avatar`}
-															/>
-															<AvatarFallback className="text-[10px]">
-																{reader.name?.[0]?.toUpperCase() ?? '?'}
-															</AvatarFallback>
-														</Avatar>
-													</TooltipTrigger>
-													<TooltipContent
-														side="top"
-														align="center"
-														className="rounded-xl bg-popover/75 px-3 py-1.5 text-sm backdrop-blur-sm"
-													>
-														Seen by {reader.name} at{' '}
-														{formatTime(message.createdAt)}
-													</TooltipContent>
-												</Tooltip>
-											))}
-										{message.readBy.filter(
-											(reader) => reader.id !== currentUserId
-										).length > 3 && (
-											<Tooltip delayDuration={200}>
+						{isCurrentUser && message.readBy && message.readBy.length > 0 && (
+							<div className="flex justify-end pt-1">
+								<div className="flex items-center gap-1">
+									{message.readBy
+										.filter((reader) => reader.id !== currentUserId)
+										.slice(0, 3)
+										.map((reader) => (
+											<Tooltip key={reader.id} delayDuration={200}>
 												<TooltipTrigger asChild>
-													<div className="flex size-5 items-center justify-center rounded-full border border-background bg-muted text-[10px]">
-														+
-														{message.readBy.filter(
-															(reader) => reader.id !== currentUserId
-														).length - 3}
-													</div>
+													<Avatar className="size-5 border border-background">
+														<AvatarImage
+															src={reader.image ?? ''}
+															alt={`${reader.name}'s avatar`}
+														/>
+														<AvatarFallback className="text-[10px]">
+															{reader.name?.[0]?.toUpperCase() ?? '?'}
+														</AvatarFallback>
+													</Avatar>
 												</TooltipTrigger>
 												<TooltipContent
 													side="top"
 													align="center"
 													className="rounded-xl bg-popover/75 px-3 py-1.5 text-sm backdrop-blur-sm"
 												>
-													<div className="space-y-1">
-														{message.readBy
-															.filter((reader) => reader.id !== currentUserId)
-															.slice(3)
-															.map((reader) => (
-																<div key={reader.id}>{reader.name}</div>
-															))}
-													</div>
+													Seen by {reader.name} at{' '}
+													{formatTime(message.createdAt)}
 												</TooltipContent>
 											</Tooltip>
-										)}
-									</div>
+										))}
+
+									{message.readBy.filter(
+										(reader) => reader.id !== currentUserId
+									).length > 3 && (
+										<Tooltip delayDuration={200}>
+											<TooltipTrigger asChild>
+												<div className="flex size-5 items-center justify-center rounded-full border border-background bg-muted text-[10px]">
+													+
+													{message.readBy.filter(
+														(reader) => reader.id !== currentUserId
+													).length - 3}
+												</div>
+											</TooltipTrigger>
+											<TooltipContent
+												side="top"
+												align="center"
+												className="rounded-xl bg-popover/75 px-3 py-1.5 text-sm backdrop-blur-sm"
+											>
+												<div className="space-y-1">
+													{message.readBy
+														.filter((reader) => reader.id !== currentUserId)
+														.slice(3)
+														.map((reader) => (
+															<div key={reader.id}>{reader.name}</div>
+														))}
+												</div>
+											</TooltipContent>
+										</Tooltip>
+									)}
 								</div>
-							)}
+							</div>
+						)}
 					</div>
 				</div>
 			</div>
