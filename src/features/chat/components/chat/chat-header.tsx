@@ -51,15 +51,16 @@ export const ChatHeader = ({ chatId }: { chatId: string }) => {
 			</div>
 
 			<div className="flex items-center gap-1">
-				<ActionButton className="hover:text-primary">
-					<Call className="!size-[18px] shrink-0" />
+				<ActionButton className="hover:text-primary" asChild>
+					<Link href={`/chat/${chatId}/call?video=false&audio=true`}>
+						<Call className="!size-[18px] shrink-0" />
+					</Link>
 				</ActionButton>
-				<ActionButton className="hover:text-primary">
-					<VideoCall className="!size-5 shrink-0" />
+				<ActionButton className="hover:text-primary" asChild>
+					<Link href={`/chat/${chatId}/call?video=true&audio=true`}>
+						<VideoCall className="!size-5 shrink-0" />
+					</Link>
 				</ActionButton>
-				{/* <ActionButton className="hover:text-primary">
-					<Info className="!size-5 shrink-0" />
-				</ActionButton> */}
 			</div>
 		</motion.div>
 	)

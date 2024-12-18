@@ -83,23 +83,6 @@ type GroupMessage = {
 
 type RawMessage = DirectMessage | GroupMessage
 
-type MessageEvent = {
-	id: string
-	content: string
-	senderId: string
-	senderName: string | null
-	senderImage: string | null
-	createdAt: string | Date
-	chatId: string
-	type: 'direct' | 'group'
-	readBy?: Array<{
-		id: string
-		name: string | null
-		image: string | null
-	}>
-	isLastReadByUser?: boolean
-}
-
 /**
  * Safely converts a value to a Date object
  */
@@ -207,7 +190,10 @@ export function useLiveChat(chatId: string, type: 'direct' | 'group') {
 	api.chat.onMessage.useSubscription(
 		{ chatId, lastMessageId: null },
 		{
-			onData: (message: MessageEvent) => {
+			onData(trackedMessage) {
+				// Get the actual message data from the tracked wrapper
+				const message = trackedMessage as unknown as ChatMessage
+
 				// Update messages immediately
 				setMessages((prev) => {
 					if (!prev) return prev

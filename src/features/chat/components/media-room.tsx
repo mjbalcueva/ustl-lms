@@ -15,59 +15,57 @@ import { useEffect, useState } from 'react'
 import { Track } from 'livekit-client'
 import { useSession } from 'next-auth/react'
 
-interface MediaRoomProps {
+import { env } from '@/core/env/client'
+import { Loader2 } from '@/core/lib/icons'
+
+type MediaRoomProps = {
 	chatId: string
-	videoId: string
-	audioId: string
+	video: boolean
+	audio: boolean
 }
 
-export const MediaRoom = ({ chatId, videoId, audioId }: MediaRoomProps) => {
+type LiveKitResponse = {
+	token: string
+}
+
+export const MediaRoom = ({ chatId, video, audio }: MediaRoomProps) => {
 	const { data: session } = useSession()
 	const user = session?.user
 
-	// TODO: get user input for room and name
-	const room = 'quickstart-room'
-	const name = 'quickstart-user'
 	const [token, setToken] = useState('')
-
-	// useEffect(() => {
-	// 	;(async () => {
-	// 		try {
-	// 			const resp = await fetch(`/api/livekit?room=${room}&username=${name}`)
-	// 			const data = await resp.json()
-	// 			setToken(data.token)
-	// 		} catch (e) {
-	// 			console.error(e)
-	// 		}
-	// 	})().catch(console.error)
-	// }, [])
 
 	useEffect(() => {
 		if (!user?.name) return
 
-		;(async () => {
+		void (async () => {
 			try {
 				const resp = await fetch(
-					`/api/livekit?room=${room}&username=${user.name}`
+					`/api/livekit?room=${chatId}&username=${user.name}`
 				)
-				const data = await resp.json()
+				const data = (await resp.json()) as LiveKitResponse
 				setToken(data.token)
-			} catch (error) {
-				console.error(error)
+			} catch (e) {
+				console.log(e)
 			}
-		})().catch(console.error)
-	}, [user])
+		})()
+	}, [user, chatId])
 
 	if (token === '') {
-		return <div>Getting token...</div>
+		return (
+			<div className="flex flex-1 flex-col items-center justify-center">
+				<Loader2 className="my-4 size-7 animate-spin text-muted-foreground" />
+				<p className="text-xs text-muted-foreground">Getting token...</p>
+			</div>
+		)
 	}
 
 	return (
 		<LiveKitRoom
-			video={true}
-			audio={true}
+			video={video}
+			audio={audio}
 			token={token}
-			serverUrl={process.env.LIVEKIT_URL}
+			serverUrl={env.NEXT_PUBLIC_LIVEKIT_URL}
+			connect={true}
 			// Use the default LiveKit theme for nice styles.
 			data-lk-theme="default"
 			style={{ height: '100dvh' }}
@@ -78,7 +76,7 @@ export const MediaRoom = ({ chatId, videoId, audioId }: MediaRoomProps) => {
 			<RoomAudioRenderer />
 			{/* Controls for the user to start/stop audio, video, and screen
       share tracks and to leave the room. */}
-			<ControlBar />
+			<ControlBar variation="verbose" />
 		</LiveKitRoom>
 	)
 }
@@ -96,7 +94,7 @@ function MyVideoConference() {
 	return (
 		<GridLayout
 			tracks={tracks}
-			style={{ height: 'calc(100vh - var(--lk-control-bar-height))' }}
+			style={{ height: 'calc(96vh - var(--lk-control-bar-height))' }}
 		>
 			{/* The GridLayout accepts zero or one child. The child is used
       as a template to render all passed in tracks. */}
