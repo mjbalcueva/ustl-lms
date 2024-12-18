@@ -1,5 +1,6 @@
 import { EventEmitter, on } from 'node:events'
 import {
+	GroupChatMemberRole,
 	GroupChatType,
 	type DirectChatMessage,
 	type GroupChatMessage,
@@ -911,7 +912,7 @@ export const chatRouter = createTRPCRouter({
 		.mutation(async ({ ctx, input }) => {
 			const currentUserId = ctx.session.user.id
 
-			// Create group chat with current user as admin
+			// Create group chat with current user as owner
 			const chat = await ctx.db.groupChat.create({
 				data: {
 					name: input.name,
@@ -923,11 +924,11 @@ export const chatRouter = createTRPCRouter({
 						create: [
 							{
 								userId: currentUserId,
-								isAdmin: true
+								role: GroupChatMemberRole.OWNER
 							},
 							...input.memberIds.map((id) => ({
 								userId: id,
-								isAdmin: false
+								role: GroupChatMemberRole.MEMBER
 							}))
 						]
 					}

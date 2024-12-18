@@ -1,6 +1,6 @@
 import { siteConfig } from '@/core/config/site'
 import {
-	Analytics,
+	// Analytics,
 	Chat,
 	Courses,
 	Dashboard,
@@ -55,12 +55,12 @@ export const instructor: Link[] = [
 				label: 'Courses',
 				href: '/instructor/courses',
 				icon: Courses
-			},
-			{
-				label: 'Analytics',
-				href: '/instructor/analytics',
-				icon: Analytics
 			}
+			// {
+			// 	label: 'Analytics',
+			// 	href: '/instructor/analytics',
+			// 	icon: Analytics
+			// }
 		]
 	}
 ]
