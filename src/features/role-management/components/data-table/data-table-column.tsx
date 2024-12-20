@@ -28,7 +28,7 @@ import { DotsHorizontal, User } from '@/core/lib/icons'
 import { formatDate } from '@/core/lib/utils/format-date'
 
 import { RoleBadge } from '@/features/role-management/components/role-badge'
-import { getRoleVisibility } from '@/features/role-management/lib/get-role-visibility'
+import { getLimitedRoleVisibility } from '@/features/role-management/lib/get-limited-role-visibility'
 
 export const useColumns = (
 	editRole: (userId: string, newRole: Role) => Promise<void>
@@ -147,7 +147,7 @@ export const useColumns = (
 										editRole(row.original.id, value as Role)
 									}
 								>
-									{getRoleVisibility(currentUserRole!).map((role) => {
+									{getLimitedRoleVisibility(currentUserRole!).map((role) => {
 										const roleMap = {
 											REGISTRAR: { label: 'Registrar' },
 											DEAN: { label: 'Dean' },
