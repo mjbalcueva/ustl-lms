@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
+  provider = "postgresql"
   url      = env("DATABASE_URL") // local
   // url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
   // directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
@@ -518,6 +518,7 @@ model Profile {
   bio         String?
   dateOfBirth DateTime? @map("date_of_birth")
   gender      String?
+  department  String?   @map("department")
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 

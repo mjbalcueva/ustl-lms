@@ -32,7 +32,13 @@ export const roleManagementRouter = createTRPCRouter({
 				id: true,
 				email: true,
 				role: true,
-				profile: { select: { name: true, imageUrl: true } },
+				profile: { 
+					select: { 
+						name: true, 
+						imageUrl: true, 
+						department: true 
+					} 
+				},
 				promotionsReceived: {
 					select: {
 						promoter: {
@@ -63,6 +69,7 @@ export const roleManagementRouter = createTRPCRouter({
 					email: user.email,
 					role: user.role,
 					imageUrl: user.profile?.imageUrl,
+					department: user.profile?.department,
 					lastPromotion: user.promotionsReceived[0]
 						? {
 								promoterName:
@@ -96,12 +103,12 @@ export const roleManagementRouter = createTRPCRouter({
 	editUserRole: protectedProcedure
 		.input(editUserRoleSchema)
 		.mutation(async ({ ctx, input }) => {
-			const { userId, newRole } = input
+			const { userId, newRole, department } = input
 
 			// Get the user's current role before updating
 			const user = await ctx.db.user.findUnique({
 				where: { id: userId },
-				select: { role: true }
+				select: { role: true, profile: true }
 			})
 
 			if (!user) {
@@ -110,10 +117,18 @@ export const roleManagementRouter = createTRPCRouter({
 
 			const oldRole = user.role
 
-			// Update user's role
+			// Update user's role and department if provided
 			await ctx.db.user.update({
 				where: { id: userId },
-				data: { role: newRole }
+				data: { 
+					role: newRole,
+					profile: department ? {
+						upsert: {
+							create: { department },
+							update: { department }
+						}
+					} : undefined
+				}
 			})
 
 			// Record the promotion

@@ -33,14 +33,15 @@ import { type DataTableFilterField } from '@/core/types/data-table'
 
 import { useColumns } from '@/features/role-management/components/data-table/data-table-column'
 
+type User = RouterOutputs['roleManagement']['findManyUsers']['users'][number] & {
+	department?: string | null
+}
+
 type DataTableProps<TData> = {
 	data: TData[]
 }
 
-export const DataTable = <
-	TData extends
-		RouterOutputs['roleManagement']['findManyUsers']['users'][number]
->({
+export const DataTable = <TData extends User>({
 	data
 }: DataTableProps<TData>) => {
 	const router = useRouter()
@@ -54,8 +55,8 @@ export const DataTable = <
 		}
 	)
 
-	const columns = useColumns(async (userId: string, newRole: Role) => {
-		await editRole({ userId, newRole })
+	const columns = useColumns(async (userId: string, newRole: Role, department?: string) => {
+		await editRole({ userId, newRole, department })
 	})
 
 	const [sorting, setSorting] = React.useState<SortingState>([])

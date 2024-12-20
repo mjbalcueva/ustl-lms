@@ -8,7 +8,8 @@ import { z } from 'zod'
 
 export const editUserRoleSchema = z.object({
 	userId: z.string().min(1, 'User ID is required'),
-	newRole: z.nativeEnum(Role)
+	newRole: z.nativeEnum(Role),
+	department: z.string().optional()
 })
 
 export type EditUserRoleInput = z.infer<typeof editUserRoleSchema>

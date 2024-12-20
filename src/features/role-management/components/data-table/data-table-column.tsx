@@ -17,8 +17,7 @@ import { Button } from '@/core/components/ui/button'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
-	DropdownMenuRadioGroup,
-	DropdownMenuRadioItem,
+	DropdownMenuItem,
 	DropdownMenuSub,
 	DropdownMenuSubContent,
 	DropdownMenuSubTrigger,
@@ -27,14 +26,22 @@ import {
 import { DotsHorizontal, User } from '@/core/lib/icons'
 import { formatDate } from '@/core/lib/utils/format-date'
 
+import { DepartmentFormModal } from '@/features/role-management/components/department-form-modal'
 import { RoleBadge } from '@/features/role-management/components/role-badge'
 import { getLimitedRoleVisibility } from '@/features/role-management/lib/get-limited-role-visibility'
 
+type User =
+	RouterOutputs['roleManagement']['findManyUsers']['users'][number] & {
+		department?: string | null
+	}
+
 export const useColumns = (
-	editRole: (userId: string, newRole: Role) => Promise<void>
-): ColumnDef<
-	RouterOutputs['roleManagement']['findManyUsers']['users'][number]
->[] => {
+	editRole: (
+		userId: string,
+		newRole: Role,
+		department?: string
+	) => Promise<void>
+): ColumnDef<User>[] => {
 	const { data: session } = useSession()
 	const currentUserRole = session?.user?.role
 
@@ -122,51 +129,78 @@ export const useColumns = (
 			}
 		},
 		{
+			accessorKey: 'department',
+			header: ({ column }) => (
+				<DataTableColumnHeader column={column} title="Department" />
+			),
+			cell: ({ row }) => {
+				return <span className="text-sm">{row.original.department ?? '-'}</span>
+			}
+		},
+		{
 			id: 'actions',
-			cell: ({ row }) => (
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button
-							aria-label="Open menu"
-							variant="ghost"
-							className="size-8 rounded-lg p-0 data-[state=open]:bg-muted"
-						>
-							<DotsHorizontal className="size-4" aria-hidden="true" />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align="end" className="w-40">
-						<DropdownMenuSub>
-							<DropdownMenuSubTrigger>
-								<User className="mr-2 size-4" />
-								Set Role
-							</DropdownMenuSubTrigger>
-							<DropdownMenuSubContent className="w-40" sideOffset={8}>
-								<DropdownMenuRadioGroup
-									value={row.original.role}
-									onValueChange={(value) =>
-										editRole(row.original.id, value as Role)
-									}
-								>
-									{getLimitedRoleVisibility(currentUserRole!).map((role) => {
-										const roleMap = {
-											REGISTRAR: { label: 'Registrar' },
-											DEAN: { label: 'Dean' },
-											PROGRAM_CHAIR: { label: 'Program Chair' },
-											INSTRUCTOR: { label: 'Instructor' },
-											STUDENT: { label: 'Student' }
-										}
-										return (
-											<DropdownMenuRadioItem key={role} value={role}>
-												{roleMap[role].label}
-											</DropdownMenuRadioItem>
-										)
-									})}
-								</DropdownMenuRadioGroup>
-							</DropdownMenuSubContent>
-						</DropdownMenuSub>
-					</DropdownMenuContent>
-				</DropdownMenu>
-			)
+			cell: ({ row }) => {
+				return (
+					<DropdownMenu modal={false}>
+						<DropdownMenuTrigger asChild>
+							<Button
+								aria-label="Open menu"
+								variant="ghost"
+								className="size-8 rounded-lg p-0 data-[state=open]:bg-muted"
+							>
+								<DotsHorizontal className="size-4" aria-hidden="true" />
+							</Button>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent align="end" className="w-40">
+							<DropdownMenuSub>
+								<DropdownMenuSubTrigger>
+									<User className="mr-2 size-4" />
+									Set Role
+								</DropdownMenuSubTrigger>
+								<DropdownMenuSubContent className="w-40" sideOffset={8}>
+									{currentUserRole
+										? getLimitedRoleVisibility(currentUserRole).map((role) => {
+												const roleMap = {
+													REGISTRAR: { label: 'Registrar' },
+													DEAN: { label: 'Dean' },
+													PROGRAM_CHAIR: { label: 'Program Chair' },
+													INSTRUCTOR: { label: 'Instructor' },
+													STUDENT: { label: 'Student' }
+												}
+
+												if (role === 'DEAN') {
+													return (
+														<DepartmentFormModal
+															key={role}
+															onSubmit={(department) =>
+																editRole(row.original.id, role, department)
+															}
+														>
+															<DropdownMenuItem
+																onSelect={(e) => e.preventDefault()}
+															>
+																{roleMap[role].label}
+															</DropdownMenuItem>
+														</DepartmentFormModal>
+													)
+												}
+
+												return (
+													<DropdownMenuItem
+														key={role}
+														onSelect={() => editRole(row.original.id, role)}
+													>
+														{roleMap[role].label}
+													</DropdownMenuItem>
+												)
+											})
+										: null}
+								</DropdownMenuSubContent>
+							</DropdownMenuSub>
+						</DropdownMenuContent>
+					</DropdownMenu>
+				)
+			}
 		}
 	]
 }
